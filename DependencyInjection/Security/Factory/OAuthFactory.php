@@ -25,7 +25,7 @@ class OAuthFactory extends AbstractFactory
         $container
             ->setDefinition($entryPointId, new DefinitionDecorator('knp_oauth.authentication.entry_point.oauth'))
             ->addArgument(new Reference('security.http_utils'))
-            ->addArgument($config['entry_point'])
+            ->addArgument($config['authorization_url'])
             ->addArgument($config['client_id'])
             ->addArgument($config['scope'])
             ->addArgument($config['secret'])
@@ -35,12 +35,22 @@ class OAuthFactory extends AbstractFactory
         return $entryPointId;
     }
 
+    protected function createListener($container, $id, $config, $userProvider)
+    {
+        $listenerId = parent::createListener($container, $id, $config, $userProvider);
+
+        $container->getDefinition($listenerId)->addMethodCall('setOAuthOptions', array($config));
+
+        return $listenerId;
+    }
+
     public function addConfiguration(NodeDefinition $node)
     {
         parent::addConfiguration($node);
 
         $node->children()
-            ->scalarNode('entry_point')->cannotBeEmpty()->isRequired()->end()
+            ->scalarNode('authorization_url')->cannotBeEmpty()->isRequired()->end()
+            ->scalarNode('access_token_url')->cannotBeEmpty()->isRequired()->end()
             ->scalarNode('client_id')->cannotBeEmpty()->isRequired()->end()
             ->scalarNode('scope')->cannotBeEmpty()->isRequired()->end()
             ->scalarNode('secret')->cannotBeEmpty()->isRequired()->end()

@@ -9,14 +9,27 @@ This bundle depends on Buzz, the lightweight HTTP client by awesome @kriswallsmi
         version=v0.5
     [BuzzBundle]
         git=https://github.com/sensio/SensioBuzzBundle.git
-        target=/bundles/Sensio/BuzzBundle
+        target=/bundles/Sensio/Bundle/BuzzBundle
     [KnpOAuthBundle]
         git=https://github.com/KnpLabs/KnpOAuthBundle.git
-        target=/bundles/Knp/OAuthBundle
+        target=/bundles/Knp/Bundle/OAuthBundle
 
 Then run the usual `bin/vendors`:
 
     bin/vendors install
+
+Add `Buzz` to your autoload:
+
+    $loader->registerNamespaces(array(
+        'Buzz'             => __DIR__.'/../vendor/Buzz/lib/'
+    ));
+
+Finally, register the bundles in your `AppKernel`:
+
+    $bundles = array(
+        new Knp\OAuthBundle\KnpOAuthBundle(),
+        new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
+    );
 
 ## Configuration
 
@@ -30,16 +43,18 @@ Using the `KnpOAuthBundle` is just a matter of configuring an `oauth` firewall i
             secured_area:
                 pattern:    ^/secured/
                 oauth:
-                    entry_point:   https://github.com/login/oauth/authorize
-                    client_id:     <your_oauth_client_id>
-                    secret:        <your_oauth_secret>
-                    scope:         <your_oauth_scope>
-                    check_path:    /secured/login_check
-                    login_path:    /secured/login
+                    authorize_url:    https://github.com/login/oauth/authorize
+                    access_token_url: https://github.com/login/oauth/access_token
+                    client_id:        <your_oauth_client_id>
+                    secret:           <your_oauth_secret>
+                    scope:            <your_oauth_scope>
+                    check_path:       /secured/login_check
+                    login_path:       /secured/login
 
 Here's a quick description of what each directive means:
 
-* `entry_point` is the OAuth authorization URL provided by your OAuth provider.
+* `authorize_url` is the OAuth authorization URL provided by your OAuth provider.
+* `access_token_url` is the OAuth access token url, courtesy of your OAuth provider.
 * `client_id` is the... client id, provided by... your OAuth provider.
 * `secret`, do I really have to explain? hint: it's provided by your OAuth provider too.
 * `scope` is how much information and authorization you wish to access.

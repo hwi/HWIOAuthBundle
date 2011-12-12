@@ -10,7 +10,11 @@
 
     <services>
 
-        <service id="knp_oauth.authentication.listener.oauth" class="%knp_oauth.authentication.listener.oauth.class%" parent="security.authentication.listener.abstract" />
+        <service id="knp_oauth.authentication.listener.oauth" class="%knp_oauth.authentication.listener.oauth.class%" parent="security.authentication.listener.abstract">
+            <call method="setHttpClient">
+                <argument type="service" id="buzz.client" />
+            </call>
+        </service>
         <service id="knp_oauth.authentication.provider.oauth" class="%knp_oauth.authentication.provider.oauth.class%" />
         <service id="knp_oauth.authentication.entry_point.oauth" class="%knp_oauth.authentication.entry_point.oauth.class%" />
     </services>

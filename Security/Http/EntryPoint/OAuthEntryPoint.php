@@ -9,16 +9,16 @@ use Symfony\Component\HttpFoundation\Request;
 
 class OAuthEntryPoint implements AuthenticationEntryPointInterface
 {
-    private $entryPoint;
+    private $authorizationUrl, $clientId, $scope, $secret, $checkPath;
 
-    public function __construct(HttpUtils $httpUtils, $entryPoint, $clientId, $scope, $secret, $checkPath)
+    public function __construct(HttpUtils $httpUtils, $authorizationUrl, $clientId, $scope, $secret, $checkPath)
     {
-        $this->httpUtils  = $httpUtils;
-        $this->entryPoint = $entryPoint;
-        $this->clientId   = $clientId;
-        $this->scope      = $scope;
-        $this->secret     = $secret;
-        $this->checkPath  = $checkPath;
+        $this->httpUtils        = $httpUtils;
+        $this->authorizationUrl = $authorizationUrl;
+        $this->clientId         = $clientId;
+        $this->scope            = $scope;
+        $this->secret           = $secret;
+        $this->checkPath        = $checkPath;
     }
 
     public function start(Request $request, AuthenticationException $authException = null)
@@ -34,7 +34,7 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     {
         $loginCheckUrl = $this->httpUtils->createRequest($request, $this->checkPath)->getUri();
 
-        return $this->entryPoint.'?'.http_build_query(array(
+        return $this->authorizationUrl.'?'.http_build_query(array(
             'response_type' => 'code',
             'redirect_uri'  => $loginCheckUrl.'?redirect_uri='.urlencode($request->getUri()),
             'client_id'     => $this->clientId,
