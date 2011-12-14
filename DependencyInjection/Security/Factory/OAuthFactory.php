@@ -39,7 +39,10 @@ class OAuthFactory extends AbstractFactory
     {
         $listenerId = parent::createListener($container, $id, $config, $userProvider);
 
-        $container->getDefinition($listenerId)->addMethodCall('setOAuthOptions', array($config));
+        $container->getDefinition($listenerId)
+            ->addMethodCall('setHttpClient', array(new Reference('buzz.client')))
+            ->addMethodCall('setOAuthOptions', array($config))
+        ;
 
         return $listenerId;
     }
