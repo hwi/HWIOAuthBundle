@@ -17,6 +17,6 @@ class OAuthToken extends AbstractToken
 
     public function getCredentials()
     {
-        return array($this->accessToken);
+        return $this->accessToken;
     }
 }
