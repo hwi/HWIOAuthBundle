@@ -52,11 +52,26 @@ class OAuthFactory extends AbstractFactory
         parent::addConfiguration($node);
 
         $node->children()
-            ->scalarNode('authorization_url')->cannotBeEmpty()->isRequired()->end()
-            ->scalarNode('access_token_url')->cannotBeEmpty()->isRequired()->end()
-            ->scalarNode('client_id')->cannotBeEmpty()->isRequired()->end()
-            ->scalarNode('scope')->cannotBeEmpty()->isRequired()->end()
-            ->scalarNode('secret')->cannotBeEmpty()->isRequired()->end()
+            ->scalarNode('authorization_url')
+                ->cannotBeEmpty()
+                ->isRequired()
+            ->end()
+            ->scalarNode('access_token_url')
+                ->cannotBeEmpty()
+                ->isRequired()
+            ->end()
+            ->scalarNode('client_id')
+                ->cannotBeEmpty()
+                ->isRequired()
+            ->end()
+            ->scalarNode('scope')
+                ->cannotBeEmpty()
+                ->isRequired()
+            ->end()
+            ->scalarNode('secret')
+                ->cannotBeEmpty()
+                ->isRequired()
+            ->end()
         ;
     }
 
