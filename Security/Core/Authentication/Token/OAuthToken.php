@@ -8,9 +8,11 @@ class OAuthToken extends AbstractToken
 {
     private $accessToken;
 
-    public function __construct($accessToken)
+    public function __construct($accessToken, array $roles = array())
     {
         $this->accessToken = $accessToken;
+
+        parent::__construct($roles);
     }
 
     public function getCredentials()
