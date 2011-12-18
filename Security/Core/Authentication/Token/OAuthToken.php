@@ -19,4 +19,9 @@ class OAuthToken extends AbstractToken
     {
         return $this->accessToken;
     }
+
+    public function getUsername()
+    {
+        return 'OAUTH_USER';
+    }
 }

@@ -47,7 +47,9 @@ class OAuthListener extends AbstractAuthenticationListener
             return;
         }
 
-        return new OAuthToken($response['access_token']);
+        $token = new OAuthToken($response['access_token']);
+
+        return $this->authenticationManager->authenticate($token);
     }
 
     private function httpRequest($url, $method = null)
