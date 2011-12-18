@@ -20,8 +20,8 @@ class OAuthToken extends AbstractToken
         return $this->accessToken;
     }
 
-    public function getUsername()
+    public function isAuthenticated()
     {
-        return 'OAUTH_USER';
+        return count($this->getRoles()) > 0;
     }
 }

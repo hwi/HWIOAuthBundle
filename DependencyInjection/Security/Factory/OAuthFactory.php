@@ -14,8 +14,12 @@ class OAuthFactory extends AbstractFactory
     {
         $providerId = 'knp_oauth.authentication.provider.oauth.'.$id;
 
-        $container->setDefinition($providerId, new DefinitionDecorator('knp_oauth.authentication.provider.oauth'));
-        
+        $container
+            ->setDefinition($providerId, new DefinitionDecorator('knp_oauth.authentication.provider.oauth'))
+            ->addArgument(new Reference($userProviderId))
+            ->addArgument(new Reference('buzz.client'))
+            ->addArgument($config);
+
         return $providerId;
     }
 
@@ -60,6 +64,10 @@ class OAuthFactory extends AbstractFactory
                 ->cannotBeEmpty()
                 ->isRequired()
             ->end()
+            ->scalarNode('infos_url')
+                ->cannotBeEmpty()
+                ->isRequired()
+            ->end()
             ->scalarNode('client_id')
                 ->cannotBeEmpty()
                 ->isRequired()
@@ -72,13 +80,17 @@ class OAuthFactory extends AbstractFactory
                 ->cannotBeEmpty()
                 ->isRequired()
             ->end()
+            ->scalarNode('username_path')
+                ->cannotBeEmpty()
+                ->isRequired()
+            ->end()
         ;
     }
 
 
     protected function getListenerId()
     {
-      return 'knp_oauth.authentication.listener.oauth';  
+      return 'knp_oauth.authentication.listener.oauth';
     }
 
     public function getKey()

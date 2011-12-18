@@ -19,11 +19,6 @@ class OAuthListener extends AbstractAuthenticationListener
         $this->httpClient = $client;
     }
 
-    public function getHttpClient()
-    {
-        return $this->httpClient;
-    }
-
     public function setOAuthOptions(array $options)
     {
         $this->oauthOptions = $options;
@@ -39,9 +34,16 @@ class OAuthListener extends AbstractAuthenticationListener
             throw new \InvalidArgumentException(sprintf('Could not use instance of "%s" as an HTTP client', get_class($this->httpClass)));
         }
 
+        $accessTokenUrl  = $this->getAccessTokenUrl($request);
+
+        $hRequest        = new HttpRequest(HttpRequest::METHOD_GET, $accessTokenUrl);
+        $hResponse       = new HttpResponse();
+
+        $this->httpClient->send($hRequest, $hResponse);
+
         $response = array();
 
-        parse_str($this->httpRequest($this->getAccessTokenUrl($request)), $response);
+        parse_str($hResponse->getContent(), $response);
 
         if (null === $response || isset($response['error'])) {
             return;
@@ -50,18 +52,6 @@ class OAuthListener extends AbstractAuthenticationListener
         $token = new OAuthToken($response['access_token']);
 
         return $this->authenticationManager->authenticate($token);
-    }
-
-    private function httpRequest($url, $method = null)
-    {
-        $method = $method ?: HttpRequest::METHOD_GET;
-
-        $request  = new HttpRequest($method, $url);
-        $response = new HttpResponse();
-
-        $this->getHttpClient()->send($request, $response);
-
-        return $response->getContent();
     }
 
     private function getAccessTokenUrl(Request $request)
