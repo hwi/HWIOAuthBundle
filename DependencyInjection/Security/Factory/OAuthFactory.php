@@ -37,14 +37,13 @@ class OAuthFactory extends AbstractFactory
 
     protected function createEntryPoint($container, $id, $config, $defaultEntryPoint)
     {
-        $entryPointId = 'knp_oauth.authentication.entry_point.oauth.'.$id;
+        $entryPointId    = 'knp_oauth.authentication.entry_point.oauth.'.$id;
+        $oauthProviderId = $this->createOAuthProvider($container, $id, $config);
+
         $container
             ->setDefinition($entryPointId, new DefinitionDecorator('knp_oauth.authentication.entry_point.oauth'))
             ->addArgument(new Reference('security.http_utils'))
-            ->addArgument($config['authorization_url'])
-            ->addArgument($config['client_id'])
-            ->addArgument($config['scope'])
-            ->addArgument($config['secret'])
+            ->addArgument(new Reference($oauthProviderId))
             ->addArgument($config['check_path'])
         ;
 
@@ -53,11 +52,12 @@ class OAuthFactory extends AbstractFactory
 
     protected function createListener($container, $id, $config, $userProvider)
     {
-        $listenerId = parent::createListener($container, $id, $config, $userProvider);
+        $listenerId      = parent::createListener($container, $id, $config, $userProvider);
+        $oauthProviderId = $this->createOAuthProvider($container, $id, $config);
 
         $container->getDefinition($listenerId)
+            ->addMethodCall('setOAuthProvider', array(new Reference($oauthProviderId)))
             ->addMethodCall('setHttpClient', array(new Reference('buzz.client')))
-            ->addMethodCall('setOAuthOptions', array($config))
         ;
 
         return $listenerId;
@@ -67,7 +67,13 @@ class OAuthFactory extends AbstractFactory
     {
         parent::addConfiguration($node);
 
-        $node->children()
+        $builder = $node->children();
+
+        $builder
+            ->scalarNode('oauth_provider')
+                ->cannotBeEmpty()
+                ->isRequired()
+            ->end()
             ->scalarNode('authorization_url')
                 ->cannotBeEmpty()
                 ->isRequired()

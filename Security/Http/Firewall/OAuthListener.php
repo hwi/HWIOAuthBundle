@@ -5,23 +5,28 @@ namespace Knp\OauthBundle\Security\Http\Firewall;
 use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+
 use Knp\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Knp\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+
 use Buzz\Client\ClientInterface as HttpClientInterface,
     Buzz\Message\Request as HttpRequest,
     Buzz\Message\Response as HttpResponse;
 
 class OAuthListener extends AbstractAuthenticationListener
 {
-    private $httpClient, $oauthOptions;
+    private $httpClient;
+
+    private $oauthProvider;
 
     public function setHttpClient(HttpClientInterface $client)
     {
         $this->httpClient = $client;
     }
 
-    public function setOAuthOptions(array $options)
+    public function setOAuthProvider(OAuthProviderInterface $oauthProvider)
     {
-        $this->oauthOptions = $options;
+        $this->oauthProvider = $oauthProvider;
     }
 
     protected function attemptAuthentication(Request $request)
@@ -34,7 +39,9 @@ class OAuthListener extends AbstractAuthenticationListener
             throw new \InvalidArgumentException(sprintf('Could not use instance of "%s" as an HTTP client', get_class($this->httpClass)));
         }
 
-        $accessTokenUrl  = $this->getAccessTokenUrl($request);
+        $accessTokenUrl  = $this->oauthProvider->getAccessTokenUrl($request->get('code'), array(
+            'redirect_url' => urldecode($request->get('redirect_uri'))
+        ));
 
         $hRequest        = new HttpRequest(HttpRequest::METHOD_GET, $accessTokenUrl);
         $hResponse       = new HttpResponse();
@@ -52,16 +59,5 @@ class OAuthListener extends AbstractAuthenticationListener
         $token = new OAuthToken($response['access_token']);
 
         return $this->authenticationManager->authenticate($token);
-    }
-
-    private function getAccessTokenUrl(Request $request)
-    {
-        return $this->oauthOptions['access_token_url'].'?'.http_build_query(array(
-            'client_id'     => $this->oauthOptions['client_id'],
-            'client_secret' => $this->oauthOptions['secret'],
-            'code'          => $request->get('code'),
-            'grant_type'    => 'authorization_code',
-            'redirect_url'  => urldecode($request->get('redirect_uri'))
-        ));
     }
 }

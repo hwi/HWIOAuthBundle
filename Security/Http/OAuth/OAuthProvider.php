@@ -57,4 +57,27 @@ class OAuthProvider implements OAuthProviderInterface
 
         return $username;
     }
+
+    public function getAuthorizationUrl(array $extraParameters = array())
+    {
+        $parameters = array_merge($extraParameters, array(
+            'response_type' => 'code',
+            'client_id'     => $this->getOption('client_id'),
+            'scope'         => $this->getOption('scope'),
+        ));
+
+        return $this->getOption('authorization_url').'?'.http_build_query($parameters);
+    }
+
+    public function getAccessTokenUrl($code, array $extraParameters = array())
+    {
+        $parameters = array_merge($extraParameters, array(
+            'code'          => $code,
+            'grant_type'    => 'authorization_code',
+            'client_id'     => $this->getOption('client_id'),
+            'client_secret' => $this->getOption('secret'),
+        ));
+
+        return $this->getOption('access_token_url').'?'.http_build_query($parameters);
+    }
 }

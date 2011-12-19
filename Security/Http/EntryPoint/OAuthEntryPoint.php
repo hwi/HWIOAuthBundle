@@ -7,38 +7,33 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\HttpFoundation\Request;
 
+use Knp\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+
 class OAuthEntryPoint implements AuthenticationEntryPointInterface
 {
     private $authorizationUrl, $clientId, $scope, $secret, $checkPath;
 
-    public function __construct(HttpUtils $httpUtils, $authorizationUrl, $clientId, $scope, $secret, $checkPath)
+    public function __construct(HttpUtils $httpUtils, OAuthProviderInterface $oauthProvider, $checkPath)
     {
         $this->httpUtils        = $httpUtils;
-        $this->authorizationUrl = $authorizationUrl;
-        $this->clientId         = $clientId;
-        $this->scope            = $scope;
-        $this->secret           = $secret;
+        $this->oauthProvider    = $oauthProvider;
         $this->checkPath        = $checkPath;
     }
 
     public function start(Request $request, AuthenticationException $authException = null)
     {
         if (!$this->httpUtils->checkRequestPath($request, $this->checkPath)) {
-            return $this->httpUtils->createRedirectResponse($request, $this->getAuthorizationUrl($request));
+            $loginCheckUrl = $this->httpUtils
+                ->createRequest($request, $this->checkPath)
+                ->getUri();
+
+            $authorizationUrl = $this->oauthProvider->getAuthorizationUrl(array(
+                'redirect_uri' => $loginCheckUrl.'?redirect_uri='.urlencode($request->getUri())
+            ));
+
+            return $this->httpUtils->createRedirectResponse($request, $authorizationUrl);
         }
 
         throw $authException;
-    }
-
-    private function getAuthorizationUrl(Request $request)
-    {
-        $loginCheckUrl = $this->httpUtils->createRequest($request, $this->checkPath)->getUri();
-
-        return $this->authorizationUrl.'?'.http_build_query(array(
-            'response_type' => 'code',
-            'redirect_uri'  => $loginCheckUrl.'?redirect_uri='.urlencode($request->getUri()),
-            'client_id'     => $this->clientId,
-            'scope'         => $this->scope,
-        ));
     }
 }
