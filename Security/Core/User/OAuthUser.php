@@ -13,33 +13,33 @@ class OAuthUser implements UserInterface
         $this->username   = $username;
     }
 
-    function getRoles()
+    public function getRoles()
     {
-      return array('ROLE_USER');
+        return array('ROLE_USER');
     }
 
-    function getPassword()
+    public function getPassword()
     {
-      return null;
+        return null;
     }
 
-    function getSalt()
+    public function getSalt()
     {
-      return null;
+        return null;
     }
 
-    function getUsername()
+    public function getUsername()
     {
-      return $this->username;
+        return $this->username;
     }
 
-    function eraseCredentials()
+    public function eraseCredentials()
     {
-      return true;
+        return true;
     }
 
-    function equals(UserInterface $user)
+    public function equals(UserInterface $user)
     {
-      return $user->getUsername() == $this->getUsername();
+        return $user->getUsername() == $this->getUsername();
     }
 }
