@@ -17,13 +17,21 @@ class OAuthProvider implements OAuthProviderInterface
 
     public function __construct(HttpClientInterface $httpClient, array $options)
     {
+        if (null !== $options['infos_url'] && null === $options['username_path']) {
+            throw new \InvalidArgumentException('You must set an "username_path" to use an "infos_url"');
+        }
+
+        if (null === $options['infos_url'] && null !== $options['username_path']) {
+            throw new \InvalidArgumentException('You must set an "infos_url" to use an "username_path"');
+        }
+
         $this->httpClient = $httpClient;
         $this->options    = $options;
     }
 
     public function getOption($name)
     {
-        if (!isset($this->options[$name])) {
+        if (!array_key_exists($name, $this->options)) {
             throw new \InvalidArgumentException(sprintf('Unknown option "%s"', $name));
         }
 
@@ -42,6 +50,10 @@ class OAuthProvider implements OAuthProviderInterface
 
     public function getUsername($accessToken)
     {
+        if ($this->getOption('infos_url') === null) {
+            return $accessToken;
+        }
+
         $url = $this->getOption('infos_url').'?'.http_build_query(array(
             'access_token' => $accessToken
         ));

@@ -82,8 +82,7 @@ class OAuthFactory extends AbstractFactory
                 ->isRequired()
             ->end()
             ->scalarNode('infos_url')
-                ->cannotBeEmpty()
-                ->isRequired()
+                ->defaultNull()
             ->end()
             ->scalarNode('client_id')
                 ->cannotBeEmpty()
@@ -98,8 +97,7 @@ class OAuthFactory extends AbstractFactory
                 ->isRequired()
             ->end()
             ->scalarNode('username_path')
-                ->cannotBeEmpty()
-                ->isRequired()
+                ->defaultNull()
             ->end()
         ;
     }
