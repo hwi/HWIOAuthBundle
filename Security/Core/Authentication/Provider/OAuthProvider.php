@@ -48,8 +48,7 @@ class OAuthProvider implements AuthenticationProviderInterface
 
         $username     = $userInfos;
 
-        foreach ($usernamePath as $path)
-        {
+        foreach ($usernamePath as $path) {
             $username = $username[$path];
         }
 
