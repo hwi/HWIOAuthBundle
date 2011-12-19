@@ -12,10 +12,24 @@ class OAuthFactory extends AbstractFactory
 {
     protected function createOAuthProvider(ContainerBuilder $container, $id, $config)
     {
-        $oauthProviderId = 'knp_oauth.security.oauth.oauth_provider'.$id;
+        /**
+         * So hmm, we could directly use $container->has(), but that would not
+         * allow for meaningful error reporting
+         */
+        if (false !== strpos($config['oauth_provider'], '.')) {
+            if (!$container->has($config['oauth_provider'])) {
+                throw new \InvalidArgumentException(sprintf('OAuth provider service "%s" does not exist in container'));
+            }
+
+            $baseOAuthProviderId = $config['oauth_provider'];
+        } else {
+            $baseOAuthProviderId = 'knp_oauth.security.oauth.'.$config['oauth_provider'].'_provider';
+        }
+
+        $oauthProviderId = $baseOAuthProviderId.'.'.$id;
 
         $container
-            ->setDefinition($oauthProviderId, new DefinitionDecorator('knp_oauth.security.oauth.oauth_provider'))
+            ->setDefinition($oauthProviderId, new DefinitionDecorator($baseOAuthProviderId))
             ->addArgument(new Reference('buzz.client'))
             ->addArgument($config);
 
@@ -70,18 +84,18 @@ class OAuthFactory extends AbstractFactory
 
         $builder
             ->scalarNode('oauth_provider')
-                ->cannotBeEmpty()
-                ->isRequired()
+                ->defaultValue('oauth')
             ->end()
             ->scalarNode('authorization_url')
-                ->cannotBeEmpty()
-                ->isRequired()
+                ->defaultNull()
             ->end()
             ->scalarNode('access_token_url')
-                ->cannotBeEmpty()
-                ->isRequired()
+                ->defaultNull()
             ->end()
             ->scalarNode('infos_url')
+                ->defaultNull()
+            ->end()
+            ->scalarNode('username_path')
                 ->defaultNull()
             ->end()
             ->scalarNode('client_id')
@@ -95,9 +109,6 @@ class OAuthFactory extends AbstractFactory
             ->scalarNode('secret')
                 ->cannotBeEmpty()
                 ->isRequired()
-            ->end()
-            ->scalarNode('username_path')
-                ->defaultNull()
             ->end()
         ;
     }

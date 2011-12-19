@@ -8,6 +8,7 @@
         <parameter key="knp_oauth.authentication.entry_point.oauth.class">Knp\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint</parameter>
         <parameter key="knp_oauth.user.provider">Knp\OAuthBundle\Security\Core\User\OAuthUserProvider</parameter>
         <parameter key="knp_oauth.security.oauth.oauth_provider.class">Knp\OAuthBundle\Security\Http\OAuth\OAuthProvider</parameter>
+        <parameter key="knp_oauth.security.oauth.github_provider.class">Knp\OAuthBundle\Security\Http\OAuth\GithubProvider</parameter>
     </parameters>
 
     <services>
@@ -24,6 +25,10 @@
         <service id="knp_oauth.authentication.provider.oauth" class="%knp_oauth.authentication.provider.oauth.class%" />
         <service id="knp_oauth.authentication.entry_point.oauth" class="%knp_oauth.authentication.entry_point.oauth.class%" />
         <service id="knp_oauth.user.provider" class="%knp_oauth.user.provider%" />
+
+        <!-- builtin providers -->
+
         <service id="knp_oauth.security.oauth.oauth_provider" class="%knp_oauth.security.oauth.oauth_provider.class%" />
+        <service id="knp_oauth.security.oauth.github_provider" class="%knp_oauth.security.oauth.github_provider.class%" />
     </services>
 </container>

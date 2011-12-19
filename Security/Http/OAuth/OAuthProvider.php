@@ -11,9 +11,9 @@ use Buzz\Client\ClientInterface as HttpClientInterface,
 
 class OAuthProvider implements OAuthProviderInterface
 {
-    private $options = array();
+    protected $options = array();
 
-    private $httpClient;
+    protected $httpClient;
 
     public function __construct(HttpClientInterface $httpClient, array $options)
     {
@@ -25,8 +25,18 @@ class OAuthProvider implements OAuthProviderInterface
             throw new \InvalidArgumentException('You must set an "infos_url" to use an "username_path"');
         }
 
+        /**
+         * We want to merge passed options within existing options
+         * but only if they are not null. This is a bit messy. Sorry.
+         */
+        foreach ($options as $k => $v) {
+            if (null === $v && array_key_exists($k, $this->options)) {
+                unset($options[$k]);
+            }
+        }
+
+        $this->options    = array_merge($this->options, $options);
         $this->httpClient = $httpClient;
-        $this->options    = $options;
     }
 
     public function getOption($name)
