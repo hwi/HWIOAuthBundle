@@ -10,15 +10,27 @@ use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
 class OAuthFactory extends AbstractFactory
 {
+    protected function createOAuthProvider(ContainerBuilder $container, $id, $config)
+    {
+        $oauthProviderId = 'knp_oauth.security.oauth.oauth_provider'.$id;
+
+        $container
+            ->setDefinition($oauthProviderId, new DefinitionDecorator('knp_oauth.security.oauth.oauth_provider'))
+            ->addArgument(new Reference('buzz.client'))
+            ->addArgument($config);
+
+        return $oauthProviderId;
+    }
+
     protected function createAuthProvider(ContainerBuilder $container, $id, $config, $userProviderId)
     {
-        $providerId = 'knp_oauth.authentication.provider.oauth.'.$id;
+        $providerId      = 'knp_oauth.authentication.provider.oauth.'.$id;
+        $oauthProviderId = $this->createOAuthProvider($container, $id, $config);
 
         $container
             ->setDefinition($providerId, new DefinitionDecorator('knp_oauth.authentication.provider.oauth'))
             ->addArgument(new Reference($userProviderId))
-            ->addArgument(new Reference('buzz.client'))
-            ->addArgument($config);
+            ->addArgument(new Reference($oauthProviderId));
 
         return $providerId;
     }
