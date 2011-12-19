@@ -8,16 +8,9 @@ class OAuthUser implements UserInterface
 {
     private $username = 'NONE_PROVIDED';
 
-    private $accessToken;
-
     public function __construct($username)
     {
         $this->username = $username;
-    }
-
-    public function getAccessToken()
-    {
-        return $this->accessToken;
     }
 
     public function getRoles()
