@@ -69,7 +69,7 @@ class OAuthProvider implements OAuthProviderInterface
         return $this->getOption('authorization_url').'?'.http_build_query($parameters);
     }
 
-    public function getAccessTokenUrl($code, array $extraParameters = array())
+    public function getAccessToken($code, array $extraParameters = array())
     {
         $parameters = array_merge($extraParameters, array(
             'code'          => $code,
@@ -78,6 +78,15 @@ class OAuthProvider implements OAuthProviderInterface
             'client_secret' => $this->getOption('secret'),
         ));
 
-        return $this->getOption('access_token_url').'?'.http_build_query($parameters);
+        $url      = $this->getOption('access_token_url').'?'.http_build_query($parameters);
+        $response = array();
+
+        parse_str($this->httpRequest($url), $response);
+
+        if (isset($response['error'])) {
+            throw new \RuntimeError(sprintf('OAuth error: "%s"', $response['error']));
+        }
+
+        return $response['access_token'];
     }
 }

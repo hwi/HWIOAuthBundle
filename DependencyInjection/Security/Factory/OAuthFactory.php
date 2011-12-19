@@ -57,7 +57,6 @@ class OAuthFactory extends AbstractFactory
 
         $container->getDefinition($listenerId)
             ->addMethodCall('setOAuthProvider', array(new Reference($oauthProviderId)))
-            ->addMethodCall('setHttpClient', array(new Reference('buzz.client')))
         ;
 
         return $listenerId;

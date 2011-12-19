@@ -8,5 +8,5 @@ interface OAuthProviderInterface
 
     function getAuthorizationUrl(array $extraParameters = array());
 
-    function getAccessTokenUrl($code, array $extraParameters = array());
+    function getAccessToken($code, array $extraParameters = array());
 }
