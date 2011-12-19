@@ -30,19 +30,24 @@ class OAuthProvider implements OAuthProviderInterface
         return $this->options[$name];
     }
 
-    public function getUsername($accessToken)
+    protected function httpRequest($url, $method = HttpRequest::METHOD_GET)
     {
-        $url = $this->options['infos_url'].'?'.http_build_query(array(
-            'access_token' => $accessToken
-        ));
-
-        $request  = new HttpRequest(HttpRequest::METHOD_GET, $url);
+        $request  = new HttpRequest($method, $url);
         $response = new HttpResponse();
 
         $this->httpClient->send($request, $response);
 
-        $userInfos    = json_decode($response->getContent(), true);
-        $usernamePath = explode('.', $this->options['username_path']);
+        return $response->getContent();
+    }
+
+    public function getUsername($accessToken)
+    {
+        $url = $this->getOption('infos_url').'?'.http_build_query(array(
+            'access_token' => $accessToken
+        ));
+
+        $userInfos    = json_decode($this->httpRequest($url), true);
+        $usernamePath = explode('.', $this->getOption('username_path'));
 
         $username     = $userInfos;
 
