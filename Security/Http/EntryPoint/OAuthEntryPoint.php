@@ -27,9 +27,7 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
                 ->createRequest($request, $this->checkPath)
                 ->getUri();
 
-            $authorizationUrl = $this->oauthProvider->getAuthorizationUrl(array(
-                'redirect_uri' => $loginCheckUrl.'?redirect_uri='.urlencode($request->getUri())
-            ));
+            $authorizationUrl = $this->oauthProvider->getAuthorizationUrl($loginCheckUrl);
 
             return $this->httpUtils->createRedirectResponse($request, $authorizationUrl);
         }

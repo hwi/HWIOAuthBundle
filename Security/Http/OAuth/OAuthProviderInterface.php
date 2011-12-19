@@ -6,7 +6,7 @@ interface OAuthProviderInterface
 {
     function getUsername($accessToken);
 
-    function getAuthorizationUrl(array $extraParameters = array());
+    function getAuthorizationUrl($loginCheckUrl, array $extraParameters = array());
 
     function getAccessToken($code, array $extraParameters = array());
 }

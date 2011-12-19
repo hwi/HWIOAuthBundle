@@ -58,12 +58,13 @@ class OAuthProvider implements OAuthProviderInterface
         return $username;
     }
 
-    public function getAuthorizationUrl(array $extraParameters = array())
+    public function getAuthorizationUrl($loginCheckUrl, array $extraParameters = array())
     {
         $parameters = array_merge($extraParameters, array(
             'response_type' => 'code',
             'client_id'     => $this->getOption('client_id'),
             'scope'         => $this->getOption('scope'),
+            'redirect_uri'  => $loginCheckUrl,
         ));
 
         return $this->getOption('authorization_url').'?'.http_build_query($parameters);
