@@ -1,13 +1,13 @@
 <?php
 
-namespace Knp\OAuthBundle\Security\Core\Authentication\Provider;
+namespace Knp\Bundle\OAuthBundle\Security\Core\Authentication\Provider;
 
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-use Knp\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Knp\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+use Knp\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
 
 class OAuthProvider implements AuthenticationProviderInterface
 {

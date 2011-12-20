@@ -3,12 +3,12 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="knp_oauth.authentication.listener.oauth.class">Knp\OAuthBundle\Security\Http\Firewall\OAuthListener</parameter>
-        <parameter key="knp_oauth.authentication.provider.oauth.class">Knp\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider</parameter>
-        <parameter key="knp_oauth.authentication.entry_point.oauth.class">Knp\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint</parameter>
-        <parameter key="knp_oauth.user.provider">Knp\OAuthBundle\Security\Core\User\OAuthUserProvider</parameter>
-        <parameter key="knp_oauth.security.oauth.oauth_provider.class">Knp\OAuthBundle\Security\Http\OAuth\OAuthProvider</parameter>
-        <parameter key="knp_oauth.security.oauth.github_provider.class">Knp\OAuthBundle\Security\Http\OAuth\GithubProvider</parameter>
+        <parameter key="knp_oauth.authentication.listener.oauth.class">Knp\Bundle\OAuthBundle\Security\Http\Firewall\OAuthListener</parameter>
+        <parameter key="knp_oauth.authentication.provider.oauth.class">Knp\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider</parameter>
+        <parameter key="knp_oauth.authentication.entry_point.oauth.class">Knp\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint</parameter>
+        <parameter key="knp_oauth.user.provider">Knp\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider</parameter>
+        <parameter key="knp_oauth.security.oauth.oauth_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider</parameter>
+        <parameter key="knp_oauth.security.oauth.github_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\GithubProvider</parameter>
     </parameters>
 
     <services>

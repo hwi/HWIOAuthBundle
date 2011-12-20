@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\OAuthBundle\Security\Http\OAuth;
+namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
 
 interface OAuthProviderInterface
 {

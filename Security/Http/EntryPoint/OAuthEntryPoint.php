@@ -1,13 +1,13 @@
 <?php
 
-namespace Knp\OAuthBundle\Security\Http\EntryPoint;
+namespace Knp\Bundle\OAuthBundle\Security\Http\EntryPoint;
 
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\HttpFoundation\Request;
 
-use Knp\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
 
 class OAuthEntryPoint implements AuthenticationEntryPointInterface
 {

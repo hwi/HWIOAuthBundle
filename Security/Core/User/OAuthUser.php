@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\OAuthBundle\Security\Core\User;
+namespace Knp\Bundle\OAuthBundle\Security\Core\User;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 

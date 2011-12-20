@@ -1,8 +1,8 @@
 <?php
 
-namespace Knp\OAuthBundle\Security\Http\OAuth;
+namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
 
-use Knp\OAuthBundle\Security\Http\OAuth\OAuthProvider;
+use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider;
 
 class GithubProvider extends OAuthProvider
 {

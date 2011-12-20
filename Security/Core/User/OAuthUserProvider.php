@@ -1,13 +1,13 @@
 <?php
 
-namespace Knp\OAuthBundle\Security\Core\User;
+namespace Knp\Bundle\OAuthBundle\Security\Core\User;
 
 use Symfony\Component\Security\Core\User\UserProviderInterface,
     Symfony\Component\Security\Core\User\UserInterface;
 
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
-use Knp\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
 
 class OAuthUserProvider implements UserProviderInterface
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace Knp\OAuthBundle\Security\Http\OAuth;
+namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
 
-use Knp\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
 
 use Buzz\Client\ClientInterface as HttpClientInterface,
     Buzz\Message\Request as HttpRequest,

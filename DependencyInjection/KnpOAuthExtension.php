@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\OAuthBundle\DependencyInjection;
+namespace Knp\Bundle\OAuthBundle\DependencyInjection;
 
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;

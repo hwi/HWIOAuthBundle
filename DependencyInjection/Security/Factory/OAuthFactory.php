@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\OAuthBundle\DependencyInjection\Security\Factory;
+namespace Knp\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

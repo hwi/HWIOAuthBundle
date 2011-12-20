@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\OAuthBundle\Security\Core\Authentication\Token;
+namespace Knp\Bundle\OAuthBundle\Security\Core\Authentication\Token;
 
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 

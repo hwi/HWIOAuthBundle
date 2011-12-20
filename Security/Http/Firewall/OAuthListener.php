@@ -1,13 +1,13 @@
 <?php
 
-namespace Knp\OauthBundle\Security\Http\Firewall;
+namespace Knp\Bundle\OauthBundle\Security\Http\Firewall;
 
 use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-use Knp\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Knp\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+use Knp\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
 
 class OAuthListener extends AbstractAuthenticationListener
 {
