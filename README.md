@@ -24,10 +24,11 @@ Then run the usual `bin/vendors`:
 
     bin/vendors install
 
-Add `Buzz` to your autoload:
+Register autoloads:
 
     $loader->registerNamespaces(array(
-        'Buzz'             => __DIR__.'/../vendor/Buzz/lib/'
+        'Knp'              => __DIR__.'/../vendor/bundles',
+        'Buzz'             => __DIR__.'/../vendor/Buzz/lib'
     ));
 
 Register the bundles in your `AppKernel`:
@@ -40,7 +41,7 @@ Register the bundles in your `AppKernel`:
 Finally, add the security factory to your security.yml config file:
 
     factories:
-        - "%kernel.root_dir%/../src/Knp/Bundle/OAuthBundle/Resources/config/security/factories.xml
+        - "%kernel.root_dir%/../vendor/bundles/Knp/Bundle/OAuthBundle/Resources/config/security/factories.xml
 
 ## Configuration
 
