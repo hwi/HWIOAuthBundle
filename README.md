@@ -30,12 +30,17 @@ Add `Buzz` to your autoload:
         'Buzz'             => __DIR__.'/../vendor/Buzz/lib/'
     ));
 
-Finally, register the bundles in your `AppKernel`:
+Register the bundles in your `AppKernel`:
 
     $bundles = array(
         new Knp\OAuthBundle\KnpOAuthBundle(),
         new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
     );
+
+Finally, add the security factory to your security.yml config file:
+
+    factories:
+        - "%kernel.root_dir%/../src/Knp/Bundle/OAuthBundle/Resources/config/security/factories.xml
 
 ## Configuration
 
