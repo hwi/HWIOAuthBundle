@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\Security\Core\User;
+namespace Knp\Bundle\OAuthBundle\Security\Core\UserProvider;
 
 use Symfony\Component\Security\Core\User\UserProviderInterface,
     Symfony\Component\Security\Core\User\UserInterface,

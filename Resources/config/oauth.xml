@@ -8,7 +8,8 @@
         <parameter key="knp_oauth.authentication.listener.oauth.class">Knp\Bundle\OAuthBundle\Security\Http\Firewall\OAuthListener</parameter>
         <parameter key="knp_oauth.authentication.provider.oauth.class">Knp\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider</parameter>
         <parameter key="knp_oauth.authentication.entry_point.oauth.class">Knp\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint</parameter>
-        <parameter key="knp_oauth.user.provider">Knp\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider</parameter>
+        <parameter key="knp_oauth.user.provider.class">Knp\Bundle\OAuthBundle\Security\Core\UserProvider\OAuthUserProvider</parameter>
+        <parameter key="knp_oauth.user.provider.entity.class">Knp\Bundle\OAuthBundle\Security\Core\UserProvider\EntityUserProvider</parameter>
         <parameter key="knp_oauth.security.oauth.oauth_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider</parameter>
         <parameter key="knp_oauth.security.oauth.github_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\GithubProvider</parameter>
     </parameters>
@@ -26,7 +27,10 @@
         <service id="knp_oauth.authentication.listener.oauth" class="%knp_oauth.authentication.listener.oauth.class%" parent="security.authentication.listener.abstract" />
         <service id="knp_oauth.authentication.provider.oauth" class="%knp_oauth.authentication.provider.oauth.class%" />
         <service id="knp_oauth.authentication.entry_point.oauth" class="%knp_oauth.authentication.entry_point.oauth.class%" />
-        <service id="knp_oauth.user.provider" class="%knp_oauth.user.provider%" />
+        <service id="knp_oauth.user.provider" class="%knp_oauth.user.provider.class%" />
+        <service id="knp_oauth.user.provider.entity" class="%knp_oauth.user.provider.entity.class%">
+            <argument type="service" id="doctrine.orm.entity_manager" />
+        </service>
 
         <!-- builtin providers -->
 
