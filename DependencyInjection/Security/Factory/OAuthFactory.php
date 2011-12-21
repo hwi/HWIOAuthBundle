@@ -95,7 +95,6 @@ class OAuthFactory extends AbstractFactory
                 ->isRequired()
             ->end()
             ->scalarNode('scope')
-                ->cannotBeEmpty()
                 ->isRequired()
             ->end()
             ->scalarNode('secret')
