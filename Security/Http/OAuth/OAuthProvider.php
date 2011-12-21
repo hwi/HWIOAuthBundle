@@ -37,6 +37,13 @@ class OAuthProvider implements OAuthProviderInterface
 
         $this->options    = array_merge($this->options, $options);
         $this->httpClient = $httpClient;
+
+        $this->configure();
+    }
+
+    public function configure()
+    {
+
     }
 
     public function getOption($name)

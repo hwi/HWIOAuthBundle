@@ -12,4 +12,10 @@ class GithubProvider extends OAuthProvider
         'infos_url'         => 'https://github.com/api/v2/json/user/show',
         'username_path'     => 'user.login',
     );
+
+    public function configure()
+    {
+      // github uses comma to separate scopes
+      $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+    }
 }
