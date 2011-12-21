@@ -1,20 +1,43 @@
 <?php
 
-namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
+/*
+ * This file is part of the KnpOAuthBundle package.
+ *
+ * (c) KnpLabs <hello@knplabs.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 
-use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
 
 use Buzz\Client\ClientInterface as HttpClientInterface,
     Buzz\Message\Request as HttpRequest,
     Buzz\Message\Response as HttpResponse;
 
+use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
 
+/**
+ * OAuthProvider
+ *
+ * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ */
 class OAuthProvider implements OAuthProviderInterface
 {
+    /**
+     * @var array
+     */
     protected $options = array();
 
+    /**
+     * @var Buzz\Client\ClientInterface
+     */
     protected $httpClient;
 
+    /**
+     * @param Buzz\Client\ClientInterface
+     * @param array $options
+     */
     public function __construct(HttpClientInterface $httpClient, array $options)
     {
         if (null !== $options['infos_url'] && null === $options['username_path']) {
@@ -41,11 +64,21 @@ class OAuthProvider implements OAuthProviderInterface
         $this->configure();
     }
 
+    /**
+     * Gives a chance for extending providers to customize stuff
+     */
     public function configure()
     {
 
     }
 
+    /**
+     * Retrieve an option by name
+     *
+     * @throws InvalidArgumentException When the option does not exist
+     * @param string $name The option name
+     * @return mixed The option value
+     */
     public function getOption($name)
     {
         if (!array_key_exists($name, $this->options)) {
@@ -55,6 +88,13 @@ class OAuthProvider implements OAuthProviderInterface
         return $this->options[$name];
     }
 
+    /**
+     * Performs an HTTP request
+     *
+     * @param string $url The url to fetch
+     * @param string $method The HTTP method to use
+     * @return string The response content
+     */
     protected function httpRequest($url, $method = HttpRequest::METHOD_GET)
     {
         $request  = new HttpRequest($method, $url);
@@ -65,6 +105,9 @@ class OAuthProvider implements OAuthProviderInterface
         return $response->getContent();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getUsername($accessToken)
     {
         if ($this->getOption('infos_url') === null) {
@@ -87,6 +130,9 @@ class OAuthProvider implements OAuthProviderInterface
         return $username;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getAuthorizationUrl($loginCheckUrl, array $extraParameters = array())
     {
         $parameters = array_merge($extraParameters, array(
@@ -99,6 +145,9 @@ class OAuthProvider implements OAuthProviderInterface
         return $this->getOption('authorization_url').'?'.http_build_query($parameters);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getAccessToken($code, array $extraParameters = array())
     {
         $parameters = array_merge($extraParameters, array(

@@ -1,15 +1,37 @@
 <?php
 
+/*
+ * This file is part of the KnpOAuthBundle package.
+ *
+ * (c) KnpLabs <hello@knplabs.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Knp\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
-use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\DefinitionDecorator;
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory,
+    Symfony\Component\DependencyInjection\ContainerBuilder,
+    Symfony\Component\DependencyInjection\DefinitionDecorator,
+    Symfony\Component\DependencyInjection\Reference,
+    Symfony\Component\Config\Definition\Builder\NodeDefinition;
 
+/**
+ * OAuthFactory
+ *
+ * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ */
 class OAuthFactory extends AbstractFactory
 {
+    /**
+     * Creates an OAuth provider for a given firewall
+     *
+     * @param Symfony\Component\DependencyInjection\ContainerBuilder $container
+     * @param string $id The firewall id
+     * @param array $config The firewall config
+     * @return string The OAuth provider service id
+     */
     protected function createOAuthProvider(ContainerBuilder $container, $id, $config)
     {
         if (false !== strpos($config['oauth_provider'], '.')) {
@@ -28,6 +50,9 @@ class OAuthFactory extends AbstractFactory
         return $oauthProviderId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function createAuthProvider(ContainerBuilder $container, $id, $config, $userProviderId)
     {
         $providerId      = 'knp_oauth.authentication.provider.oauth.'.$id;
@@ -41,6 +66,9 @@ class OAuthFactory extends AbstractFactory
         return $providerId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function createEntryPoint($container, $id, $config, $defaultEntryPoint)
     {
         $entryPointId    = 'knp_oauth.authentication.entry_point.oauth.'.$id;
@@ -56,6 +84,9 @@ class OAuthFactory extends AbstractFactory
         return $entryPointId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function createListener($container, $id, $config, $userProvider)
     {
         $listenerId      = parent::createListener($container, $id, $config, $userProvider);
@@ -68,6 +99,9 @@ class OAuthFactory extends AbstractFactory
         return $listenerId;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function addConfiguration(NodeDefinition $node)
     {
         parent::addConfiguration($node);
@@ -104,17 +138,25 @@ class OAuthFactory extends AbstractFactory
         ;
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
     protected function getListenerId()
     {
       return 'knp_oauth.authentication.listener.oauth';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getKey()
     {
         return 'oauth';
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getPosition()
     {
         return 'http';
