@@ -1,10 +1,14 @@
 # KnpOAuthBundle, an OAuth firewall for all your Symfony2 OAuth needs.
 
-Still todo:
+## TODO:
 
 * ease local user persistance
 * code-cleanup
 * unit tests
+
+## Requirements
+
+This bundle requires Symfony 2.1 or later to work.
 
 ## Installation
 
@@ -13,9 +17,11 @@ This bundle depends on Buzz, the lightweight HTTP client by awesome @kriswallsmi
     [Buzz]
         git=https://github.com/kriswallsmith/Buzz.git
         version=v0.5
+
     [BuzzBundle]
         git=https://github.com/sensio/SensioBuzzBundle.git
         target=/bundles/Sensio/Bundle/BuzzBundle
+
     [KnpOAuthBundle]
         git=https://github.com/KnpLabs/KnpOAuthBundle.git
         target=/bundles/Knp/Bundle/OAuthBundle
@@ -37,11 +43,6 @@ Register the bundles in your `AppKernel`:
         new Knp\Bundle\OAuthBundle\KnpOAuthBundle(),
         new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
     );
-
-Finally, add the security factory to your security.yml config file:
-
-    factories:
-        - "%kernel.root_dir%/../vendor/bundles/Knp/Bundle/OAuthBundle/Resources/config/security/factories.xml
 
 ## Configuration
 
