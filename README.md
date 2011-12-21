@@ -40,7 +40,7 @@ Register autoloads:
 Register the bundles in your `AppKernel`:
 
     $bundles = array(
-        new Knp\OAuthBundle\KnpOAuthBundle(),
+        new Knp\Bundle\OAuthBundle\KnpOAuthBundle(),
         new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
     );
 
@@ -110,9 +110,9 @@ Of course, you can still set a custom `username_path` when using a builtin provi
 
 ## Using your own custom providers
 
-You can write your own OAuth providers to use with this bundle. A custom OAuth provider consists in a class implementing `Knp\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface` and the corresponding DIC service.
+You can write your own OAuth providers to use with this bundle. A custom OAuth provider consists in a class implementing `Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface` and the corresponding DIC service.
 
-If your custom provider is simple enough, you can also extend `Knp\OAuthBundle\Security\Http\OAuth\OAuthProvider`, see the `GithubProvider` for more information on that.
+If your custom provider is simple enough, you can also extend `Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider`, see the `GithubProvider` for more information on that.
 
 One your custom provider is writen and added to the DIC, you just have to configure `oauth_provider` to its service name. For example, say you implemented a `My\FooBarProvider` and added a service for it named `my.oauth.foobar_provider`, then your configuration would become:
 
