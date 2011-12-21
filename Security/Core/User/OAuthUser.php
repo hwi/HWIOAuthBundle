@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class OAuthUser implements UserInterface
 {
     /**
-     * @var string $username
+     * @param string $username
      */
     public function __construct($username)
     {
