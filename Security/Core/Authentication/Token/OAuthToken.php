@@ -49,6 +49,7 @@ class OAuthToken extends AbstractToken
      */
     public function isAuthenticated()
     {
+        // @todo pas très bon ça
         return count($this->getRoles()) > 0;
     }
 }

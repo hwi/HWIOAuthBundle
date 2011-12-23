@@ -23,14 +23,18 @@ class EntityUserProvider extends BaseEntityUserProvider
 {
     protected $class;
 
+    protected $property;
+
     /**
      * @var string $username
      * @return mixed An user entity
      */
     public function createEntity($username)
     {
-        $user = new $this->class;
-        $user->setUsername($username);
+        $setter = 'set'.ucfirst($this->property);
+        $user   = new $this->class;
+
+        call_user_func(array($user, $setter), $username);
 
         return $user;
     }
