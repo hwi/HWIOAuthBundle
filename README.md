@@ -2,7 +2,7 @@
 
 ## TODO:
 
-* ease local user persistance
+* implement a PropelUserProvider
 * code-cleanup
 * unit tests
 
@@ -133,6 +133,18 @@ One your custom provider is writen and added to the DIC, you just have to config
 
 ## User providers
 
-This bundle comes with a custom `UserProvider` that does nothing but create valid users with default roles (`ROLE_USER` for now) and using `infos_url` in conjunction with `username_path` to provide `getUsername()`'s result. This `UserProvider` is used to represent *remote* OAuth user, when you don't need to do fancy things with your users, such as managing roles and ACLs.
+This bundle comes with a few custom `UserProvider`s:
 
-More `UserProvider`s will be added in the future.
+* `OAuthUserProvider`, that does nothing but create valid users with default roles (`ROLE_USER` for now) and using `infos_url` in conjunction with `username_path` to provide `getUsername()`'s result. This `UserProvider` is used to represent *remote* OAuth user, when you don't need to do fancy things with your users, such as managing roles and ACLs. Example usage:
+
+    providers:
+        secured_area:
+            id: knp_oauth.user.provider
+
+* `EntityUserProvider` fetches users from the database and creates them on the fly if they don't already exist. It requires Doctrine to work. It works exactly like Doctrine's entity user provider, except its configuration key is `oauth_entity`:
+
+    providers:
+        secured_area:
+            oauth_entity:
+                class: KnpBundlesBundle:User
+                property: username
