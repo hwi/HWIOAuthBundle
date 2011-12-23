@@ -1,6 +1,6 @@
 # KnpOAuthBundle, an OAuth firewall for all your Symfony2 OAuth needs.
 
-Hey there, welcome to this awesome README file. You should really read the [full documentation](master/Resources/doc/01_index.md), but if you're in a hurry (I know you are), this file should help you quickly getting a working setup.
+Hey there, welcome to this awesome README file. You should really read the [full documentation](https://github.com/KnpLabs/KnpOAuthBundle/blob/master/Resources/doc/01_index.md), but if you're in a hurry (I know you are), this file should help you quickly getting a working setup.
 
 ## Requirements
 
@@ -66,7 +66,7 @@ Using the `KnpOAuthBundle` is just a matter of configuring an `oauth` firewall i
                     check_path:       /secured/login_check
                     login_path:       /secured/login
 
-Please see [the configuration reference](master/Resources/doc/03_configuration.md) for a description of the configuration options.
+Please see [the configuration reference](https://github.com/KnpLabs/KnpOAuthBundle/blob/master/Resources/doc/03_configuration.md) for a description of the configuration options.
 
 Right now, what you probably want to know is that this bundle comes with a few pre-configured oauth provider, namely:
 
@@ -75,8 +75,8 @@ Right now, what you probably want to know is that this bundle comes with a few p
 
 If you don't see your favorite provider in the list, don't worry, there are three solutions, depending on how much of a hurry you're in:
 
-1. [Implement it](05_custom_oauth_providers.md) (and it would be awesome if you contributed it afterwards)
-2. [Use the generic OAuth provider](master/Resources/doc/04_builtin_oauth_providers.md)
+1. [Implement it](https://github.com/KnpLabs/KnpOAuthBundle/blob/master/Resources/doc/05_custom_oauth_providers.md) (and it would be awesome if you contributed it afterwards)
+2. [Use the generic OAuth provider](https://github.com/KnpLabs/KnpOAuthBundle/blob/master/Resources/doc/04_builtin_oauth_providers.md)
 3. [Ask us to implement it](https://github.com/KnpLabs/KnpOAuthBundle/issues/new). (please provide as much information as possible (`authorize_url`, `access_token_url`, `infos_url` (with its response format) and `username_path` would be nice))
 
 ## User providers
