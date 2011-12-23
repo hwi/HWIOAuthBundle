@@ -1,0 +1,79 @@
+# KnpOAuthBundle
+
+## Custom OAuth Providers
+
+You can of course implement your own custom OAuth provider. The good news is it's a fairly easy three steps process:
+
+1. Implement the `Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface` interface
+2. Declare the corresponding service
+3. Configure your firewall
+
+### Implementing the interface
+
+The interface is not too hard to implement, it only consists in three methods:
+
+* `getUsername($accessToken)` must return the user's username.
+* `getAuthorizationUrl($loginCheckUrl, array $extraParameters = array())` must return the provider's authorization url.
+* `getAccessToken($code, array $extraParameters = array())` must return an access token.
+
+Please see `Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider` for an example implementation.
+
+To ease the task even a little more, you can extend the generic `OAuthProvider` provider. This provider comes with a few helper methods:
+
+* `configure()` is the place to put some custom logic (you can see the `GithubProvider` for an example of that).
+* `getOption($name)` retrieves an option, with existance check.
+* `httpRequest($url, $method)` is a small wrapper around `Buzz`.
+
+### Declaring the DIC service
+
+Once your provider is implemented, you need to declare it as a DIC service. This step is fairly easy too. First you need to declare a DependencyInjection Extension somewhere in your application (most likely, in the bundle where you put your custom provider). A DependencyInjection Extension consists in a class located in `DependencyInjection/MyBundleExtension.php`, that extends the `Symfony\Component\HttpKernel\DependencyInjection\Extension` class and overload the `load` method. Long story short, your extension should look something like that:
+
+    <?php
+
+    namespace Knp\Bundle\OAuthBundle\DependencyInjection;
+
+    use Symfony\Component\HttpKernel\DependencyInjection\Extension,
+        Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
+        Symfony\Component\DependencyInjection\ContainerBuilder,
+        Symfony\Component\Config\FileLocator;
+
+    class KnpOAuthExtension extends Extension
+    {
+        public function load(array $configs, ContainerBuilder $container)
+        {
+            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
+            $loader->load('services.xml');
+        }
+    }
+
+This will load the `Resources/config/services.xml` configuration file into the DIC configuration. Next step is to create that configuration file. It's fairly easy too. For the purpose of this documentation, let's imagine your provider is `MyBundle\Security\Http\OAuth\MyProvider`:
+
+    <?xml version="1.0" ?>
+    <container xmlns="http://symfony.com/schema/dic/services"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+        <service id="my_bundle.authentication.entry_point.my_provider" class="MyBundle\Security\Http\OAuth\MyProvider" />
+    </container>
+
+Bear with me, we're almost done.
+
+### Configuring your firewall
+
+The `KnpOAuthBundle` tries to be clever, and decides that any OAuth provider containing a dot (`.`) is in fact a DIC service that we want to use. The configuration would then be:
+
+    security:
+        firewalls:
+            secured_area:
+                pattern:    ^/secured/
+                oauth:
+                    oauth_provider:   my_bundle.authentication.entry_point.my_provider
+                    client_id:        <your_oauth_client_id>
+                    secret:           <your_oauth_secret>
+                    scope:            <your_oauth_scope>
+                    check_path:       /secured/login_check
+                    login_path:       /secured/login
+                    failure_path:     /
+
+What options are required is totally up to your provider's implementation, but you will most likely want to pre-configure most of them.
+
+Hurray! You have an OAuth provider! Will you have a [user provider](06_builtin_user_providers.md) with that?

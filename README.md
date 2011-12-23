@@ -1,18 +1,17 @@
 # KnpOAuthBundle, an OAuth firewall for all your Symfony2 OAuth needs.
 
-## TODO:
-
-* implement a PropelUserProvider
-* code-cleanup
-* unit tests
+Hey there, welcome to this awesome README file. You should really read the [full documentation](master/Resources/doc/01_index.md), but if you're in a hurry (I know you are), this file should help you quickly getting a working setup.
 
 ## Requirements
 
-This bundle requires Symfony 2.1 or later to work.
+* Symfony version: _2.1 or later_
+* Dependencies:
+ * [`SensioBuzzBundle`](https://github.com/sensio/SensioBuzzBundle)
+ * [`Buzz`](https://github.com/kriswallsmith/Buzz)
 
 ## Installation
 
-This bundle depends on Buzz, the lightweight HTTP client by awesome @kriswallsmith, so add it to your project's deps file alongside the bundle itself. Also, since we're lazy, we'll use sensiolabs' `BuzzBundle` by no less awesome @marcw:
+Add this to your `deps`:
 
     [Buzz]
         git=https://github.com/kriswallsmith/Buzz.git
@@ -67,83 +66,22 @@ Using the `KnpOAuthBundle` is just a matter of configuring an `oauth` firewall i
                     check_path:       /secured/login_check
                     login_path:       /secured/login
 
-Here's a quick description of what each directive means:
+Please see [the configuration reference](master/Resources/doc/03_configuration.md) for a description of the configuration options.
 
-* `oauth_provider` is the OAuth provider name to use. This bundle comes with a few builtin providers:
- * `oauth`, a basic provider which needs all of the options to work. This is the default provider if you don't specify `oauth_provider`.
- * the `github` provider encapsulates a few options. Basically, you don't need the options marked *optional* below.
- * if your `oauth_provider` contains a dot (`.`), it will be considered as a fully qualified service name and the bundle will attempt to retrieve it from the DIC.
-* `authorize_url` (*optional*) is the OAuth authorization URL provided by your OAuth provider.
-* `access_token_url` (*optional*) is the OAuth access token url, courtesy of your OAuth provider.
-* `infos_url` (*optional*) is the URL where your provider will give you infos about your user. This option is always optional (but it requires `username_path` to work). If it's not set, the `access_token` will be used as the `username`.
-* `username_path` (*optional*) is the dot-separated array path where to find the username in the response content of `infos_url` (e.g. github returns an array in which `$foo['user']['login']` holds the user's login, so we set `username_path` to `user.login`). Like `infos_url`, this option is always optional, but you will need to set `infos_url` to use it.
-* `client_id` is the... client id, provided by... your OAuth provider.
-* `secret`, do I really have to explain? hint: it's provided by your OAuth provider too.
-* `scope` is how much information and authorization you wish to access.
+Right now, what you probably want to know is that this bundle comes with a few pre-configured oauth provider, namely:
 
-The `check_path` and `login_path` directives are standard Symfony2 security configuration. You should read the [security documentation](http://symfony.com/doc/current/book/security.html) if you're not yet familiar with them.
+* `github` (required options: `client_id`, `secret`)
+* er... that's all for now.
 
-## Built-in OAuth providers
+If you don't see your favorite provider in the list, don't worry, there are three solutions, depending on how much of a hurry you're in:
 
-Built-in providers exist to ease configuration of your OAuth firewall. They come pre-configured and they can have custom mechanisms to retrieve the user's username.
-
-Here's a quick example using the `GithubProvider`:
-
-    security:
-        firewalls:
-            login:
-                pattern:    ^/secured/login$
-                security:   false
-            secured_area:
-                pattern:    ^/secured/
-                oauth:
-                    oauth_provider:   github
-                    client_id:        <your_oauth_client_id>
-                    secret:           <your_oauth_secret>
-                    scope:            <your_oauth_scope>
-                    check_path:       /secured/login_check
-                    login_path:       /secured/login
-
-Sounds easy? That's because it is.
-
-Of course, you can still set a custom `username_path` when using a builtin provider. Actually, you can override any pre-configured option.
-
-## Using your own custom providers
-
-You can write your own OAuth providers to use with this bundle. A custom OAuth provider consists in a class implementing `Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface` and the corresponding DIC service.
-
-If your custom provider is simple enough, you can also extend `Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider`, see the `GithubProvider` for more information on that.
-
-One your custom provider is writen and added to the DIC, you just have to configure `oauth_provider` to its service name. For example, say you implemented a `My\FooBarProvider` and added a service for it named `my.oauth.foobar_provider`, then your configuration would become:
-
-    security:
-        firewalls:
-            login:
-                pattern:    ^/secured/login$
-                security:   false
-            secured_area:
-                pattern:    ^/secured/
-                oauth:
-                    oauth_provider:   my.oauth.foobar_provider
-                    client_id:        <your_oauth_client_id>
-                    secret:           <your_oauth_secret>
-                    scope:            <your_oauth_scope>
-                    check_path:       /secured/login_check
-                    login_path:       /secured/login
+1. [Implement it](05_custom_oauth_providers.md) (and it would be awesome if you contributed it afterwards)
+2. [Use the generic OAuth provider](master/Resources/doc/04_builtin_oauth_providers.md)
+3. [Ask us to implement it](https://github.com/KnpLabs/KnpOAuthBundle/issues/new). (please provide as much information as possible (`authorize_url`, `access_token_url`, `infos_url` (with its response format) and `username_path` would be nice))
 
 ## User providers
 
-This bundle comes with a few custom `UserProvider`s:
-
-### `OAuthUserProvider`
-
-This one does nothing but create valid users with default roles (`ROLE_USER` for now) and using `infos_url` in conjunction with `username_path` to provide `getUsername()`'s result. This `UserProvider` is used to represent *remote* OAuth user, when you don't need to do fancy things with your users, such as managing roles and ACLs. Example usage:
-
-    providers:
-        secured_area:
-            id: knp_oauth.user.provider
-
-### `EntityUserProvider`
+Most of the time, if you are using Doctrine, you will want to use the `EntityUserProvider`.
 
 This provider fetches users from the database and creates them on the fly if they don't already exist. It requires Doctrine to work. It works exactly like Doctrine's entity user provider, except its configuration key is `oauth_entity`:
 
@@ -151,4 +89,4 @@ This provider fetches users from the database and creates them on the fly if the
         secured_area:
             oauth_entity:
                 class: KnpBundlesBundle:User
-                property: username
+                property: name
