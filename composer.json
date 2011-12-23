@@ -1,0 +1,63 @@
+{
+    "name":        "knplabs/knp-oauth-bundle",
+    "type":        "symfony-bundle",
+    "description": "An OAuth firewall for Symfony2",
+    "keywords":    ["security", "firewall", "oauth"],
+    "homepage":    "http://github.com/KnpLabs/KnpOAuthBundle",
+    "license":     "MIT",
+
+    "authors": [
+        {
+            "name": "Geoffrey Bachelet",
+            "email": "geoffrey.bachelet@gmail.com"
+        }
+    ],
+
+    "require": {
+        "php":                      ">=5.3.2",
+        "symfony/framework-bundle": ">=2.1",
+        "sensio/buzz-bundle":       "*",
+    },
+
+    "suggest": {
+        "symfony/doctrine-bundle": "*"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Knp\\Bundle\\OAuthBundle": ""
+        }
+    },
+
+    "target-dir": "Knp/Bundle/OAuthBundle",
+
+    "repositories": {
+        "sensio/buzz-bundle": {
+            "package": {
+                "name":     "sensio/buzz-bundle",
+                "version":  "master",
+
+                "dist": {
+                    "url":  "https://github.com/sensio/SensioBuzzBundle/zipball/master",
+                    "type": "zip"
+                },
+
+                "source": {
+                    "url":          "git://github.com/sensio/SensioBuzzBundle.git",
+                    "type":         "git",
+                    "reference":    "master"
+                },
+
+                "require": {
+                    "kriswallsmith/buzz": "*"
+                },
+
+                "autoload": {
+                    "psr-0": { "Sensio\\Bundle\\SensioBuzzBundle": "" }
+                },
+
+                "target-dir": "Sensio/Bundle/BuzzBundle"
+            }
+        }
+    }
+}
