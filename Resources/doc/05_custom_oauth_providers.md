@@ -26,7 +26,7 @@ To ease the task even a little more, you can extend the generic `OAuthProvider` 
 
 ### Declaring the DIC service
 
-Once your provider is implemented, you need to declare it as a DIC service. This step is fairly easy too, since Symfony provides a way to declare services without the hassle of creating a DIC Extension. Just define your service in your configuration, under the `services` section:
+Once your provider is implemented, you need to declare it as a DIC service. This step is fairly easy too, you just have to define your service in your configuration, under the `services` section:
 
     services:
         my_bundle.security.oauth.my_provider:
