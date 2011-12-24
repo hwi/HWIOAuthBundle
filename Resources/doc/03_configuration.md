@@ -31,6 +31,12 @@ Here's a full-fledged example of configuration:
                     path: /secured/logout
                     target: /
 
+        providers:
+            main:
+                oauth_entity:
+                    class: MyBundle:User
+                    property: username
+
 Please note that most of these options are *optional* under certain conditions. Mostly, when you're using a provider that comes pre-configured with them. See the [built-in OAuth providers page](04_builtin_oauth_providers.md) for more information on that.
 
 The `check_path`, `login_path` and `failure_path` are standard Symfony2 security configuration directives.
