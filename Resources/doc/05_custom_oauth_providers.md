@@ -26,34 +26,13 @@ To ease the task even a little more, you can extend the generic `OAuthProvider` 
 
 ### Declaring the DIC service
 
-Once your provider is implemented, you need to declare it as a DIC service. This step is fairly easy too. First you need to declare a DependencyInjection Extension somewhere in your application (most likely, in the bundle where you put your custom provider). A DependencyInjection Extension consists in a class located in `DependencyInjection/MyBundleExtension.php`, that extends the `Symfony\Component\HttpKernel\DependencyInjection\Extension` class and overload the `load` method. Long story short, your extension should look something like that:
+Once your provider is implemented, you need to declare it as a DIC service. This step is fairly easy too, since Symfony provides a way to declare services without the hassle of creating a DIC Extension. Just define your service in your configuration, under the `services` section:
 
-    <?php
+    services:
+        my_bundle.security.oauth.my_provider:
+            class: MyBundle\Security\Http\OAuth\MyProvider
 
-    namespace Knp\Bundle\OAuthBundle\DependencyInjection;
-
-    use Symfony\Component\HttpKernel\DependencyInjection\Extension,
-        Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
-        Symfony\Component\DependencyInjection\ContainerBuilder,
-        Symfony\Component\Config\FileLocator;
-
-    class KnpOAuthExtension extends Extension
-    {
-        public function load(array $configs, ContainerBuilder $container)
-        {
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
-            $loader->load('services.xml');
-        }
-    }
-
-This will load the `Resources/config/services.xml` configuration file into the DIC configuration. Next step is to create that configuration file. It's fairly easy too. For the purpose of this documentation, let's imagine your provider is `MyBundle\Security\Http\OAuth\MyProvider`:
-
-    <?xml version="1.0" ?>
-    <container xmlns="http://symfony.com/schema/dic/services"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-        <service id="my_bundle.authentication.entry_point.my_provider" class="MyBundle\Security\Http\OAuth\MyProvider" />
-    </container>
+See [Symfony's service container documentation](http://symfony.com/doc/current/book/service_container.html#creating-configuring-services-in-the-container) for more information on that.
 
 Bear with me, we're almost done.
 
