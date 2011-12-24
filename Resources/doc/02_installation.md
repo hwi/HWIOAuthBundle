@@ -27,7 +27,7 @@ Then you need to update your vendors:
 If you don't already have bundles in the `Knp` or `Sensio` namespaces, you will need to register these namespaces to your `app/autoload.php`:
 
     $loader->registerNamespaces(array(
-        'Knp'              => __DIR__.'/../vendor/bundles',
+        'Knp\\Bundle'      => __DIR__.'/../vendor/bundles',
         'Buzz'             => __DIR__.'/../vendor/Buzz/lib'
     ));
 
