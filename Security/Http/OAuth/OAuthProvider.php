@@ -15,6 +15,8 @@ use Buzz\Client\ClientInterface as HttpClientInterface,
     Buzz\Message\Request as HttpRequest,
     Buzz\Message\Response as HttpResponse;
 
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+
 use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
 
 /**
@@ -163,7 +165,7 @@ class OAuthProvider implements OAuthProviderInterface
         parse_str($this->httpRequest($url), $response);
 
         if (isset($response['error'])) {
-            throw new \RuntimeError(sprintf('OAuth error: "%s"', $response['error']));
+            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
         }
 
         return $response['access_token'];
