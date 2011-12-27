@@ -14,7 +14,7 @@ namespace Knp\Bundle\OAuthBundle\Security\Core\UserProvider;
 use Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\DefinitionDecorator,
     Symfony\Component\Config\Definition\Builder\NodeDefinition,
-    Symfony\Bundle\DoctrineBundle\DependencyInjection\Security\UserProvider\EntityFactory as BaseEntityFactory;
+    Symfony\Bridge\Doctrine\DependencyInjection\Security\UserProvider\EntityFactory as BaseEntityFactory;
 
 /**
  * EntityFactory

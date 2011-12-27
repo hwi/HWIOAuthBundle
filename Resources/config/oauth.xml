@@ -29,7 +29,7 @@
         <service id="knp_oauth.authentication.entry_point.oauth" class="%knp_oauth.authentication.entry_point.oauth.class%" />
         <service id="knp_oauth.user.provider" class="%knp_oauth.user.provider.class%" />
         <service id="knp_oauth.user.provider.entity" class="%knp_oauth.user.provider.entity.class%">
-            <argument type="service" id="doctrine.orm.entity_manager" />
+            <argument type="service" id="doctrine" />
         </service>
 
         <!-- builtin providers -->
