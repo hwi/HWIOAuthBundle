@@ -4,10 +4,10 @@ Hey there, welcome to this awesome README file. You should really read the [full
 
 ## Requirements
 
-* Symfony version: _2.1 or later_
+* Symfony version: __2.1__ *(current master branch) or later*
 * Dependencies:
+ * [`Buzz`](https://github.com/kriswallsmith/Buzz) version: __0.5__ *or later*
  * [`SensioBuzzBundle`](https://github.com/sensio/SensioBuzzBundle)
- * [`Buzz`](https://github.com/kriswallsmith/Buzz)
 
 ## Installation
 
@@ -19,29 +19,39 @@ Add this to your `deps`:
 
     [BuzzBundle]
         git=https://github.com/sensio/SensioBuzzBundle.git
-        target=/bundles/Sensio/Bundle/BuzzBundle
+        target=bundles/Sensio/Bundle/BuzzBundle
 
     [KnpOAuthBundle]
         git=https://github.com/KnpLabs/KnpOAuthBundle.git
-        target=/bundles/Knp/Bundle/OAuthBundle
+        target=bundles/Knp/Bundle/OAuthBundle
 
 Then run the usual `bin/vendors`:
 
-    bin/vendors install
+```bash
+$ bin/vendors install
+```
 
 Register autoloads:
 
-    $loader->registerNamespaces(array(
-        'Knp'              => __DIR__.'/../vendor/bundles',
-        'Buzz'             => __DIR__.'/../vendor/Buzz/lib'
-    ));
+```php
+<?php
+// (...)
+$loader->registerNamespaces(array(
+    'Knp'              => __DIR__.'/../vendor/bundles',
+    'Buzz'             => __DIR__.'/../vendor/Buzz/lib'
+));
+```
 
 Register the bundles in your `AppKernel`:
 
-    $bundles = array(
-        new Knp\Bundle\OAuthBundle\KnpOAuthBundle(),
-        new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
-    );
+```php
+<?php
+// (...)
+$bundles = array(
+    new Knp\Bundle\OAuthBundle\KnpOAuthBundle(),
+    new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
+);
+```
 
 ## Configuration
 
@@ -65,6 +75,7 @@ Using the `KnpOAuthBundle` is just a matter of configuring an `oauth` firewall i
                     scope:            <your_oauth_scope>
                     check_path:       /secured/login_check
                     login_path:       /secured/login
+
 
 Please see [the configuration reference](https://github.com/KnpLabs/KnpOAuthBundle/blob/master/Resources/doc/03_configuration.md) for a description of the configuration options.
 
