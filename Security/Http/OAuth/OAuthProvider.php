@@ -126,6 +126,9 @@ class OAuthProvider implements OAuthProviderInterface
         $username     = $userInfos;
 
         foreach ($usernamePath as $path) {
+            if (!array_key_exists($path, $username)) {
+                throw new AuthenticationException(sprintf('Could not follow username path "%s" in OAuth provider response: %s', $this->getOption('username_path')), var_export($userInfos, true));
+            }
             $username = $username[$path];
         }
 
