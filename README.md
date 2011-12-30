@@ -1,8 +1,8 @@
-# KnpOAuthBundle, an OAuth firewall Symfony2
+# KnpOAuthBundle, an OAuth firewall for Symfony2
 
 ## Instructions for 2.1 branch
 
-Please note this is the 2.1 compatible branch of this bundle. If you are using Symfony 2.0.*, then you should upgrade. If you can't, you can still use the [2.0 branch](https://github.com/KnpLabs/KnpOAuthBundle/tree/2.0).
+Please note this is the 2.1 compatible branch of this bundle. If you are using Symfony 2.0.\*, then you should upgrade. If you can't, you can still use the [2.0 branch](https://github.com/KnpLabs/KnpOAuthBundle/tree/2.0).
 
 ## Introduction
 
