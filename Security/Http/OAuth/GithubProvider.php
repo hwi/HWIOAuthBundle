@@ -27,7 +27,7 @@ class GithubProvider extends OAuthProvider
         'authorization_url' => 'https://github.com/login/oauth/authorize',
         'access_token_url'  => 'https://github.com/login/oauth/access_token',
         'infos_url'         => 'https://api.github.com/user',
-        'username_path'     => 'user.login',
+        'username_path'     => 'login',
     );
 
     /**
