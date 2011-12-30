@@ -79,6 +79,7 @@ class OAuthFactory extends AbstractFactory
             ->addArgument(new Reference('security.http_utils'))
             ->addArgument(new Reference($oauthProviderId))
             ->addArgument($config['check_path'])
+            ->addArgument($config['login_path'])
         ;
 
         return $entryPointId;

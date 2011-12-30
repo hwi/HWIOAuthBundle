@@ -45,11 +45,12 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
      * @param Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface $oauthProvider
      * @param string $checkPath
      */
-    public function __construct(HttpUtils $httpUtils, OAuthProviderInterface $oauthProvider, $checkPath)
+    public function __construct(HttpUtils $httpUtils, OAuthProviderInterface $oauthProvider, $checkPath, $loginPath)
     {
         $this->httpUtils        = $httpUtils;
         $this->oauthProvider    = $oauthProvider;
         $this->checkPath        = $checkPath;
+        $this->loginPath        = $loginPath;
     }
 
     /**
@@ -58,6 +59,10 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     public function start(Request $request, AuthenticationException $authException = null)
     {
         if (!$this->httpUtils->checkRequestPath($request, $this->checkPath)) {
+            if ($this->httpUtils->checkRequestPath($request, $this->loginPath)) {
+                $request->getSession()->remove('_security.target_path');
+            }
+
             $loginCheckUrl = $this->httpUtils
                 ->createRequest($request, $this->checkPath)
                 ->getUri();

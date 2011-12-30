@@ -10,9 +10,6 @@ Here's a full-fledged example of configuration:
 
     security:
         firewalls:
-            login:
-                pattern:    ^/secured/login$
-                security:   false
             secured_area:
                 pattern:    ^/secured/
                 oauth:
@@ -36,6 +33,8 @@ Here's a full-fledged example of configuration:
                 oauth_entity:
                     class: MyBundle:User
                     property: username
+
+If you're familiar with the security component, you might have noticed that contrary to the form login listener, we don't disable security on the `login_path`. This is needed for this firewall to work _as expected_ when you hit the login page.
 
 Please note that most of these options are *optional* under certain conditions. Mostly, when you're using a provider that comes pre-configured with them. See the [built-in OAuth providers page](04_builtin_oauth_providers.md) for more information on that.
 

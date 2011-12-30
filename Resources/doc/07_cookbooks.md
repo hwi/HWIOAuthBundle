@@ -26,6 +26,7 @@ This is the [KnpBundles](http://knpbundles.com/) setup. Basically, you can brows
                     target: /
 
         access_control:
+            - { path: ^/login$, roles: ROLE_USER }
             - { path: ^/add, roles: ROLE_USER }
             - { path: change-usage-status$, roles: ROLE_USER }
 
@@ -37,4 +38,4 @@ This is the [KnpBundles](http://knpbundles.com/) setup. Basically, you can brows
 
 The key here is the `access_control` section. We define a firewall on the entire website that allows anonymous connections (anonymous users are given the `IS_AUTHENTICATED_ANONYMOUSLY` and that's all) so that everyone can browser the site, but still be authenticated in the Symfony2 meaning of the term.
 
-Then we need to tell Symfony that we want extra-security for some paths, using the `access_control`. We require the `ROLE_USER` role, thus forcing already anonymously authenticated user to re-authenticate to gain higher access privileges.
+Then we need to tell Symfony that we want extra-security for some paths, using the `access_control`. We require the `ROLE_USER` role, thus forcing already anonymously authenticated user to re-authenticate to gain higher access privileges. Note that we force full authentication on the `login_path` to enforce using the OAuth Entry Point.
