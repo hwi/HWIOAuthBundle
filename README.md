@@ -63,16 +63,16 @@ Using the `KnpOAuthBundle` is just a matter of configuring an `oauth` firewall i
             secured_area:
                 pattern:    ^/secured/
                 oauth:
-                    oauth_provider:   oauth
-                    authorize_url:    https://github.com/login/oauth/authorize
-                    access_token_url: https://github.com/login/oauth/access_token
-                    infos_url:        https://github.com/api/v2/json/user/show
-                    username_path:    user.login
-                    client_id:        <your_oauth_client_id>
-                    secret:           <your_oauth_secret>
-                    scope:            <your_oauth_scope>
-                    check_path:       /secured/login_check
-                    login_path:       /secured/login
+                    oauth_provider:    oauth
+                    authorization_url: https://github.com/login/oauth/authorize
+                    access_token_url:  https://github.com/login/oauth/access_token
+                    infos_url:         https://github.com/api/v2/json/user/show
+                    username_path:     user.login
+                    client_id:         <your_oauth_client_id>
+                    secret:            <your_oauth_secret>
+                    scope:             <your_oauth_scope>
+                    check_path:        /secured/login_check
+                    login_path:        /secured/login
 
 Please see [the configuration reference](https://github.com/KnpLabs/KnpOAuthBundle/blob/master/Resources/doc/03_configuration.md) for a description of the configuration options.
 
