@@ -12,7 +12,8 @@
 namespace Knp\Bundle\OAuthBundle\Security\Core\UserProvider;
 
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException,
-    Symfony\Bridge\Doctrine\Security\User\EntityUserProvider as BaseEntityUserProvider;
+    Symfony\Bridge\Doctrine\Security\User\EntityUserProvider as BaseEntityUserProvider,
+    Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
  * EntityUserProvider
@@ -21,9 +22,23 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException,
  */
 class EntityUserProvider extends BaseEntityUserProvider
 {
-    protected $class;
+    private $class;
+    private $property;
 
-    protected $property;
+    public function __construct(ManagerRegistry $registry, $class, $property = null, $managerName = null)
+    {
+        $this->property = $property;
+        $this->class = $class;
+
+        $this->em = $registry->getManager($managerName);
+
+        if (false !== strpos($this->class, ':')) {
+            $metadata = $this->em->getClassMetadata($this->class);
+            $this->class = $metadata->getName();
+        }
+
+        parent::__construct($registry, $class, $property, $managerName);
+    }
 
     /**
      * @var string $username
@@ -49,6 +64,7 @@ class EntityUserProvider extends BaseEntityUserProvider
         } catch (UsernameNotFoundException $e) {
             $user = $this->createEntity($username);
             $this->em->persist($user);
+            $this->em->flush();
         }
 
         return $user;
