@@ -31,7 +31,7 @@ class FacebookProvider extends OAuthProvider
     );
 
     /**
-     * Github unfortunately breaks the spec by using commas instead of spaces
+     * Facebook unfortunately breaks the spec by using commas instead of spaces
      * to separate scopes
      */
     public function configure()
