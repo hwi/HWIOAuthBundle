@@ -24,6 +24,7 @@ class EntityUserProvider extends BaseEntityUserProvider
 {
     private $class;
     private $property;
+    private $em;
 
     public function __construct(ManagerRegistry $registry, $class, $property = null, $managerName = null)
     {
