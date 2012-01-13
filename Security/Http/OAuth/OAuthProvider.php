@@ -39,8 +39,8 @@ class OAuthProvider implements OAuthProviderInterface
     protected $httpClient;
 
     /**
-     * @param Buzz\Client\ClientInterface
-     * @param array $options
+     * @param Buzz\Client\ClientInterface $httpClient
+     * @param array                       $options
      */
     public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options)
     {
@@ -90,8 +90,8 @@ class OAuthProvider implements OAuthProviderInterface
      * Retrieve an option by name
      *
      * @throws InvalidArgumentException When the option does not exist
-     * @param string $name The option name
-     * @return mixed The option value
+     * @param string                    $name The option name
+     * @return mixed                    The option value
      */
     public function getOption($name)
     {
@@ -109,10 +109,16 @@ class OAuthProvider implements OAuthProviderInterface
      * @param string $method The HTTP method to use
      * @return string The response content
      */
-    protected function httpRequest($url, $method = HttpRequest::METHOD_GET)
+    protected function httpRequest($url, $content = null, $method = null)
     {
+        if (null === $method) {
+            $method = (null === $content ? self::METHOD_GET : self::METHOD_POST);
+        }
+
         $request  = new HttpRequest($method, $url);
         $response = new HttpResponse();
+
+        $request->setContent($content);
 
         $this->httpClient->send($request, $response);
 
@@ -175,7 +181,7 @@ class OAuthProvider implements OAuthProviderInterface
             'redirect_uri'  => $this->getRedirectUri($request),
         ));
 
-        $url      = $this->getOption('access_token_url').'?'.http_build_query($parameters);
+        $url = $this->getOption('access_token_url').'?'.http_build_query($parameters);
 
         $response = array();
 

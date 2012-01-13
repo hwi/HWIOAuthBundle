@@ -13,6 +13,7 @@
         <parameter key="knp_oauth.security.oauth.oauth_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider</parameter>
         <parameter key="knp_oauth.security.oauth.github_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\GithubProvider</parameter>
         <parameter key="knp_oauth.security.oauth.facebook_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\FacebookProvider</parameter>
+        <parameter key="knp_oauth.security.oauth.google_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\GoogleProvider</parameter>
     </parameters>
 
     <services>
@@ -36,5 +37,6 @@
         <service id="knp_oauth.security.oauth.oauth_provider" class="%knp_oauth.security.oauth.oauth_provider.class%" />
         <service id="knp_oauth.security.oauth.github_provider" class="%knp_oauth.security.oauth.github_provider.class%" />
         <service id="knp_oauth.security.oauth.facebook_provider" class="%knp_oauth.security.oauth.facebook_provider.class%" />
+        <service id="knp_oauth.security.oauth.google_provider" class="%knp_oauth.security.oauth.google_provider.class%" />
     </services>
 </container>
