@@ -45,6 +45,7 @@ class OAuthFactory extends AbstractFactory
         $container
             ->setDefinition($oauthProviderId, new DefinitionDecorator($baseOAuthProviderId))
             ->addArgument(new Reference('buzz.client'))
+            ->addArgument(new Reference('security.http_utils'))
             ->addArgument($config);
 
         return $oauthProviderId;

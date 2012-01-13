@@ -11,6 +11,8 @@
 
 namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * OAuthProviderInterface
  *
@@ -33,7 +35,7 @@ interface OAuthProviderInterface
      * @param array $extraParameters An array of parameters to add to the url
      * @return string The authorization url
      */
-    function getAuthorizationUrl($loginCheckUrl, array $extraParameters = array());
+    function getAuthorizationUrl(Request $request, array $extraParameters = array());
 
     /**
      * Retrieve an access token for a given code
@@ -42,5 +44,5 @@ interface OAuthProviderInterface
      * @param array $extraParameters An array of parameters to add to the url
      * @return string The access token
      */
-    function getAccessToken($code, array $extraParameters = array());
+    function getAccessToken(Request $request, array $extraParameters = array());
 }

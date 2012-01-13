@@ -15,7 +15,9 @@ use Buzz\Client\ClientInterface as HttpClientInterface,
     Buzz\Message\Request as HttpRequest,
     Buzz\Message\Response as HttpResponse;
 
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException,
+    Symfony\Component\Security\Http\HttpUtils,
+    Symfony\Component\HttpFoundation\Request;
 
 use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
 
@@ -40,7 +42,7 @@ class OAuthProvider implements OAuthProviderInterface
      * @param Buzz\Client\ClientInterface
      * @param array $options
      */
-    public function __construct(HttpClientInterface $httpClient, array $options)
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options)
     {
         if (null !== $options['infos_url'] && null === $options['username_path']) {
             throw new \InvalidArgumentException('You must set an "username_path" to use an "infos_url"');
@@ -62,6 +64,7 @@ class OAuthProvider implements OAuthProviderInterface
 
         $this->options    = array_merge($this->options, $options);
         $this->httpClient = $httpClient;
+        $this->httpUtils  = $httpUtils;
 
         $this->configure();
     }
@@ -72,6 +75,15 @@ class OAuthProvider implements OAuthProviderInterface
     public function configure()
     {
 
+    }
+
+    /**
+     * @param Symfony\Component\HttpFoundation\Request $request
+     * @return string
+     */
+    public function getRedirectUri(Request $request)
+    {
+        return $this->httpUtils->createRequest($request, $this->getOption('check_path'))->getUri();
     }
 
     /**
@@ -127,7 +139,7 @@ class OAuthProvider implements OAuthProviderInterface
 
         foreach ($usernamePath as $path) {
             if (!array_key_exists($path, $username)) {
-                throw new AuthenticationException(sprintf('Could not follow username path "%s" in OAuth provider response: %s', $this->getOption('username_path')), var_export($userInfos, true));
+                throw new AuthenticationException(sprintf('Could not follow username path "%s" in OAuth provider response: %s', $this->getOption('username_path'), var_export($userInfos, true)));
             }
             $username = $username[$path];
         }
@@ -138,13 +150,13 @@ class OAuthProvider implements OAuthProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function getAuthorizationUrl($loginCheckUrl, array $extraParameters = array())
+    public function getAuthorizationUrl(Request $request, array $extraParameters = array())
     {
         $parameters = array_merge($extraParameters, array(
             'response_type' => 'code',
             'client_id'     => $this->getOption('client_id'),
             'scope'         => $this->getOption('scope'),
-            'redirect_uri'  => $loginCheckUrl,
+            'redirect_uri'  => $this->getRedirectUri($request),
         ));
 
         return $this->getOption('authorization_url').'?'.http_build_query($parameters);
@@ -153,16 +165,18 @@ class OAuthProvider implements OAuthProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function getAccessToken($code, array $extraParameters = array())
+    public function getAccessToken(Request $request, array $extraParameters = array())
     {
         $parameters = array_merge($extraParameters, array(
-            'code'          => $code,
+            'code'          => $request->get('code'),
             'grant_type'    => 'authorization_code',
             'client_id'     => $this->getOption('client_id'),
             'client_secret' => $this->getOption('secret'),
+            'redirect_uri'  => $this->getRedirectUri($request),
         ));
 
         $url      = $this->getOption('access_token_url').'?'.http_build_query($parameters);
+
         $response = array();
 
         parse_str($this->httpRequest($url), $response);
