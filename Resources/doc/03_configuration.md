@@ -13,17 +13,17 @@ Here's a full-fledged example of configuration:
             secured_area:
                 pattern:    ^/secured/
                 oauth:
-                    oauth_provider:   oauth
-                    authorize_url:    https://github.com/login/oauth/authorize
-                    access_token_url: https://github.com/login/oauth/access_token
-                    infos_url:        https://github.com/api/v2/json/user/show
-                    username_path:    user.login
-                    client_id:        <your_oauth_client_id>
-                    secret:           <your_oauth_secret>
-                    scope:            <your_oauth_scope>
-                    check_path:       /secured/login_check
-                    login_path:       /secured/login
-                    failure_path:     /
+                    oauth_provider:    oauth
+                    authorization_url: https://github.com/login/oauth/authorize
+                    access_token_url:  https://github.com/login/oauth/access_token
+                    infos_url:         https://github.com/api/v2/json/user/show
+                    username_path:     user.login
+                    client_id:         <your_oauth_client_id>
+                    secret:            <your_oauth_secret>
+                    scope:             <your_oauth_scope>
+                    check_path:        /secured/login_check
+                    login_path:        /secured/login
+                    failure_path:      /
                 logout:
                     path: /secured/logout
                     target: /
@@ -63,9 +63,9 @@ This is provided by your OAuth provider too.
 
 The scope of the data you wish to retrieve about your users. You can require multiple scopes by separating them with a space.
 
-### authorize_url
+### authorization_url
 
-The `authorize_url` is the URL used for the first OAuth round-trip. When initiating the authentication procedure, your users will be redirected there and presented, hopefuly, with the provider's OAuth authorization screen.
+The `authorization_url` is the URL used for the first OAuth round-trip. When initiating the authentication procedure, your users will be redirected there and presented, hopefuly, with the provider's OAuth authorization screen.
 
 ### access_token_url
 
