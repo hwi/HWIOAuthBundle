@@ -15,7 +15,8 @@ use Symfony\Component\Security\Core\User\UserProviderInterface,
     Symfony\Component\Security\Core\User\UserInterface,
     Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
-use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+use Knp\Bundle\OAuthBundle\Security\Core\User\OAuthUser,
+    Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
 
 /**
  * OAuthUserProvider
@@ -49,6 +50,6 @@ class OAuthUserProvider implements UserProviderInterface
      */
     public function supportsClass($class)
     {
-        return $class == 'Knp\\OAuthBundle\\Security\\Core\\User\\OAuthUser';
+        return $class === 'Knp\\Bundle\\OAuthBundle\\Security\\Core\\User\\OAuthUser';
     }
 }
