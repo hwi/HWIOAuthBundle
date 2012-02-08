@@ -16,7 +16,8 @@ use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProvid
     Symfony\Component\Security\Core\User\UserProviderInterface;
 
 use Knp\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
-    Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+    Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface,
+    Knp\Bundle\OAuthBundle\Security\Exception\AccessTokenAwareExceptionInterface;
 
 /**
  * OAuthProvider
@@ -59,7 +60,13 @@ class OAuthProvider implements AuthenticationProviderInterface
     public function authenticate(TokenInterface $token)
     {
         $username = $this->oauthProvider->getUsername($token->getCredentials());
-        $user     = $this->userProvider->loadUserByUsername($username);
+
+        try {
+            $user = $this->userProvider->loadUserByUsername($username);
+        } catch (AccessTokenAwareExceptionInterface $e) {
+            $e->setAccessToken($token->getCredentials());
+            throw $e;
+        }
 
         $token = new OAuthToken($token->getCredentials(), $user->getRoles());
         $token->setUser($user);
