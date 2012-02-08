@@ -13,6 +13,8 @@ namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
 
 use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * GoogleProvider
  *
