@@ -8,8 +8,16 @@
 
     "authors": [
         {
+            "name": "KnpLabs Team",
+            "homepage": "http://knplabs.com/"
+        },
+        {
             "name": "Geoffrey Bachelet",
             "email": "geoffrey.bachelet@gmail.com"
+        },
+        {
+            "name": "Contributors",
+            "homepage": "https://github.com/KnpLabs/KnpOAuthBundle/contributors"
         }
     ],
 
@@ -30,34 +38,4 @@
     },
 
     "target-dir": "Knp/Bundle/OAuthBundle",
-
-    "repositories": {
-        "sensio/buzz-bundle": {
-            "package": {
-                "name":     "sensio/buzz-bundle",
-                "version":  "master-dev",
-
-                "dist": {
-                    "url":  "https://github.com/sensio/SensioBuzzBundle/zipball/master",
-                    "type": "zip"
-                },
-
-                "source": {
-                    "url":          "git://github.com/sensio/SensioBuzzBundle.git",
-                    "type":         "git",
-                    "reference":    "master"
-                },
-
-                "require": {
-                    "kriswallsmith/buzz": "*"
-                },
-
-                "autoload": {
-                    "psr-0": { "Sensio\\Bundle\\SensioBuzzBundle": "" }
-                },
-
-                "target-dir": "Sensio/Bundle/BuzzBundle"
-            }
-        }
-    }
 }
