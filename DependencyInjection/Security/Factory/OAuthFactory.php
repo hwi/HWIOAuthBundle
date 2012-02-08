@@ -48,6 +48,8 @@ class OAuthFactory extends AbstractFactory
             ->addArgument(new Reference('security.http_utils'))
             ->addArgument($config);
 
+        $container->setAlias('knp_oauth.oauth_provider.'.$id, $oauthProviderId);
+
         return $oauthProviderId;
     }
 
