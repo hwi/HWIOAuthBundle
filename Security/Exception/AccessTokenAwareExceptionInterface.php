@@ -2,7 +2,7 @@
 
 namespace Knp\Bundle\OAuthBundle\Security\Exception;
 
-class AccessTokenAwareExceptionInterface
+interface AccessTokenAwareExceptionInterface
 {
   public function setAccessToken($accessToken);
 
