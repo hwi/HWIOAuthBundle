@@ -112,7 +112,7 @@ class OAuthProvider implements OAuthProviderInterface
     protected function httpRequest($url, $content = null, $method = null)
     {
         if (null === $method) {
-            $method = (null === $content ? self::METHOD_GET : self::METHOD_POST);
+            $method = null === $content ? HttpRequest::METHOD_GET : HttpRequest::METHOD_POST;
         }
 
         $request  = new HttpRequest($method, $url);
