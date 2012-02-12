@@ -39,6 +39,11 @@ class OAuthProvider implements OAuthProviderInterface
     protected $httpClient;
 
     /**
+     * @var array
+     */
+    private $userInfosCache;
+
+    /**
      * @param Buzz\Client\ClientInterface $httpClient
      * @param array                       $options
      */
@@ -126,21 +131,38 @@ class OAuthProvider implements OAuthProviderInterface
     }
 
     /**
+     * @param  string $accessToken
+     * @return array
+     */
+    public function getUserInfos($accessToken)
+    {
+        if (null = $infos_url = $this->getOptions('infos_url')) {
+            throw new \BadMethodCallException('You need an "infos_url" option to be set in order to call getUserInfos()');
+        }
+
+        if (!isset($this->userInfosCache[$accessToken])) {
+            $url = $infos_url.'?'.http_build_query(array(
+                'access_token' => $accessToken
+            ));
+
+            $this->userInfosCache[$accessToken] = json_decode($this->httpRequest($url), true);
+        }
+
+        return $this->userInfosCache[$accessToken];
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getUsername($accessToken)
     {
-        if ($this->getOption('infos_url') === null) {
+        try {
+            $userInfos = $this->getUserInfos($accessToken);
+        } catch (\BadMethodCallException $e) {
             return $accessToken;
         }
 
-        $url = $this->getOption('infos_url').'?'.http_build_query(array(
-            'access_token' => $accessToken
-        ));
-
-        $userInfos    = json_decode($this->httpRequest($url), true);
         $usernamePath = explode('.', $this->getOption('username_path'));
-
         $username     = $userInfos;
 
         foreach ($usernamePath as $path) {
