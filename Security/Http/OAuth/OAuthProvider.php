@@ -132,7 +132,7 @@ class OAuthProvider implements OAuthProviderInterface
      */
     public function getUserInfos($accessToken)
     {
-        if (null === $infos_url = $this->getOptions('infos_url')) {
+        if (null = $infos_url = $this->getOptions('infos_url')) {
             throw new \BadMethodCallException('You need an "infos_url" option to be set in order to call getUserInfos()');
         }
 
