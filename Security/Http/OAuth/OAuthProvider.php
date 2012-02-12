@@ -139,9 +139,8 @@ class OAuthProvider implements OAuthProviderInterface
             'access_token' => $accessToken
         ));
 
-        $response = new PathUserResponse();
+        $response = new PathUserResponse($this->httpRequest($url));
         $response->setPaths(array('username_path' => $this->getOption('username_path')));
-        $response->setResponse($this->httpRequest($url));
 
         return $response;
     }

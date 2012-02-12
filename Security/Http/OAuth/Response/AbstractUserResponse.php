@@ -18,7 +18,18 @@ namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth\Response;
  */
 abstract class AbstractUserResponse implements UserResponseInterface
 {
+    /**
+     * @var array
+     */
     protected $response;
+
+    /**
+     * @param string $response The json encoded response
+     */
+    public function __construct($response)
+    {
+        $this->setResponse($response);
+    }
 
     /**
      * {@inheritdoc}
