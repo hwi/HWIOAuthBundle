@@ -148,14 +148,12 @@ class OAuthProvider implements OAuthProviderInterface
     /**
      * Get the response object to return.
      *
-     * @param string $responseData
-     *
      * @return UserResponseInterface
      */
-    protected function getUserResponse($responseData)
+    protected function getUserResponse()
     {
         $response = new PathUserResponse;
-        $response->setPaths(array('username_path', $this->getOption('username_path')));
+        $response->setPaths(array('username_path' => $this->getOption('username_path')));
 
         return $response;
     }
