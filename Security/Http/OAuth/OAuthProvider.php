@@ -127,34 +127,11 @@ class OAuthProvider implements OAuthProviderInterface
     }
 
     /**
-     * @param  string $accessToken
-     * @return array
-     */
-    public function getUserInfos($accessToken)
-    {
-        if (null = $infos_url = $this->getOptions('infos_url')) {
-            throw new \BadMethodCallException('You need an "infos_url" option to be set in order to call getUserInfos()');
-        }
-
-        if (!isset($this->userInfosCache[$accessToken])) {
-            $url = $infos_url.'?'.http_build_query(array(
-                'access_token' => $accessToken
-            ));
-
-            $this->userInfosCache[$accessToken] = json_decode($this->httpRequest($url), true);
-        }
-
-        return $this->userInfosCache[$accessToken];
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getUserInformation($accessToken)
     {
-        try {
-            $userInfos = $this->getUserInfos($accessToken);
-        } catch (\BadMethodCallException $e) {
+        if ($this->getOption('infos_url') === null) {
             return $accessToken;
         }
 
