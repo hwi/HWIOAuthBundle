@@ -28,10 +28,10 @@ class PathUserResponse extends AbstractUserResponse
     {
         $usernamePath = explode('.', $this->paths['username_path']);
 
-        $username     = $this->response;
+        $username = $this->response;
         foreach ($usernamePath as $path) {
             if (!array_key_exists($path, $username)) {
-                throw new AuthenticationException(sprintf('Could not follow username path "%s" in OAuth provider response: %s', $this->getOption('username_path'), var_export($userInfos, true)));
+                throw new AuthenticationException(sprintf('Could not follow username path "%s" in OAuth provider response: %s', $this->paths['username_path'], var_export($this->response, true)));
             }
             $username = $username[$path];
         }
