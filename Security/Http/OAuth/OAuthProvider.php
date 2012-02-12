@@ -19,7 +19,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException,
     Symfony\Component\Security\Http\HttpUtils,
     Symfony\Component\HttpFoundation\Request;
 
-use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface,
+    Knp\Bundle\OAuthBundle\Security\Http\OAuth\Response\PathUserResponse;
 
 /**
  * OAuthProvider
@@ -37,11 +38,6 @@ class OAuthProvider implements OAuthProviderInterface
      * @var Buzz\Client\ClientInterface
      */
     protected $httpClient;
-
-    /**
-     * @var array
-     */
-    private $userInfosCache;
 
     /**
      * @param Buzz\Client\ClientInterface $httpClient
@@ -154,7 +150,7 @@ class OAuthProvider implements OAuthProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function getUsername($accessToken)
+    public function getUserInformation($accessToken)
     {
         try {
             $userInfos = $this->getUserInfos($accessToken);
@@ -162,17 +158,29 @@ class OAuthProvider implements OAuthProviderInterface
             return $accessToken;
         }
 
-        $usernamePath = explode('.', $this->getOption('username_path'));
-        $username     = $userInfos;
+        $url = $this->getOption('infos_url').'?'.http_build_query(array(
+            'access_token' => $accessToken
+        ));
 
-        foreach ($usernamePath as $path) {
-            if (!array_key_exists($path, $username)) {
-                throw new AuthenticationException(sprintf('Could not follow username path "%s" in OAuth provider response: %s', $this->getOption('username_path'), var_export($userInfos, true)));
-            }
-            $username = $username[$path];
-        }
+        $response = $this->getUserResponse();
+        $response->setResponse($this->httpRequest($url));
 
-        return $username;
+        return $response;
+    }
+
+    /**
+     * Get the response object to return.
+     *
+     * @param string $responseData
+     *
+     * @return UserResponseInterface
+     */
+    protected function getUserResponse($responseData)
+    {
+        $response = new PathUserResponse;
+        $response->setPaths(array('username_path', $this->getOption('username_path')));
+
+        return $response;
     }
 
     /**
@@ -196,7 +204,7 @@ class OAuthProvider implements OAuthProviderInterface
     public function getAccessToken(Request $request, array $extraParameters = array())
     {
         $parameters = array_merge($extraParameters, array(
-            'code'          => $request->get('code'),
+            'code'          => $request->query->get('code'),
             'grant_type'    => 'authorization_code',
             'client_id'     => $this->getOption('client_id'),
             'client_secret' => $this->getOption('secret'),

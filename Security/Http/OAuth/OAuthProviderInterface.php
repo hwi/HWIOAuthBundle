@@ -21,12 +21,13 @@ use Symfony\Component\HttpFoundation\Request;
 interface OAuthProviderInterface
 {
     /**
-     * Retrieves the user's username from an access_token
+     * Retrieves the user's information from an access_token
      *
      * @param string $accessToken
-     * @return string The username
+     *
+     * @return UserResponseInterface The wrapped response interface.
      */
-    function getUsername($accessToken);
+    function getUserInformation($accessToken);
 
     /**
      * Returns the provider's authorization url
