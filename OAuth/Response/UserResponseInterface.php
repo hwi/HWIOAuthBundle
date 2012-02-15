@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth\Response;
+namespace Knp\Bundle\OAuthBundle\OAuth\Response;
 
 /**
  * UserResponseInterface

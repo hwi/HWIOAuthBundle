@@ -9,16 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
+namespace Knp\Bundle\OAuthBundle\OAuth;
 
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * OAuthProviderInterface
+ * ResourceOwnerInterface
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ * @author Alexander <iam.asm89@gmail.com>
  */
-interface OAuthProviderInterface
+interface ResourceOwnerInterface
 {
     /**
      * Retrieves the user's information from an access_token
@@ -32,18 +33,20 @@ interface OAuthProviderInterface
     /**
      * Returns the provider's authorization url
      *
-     * @param string $loginCheckUrl You should set that as your redirect_uri
+     * @param mixed $redirectUri     The uri to redirect the client back to
      * @param array $extraParameters An array of parameters to add to the url
+     *
      * @return string The authorization url
      */
-    function getAuthorizationUrl(Request $request, array $extraParameters = array());
+    function getAuthorizationUrl($redirectUri, array $extraParameters = array());
 
     /**
      * Retrieve an access token for a given code
      *
-     * @param string $code The code
+     * @param mixed $code            The code to use to retrieve the access token
+     * @param mixed $redirectUri     The uri to redirect the client back to
      * @param array $extraParameters An array of parameters to add to the url
      * @return string The access token
      */
-    function getAccessToken(Request $request, array $extraParameters = array());
+    function getAccessToken($code, $redirectUri, array $extraParameters = array());
 }

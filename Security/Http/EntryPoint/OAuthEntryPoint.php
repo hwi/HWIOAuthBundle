@@ -16,7 +16,7 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
     Symfony\Component\Security\Http\HttpUtils,
     Symfony\Component\HttpFoundation\Request;
 
-use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+use Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 
 /**
  * OAuthEntryPoint
@@ -31,9 +31,9 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     private $httpUtils;
 
     /**
-     * @var Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface
+     * @var Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
      */
-    private $oauthProvider;
+    private $resourceOwner;
 
     /**
      * @var string
@@ -42,13 +42,13 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
 
     /**
      * @param Symfony\Component\Security\Http\HttpUtils $httpUtils
-     * @param Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface $oauthProvider
+     * @param Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner
      * @param string $checkPath
      */
-    public function __construct(HttpUtils $httpUtils, OAuthProviderInterface $oauthProvider, $checkPath, $loginPath)
+    public function __construct(HttpUtils $httpUtils, ResourceOwnerInterface $resourceOwner, $checkPath, $loginPath)
     {
         $this->httpUtils        = $httpUtils;
-        $this->oauthProvider    = $oauthProvider;
+        $this->resourceOwner    = $resourceOwner;
         $this->checkPath        = $checkPath;
         $this->loginPath        = $loginPath;
     }
@@ -63,7 +63,9 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
                 $request->getSession()->remove('_security.target_path');
             }
 
-            $authorizationUrl = $this->oauthProvider->getAuthorizationUrl($request);
+            $authorizationUrl = $this->resourceOwner->getAuthorizationUrl(
+                $this->httpUtils->createRequest($request, $this->checkPath)->getUri()
+            );
 
             return $this->httpUtils->createRedirectResponse($request, $authorizationUrl);
         }

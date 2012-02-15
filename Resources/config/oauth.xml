@@ -10,10 +10,10 @@
         <parameter key="knp_oauth.authentication.entry_point.oauth.class">Knp\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint</parameter>
         <parameter key="knp_oauth.user.provider.class">Knp\Bundle\OAuthBundle\Security\Core\UserProvider\OAuthUserProvider</parameter>
         <parameter key="knp_oauth.user.provider.entity.class">Knp\Bundle\OAuthBundle\Security\Core\UserProvider\EntityUserProvider</parameter>
-        <parameter key="knp_oauth.security.oauth.oauth_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider</parameter>
-        <parameter key="knp_oauth.security.oauth.github_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\GithubProvider</parameter>
-        <parameter key="knp_oauth.security.oauth.facebook_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\FacebookProvider</parameter>
-        <parameter key="knp_oauth.security.oauth.google_provider.class">Knp\Bundle\OAuthBundle\Security\Http\OAuth\GoogleProvider</parameter>
+        <parameter key="knp_oauth.resource_owner.generic.class">Knp\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericResourceOwner</parameter>
+        <parameter key="knp_oauth.resource_owner.github.class">Knp\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner</parameter>
+        <parameter key="knp_oauth.resource_owner.facebook.class">Knp\Bundle\OAuthBundle\OAuth\ResourceOwner\FacebookResourceOwner</parameter>
+        <parameter key="knp_oauth.resource_owner.google.class">Knp\Bundle\OAuthBundle\OAuth\ResourceOwner\GoogleResourceOwner</parameter>
     </parameters>
 
     <services>
@@ -22,7 +22,7 @@
         Hey there, welcome to this bundle's DIC configuration !
 
         Did you know that most of these services definition
-        are modified by the OAuthFactory?
+        are modified by the OAuthFactory? Or setup in the Extension?
 
         Cheers!
         -->
@@ -31,12 +31,5 @@
         <service id="knp_oauth.authentication.entry_point.oauth" class="%knp_oauth.authentication.entry_point.oauth.class%" />
         <service id="knp_oauth.user.provider" class="%knp_oauth.user.provider.class%" />
         <service id="knp_oauth.user.provider.entity" class="%knp_oauth.user.provider.entity.class%" parent="doctrine.orm.security.user.provider" />
-
-        <!-- builtin providers -->
-
-        <service id="knp_oauth.security.oauth.oauth_provider" class="%knp_oauth.security.oauth.oauth_provider.class%" />
-        <service id="knp_oauth.security.oauth.github_provider" class="%knp_oauth.security.oauth.github_provider.class%" />
-        <service id="knp_oauth.security.oauth.facebook_provider" class="%knp_oauth.security.oauth.facebook_provider.class%" />
-        <service id="knp_oauth.security.oauth.google_provider" class="%knp_oauth.security.oauth.google_provider.class%" />
     </services>
 </container>

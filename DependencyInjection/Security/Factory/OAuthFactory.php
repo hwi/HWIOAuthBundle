@@ -21,36 +21,24 @@ use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractF
  * OAuthFactory
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ * @author Alexander <iam.asm89@gmail.com>
  */
 class OAuthFactory extends AbstractFactory
 {
     /**
-     * Creates an OAuth provider for a given firewall
+     * Gets the reference to the appropriate resource owner service.
      *
-     * @param Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $id The firewall id
-     * @param array $config The firewall config
-     * @return string The OAuth provider service id
+     * @param array $config
+     *
+     * @return Reference
      */
-    protected function createOAuthProvider(ContainerBuilder $container, $id, $config)
+    protected function getResourceOwnerReference(array $config)
     {
-        if (false !== strpos($config['oauth_provider'], '.')) {
-            $baseOAuthProviderId = $config['oauth_provider'];
-        } else {
-            $baseOAuthProviderId = 'knp_oauth.security.oauth.'.$config['oauth_provider'].'_provider';
+        if (false !== strpos($config['resource_owner'], '.')) {
+            return new Reference($config['resource_owner']);
         }
 
-        $oauthProviderId = $baseOAuthProviderId.'.'.$id;
-
-        $container
-            ->setDefinition($oauthProviderId, new DefinitionDecorator($baseOAuthProviderId))
-            ->addArgument(new Reference('buzz.client'))
-            ->addArgument(new Reference('security.http_utils'))
-            ->addArgument($config);
-
-        $container->setAlias('knp_oauth.oauth_provider.'.$id, $oauthProviderId);
-
-        return $oauthProviderId;
+        return new Reference('knp_oauth.resource_owner.'.$config['resource_owner']);
     }
 
     /**
@@ -59,12 +47,11 @@ class OAuthFactory extends AbstractFactory
     protected function createAuthProvider(ContainerBuilder $container, $id, $config, $userProviderId)
     {
         $providerId      = 'knp_oauth.authentication.provider.oauth.'.$id;
-        $oauthProviderId = $this->createOAuthProvider($container, $id, $config);
 
         $container
             ->setDefinition($providerId, new DefinitionDecorator('knp_oauth.authentication.provider.oauth'))
             ->addArgument(new Reference($userProviderId))
-            ->addArgument(new Reference($oauthProviderId));
+            ->addArgument($this->getResourceOwnerReference($config));
 
         return $providerId;
     }
@@ -75,12 +62,11 @@ class OAuthFactory extends AbstractFactory
     protected function createEntryPoint($container, $id, $config, $defaultEntryPoint)
     {
         $entryPointId    = 'knp_oauth.authentication.entry_point.oauth.'.$id;
-        $oauthProviderId = $this->createOAuthProvider($container, $id, $config);
 
         $container
             ->setDefinition($entryPointId, new DefinitionDecorator('knp_oauth.authentication.entry_point.oauth'))
             ->addArgument(new Reference('security.http_utils'))
-            ->addArgument(new Reference($oauthProviderId))
+            ->addArgument($this->getResourceOwnerReference($config))
             ->addArgument($config['check_path'])
             ->addArgument($config['login_path'])
         ;
@@ -94,10 +80,10 @@ class OAuthFactory extends AbstractFactory
     protected function createListener($container, $id, $config, $userProvider)
     {
         $listenerId      = parent::createListener($container, $id, $config, $userProvider);
-        $oauthProviderId = $this->createOAuthProvider($container, $id, $config);
 
         $container->getDefinition($listenerId)
-            ->addMethodCall('setOAuthProvider', array(new Reference($oauthProviderId)))
+            ->addMethodCall('setResourceOwner', array($this->getResourceOwnerReference($config)))
+            ->addMethodCall('setCheckPath', array($config['check_path']));
         ;
 
         return $listenerId;
@@ -113,29 +99,15 @@ class OAuthFactory extends AbstractFactory
         $builder = $node->children();
 
         $builder
-            ->scalarNode('oauth_provider')
-                ->defaultValue('oauth')
-            ->end()
-            ->scalarNode('authorization_url')
-                ->defaultNull()
-            ->end()
-            ->scalarNode('access_token_url')
-                ->defaultNull()
-            ->end()
-            ->scalarNode('infos_url')
-                ->defaultNull()
-            ->end()
-            ->scalarNode('username_path')
-                ->defaultNull()
-            ->end()
-            ->scalarNode('client_id')
+            ->scalarNode('resource_owner')
                 ->cannotBeEmpty()
                 ->isRequired()
             ->end()
-            ->scalarNode('scope')
+            ->scalarNode('check_path')
+                ->cannotBeEmpty()
                 ->isRequired()
             ->end()
-            ->scalarNode('secret')
+            ->scalarNode('login_path')
                 ->cannotBeEmpty()
                 ->isRequired()
             ->end()

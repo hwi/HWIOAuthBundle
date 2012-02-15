@@ -9,16 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
-
-use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider;
+namespace Knp\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 /**
- * GithubProvider
+ * GitHubResourceOwner
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  */
-class GithubProvider extends OAuthProvider
+class GitHubResourceOwner extends GenericResourceOwner
 {
     /**
      * {@inheritDoc}

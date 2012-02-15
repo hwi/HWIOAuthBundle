@@ -9,25 +9,25 @@
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
+namespace Knp\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Client\ClientInterface as HttpClientInterface,
     Buzz\Message\Request as HttpRequest,
     Buzz\Message\Response as HttpResponse;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException,
-    Symfony\Component\Security\Http\HttpUtils,
-    Symfony\Component\HttpFoundation\Request;
+    Symfony\Component\Security\Http\HttpUtils;
 
-use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface,
-    Knp\Bundle\OAuthBundle\Security\Http\OAuth\Response\PathUserResponse;
+use Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
+    Knp\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 
 /**
- * OAuthProvider
+ * GenericResourceOwner
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ * @author Alexander <iam.asm89@gmail.com>
  */
-class OAuthProvider implements OAuthProviderInterface
+class GenericResourceOwner implements ResourceOwnerInterface
 {
     /**
      * @var array
@@ -45,25 +45,17 @@ class OAuthProvider implements OAuthProviderInterface
      */
     public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options)
     {
-        if (null !== $options['infos_url'] && null === $options['username_path']) {
+        // Merge the options, then validate them
+        $this->options = array_merge($this->options, $options);
+
+        if (null !== $this->options['infos_url'] && null === $this->options['username_path']) {
             throw new \InvalidArgumentException('You must set an "username_path" to use an "infos_url"');
         }
 
-        if (null === $options['infos_url'] && null !== $options['username_path']) {
+        if (null === $this->options['infos_url'] && null !== $this->options['username_path']) {
             throw new \InvalidArgumentException('You must set an "infos_url" to use an "username_path"');
         }
 
-        /**
-         * We want to merge passed options within existing options
-         * but only if they are not null. This is a bit messy. Sorry.
-         */
-        foreach ($options as $k => $v) {
-            if (null === $v && array_key_exists($k, $this->options)) {
-                unset($options[$k]);
-            }
-        }
-
-        $this->options    = array_merge($this->options, $options);
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
 
@@ -76,15 +68,6 @@ class OAuthProvider implements OAuthProviderInterface
     public function configure()
     {
 
-    }
-
-    /**
-     * @param Symfony\Component\HttpFoundation\Request $request
-     * @return string
-     */
-    public function getRedirectUri(Request $request)
-    {
-        return $this->httpUtils->createRequest($request, $this->getOption('check_path'))->getUri();
     }
 
     /**
@@ -161,13 +144,13 @@ class OAuthProvider implements OAuthProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function getAuthorizationUrl(Request $request, array $extraParameters = array())
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         $parameters = array_merge($extraParameters, array(
             'response_type' => 'code',
             'client_id'     => $this->getOption('client_id'),
             'scope'         => $this->getOption('scope'),
-            'redirect_uri'  => $this->getRedirectUri($request),
+            'redirect_uri'  => $redirectUri,
         ));
 
         return $this->getOption('authorization_url').'?'.http_build_query($parameters);
@@ -176,14 +159,14 @@ class OAuthProvider implements OAuthProviderInterface
     /**
      * {@inheritDoc}
      */
-    public function getAccessToken(Request $request, array $extraParameters = array())
+    public function getAccessToken($code, $redirectUri, array $extraParameters = array())
     {
         $parameters = array_merge($extraParameters, array(
-            'code'          => $request->query->get('code'),
+            'code'          => $code,
             'grant_type'    => 'authorization_code',
             'client_id'     => $this->getOption('client_id'),
-            'client_secret' => $this->getOption('secret'),
-            'redirect_uri'  => $this->getRedirectUri($request),
+            'client_secret' => $this->getOption('client_secret'),
+            'redirect_uri'  => $redirectUri,
         ));
 
         $url = $this->getOption('access_token_url').'?'.http_build_query($parameters);

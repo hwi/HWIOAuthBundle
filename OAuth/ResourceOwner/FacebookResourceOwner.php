@@ -9,16 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
-
-use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider;
+namespace Knp\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 /**
- * FacebookProvider
+ * FacebookResourceOwner
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  */
-class FacebookProvider extends OAuthProvider
+class FacebookResourceOwner extends GenericResourceOwner
 {
     /**
      * {@inheritDoc}

@@ -9,18 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\Security\Http\OAuth;
-
-use Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProvider;
+namespace Knp\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * GoogleProvider
+ * GoogleResourceOwner
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  */
-class GoogleProvider extends OAuthProvider
+class GoogleResourceOwner extends GenericResourceOwner
 {
     /**
      * {@inheritDoc}
@@ -36,14 +34,14 @@ class GoogleProvider extends OAuthProvider
     /**
      * {@inheritDoc}
      */
-    public function getAccessToken(Request $request, array $extraParameters = array())
+    public function getAccessToken($code, $redirectUri, array $extraParameters = array())
     {
         $parameters = array_merge($extraParameters, array(
-            'code'          => $request->get('code'),
+            'code'          => $code,
             'grant_type'    => 'authorization_code',
             'client_id'     => $this->getOption('client_id'),
-            'client_secret' => $this->getOption('secret'),
-            'redirect_uri'  => $this->getRedirectUri($request),
+            'client_secret' => $this->getOption('client_secret'),
+            'redirect_uri'  => $redirectUri,
         ));
 
         $url = $this->getOption('access_token_url');

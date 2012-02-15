@@ -15,27 +15,36 @@ use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener,
     Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-use Knp\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
-    Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface;
+
+use Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
+    Knp\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
 /**
  * OAuthListener
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ * @author Alexander <iam.asm89@gmail.com>
  */
 class OAuthListener extends AbstractAuthenticationListener
 {
     /**
-     * @var Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface
+     * @var Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
      */
-    private $oauthProvider;
+    private $resourceOwner;
+
+    private $checkPath;
 
     /**
-     * @var Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface $oauthProvider
+     * @var Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner
      */
-    public function setOAuthProvider(OAuthProviderInterface $oauthProvider)
+    public function setResourceOwner(ResourceOwnerInterface $resourceOwner)
     {
-        $this->oauthProvider = $oauthProvider;
+        $this->resourceOwner = $resourceOwner;
+    }
+
+    public function setCheckPath($checkPath)
+    {
+        $this->checkPath = $checkPath;
     }
 
     /**
@@ -43,7 +52,10 @@ class OAuthListener extends AbstractAuthenticationListener
      */
     protected function attemptAuthentication(Request $request)
     {
-        $accessToken = $this->oauthProvider->getAccessToken($request);
+        $accessToken = $this->resourceOwner->getAccessToken(
+            $request->query->get('code'),
+            $this->httpUtils->createRequest($request, $this->checkPath)->getUri()
+        );
 
         $token = new OAuthToken($accessToken);
 

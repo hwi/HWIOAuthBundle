@@ -15,21 +15,22 @@ use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProvid
     Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
     Symfony\Component\Security\Core\User\UserProviderInterface;
 
-use Knp\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
-    Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface,
+use Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
+    Knp\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
     Knp\Bundle\OAuthBundle\Security\Exception\AccessTokenAwareExceptionInterface;
 
 /**
  * OAuthProvider
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ * @author Alexander <iam.asm89@gmail.com>
  */
 class OAuthProvider implements AuthenticationProviderInterface
 {
     /**
-     * @var Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface
+     * @var Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
      */
-    private $oauthProvider;
+    private $resourceOwner;
 
     /**
      * @var Symfony\Component\Security\Core\User\UserProviderInterface
@@ -38,12 +39,12 @@ class OAuthProvider implements AuthenticationProviderInterface
 
     /**
      * @param Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
-     * @param Knp\Bundle\OAuthBundle\Security\Http\OAuth\OAuthProviderInterface $oauthProvider
+     * @param Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner
      */
-    public function __construct(UserProviderInterface $userProvider, OAuthProviderInterface $oauthProvider)
+    public function __construct(UserProviderInterface $userProvider, ResourceOwnerInterface $resourceOwner)
     {
         $this->userProvider  = $userProvider;
-        $this->oauthProvider = $oauthProvider;
+        $this->resourceOwner = $resourceOwner;
     }
 
     /**
@@ -59,7 +60,7 @@ class OAuthProvider implements AuthenticationProviderInterface
      */
     public function authenticate(TokenInterface $token)
     {
-        $username = $this->oauthProvider
+        $username = $this->resourceOwner
             ->getUserInformation($token->getCredentials())
             ->getUsername();
 
