@@ -35,8 +35,7 @@ class KnpOAuthExtension extends Extension
         $loader->load('oauth.xml');
 
         $processor = new Processor();
-        $configuration = new Configuration();
-        $config = $processor->processConfiguration($configuration, $configs);
+        $config = $processor->processConfiguration(new Configuration(), $configs);
 
         // setup services for all configured resource owners
         foreach ($config['resource_owners'] as $name => $options) {

@@ -31,7 +31,9 @@ class Configuration implements ConfigurationInterface
         $builder = new TreeBuilder();
 
         $rootNode = $builder->root('knp_oauth');
-        $rootNode->children()
+        $rootNode
+            ->fixXmlConfig('resource_owner')
+            ->children()
             ->arrayNode('resource_owners')
                 ->isRequired()
                 ->useAttributeAsKey('name')
@@ -70,10 +72,10 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->validate()
                         ->ifTrue(function($c){
-                            if('generic' === $c['type']) {
+                            if ('generic' === $c['type']) {
                                 $children = array('authorization_url', 'access_token_url', 'infos_url', 'username_path');
-                                foreach($children as $child) {
-                                    if(!isset($c[$child])) {
+                                foreach ($children as $child) {
+                                    if (!isset($c[$child])) {
                                         return true;
                                     }
                                 }

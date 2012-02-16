@@ -44,6 +44,10 @@ class KnpOAuthBundle extends Bundle
     {
         // return the right extension instead of "auto-registering" it. Now the
         // alias can be knp_oauth instead of knp_o_auth..
-        return new KnpOAuthExtension;
+        if (null === $this->extension) {
+            return new KnpOAuthExtension;
+        }
+
+        return $this->extension;
     }
 }
