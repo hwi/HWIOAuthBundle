@@ -135,10 +135,14 @@ class GenericResourceOwner implements ResourceOwnerInterface
      */
     protected function getUserResponse()
     {
-        $response = new PathUserResponse();
-        $response->setPaths(array('username_path' => $this->getOption('username_path')));
+        if(!isset($this->options['user_response_class'])) {
+            $response = new PathUserResponse();
+            $response->setPaths(array('username_path' => $this->getOption('username_path')));
 
-        return $response;
+            return $response;
+        }
+
+        return new $this->options['user_response_class'];
     }
 
     /**
