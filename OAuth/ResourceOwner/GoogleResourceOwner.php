@@ -11,7 +11,8 @@
 
 namespace Knp\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * GoogleResourceOwner
@@ -48,7 +49,7 @@ class GoogleResourceOwner extends GenericResourceOwner
         $content = http_build_query($parameters);
 
         $response = $this->httpRequest($url, $content);
-        $response = json_decode($response);
+        $response = json_decode($response, true);
 
         if (isset($response['error'])) {
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
