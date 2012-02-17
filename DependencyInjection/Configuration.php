@@ -68,6 +68,12 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('scope')
                             ->isRequired()
                         ->end()
+                        ->scalarNode('user_response_class')
+                            ->validate()
+                                ->ifTrue(function($v) { return empty($v); })
+                                ->thenUnset()
+                            ->end()
+                        ->end()
                         ->scalarNode('type')
                             ->defaultValue('generic')
                             ->validate()
@@ -85,17 +91,20 @@ class Configuration implements ConfigurationInterface
                     ->validate()
                         ->ifTrue(function($c) {
                             if ('generic' === $c['type']) {
-                                $children = array('authorization_url', 'access_token_url', 'infos_url', 'username_path');
+                                $children = array('authorization_url', 'access_token_url', 'infos_url');
                                 foreach ($children as $child) {
                                     if (!isset($c[$child])) {
                                         return true;
                                     }
                                 }
+
+                                // one of the two should be set
+                                return !isset($c['username_path']) && !isset($c['user_response_class']);
                             }
 
                             return false;
                         })
-                        ->thenInvalid("All parameters are mandatory for type 'generic'. Check if you're missing one of: access_token_url, authorization_url, infos_url, username_path.")
+                        ->thenInvalid("All parameters are mandatory for type 'generic'. Check if you're missing one of: access_token_url, authorization_url, infos_url or username_path or user_response_class.")
                     ->end()
                 ->end()
             ->end();
