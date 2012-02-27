@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->fixXmlConfig('resource_owner')
             ->children()
+            ->scalarNode('firewall_name')->defaultValue(false)->end()
             ->arrayNode('resource_owners')
                 ->isRequired()
                 ->useAttributeAsKey('name')

@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the HWiOAuthBundle package.
+ * This file is part of the HWIOAuthBundle package.
  *
  * (c) Hardware.Info <opensource@hardware.info>
  *
@@ -19,9 +19,12 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 
 /**
- * OAuthEntryPoint
+ * OAuthEntryPoint redirects the user to the appropriate login url if there is
+ * only one resource owner. Otherwise the user will be redirected to a login
+ * page.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ * @author Alexander <iam.asm89@gmail.com>
  */
 class OAuthEntryPoint implements AuthenticationEntryPointInterface
 {
@@ -41,16 +44,24 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     private $checkPath;
 
     /**
-     * @param Symfony\Component\Security\Http\HttpUtils $httpUtils
-     * @param HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner
-     * @param string $checkPath
+     * @var string
      */
-    public function __construct(HttpUtils $httpUtils, ResourceOwnerInterface $resourceOwner, $checkPath, $loginPath)
+    private $loginPath;
+
+    /**
+     * Constructor
+     *
+     * @param HttpUtils              $httpUtils
+     * @param string                 $loginPath
+     * @param ResourceOwnerInterface $resourceOwner
+     * @param string                 $checkPath
+     */
+    public function __construct(HttpUtils $httpUtils, $loginPath, ResourceOwnerInterface $resourceOwner = null, $checkPath = null)
     {
-        $this->httpUtils        = $httpUtils;
-        $this->resourceOwner    = $resourceOwner;
-        $this->checkPath        = $checkPath;
-        $this->loginPath        = $loginPath;
+        $this->httpUtils     = $httpUtils;
+        $this->loginPath     = $loginPath;
+        $this->resourceOwner = $resourceOwner;
+        $this->checkPath     = $checkPath;
     }
 
     /**
@@ -58,18 +69,17 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        if (!$this->httpUtils->checkRequestPath($request, $this->checkPath)) {
-            if ($this->httpUtils->checkRequestPath($request, $this->loginPath)) {
-                $request->getSession()->remove('_security.target_path');
-            }
+        // redirect to the login url if there are several resource owners
+        if (null === $this->resourceOwner) {
 
-            $authorizationUrl = $this->resourceOwner->getAuthorizationUrl(
-                $this->httpUtils->createRequest($request, $this->checkPath)->getUri()
-            );
-
-            return $this->httpUtils->createRedirectResponse($request, $authorizationUrl);
+            return $this->httpUtils->createRedirectResponse($request, $this->loginPath);
         }
 
-        throw $authException;
+        // otherwise start authentication
+        $authorizationUrl = $this->resourceOwner->getAuthorizationUrl(
+            $this->httpUtils->createRequest($request, $this->checkPath)->getUri()
+        );
+
+        return $this->httpUtils->createRedirectResponse($request, $authorizationUrl);
     }
 }

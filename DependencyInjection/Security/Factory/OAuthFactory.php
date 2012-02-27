@@ -28,17 +28,48 @@ class OAuthFactory extends AbstractFactory
     /**
      * Gets the reference to the appropriate resource owner service.
      *
-     * @param array $config
+     * @param array $id
      *
      * @return Reference
      */
-    protected function getResourceOwnerReference(array $config)
+    protected function getResourceOwnerId($id)
     {
-        if (false !== strpos($config['resource_owner'], '.')) {
-            return new Reference($config['resource_owner']);
+        if (false !== strpos($id, '.')) {
+            return $id;
         }
 
-        return new Reference('hwi_oauth.resource_owner.'.$config['resource_owner']);
+        return 'hwi_oauth.resource_owner.'.$id;
+    }
+
+    /**
+     * Creates a resource owner map for the given configuration.
+     *
+     * @param ContainerBuilder $container Container to build for
+     * @param string           $id        Firewall id
+     * @param array            $config    Configuration
+     */
+    protected function createResourceOwnerMap(ContainerBuilder $container, $id, array $config)
+    {
+        $ownerMapDefinition = $container
+            ->register($this->getResourceOwnerMapReference($id), '%hwi_oauth.resource_ownermap.class%')
+            ->addArgument(new Reference('service_container'))
+            ->addArgument(new Reference('security.http_utils'));
+
+        foreach ($config['resource_owners'] as $resourceOwner) {
+            $ownerMapDefinition->addMethodCall('addResourceOwner', array($this->getResourceOwnerId($resourceOwner['service']), $resourceOwner));
+        }
+    }
+
+    /**
+     * Gets a reference to the resource owner map.
+     *
+     * @param string $id
+     *
+     * @return Reference
+     */
+    protected function getResourceOwnerMapReference($id)
+    {
+        return new Reference('hwi_oauth.resource_ownermap.'.$id);
     }
 
     /**
@@ -46,12 +77,14 @@ class OAuthFactory extends AbstractFactory
      */
     protected function createAuthProvider(ContainerBuilder $container, $id, $config, $userProviderId)
     {
-        $providerId      = 'hwi_oauth.authentication.provider.oauth.'.$id;
+        $providerId = 'hwi_oauth.authentication.provider.oauth.'.$id;
+
+        $this->createResourceOwnerMap($container, $id, $config);
 
         $container
             ->setDefinition($providerId, new DefinitionDecorator('hwi_oauth.authentication.provider.oauth'))
             ->addArgument(new Reference($userProviderId))
-            ->addArgument($this->getResourceOwnerReference($config));
+            ->addArgument($this->getResourceOwnerMapReference($id));
 
         return $providerId;
     }
@@ -61,14 +94,19 @@ class OAuthFactory extends AbstractFactory
      */
     protected function createEntryPoint($container, $id, $config, $defaultEntryPoint)
     {
-        $entryPointId    = 'hwi_oauth.authentication.entry_point.oauth.'.$id;
+        $entryPointId = 'hwi_oauth.authentication.entry_point.oauth.'.$id;
 
-        $container
+        $entryPointDefinition = $container
             ->setDefinition($entryPointId, new DefinitionDecorator('hwi_oauth.authentication.entry_point.oauth'))
             ->addArgument(new Reference('security.http_utils'))
-            ->addArgument($this->getResourceOwnerReference($config))
-            ->addArgument($config['check_path'])
             ->addArgument($config['login_path']);
+
+        // Inject the resource owners directly if there is only one
+        if (1 === count($config['resource_owners'])) {
+            $entryPointDefinition
+                ->addArgument(new Reference($this->getResourceOwnerId($config['resource_owners'][0]['service'])))
+                ->addArgument($config['resource_owners'][0]['check_path']);
+        }
 
         return $entryPointId;
     }
@@ -78,11 +116,16 @@ class OAuthFactory extends AbstractFactory
      */
     protected function createListener($container, $id, $config, $userProvider)
     {
-        $listenerId      = parent::createListener($container, $id, $config, $userProvider);
+        $listenerId = parent::createListener($container, $id, $config, $userProvider);
+
+        $checkPaths = array();
+        foreach ($config['resource_owners'] as $resourceOwner) {
+            $checkPaths[] = $resourceOwner['check_path'];
+        }
 
         $container->getDefinition($listenerId)
-            ->addMethodCall('setResourceOwner', array($this->getResourceOwnerReference($config)))
-            ->addMethodCall('setCheckPath', array($config['check_path']));
+            ->addMethodCall('setResourceOwnerMap', array($this->getResourceOwnerMapReference($id)))
+            ->addMethodCall('setCheckPaths', array($checkPaths));
 
         return $listenerId;
     }
@@ -97,13 +140,34 @@ class OAuthFactory extends AbstractFactory
         $builder = $node->children();
 
         $builder
-            ->scalarNode('resource_owner')
-                ->cannotBeEmpty()
+            ->arrayNode('resource_owners')
                 ->isRequired()
-            ->end()
-            ->scalarNode('check_path')
-                ->cannotBeEmpty()
-                ->isRequired()
+                ->prototype('array')
+                    ->children()
+                        ->scalarNode('service')
+                            ->isRequired()
+                        ->end()
+                        ->scalarNode('check_path')
+                            ->isRequired()
+                        ->end()
+                    ->end()
+                ->end()
+                ->validate()
+                    ->ifTrue(function($c) {
+                        $checkPaths = array();
+                        foreach ($c as $resourceOwner) {
+                            if (in_array($resourceOwner['check_path'], $checkPaths)) {
+
+                                return true;
+                            }
+
+                            $checkPaths[] = $resourceOwner['check_path'];
+                        }
+
+                        return false;
+                    })
+                    ->thenInvalid("Each resource owner should have a unique check_path.")
+                ->end()
             ->end()
             ->scalarNode('login_path')
                 ->cannotBeEmpty()
