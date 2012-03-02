@@ -1,6 +1,6 @@
 <?php
 
-namespace Knp\Bundle\OAuthBundle\Security\Exception;
+namespace HWI\Bundle\OAuthBundle\Security\Exception;
 
 interface AccessTokenAwareExceptionInterface
 {

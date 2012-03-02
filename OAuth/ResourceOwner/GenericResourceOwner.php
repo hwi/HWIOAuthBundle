@@ -1,15 +1,15 @@
 <?php
 
 /*
- * This file is part of the KnpOAuthBundle package.
+ * This file is part of the HWIOAuthBundle package.
  *
- * (c) KnpLabs <hello@knplabs.com>
+ * (c) Hardware.Info <opensource@hardware.info>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\OAuth\ResourceOwner;
+namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Client\ClientInterface as HttpClientInterface,
     Buzz\Message\Request as HttpRequest,
@@ -18,8 +18,8 @@ use Buzz\Client\ClientInterface as HttpClientInterface,
 use Symfony\Component\Security\Core\Exception\AuthenticationException,
     Symfony\Component\Security\Http\HttpUtils;
 
-use Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
-    Knp\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
+    HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 
 /**
  * GenericResourceOwner
@@ -135,7 +135,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
      */
     protected function getUserResponse()
     {
-        if(!isset($this->options['user_response_class'])) {
+        if (!isset($this->options['user_response_class'])) {
             $response = new PathUserResponse();
             $response->setPaths(array('username_path' => $this->getOption('username_path')));
 

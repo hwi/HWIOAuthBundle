@@ -1,23 +1,23 @@
 <?php
 
 /*
- * This file is part of the KnpOAuthBundle package.
+ * This file is part of the HWIOAuthBundle package.
  *
- * (c) KnpLabs <hello@knplabs.com>
+ * (c) Hardware.Info <opensource@hardware.info>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OauthBundle\Security\Http\Firewall;
+namespace HWI\Bundle\OauthBundle\Security\Http\Firewall;
 
 use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener,
     Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 
-use Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
-    Knp\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
+    HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
 /**
  * OAuthListener
@@ -28,14 +28,14 @@ use Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
 class OAuthListener extends AbstractAuthenticationListener
 {
     /**
-     * @var Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
+     * @var HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
      */
     private $resourceOwner;
 
     private $checkPath;
 
     /**
-     * @var Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner
+     * @var HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner
      */
     public function setResourceOwner(ResourceOwnerInterface $resourceOwner)
     {

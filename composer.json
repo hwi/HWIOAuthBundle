@@ -1,15 +1,15 @@
 {
-    "name":        "knplabs/knp-oauth-bundle",
+    "name":        "hwi/hwi-oauth-bundle",
     "type":        "symfony-bundle",
-    "description": "An OAuth firewall for Symfony2",
+    "description": "Support for authenticating users via oauth in Symfony2.",
     "keywords":    ["security", "firewall", "oauth"],
-    "homepage":    "http://github.com/KnpLabs/KnpOAuthBundle",
+    "homepage":    "http://github.com/hwi/HWIOAuthBundle",
     "license":     "MIT",
 
     "authors": [
         {
-            "name": "KnpLabs Team",
-            "homepage": "http://knplabs.com/"
+            "name": "Alexander",
+            "email": "iam.asm89@gmail.com"
         },
         {
             "name": "Geoffrey Bachelet",
@@ -17,7 +17,7 @@
         },
         {
             "name": "Contributors",
-            "homepage": "https://github.com/KnpLabs/KnpOAuthBundle/contributors"
+            "homepage": "https://github.com/hwi/HWIOAuthBundle/contributors"
         }
     ],
 
@@ -33,9 +33,9 @@
 
     "autoload": {
         "psr-0": {
-            "Knp\\Bundle\\OAuthBundle": ""
+            "HWI\\Bundle\\OAuthBundle": ""
         }
     },
 
-    "target-dir": "Knp/Bundle/OAuthBundle",
+    "target-dir": "HWI/Bundle/OAuthBundle"
 }

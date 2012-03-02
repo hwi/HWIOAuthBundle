@@ -1,15 +1,15 @@
 <?php
 
 /*
- * This file is part of the KnpOAuthBundle package.
+ * This file is part of the HWIOAuthBundle package.
  *
- * (c) KnpLabs <hello@knplabs.com>
+ * (c) Hardware.Info <opensource@hardware.info>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\DependencyInjection;
+namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator,
     Symfony\Component\Config\Definition\Processor,
@@ -19,12 +19,12 @@ use Symfony\Component\Config\FileLocator,
     Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
- * KnpOAuthExtension
+ * HWIOAuthExtension
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @auther Alexander <iam.asm89@gmail.com>
  */
-class KnpOAuthExtension extends Extension
+class HWIOAuthExtension extends Extension
 {
     /**
      * @{inheritDoc}
@@ -56,7 +56,7 @@ class KnpOAuthExtension extends Extension
     public function createResourceOwnerService(ContainerBuilder $container, $name, $type, array $options)
     {
         $container
-            ->register('knp_oauth.resource_owner.'.$name, '%knp_oauth.resource_owner.'.$type.'.class%')
+            ->register('hwi_oauth.resource_owner.'.$name, '%hwi_oauth.resource_owner.'.$type.'.class%')
             ->addArgument(new Reference('buzz.client'))
             ->addArgument(new Reference('security.http_utils'))
             ->addArgument($options);
@@ -67,6 +67,6 @@ class KnpOAuthExtension extends Extension
      */
     public function getAlias()
     {
-        return 'knp_oauth';
+        return 'hwi_oauth';
     }
 }

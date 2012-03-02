@@ -1,15 +1,15 @@
 <?php
 
 /*
- * This file is part of the KnpOAuthBundle package.
+ * This file is part of the HWIOAuthBundle package.
  *
- * (c) KnpLabs <hello@knplabs.com>
+ * (c) Hardware.Info <opensource@hardware.info>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
+namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory,
     Symfony\Component\DependencyInjection\ContainerBuilder,
@@ -38,7 +38,7 @@ class OAuthFactory extends AbstractFactory
             return new Reference($config['resource_owner']);
         }
 
-        return new Reference('knp_oauth.resource_owner.'.$config['resource_owner']);
+        return new Reference('hwi_oauth.resource_owner.'.$config['resource_owner']);
     }
 
     /**
@@ -46,10 +46,10 @@ class OAuthFactory extends AbstractFactory
      */
     protected function createAuthProvider(ContainerBuilder $container, $id, $config, $userProviderId)
     {
-        $providerId      = 'knp_oauth.authentication.provider.oauth.'.$id;
+        $providerId      = 'hwi_oauth.authentication.provider.oauth.'.$id;
 
         $container
-            ->setDefinition($providerId, new DefinitionDecorator('knp_oauth.authentication.provider.oauth'))
+            ->setDefinition($providerId, new DefinitionDecorator('hwi_oauth.authentication.provider.oauth'))
             ->addArgument(new Reference($userProviderId))
             ->addArgument($this->getResourceOwnerReference($config));
 
@@ -61,15 +61,14 @@ class OAuthFactory extends AbstractFactory
      */
     protected function createEntryPoint($container, $id, $config, $defaultEntryPoint)
     {
-        $entryPointId    = 'knp_oauth.authentication.entry_point.oauth.'.$id;
+        $entryPointId    = 'hwi_oauth.authentication.entry_point.oauth.'.$id;
 
         $container
-            ->setDefinition($entryPointId, new DefinitionDecorator('knp_oauth.authentication.entry_point.oauth'))
+            ->setDefinition($entryPointId, new DefinitionDecorator('hwi_oauth.authentication.entry_point.oauth'))
             ->addArgument(new Reference('security.http_utils'))
             ->addArgument($this->getResourceOwnerReference($config))
             ->addArgument($config['check_path'])
-            ->addArgument($config['login_path'])
-        ;
+            ->addArgument($config['login_path']);
 
         return $entryPointId;
     }
@@ -84,7 +83,6 @@ class OAuthFactory extends AbstractFactory
         $container->getDefinition($listenerId)
             ->addMethodCall('setResourceOwner', array($this->getResourceOwnerReference($config)))
             ->addMethodCall('setCheckPath', array($config['check_path']));
-        ;
 
         return $listenerId;
     }
@@ -110,8 +108,7 @@ class OAuthFactory extends AbstractFactory
             ->scalarNode('login_path')
                 ->cannotBeEmpty()
                 ->isRequired()
-            ->end()
-        ;
+            ->end();
     }
 
     /**
@@ -119,7 +116,7 @@ class OAuthFactory extends AbstractFactory
      */
     protected function getListenerId()
     {
-      return 'knp_oauth.authentication.listener.oauth';
+      return 'hwi_oauth.authentication.listener.oauth';
     }
 
     /**

@@ -1,23 +1,23 @@
 <?php
 
 /*
- * This file is part of the KnpOAuthBundle package.
+ * This file is part of the HWIOAuthBundle package.
  *
- * (c) KnpLabs <hello@knplabs.com>
+ * (c) Hardware.Info <opensource@hardware.info>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\Security\Core\Authentication\Provider;
+namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider;
 
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface,
     Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
     Symfony\Component\Security\Core\User\UserProviderInterface;
 
-use Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
-    Knp\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
-    Knp\Bundle\OAuthBundle\Security\Exception\AccessTokenAwareExceptionInterface;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
+    HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
+    HWI\Bundle\OAuthBundle\Security\Exception\AccessTokenAwareExceptionInterface;
 
 /**
  * OAuthProvider
@@ -28,7 +28,7 @@ use Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
 class OAuthProvider implements AuthenticationProviderInterface
 {
     /**
-     * @var Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
+     * @var HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
      */
     private $resourceOwner;
 
@@ -39,7 +39,7 @@ class OAuthProvider implements AuthenticationProviderInterface
 
     /**
      * @param Symfony\Component\Security\Core\User\UserProviderInterface $userProvider
-     * @param Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner
+     * @param HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner
      */
     public function __construct(UserProviderInterface $userProvider, ResourceOwnerInterface $resourceOwner)
     {

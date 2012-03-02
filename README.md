@@ -1,100 +1,29 @@
-# KnpOAuthBundle, an OAuth firewall for Symfony2
+HWIOAuthBundle
+==============
 
-## Instructions for 2.1 branch
+The HWIOAuthBundle adds support for authenticating users via oauth in Symfony2. The bundle was forked of [KnpOAuthBundle](https://github.com/KnpLabs/KnpOAuthBundle) with consent of the primary maintainer [ubermuda](https://github.com/ubermuda) in order to push the bundle forward faster as original creator currently didn't have the desired time for it.
 
-Please note this is the 2.1 compatible branch of this bundle. If you are using Symfony 2.0.\*, then you should upgrade. If you can't, you can still use the [2.0 branch](https://github.com/KnpLabs/KnpOAuthBundle/tree/2.0).
+**Note:**
 
-## Introduction
+> This bundle is currently only compatible with the master branch of Symfony2.
 
-This bundle provides an OAuth firewall for Symfony2.
+Documentation
+-------------
 
-You should really read the [full documentation](https://github.com/KnpLabs/KnpOAuthBundle/blob/master/Resources/doc/01_index.md), but if you're in a hurry (I know you are), this file should help you quickly getting a working setup.
+The bulk of the documentation is stored in the `Resources/doc/index.md`
+file in this bundle:
 
-## Requirements
+[Read the Documentation](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md)
 
-* Symfony (_2.1 (master branch) or later_)
-* Dependencies:
- * [`Buzz`](https://github.com/kriswallsmith/Buzz) (_0.5 or later_)
- * [`SensioBuzzBundle`](https://github.com/sensio/SensioBuzzBundle)
+Installation
+------------
 
-## Installation
+All the installation instructions are located in [documentation](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md).
 
-Add this to your `deps`:
+License
+-------
 
-    [Buzz]
-        git=https://github.com/kriswallsmith/Buzz.git
-        version=v0.5
+This bundle is under the MIT license. See the complete license in the bundle:
 
-    [BuzzBundle]
-        git=https://github.com/sensio/SensioBuzzBundle.git
-        target=/bundles/Sensio/Bundle/BuzzBundle
+    Resources/meta/LICENSE
 
-    [KnpOAuthBundle]
-        git=https://github.com/KnpLabs/KnpOAuthBundle.git
-        target=/bundles/Knp/Bundle/OAuthBundle
-
-Then run the usual `bin/vendors`:
-
-    bin/vendors install
-
-Register autoloads:
-
-    $loader->registerNamespaces(array(
-        'Knp'              => __DIR__.'/../vendor/bundles',
-        'Buzz'             => __DIR__.'/../vendor/Buzz/lib'
-    ));
-
-Register the bundles in your `AppKernel`:
-
-    $bundles = array(
-        new Knp\Bundle\OAuthBundle\KnpOAuthBundle(),
-        new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
-    );
-
-## Configuration
-
-Using the `KnpOAuthBundle` is just a matter of configuring an `oauth` firewall in your `security.yml`. The bundle exposes a number of configuration directives to suit your oauth needs. Here's a pretty standard security configuration:
-
-    security:
-        firewalls:
-            login:
-                pattern:    ^/secured/login$
-                security:   false
-            secured_area:
-                pattern:    ^/secured/
-                oauth:
-                    oauth_provider:    oauth
-                    authorization_url: https://github.com/login/oauth/authorize
-                    access_token_url:  https://github.com/login/oauth/access_token
-                    infos_url:         https://github.com/api/v2/json/user/show
-                    username_path:     user.login
-                    client_id:         <your_oauth_client_id>
-                    secret:            <your_oauth_secret>
-                    scope:             <your_oauth_scope>
-                    check_path:        /secured/login_check
-                    login_path:        /secured/login
-
-Please see [the configuration reference](https://github.com/KnpLabs/KnpOAuthBundle/blob/master/Resources/doc/03_configuration.md) for a description of the configuration options.
-
-Right now, what you probably want to know is that this bundle comes with a few pre-configured oauth provider, namely:
-
-* `github` (required options: `client_id`, `secret`)
-* er... that's all for now.
-
-If you don't see your favorite provider in the list, don't worry, there are three solutions, depending on how much of a hurry you're in:
-
-1. [Implement it](https://github.com/KnpLabs/KnpOAuthBundle/blob/master/Resources/doc/05_custom_oauth_providers.md) (and it would be awesome if you contributed it afterwards)
-2. [Use the generic OAuth provider](https://github.com/KnpLabs/KnpOAuthBundle/blob/master/Resources/doc/04_builtin_oauth_providers.md)
-3. [Ask us to implement it](https://github.com/KnpLabs/KnpOAuthBundle/issues/new). (please provide as much information as possible (`authorize_url`, `access_token_url`, `infos_url` (with its response format) and `username_path` would be nice))
-
-## User providers
-
-Most of the time, if you are using Doctrine, you will want to use the `EntityUserProvider`.
-
-This provider fetches users from the database and creates them on the fly if they don't already exist. It requires Doctrine to work. It works exactly like Doctrine's entity user provider, except its configuration key is `oauth_entity`:
-
-    providers:
-        secured_area:
-            oauth_entity:
-                class: KnpBundlesBundle:User
-                property: name

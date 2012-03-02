@@ -1,22 +1,22 @@
 <?php
 
 /*
- * This file is part of the KnpOAuthBundle package.
+ * This file is part of the HWiOAuthBundle package.
  *
- * (c) KnpLabs <hello@knplabs.com>
+ * (c) Hardware.Info <opensource@hardware.info>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace Knp\Bundle\OAuthBundle\Security\Http\EntryPoint;
+namespace HWI\Bundle\OAuthBundle\Security\Http\EntryPoint;
 
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface,
     Symfony\Component\Security\Core\Exception\AuthenticationException,
     Symfony\Component\Security\Http\HttpUtils,
     Symfony\Component\HttpFoundation\Request;
 
-use Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 
 /**
  * OAuthEntryPoint
@@ -31,7 +31,7 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     private $httpUtils;
 
     /**
-     * @var Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
+     * @var HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
      */
     private $resourceOwner;
 
@@ -42,7 +42,7 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
 
     /**
      * @param Symfony\Component\Security\Http\HttpUtils $httpUtils
-     * @param Knp\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner
+     * @param HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner
      * @param string $checkPath
      */
     public function __construct(HttpUtils $httpUtils, ResourceOwnerInterface $resourceOwner, $checkPath, $loginPath)
