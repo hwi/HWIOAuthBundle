@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+
 /**
  * AbstractUserResponse
  *
@@ -22,6 +24,11 @@ abstract class AbstractUserResponse implements UserResponseInterface
      * @var array
      */
     protected $response;
+
+    /**
+     * @var ResourceOwnerInterface
+     */
+    protected $resourceOwner;
 
     /**
      * {@inheritdoc}
@@ -37,5 +44,21 @@ abstract class AbstractUserResponse implements UserResponseInterface
     public function setResponse($response)
     {
         $this->response = json_decode($response, true);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getResourceOwner()
+    {
+        return $this->resourceOwner;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setResourceOwner(ResourceOwnerInterface $resourceOwner)
+    {
+        $this->resourceOwner = $resourceOwner;
     }
 }

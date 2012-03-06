@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+
 /**
  * UserResponseInterface
  *
@@ -26,7 +28,7 @@ interface UserResponseInterface
     public function getUsername();
 
     /**
-     * Set the api response.
+     * Get the api response.
      *
      * @return mixed
      */
@@ -38,4 +40,18 @@ interface UserResponseInterface
      * @param string $response
      */
     public function setResponse($response);
+
+    /**
+     * Get the resource owner responsible for the response.
+     *
+     * @return ResourceOwnerInterface
+     */
+    public function getResourceOwner();
+
+    /**
+     * Set the resource owner for the response.
+     *
+     * @param ResourceOwnerInterface $resourceOwner
+     */
+    public function setResourceOwner(ResourceOwnerInterface $resourceOwner);
 }

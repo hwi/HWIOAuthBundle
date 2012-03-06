@@ -35,7 +35,6 @@ class HWIOAuthBundle extends Bundle
 
         $extension = $container->getExtension('security');
         $extension->addSecurityListenerFactory(new OAuthFactory());
-        $extension->addUserProviderFactory(new EntityFactory('entity', 'doctrine.orm.security.user.provider'));
     }
 
     /**

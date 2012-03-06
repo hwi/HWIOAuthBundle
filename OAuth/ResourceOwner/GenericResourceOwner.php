@@ -40,10 +40,17 @@ class GenericResourceOwner implements ResourceOwnerInterface
     protected $httpClient;
 
     /**
-     * @param Buzz\Client\ClientInterface $httpClient
-     * @param array                       $options
+     * @access string
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options)
+    protected $name;
+
+    /**
+     * @param HttpClientInterface $httpClient Buzz http client
+     * @param HttpUtils           $httpUtils  Http utils
+     * @param array               $options    Options for the resource owner
+     * @param string              $name       Name for the resource owner
+     */
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name)
     {
         // Merge the options, then validate them
         $this->options = array_merge($this->options, $options);
@@ -58,6 +65,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
 
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
+        $this->name       = $name;
 
         $this->configure();
     }
@@ -73,9 +81,11 @@ class GenericResourceOwner implements ResourceOwnerInterface
     /**
      * Retrieve an option by name
      *
+     * @param string $name The option name
+     *
+     * @return mixed The option value
+     *
      * @throws InvalidArgumentException When the option does not exist
-     * @param string                    $name The option name
-     * @return mixed                    The option value
      */
     public function getOption($name)
     {
@@ -89,8 +99,10 @@ class GenericResourceOwner implements ResourceOwnerInterface
     /**
      * Performs an HTTP request
      *
-     * @param string $url The url to fetch
-     * @param string $method The HTTP method to use
+     * @param string $url     The url to fetch
+     * @param string $content The content of the request
+     * @param string $method  The HTTP method to use
+     *
      * @return string The response content
      */
     protected function httpRequest($url, $content = null, $method = null)
@@ -124,6 +136,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
 
         $response = $this->getUserResponse();
         $response->setResponse($this->httpRequest($url));
+        $response->setResourceOwner($this);
 
         return $response;
     }
@@ -184,5 +197,13 @@ class GenericResourceOwner implements ResourceOwnerInterface
         }
 
         return $response['access_token'];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 }

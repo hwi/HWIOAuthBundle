@@ -8,8 +8,9 @@
         <parameter key="hwi_oauth.authentication.listener.oauth.class">HWI\Bundle\OAuthBundle\Security\Http\Firewall\OAuthListener</parameter>
         <parameter key="hwi_oauth.authentication.provider.oauth.class">HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider</parameter>
         <parameter key="hwi_oauth.authentication.entry_point.oauth.class">HWI\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint</parameter>
-        <parameter key="hwi_oauth.user.provider.class">HWI\Bundle\OAuthBundle\Security\Core\UserProvider\OAuthUserProvider</parameter>
-        <parameter key="hwi_oauth.user.provider.entity.class">HWI\Bundle\OAuthBundle\Security\Core\UserProvider\EntityUserProvider</parameter>
+        <parameter key="hwi_oauth.user.provider.class">HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider</parameter>
+        <parameter key="hwi_oauth.user.provider.entity.class">HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider</parameter>
+        <parameter key="hwi_oauth.user.provider.fosub_bridge.class">HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider</parameter>
         <parameter key="hwi_oauth.resource_owner.generic.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.github.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.facebook.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FacebookResourceOwner</parameter>
@@ -32,5 +33,6 @@
         <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" />
         <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" />
         <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" parent="doctrine.orm.security.user.provider" />
+        <service id="hwi_oauth.user.provider.fosub_bridge" class="%hwi_oauth.user.provider.fosub_bridge.class%" />
     </services>
 </container>

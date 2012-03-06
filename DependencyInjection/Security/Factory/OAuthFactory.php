@@ -83,10 +83,43 @@ class OAuthFactory extends AbstractFactory
 
         $container
             ->setDefinition($providerId, new DefinitionDecorator('hwi_oauth.authentication.provider.oauth'))
-            ->addArgument(new Reference($userProviderId))
+            ->addArgument($this->createOAuthAwareUserProvider($container, $id, $config['oauth_user_provider']))
             ->addArgument($this->getResourceOwnerMapReference($id));
 
         return $providerId;
+    }
+
+    protected function createOAuthAwareUserProvider(ContainerBuilder $container, $id, $config)
+    {
+        $serviceId = 'hwi_oauth.user.provider.entity.'.$id;
+
+        // todo: move this to factories?
+        switch(key($config)) {
+            case 'oauth':
+                $container
+                    ->setDefinition($serviceId, new DefinitionDecorator('hwi_oauth.user.provider'));
+                break;
+            case 'orm':
+                $container
+                    ->setDefinition($serviceId, new DefinitionDecorator('hwi_oauth.user.provider.entity'))
+                    ->addArgument($config['orm']['class'])
+                    ->addArgument($config['orm']['properties'])
+                    ->addArgument($config['orm']['manager_name']);
+                break;
+            case 'service':
+                $container
+                    ->setAlias($serviceId, $config['service']);
+                break;
+            case 'fosub':
+                $container
+                    ->setDefinition($serviceId, new DefinitionDecorator('hwi_oauth.user.provider.fosub_bridge'))
+                    ->addArgument(new Reference('fos_user.user_manager'))
+                    ->addArgument($config['fosub']['properties']);
+                break;
+        }
+
+
+        return new Reference($serviceId);
     }
 
     /**
@@ -167,6 +200,42 @@ class OAuthFactory extends AbstractFactory
                         return false;
                     })
                     ->thenInvalid("Each resource owner should have a unique check_path.")
+                ->end()
+            ->end()
+            ->arrayNode('oauth_user_provider')
+                ->isRequired()
+                ->children()
+                    ->arrayNode('orm')
+                        ->children()
+                            ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('manager_name')->defaultNull()->end()
+                            ->arrayNode('properties')
+                                ->isRequired()
+                                ->useAttributeAsKey('name')
+                                ->prototype('scalar')
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                    ->scalarNode('service')->cannotBeEmpty()->end()
+                    ->scalarNode('oauth')->end()
+                    ->arrayNode('fosub')
+                        ->children()
+                            ->arrayNode('properties')
+                                ->isRequired()
+                                ->useAttributeAsKey('name')
+                                ->prototype('scalar')
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->validate()
+                    ->ifTrue(function($c) {
+                        return 1 !== count($c)
+                            || !in_array(key($c), array('fosub', 'oauth','orm', 'service'));
+                    })
+                    ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
                 ->end()
             ->end()
             ->scalarNode('login_path')

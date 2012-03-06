@@ -46,7 +46,15 @@ interface ResourceOwnerInterface
      * @param mixed $code            The code to use to retrieve the access token
      * @param mixed $redirectUri     The uri to redirect the client back to
      * @param array $extraParameters An array of parameters to add to the url
+     *
      * @return string The access token
      */
     function getAccessToken($code, $redirectUri, array $extraParameters = array());
+
+    /**
+     * Return a name for the resource owner.
+     *
+     * @return string
+     */
+    function getName();
 }

@@ -9,20 +9,22 @@
  * file that was distributed with this source code.
  */
 
-namespace HWI\Bundle\OAuthBundle\Security\Core\UserProvider;
+namespace HWI\Bundle\OAuthBundle\Security\Core\User;
+
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface,
+    HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser,
+    HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 
 use Symfony\Component\Security\Core\User\UserProviderInterface,
     Symfony\Component\Security\Core\User\UserInterface,
     Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-
-use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 
 /**
  * OAuthUserProvider
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  */
-class OAuthUserProvider implements UserProviderInterface
+class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
 {
     /**
      * {@inheritDoc}
@@ -50,5 +52,13 @@ class OAuthUserProvider implements UserProviderInterface
     public function supportsClass($class)
     {
         return $class === 'HWI\\Bundle\\OAuthBundle\\Security\\Core\\User\\OAuthUser';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadUserByOAuthUserResponse(UserResponseInterface $response)
+    {
+        return $this->loadUserByUsername($response->getUsername());
     }
 }

@@ -12,10 +12,10 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider;
 
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface,
-    Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
-    Symfony\Component\Security\Core\User\UserProviderInterface;
+    Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
+    HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface,
     HWI\Bundle\OAuthBundle\Security\Exception\OAuthAwareExceptionInterface,
     HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 
@@ -41,7 +41,7 @@ class OAuthProvider implements AuthenticationProviderInterface
      * @param UserProviderInterface $userProvider     User provider
      * @param ResourceOwnerMap      $resourceOwnerMap Resource owner map
      */
-    public function __construct(UserProviderInterface $userProvider, ResourceOwnerMap $resourceOwnerMap)
+    public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMap $resourceOwnerMap)
     {
         $this->userProvider  = $userProvider;
         $this->resourceOwnerMap = $resourceOwnerMap;
@@ -62,12 +62,10 @@ class OAuthProvider implements AuthenticationProviderInterface
     {
         $resourceOwner = $this->resourceOwnerMap->getResourceOwnerById($token->getResourceOwnerId());
 
-        $username = $resourceOwner
-            ->getUserInformation($token->getCredentials())
-            ->getUsername();
+        $userResponse = $resourceOwner->getUserInformation($token->getCredentials());
 
         try {
-            $user = $this->userProvider->loadUserByUsername($username);
+            $user = $this->userProvider->loadUserByOAuthUserResponse($userResponse);
         } catch (OAuthAwareExceptionInterface $e) {
             $e->setAccessToken($token->getCredentials());
             $e->setResourceOwnerId($token->getResourceOwnerId());
