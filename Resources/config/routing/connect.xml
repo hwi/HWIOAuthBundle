@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="hwi_oauth_connect_service" pattern="/service/{service}">
+        <default key="_controller">HWIOAuthBundle:Connect:connectService</default>
+    </route>
+
+    <route id="hwi_oauth_connect_registration" pattern="/registration/{key}">
+        <default key="_controller">HWIOAuthBundle:Connect:registration</default>
+    </route>
+
+    <route id="hwi_oauth_connect_registration_success" pattern="/registration-success">
+        <default key="_controller">HWIOAuthBundle:Connect:registrationSuccess</default>
+    </route>
+</routes>

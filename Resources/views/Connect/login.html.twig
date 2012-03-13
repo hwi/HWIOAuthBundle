@@ -1,0 +1,10 @@
+{% extends 'HWIOAuthBundle::layout.html.twig' %}
+
+{% block hwi_oauth_content %}
+    {% if error %}
+        <span>{{ error }}</span>
+    {% endif %}
+    {% for owner in resource_owners %}
+    <a href="{{ owner.url }}">{{ owner.name | trans }}</a> <br />
+    {% endfor %}
+{% endblock hwi_oauth_content %}

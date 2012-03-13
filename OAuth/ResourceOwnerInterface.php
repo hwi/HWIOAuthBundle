@@ -57,4 +57,9 @@ interface ResourceOwnerInterface
      * @return string
      */
     function getName();
+
+    /**
+     * Sets a name for the resource owner.
+     */
+    function setName($name);
 }

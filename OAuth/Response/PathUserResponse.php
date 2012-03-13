@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+
 /**
  * Class parsing the properties by given path options.
  *
@@ -26,17 +28,17 @@ class PathUserResponse extends AbstractUserResponse
      */
     public function getUsername()
     {
-        $usernamePath = explode('.', $this->paths['username_path']);
+        return $this->getValueForPath('username_path');
+    }
 
-        $username = $this->response;
-        foreach ($usernamePath as $path) {
-            if (!array_key_exists($path, $username)) {
-                throw new AuthenticationException(sprintf('Could not follow username path "%s" in OAuth provider response: %s', $this->paths['username_path'], var_export($this->response, true)));
-            }
-            $username = $username[$path];
-        }
-
-        return $username;
+    /**
+     * Get the name to display.
+     *
+     * @return string
+     */
+    public function getDisplayName()
+    {
+        return $this->getValueForPath('displayname_path');
     }
 
     public function getPaths()
@@ -47,5 +49,20 @@ class PathUserResponse extends AbstractUserResponse
     public function setPaths(array $paths)
     {
         $this->paths = $paths;
+    }
+
+    protected function getValueForPath($path)
+    {
+        $steps = explode('.', $this->paths[$path]);
+
+        $value = $this->response;
+        foreach ($steps as $step) {
+            if (!array_key_exists($step, $value)) {
+                throw new AuthenticationException(sprintf('Could not follow path "%s" in OAuth provider response: %s', $this->paths[$path], var_export($this->response, true)));
+            }
+            $value = $value[$step];
+        }
+
+        return $value;
     }
 }

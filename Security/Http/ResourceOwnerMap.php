@@ -39,40 +39,43 @@ class ResourceOwnerMap
      */
     protected $resourceOwners;
 
+    protected $possibleResourceOwners;
+
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container
-     * @param HttpUtils          $httpUtils
+     * @param ContainerInterface $container              Container used to lazy load the resource owners.
+     * @param HttpUtils          $httpUtils              HttpUtils
+     * @param array              $possibleResourceOwners Array with possible resource owners names.
+     * @param array              $resourceOwners         Array with configured resource owners.
      */
-    public function __construct(ContainerInterface $container, HttpUtils $httpUtils)
+    public function __construct(ContainerInterface $container, HttpUtils $httpUtils, array $possibleResourceOwners, $resourceOwners)
     {
-        $this->container = $container;
-        $this->httpUtils = $httpUtils;
+        $this->container              = $container;
+        $this->httpUtils              = $httpUtils;
+        $this->possibleResourceOwners = $possibleResourceOwners;
+        $this->resourceOwners         = $resourceOwners;
     }
 
     /**
-     * Add a resource owner to the map.
-     *
-     * @param string $resourceOwnerId
-     * @param array  $configuration
-     */
-    public function addResourceOwner($resourceOwnerId, array $configuration)
-    {
-        $configuration['service'] = $resourceOwnerId;
-        $this->resourceOwners[$configuration['service']] = $configuration;
-    }
-
-    /**
-     * Gets the appropriate resource owner given the id.
+     * Gets the appropriate resource owner given the name.
      *
      * @param string $id
      *
      * @return null|HWI\Bundle\OAuthBundle\OAuthResourceOwnerInterface
      */
-    public function getResourceOwnerById($id)
+    public function getResourceOwnerByName($name)
     {
-        return isset($this->resourceOwners[$id]) ? $this->container->get($id) : null;
+        if (!isset($this->resourceOwners[$name])) {
+            return null;
+        }
+        if (!in_array($name, $this->possibleResourceOwners)) {
+            return null;
+        }
+
+        $service = $this->container->get('hwi_oauth.resource_owner.'.$name);
+
+        return $service;
     }
 
     /**
@@ -84,9 +87,9 @@ class ResourceOwnerMap
      */
     public function getResourceOwnerByRequest(Request $request)
     {
-        foreach ($this->resourceOwners as $resourceOwner) {
-            if ($this->httpUtils->checkRequestPath($request, $resourceOwner['check_path'])) {
-                return array($this->container->get($resourceOwner['service']), $resourceOwner['check_path'], $resourceOwner['service']);
+        foreach ($this->resourceOwners as $name => $checkPath) {
+            if ($this->httpUtils->checkRequestPath($request, $checkPath)) {
+                return array($this->getResourceOwnerByName($name), $checkPath);
             }
         }
     }

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace HWI\Bundle\OAuthBundle\Security\Exception;
+namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 
 /**
  * OAuthAwareExceptionInterface
@@ -32,14 +32,14 @@ interface OAuthAwareExceptionInterface
     public function getAccessToken();
 
     /**
-    * Set the id of the resource owner responsible for the oauth authentication.
+    * Set the name of the resource owner responsible for the oauth authentication.
     *
-    * @param string $resourceOwnerId
+    * @param string $resourceOwnerName
     */
-    public function setResourceOwnerId($resourceOwnerId);
+    public function setResourceOwnerName($resourceOwnerName);
 
     /**
     * @return string
     */
-    public function getResourceOwnerId();
+    public function getResourceOwnerName();
 }

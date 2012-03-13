@@ -18,6 +18,7 @@ use Symfony\Component\HttpFoundation\Request,
  * GoogleResourceOwner
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ * @author Alexander <iam.asm89@gmail.com>
  */
 class GoogleResourceOwner extends GenericResourceOwner
 {
@@ -28,7 +29,8 @@ class GoogleResourceOwner extends GenericResourceOwner
         'authorization_url' => 'https://accounts.google.com/o/oauth2/auth',
         'access_token_url'  => 'https://accounts.google.com/o/oauth2/token',
         'infos_url'         => 'https://www.googleapis.com/oauth2/v1/userinfo',
-        'username_path'     => 'name',
+        'username_path'     => 'id',
+        'displayname_path'  => 'name',
         'scope'             => 'userinfo.profile',
     );
 

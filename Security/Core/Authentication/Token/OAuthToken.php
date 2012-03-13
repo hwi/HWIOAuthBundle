@@ -29,7 +29,7 @@ class OAuthToken extends AbstractToken
     /**
      * @var string
      */
-    private $resourceOwnerId;
+    private $resourceOwnerName;
 
     /**
      * @param string $accessToken The OAuth access token
@@ -59,22 +59,22 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * Get the resource owner id.
+     * Get the resource owner name.
      *
      * @return string
      */
-    public function getResourceOwnerId()
+    public function getResourceOwnerName()
     {
-        return $this->resourceOwnerId;
+        return $this->resourceOwnerName;
     }
 
     /**
-     * Set the resource owner id.
+     * Set the resource owner name.
      *
-     * @param string $resourceOwnerId
+     * @param string $resourceOwnerName
      */
-    public function setResourceOwnerId($resourceOwnerId)
+    public function setResourceOwnerName($resourceOwnerName)
     {
-        $this->resourceOwnerId = $resourceOwnerId;
+        $this->resourceOwnerName = $resourceOwnerName;
     }
 }

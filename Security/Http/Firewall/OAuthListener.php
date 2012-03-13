@@ -73,7 +73,7 @@ class OAuthListener extends AbstractAuthenticationListener
      */
     protected function attemptAuthentication(Request $request)
     {
-        list($resourceOwner, $checkPath, $resourceOwnerId) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
+        list($resourceOwner, $checkPath) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
 
         $accessToken = $resourceOwner->getAccessToken(
             $request->query->get('code'),
@@ -81,7 +81,7 @@ class OAuthListener extends AbstractAuthenticationListener
         );
 
         $token = new OAuthToken($accessToken);
-        $token->setResourceOwnerId($resourceOwnerId);
+        $token->setResourceOwnerName($resourceOwner->getName());
 
         return $this->authenticationManager->authenticate($token);
     }

@@ -28,6 +28,13 @@ interface UserResponseInterface
     public function getUsername();
 
     /**
+     * Get the name to display.
+     *
+     * @return string
+     */
+    public function getDisplayName();
+
+    /**
      * Get the api response.
      *
      * @return mixed

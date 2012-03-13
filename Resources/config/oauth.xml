@@ -11,6 +11,7 @@
         <parameter key="hwi_oauth.user.provider.class">HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider</parameter>
         <parameter key="hwi_oauth.user.provider.entity.class">HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider</parameter>
         <parameter key="hwi_oauth.user.provider.fosub_bridge.class">HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider</parameter>
+        <parameter key="hwi_oauth.registration.form.handler.fosub_bridge.class">HWI\Bundle\OAuthBundle\Form\FOSUBRegistrationFormHandler</parameter>
         <parameter key="hwi_oauth.resource_owner.generic.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.github.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.facebook.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FacebookResourceOwner</parameter>
@@ -33,6 +34,9 @@
         <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" />
         <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" />
         <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" parent="doctrine.orm.security.user.provider" />
-        <service id="hwi_oauth.user.provider.fosub_bridge" class="%hwi_oauth.user.provider.fosub_bridge.class%" />
+
+        <!-- fosub bridges -->
+        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="%hwi_oauth.user.provider.fosub_bridge.class%" />
+        <service id="hwi_oauth.registration.form.handler.fosub_bridge.def" class="%hwi_oauth.registration.form.handler.fosub_bridge.class%" />
     </services>
 </container>

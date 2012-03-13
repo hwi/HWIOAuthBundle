@@ -12,10 +12,11 @@
 namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory,
+    Symfony\Component\Config\Definition\Builder\NodeDefinition,
     Symfony\Component\DependencyInjection\ContainerBuilder,
     Symfony\Component\DependencyInjection\DefinitionDecorator,
-    Symfony\Component\DependencyInjection\Reference,
-    Symfony\Component\Config\Definition\Builder\NodeDefinition;
+    Symfony\Component\DependencyInjection\Parameter,
+    Symfony\Component\DependencyInjection\Reference;
 
 /**
  * OAuthFactory
@@ -26,22 +27,6 @@ use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractF
 class OAuthFactory extends AbstractFactory
 {
     /**
-     * Gets the reference to the appropriate resource owner service.
-     *
-     * @param array $id
-     *
-     * @return Reference
-     */
-    protected function getResourceOwnerId($id)
-    {
-        if (false !== strpos($id, '.')) {
-            return $id;
-        }
-
-        return 'hwi_oauth.resource_owner.'.$id;
-    }
-
-    /**
      * Creates a resource owner map for the given configuration.
      *
      * @param ContainerBuilder $container Container to build for
@@ -50,14 +35,18 @@ class OAuthFactory extends AbstractFactory
      */
     protected function createResourceOwnerMap(ContainerBuilder $container, $id, array $config)
     {
+        $resourceOwnersMap = array();
+        foreach ($config['resource_owners'] as $name => $checkPath) {
+            $resourceOwnersMap[$name] = $checkPath;
+        }
+        $container->setParameter('hwi_oauth.resource_ownermap.configured.'.$id, $resourceOwnersMap);
+
         $ownerMapDefinition = $container
             ->register($this->getResourceOwnerMapReference($id), '%hwi_oauth.resource_ownermap.class%')
             ->addArgument(new Reference('service_container'))
-            ->addArgument(new Reference('security.http_utils'));
-
-        foreach ($config['resource_owners'] as $resourceOwner) {
-            $ownerMapDefinition->addMethodCall('addResourceOwner', array($this->getResourceOwnerId($resourceOwner['service']), $resourceOwner));
-        }
+            ->addArgument(new Reference('security.http_utils'))
+            ->addArgument(new Parameter('hwi_oauth.resource_owners'))
+            ->addArgument(new Parameter('hwi_oauth.resource_ownermap.configured.'.$id));
     }
 
     /**
@@ -110,12 +99,6 @@ class OAuthFactory extends AbstractFactory
                 $container
                     ->setAlias($serviceId, $config['service']);
                 break;
-            case 'fosub':
-                $container
-                    ->setDefinition($serviceId, new DefinitionDecorator('hwi_oauth.user.provider.fosub_bridge'))
-                    ->addArgument(new Reference('fos_user.user_manager'))
-                    ->addArgument($config['fosub']['properties']);
-                break;
         }
 
 
@@ -137,8 +120,8 @@ class OAuthFactory extends AbstractFactory
         // Inject the resource owners directly if there is only one
         if (1 === count($config['resource_owners'])) {
             $entryPointDefinition
-                ->addArgument(new Reference($this->getResourceOwnerId($config['resource_owners'][0]['service'])))
-                ->addArgument($config['resource_owners'][0]['check_path']);
+                ->addArgument(new Reference('hwi_oauth.resource_owners.'.key($config['resource_owners'])))
+                ->addArgument(current($config['resource_owners']));
         }
 
         return $entryPointId;
@@ -152,8 +135,8 @@ class OAuthFactory extends AbstractFactory
         $listenerId = parent::createListener($container, $id, $config, $userProvider);
 
         $checkPaths = array();
-        foreach ($config['resource_owners'] as $resourceOwner) {
-            $checkPaths[] = $resourceOwner['check_path'];
+        foreach ($config['resource_owners'] as $name => $checkPath) {
+            $checkPaths[] = $checkPath;
         }
 
         $container->getDefinition($listenerId)
@@ -175,26 +158,19 @@ class OAuthFactory extends AbstractFactory
         $builder
             ->arrayNode('resource_owners')
                 ->isRequired()
-                ->prototype('array')
-                    ->children()
-                        ->scalarNode('service')
-                            ->isRequired()
-                        ->end()
-                        ->scalarNode('check_path')
-                            ->isRequired()
-                        ->end()
-                    ->end()
+                ->useAttributeAsKey('name')
+                ->prototype('scalar')
                 ->end()
                 ->validate()
                     ->ifTrue(function($c) {
                         $checkPaths = array();
-                        foreach ($c as $resourceOwner) {
-                            if (in_array($resourceOwner['check_path'], $checkPaths)) {
+                        foreach ($c as $name => $checkPath) {
+                            if (in_array($checkPath, $checkPaths)) {
 
                                 return true;
                             }
 
-                            $checkPaths[] = $resourceOwner['check_path'];
+                            $checkPaths[] = $checkPath;
                         }
 
                         return false;

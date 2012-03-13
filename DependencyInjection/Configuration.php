@@ -35,6 +35,29 @@ class Configuration implements ConfigurationInterface
             ->fixXmlConfig('resource_owner')
             ->children()
             ->scalarNode('firewall_name')->defaultValue(false)->end()
+            ->arrayNode('fosub')
+                ->children()
+                    ->arrayNode('properties')
+                        ->isRequired()
+                        ->useAttributeAsKey('name')
+                        ->prototype('scalar')
+                        ->end()
+                    ->end()
+                ->end()
+            ->end()
+            ->arrayNode('connect')
+                ->children()
+                    ->scalarNode('account_connector')
+                        ->cannotBeEmpty()
+                    ->end()
+                    ->scalarNode('registration_form_handler')
+                        ->cannotBeEmpty()
+                    ->end()
+                    ->scalarNode('registration_form')
+                        ->cannotBeEmpty()
+                    ->end()
+                ->end()
+            ->end()
             ->arrayNode('resource_owners')
                 ->isRequired()
                 ->useAttributeAsKey('name')
@@ -58,11 +81,9 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('client_id')
                             ->cannotBeEmpty()
-                            ->isRequired()
                         ->end()
                         ->scalarNode('client_secret')
                             ->cannotBeEmpty()
-                            ->isRequired()
                         ->end()
                         ->scalarNode('infos_url')
                             ->validate()
@@ -73,7 +94,6 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                         ->scalarNode('scope')
-                            ->isRequired()
                         ->end()
                         ->scalarNode('user_response_class')
                             ->validate()
@@ -83,11 +103,24 @@ class Configuration implements ConfigurationInterface
                                 ->thenUnset()
                             ->end()
                         ->end()
+                        ->scalarNode('service')
+                            ->validate()
+                                ->ifTrue(function($v) {
+                                    return empty($v);
+                                })
+                                ->thenUnset()
+                            ->end()
+                        ->end()
                         ->scalarNode('type')
-                            ->defaultValue('generic')
                             ->validate()
                                 ->ifNotInArray(array('facebook', 'generic', 'github', 'google'))
                                 ->thenInvalid('Unknow resource owner type %s.')
+                            ->end()
+                            ->validate()
+                                ->ifTrue(function($v) {
+                                    return empty($v);
+                                })
+                                ->thenUnset()
                             ->end()
                         ->end()
                         ->scalarNode('username_path')
@@ -101,6 +134,29 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {
+                            // skip if this contains a service
+                            if (isset($c['service'])) {
+                                return false;
+                            }
+
+                            // for each type at least these have to be set
+                            $children = array('type', 'client_id', 'client_secret');
+                            foreach ($children as $child) {
+                                if (!isset($c[$child])) {
+                                    return true;
+                                }
+                            }
+                            return false;
+                        })
+                        ->thenInvalid('You should set at least the type, client_id and the client_secret of a resource owner.')
+                    ->end()
+                    ->validate()
+                        ->ifTrue(function($c) {
+                            // skip if this contains a service
+                            if (isset($c['service'])) {
+                                return false;
+                            }
+
                             if ('generic' === $c['type']) {
                                 $children = array('authorization_url', 'access_token_url', 'infos_url');
                                 foreach ($children as $child) {
@@ -116,6 +172,12 @@ class Configuration implements ConfigurationInterface
                             return false;
                         })
                         ->thenInvalid("All parameters are mandatory for type 'generic'. Check if you're missing one of: access_token_url, authorization_url, infos_url or username_path or user_response_class.")
+                    ->end()
+                    ->validate()
+                        ->ifTrue(function($c) {
+                            return isset($c['service']) && 1 !== count($c);
+                        })
+                        ->thenInvalid("If you're setting a service, no other arguments should be set.")
                     ->end()
                 ->end()
             ->end();

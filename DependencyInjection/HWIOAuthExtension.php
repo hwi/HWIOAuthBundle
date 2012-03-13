@@ -18,6 +18,8 @@ use Symfony\Component\Config\FileLocator,
     Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
     Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
+
 /**
  * HWIOAuthExtension
  *
@@ -40,10 +42,48 @@ class HWIOAuthExtension extends Extension
         $container->setParameter('hwi_oauth.firewall_name', $config['firewall_name']);
 
         // setup services for all configured resource owners
+        $resourceOwners = array();
         foreach ($config['resource_owners'] as $name => $options) {
-            $type = $options['type'];
-            unset($options['type']);
-            $this->createResourceOwnerService($container, $name, $type, $options);
+            $resourceOwners[] = $name;
+            $this->createResourceOwnerService($container, $name, $options);
+        }
+        $container->setParameter('hwi_oauth.resource_owners', $resourceOwners);
+
+        if (isset($config['fosub'])) {
+            $container
+                ->setDefinition('hwi_oauth.user.provider.fosub_bridge', new DefinitionDecorator('hwi_oauth.user.provider.fosub_bridge.def'))
+                ->addArgument(new Reference('fos_user.user_manager'))
+                ->addArgument($config['fosub']['properties']);
+        }
+
+        // check of the connect controllers etc should be enabled
+        if (isset($config['connect'])) {
+            $container->setParameter('hwi_oauth.connect', true);
+
+            if (isset($config['fosub'])) {
+                // setup fosub bridge services
+                $container->setAlias('hwi_oauth.account.connector', 'hwi_oauth.user.provider.fosub_bridge');
+
+                $container
+                    ->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new DefinitionDecorator('hwi_oauth.registration.form.handler.fosub_bridge.def'))
+                    ->addArgument(new Reference('fos_user.registration.form.handler'))
+                    ->addArgument(new Reference('fos_user.user_manager'))
+                    ->addArgument(new Reference('fos_user.mailer'))
+                    ->setScope('request');
+
+                $container->setAlias('hwi_oauth.registration.form.handler', 'hwi_oauth.registration.form.handler.fosub_bridge');
+                $container->setAlias('hwi_oauth.registration.form', 'fos_user.registration.form');
+            }
+
+            foreach ($config['connect'] as $key => $serviceId) {
+                 $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), $serviceId);
+            }
+
+            $container->setAlias('hwi_oauth.user_checker', 'security.user_checker');
+
+            // setup custom services
+        } else {
+            $container->setParameter('hwi_oauth.connect', false);
         }
     }
 
@@ -55,14 +95,26 @@ class HWIOAuthExtension extends Extension
      * @param string           $type      The type of the service
      * @param array            $options   Additional options of the service
      */
-    public function createResourceOwnerService(ContainerBuilder $container, $name, $type, array $options)
+    public function createResourceOwnerService(ContainerBuilder $container, $name, array $options)
     {
-        $container
-            ->register('hwi_oauth.resource_owner.'.$name, '%hwi_oauth.resource_owner.'.$type.'.class%')
-            ->addArgument(new Reference('buzz.client'))
-            ->addArgument(new Reference('security.http_utils'))
-            ->addArgument($options)
-            ->addArgument($name);
+        // alias services
+        if (isset($options['service'])) {
+            $container
+                ->setAlias('hwi_oauth.resource_owner.'.$name, $options['service']);
+
+            // set the appropriate name for aliased services
+            $resourceOwnerDefinition = $container->getDefinition('hwi_oauth.resource_owner.'.$name);
+            $resourceOwnerDefinition->addMethodCall('setName', array($name));
+        } else {
+            $type = $options['type'];
+            unset($options['type']);
+            $container
+                ->register('hwi_oauth.resource_owner.'.$name, '%hwi_oauth.resource_owner.'.$type.'.class%')
+                ->addArgument(new Reference('buzz.client'))
+                ->addArgument(new Reference('security.http_utils'))
+                ->addArgument($options)
+                ->addArgument($name);
+        }
     }
 
     /**

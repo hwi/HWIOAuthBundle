@@ -150,7 +150,10 @@ class GenericResourceOwner implements ResourceOwnerInterface
     {
         if (!isset($this->options['user_response_class'])) {
             $response = new PathUserResponse();
-            $response->setPaths(array('username_path' => $this->getOption('username_path')));
+            $response->setPaths(array(
+                'username_path' => $this->getOption('username_path'),
+                'displayname_path' => $this->getOption('displayname_path')
+            ));
 
             return $response;
         }
@@ -205,5 +208,13 @@ class GenericResourceOwner implements ResourceOwnerInterface
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
     }
 }

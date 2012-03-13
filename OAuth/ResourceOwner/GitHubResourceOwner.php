@@ -15,6 +15,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  * GitHubResourceOwner
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ * @author Alexander <iam.asm89@gmail.com>
  */
 class GitHubResourceOwner extends GenericResourceOwner
 {
@@ -26,6 +27,8 @@ class GitHubResourceOwner extends GenericResourceOwner
         'access_token_url'  => 'https://github.com/login/oauth/access_token',
         'infos_url'         => 'https://api.github.com/user',
         'username_path'     => 'login',
+        'displayname_path'  => 'name',
+        'scope'             => '',
     );
 
     /**

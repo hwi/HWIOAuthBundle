@@ -25,7 +25,8 @@ class FacebookResourceOwner extends GenericResourceOwner
         'authorization_url' => 'https://www.facebook.com/dialog/oauth',
         'access_token_url'  => 'https://graph.facebook.com/oauth/access_token',
         'infos_url'         => 'https://graph.facebook.com/me',
-        'username_path'     => 'name',
+        'username_path'     => 'id',
+        'displayname_path'  => 'name',
     );
 
     /**
