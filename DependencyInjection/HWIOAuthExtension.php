@@ -69,6 +69,7 @@ class HWIOAuthExtension extends Extension
                     ->addArgument(new Reference('fos_user.registration.form.handler'))
                     ->addArgument(new Reference('fos_user.user_manager'))
                     ->addArgument(new Reference('fos_user.mailer'))
+                    ->addArgument($config['fosub']['username_iterations'])
                     ->setScope('request');
 
                 $container->setAlias('hwi_oauth.registration.form.handler', 'hwi_oauth.registration.form.handler.fosub_bridge');

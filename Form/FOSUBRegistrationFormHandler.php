@@ -33,6 +33,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     protected $userManager;
     protected $mailer;
     protected $registrationFormHandler;
+    protected $iterations;
 
     /**
      * Constructor.
@@ -40,12 +41,14 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      * @param RegistrationFormHandler $registrationFormHandler FOSUB registration form handler
      * @param UserManagerInterface    $userManager             FOSUB user manager
      * @param MailerInterface         $mailer                  FOSUB mailer
+     * @param integer                 $iterations              Amount of attempts that should be made to 'guess' a unique username
      */
-    public function __construct(RegistrationFormHandler $registrationFormHandler, UserManagerInterface $userManager, MailerInterface $mailer)
+    public function __construct(RegistrationFormHandler $registrationFormHandler, UserManagerInterface $userManager, MailerInterface $mailer, $iterations = 5)
     {
         $this->registrationFormHandler = $registrationFormHandler;
         $this->userManager = $userManager;
         $this->mailer = $mailer;
+        $this->iterations = $iterations;
     }
 
     /**
@@ -68,7 +71,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         if ('POST' !== $request->getMethod()) {
             $user = $form->getData();
 
-            $user->setUsername($userInformation->getDisplayName().' ('.$userInformation->getResourceOwner()->getName().' '.$userInformation->getUsername().')');
+            $user->setUsername($this->getUniqueUsername($userInformation->getDisplayName()));
 
             if ($userInformation instanceof AdvancedUserResponseInterface) {
                 $user->setEmail($userInformation->getEmail());
@@ -78,6 +81,25 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         }
 
         return $processed;
+    }
+
+    /**
+     * Attempts to get a unique username for the user.
+     *
+     * @param string $name
+     *
+     * @return string Name, or empty string if it failed after all the iterations.
+     */
+    protected function getUniqueUserName($name)
+    {
+        $i = 0;
+        $testName = $name;
+
+        do {
+            $user = $this->userManager->findUserByUsername($testName);
+        } while ($user !== null && $i < $this->iterations && $testName = $name.++$i);
+
+        return $user !== null ? '' : $testName;
     }
 
     /**
