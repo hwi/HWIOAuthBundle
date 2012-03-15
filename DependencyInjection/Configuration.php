@@ -123,13 +123,9 @@ class Configuration implements ConfigurationInterface
                                 ->thenUnset()
                             ->end()
                         ->end()
-                        ->scalarNode('username_path')
-                            ->validate()
-                                ->ifTrue(function($v) {
-                                    return empty($v);
-                                })
-                                ->thenUnset()
-                            ->end()
+                        ->arrayNode('paths')
+                            ->useAttributeAsKey('name')
+                            ->prototype('scalar')->end()
                         ->end()
                     ->end()
                     ->validate()
@@ -146,6 +142,7 @@ class Configuration implements ConfigurationInterface
                                     return true;
                                 }
                             }
+
                             return false;
                         })
                         ->thenInvalid('You should set at least the type, client_id and the client_secret of a resource owner.')
@@ -157,21 +154,46 @@ class Configuration implements ConfigurationInterface
                                 return false;
                             }
 
-                            if ('generic' === $c['type']) {
-                                $children = array('authorization_url', 'access_token_url', 'infos_url');
-                                foreach ($children as $child) {
-                                    if (!isset($c[$child])) {
-                                        return true;
-                                    }
-                                }
-
-                                // one of the two should be set
-                                return !isset($c['username_path']) && !isset($c['user_response_class']);
+                            // Only validate the 'generic' type
+                            if ('generic' !== $c['type']) {
+                                return false;
                             }
 
-                            return false;
+                            $children = array('authorization_url', 'access_token_url', 'infos_url');
+                            foreach ($children as $child) {
+                                if (!isset($c[$child])) {
+                                    return true;
+                                }
+                            }
+
+                            // one of the two should be set
+                            return !isset($c['paths']) && !isset($c['user_response_class']);
                         })
-                        ->thenInvalid("All parameters are mandatory for type 'generic'. Check if you're missing one of: access_token_url, authorization_url, infos_url or username_path or user_response_class.")
+                        ->thenInvalid("All parameters are mandatory for type 'generic'. Check if you're missing one of: access_token_url, authorization_url, infos_url or paths or user_response_class.")
+                    ->end()
+                    ->validate()
+                        ->ifTrue(function($c) {
+                            // skip if this contains a service
+                            if (isset($c['service'])) {
+                                return false;
+                            }
+
+                            // Only validate the 'generic' type
+                            if ('generic' !== $c['type']) {
+                                return false;
+                            }
+
+                            $children = array('username', 'displayname');
+                            foreach ($children as $child) {
+                                if (!isset($c['paths'][$child])) {
+                                    return true;
+                                }
+                            }
+
+                            // one of the two should be set
+                            return !isset($c['paths']) && !isset($c['user_response_class']);
+                        })
+                        ->thenInvalid("At least 'username' and 'displayname' paths should be configured for the generic type.")
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {

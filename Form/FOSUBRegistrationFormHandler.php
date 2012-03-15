@@ -15,7 +15,8 @@ use FOS\UserBundle\Form\Handler\RegistrationFormHandler,
     FOS\UserBundle\Model\UserManagerInterface,
     FOS\UserBundle\Mailer\MailerInterface;
 
-use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedUserResponseInterface,
+    HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 
 use Symfony\Component\Form\Form,
     Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,13 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     protected $mailer;
     protected $registrationFormHandler;
 
+    /**
+     * Constructor.
+     *
+     * @param RegistrationFormHandler $registrationFormHandler FOSUB registration form handler
+     * @param UserManagerInterface    $userManager             FOSUB user manager
+     * @param MailerInterface         $mailer                  FOSUB mailer
+     */
     public function __construct(RegistrationFormHandler $registrationFormHandler, UserManagerInterface $userManager, MailerInterface $mailer)
     {
         $this->registrationFormHandler = $registrationFormHandler;
@@ -43,19 +51,44 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     /**
      * Processes the form for a given request.
      *
-     * @param Request $request Active request
-     * @param Form    $form    Form to process
+     * @param Request               $request         Active request
+     * @param Form                  $form            Form to process
+     * @param UserResponseInterface $userInformation OAuth response
      *
      * @return boolean True if the processing was successful
      */
     public function process(Request $request, Form $form, UserResponseInterface $userInformation)
     {
-        $formHandler = $this->getReconstructionFormHandler($request, $form);
+        $formHandler = $this->reconstructFormHandler($request, $form);
 
-        return $formHandler->process();
+        // make FOSUB process the form already
+        $processed = $formHandler->process();
+
+        // if the form is not posted we'll try to set some properties
+        if ('POST' !== $request->getMethod()) {
+            $user = $form->getData();
+
+            $user->setUsername($userInformation->getDisplayName().' ('.$userInformation->getResourceOwner()->getName().' '.$userInformation->getUsername().')');
+
+            if ($userInformation instanceof AdvancedUserResponseInterface) {
+                $user->setEmail($userInformation->getEmail());
+            }
+
+            $form->setData($user);
+        }
+
+        return $processed;
     }
 
-    protected function getReconstructionFormHandler(Request $request, Form $form)
+    /**
+     * Reconstructs the form handler in order to inject the right form.
+     *
+     * @param Request $request Active request
+     * @param Form    $form    Form to process
+     *
+     * @return mixed
+     */
+    protected function reconstructFormHandler(Request $request, Form $form)
     {
         $handlerClass = get_class($this->registrationFormHandler);
 

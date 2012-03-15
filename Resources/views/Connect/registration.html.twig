@@ -2,10 +2,20 @@
 
 {% block hwi_oauth_content %}
     <h3>Register with the account '{{ userInformation.displayName }}'.</h3>
-    <form action="{{ path('hwi_oauth_connect_registration', {'key': key}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
-        {{ form_widget(form) }}
-        <div>
-            <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
+    <div class="row">
+        <div class="span6">
+            <form action="{{ path('hwi_oauth_connect_registration', {'key': key}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+                {{ form_widget(form) }}
+                <div>
+                    <input type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
+                </div>
+            </form>
         </div>
-    </form>
+        <div class="span6">
+            {% if userInformation.profilePicture is defined and userInformation.profilePicture%}
+                <img src="{{ userInformation.profilePicture}}" />
+            {% endif %}
+        </div>
+    </div>
+
 {% endblock hwi_oauth_content %}

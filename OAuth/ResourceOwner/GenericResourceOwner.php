@@ -32,7 +32,14 @@ class GenericResourceOwner implements ResourceOwnerInterface
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = array(
+        'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+    );
+
+    /**
+     * @var array
+     */
+    protected $paths = array();
 
     /**
      * @var Buzz\Client\ClientInterface
@@ -49,19 +56,13 @@ class GenericResourceOwner implements ResourceOwnerInterface
      * @param HttpUtils           $httpUtils  Http utils
      * @param array               $options    Options for the resource owner
      * @param string              $name       Name for the resource owner
+     * @param array               $paths      Optional paths to use for the default response
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name)
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, $paths = array())
     {
         // Merge the options, then validate them
         $this->options = array_merge($this->options, $options);
-
-        if (null !== $this->options['infos_url'] && null === $this->options['username_path']) {
-            throw new \InvalidArgumentException('You must set an "username_path" to use an "infos_url"');
-        }
-
-        if (null === $this->options['infos_url'] && null !== $this->options['username_path']) {
-            throw new \InvalidArgumentException('You must set an "infos_url" to use an "username_path"');
-        }
+        $this->paths = array_merge($this->paths, $paths);
 
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
@@ -130,7 +131,8 @@ class GenericResourceOwner implements ResourceOwnerInterface
             return $accessToken;
         }
 
-        $url = $this->getOption('infos_url').'?'.http_build_query(array(
+        $url = $this->getOption('infos_url');
+        $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
             'access_token' => $accessToken
         ));
 
@@ -148,17 +150,13 @@ class GenericResourceOwner implements ResourceOwnerInterface
      */
     protected function getUserResponse()
     {
-        if (!isset($this->options['user_response_class'])) {
-            $response = new PathUserResponse();
-            $response->setPaths(array(
-                'username_path' => $this->getOption('username_path'),
-                'displayname_path' => $this->getOption('displayname_path')
-            ));
+        $response = new $this->options['user_response_class'];
 
-            return $response;
+        if ($response instanceof PathUserResponse) {
+            $response->setPaths($this->paths);
         }
 
-        return new $this->options['user_response_class'];
+        return $response;
     }
 
     /**
@@ -203,7 +201,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getName()
     {
@@ -211,7 +209,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function setName($name)
     {

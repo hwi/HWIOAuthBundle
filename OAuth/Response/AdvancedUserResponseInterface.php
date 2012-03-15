@@ -11,26 +11,24 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResponseInterface;
-
 /**
  * UserResponseInterface
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-interface UserResponseInterface extends ResponseInterface
+interface AdvancedUserResponseInterface extends UserResponseInterface
 {
     /**
-     * Get the username.
+     * Get the email address.
      *
-     * @return string
+     * @return null|string
      */
-    public function getUsername();
+    public function getEmail();
 
     /**
-     * Get the name to display.
+     * Get the url to the profile picture.
      *
-     * @return string
+     * @return null|string
      */
-    public function getDisplayName();
+    public function getProfilePicture();
 }

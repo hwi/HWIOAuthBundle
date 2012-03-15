@@ -28,7 +28,7 @@ class PathUserResponse extends AbstractUserResponse
      */
     public function getUsername()
     {
-        return $this->getValueForPath('username_path');
+        return $this->getValueForPath('username');
     }
 
     /**
@@ -38,26 +38,50 @@ class PathUserResponse extends AbstractUserResponse
      */
     public function getDisplayName()
     {
-        return $this->getValueForPath('displayname_path');
+        return $this->getValueForPath('displayname');
     }
 
+    /**
+     * Get the configured paths.
+     *
+     * @return array
+     */
     public function getPaths()
     {
         return $this->paths;
     }
 
+    /**
+     * Configure the paths.
+     *
+     * @param array $paths
+     */
     public function setPaths(array $paths)
     {
         $this->paths = $paths;
     }
 
-    protected function getValueForPath($path)
+    /**
+     * Extracts a value from the response for a given path.
+     *
+     * @param string  $path      Name of the path to get the value for
+     * @param boolean $exception Whether to throw an exception or return null
+     *
+     * @return null|String
+     *
+     * @throws AuthenticationException
+     */
+    protected function getValueForPath($path, $exception = true)
     {
         $steps = explode('.', $this->paths[$path]);
 
         $value = $this->response;
         foreach ($steps as $step) {
             if (!array_key_exists($step, $value)) {
+                if (!$exception) {
+                    return null;
+                }
+
                 throw new AuthenticationException(sprintf('Could not follow path "%s" in OAuth provider response: %s', $this->paths[$path], var_export($this->response, true)));
             }
             $value = $value[$step];

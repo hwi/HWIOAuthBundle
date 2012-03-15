@@ -29,7 +29,7 @@ use Symfony\Component\DependencyInjection\DefinitionDecorator;
 class HWIOAuthExtension extends Extension
 {
     /**
-     * @{inheritDoc}
+     * {@inheritDoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -92,7 +92,6 @@ class HWIOAuthExtension extends Extension
      *
      * @param ContainerBuilder $container The container builder
      * @param string           $name      The name of the service
-     * @param string           $type      The type of the service
      * @param array            $options   Additional options of the service
      */
     public function createResourceOwnerService(ContainerBuilder $container, $name, array $options)
@@ -108,12 +107,17 @@ class HWIOAuthExtension extends Extension
         } else {
             $type = $options['type'];
             unset($options['type']);
+
+            $paths = isset($options['paths']) ? $options['paths'] : array();
+            unset($options['paths']);
+
             $container
                 ->register('hwi_oauth.resource_owner.'.$name, '%hwi_oauth.resource_owner.'.$type.'.class%')
                 ->addArgument(new Reference('buzz.client'))
                 ->addArgument(new Reference('security.http_utils'))
                 ->addArgument($options)
-                ->addArgument($name);
+                ->addArgument($name)
+                ->addArgument($paths);
         }
     }
 

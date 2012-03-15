@@ -22,11 +22,18 @@ class FacebookResourceOwner extends GenericResourceOwner
      * {@inheritDoc}
      */
     protected $options = array(
-        'authorization_url' => 'https://www.facebook.com/dialog/oauth',
-        'access_token_url'  => 'https://graph.facebook.com/oauth/access_token',
-        'infos_url'         => 'https://graph.facebook.com/me',
-        'username_path'     => 'id',
-        'displayname_path'  => 'name',
+        'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
+        'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
+        'infos_url'           => 'https://graph.facebook.com/me',
+        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+    );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected $paths = array(
+        'username'     => 'id',
+        'displayname'  => 'name',
     );
 
     /**
