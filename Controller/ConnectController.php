@@ -149,21 +149,49 @@ class ConnectController extends ContainerAware
             throw new \Exception('Cannot connect an account.');
         }
 
-        $user = $this->container->get('security.context')->getToken()->getUser();
-
-        $ownerMap = $this->container->get('hwi_oauth.resource_ownermap.'.$this->container->getParameter('hwi_oauth.firewall_name'));
+        // Get the data from the resource owner
         $resourceOwner = $this->getResourceOwnerByName($service);
 
-        $accessToken = $resourceOwner->getAccessToken(
-            $request->query->get('code'),
-            $this->generate('hwi_oauth_connect_service', array('service' => $service), true)
-        );
+        $session = $request->getSession();
+        $key = $request->query->get('key', time());
+
+        if (null !== $code = $request->query->get('code')) {
+            $accessToken = $resourceOwner->getAccessToken(
+                $request->query->get('code'),
+                $this->generate('hwi_oauth_connect_service', array('service' => $service), true)
+            );
+
+            // save in session
+            $session->set('_hwi_oauth.connect_confirmation.'.$key, $accessToken);
+        } else {
+            $accessToken = $session->get('_hwi_oauth.connect_confirmation.'.$key);
+        }
 
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
-        $this->container->get('hwi_oauth.account.connector')->connect($user, $userInformation);
+        // Handle the form
+        $form = $this->container->get('form.factory')
+            ->createBuilder('form')
+            ->getForm();
 
-        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.twig', array(
+        if ('POST' === $request->getMethod()) {
+            $form->bindRequest($request);
+
+            if ($form->isValid()) {
+                $user = $this->container->get('security.context')->getToken()->getUser();
+
+                $this->container->get('hwi_oauth.account.connector')->connect($user, $userInformation);
+
+                return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.twig', array(
+                    'userInformation' => $userInformation,
+                ));
+            }
+        }
+
+        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_confirm.html.twig', array(
+            'key' => $key,
+            'service' => $service,
+            'form' => $form->createView(),
             'userInformation' => $userInformation,
         ));
     }
