@@ -66,10 +66,16 @@ class FOSUBUserProvider implements OAuthAwareUserProviderInterface
 
     public function connect($user, UserResponseInterface $response)
     {
-        $setter = 'set'.ucfirst($this->getProperty($response));
+        $property = $this->getProperty($response);
+        $setter = 'set'.ucfirst($property);
 
         if (!method_exists($user, $setter)) {
             throw new \RuntimeException(sprintf("Class '%s' should have a method '%s'.", get_class($user), $setter));
+        }
+
+        if (null !== $previousUser = $this->userManager->findUserBy(array($property => $response->getUsername()))) {
+            $previousUser->$setter(null);
+            $this->userManager->updateUser($previousUser);
         }
 
         $user->$setter($response->getUsername());
