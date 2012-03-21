@@ -100,7 +100,9 @@ class ConnectController extends ContainerAware
             // Authenticate the user
             $this->authenticateUser($form->getData());
 
-            return new RedirectResponse($this->generate('hwi_oauth_connect_registration_success'));
+            return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.twig', array(
+                'userInformation' => $userInformation,
+            ));
         }
 
         // reset the error in the session
@@ -112,23 +114,6 @@ class ConnectController extends ContainerAware
             'form' => $form->createView(),
             'userInformation' => $userInformation,
         ));
-    }
-
-    /**
-     * Shows a message when a user was successfuly registered.
-     *
-     * @return Response
-     */
-    public function registrationSuccessAction()
-    {
-        $user = $this->container->get('security.context')->getToken()->getUser();
-
-        if (null === $user || !$user instanceof UserInterface) {
-            // todo: fix this
-            throw new \Exception();
-        }
-
-        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.twig');
     }
 
     /**

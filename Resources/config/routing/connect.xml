@@ -11,8 +11,4 @@
     <route id="hwi_oauth_connect_registration" pattern="/registration/{key}">
         <default key="_controller">HWIOAuthBundle:Connect:registration</default>
     </route>
-
-    <route id="hwi_oauth_connect_registration_success" pattern="/registration-success">
-        <default key="_controller">HWIOAuthBundle:Connect:registrationSuccess</default>
-    </route>
 </routes>
