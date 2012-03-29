@@ -193,6 +193,10 @@ class GenericResourceOwner implements ResourceOwnerInterface
 
         parse_str($this->httpRequest($url), $response);
 
+        if (!isset($response['access_token'])) {
+            $response = json_decode(key($response), true);
+        }
+
         if (isset($response['error'])) {
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
         }
