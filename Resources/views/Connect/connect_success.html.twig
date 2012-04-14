@@ -1,5 +1,5 @@
 {% extends 'HWIOAuthBundle::layout.html.twig' %}
 
 {% block hwi_oauth_content %}
-    <h3>Successfuly connected the account '{{ userInformation.displayName }}'!</h3>
+    <h3>{{ 'header.success' | trans({'%displayName%', 'HWIOAuthBundle') }}</h3>
 {% endblock hwi_oauth_content %}

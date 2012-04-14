@@ -1,0 +1,14 @@
+header:
+    connecting: Connecting
+    success: Successfuly connected the account '%displayName%'!
+    register: Register with the account '%displayName%'
+    registration_success: Successfuly registered and connected the account '%username%'!
+
+connect:
+    confirm:
+        cancel: Cancel
+        submit: Connect account
+        text: Are you sure that you want to connect the '%service%' account '%displayName%' to your current one?
+    registration:
+        cancel: Cancel
+        submit: Register account

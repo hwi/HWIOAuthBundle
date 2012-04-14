@@ -1,5 +1,5 @@
 {% extends 'HWIOAuthBundle::layout.html.twig' %}
 
 {% block hwi_oauth_content %}
-    <h3>Successfuly registered and connected the account '{{ app.user.username }}'!</h3>
+    <h3>{{ 'header.registration_success' | trans({'%username%': app.user.username}, 'HWIOAuthBundle') }}</h3>
 {% endblock hwi_oauth_content %}
