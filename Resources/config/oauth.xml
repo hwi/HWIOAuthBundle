@@ -33,7 +33,7 @@
         <service id="hwi_oauth.authentication.provider.oauth" class="%hwi_oauth.authentication.provider.oauth.class%" />
         <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" />
         <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" />
-        <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" parent="doctrine.orm.security.user.provider" />
+        <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" />
 
         <!-- fosub bridges -->
         <service id="hwi_oauth.user.provider.fosub_bridge.def" class="%hwi_oauth.user.provider.fosub_bridge.class%" />
