@@ -1,0 +1,141 @@
+<?php
+
+/*
+ * This file is part of the HWIOAuthBundle package.
+ *
+ * (c) Hardware.Info <opensource@hardware.info>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
+
+use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider,
+    HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
+
+class EntityUserProviderTest extends \PHPUnit_Framework_Testcase
+{
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage No property defined for entity for resource owner 'not_configured'.
+     */
+    public function testLoadUserByOAuthuserResponseThrowsExceptionWhenNoPropertyIsConfigured()
+    {
+        $provider = $this->createEntityUserProvider();
+        $provider->loadUserByOAuthUserResponse($this->createUserResponseMock(null, 'not_configured'));
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage User 'asm89' not found.
+     */
+    public function testLoadUserByOAuthuserResponseThrowsExceptionWhenUserIsNull()
+    {
+        $userResponseMock = $this->createUserResponseMock('asm89', 'github');
+
+        $provider = $this->createEntityUserProvider(null);
+
+        $provider->loadUserByOAuthUserResponse($userResponseMock);
+    }
+
+    public function testLoadUserByOAuthuserResponse()
+    {
+        $userResponseMock = $this->createUserResponseMock('asm89', 'github');
+
+        $user = new User;
+        $provider = $this->createEntityUserProvider($user);
+
+        $loadedUser = $provider->loadUserByOAuthUserResponse($userResponseMock);
+
+        $this->assertEquals($user, $loadedUser);
+    }
+
+    protected function createEntityUserProvider($user = false)
+    {
+        $class = 'HWI\Bundle\OAuthBundle\Tests\Fixtures\User';
+        $properties = array('github' => 'githubId');
+
+        return new EntityUserProvider($this->createManagerRegistryMock($user), $class, $properties);
+    }
+
+    public function createManagerRegistryMock($user = false)
+    {
+        $registryMock = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
+            ->getMock();
+
+        $registryMock
+            ->expects($this->once())
+            ->method('getManager')
+            ->will($this->returnValue($this->createEntityManagerMock($user)));
+
+        return $registryMock;
+    }
+
+    protected function createResourceOwnerMock($resourceOwnerName = null)
+    {
+        $resourceOwnerMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
+            ->getMock();
+
+        if (null !== $resourceOwnerName) {
+            $resourceOwnerMock
+                ->expects($this->once())
+                ->method('getName')
+                ->will($this->returnValue($resourceOwnerName));
+        }
+
+        return $resourceOwnerMock;
+    }
+
+    protected function createEntityManagerMock($user = false)
+    {
+        $emMock = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $emMock
+            ->expects($this->once())
+            ->method('getRepository')
+            ->will($this->returnValue($this->createReposityMock($user)));
+
+        return $emMock;
+    }
+
+    public function createReposityMock($user = false)
+    {
+        $mock = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        if (false !== $user) {
+            $mock->expects($this->once())
+                ->method('findOneBy')
+                ->with(array('githubId' => 'asm89'))
+                ->will($this->returnValue($user));
+        }
+
+        return $mock;
+    }
+
+    protected function createUserResponseMock($username = null, $resourceOwnerName = null)
+    {
+        $responseMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
+            ->getMock();
+
+        if (null !== $resourceOwnerName) {
+            $responseMock
+                ->expects($this->once())
+                ->method('getResourceOwner')
+                ->will($this->returnValue($this->createResourceOwnerMock($resourceOwnerName)));
+        }
+
+        if (null !== $username) {
+            $responseMock
+                ->expects($this->once())
+                ->method('getUsername')
+                ->will($this->returnValue($username));
+        }
+
+        return $responseMock;
+    }
+}

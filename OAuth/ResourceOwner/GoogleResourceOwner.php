@@ -64,6 +64,10 @@ class GoogleResourceOwner extends GenericResourceOwner
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
         }
 
+        if (!isset($response['access_token'])) {
+            throw new AuthenticationException('Not a valid access token.');
+        }
+
         return $response['access_token'];
     }
 }

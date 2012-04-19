@@ -1,0 +1,39 @@
+<?php
+
+/*
+ * This file is part of the HWIOAuthBundle package.
+ *
+ * (c) Hardware.Info <opensource@hardware.info>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\Authentication\Token;
+
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+
+class OAuthTokenTest extends \PHPUnit_Framework_Testcase
+{
+    protected $token;
+    public function setup()
+    {
+        $this->token = new OAuthToken('access_token', array('ROLE_TEST'));
+    }
+
+    public function testGetCredentials()
+    {
+        $this->assertEquals('access_token', $this->token->getCredentials());
+    }
+
+    public function testIsAuthenticated()
+    {
+        $this->assertTrue($this->token->isAuthenticated());
+    }
+
+    public function testGetSetResourceOwnerName()
+    {
+        $this->token->setResourceOwnerName('github');
+        $this->assertEquals('github', $this->token->getResourceOwnerName());
+    }
+}

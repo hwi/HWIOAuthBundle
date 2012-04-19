@@ -62,10 +62,11 @@ class EntityUserProvider implements OAuthAwareUserProviderInterface
             throw new \RuntimeException(sprintf("No property defined for entity for resource owner '%s'.", $resourceOwnerName));
         }
 
-        $user = $this->repository->findOneBy(array($this->properties[$resourceOwnerName] => $response->getUsername()));
+        $username = $response->getUsername();
+        $user = $this->repository->findOneBy(array($this->properties[$resourceOwnerName] => $username));
 
         if (null === $user) {
-            throw new UsernameNotFoundException(sprintf('User "%s" not found.', $response->getUsername()));
+            throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
         }
 
         return $user;

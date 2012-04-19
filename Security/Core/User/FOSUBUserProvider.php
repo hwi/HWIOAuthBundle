@@ -21,7 +21,7 @@ use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface,
 /**
  * Class providing a bridge to use the FOSUB user provider with HWIOAuth.
  *
- * In order to use the class as a connector, the appropriate setters for the 
+ * In order to use the class as a connector, the appropriate setters for the
  * property mapping should be available.
  *
  * @author Alexander <iam.asm89@gmail.com>
@@ -55,15 +55,19 @@ class FOSUBUserProvider implements OAuthAwareUserProviderInterface
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $response->getUsername()));
+        $username = $response->getUsername();
+        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
 
         if (null === $user) {
-            throw new AccountNotLinkedException(sprintf('User "%s" not found.', $response->getUsername()));
+            throw new AccountNotLinkedException(sprintf("User '%s' not found.", $username));
         }
 
         return $user;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function connect($user, UserResponseInterface $response)
     {
         $property = $this->getProperty($response);
@@ -73,17 +77,26 @@ class FOSUBUserProvider implements OAuthAwareUserProviderInterface
             throw new \RuntimeException(sprintf("Class '%s' should have a method '%s'.", get_class($user), $setter));
         }
 
-        if (null !== $previousUser = $this->userManager->findUserBy(array($property => $response->getUsername()))) {
+        $username = $response->getUsername();
+
+        if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
             $previousUser->$setter(null);
             $this->userManager->updateUser($previousUser);
         }
 
-        $user->$setter($response->getUsername());
+        $user->$setter($username);
 
         $this->userManager->updateUser($user);
     }
 
-    protected function getProperty($response)
+    /**
+     * Gets the property for the response.
+     *
+     * @param UserResponseInterface $response
+     *
+     * @return string
+     */
+    protected function getProperty(UserResponseInterface $response)
     {
         $resourceOwnerName = $response->getResourceOwner()->getName();
 

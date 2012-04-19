@@ -41,6 +41,15 @@ class PathUserResponse extends AbstractUserResponse
         return $this->getValueForPath('displayname');
     }
 
+    protected function getPath($name)
+    {
+        if (!isset($this->paths[$name])) {
+            throw new AuthenticationException(sprintf('No path with name "%s" configured.', $name));
+        }
+
+        return $this->paths[$name];
+    }
+
     /**
      * Get the configured paths.
      *
@@ -73,7 +82,7 @@ class PathUserResponse extends AbstractUserResponse
      */
     protected function getValueForPath($path, $exception = true)
     {
-        $steps = explode('.', $this->paths[$path]);
+        $steps = explode('.', $this->getPath($path));
 
         $value = $this->response;
         foreach ($steps as $step) {

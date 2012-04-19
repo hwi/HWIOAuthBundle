@@ -13,6 +13,8 @@ namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+
 /**
  * AbstractUserResponse
  *
@@ -44,6 +46,10 @@ abstract class AbstractUserResponse implements UserResponseInterface
     public function setResponse($response)
     {
         $this->response = json_decode($response, true);
+
+        if (json_last_error() != \JSON_ERROR_NONE) {
+            throw new AuthenticationException(sprintf('Not a valid JSON response.'));
+        }
     }
 
     /**

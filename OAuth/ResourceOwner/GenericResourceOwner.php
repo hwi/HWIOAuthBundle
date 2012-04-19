@@ -33,7 +33,12 @@ class GenericResourceOwner implements ResourceOwnerInterface
      * @var array
      */
     protected $options = array(
+        'client_id' => '',
+        'client_secret' => '',
+        'displayname_path' => '',
+        'infos_url' => '',
         'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+        'username_path' => '',
     );
 
     /**
@@ -60,7 +65,6 @@ class GenericResourceOwner implements ResourceOwnerInterface
      */
     public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, $paths = array())
     {
-        // Merge the options, then validate them
         $this->options = array_merge($this->options, $options);
         $this->paths = array_merge($this->paths, $paths);
 
@@ -127,10 +131,6 @@ class GenericResourceOwner implements ResourceOwnerInterface
      */
     public function getUserInformation($accessToken)
     {
-        if ($this->getOption('infos_url') === null) {
-            return $accessToken;
-        }
-
         $url = $this->getOption('infos_url');
         $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
             'access_token' => $accessToken
@@ -195,6 +195,10 @@ class GenericResourceOwner implements ResourceOwnerInterface
 
         if (isset($response['error'])) {
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
+        }
+
+        if (!isset($response['access_token'])) {
+            throw new AuthenticationException('Not a valid access token.');
         }
 
         return $response['access_token'];
