@@ -3,6 +3,8 @@ HWIOAuthBundle
 
 The HWIOAuthBundle adds support for authenticating users via oauth in Symfony2. The bundle was forked of [KnpOAuthBundle](https://github.com/KnpLabs/KnpOAuthBundle) with consent of the primary maintainer [ubermuda](https://github.com/ubermuda) in order to push the bundle forward faster as original creator currently didn't have the desired time for it.
 
+[![Build Status](https://secure.travis-ci.org/hwi/HWIOAuthBundle.png?branch=master)](http://travis-ci.org/hwi/HWIOAuthBundle)
+
 Documentation
 -------------
 
