@@ -29,7 +29,7 @@ class GitHubResourceOwnerTest extends GenericResourceOwnerTest
         );
     }
 
-    protected function createResourceOwner(array $options, $name)
+    protected function createResourceOwner(array $options, $name, $paths = null)
     {
         $this->buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
             ->disableOriginalConstructor()->getMock();

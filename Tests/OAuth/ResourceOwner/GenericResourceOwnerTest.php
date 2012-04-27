@@ -69,6 +69,7 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
     public function testGetUserInformation()
     {
+        $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $this->mockBuzz($this->userResponse);
         $userResponse = $this->resourceOwner->getUserInformation('access_token');
 
@@ -85,6 +86,7 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
     public function testGetAccessToken()
     {
+        $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $this->mockBuzz('access_token=code');
         $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
     }
