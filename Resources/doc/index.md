@@ -11,7 +11,7 @@ Will follow soon. For now check out the reference configuration below.
 # app/config.yml
 
 hwi_oauth:
-    # configuration of oauth resource oweners to use
+    # configuration of oauth resource owners to use
     resource_owners:
         github:
             type:                github
