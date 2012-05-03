@@ -15,6 +15,7 @@
         <parameter key="hwi_oauth.resource_owner.generic.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.github.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.facebook.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FacebookResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.windows_live.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WindowsLiveResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.google.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GoogleResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_ownermap.class">HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap</parameter>
     </parameters>
