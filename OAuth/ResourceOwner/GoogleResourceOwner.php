@@ -40,34 +40,4 @@ class GoogleResourceOwner extends GenericResourceOwner
         'username'     => 'id',
         'displayname'  => 'name',
     );
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getAccessToken($code, $redirectUri, array $extraParameters = array())
-    {
-        $parameters = array_merge($extraParameters, array(
-            'code'          => $code,
-            'grant_type'    => 'authorization_code',
-            'client_id'     => $this->getOption('client_id'),
-            'client_secret' => $this->getOption('client_secret'),
-            'redirect_uri'  => $redirectUri,
-        ));
-
-        $url = $this->getOption('access_token_url');
-        $content = http_build_query($parameters);
-
-        $response = $this->httpRequest($url, $content);
-        $response = json_decode($response, true);
-
-        if (isset($response['error'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
-        }
-
-        if (!isset($response['access_token'])) {
-            throw new AuthenticationException('Not a valid access token.');
-        }
-
-        return $response['access_token'];
-    }
 }

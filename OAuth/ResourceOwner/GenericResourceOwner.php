@@ -123,7 +123,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
 
         $this->httpClient->send($request, $response);
 
-        return $response->getContent();
+        return $response;
     }
 
     /**
@@ -137,7 +137,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
         ));
 
         $response = $this->getUserResponse();
-        $response->setResponse($this->httpRequest($url));
+        $response->setResponse($this->httpRequest($url)->getContent());
         $response->setResourceOwner($this);
 
         return $response;
@@ -187,14 +187,15 @@ class GenericResourceOwner implements ResourceOwnerInterface
             'redirect_uri'  => $redirectUri,
         ));
 
-        $url = $this->getOption('access_token_url').'?'.http_build_query($parameters);
+        $url = $this->getOption('access_token_url');
+        $content = http_build_query($parameters);
 
-        $response = array();
+        $apiResponse = $this->httpRequest($url, $content);
 
-        parse_str($this->httpRequest($url), $response);
-
-        if (!isset($response['access_token'])) {
-            $response = json_decode(key($response), true);
+        if ('application/json' == $apiResponse->getHeader('content-type')) {
+            $response = json_decode($apiResponse->getContent(), true);
+        } else {
+            parse_str($apiResponse->getContent(), $response);
         }
 
         if (isset($response['error'])) {
