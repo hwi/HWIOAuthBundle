@@ -55,8 +55,7 @@ class WindowsLiveResourceOwnerTest extends GenericResourceOwnerTest
     public function testGetAccessToken()
     {
         $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
-        // google returns json for the access token
-        $this->mockBuzz('{"access_token": "code"}');
+        $this->mockBuzz('{"access_token": "code"}', 'application/json');
         $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
     }
 

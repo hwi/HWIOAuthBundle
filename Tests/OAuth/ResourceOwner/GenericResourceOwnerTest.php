@@ -18,6 +18,7 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
     protected $resourceOwner;
     protected $buzzClient;
     protected $buzzResponse;
+    protected $buzzResponseContentType;
 
     protected $userResponse = '{"foo": "bar"}';
 
@@ -91,6 +92,20 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
         $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
     }
 
+    public function testGetAccessTokenJsonResponse()
+    {
+        $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
+        $this->mockBuzz('{"access_token": "code"}', 'application/json');
+        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+    }
+
+    public function testGetAccessTokenJsonCharsetResponse()
+    {
+        $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
+        $this->mockBuzz('{"access_token": "code"}', 'application/json; charset=utf-8');
+        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+    }
+
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */
@@ -129,16 +144,18 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
         $this->assertEquals('foo', $userResponse->getUsername());
     }
 
-    protected function mockBuzz($response = '')
+    protected function mockBuzz($response = '', $contentType = 'text/plain')
     {
         $this->buzzClient->expects($this->once())
             ->method('send')
             ->will($this->returnCallback(array($this, 'buzzSendMock')));
         $this->buzzResponse = $response;
+        $this->buzzResponseContentType = $contentType;
     }
 
     public function buzzSendMock($request, $response)
     {
         $response->setContent($this->buzzResponse);
+        $response->addHeader('Content-Type: ' . $this->buzzResponseContentType);
     }
 }
