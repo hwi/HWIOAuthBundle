@@ -192,7 +192,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
 
         $apiResponse = $this->httpRequest($url, $content);
 
-        if (false === strpos('application/json', $apiResponse->getHeader('content-type'))) {
+        if (false !== strpos('application/json', $apiResponse->getHeader('content-type'))) {
             $response = json_decode($apiResponse->getContent(), true);
         } else {
             parse_str($apiResponse->getContent(), $response);
