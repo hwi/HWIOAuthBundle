@@ -18,7 +18,7 @@ Getting Started With HWIOAuthBundle
 # app/config.yml
 
 hwi_oauth:
-    # configuration of oauth resource oweners to use
+    # configuration of oauth resource owners to use
     resource_owners:
         github:
             type:                github
