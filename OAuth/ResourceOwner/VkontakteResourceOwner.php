@@ -34,8 +34,8 @@ class VkontakteResourceOwner extends GenericResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'username'     => 'user_id',
-        'displayname'  => 'user_name',
+        'username'     => 'response.user_id',
+        'displayname'  => 'response.user_name',
     );
 
     /**
@@ -45,24 +45,5 @@ class VkontakteResourceOwner extends GenericResourceOwner
     public function configure()
     {
         $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUserInformation($accessToken)
-    {
-        $url = $this->getOption('infos_url');
-        $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
-            'access_token' => $accessToken,
-        ));
-
-        $response = $this->getUserResponse();
-        $content = json_decode($this->httpRequest($url)->getContent(), true);
-        $content = json_encode($content['response']);
-        $response->setResponse($content);
-        $response->setResourceOwner($this);
-        
-        return $response;
     }
 }
