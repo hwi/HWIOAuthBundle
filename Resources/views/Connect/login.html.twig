@@ -5,6 +5,6 @@
         <span>{{ error }}</span>
     {% endif %}
     {% for owner in resource_owners %}
-    <a href="{{ owner.url }}">{{ owner.name | trans }}</a> <br />
+    <a href="{{ owner.url }}">{{ owner.name | trans({}, 'HWIOAuthBundle') }}</a> <br />
     {% endfor %}
 {% endblock hwi_oauth_content %}
