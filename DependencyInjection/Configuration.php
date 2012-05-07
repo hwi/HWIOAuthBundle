@@ -117,7 +117,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('type')
                             ->validate()
-                                ->ifNotInArray(array('facebook', 'generic', 'github', 'google', 'windows_live'))
+                                ->ifNotInArray(array('facebook', 'generic', 'github', 'google', 'windows_live', 'vkontakte'))
                                 ->thenInvalid('Unknown resource owner type %s.')
                             ->end()
                             ->validate()
