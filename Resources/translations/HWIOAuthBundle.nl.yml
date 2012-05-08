@@ -8,7 +8,7 @@ connect:
     confirm:
         cancel: Annuleren
         submit: Account koppelen
-        text: Weet je zeker dat je de '%service%' account '%displayName%' aan je huidige account wil koppelen?
+        text: Weet je zeker dat je je %service% account '%displayName%' aan je huidige account wil koppelen?
     registration:
         cancel: Annuleren
         submit: Registeer account

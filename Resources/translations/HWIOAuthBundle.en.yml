@@ -8,7 +8,7 @@ connect:
     confirm:
         cancel: Cancel
         submit: Connect account
-        text: Are you sure that you want to connect the '%service%' account '%displayName%' to your current one?
+        text: Are you sure that you want to connect your %service% account '%displayName%' to your current account?
     registration:
         cancel: Cancel
         submit: Register account
