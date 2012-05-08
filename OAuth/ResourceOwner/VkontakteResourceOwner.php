@@ -18,12 +18,11 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  */
 class VkontakteResourceOwner extends GenericResourceOwner
 {
-
     /**
      * {@inheritDoc}
      */
     protected $options = array(
-        'authorization_url'   => 'http://api.vk.com/oauth/authorize',
+        'authorization_url'   => 'https://api.vk.com/oauth/authorize',
         'access_token_url'    => 'https://oauth.vk.com/access_token',
         'infos_url'           => 'https://api.vk.com/method/getUserInfoEx',
         'scope'               => '',
