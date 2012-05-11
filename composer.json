@@ -1,5 +1,5 @@
 {
-    "name":        "hwi/hwi-oauth-bundle",
+    "name":        "hwi/oauth-bundle",
     "type":        "symfony-bundle",
     "description": "Support for authenticating users via oauth in Symfony2.",
     "keywords":    ["security", "firewall", "oauth"],
