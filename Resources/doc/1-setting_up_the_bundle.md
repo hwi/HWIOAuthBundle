@@ -5,7 +5,7 @@ Step 1: Setting up the bundle
 ``` js
 {
     "require": {
-        "hwi/hwi-oauth-bundle": "*"
+        "hwi/oauth-bundle": "*"
     }
 }
 ```
