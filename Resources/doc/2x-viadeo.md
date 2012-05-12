@@ -1,10 +1,10 @@
-Step 2x: Setup GitHub
-=====================
-First you will have to register your application on GitHub. Check out the
-documentation for more information: http://developer.github.com/v3/oauth/.
+Step 2x: Setup Viadeo
+=======================
+First you will have to register your application on Viadeo. Check out the
+documentation for more information: http://dev.viadeo.com/.
 
-Next configure a resource owner of type `github` with appropriate
-`client_id`, `client_secret` and `scope`. Refer to the GitHub documentation
+Next configure a resource owner of type `viadeo` with appropriate
+`client_id`, `client_secret` and `scope`. Refer to the Facebook documentation
 for the available scopes.
 
 ``` yaml
@@ -13,7 +13,7 @@ for the available scopes.
 hwi_oauth:
     resource_owners:
         any_name:
-            type:                github
+            type:                viadeo
             client_id:           <client_id>
             client_secret:       <client_secret>
             scope:               ""
