@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
             'google',
             'sensio_connect',
             'stack_exchange',
+            'viadeo',
             'vkontakte',
             'windows_live',
 
