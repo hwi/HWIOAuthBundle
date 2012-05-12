@@ -41,6 +41,7 @@ hwi_oauth:
             access_token_url:    https://path.to/oauth/v2/token
             authorization_url:   https://path.to/oauth/v2/authorize
             infos_url:           https://path.to/api/user
+            access_token_encode: false
             scope:               ""
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
             paths:
