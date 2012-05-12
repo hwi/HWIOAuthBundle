@@ -39,6 +39,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
         'infos_url' => '',
         'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
         'username_path' => '',
+        'access_token_encode' => false
     );
 
     /**
@@ -192,7 +193,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
 
         $apiResponse = $this->httpRequest($url, $content);
 
-        if (false !== strpos($apiResponse->getHeader('content-type'), 'application/json')) {
+        if (false !== strpos($apiResponse->getHeader('content-type'), 'application/json') || $this->options['access_token_encode'] == 'json') {
             $response = json_decode($apiResponse->getContent(), true);
         } else {
             parse_str($apiResponse->getContent(), $response);

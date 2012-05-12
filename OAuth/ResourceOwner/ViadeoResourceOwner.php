@@ -12,29 +12,29 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 /**
- * WindowsLiveResourceOwner
+ * ViadeoResourceOwner
  *
- * @author Alexander <alexander@hardware.info>
+ * @author Sullivan SENECHAL <soullivaneuh@gmail.com>
  */
-class WindowsLiveResourceOwner extends GenericResourceOwner
+class ViadeoResourceOwner extends GenericResourceOwner
 {
     /**
      * {@inheritDoc}
      */
     protected $options = array(
-        'authorization_url'   => 'https://login.live.com/oauth20_authorize.srf',
-        'access_token_url'    => 'https://login.live.com/oauth20_token.srf',
-        'infos_url'           => 'https://apis.live.net/v5.0/me',
+        'authorization_url'   => 'https://secure.viadeo.com/oauth-provider/authorize2',
+        'access_token_url'    => 'https://secure.viadeo.com/oauth-provider/access_token2',
+        'infos_url'           => 'https://api.viadeo.com/me',
         'scope'               => '',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-        'access_token_encode' => false
+        'access_token_encode' => 'json'
     );
 
     /**
      * {@inheritDoc}
      */
     protected $paths = array(
-        'username'     => 'id',
+        'username'     => 'nickname',
         'displayname'  => 'name',
     );
 }

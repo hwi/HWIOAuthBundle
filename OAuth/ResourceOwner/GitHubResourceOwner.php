@@ -28,6 +28,7 @@ class GitHubResourceOwner extends GenericResourceOwner
         'infos_url'           => 'https://api.github.com/user',
         'scope'               => '',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse',
+        'access_token_encode' => false
     );
 
     /**
