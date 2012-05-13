@@ -28,6 +28,12 @@ hwi_oauth:
             client_secret:       <client_secret>
             scope:               ""
 
+        viadeo:
+            type:                viadeo
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+            scope:               ""
+
         my_custom_provider:
             type:                generic
             client_id:           <client_id>
@@ -35,6 +41,7 @@ hwi_oauth:
             access_token_url:    https://path.to/oauth/v2/token
             authorization_url:   https://path.to/oauth/v2/authorize
             infos_url:           https://path.to/api/user
+            access_token_encode: false
             scope:               ""
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
             paths:
@@ -55,6 +62,7 @@ hwi_oauth:
             github: githubId
             google: googleId
             facebook: facebookId
+            viadeo: viadeoId
             my_custom_provider: customId
 
     # if you want to use 'connect' and do not use the FOSUB integration, configure these separately
@@ -84,6 +92,7 @@ security:
                     github:             "/login/check-github"
                     google:             "/login/check-google"
                     facebook:           "/login/check-facebook"
+                    viadeo:             "/login/check-viadeo"
                     my_custom_provider: "/login/check-custom"
                 login_path:        /connect
                 failure_path:      /connect

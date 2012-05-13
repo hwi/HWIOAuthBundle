@@ -83,6 +83,14 @@ class Configuration implements ConfigurationInterface
                                 ->thenUnset()
                             ->end()
                         ->end()
+                        ->scalarNode('access_token_encode')
+                            ->validate()
+                                ->ifTrue(function($v) {
+                                    return empty($v);
+                                })
+                                ->thenUnset()
+                            ->end()
+                        ->end()                        
                         ->scalarNode('client_id')
                             ->cannotBeEmpty()
                         ->end()
@@ -117,7 +125,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('type')
                             ->validate()
-                                ->ifNotInArray(array('facebook', 'generic', 'github', 'google', 'windows_live'))
+                                ->ifNotInArray(array('facebook', 'generic', 'github', 'google', 'windows_live', 'viadeo'))
                                 ->thenInvalid('Unknown resource owner type %s.')
                             ->end()
                             ->validate()
