@@ -31,7 +31,6 @@ class GoogleResourceOwner extends GenericResourceOwner
         'infos_url'           => 'https://www.googleapis.com/oauth2/v1/userinfo',
         'scope'               => 'userinfo.profile',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-        'access_token_encode' => false
     );
 
     /**

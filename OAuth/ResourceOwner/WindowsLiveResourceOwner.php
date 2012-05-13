@@ -27,7 +27,6 @@ class WindowsLiveResourceOwner extends GenericResourceOwner
         'infos_url'           => 'https://apis.live.net/v5.0/me',
         'scope'               => '',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-        'access_token_encode' => false
     );
 
     /**

@@ -27,7 +27,6 @@ class FacebookResourceOwner extends GenericResourceOwner
         'infos_url'           => 'https://graph.facebook.com/me',
         'scope'               => '',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-        'access_token_encode' => false
     );
 
     /**
