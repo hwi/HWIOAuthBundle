@@ -92,7 +92,7 @@ security:
                     github:             "/login/check-github"
                     google:             "/login/check-google"
                     facebook:           "/login/check-facebook"
-                    facebook:           "/login/check-viadeo"
+                    viadeo:             "/login/check-viadeo"
                     my_custom_provider: "/login/check-custom"
                 login_path:        /connect
                 failure_path:      /connect
