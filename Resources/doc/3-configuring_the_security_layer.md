@@ -46,10 +46,23 @@ security:
 > ```
 > # app/routing.yml
 > github_login:
->     pattern: /login/github
+>     pattern: /login/github        
 > ```
 
 
+> If there is only one resource owner configured, the bundle will automatically
+> begin the OAuth workflow redirecting to that single configured oauth provider.
+> To disable that behaviour you can set the smart_redirect config flag to false.
+>
+> ```yaml
+> # app/config/security.yml
+> security:
+>    firewalls:
+>        secured_area:
+>            oauth:
+>                smart_redirect: false
+>                    
+> ```
 ## That was it!
 That's the basic setup of the bundle. [Return to the index.](index.md) If you
 are interested in giving users the option to "connect" social accounts check out: (todo).
