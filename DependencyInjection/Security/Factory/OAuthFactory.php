@@ -218,6 +218,7 @@ class OAuthFactory extends AbstractFactory
             ->scalarNode('login_path')
                 ->cannotBeEmpty()
                 ->isRequired()
+            ->end()
             ->scalarNode('smart_redirect')
                 ->defaultValue(true)
             ->end();
