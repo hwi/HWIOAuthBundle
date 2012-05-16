@@ -220,7 +220,7 @@ class OAuthFactory extends AbstractFactory
                 ->isRequired()
             ->end()
             ->booleanNode('smart_redirect')
-                ->defaultValue(true)
+                ->defaultTrue()
             ->end();
     }
 
