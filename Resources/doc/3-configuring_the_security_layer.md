@@ -46,7 +46,7 @@ security:
 > ```
 > # app/routing.yml
 > github_login:
->     pattern: /login/github        
+>     pattern: /login/github
 > ```
 
 
@@ -61,7 +61,6 @@ security:
 >        secured_area:
 >            oauth:
 >                smart_redirect: false
->                    
 > ```
 ## That was it!
 That's the basic setup of the bundle. [Return to the index.](index.md) If you
