@@ -196,8 +196,7 @@ class ConnectController extends ContainerAware
         $resourceOwners = array();
         foreach ($ownerMap->getResourceOwners() as $name => $checkPath) {
             $resourceOwner = $ownerMap->getResourceOwnerByName($name);
-            if(isset($resourceOwner))
-            {
+            if (null !== $resourceOwner) {
                 $resourceOwners[$name] = array(
                     'url' => $resourceOwner->getAuthorizationUrl(
                         $connect
