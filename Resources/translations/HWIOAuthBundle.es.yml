@@ -1,8 +1,8 @@
 header:
     connecting: Conectando
-    success: Ha conectado la cuenta '%displayName%' exitosamente!
+    success: ¡Ha conectado la cuenta '%displayName%' exitosamente!
     register: Registrarse con la cuenta '%displayName%'
-    registration_success: Se ha regitrado y conectado la cuenta '%username%' exitosamente!
+    registration_success: ¡Se ha regitrado y conectado la cuenta '%username%' exitosamente!
 
 connect:
     confirm:
