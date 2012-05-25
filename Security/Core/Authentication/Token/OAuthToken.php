@@ -77,4 +77,30 @@ class OAuthToken extends AbstractToken
     {
         $this->resourceOwnerName = $resourceOwnerName;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function serialize()
+    {
+        return serialize(array(
+            $this->accessToken,
+            $this->resourceOwnerName,
+            parent::serialize()
+        ));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function unserialize($serialized)
+    {
+        list(
+            $this->accessToken,
+            $this->resourceOwnerName,
+            $parent,
+        ) = unserialize($serialized);
+
+        parent::unserialize($parent);
+    }
 }

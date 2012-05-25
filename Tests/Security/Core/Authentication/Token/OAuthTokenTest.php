@@ -19,6 +19,7 @@ class OAuthTokenTest extends \PHPUnit_Framework_Testcase
     public function setup()
     {
         $this->token = new OAuthToken('access_token', array('ROLE_TEST'));
+        $this->token->setResourceOwnerName('github');
     }
 
     public function testGetCredentials()
@@ -35,5 +36,13 @@ class OAuthTokenTest extends \PHPUnit_Framework_Testcase
     {
         $this->token->setResourceOwnerName('github');
         $this->assertEquals('github', $this->token->getResourceOwnerName());
+    }
+
+    public function testSerialization()
+    {
+        $token = unserialize(serialize($this->token));
+
+        $this->assertEquals('access_token', $token->getCredentials());
+        $this->assertEquals('github', $token->getResourceOwnerName());
     }
 }
