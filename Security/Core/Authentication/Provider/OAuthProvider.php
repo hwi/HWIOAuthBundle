@@ -33,13 +33,13 @@ class OAuthProvider implements AuthenticationProviderInterface
     private $resourceOwnerMap;
 
     /**
-     * @var Symfony\Component\Security\Core\User\UserProviderInterface
+     * @var \Symfony\Component\Security\Core\User\UserProviderInterface
      */
     private $userProvider;
 
     /**
-     * @param UserProviderInterface $userProvider     User provider
-     * @param ResourceOwnerMap      $resourceOwnerMap Resource owner map
+     * @param OAuthAwareUserProviderInterface $userProvider     User provider
+     * @param ResourceOwnerMap                $resourceOwnerMap Resource owner map
      */
     public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMap $resourceOwnerMap)
     {
@@ -61,6 +61,10 @@ class OAuthProvider implements AuthenticationProviderInterface
     public function authenticate(TokenInterface $token)
     {
         $resourceOwner = $this->resourceOwnerMap->getResourceOwnerByName($token->getResourceOwnerName());
+
+        if ($resourceOwner === null) {
+            return $token;
+        }
 
         $userResponse = $resourceOwner->getUserInformation($token->getCredentials());
 
