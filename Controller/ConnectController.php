@@ -196,14 +196,16 @@ class ConnectController extends ContainerAware
         $resourceOwners = array();
         foreach ($ownerMap->getResourceOwners() as $name => $checkPath) {
             $resourceOwner = $ownerMap->getResourceOwnerByName($name);
-            $resourceOwners[$name] = array(
-                'url' => $resourceOwner->getAuthorizationUrl(
-                    $connect
-                    ? $this->generate('hwi_oauth_connect_service', array('service' => $name), true)
-                    : $this->getUriForCheckPath($request, $checkPath)
-                ),
-                'name' => $name,
-            );
+            if (null !== $resourceOwner) {
+                $resourceOwners[$name] = array(
+                    'url' => $resourceOwner->getAuthorizationUrl(
+                        $connect
+                        ? $this->generate('hwi_oauth_connect_service', array('service' => $name), true)
+                        : $this->getUriForCheckPath($request, $checkPath)
+                    ),
+                    'name' => $name,
+                );
+            }
         }
 
         return $resourceOwners;
