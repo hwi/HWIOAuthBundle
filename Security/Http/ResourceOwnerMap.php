@@ -62,7 +62,7 @@ class ResourceOwnerMap
      *
      * @param string $id
      *
-     * @return null|HWI\Bundle\OAuthBundle\OAuthResourceOwnerInterface
+     * @return null|\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
      */
     public function getResourceOwnerByName($name)
     {
