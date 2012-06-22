@@ -42,6 +42,20 @@ hwi_oauth:
                 displayname: username
                 email: email
 
+        my_custom_provider_1:
+            type:                oauth1
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+            request_token_url:   https://path.to/oauth/v1/requestToken
+            access_token_url:    https://path.to/oauth/v1/token
+            authorization_url:   https://path.to/oauth/v1/authorize
+            infos_url:           https://path.to/api/user
+            scope:               ""
+            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
+            paths:
+                username: id
+                displayname: username
+
     # name of the firewall the oauth bundle is active in
     firewall_name: secured_area
 
