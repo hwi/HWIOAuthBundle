@@ -11,17 +11,16 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WindowsLiveResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LinkedinResourceOwner;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\HttpFoundation\Request;
 
-class WindowsLiveResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+class LinkedinResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected $userResponse = '{"id": "bar"}';
 
     public function setup()
     {
-        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
+        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth1');
     }
 
     protected function getDefaultOptions()
@@ -44,37 +43,21 @@ class WindowsLiveResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
             $session = new \Symfony\Component\HttpFoundation\Session(new \Symfony\Component\HttpFoundation\SessionStorage\ArraySessionStorage());
         }
 
-        return new WindowsLiveResourceOwner($this->buzzClient, $httpUtils, $session, $options, $name);
+        return new LinkedinResourceOwner($this->buzzClient, $httpUtils, $session, $options, $name);
     }
 
     public function testGetAuthorizationUrl()
     {
+        $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
+        $this->mockBuzz('{"oauth_token": "token","oauth_token_secret": "token_secret"}', 'application/json; charset=utf-8');
         $this->assertEquals(
-            'https://login.live.com/oauth20_authorize.srf?response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            'https://www.linkedin.com/uas/oauth/authenticate?oauth_token=token',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 
     public function testGetOption()
     {
-        $this->assertEquals('https://apis.live.net/v5.0/me', $this->resourceOwner->getOption('infos_url'));
-    }
-
-    public function testGetAccessToken()
-    {
-        $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
-        $this->mockBuzz('{"access_token": "code"}', 'application/json');
-        $request = new Request(array('oauth_verifier' => 'code'));
-        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
-    }
-
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
-    public function testGetAccessTokenErrorResponse()
-    {
-        $this->mockBuzz('{"error": "foo"}');
-        $request = new Request(array('oauth_verifier' => 'code'));
-        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+        $this->assertEquals('http://api.linkedin.com/v1/people/~:(id,first-name,last-name,maiden-name,location,industry)', $this->resourceOwner->getOption('infos_url'));
     }
 }

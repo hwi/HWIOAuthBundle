@@ -43,13 +43,13 @@ interface ResourceOwnerInterface
     /**
      * Retrieve an access token for a given code
      *
-     * @param mixed $code            The code to use to retrieve the access token
-     * @param mixed $redirectUri     The uri to redirect the client back to
-     * @param array $extraParameters An array of parameters to add to the url
+     * @param Request $request         The request object where is going to extract the code from
+     * @param mixed   $redirectUri     The uri to redirect the client back to
+     * @param array   $extraParameters An array of parameters to add to the url
      *
      * @return string The access token
      */
-    function getAccessToken($code, $redirectUri, array $extraParameters = array());
+    function getAccessToken(Request $request, $redirectUri, array $extraParameters = array());
 
     /**
      * Return a name for the resource owner.

@@ -131,6 +131,7 @@ class HWIOAuthExtension extends Extension
                 ->register('hwi_oauth.resource_owner.'.$name, '%hwi_oauth.resource_owner.'.$type.'.class%')
                 ->addArgument(new Reference('hwi_oauth.http_client'))
                 ->addArgument(new Reference('security.http_utils'))
+                ->addArgument(new Reference('hwi_oauth.storage.session'))
                 ->addArgument($options)
                 ->addArgument($name)
                 ->addArgument($paths);

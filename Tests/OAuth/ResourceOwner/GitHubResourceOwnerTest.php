@@ -12,14 +12,15 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner;
+use Symfony\Component\HttpKernel\Kernel;
 
-class GitHubResourceOwnerTest extends GenericResourceOwnerTest
+class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = '{"login": "bar"}';
 
     public function setup()
     {
-        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'generic');
+        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
     }
 
     protected function getDefaultOptions()
@@ -35,8 +36,14 @@ class GitHubResourceOwnerTest extends GenericResourceOwnerTest
             ->disableOriginalConstructor()->getMock();
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
+        // Session changed interface in 2.1, hack to avoid branching
+        if (version_compare(Kernel::VERSION, '2.1-DEV', '>=')) {
+            $session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
+        } else {
+            $session = new \Symfony\Component\HttpFoundation\Session(new \Symfony\Component\HttpFoundation\SessionStorage\ArraySessionStorage());
+        }
 
-        return new GitHubResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new GitHubResourceOwner($this->buzzClient, $httpUtils, $session, $options, $name);
     }
 
     public function testGetAuthorizationUrl()

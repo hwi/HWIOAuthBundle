@@ -17,7 +17,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
  */
-class GitHubResourceOwner extends GenericResourceOwner
+class GitHubResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritDoc}
