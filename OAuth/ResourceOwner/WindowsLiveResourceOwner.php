@@ -16,7 +16,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  *
  * @author Alexander <alexander@hardware.info>
  */
-class WindowsLiveResourceOwner extends GenericResourceOwner
+class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritDoc}

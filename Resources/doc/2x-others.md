@@ -10,7 +10,7 @@ resource owner:
 hwi_oauth:
     resource_owners:
         my_custom:
-            type:                generic
+            type:                oauth2
             client_id:           <client_id>
             client_secret:       <client_secret>
             access_token_url:    https://path.to/oauth/v2/token

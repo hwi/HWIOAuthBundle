@@ -13,13 +13,13 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner;
 
-class GitHubResourceOwnerTest extends GenericResourceOwnerTest
+class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = '{"login": "bar"}';
 
     public function setup()
     {
-        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'generic');
+        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
     }
 
     protected function getDefaultOptions()

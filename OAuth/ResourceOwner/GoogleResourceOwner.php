@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Request,
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
  */
-class GoogleResourceOwner extends GenericResourceOwner
+class GoogleResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritDoc}

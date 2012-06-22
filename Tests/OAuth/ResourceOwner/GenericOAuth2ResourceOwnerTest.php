@@ -11,9 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 
-class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
+class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
 {
     protected $resourceOwner;
     protected $buzzClient;
@@ -24,7 +24,7 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
     public function setup()
     {
-        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'generic');
+        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
     }
 
     protected function getDefaultOptions()
@@ -52,7 +52,7 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
 
-        return new GenericResourceOwner($this->buzzClient, $httpUtils, $options, $name, $paths ?: $this->getDefaultPaths());
+        return new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $paths ?: $this->getDefaultPaths());
     }
 
     public function testGetOption()
@@ -126,7 +126,7 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
     public function testGetSetName()
     {
-        $this->assertEquals('generic', $this->resourceOwner->getName());
+        $this->assertEquals('oauth2', $this->resourceOwner->getName());
         $this->resourceOwner->setName('foo');
         $this->assertEquals('foo', $this->resourceOwner->getName());
     }
@@ -135,7 +135,7 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
     {
         $options = $this->getDefaultOptions();
         $options['user_response_class'] = "\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse";
-        $resourceOwner = $this->createResourceOwner($options, 'generic');
+        $resourceOwner = $this->createResourceOwner($options, 'oauth2');
 
         $this->mockBuzz();
         $userResponse = $resourceOwner->getUserInformation('access_token');

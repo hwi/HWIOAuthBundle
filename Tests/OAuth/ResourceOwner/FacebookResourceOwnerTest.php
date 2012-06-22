@@ -13,13 +13,13 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FacebookResourceOwner;
 
-class FacebookResourceOwnerTest extends GenericResourceOwnerTest
+class FacebookResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = '{"id": "bar"}';
 
     public function setup()
     {
-        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'generic');
+        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
     }
 
     protected function getDefaultOptions()

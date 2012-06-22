@@ -22,12 +22,12 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
     HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 
 /**
- * GenericResourceOwner
+ * GenericOAuth2ResourceOwner
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
  */
-class GenericResourceOwner implements ResourceOwnerInterface
+class GenericOAuth2ResourceOwner implements ResourceOwnerInterface
 {
     /**
      * @var array

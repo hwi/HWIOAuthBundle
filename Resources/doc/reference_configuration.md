@@ -28,8 +28,8 @@ hwi_oauth:
             client_secret:       <client_secret>
             scope:               ""
 
-        my_custom_provider:
-            type:                generic
+        my_custom_provider_2:
+            type:                oauth2
             client_id:           <client_id>
             client_secret:       <client_secret>
             access_token_url:    https://path.to/oauth/v2/token
