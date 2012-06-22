@@ -224,4 +224,12 @@ class GenericOAuth2ResourceOwner implements ResourceOwnerInterface
     {
         $this->name = $name;
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCodeFieldName()
+    {
+        return "code";
+    }
 }

@@ -140,9 +140,9 @@ class ConnectController extends ContainerAware
         $session = $request->getSession();
         $key = $request->query->get('key', time());
 
-        if (null !== $code = $request->query->get('code')) {
+        if (null !== $code = $request->query->get($resourceOwner->getCodeFieldName())) {
             $accessToken = $resourceOwner->getAccessToken(
-                $request->query->get('code'),
+                $request->query->get($resourceOwner->getCodeFieldName()),
                 $this->generate('hwi_oauth_connect_service', array('service' => $service), true)
             );
 

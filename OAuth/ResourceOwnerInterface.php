@@ -62,4 +62,11 @@ interface ResourceOwnerInterface
      * Sets a name for the resource owner.
      */
     function setName($name);
+
+    /**
+     * Return the code field name for the provider
+     *
+     * @return string
+     */
+    function getCodeFieldName();
 }
