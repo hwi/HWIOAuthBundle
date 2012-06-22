@@ -105,7 +105,7 @@ class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
      * Performs an HTTP request
      *
      * @param string $url     The url to fetch
-     * @param string $content The content of the request
+     * @param array  $content The content of the request
      * @param string $method  The HTTP method to use
      *
      * @return string The response content
@@ -113,7 +113,7 @@ class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
     protected function httpRequest($url, $content = array(), $method = null)
     {
         if (null === $method) {
-            $method = null === $content ? HttpRequest::METHOD_GET : HttpRequest::METHOD_POST;
+            $method = empty($content) ? HttpRequest::METHOD_GET : HttpRequest::METHOD_POST;
         }
 
         $request  = new HttpRequest($method, $url);
