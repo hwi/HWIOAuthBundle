@@ -9,6 +9,7 @@ need little configuration.
 - [Google](2x-google.md)
 - [GitHub](2x-github.md)
 - [Windows Live](2x-windows_live.md)
+- [Linkedin](2x-linkedin.md)
 - [Others](2x-others.md)
 
 ### Continue to the next step!
