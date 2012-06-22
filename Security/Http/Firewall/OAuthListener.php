@@ -75,8 +75,18 @@ class OAuthListener extends AbstractAuthenticationListener
     {
         list($resourceOwner, $checkPath) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
 
+        $code = $request->query->get('code');
+        // We have more than one resource registered probably, let's try to get code instead dying in loop
+        if (null === $code) {
+            $authorizationUrl = $resourceOwner->getAuthorizationUrl(
+                $this->httpUtils->createRequest($request, $checkPath)->getUri()
+            );
+
+            return $this->httpUtils->createRedirectResponse($request, $authorizationUrl);
+        }
+
         $accessToken = $resourceOwner->getAccessToken(
-            $request->query->get('code'),
+            $code,
             $this->httpUtils->createRequest($request, $checkPath)->getUri()
         );
 
