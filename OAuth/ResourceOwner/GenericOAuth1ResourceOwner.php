@@ -26,7 +26,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
  *
  * @author Francisco Facioni <fran6co@gmail.com>
  */
-class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
+class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 {
     /**
      * @var array
@@ -40,66 +40,6 @@ class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
         'username_path' => '',
         'realm' => null,
     );
-
-    /**
-     * @var array
-     */
-    protected $paths = array();
-
-    /**
-     * @var Buzz\Client\ClientInterface
-     */
-    protected $httpClient;
-
-    /**
-     * @access string
-     */
-    protected $name;
-
-    /**
-     * @param HttpClientInterface $httpClient Buzz http client
-     * @param HttpUtils           $httpUtils  Http utils
-     * @param array               $options    Options for the resource owner
-     * @param string              $name       Name for the resource owner
-     * @param array               $paths      Optional paths to use for the default response
-     */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, $paths = array())
-    {
-        $this->options = array_merge($this->options, $options);
-        $this->paths = array_merge($this->paths, $paths);
-
-        $this->httpClient = $httpClient;
-        $this->httpUtils  = $httpUtils;
-        $this->name       = $name;
-
-        $this->configure();
-    }
-
-    /**
-     * Gives a chance for extending providers to customize stuff
-     */
-    public function configure()
-    {
-
-    }
-
-    /**
-     * Retrieve an option by name
-     *
-     * @param string $name The option name
-     *
-     * @return mixed The option value
-     *
-     * @throws InvalidArgumentException When the option does not exist
-     */
-    public function getOption($name)
-    {
-        if (!array_key_exists($name, $this->options)) {
-            throw new \InvalidArgumentException(sprintf('Unknown option "%s"', $name));
-        }
-
-        return $this->options[$name];
-    }
 
     /**
      * {@inheritDoc}
@@ -145,7 +85,7 @@ class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
         $url = $this->getOption('request_token_url');
         $parameters['oauth_signature'] = $this->signRequest($url, $parameters);
 
-        $apiResponse = $this->httpRequest($url, $parameters);
+        $apiResponse = $this->httpRequest($url, null, $parameters, 'POST');
 
         if (false !== strpos($apiResponse->getHeader('Content-Type'), 'application/json')) {
             $response = json_decode($apiResponse->getContent(), true);
@@ -184,7 +124,7 @@ class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
         $url = $this->getOption('access_token_url');
         $parameters['oauth_signature'] = $this->signRequest($url, $parameters, $token["oauth_token_secret"]);
 
-        $apiResponse = $this->httpRequest($url, $parameters);
+        $apiResponse = $this->httpRequest($url, null, $parameters, 'POST');
 
         if (false !== strpos($apiResponse->getHeader('Content-Type'), 'application/json')) {
             $response = json_decode($apiResponse->getContent(), true);
@@ -201,22 +141,6 @@ class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
         }
 
         return $response['access'];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
     }
 
     /**
@@ -265,54 +189,20 @@ class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
         return base64_encode(hash_hmac('sha1', $baseString, $key, true));
     }
 
-    /**
-     * Get the response object to return.
-     *
-     * @return UserResponseInterface
-     */
-    protected function getUserResponse()
+    protected function httpRequest($url, $content = null, $headers = array(), $method = null)
     {
-        $response = new $this->options['user_response_class'];
-
-        if ($response instanceof PathUserResponse) {
-            $response->setPaths($this->paths);
-        }
-
-        return $response;
-    }
-
-    /**
-     * Performs an HTTP request
-     *
-     * @param string $url     The url to fetch
-     * @param array  $content The content of the request
-     * @param string $method  The HTTP method to use
-     *
-     * @return string The response content
-     */
-    protected function httpRequest($url, $content = array(), $method = null)
-    {
-        if (null === $method) {
-            $method = empty($content) ? HttpRequest::METHOD_GET : HttpRequest::METHOD_POST;
-        }
-
-        $request  = new HttpRequest($method, $url);
-        $response = new HttpResponse();
-
         $authorization = 'Authorization: OAuth';
         if (null !== $this->getOption('realm')) {
             $authorization = 'Authorization: OAuth realm="' . rawurlencode($this->getOption('realm')) . '"';
         }
 
-        foreach ($content as $key => $value) {
+        foreach ($headers as $key => $value) {
             $value = rawurlencode($value);
             $authorization .= ", $key=\"$value\"";
         }
 
-        $request->addHeader($authorization);
+        $headers[] = $authorization;
 
-        $this->httpClient->send($request, $response);
-
-        return $response;
+        return parent::httpRequest($url, $content, $headers, $method);
     }
 }
