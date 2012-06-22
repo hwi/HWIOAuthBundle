@@ -102,31 +102,6 @@ class GenericOAuth2ResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * Performs an HTTP request
-     *
-     * @param string $url     The url to fetch
-     * @param string $content The content of the request
-     * @param string $method  The HTTP method to use
-     *
-     * @return string The response content
-     */
-    protected function httpRequest($url, $content = null, $method = null)
-    {
-        if (null === $method) {
-            $method = null === $content ? HttpRequest::METHOD_GET : HttpRequest::METHOD_POST;
-        }
-
-        $request  = new HttpRequest($method, $url);
-        $response = new HttpResponse();
-
-        $request->setContent($content);
-
-        $this->httpClient->send($request, $response);
-
-        return $response;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getUserInformation($accessToken)
@@ -139,22 +114,6 @@ class GenericOAuth2ResourceOwner implements ResourceOwnerInterface
         $response = $this->getUserResponse();
         $response->setResponse($this->httpRequest($url)->getContent());
         $response->setResourceOwner($this);
-
-        return $response;
-    }
-
-    /**
-     * Get the response object to return.
-     *
-     * @return UserResponseInterface
-     */
-    protected function getUserResponse()
-    {
-        $response = new $this->options['user_response_class'];
-
-        if ($response instanceof PathUserResponse) {
-            $response->setPaths($this->paths);
-        }
 
         return $response;
     }
@@ -231,5 +190,46 @@ class GenericOAuth2ResourceOwner implements ResourceOwnerInterface
     public function getCodeFieldName()
     {
         return "code";
+    }
+
+    /**
+     * Get the response object to return.
+     *
+     * @return UserResponseInterface
+     */
+    protected function getUserResponse()
+    {
+        $response = new $this->options['user_response_class'];
+
+        if ($response instanceof PathUserResponse) {
+            $response->setPaths($this->paths);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Performs an HTTP request
+     *
+     * @param string $url     The url to fetch
+     * @param string $content The content of the request
+     * @param string $method  The HTTP method to use
+     *
+     * @return string The response content
+     */
+    protected function httpRequest($url, $content = null, $method = null)
+    {
+        if (null === $method) {
+            $method = null === $content ? HttpRequest::METHOD_GET : HttpRequest::METHOD_POST;
+        }
+
+        $request  = new HttpRequest($method, $url);
+        $response = new HttpResponse();
+
+        $request->setContent($content);
+
+        $this->httpClient->send($request, $response);
+
+        return $response;
     }
 }

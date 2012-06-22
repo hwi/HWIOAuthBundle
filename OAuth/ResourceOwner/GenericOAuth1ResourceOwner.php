@@ -102,41 +102,6 @@ class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * Performs an HTTP request
-     *
-     * @param string $url     The url to fetch
-     * @param array  $content The content of the request
-     * @param string $method  The HTTP method to use
-     *
-     * @return string The response content
-     */
-    protected function httpRequest($url, $content = array(), $method = null)
-    {
-        if (null === $method) {
-            $method = empty($content) ? HttpRequest::METHOD_GET : HttpRequest::METHOD_POST;
-        }
-
-        $request  = new HttpRequest($method, $url);
-        $response = new HttpResponse();
-
-        $authorization = 'Authorization: OAuth';
-        if (null !== $this->getOption('realm')) {
-            $authorization = 'Authorization: OAuth realm="' . rawurlencode($this->getOption('realm')) . '"';
-        }
-
-        foreach ($content as $key => $value) {
-            $value = rawurlencode($value);
-            $authorization .= ", $key=\"$value\"";
-        }
-
-        $request->addHeader($authorization);
-
-        $this->httpClient->send($request, $response);
-
-        return $response;
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getUserInformation($accessToken)
@@ -149,22 +114,6 @@ class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
         $response = $this->getUserResponse();
         $response->setResponse($this->httpRequest($url)->getContent());
         $response->setResourceOwner($this);
-
-        return $response;
-    }
-
-    /**
-     * Get the response object to return.
-     *
-     * @return UserResponseInterface
-     */
-    protected function getUserResponse()
-    {
-        $response = new $this->options['user_response_class'];
-
-        if ($response instanceof PathUserResponse) {
-            $response->setPaths($this->paths);
-        }
 
         return $response;
     }
@@ -270,14 +219,24 @@ class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
         $this->name = $name;
     }
 
-    protected function generateNonce() {
+    /**
+     * {@inheritDoc}
+     */
+    public function getCodeFieldName()
+    {
+        return "oauth_verifier";
+    }
+
+    protected function generateNonce()
+    {
         $mt = microtime();
         $rand = mt_rand();
 
         return md5($mt . $rand);
     }
 
-    protected function signRequest($url, $parameters, $tokenSecret = '') {
+    protected function signRequest($url, $parameters, $tokenSecret = '')
+    {
         // Remove oauth_signature if present
         // Ref: Spec: 9.1.1 ("The oauth_signature parameter MUST be excluded.")
         if (isset($params['oauth_signature'])) {
@@ -307,10 +266,53 @@ class GenericOAuth1ResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * Get the response object to return.
+     *
+     * @return UserResponseInterface
      */
-    public function getCodeFieldName()
+    protected function getUserResponse()
     {
-        return "oauth_verifier";
+        $response = new $this->options['user_response_class'];
+
+        if ($response instanceof PathUserResponse) {
+            $response->setPaths($this->paths);
+        }
+
+        return $response;
+    }
+
+    /**
+     * Performs an HTTP request
+     *
+     * @param string $url     The url to fetch
+     * @param array  $content The content of the request
+     * @param string $method  The HTTP method to use
+     *
+     * @return string The response content
+     */
+    protected function httpRequest($url, $content = array(), $method = null)
+    {
+        if (null === $method) {
+            $method = empty($content) ? HttpRequest::METHOD_GET : HttpRequest::METHOD_POST;
+        }
+
+        $request  = new HttpRequest($method, $url);
+        $response = new HttpResponse();
+
+        $authorization = 'Authorization: OAuth';
+        if (null !== $this->getOption('realm')) {
+            $authorization = 'Authorization: OAuth realm="' . rawurlencode($this->getOption('realm')) . '"';
+        }
+
+        foreach ($content as $key => $value) {
+            $value = rawurlencode($value);
+            $authorization .= ", $key=\"$value\"";
+        }
+
+        $request->addHeader($authorization);
+
+        $this->httpClient->send($request, $response);
+
+        return $response;
     }
 }
