@@ -46,13 +46,22 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     public function getUserInformation($accessToken)
     {
+        $parameters = array(
+            'oauth_consumer_key'     => $this->getOption('client_id'),
+            'oauth_timestamp'        => time(),
+            'oauth_nonce'            => $this->generateNonce(),
+            'oauth_version'          => '1.0',
+            'oauth_signature_method' => 'HMAC-SHA1',
+            'oauth_token'            => $accessToken["oauth_token"],
+        );
+
         $url = $this->getOption('infos_url');
-        $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
-            'access_token' => $accessToken
-        ));
+        $parameters['oauth_signature'] = $this->signRequest($url, $parameters, $accessToken["oauth_token_secret"]);
+
+        $apiResponse = $this->httpRequest($url, null, $parameters, 'POST');
 
         $response = $this->getUserResponse();
-        $response->setResponse($this->httpRequest($url)->getContent());
+        $response->setResponse($apiResponse->getContent());
         $response->setResourceOwner($this);
 
         return $response;
@@ -132,15 +141,11 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             parse_str($apiResponse->getContent(), $response);
         }
 
-        if (isset($response['error'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
+        if (!isset($response['oauth_token']) || !isset($response['oauth_token_secret'])) {
+            throw new AuthenticationException('Not a valid request token.');
         }
 
-        if (!isset($response['access'])) {
-            throw new AuthenticationException('Not a valid access token.');
-        }
-
-        return $response['access'];
+        return $response;
     }
 
     /**
