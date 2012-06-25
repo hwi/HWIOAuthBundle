@@ -80,11 +80,23 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getRequestToken($redirectUri, array $extraParameters = array())
+    protected function getRequestToken($redirectUri, array $extraParameters = array())
     {
+        $timestamp = time();
+
+        if ($this->session->has('_hwi_oauth.request_token.' . $this->getName())) {
+            $requestToken = $this->session->get('_hwi_oauth.request_token.' . $this->getName());
+
+            if (0 < $requestToken['oauth_expires_in']
+                && $requestToken['timestamp'] + $requestToken['oauth_expires_in'] > $timestamp
+            ) {
+                return $requestToken;
+            }
+        }
+
         $parameters = array_merge($extraParameters, array(
             'oauth_consumer_key'     => $this->getOption('client_id'),
-            'oauth_timestamp'        => time(),
+            'oauth_timestamp'        => $timestamp,
             'oauth_nonce'            => $this->generateNonce(),
             'oauth_version'          => '1.0',
             'oauth_callback'         => $redirectUri,
@@ -110,15 +122,20 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             throw new AuthenticationException('Not a valid request token.');
         }
 
+        $response['timestamp'] = $timestamp;
+
+        $this->session->set('_hwi_oauth.request_token.' . $this->getName(), $response);
+
         return $response;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getAccessToken($code, $redirectUri, array $extraParameters = array())
+    public function getAccessToken($code, $redirectUri, array $extraParameters = array(), $requestToken = null)
     {
-        $token = $this->getRequestToken($redirectUri, $extraParameters);
+        $requestToken = $this->getRequestToken($redirectUri, $extraParameters);
+        $this->session->remove('_hwi_oauth.request_token.' . $this->getName());
 
         $parameters = array_merge($extraParameters, array(
             'oauth_consumer_key'     => $this->getOption('client_id'),
@@ -126,12 +143,12 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'oauth_nonce'            => $this->generateNonce(),
             'oauth_version'          => '1.0',
             'oauth_signature_method' => 'HMAC-SHA1',
-            'oauth_token'            => $token["oauth_token"],
+            'oauth_token'            => $requestToken["oauth_token"],
             'oauth_verifier'         => $code,
         ));
 
         $url = $this->getOption('access_token_url');
-        $parameters['oauth_signature'] = $this->signRequest($url, $parameters, $token["oauth_token_secret"]);
+        $parameters['oauth_signature'] = $this->signRequest($url, $parameters, $requestToken["oauth_token_secret"]);
 
         $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
 

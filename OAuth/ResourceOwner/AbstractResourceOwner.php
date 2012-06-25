@@ -50,6 +50,8 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     protected $httpClient;
 
+    protected $session;
+
     /**
      * @access string
      */
@@ -58,17 +60,19 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * @param HttpClientInterface $httpClient Buzz http client
      * @param HttpUtils           $httpUtils  Http utils
+     * @param Session             $session    Session container
      * @param array               $options    Options for the resource owner
      * @param string              $name       Name for the resource owner
      * @param array               $paths      Optional paths to use for the default response
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, $paths = array())
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, $session, array $options, $name, $paths = array())
     {
         $this->options = array_merge($this->options, $options);
         $this->paths = array_merge($this->paths, $paths);
 
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
+        $this->session    = $session;
         $this->name       = $name;
 
         $this->configure();
