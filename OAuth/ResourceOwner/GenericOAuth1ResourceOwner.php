@@ -56,9 +56,9 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         );
 
         $url = $this->getOption('infos_url');
-        $parameters['oauth_signature'] = $this->signRequest($url, $parameters, $accessToken["oauth_token_secret"]);
+        $parameters['oauth_signature'] = $this->signRequest('GET', $url, $parameters, $accessToken["oauth_token_secret"]);
 
-        $apiResponse = $this->httpRequest($url, null, $parameters);
+        $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'GET');
 
         $response = $this->getUserResponse();
         $response->setResponse($apiResponse->getContent());
@@ -104,7 +104,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         ));
 
         $url = $this->getOption('request_token_url');
-        $parameters['oauth_signature'] = $this->signRequest($url, $parameters);
+        $parameters['oauth_signature'] = $this->signRequest('POST', $url, $parameters);
 
         $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
 
@@ -148,7 +148,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         ));
 
         $url = $this->getOption('access_token_url');
-        $parameters['oauth_signature'] = $this->signRequest($url, $parameters, $requestToken["oauth_token_secret"]);
+        $parameters['oauth_signature'] = $this->signRequest('POST', $url, $parameters, $requestToken["oauth_token_secret"]);
 
         $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
 
@@ -185,7 +185,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         return md5($mt . $rand);
     }
 
-    protected function signRequest($url, $parameters, $tokenSecret = '')
+    protected function signRequest($method, $url, $parameters, $tokenSecret = '')
     {
         // Remove oauth_signature if present
         // Ref: Spec: 9.1.1 ("The oauth_signature parameter MUST be excluded.")
@@ -198,7 +198,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         uksort($parameters, 'strcmp');
 
         $parts = array(
-            'POST',
+            $method,
             rawurlencode($url),
             rawurlencode(http_build_query($parameters)),
         );
