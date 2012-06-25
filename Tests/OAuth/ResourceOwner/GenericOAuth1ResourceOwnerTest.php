@@ -80,8 +80,10 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
     public function testGetAuthorizationUrl()
     {
+        $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
+        $this->mockBuzz('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json; charset=utf-8');
         $this->assertEquals(
-            'http://user.auth/?response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            'http://user.auth/?oauth_token=token',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
