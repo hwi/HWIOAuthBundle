@@ -25,8 +25,7 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
         'authorization_url'   => 'https://www.linkedin.com/uas/oauth/authenticate',
         'request_token_url'   => 'https://api.linkedin.com/uas/oauth/requestToken',
         'access_token_url'    => 'https://api.linkedin.com/uas/oauth/accessToken',
-        'infos_url'           => 'http://api.linkedin.com/v1/people/~',
-        'scope'               => '',
+        'infos_url'           => 'http://api.linkedin.com/v1/people/~:(id,first-name,last-name,maiden-name,location,industry)',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
         'realm'               => 'http://api.linkedin.com',
     );
@@ -36,7 +35,7 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
      */
     protected $paths = array(
         'username'     => 'id',
-        'displayname'  => 'name',
+        'displayname'  => 'id',
     );
 
     protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
