@@ -39,10 +39,10 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
         'displayname'  => 'name',
     );
 
-    protected function httpRequest($url, $content = null, $headers = array(), $method = null)
+    protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
     {
         $headers[] = 'x-li-format: json';
 
-        return parent::httpRequest($url, $content, $headers, $method);
+        return parent::httpRequest($url, $content, $parameters, $headers, $method);
     }
 }

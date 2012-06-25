@@ -58,7 +58,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $url = $this->getOption('infos_url');
         $parameters['oauth_signature'] = $this->signRequest($url, $parameters, $accessToken["oauth_token_secret"]);
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, 'POST');
+        $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
 
         $response = $this->getUserResponse();
         $response->setResponse($apiResponse->getContent());
@@ -94,7 +94,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $url = $this->getOption('request_token_url');
         $parameters['oauth_signature'] = $this->signRequest($url, $parameters);
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, 'POST');
+        $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
 
         if (false !== strpos($apiResponse->getHeader('Content-Type'), 'application/json')) {
             $response = json_decode($apiResponse->getContent(), true);
@@ -133,7 +133,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $url = $this->getOption('access_token_url');
         $parameters['oauth_signature'] = $this->signRequest($url, $parameters, $token["oauth_token_secret"]);
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, 'POST');
+        $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
 
         if (false !== strpos($apiResponse->getHeader('Content-Type'), 'application/json')) {
             $response = json_decode($apiResponse->getContent(), true);
@@ -198,14 +198,14 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         return base64_encode(hash_hmac('sha1', $baseString, $key, true));
     }
 
-    protected function httpRequest($url, $content = null, $headers = array(), $method = null)
+    protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
     {
         $authorization = 'Authorization: OAuth';
         if (null !== $this->getOption('realm')) {
             $authorization = 'Authorization: OAuth realm="' . rawurlencode($this->getOption('realm')) . '"';
         }
 
-        foreach ($headers as $key => $value) {
+        foreach ($parameters as $key => $value) {
             $value = rawurlencode($value);
             $authorization .= ", $key=\"$value\"";
         }
