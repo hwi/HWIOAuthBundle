@@ -102,8 +102,8 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             parse_str($apiResponse->getContent(), $response);
         }
 
-        if (isset($response['oauth_callback_confirmed']) && ($response['oauth_callback_confirmed'] != 'true')) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
+        if (isset($response['oauth_problem']) || (isset($response['oauth_callback_confirmed']) && ($response['oauth_callback_confirmed'] != 'true'))) {
+            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
         }
 
         if (!isset($response['oauth_token']) || !isset($response['oauth_token_secret'])) {
@@ -139,6 +139,10 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $response = json_decode($apiResponse->getContent(), true);
         } else {
             parse_str($apiResponse->getContent(), $response);
+        }
+
+        if (isset($response['oauth_problem'])) {
+            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
         }
 
         if (!isset($response['oauth_token']) || !isset($response['oauth_token_secret'])) {
