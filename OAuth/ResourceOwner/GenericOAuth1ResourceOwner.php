@@ -58,7 +58,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $url = $this->getOption('infos_url');
         $parameters['oauth_signature'] = $this->signRequest($url, $parameters, $accessToken["oauth_token_secret"]);
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
+        $apiResponse = $this->httpRequest($url, null, $parameters);
 
         $response = $this->getUserResponse();
         $response->setResponse($apiResponse->getContent());
