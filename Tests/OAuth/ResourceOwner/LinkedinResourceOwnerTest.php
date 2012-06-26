@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LinkedinResourceOwner;
+use Symfony\Component\HttpKernel\Kernel;
 
 class LinkedinResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
@@ -35,10 +36,14 @@ class LinkedinResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
             ->disableOriginalConstructor()->getMock();
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
+        // Session changed interface in 2.1, hack to avoid branching
+        if (version_compare(Kernel::VERSION, '2.1-DEV', '>=')) {
+            $session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
+        } else {
+            $session = new \Symfony\Component\HttpFoundation\Session(new \Symfony\Component\HttpFoundation\SessionStorage\ArraySessionStorage());
+        }
 
-        $this->buzzClient = new \Buzz\Client\Curl();
-
-        return new LinkedinResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new LinkedinResourceOwner($this->buzzClient, $httpUtils, $session, $options, $name);
     }
 
     public function testGetAuthorizationUrl()
@@ -53,6 +58,6 @@ class LinkedinResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
     public function testGetOption()
     {
-        $this->assertEquals('http://api.linkedin.com/v1/people/~', $this->resourceOwner->getOption('infos_url'));
+        $this->assertEquals('http://api.linkedin.com/v1/people/~:(id,first-name,last-name,maiden-name,location,industry)', $this->resourceOwner->getOption('infos_url'));
     }
 }

@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GoogleResourceOwner;
+use Symfony\Component\HttpKernel\Kernel;
 
 class GoogleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
@@ -35,8 +36,14 @@ class GoogleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
             ->disableOriginalConstructor()->getMock();
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
+        // Session changed interface in 2.1, hack to avoid branching
+        if (version_compare(Kernel::VERSION, '2.1-DEV', '>=')) {
+            $session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
+        } else {
+            $session = new \Symfony\Component\HttpFoundation\Session(new \Symfony\Component\HttpFoundation\SessionStorage\ArraySessionStorage());
+        }
 
-        return new GoogleResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new GoogleResourceOwner($this->buzzClient, $httpUtils, $session, $options, $name);
     }
 
     public function testGetAuthorizationUrl()
