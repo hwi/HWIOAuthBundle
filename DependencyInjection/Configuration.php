@@ -117,7 +117,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('type')
                             ->validate()
-                                ->ifNotInArray(array('facebook', 'generic', 'github', 'google', 'windows_live', 'vkontakte'))
+                                ->ifNotInArray(array('facebook', 'oauth2', 'github', 'google', 'windows_live', 'vkontakte', 'oauth1', 'linkedin'))
                                 ->thenInvalid('Unknown resource owner type %s.')
                             ->end()
                             ->validate()
@@ -158,8 +158,8 @@ class Configuration implements ConfigurationInterface
                                 return false;
                             }
 
-                            // Only validate the 'generic' type
-                            if ('generic' !== $c['type']) {
+                            // Only validate the 'oauth2' and 'oauth1' type
+                            if ('oauth2' !== $c['type'] && 'oauth1' !== $c['type']) {
                                 return false;
                             }
 
@@ -173,7 +173,7 @@ class Configuration implements ConfigurationInterface
                             // one of the two should be set
                             return !isset($c['paths']) && !isset($c['user_response_class']);
                         })
-                        ->thenInvalid("All parameters are mandatory for type 'generic'. Check if you're missing one of: access_token_url, authorization_url, infos_url or paths or user_response_class.")
+                        ->thenInvalid("All parameters are mandatory for types 'oauth2' and 'oauth1'. Check if you're missing one of: access_token_url, authorization_url, infos_url or paths or user_response_class.")
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {
@@ -182,8 +182,8 @@ class Configuration implements ConfigurationInterface
                                 return false;
                             }
 
-                            // Only validate the 'generic' type
-                            if ('generic' !== $c['type']) {
+                            // Only validate the 'oauth2' and 'oauth1' type
+                            if ('oauth2' !== $c['type'] && 'oauth1' !== $c['type']) {
                                 return false;
                             }
 
@@ -197,7 +197,7 @@ class Configuration implements ConfigurationInterface
                             // one of the two should be set
                             return !isset($c['paths']) && !isset($c['user_response_class']);
                         })
-                        ->thenInvalid("At least 'username' and 'displayname' paths should be configured for the generic type.")
+                        ->thenInvalid("At least 'username' and 'displayname' paths should be configured for oauth2 and oauth1 types.")
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {

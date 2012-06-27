@@ -10,11 +10,33 @@ resource owner:
 hwi_oauth:
     resource_owners:
         my_custom:
-            type:                generic
+            type:                oauth2
             client_id:           <client_id>
             client_secret:       <client_secret>
             access_token_url:    https://path.to/oauth/v2/token
             authorization_url:   https://path.to/oauth/v2/authorize
+            infos_url:           https://path.to/api/user
+            scope:               ""
+            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
+            paths:
+                username: id
+                displayname: username
+```
+
+or an oauth1:
+
+``` yaml
+# app/config.yml
+
+hwi_oauth:
+    resource_owners:
+        my_custom:
+            type:                oauth1
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+            request_token_url:   https://path.to/oauth/v1/requestToken
+            access_token_url:    https://path.to/oauth/v1/token
+            authorization_url:   https://path.to/oauth/v1/authorize
             infos_url:           https://path.to/api/user
             scope:               ""
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse

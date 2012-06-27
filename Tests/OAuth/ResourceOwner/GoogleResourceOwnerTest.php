@@ -12,14 +12,16 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GoogleResourceOwner;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpFoundation\Request;
 
-class GoogleResourceOwnerTest extends GenericResourceOwnerTest
+class GoogleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = '{"id": "bar"}';
 
     public function setup()
     {
-        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'generic');
+        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
     }
 
     protected function getDefaultOptions()
@@ -35,8 +37,14 @@ class GoogleResourceOwnerTest extends GenericResourceOwnerTest
             ->disableOriginalConstructor()->getMock();
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
+        // Session changed interface in 2.1, hack to avoid branching
+        if (version_compare(Kernel::VERSION, '2.1-DEV', '>=')) {
+            $session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
+        } else {
+            $session = new \Symfony\Component\HttpFoundation\Session(new \Symfony\Component\HttpFoundation\SessionStorage\ArraySessionStorage());
+        }
 
-        return new GoogleResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new GoogleResourceOwner($this->buzzClient, $httpUtils, $session, $options, $name);
     }
 
     public function testGetAuthorizationUrl()
@@ -56,7 +64,8 @@ class GoogleResourceOwnerTest extends GenericResourceOwnerTest
     {
         $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $this->mockBuzz('{"access_token": "code"}', 'application/json');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     /**
@@ -65,6 +74,7 @@ class GoogleResourceOwnerTest extends GenericResourceOwnerTest
     public function testGetAccessTokenErrorResponse()
     {
         $this->mockBuzz('{"error": "foo"}');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 }

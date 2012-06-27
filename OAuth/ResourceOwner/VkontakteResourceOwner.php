@@ -16,7 +16,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  *
  * @author Adrov Igor <nucleartux@gmail.com>
  */
-class VkontakteResourceOwner extends GenericResourceOwner
+class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritDoc}

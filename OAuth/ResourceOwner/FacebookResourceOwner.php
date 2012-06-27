@@ -16,7 +16,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  */
-class FacebookResourceOwner extends GenericResourceOwner
+class FacebookResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritDoc}
