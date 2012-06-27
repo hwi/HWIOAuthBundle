@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GoogleResourceOwner;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class GoogleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
@@ -63,7 +64,8 @@ class GoogleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     {
         $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $this->mockBuzz('{"access_token": "code"}', 'application/json');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     /**
@@ -72,6 +74,7 @@ class GoogleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     public function testGetAccessTokenErrorResponse()
     {
         $this->mockBuzz('{"error": "foo"}');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 }

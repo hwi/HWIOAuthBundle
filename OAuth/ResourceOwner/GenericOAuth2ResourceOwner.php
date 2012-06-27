@@ -16,7 +16,8 @@ use Buzz\Client\ClientInterface as HttpClientInterface,
     Buzz\Message\Response as HttpResponse;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException,
-    Symfony\Component\Security\Http\HttpUtils;
+    Symfony\Component\Security\Http\HttpUtils,
+    Symfony\Component\HttpFoundation\Request;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
     HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
@@ -64,8 +65,10 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getAccessToken($code, $redirectUri, array $extraParameters = array())
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
+        $code = $request->query->get('code');
+
         $parameters = array_merge($extraParameters, array(
             'code'          => $code,
             'grant_type'    => 'authorization_code',
@@ -94,13 +97,5 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         }
 
         return $response['access_token'];
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getCodeFieldName()
-    {
-        return "code";
     }
 }

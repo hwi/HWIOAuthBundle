@@ -16,7 +16,8 @@ use Buzz\Client\ClientInterface as HttpClientInterface,
     Buzz\Message\Response as HttpResponse;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException,
-    Symfony\Component\Security\Http\HttpUtils;
+    Symfony\Component\Security\Http\HttpUtils,
+    Symfony\Component\HttpFoundation\Request;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
     HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
@@ -80,6 +81,48 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
+    {
+        $code = $request->query->get('oauth_verifier');
+
+        $requestToken = $this->getRequestToken($redirectUri, $extraParameters);
+        $this->session->remove('_hwi_oauth.request_token.' . $this->getName());
+
+        $parameters = array_merge($extraParameters, array(
+            'oauth_consumer_key'     => $this->getOption('client_id'),
+            'oauth_timestamp'        => time(),
+            'oauth_nonce'            => $this->generateNonce(),
+            'oauth_version'          => '1.0',
+            'oauth_signature_method' => 'HMAC-SHA1',
+            'oauth_token'            => $requestToken["oauth_token"],
+            'oauth_verifier'         => $code,
+        ));
+
+        $url = $this->getOption('access_token_url');
+        $parameters['oauth_signature'] = $this->signRequest('POST', $url, $parameters, $requestToken["oauth_token_secret"]);
+
+        $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
+
+        if (false !== strpos($apiResponse->getHeader('Content-Type'), 'application/json')) {
+            $response = json_decode($apiResponse->getContent(), true);
+        } else {
+            parse_str($apiResponse->getContent(), $response);
+        }
+
+        if (isset($response['oauth_problem'])) {
+            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
+        }
+
+        if (!isset($response['oauth_token']) || !isset($response['oauth_token_secret'])) {
+            throw new AuthenticationException('Not a valid request token.');
+        }
+
+        return $response;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function getRequestToken($redirectUri, array $extraParameters = array())
     {
         $timestamp = time();
@@ -127,54 +170,6 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $this->session->set('_hwi_oauth.request_token.' . $this->getName(), $response);
 
         return $response;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getAccessToken($code, $redirectUri, array $extraParameters = array())
-    {
-        $requestToken = $this->getRequestToken($redirectUri, $extraParameters);
-        $this->session->remove('_hwi_oauth.request_token.' . $this->getName());
-
-        $parameters = array_merge($extraParameters, array(
-            'oauth_consumer_key'     => $this->getOption('client_id'),
-            'oauth_timestamp'        => time(),
-            'oauth_nonce'            => $this->generateNonce(),
-            'oauth_version'          => '1.0',
-            'oauth_signature_method' => 'HMAC-SHA1',
-            'oauth_token'            => $requestToken["oauth_token"],
-            'oauth_verifier'         => $code,
-        ));
-
-        $url = $this->getOption('access_token_url');
-        $parameters['oauth_signature'] = $this->signRequest('POST', $url, $parameters, $requestToken["oauth_token_secret"]);
-
-        $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
-
-        if (false !== strpos($apiResponse->getHeader('Content-Type'), 'application/json')) {
-            $response = json_decode($apiResponse->getContent(), true);
-        } else {
-            parse_str($apiResponse->getContent(), $response);
-        }
-
-        if (isset($response['oauth_problem'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
-        }
-
-        if (!isset($response['oauth_token']) || !isset($response['oauth_token_secret'])) {
-            throw new AuthenticationException('Not a valid request token.');
-        }
-
-        return $response;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getCodeFieldName()
-    {
-        return "oauth_verifier";
     }
 
     protected function generateNonce()

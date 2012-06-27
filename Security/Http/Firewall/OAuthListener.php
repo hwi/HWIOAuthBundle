@@ -76,7 +76,7 @@ class OAuthListener extends AbstractAuthenticationListener
         list($resourceOwner, $checkPath) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
 
         $accessToken = $resourceOwner->getAccessToken(
-            $request->query->get($resourceOwner->getCodeFieldName()),
+            $request,
             $this->httpUtils->createRequest($request, $checkPath)->getUri()
         );
 

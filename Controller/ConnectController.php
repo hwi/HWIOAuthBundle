@@ -142,7 +142,7 @@ class ConnectController extends ContainerAware
 
         if (null !== $code = $request->query->get($resourceOwner->getCodeFieldName())) {
             $accessToken = $resourceOwner->getAccessToken(
-                $request->query->get($resourceOwner->getCodeFieldName()),
+                $request,
                 $this->generate('hwi_oauth_connect_service', array('service' => $service), true)
             );
 

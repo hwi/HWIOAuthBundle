@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpFoundation\Request;
 
 class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
 {
@@ -96,21 +97,24 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
     {
         $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $this->mockBuzz('access_token=code');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     public function testGetAccessTokenJsonResponse()
     {
         $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $this->mockBuzz('{"access_token": "code"}', 'application/json');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     public function testGetAccessTokenJsonCharsetResponse()
     {
         $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $this->mockBuzz('{"access_token": "code"}', 'application/json; charset=utf-8');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     /**
@@ -119,7 +123,8 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
     public function testGetAccessTokenFailedResponse()
     {
         $this->mockBuzz('invalid');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     /**
@@ -128,7 +133,8 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
     public function testGetAccessTokenErrorResponse()
     {
         $this->mockBuzz('error=foo');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     public function testGetSetName()
