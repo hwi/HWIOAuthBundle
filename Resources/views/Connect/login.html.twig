@@ -4,7 +4,7 @@
     {% if error %}
         <span>{{ error }}</span>
     {% endif %}
-    {% for owner in resource_owners %}
-    <a href="{{ owner.url }}">{{ owner.name | trans({}, 'HWIOAuthBundle') }}</a> <br />
+    {% for owner in hwi_oauth_resource_owners() %}
+    <a href="{{ hwi_oauth_login_url(owner) }}">{{ owner | trans({}, 'HWIOAuthBundle') }}</a> <br />
     {% endfor %}
 {% endblock hwi_oauth_content %}

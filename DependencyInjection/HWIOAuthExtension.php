@@ -35,6 +35,8 @@ class HWIOAuthExtension extends Extension
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('oauth.xml');
+        $loader->load('templating.xml');
+        $loader->load('twig.xml');
 
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);

@@ -61,8 +61,8 @@ class ConnectController extends ContainerAware
         }
 
         return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:login.html.twig', array(
-            'error'           => $error,
-            'resource_owners' => $this->getResourceOwners($request, $connect && $hasUser),
+            'error'   => $error,
+            'connect' => $connect && $hasUser,
         ));
     }
 
@@ -179,55 +179,6 @@ class ConnectController extends ContainerAware
             'form' => $form->createView(),
             'userInformation' => $userInformation,
         ));
-    }
-
-    /**
-     * Gets all the resource owners for a given request.
-     *
-     * @param Request $request A request.
-     * @param boolean $connect Whether it should be connect, or just 'regular' redirect urls.
-     *
-     * @return array Resource owner information.
-     */
-    protected function getResourceOwners(Request $request, $connect)
-    {
-        $ownerMap = $this->container->get('hwi_oauth.resource_ownermap.'.$this->container->getParameter('hwi_oauth.firewall_name'));
-
-        $resourceOwners = array();
-        foreach ($ownerMap->getResourceOwners() as $name => $checkPath) {
-            $resourceOwner = $ownerMap->getResourceOwnerByName($name);
-            $resourceOwners[$name] = array(
-                'url' => $resourceOwner->getAuthorizationUrl(
-                    $connect
-                    ? $this->generate('hwi_oauth_connect_service', array('service' => $name), true)
-                    : $this->getUriForCheckPath($request, $checkPath)
-                ),
-                'name' => $name,
-            );
-        }
-
-        return $resourceOwners;
-    }
-
-    /**
-     * Get the uri for a given path.
-     *
-     * @param Request $request A request instance
-     * @param string  $path    Path or route
-     *
-     * @return string
-     */
-    protected function getUriForCheckPath(Request $request, $path)
-    {
-        if ($path && '/' !== $path[0] && 0 !== strpos($path, 'http')) {
-            $path = $this->generate($path, array(), true);
-        }
-
-        if (0 !== strpos($path, 'http')) {
-            $path = $request->getUriForPath($path);
-        }
-
-        return $path;
     }
 
     /**
