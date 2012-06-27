@@ -23,14 +23,18 @@ class SessionStorage implements StorageInterface
     /**
      * {@inheritDoc}
      */
-    public function read(ResourceOwnerInterface $resourceOwner)
+    public function read(ResourceOwnerInterface $resourceOwner, $tokenId)
     {
-        $requestToken = $this->session->get($this->generateKey($resourceOwner), null);
+        $key = $this->generateKey($resourceOwner);
+        $requestToken = $this->session->get($key, null);
 
         if (null !== $requestToken) {
-            if ($requestToken['oauth_expires_in'] > 0
-                && $requestToken['timestamp'] + $requestToken['oauth_expires_in'] < time()
+            if ($tokenId == $requestToken['oauth_token']
+                || ($requestToken['oauth_expires_in'] > 0
+                && $requestToken['timestamp'] + $requestToken['oauth_expires_in'] < time())
             ) {
+                $this->session->remove($key);
+
                 return null;
             }
         }

@@ -83,9 +83,17 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
-        $code = $request->query->get('oauth_verifier');
+        $requestToken = null;
 
-        $requestToken = $this->getRequestToken($redirectUri, $extraParameters);
+        if ($request->query->has('oauth_token')) {
+            $requestToken = $this->storage->read($this, $request->query->get('oauth_token'));
+        }
+
+        if (null === $requestToken) {
+            $requestToken = $this->getRequestToken($redirectUri, $extraParameters);;
+        }
+
+        $code = $request->query->get('oauth_verifier');
 
         $parameters = array_merge($extraParameters, array(
             'oauth_consumer_key'     => $this->getOption('client_id'),
@@ -124,12 +132,6 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     protected function getRequestToken($redirectUri, array $extraParameters = array())
     {
-        $requestToken = $this->storage->read($this);
-
-        if (null !== $requestToken) {
-            return $requestToken;
-        }
-
         $timestamp = time();
 
         $parameters = array_merge($extraParameters, array(

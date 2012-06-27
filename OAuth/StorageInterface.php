@@ -9,10 +9,11 @@ interface StorageInterface
 {
     /**
      * @param ResourceOwnerInterface $resourceOwner
+     * @param string                 $tokenId
      *
      * @return array
      */
-    function read(ResourceOwnerInterface $resourceOwner);
+    function read(ResourceOwnerInterface $resourceOwner, $tokenId);
 
     /**
      * @param ResourceOwnerInterface $resourceOwner
