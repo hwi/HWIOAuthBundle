@@ -132,7 +132,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getAccessToken($code, $redirectUri, array $extraParameters = array(), $requestToken = null)
+    public function getAccessToken($code, $redirectUri, array $extraParameters = array())
     {
         $requestToken = $this->getRequestToken($redirectUri, $extraParameters);
         $this->session->remove('_hwi_oauth.request_token.' . $this->getName());
