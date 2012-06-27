@@ -215,6 +215,9 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         return base64_encode(hash_hmac('sha1', $baseString, $key, true));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
     {
         $authorization = 'Authorization: OAuth';
