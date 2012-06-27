@@ -92,6 +92,24 @@ class ResourceOwnerMap
                 return array($this->getResourceOwnerByName($name), $checkPath);
             }
         }
+
+        return null;
+    }
+
+    /**
+     * Gets the check path for given resource name.
+     *
+     * @param string $name
+     *
+     * @return null|string
+     */
+    public function getResourceOwnerCheckPath($name)
+    {
+        if (isset($this->resourceOwners[$name])) {
+            return $this->resourceOwners[$name];
+        }
+
+        return null;
     }
 
     /**
