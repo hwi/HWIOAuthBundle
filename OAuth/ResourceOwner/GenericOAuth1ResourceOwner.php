@@ -86,7 +86,6 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $code = $request->query->get('oauth_verifier');
 
         $requestToken = $this->getRequestToken($redirectUri, $extraParameters);
-        $this->session->remove('_hwi_oauth.request_token.' . $this->getName());
 
         $parameters = array_merge($extraParameters, array(
             'oauth_consumer_key'     => $this->getOption('client_id'),
@@ -125,17 +124,13 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     protected function getRequestToken($redirectUri, array $extraParameters = array())
     {
-        $timestamp = time();
+        $requestToken = $this->storage->read($this);
 
-        if ($this->session->has('_hwi_oauth.request_token.' . $this->getName())) {
-            $requestToken = $this->session->get('_hwi_oauth.request_token.' . $this->getName());
-
-            if (0 < $requestToken['oauth_expires_in']
-                && $requestToken['timestamp'] + $requestToken['oauth_expires_in'] > $timestamp
-            ) {
-                return $requestToken;
-            }
+        if (null !== $requestToken) {
+            return $requestToken;
         }
+
+        $timestamp = time();
 
         $parameters = array_merge($extraParameters, array(
             'oauth_consumer_key'     => $this->getOption('client_id'),
@@ -167,7 +162,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $response['timestamp'] = $timestamp;
 
-        $this->session->set('_hwi_oauth.request_token.' . $this->getName(), $response);
+        $this->storage->write($this, $response);
 
         return $response;
     }

@@ -19,7 +19,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException,
     Symfony\Component\Security\Http\HttpUtils;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
-    HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
+    HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse,
+    HWI\Bundle\OAuthBundle\OAuth\StorageInterface;
 
 /**
  * AbstractResourceOwner
@@ -50,7 +51,10 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     protected $httpClient;
 
-    protected $session;
+    /**
+     * @var HWI\Bundle\OAuthBundle\OAuth\StorageInterface
+     */
+    protected $storage;
 
     /**
      * @access string
@@ -60,19 +64,19 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * @param HttpClientInterface $httpClient Buzz http client
      * @param HttpUtils           $httpUtils  Http utils
-     * @param Session             $session    Session container
+     * @param StorageInterface    $storage    Storage container
      * @param array               $options    Options for the resource owner
      * @param string              $name       Name for the resource owner
      * @param array               $paths      Optional paths to use for the default response
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, $session, array $options, $name, $paths = array())
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils,StorageInterface $storage, array $options, $name, $paths = array())
     {
         $this->options = array_merge($this->options, $options);
         $this->paths = array_merge($this->paths, $paths);
 
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
-        $this->session    = $session;
+        $this->storage    = $storage;
         $this->name       = $name;
 
         $this->configure();
