@@ -22,9 +22,9 @@ class FacebookResourceOwner extends GenericResourceOwner
      * {@inheritDoc}
      */
     protected $options = array(
-        'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
-        'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
-        'infos_url'           => 'https://graph.facebook.com/me',
+        'authorization_url'   => 'https://runkeeper.com/apps/authorize',
+        'access_token_url'    => 'https://runkeeper.com/apps/token',
+        'infos_url'           => 'https://api.runkeeper.com/profile/',
         'scope'               => '',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
@@ -33,16 +33,8 @@ class FacebookResourceOwner extends GenericResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
+        'username'     => 'id',
         'displayname'  => 'name',
-		'profilepicture' => 'medium_picture'
     );
 
-    /**
-     * Facebook unfortunately breaks the spec by using commas instead of spaces
-     * to separate scopes
-     */
-    public function configure()
-    {
-        $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
-    }
 }
