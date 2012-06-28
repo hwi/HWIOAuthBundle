@@ -28,7 +28,15 @@ class SessionStorage implements OAuth1RequestTokenStorageInterface
      */
     public function fetch(ResourceOwnerInterface $resourceOwner, $tokenId)
     {
-        return $this->session->get($this->generateKey($resourceOwner, $tokenId));
+        $key = $this->generateKey($resourceOwner, $tokenId);
+        if (null === $token = $this->session->get($key)) {
+            throw new \RuntimeException('No request token available in storage.');
+        }
+
+        // request tokens are one time use only
+        $this->session->remove($key);
+
+        return $token;
     }
 
     /**
@@ -36,6 +44,10 @@ class SessionStorage implements OAuth1RequestTokenStorageInterface
      */
     public function save(ResourceOwnerInterface $resourceOwner, $token)
     {
+        if (!isset($token['oauth_token'])) {
+            throw new \RuntimeException('Invalid request token.');
+        }
+
         $this->session->set($this->generateKey($resourceOwner, $token['oauth_token']), $token);
     }
 
