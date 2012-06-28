@@ -11,16 +11,16 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FacebookResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LinkedinResourceOwner;
 use Symfony\Component\HttpKernel\Kernel;
 
-class FacebookResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+class LinkedinResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected $userResponse = '{"id": "bar"}';
 
     public function setup()
     {
-        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
+        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth1');
     }
 
     protected function getDefaultOptions()
@@ -37,19 +37,23 @@ class FacebookResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
 
-        return new FacebookResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface');
+
+        return new LinkedinResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 
     public function testGetAuthorizationUrl()
     {
+        $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
+        $this->mockBuzz('{"oauth_token": "token","oauth_token_secret": "token_secret"}', 'application/json; charset=utf-8');
         $this->assertEquals(
-            'https://www.facebook.com/dialog/oauth?response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            'https://www.linkedin.com/uas/oauth/authenticate?oauth_token=token',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 
     public function testGetOption()
     {
-        $this->assertEquals('https://graph.facebook.com/me', $this->resourceOwner->getOption('infos_url'));
+        $this->assertEquals('http://api.linkedin.com/v1/people/~:(id,first-name,last-name,maiden-name,location,industry)', $this->resourceOwner->getOption('infos_url'));
     }
 }

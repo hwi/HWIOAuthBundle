@@ -62,7 +62,6 @@ class ConnectController extends ContainerAware
 
         return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:login.html.twig', array(
             'error'   => $error,
-            'connect' => $connect && $hasUser,
         ));
     }
 
@@ -140,9 +139,9 @@ class ConnectController extends ContainerAware
         $session = $request->getSession();
         $key = $request->query->get('key', time());
 
-        if (null !== $code = $request->query->get('code')) {
+        if ($resourceOwner->handles($request)) {
             $accessToken = $resourceOwner->getAccessToken(
-                $request->query->get('code'),
+                $request,
                 $this->generate('hwi_oauth_connect_service', array('service' => $service), true)
             );
 
@@ -179,6 +178,17 @@ class ConnectController extends ContainerAware
             'form' => $form->createView(),
             'userInformation' => $userInformation,
         ));
+    }
+
+    /**
+     * @param Request $request
+     * @param string  $service
+     *
+     * @return RedirectResponse
+     */
+    public function redirectToServiceAction(Request $request, $service)
+    {
+        return new RedirectResponse($this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($service));
     }
 
     /**
