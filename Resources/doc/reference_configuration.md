@@ -62,6 +62,13 @@ hwi_oauth:
 #        registration_form_handler: my_registration_form_handler
 #        registration_form: my_registration_form
 #        connect_provider: my_link_provider # can be the same as your user provider
+
+    # optional HTTP Client configuration
+    http_client:
+        timeout:       5
+        verify_peer:   true
+        ignore_errors: true
+        max_redirects: 5
 ```
 
 ``` yaml

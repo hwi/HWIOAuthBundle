@@ -2,7 +2,7 @@ Step 2: Configuring resource owners
 ===================================
 HWIOAuthBundle creates a dedicated service for each resource owner you want to
 use in your application. These resource owners will be used in the oauth
-firewall. The bundle ships several preconfigured resource owners that only
+firewall. The bundle ships several pre-configured resource owners that only
 need little configuration.
 
 - [Facebook](2x-facebook.md)
