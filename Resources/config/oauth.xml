@@ -54,5 +54,33 @@
         <service id="hwi_oauth.security.oauth_utils" class="%hwi_oauth.security.oauth_utils.class%">
             <argument type="service" id="service_container" />
         </service>
+
+        <!-- resource owners -->
+        <service id="hwi_oauth.abstract_resource_owner.generic" abstract="true">
+            <argument type="service" id="hwi_oauth.http_client" />
+            <argument type="service" id="security.http_utils" />
+            <argument type="collection" /><!-- options -->
+            <argument /><!-- name -->
+        </service>
+
+        <service id="hwi_oauth.abstract_resource_owner.oauth2" class="%hwi_oauth.resource_owner.oauth2.class%"
+                 parent="hwi_oauth.abstract_resource_owner.generic" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.github" class="%hwi_oauth.resource_owner.github.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.facebook" class="%hwi_oauth.resource_owner.facebook.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.windows_live" class="%hwi_oauth.resource_owner.windows_live.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.vkontakte" class="%hwi_oauth.resource_owner.vkontakte.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+
+        <service id="hwi_oauth.abstract_resource_owner.oauth1" class="%hwi_oauth.resource_owner.oauth1.class%"
+                 parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
+            <argument type="service" id="hwi_oauth.storage.session" />
+         </service>
+        <service id="hwi_oauth.abstract_resource_owner.linkedin" class="%hwi_oauth.resource_owner.linkedin.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.twitter" class="%hwi_oauth.resource_owner.twitter.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
     </services>
 </container>
