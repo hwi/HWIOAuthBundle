@@ -1,5 +1,5 @@
 Getting Started With HWIOAuthBundle
-=====================================
+===================================
 
 ## Installation
 
@@ -9,6 +9,7 @@ Getting Started With HWIOAuthBundle
 
 ## More
 
+- [Configuring the HTTP Client](configuring_the_http_client.md)
 - [Reference configuration](reference_configuration.md)
 
 ## Todo
