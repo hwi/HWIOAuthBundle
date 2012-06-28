@@ -129,9 +129,9 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
         $this->storage->expects($this->once())
             ->method('fetch')
-            ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_secret' => 'secret')));
+            ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
 
-        $request = new Request(array('oauth_verifier' => 'code'));
+        $request = new Request(array('oauth_token' => 'token', 'oauth_verifier' => 'code'));
         $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
@@ -144,9 +144,9 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
         $this->storage->expects($this->once())
             ->method('fetch')
-            ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_secret' => 'secret')));
+            ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
 
-        $request = new Request(array('oauth_verifier' => 'code'));
+        $request = new Request(array('oauth_token' => 'token', 'oauth_verifier' => 'code'));
         $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
@@ -164,7 +164,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
         $resourceOwner = $this->createResourceOwner($options, 'oauth1');
 
         $this->mockBuzz();
-        $userResponse = $resourceOwner->getUserInformation('access_token');
+        $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'));
 
         $this->assertInstanceOf($options['user_response_class'], $userResponse);
         $this->assertEquals('foo', $userResponse->getUsername());

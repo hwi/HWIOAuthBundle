@@ -68,7 +68,7 @@ class WindowsLiveResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     public function testGetAccessTokenErrorResponse()
     {
         $this->mockBuzz('{"error": "foo"}');
-        $request = new Request(array('oauth_verifier' => 'code'));
+        $request = new Request(array('code' => 'code'));
         $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 }
