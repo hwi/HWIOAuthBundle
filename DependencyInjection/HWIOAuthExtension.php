@@ -37,10 +37,20 @@ class HWIOAuthExtension extends Extension
         $loader->load('oauth.xml');
         $loader->load('templating.xml');
         $loader->load('twig.xml');
+        $loader->load('buzz.xml');
 
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
+        // setup buzz client settings
+        $httpClient = $container->getDefinition('buzz.client');
+        $httpClient->addMethodCall('setVerifyPeer', array($config['http_client']['verify_peer']));
+        $httpClient->addMethodCall('setTimeout', array($config['http_client']['timeout']));
+        $httpClient->addMethodCall('setMaxRedirects', array($config['http_client']['max_redirects']));
+        $httpClient->addMethodCall('setIgnoreErrors', array($config['http_client']['ignore_errors']));
+        $container->setDefinition('hwi_oauth.http_client', $httpClient);
+
+        // set current firewall
         $container->setParameter('hwi_oauth.firewall_name', $config['firewall_name']);
 
         // setup services for all configured resource owners
@@ -111,12 +121,15 @@ class HWIOAuthExtension extends Extension
             $type = $options['type'];
             unset($options['type']);
 
-            $paths = isset($options['paths']) ? $options['paths'] : array();
-            unset($options['paths']);
+            $paths = array();
+            if (isset($options['paths'])) {
+                $paths = $options['paths'];
+                unset($options['paths']);
+            }
 
             $container
                 ->register('hwi_oauth.resource_owner.'.$name, '%hwi_oauth.resource_owner.'.$type.'.class%')
-                ->addArgument(new Reference('buzz.client'))
+                ->addArgument(new Reference('hwi_oauth.http_client'))
                 ->addArgument(new Reference('security.http_utils'))
                 ->addArgument($options)
                 ->addArgument($name)
