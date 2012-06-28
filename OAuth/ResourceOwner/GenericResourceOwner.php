@@ -33,12 +33,11 @@ class GenericResourceOwner implements ResourceOwnerInterface
      * @var array
      */
     protected $options = array(
-        'client_id' => '',
-        'client_secret' => '',
-        'displayname_path' => '',
-        'infos_url' => '',
+        'displayname_path'    => '',
+        'infos_url'           => '',
         'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-        'username_path' => '',
+        'username_path'       => '',
+        'scope'               => '',
     );
 
     /**
@@ -47,7 +46,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
     protected $paths = array();
 
     /**
-     * @var Buzz\Client\ClientInterface
+     * @var HttpClientInterface
      */
     protected $httpClient;
 
@@ -90,7 +89,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
      *
      * @return mixed The option value
      *
-     * @throws InvalidArgumentException When the option does not exist
+     * @throws \InvalidArgumentException When the option does not exist
      */
     public function getOption($name)
     {

@@ -29,9 +29,9 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
     protected function getDefaultOptions()
     {
-        return array('infos_url' => 'http://user.info/', 
+        return array(
+            'infos_url' => 'http://user.info/',
             'client_id' => 'clientid',
-            'scope' => '',
             'authorization_url' => 'http://user.auth/',
             'access_token_url' => 'http://user.access/',
             'client_secret' => 'clientsecret',
@@ -40,7 +40,8 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
     protected function getDefaultPaths()
     {
-        return array('username' => 'foo',
+        return array(
+            'username' => 'foo',
             'displayname' => 'foo_disp',
         );
     }
@@ -58,6 +59,7 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
     public function testGetOption()
     {
         $this->assertEquals('http://user.info/', $this->resourceOwner->getOption('infos_url'));
+        $this->assertEquals('clientid', $this->resourceOwner->getOption('client_id'));
     }
 
     /**
@@ -134,7 +136,7 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
     public function testCustomResponseClass()
     {
         $options = $this->getDefaultOptions();
-        $options['user_response_class'] = "\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse";
+        $options['user_response_class'] = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner($options, 'generic');
 
         $this->mockBuzz();
