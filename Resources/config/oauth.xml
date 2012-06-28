@@ -38,7 +38,9 @@
         -->
         <service id="hwi_oauth.authentication.listener.oauth" class="%hwi_oauth.authentication.listener.oauth.class%" parent="security.authentication.listener.abstract" />
         <service id="hwi_oauth.authentication.provider.oauth" class="%hwi_oauth.authentication.provider.oauth.class%" />
-        <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" />
+        <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%">
+            <argument type="service" id="security.http_utils" />
+        </service>
         <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" />
         <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" />
 
@@ -62,6 +64,13 @@
         </service>
 
         <!-- resource owners -->
+        <service id="hwi_oauth.abstract_resource_ownermap" class="%hwi_oauth.resource_ownermap.class%" abstract="true">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="security.http_utils" />
+            <argument>%hwi_oauth.resource_owners%</argument>
+            <argument type="collection" /><!-- map -->
+        </service>
+
         <service id="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.http_client" />
             <argument type="service" id="security.http_utils" />
