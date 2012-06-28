@@ -33,8 +33,8 @@ class FacebookResourceOwner extends GenericResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'username'     => 'id',
         'displayname'  => 'name',
+		'profilepicture' => 'medium_picture'
     );
 
     /**

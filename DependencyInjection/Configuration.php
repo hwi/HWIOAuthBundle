@@ -117,7 +117,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('type')
                             ->validate()
-                                ->ifNotInArray(array('facebook', 'generic', 'github', 'google', 'windows_live', 'vkontakte'))
+                                ->ifNotInArray(array('facebook', 'generic', 'github', 'google', 'windows_live', 'vkontakte', 'runkeeper'))
                                 ->thenInvalid('Unknown resource owner type %s.')
                             ->end()
                             ->validate()
@@ -131,6 +131,7 @@ class Configuration implements ConfigurationInterface
                             ->useAttributeAsKey('name')
                             ->prototype('scalar')->end()
                         ->end()
+						->scalarNode('request_timeout')->defaultValue(5)->end()
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {
