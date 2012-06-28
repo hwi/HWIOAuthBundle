@@ -46,15 +46,14 @@ class OAuthHelper extends Helper
 
     /**
      * @param string  $name
-     * @param boolean $connect
      *
      * @return string
      *
      * @throws \RuntimeException
      */
-    public function getLoginUrl($name, $connect = false)
+    public function getLoginUrl($name)
     {
-        return $this->oauthUtils->getLoginUrl($name, $connect);
+        return $this->oauthUtils->getLoginUrl($name);
     }
 
     /**

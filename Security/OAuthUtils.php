@@ -54,13 +54,16 @@ class OAuthUtils
      *
      * @throws \RuntimeException
      */
-    public function getAuthorizationUrl($name, $connect = false)
+    public function getAuthorizationUrl($name)
     {
+        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $connect = $this->container->getParameter('hwi_oauth.connect');
+
         $resourceOwner = $this->getResourceOwner($name);
         $checkPath = $this->ownerMap->getResourceOwnerCheckPath($name);
 
         return $resourceOwner->getAuthorizationUrl(
-            $connect
+            $connect && $hasUser
                 ? $this->generateUrl('hwi_oauth_connect_service', array('service' => $name), true)
                 : $this->generateUri($checkPath)
         );

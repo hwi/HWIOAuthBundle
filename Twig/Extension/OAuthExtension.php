@@ -54,13 +54,12 @@ class OAuthExtension extends \Twig_Extension
 
     /**
      * @param string  $name
-     * @param boolean $connect
      *
      * @return string
      */
-    public function getLoginUrl($name, $connect = false)
+    public function getLoginUrl($name)
     {
-        return $this->helper->getLoginUrl($name, $connect);
+        return $this->helper->getLoginUrl($name);
     }
 
     /**
