@@ -16,7 +16,6 @@ hwi_oauth:
             type:                linkedin
             client_id:           <client_id>
             client_secret:       <client_secret>
-            scope:               ""
 ```
 
 When you're done. Continue by configuring the security layer or go back to

@@ -115,7 +115,7 @@ class OAuthUtils
             return $this->container->get('request')->getUriForPath($path);
         }
 
-        return $this->generateUrl($path, true);
+        return $this->generateUrl($path, array(), true);
     }
 
     /**

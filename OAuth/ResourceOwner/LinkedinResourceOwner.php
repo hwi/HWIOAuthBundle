@@ -38,6 +38,9 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
         'displayname'  => 'id',
     );
 
+    /**
+     * {@inheritDoc}
+     */
     protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
     {
         $headers[] = 'x-li-format: json';

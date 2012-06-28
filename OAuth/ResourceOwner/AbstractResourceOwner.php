@@ -24,6 +24,8 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
 /**
  * AbstractResourceOwner
  *
+ * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ * @author Alexander <iam.asm89@gmail.com>
  * @author Francisco Facioni <fran6co@gmail.com>
  */
 abstract class AbstractResourceOwner implements ResourceOwnerInterface
@@ -45,7 +47,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $paths = array();
 
     /**
-     * @var Buzz\Client\ClientInterface
+     * @var HttpClientInterface
      */
     protected $httpClient;
 
@@ -86,7 +88,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return mixed The option value
      *
-     * @throws InvalidArgumentException When the option does not exist
+     * @throws \InvalidArgumentException When the option does not exist
      */
     public function getOption($name)
     {

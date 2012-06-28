@@ -144,7 +144,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     public function handles(Request $request)
     {
-        return null !== $request->query->get('oauth_token');
+        return $request->query->has('oauth_token');
     }
 
     /**
@@ -188,7 +188,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * Generate a non-guessable nonce value.
      *
-     * @return void
+     * @return string
      */
     protected function generateNonce()
     {
