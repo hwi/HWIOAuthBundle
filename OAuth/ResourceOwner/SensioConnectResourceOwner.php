@@ -46,48 +46,16 @@ class SensioConnectResourceOwner extends GenericResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getAccessToken($code, $redirectUri, array $extraParameters = array())
+    protected function doGetAccessTokenRequest(array $parameters)
     {
-        $parameters = array_merge($extraParameters, array(
-            'code'          => $code,
-            'grant_type'    => 'authorization_code',
-            'client_id'     => $this->getOption('client_id'),
-            'client_secret' => $this->getOption('client_secret'),
-            'redirect_uri'  => $redirectUri,
-            'response_type' => 'code',
-            'scope'         => $this->getOption('scope'),
-        ));
-
-        $response = $this->httpRequest($this->getOption('access_token_url'), $parameters, 'POST');
-        $response = json_decode($response->getContent(), true);
-
-        if (isset($response['error'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s" with message: "%s"', $response['error'], $response['message']));
-        }
-
-        if (!isset($response['access_token'])) {
-            throw new AuthenticationException('Not a valid access token.');
-        }
-
-        return $response['access_token'];
+        return $this->httpRequest($this->getOption('access_token_url'), $parameters, 'POST');
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getUserInformation($accessToken)
+    protected function doGetUserInformationRequest($url)
     {
-        $url  = $this->getOption('infos_url');
-        $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
-            'access_token' => $accessToken
-        ));
-
-        $content = $this->httpRequest($url, null, null, array('Accept: application/vnd.com.sensiolabs.connect+xml'))->getContent();
-
-        $response = $this->getUserResponse();
-        $response->setResponse($content);
-        $response->setResourceOwner($this);
-
-        return $response;
+        return $this->httpRequest($url, null, array('Accept: application/vnd.com.sensiolabs.connect+xml'))->getContent();
     }
 }

@@ -185,4 +185,26 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
         return $response;
     }
+
+    /**
+     * @param string $url
+     *
+     * @return mixed
+     */
+    protected function doGetUserInformationRequest($url)
+    {
+        return $this->httpRequest($url)->getContent();
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return string
+     */
+    protected function doGetAccessTokenRequest(array $parameters)
+    {
+        $content = http_build_query($parameters);
+
+        return $this->httpRequest($this->getOption('access_token_url'), $content);
+    }
 }
