@@ -16,6 +16,13 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider,
 
 class EntityUserProviderTest extends \PHPUnit_Framework_Testcase
 {
+    protected function setUp()
+    {
+        if (!class_exists('Doctrine\ORM\EntityManager')) {
+            $this->markTestSkipped('The Doctrine ORM is not available');
+        }
+    }
+
     /**
      * @expectedException RuntimeException
      * @expectedExceptionMessage No property defined for entity for resource owner 'not_configured'.
