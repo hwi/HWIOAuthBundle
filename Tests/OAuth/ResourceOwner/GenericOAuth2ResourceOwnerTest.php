@@ -11,9 +11,11 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpFoundation\Request;
 
-class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
+class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
 {
     protected $resourceOwner;
     protected $buzzClient;
@@ -24,7 +26,7 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
     public function setup()
     {
-        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'generic');
+        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
     }
 
     protected function getDefaultOptions()
@@ -53,7 +55,10 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
 
-        return new GenericResourceOwner($this->buzzClient, $httpUtils, $options, $name, $paths ?: $this->getDefaultPaths());
+        $resourceOwner = new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        $resourceOwner->addPaths($paths ?: $this->getDefaultPaths());
+
+        return $resourceOwner;
     }
 
     public function testGetOption()
@@ -91,21 +96,24 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
     {
         $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $this->mockBuzz('access_token=code');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     public function testGetAccessTokenJsonResponse()
     {
         $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $this->mockBuzz('{"access_token": "code"}', 'application/json');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     public function testGetAccessTokenJsonCharsetResponse()
     {
         $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $this->mockBuzz('{"access_token": "code"}', 'application/json; charset=utf-8');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('oauth_verifier' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     /**
@@ -114,7 +122,8 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
     public function testGetAccessTokenFailedResponse()
     {
         $this->mockBuzz('invalid');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('code' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     /**
@@ -123,12 +132,13 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
     public function testGetAccessTokenErrorResponse()
     {
         $this->mockBuzz('error=foo');
-        $accessToken = $this->resourceOwner->getAccessToken('code', 'http://redirect.to/');
+        $request = new Request(array('code' => 'code'));
+        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     public function testGetSetName()
     {
-        $this->assertEquals('generic', $this->resourceOwner->getName());
+        $this->assertEquals('oauth2', $this->resourceOwner->getName());
         $this->resourceOwner->setName('foo');
         $this->assertEquals('foo', $this->resourceOwner->getName());
     }
@@ -137,7 +147,7 @@ class GenericResourceOwnerTest extends \PHPUnit_Framework_Testcase
     {
         $options = $this->getDefaultOptions();
         $options['user_response_class'] = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
-        $resourceOwner = $this->createResourceOwner($options, 'generic');
+        $resourceOwner = $this->createResourceOwner($options, 'oauth2');
 
         $this->mockBuzz();
         $userResponse = $resourceOwner->getUserInformation('access_token');

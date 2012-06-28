@@ -11,26 +11,23 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Security\Core\Exception\AuthenticationException;
-
 /**
- * GoogleResourceOwner
+ * TwitterResourceOwner
  *
- * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
  */
-class GoogleResourceOwner extends GenericOAuth2ResourceOwner
+class TwitterResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
      * {@inheritDoc}
      */
     protected $options = array(
-        'authorization_url'   => 'https://accounts.google.com/o/oauth2/auth',
-        'access_token_url'    => 'https://accounts.google.com/o/oauth2/token',
-        'infos_url'           => 'https://www.googleapis.com/oauth2/v1/userinfo',
-        'scope'               => 'userinfo.profile',
+        'authorization_url'   => 'https://api.twitter.com/oauth/authenticate',
+        'request_token_url'   => 'https://api.twitter.com/oauth/request_token',
+        'access_token_url'    => 'https://api.twitter.com/oauth/access_token',
+        'infos_url'           => 'http://api.twitter.com/1/account/verify_credentials.json',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+        'realm'               => '',
     );
 
     /**
@@ -38,6 +35,6 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'username'     => 'id',
-        'displayname'  => 'name',
+        'displayname'  => 'screen_name',
     );
 }
