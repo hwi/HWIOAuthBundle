@@ -2,7 +2,7 @@ Step 1: Setting up the bundle
 =============================
 ### A) Add HWIOAuthBundle to your composer.json
 
-``` js
+``` yaml
 {
     "require": {
         "hwi/oauth-bundle": "*"
