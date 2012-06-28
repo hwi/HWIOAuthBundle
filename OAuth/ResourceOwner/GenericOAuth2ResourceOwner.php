@@ -67,10 +67,6 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
-        if (null === $code = $request->query->get('code')) {
-            throw new \RuntimeException('No code provided in the request.');
-        }
-
         $parameters = array_merge($extraParameters, array(
             'code'          => $code,
             'grant_type'    => 'authorization_code',
