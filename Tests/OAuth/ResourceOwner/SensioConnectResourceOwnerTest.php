@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Buzz\Browser;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SensioConnectResourceOwner;
 
 class SensioConnectResourceOwnerTest extends \PHPUnit_Framework_Testcase
@@ -29,7 +28,7 @@ class SensioConnectResourceOwnerTest extends \PHPUnit_Framework_Testcase
         );
     }
 
-    protected function createResourceOwner(array $options, $name, $paths = null)
+    protected function createResourceOwner(array $options, $name)
     {
         $this->buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
             ->disableOriginalConstructor()->getMock();

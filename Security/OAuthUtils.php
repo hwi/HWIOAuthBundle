@@ -48,11 +48,8 @@ class OAuthUtils
 
     /**
      * @param string  $name
-     * @param boolean $connect
      *
      * @return string
-     *
-     * @throws \RuntimeException
      */
     public function getAuthorizationUrl($name)
     {
@@ -72,11 +69,12 @@ class OAuthUtils
     /**
      * @param string $name
      *
-     * @throws \RuntimeException
+     * @return string
      */
     public function getLoginUrl($name)
     {
-        $resourceOwner = $this->getResourceOwner($name);
+        // Just to check that this resource owner exists
+        $this->getResourceOwner($name);
 
         return $this->generateUrl('hwi_oauth_service_redirect', array('service' => $name));
     }

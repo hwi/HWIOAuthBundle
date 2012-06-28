@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException,
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
-class SensioConnectResourceOwner extends GenericResourceOwner
+class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritDoc}
@@ -38,7 +38,7 @@ class SensioConnectResourceOwner extends GenericResourceOwner
      */
     protected function doGetAccessTokenRequest(array $parameters)
     {
-        return $this->httpRequest($this->getOption('access_token_url'), $parameters, 'POST');
+        return $this->httpRequest($this->getOption('access_token_url'), $parameters, array(), 'POST');
     }
 
     /**
