@@ -64,7 +64,6 @@ class HWIOAuthExtension extends Extension
         if (isset($config['fosub'])) {
             $container
                 ->setDefinition('hwi_oauth.user.provider.fosub_bridge', new DefinitionDecorator('hwi_oauth.user.provider.fosub_bridge.def'))
-                ->addArgument(new Reference('fos_user.user_manager'))
                 ->addArgument($config['fosub']['properties']);
         }
 
@@ -78,9 +77,6 @@ class HWIOAuthExtension extends Extension
 
                 $container
                     ->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new DefinitionDecorator('hwi_oauth.registration.form.handler.fosub_bridge.def'))
-                    ->addArgument(new Reference('fos_user.registration.form.handler'))
-                    ->addArgument(new Reference('fos_user.user_manager'))
-                    ->addArgument(new Reference('fos_user.mailer'))
                     ->addArgument($config['fosub']['username_iterations'])
                     ->setScope('request');
 
