@@ -181,12 +181,11 @@ class ConnectController extends ContainerAware
     }
 
     /**
-     * @param Request $request
      * @param string  $service
      *
      * @return RedirectResponse
      */
-    public function redirectToServiceAction(Request $request, $service)
+    public function redirectToServiceAction($service)
     {
         return new RedirectResponse($this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($service));
     }

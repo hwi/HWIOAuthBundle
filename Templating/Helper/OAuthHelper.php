@@ -26,10 +26,13 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
  */
 class OAuthHelper extends Helper
 {
+    /**
+     * @var OAuthUtils
+     */
     private $oauthUtils;
 
     /**
-     * @param ContainerInterface $container
+     * @param OAuthUtils $oauthUtils
      */
     public function __construct(OAuthUtils $oauthUtils)
     {

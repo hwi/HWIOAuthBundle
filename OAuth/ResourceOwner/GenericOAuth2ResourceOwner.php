@@ -40,8 +40,10 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'access_token' => $accessToken
         ));
 
+        $content = $this->doGetUserInformationRequest($url);
+
         $response = $this->getUserResponse();
-        $response->setResponse($this->httpRequest($url)->getContent());
+        $response->setResponse($content);
         $response->setResourceOwner($this);
 
         return $response;
@@ -79,11 +81,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'redirect_uri'  => $redirectUri,
         ));
 
-        $url = $this->getOption('access_token_url');
-        $content = http_build_query($parameters);
-
-        $apiResponse = $this->httpRequest($url, $content);
-        $response = $this->getResponseContent($apiResponse);
+        $response = $this->doGetAccessTokenRequest($parameters);
+        $response = $this->getResponseContent($response);
 
         if (isset($response['error'])) {
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
@@ -102,5 +101,27 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function handles(Request $request)
     {
         return $request->query->has('code');
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return mixed
+     */
+    protected function doGetUserInformationRequest($url)
+    {
+        return $this->httpRequest($url)->getContent();
+    }
+
+    /**
+     * @param array $parameters
+     *
+     * @return mixed
+     */
+    protected function doGetAccessTokenRequest(array $parameters)
+    {
+        $content = http_build_query($parameters);
+
+        return $this->httpRequest($this->getOption('access_token_url'), $content);
     }
 }

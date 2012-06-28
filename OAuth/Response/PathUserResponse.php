@@ -32,22 +32,11 @@ class PathUserResponse extends AbstractUserResponse
     }
 
     /**
-     * Get the name to display.
-     *
-     * @return string
+     * {@inheritdoc}
      */
     public function getDisplayName()
     {
         return $this->getValueForPath('displayname');
-    }
-
-    protected function getPath($name)
-    {
-        if (!isset($this->paths[$name])) {
-            throw new AuthenticationException(sprintf('No path with name "%s" configured.', $name));
-        }
-
-        return $this->paths[$name];
     }
 
     /**
@@ -68,6 +57,22 @@ class PathUserResponse extends AbstractUserResponse
     public function setPaths(array $paths)
     {
         $this->paths = $paths;
+    }
+
+    /**
+     * @param $name
+     *
+     * @return mixed
+     *
+     * @throws \Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
+    protected function getPath($name)
+    {
+        if (!isset($this->paths[$name])) {
+            throw new AuthenticationException(sprintf('No path with name "%s" configured.', $name));
+        }
+
+        return $this->paths[$name];
     }
 
     /**
