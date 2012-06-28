@@ -3,9 +3,8 @@ Step 2x: Setup Linkedin
 First you will have to register your application on Linkedin. Check out the
 documentation for more information: https://developer.linkedin.com/documents/authentication.
 
-Next configure a resource owner of type `linkedin` with appropriate
-`client_id`, `client_secret` and `scope`. Refer to the Linkedin documentation
-for the available scopes.
+Next configure a resource owner of type `linkedin` with appropriate `client_id`,
+`client_secret`.
 
 ``` yaml
 # app/config.yml

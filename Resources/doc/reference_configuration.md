@@ -12,6 +12,7 @@ hwi_oauth:
             client_id:           <client_id>
             client_secret:       <client_secret>
             scope:               ""
+
         google:
             type:                google
             client_id:           <client_id>
@@ -28,7 +29,7 @@ hwi_oauth:
             client_secret:       <client_secret>
             scope:               ""
 
-        my_custom_provider_2:
+        my_custom_oauth2:
             type:                oauth2
             client_id:           <client_id>
             client_secret:       <client_secret>
@@ -42,7 +43,7 @@ hwi_oauth:
                 displayname: username
                 email: email
 
-        my_custom_provider_1:
+        my_custom_oauth1:
             type:                oauth1
             client_id:           <client_id>
             client_secret:       <client_secret>
@@ -50,7 +51,7 @@ hwi_oauth:
             access_token_url:    https://path.to/oauth/v1/token
             authorization_url:   https://path.to/oauth/v1/authorize
             infos_url:           https://path.to/api/user
-            scope:               ""
+            realm:               ""
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 username: id
@@ -112,6 +113,26 @@ security:
                 # FOSUB integration
                 oauth_user_provider:
                     service: hwi_oauth.user.provider.fosub_bridge
+```
+
+``` yaml
+# app/config/routing.yml
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+facebook_login:
+    pattern: /login/check-facebook
+
+google_login:
+    pattern: /login/check-google
+
+custom_login:
+    pattern: /login/check-custom
+
+github_login:
+    pattern: /login/check-github
 ```
 
 [Return to the index.](index.md)
