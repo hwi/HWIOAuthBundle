@@ -42,7 +42,9 @@
             <argument type="service" id="security.http_utils" />
         </service>
         <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" abstract="true" public="false" />
-        <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" abstract="true" public="false" />
+        <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" abstract="true" public="false">
+            <argument type="service" id="doctrine" />
+        </service>
 
         <!-- fosub bridges -->
         <service id="hwi_oauth.user.provider.fosub_bridge.def" class="%hwi_oauth.user.provider.fosub_bridge.class%" abstract="true">
