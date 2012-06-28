@@ -34,7 +34,7 @@ class HWIOAuthBundle extends Bundle
     {
         parent::build($container);
 
-        // We can only register the secirity listener factory in sf2.1
+        // We can only register the security listener factory in sf2.1
         // If you're using 2.0, import the security_factory.xml in your security.yml:
         //
         //     factories:
@@ -53,7 +53,7 @@ class HWIOAuthBundle extends Bundle
         // return the right extension instead of "auto-registering" it. Now the
         // alias can be hwi_oauth instead of hwi_o_auth..
         if (null === $this->extension) {
-            return new HWIOAuthExtension;
+            return new HWIOAuthExtension();
         }
 
         return $this->extension;
