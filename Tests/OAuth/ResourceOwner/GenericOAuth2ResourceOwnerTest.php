@@ -54,14 +54,11 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
             ->disableOriginalConstructor()->getMock();
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
-        // Session changed interface in 2.1, hack to avoid branching
-        if (version_compare(Kernel::VERSION, '2.1-DEV', '>=')) {
-            $session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
-        } else {
-            $session = new \Symfony\Component\HttpFoundation\Session(new \Symfony\Component\HttpFoundation\SessionStorage\ArraySessionStorage());
-        }
 
-        return new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $session, $options, $name, $paths ?: $this->getDefaultPaths());
+        $resourceOwner = new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        $resourceOwner->addPaths($paths ?: $this->getDefaultPaths());
+
+        return $resourceOwner;
     }
 
     public function testGetOption()

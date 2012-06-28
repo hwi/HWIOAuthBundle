@@ -36,14 +36,10 @@ class LinkedinResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
             ->disableOriginalConstructor()->getMock();
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
-        // Session changed interface in 2.1, hack to avoid branching
-        if (version_compare(Kernel::VERSION, '2.1-DEV', '>=')) {
-            $session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
-        } else {
-            $session = new \Symfony\Component\HttpFoundation\Session(new \Symfony\Component\HttpFoundation\SessionStorage\ArraySessionStorage());
-        }
 
-        return new LinkedinResourceOwner($this->buzzClient, $httpUtils, $session, $options, $name);
+        $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface');
+
+        return new LinkedinResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 
     public function testGetAuthorizationUrl()

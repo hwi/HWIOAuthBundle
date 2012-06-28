@@ -126,11 +126,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
 
-        if (false !== strpos($apiResponse->getHeader('Content-Type'), 'application/json')) {
-            $response = json_decode($apiResponse->getContent(), true);
-        } else {
-            parse_str($apiResponse->getContent(), $response);
-        }
+        $response = $this->getResponseContent($apiResponse);
 
         if (isset($response['oauth_problem'])) {
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
@@ -141,6 +137,14 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         }
 
         return $response;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handles(Request $request)
+    {
+        return null !== $request->query->get('oauth_token');
     }
 
     /**
@@ -164,11 +168,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
 
-        if (false !== strpos($apiResponse->getHeader('Content-Type'), 'application/json')) {
-            $response = json_decode($apiResponse->getContent(), true);
-        } else {
-            parse_str($apiResponse->getContent(), $response);
-        }
+        $response = $this->getResponseContent($apiResponse);
 
         if (isset($response['oauth_problem']) || (isset($response['oauth_callback_confirmed']) && ($response['oauth_callback_confirmed'] != 'true'))) {
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
@@ -185,6 +185,11 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         return $response;
     }
 
+    /**
+     * Generate a non-guessable nonce value.
+     *
+     * @return void
+     */
     protected function generateNonce()
     {
         $mt = microtime();
@@ -193,6 +198,36 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         return md5($mt . $rand);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
+    {
+        $authorization = 'Authorization: OAuth';
+        if (null !== $this->getOption('realm')) {
+            $authorization = 'Authorization: OAuth realm="' . rawurlencode($this->getOption('realm')) . '"';
+        }
+
+        foreach ($parameters as $key => $value) {
+            $value = rawurlencode($value);
+            $authorization .= ", $key=\"$value\"";
+        }
+
+        $headers[] = $authorization;
+
+        return parent::httpRequest($url, $content, $headers, $method);
+    }
+
+    /**
+     * Sign the request parameters
+     *
+     * @param string $method Request method
+     * @param string $url    Request url
+     * @param array  $parameters  Parameters for the request
+     * @param string $tokenSecret Optional token secret to use with signing
+     *
+     * @return string
+     */
     protected function signRequest($method, $url, $parameters, $tokenSecret = '')
     {
         // Remove oauth_signature if present
@@ -221,37 +256,5 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $key = implode('&', $keyParts);
 
         return base64_encode(hash_hmac('sha1', $baseString, $key, true));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
-    {
-        $authorization = 'Authorization: OAuth';
-        if (null !== $this->getOption('realm')) {
-            $authorization = 'Authorization: OAuth realm="' . rawurlencode($this->getOption('realm')) . '"';
-        }
-
-        foreach ($parameters as $key => $value) {
-            $value = rawurlencode($value);
-            $authorization .= ", $key=\"$value\"";
-        }
-
-        $headers[] = $authorization;
-
-        return parent::httpRequest($url, $content, $headers, $method);
-    }
-
-    /**
-     * Checks whether the class can handle the request.
-     *
-     * @param Request $request
-     *
-     * @return boolean
-     */
-    public function handles(Request $request)
-    {
-        return null !== $request->query->get('oauth_token');
     }
 }

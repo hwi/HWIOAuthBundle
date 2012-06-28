@@ -21,6 +21,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
     protected $buzzClient;
     protected $buzzResponse;
     protected $buzzResponseContentType;
+    protected $storage;
 
     protected $userResponse = '{"foo": "bar"}';
 
@@ -54,14 +55,13 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
             ->disableOriginalConstructor()->getMock();
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
-        // Session changed interface in 2.1, hack to avoid branching
-        if (version_compare(Kernel::VERSION, '2.1-DEV', '>=')) {
-            $session = new \Symfony\Component\HttpFoundation\Session\Session(new \Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage());
-        } else {
-            $session = new \Symfony\Component\HttpFoundation\Session(new \Symfony\Component\HttpFoundation\SessionStorage\ArraySessionStorage());
-        }
 
-        return new GenericOAuth1ResourceOwner($this->buzzClient, $httpUtils, $session, $options, $name, $paths ?: $this->getDefaultPaths());
+        $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface');
+
+        $resourceOwner = new GenericOAuth1ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        $resourceOwner->addPaths($paths ?: $this->getDefaultPaths());
+
+        return $resourceOwner;
     }
 
     public function testGetOption()
@@ -126,6 +126,11 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
     public function testGetAccessTokenFailedResponse()
     {
         $this->mockBuzz('invalid');
+
+        $this->storage->expects($this->once())
+            ->method('fetch')
+            ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_secret' => 'secret')));
+
         $request = new Request(array('oauth_verifier' => 'code'));
         $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
@@ -136,6 +141,11 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
     public function testGetAccessTokenErrorResponse()
     {
         $this->mockBuzz('error=foo');
+
+        $this->storage->expects($this->once())
+            ->method('fetch')
+            ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_secret' => 'secret')));
+
         $request = new Request(array('oauth_verifier' => 'code'));
         $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }

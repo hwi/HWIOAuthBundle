@@ -59,6 +59,15 @@ interface ResourceOwnerInterface
     function getName();
 
     /**
+     * Checks whether the class can handle the request.
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    function handles(Request $request);
+
+    /**
      * Sets a name for the resource owner.
      */
     function setName($name);

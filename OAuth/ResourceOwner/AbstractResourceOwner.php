@@ -165,4 +165,22 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     {
         $this->paths = array_merge($this->paths, $paths);
     }
+
+    /**
+     * Get the 'parsed' content based on the response headers.
+     *
+     * @param HttpResponse $response
+     *
+     * @return mixed
+     */
+    protected function getResponseContent(HttpResponse $rawResponse)
+    {
+        if (false !== strpos($rawResponse->getHeader('Content-Type'), 'application/json')) {
+            $response = json_decode($rawResponse->getContent(), true);
+        } else {
+            parse_str($rawResponse->getContent(), $response);
+        }
+
+        return $response;
+    }
 }
