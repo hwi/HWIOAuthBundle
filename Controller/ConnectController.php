@@ -182,6 +182,23 @@ class ConnectController extends ContainerAware
     }
 
     /**
+     * @param Request $request
+     * @param string  $service
+     *
+     * @return RedirectResponse
+     */
+    public function redirectToServiceAction(Request $request, $service)
+    {
+        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $connect = $this->container->getParameter('hwi_oauth.connect');
+
+        // Get the data from the resource owner
+        $resourceOwner = $this->getResourceOwnerByName($service);
+
+        return new RedirectResponse($this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($service, $hasUser && $connect));
+    }
+
+    /**
      * Get the security error for a given request.
      *
      * @param Request $request

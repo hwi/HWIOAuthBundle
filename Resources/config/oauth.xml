@@ -22,6 +22,7 @@
         <parameter key="hwi_oauth.resource_owner.linkedin.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LinkedinResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.twitter.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_ownermap.class">HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap</parameter>
+        <parameter key="hwi_oauth.security.oauth_utils.class">HWI\Bundle\OAuthBundle\Security\OAuthUtils</parameter>
         <parameter key="hwi_oauth.storage.session.class">HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorage\SessionStorage</parameter>
     </parameters>
 
@@ -48,6 +49,10 @@
         <!-- Session storage -->
         <service id="hwi_oauth.storage.session" class="%hwi_oauth.storage.session.class%" public="false">
             <argument type="service" id="session" />
+        </service>
+
+        <service id="hwi_oauth.security.oauth_utils" class="%hwi_oauth.security.oauth_utils.class%">
+            <argument type="service" id="service_container" />
         </service>
     </services>
 </container>

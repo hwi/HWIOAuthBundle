@@ -27,7 +27,19 @@ public function registerBundles()
 }
 ```
 
-### C) Working with Symfony 2.0
+### C) Import the routing
+
+Import the `redirect.xml` routing file in your own routing file.
+
+``` yaml
+# app/config/routing.yml
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+        prefix:   /connect
+
+```
+
+### D) Working with Symfony 2.0
 
 If you use Symfony 2.0, you need to import the `security_factory.xml` in your `security.yml`:
 

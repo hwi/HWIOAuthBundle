@@ -15,25 +15,25 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Templating\Helper\Helper;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
+    HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 
 /**
  * OAuthHelper
  *
+ * @author Alexander <iam.asm89@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
 class OAuthHelper extends Helper
 {
-    private $container;
-    private $ownerMap;
+    private $oauthUtils;
 
     /**
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(OAuthUtils $oauthUtils)
     {
-        $this->container = $container;
-        $this->ownerMap  = $this->container->get('hwi_oauth.resource_ownermap.'.$this->container->getParameter('hwi_oauth.firewall_name'));
+        $this->oauthUtils = $oauthUtils;
     }
 
     /**
@@ -41,9 +41,7 @@ class OAuthHelper extends Helper
      */
     public function getResourceOwners()
     {
-        $resourceOwners = $this->ownerMap->getResourceOwners();
-
-        return array_keys($resourceOwners);
+        return $this->oauthUtils->getResourceOwners();
     }
 
     /**
@@ -56,63 +54,7 @@ class OAuthHelper extends Helper
      */
     public function getLoginUrl($name, $connect = false)
     {
-        $resourceOwner = $this->ownerMap->getResourceOwnerByName($name);
-        if (!$resourceOwner instanceof ResourceOwnerInterface) {
-            throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
-        }
-
-        $checkPath = $this->ownerMap->getResourceOwnerCheckPath($name);
-
-        return $this->getAuthorizationUrl($resourceOwner, $name, $checkPath, $connect);
-    }
-
-    /**
-     * @param ResourceOwnerInterface $resourceOwner
-     * @param string                 $name
-     * @param string                 $checkPath
-     * @param boolean                $connect
-     *
-     * @return mixed
-     */
-    private function getAuthorizationUrl(ResourceOwnerInterface $resourceOwner, $name, $checkPath, $connect)
-    {
-        return $resourceOwner->getAuthorizationUrl(
-            $connect
-                ? $this->generateUrl('hwi_oauth_connect_service', array('service' => $name), true)
-                : $this->generateUri($checkPath)
-        );
-    }
-
-    /**
-     * Get the uri for a given path.
-     *
-     * @param string $path Path or route
-     *
-     * @return string
-     */
-    private function generateUri($path)
-    {
-        if (0 === strpos($path, 'http') || !$path) {
-            return $path;
-        }
-
-        if ($path && '/' === $path[0]) {
-            return $this->container->get('request')->getUriForPath($path);
-        }
-
-        return $this->generateUrl($path, true);
-    }
-
-    /**
-     * @param string  $route
-     * @param array   $params
-     * @param boolean $absolute
-     *
-     * @return string
-     */
-    private function generateUrl($route, array $params = array(), $absolute = false)
-    {
-        return $this->container->get('router')->generate($route, $params, $absolute);
+        return $this->oauthUtils->getLoginUrl($name, $connect);
     }
 
     /**
