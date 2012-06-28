@@ -24,14 +24,14 @@ class SensioConnectUserResponse extends AbstractUserResponse implements Advanced
     /**
      * @var \DOMXpath
      */
-    private $xpath;
+    protected $xpath;
 
     /**
      * {@inheritdoc}
      */
     public function getUsername()
     {
-        return $this->getValueForPath('login');
+        return $this->getNodeValue('./foaf:name', $this->response);
     }
 
     /**
@@ -39,7 +39,7 @@ class SensioConnectUserResponse extends AbstractUserResponse implements Advanced
      */
     public function getDisplayName()
     {
-        return $this->getValueForPath('name');
+        return $this->getNodeValue('./foaf:name', $this->response);
     }
 
     /**
@@ -47,7 +47,7 @@ class SensioConnectUserResponse extends AbstractUserResponse implements Advanced
      */
     public function getEmail()
     {
-        return $this->getValueForPath('email');
+        return $this->getNodeValue('./foaf:mbox', $this->response);
     }
 
     /**
@@ -55,7 +55,7 @@ class SensioConnectUserResponse extends AbstractUserResponse implements Advanced
      */
     public function getProfilePicture()
     {
-        return $this->getValueForPath('avatar_url');
+        return $this->getNodeValue('./atom:link[@rel="foaf:depiction"]', $this->response, 'link');
     }
 
     /**
@@ -79,57 +79,33 @@ class SensioConnectUserResponse extends AbstractUserResponse implements Advanced
             throw new AuthenticationException('Could not retrieve user info.');
         }
 
-        $element  = $user->item(0);
-        $username = $this->getNodeValue('./foaf:name', $element);
-
-        $this->response = array(
-            'login'      => $username,
-            'name'       => $username,
-            'email'      => $this->getNodeValue('./foaf:mbox', $element),
-            'avatar_url' => $this->getLinkToFoafDepiction($element),
-        );
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return string|null
-     */
-    protected function getValueForPath($path)
-    {
-        if (isset($this->response[$path])) {
-            return $this->response[$path];
-        }
-
-        return null;
-    }
-
-    /**
-     * @param \DOMElement $element
-     *
-     * @return mixed|null
-     */
-    private function getLinkToFoafDepiction(\DOMElement $element)
-    {
-        $nodeList = $this->xpath->query('./atom:link[@rel="foaf:depiction"]', $element);
-        if ($nodeList && $nodeList->length > 0) {
-            return $this->sanitizeValue($nodeList->item(0)->attributes->getNamedItem('href')->value);
-        }
-
-        return null;
+        $this->response = $user->item(0);
     }
 
     /**
      * @param string      $query
      * @param \DOMElement $element
+     * @param string      $nodeType
      *
      * @return mixed|null
      */
-    private function getNodeValue($query, \DOMElement $element)
+    protected function getNodeValue($query, \DOMElement $element, $nodeType = 'normal')
     {
         $nodeList = $this->xpath->query($query, $element);
         if ($nodeList && $nodeList->length > 0) {
-            return $this->sanitizeValue($nodeList->item(0)->nodeValue);
+            $node = $nodeList->item(0);
+            switch ($nodeType) {
+                case 'link':
+                    $nodeValue = $node->attributes->getNamedItem('href')->value;
+                    break;
+
+                case 'normal':
+                default:
+                    $nodeValue = $node->nodeValue;
+                    break;
+            }
+
+            return $this->sanitizeValue($nodeValue);
         }
 
         return null;
@@ -140,7 +116,7 @@ class SensioConnectUserResponse extends AbstractUserResponse implements Advanced
      *
      * @return mixed
      */
-    private function sanitizeValue($value)
+    protected function sanitizeValue($value)
     {
         if ('true' === $value) {
             $value = true;

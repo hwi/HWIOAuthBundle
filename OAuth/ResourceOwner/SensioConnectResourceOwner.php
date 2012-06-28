@@ -36,16 +36,6 @@ class SensioConnectResourceOwner extends GenericResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $paths = array(
-        'username'       => 'login',
-        'displayname'    => 'name',
-        'email'          => 'email',
-        'profilepicture' => 'avatar_url',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected function doGetAccessTokenRequest(array $parameters)
     {
         return $this->httpRequest($this->getOption('access_token_url'), $parameters, 'POST');
