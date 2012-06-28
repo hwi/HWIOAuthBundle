@@ -98,4 +98,16 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 
         return $response['access_token'];
     }
+
+    /**
+     * Checks whether the class can handle the request.
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function handles(Request $request)
+    {
+        return null !== $request->query->get('code');
+    }
 }

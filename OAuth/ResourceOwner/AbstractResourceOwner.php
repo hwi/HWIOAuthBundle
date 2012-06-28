@@ -19,8 +19,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException,
     Symfony\Component\Security\Http\HttpUtils;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
-    HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse,
-    HWI\Bundle\OAuthBundle\OAuth\StorageInterface;
+    HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 
 /**
  * AbstractResourceOwner
@@ -51,11 +50,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $httpClient;
 
     /**
-     * @var HWI\Bundle\OAuthBundle\OAuth\StorageInterface
-     */
-    protected $storage;
-
-    /**
      * @access string
      */
     protected $name;
@@ -63,19 +57,15 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * @param HttpClientInterface $httpClient Buzz http client
      * @param HttpUtils           $httpUtils  Http utils
-     * @param StorageInterface    $storage    Storage container
      * @param array               $options    Options for the resource owner
      * @param string              $name       Name for the resource owner
-     * @param array               $paths      Optional paths to use for the default response
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils,StorageInterface $storage, array $options, $name, $paths = array())
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name)
     {
         $this->options = array_merge($this->options, $options);
-        $this->paths = array_merge($this->paths, $paths);
 
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
-        $this->storage    = $storage;
         $this->name       = $name;
 
         $this->configure();
@@ -164,5 +154,15 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $this->httpClient->send($request, $response);
 
         return $response;
+    }
+
+    /**
+     * Add extra paths to the configuration.
+     *
+     * @param array $paths
+     */
+    public function addPaths(array $paths)
+    {
+        $this->paths = array_merge($this->paths, $paths);
     }
 }

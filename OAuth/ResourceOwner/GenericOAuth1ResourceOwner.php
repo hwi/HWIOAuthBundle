@@ -20,7 +20,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException,
     Symfony\Component\HttpFoundation\Request;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
-    HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
+    HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse,
+    HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface;
 
 /**
  * GenericOAuth1ResourceOwner
@@ -29,6 +30,11 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
  */
 class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 {
+    /**
+     * @var OAuth1RequestTokenStorageInterface
+     */
+    protected $storage;
+
     /**
      * @var array
      */
@@ -41,6 +47,20 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         'username_path' => '',
         'realm' => null,
     );
+
+    /**
+     * @param HttpClientInterface                $httpClient Buzz http client
+     * @param HttpUtils                          $httpUtils  Http utils
+     * @param array                              $options    Options for the resource owner
+     * @param string                             $name       Name for the resource owner
+     * @param OAuth1RequestTokenStorageInterface $storage Request token storage
+     */
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, OAuth1RequestTokenStorageInterface $storage)
+    {
+        parent::__construct($httpClient, $httpUtils, $options, $name);
+
+        $this->storage = $storage;
+    }
 
     /**
      * {@inheritDoc}
@@ -83,17 +103,13 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
-        $requestToken = null;
-
-        if ($request->query->has('oauth_token')) {
-            $requestToken = $this->storage->read($this, $request->query->get('oauth_token'));
+        if (null === $oauthToken = $request->query->has('oauth_token')) {
+            throw new \RuntimeException('No oauth_token provided in the request.');
         }
 
-        if (null === $requestToken) {
-            $requestToken = $this->getRequestToken($redirectUri, $extraParameters);;
+        if (null === $requestToken = $this->storage->fetch($this, $request->query->get('oauth_token'))) {
+            throw new \RuntimeException('No request token found in the storage.');
         }
-
-        $code = $request->query->get('oauth_verifier');
 
         $parameters = array_merge($extraParameters, array(
             'oauth_consumer_key'     => $this->getOption('client_id'),
@@ -102,7 +118,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'oauth_version'          => '1.0',
             'oauth_signature_method' => 'HMAC-SHA1',
             'oauth_token'            => $requestToken["oauth_token"],
-            'oauth_verifier'         => $code,
+            'oauth_verifier'         => $request->query->get('oauth_verifier'),
         ));
 
         $url = $this->getOption('access_token_url');
@@ -164,7 +180,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $response['timestamp'] = $timestamp;
 
-        $this->storage->write($this, $response);
+        $this->storage->save($this, $response);
 
         return $response;
     }
@@ -225,5 +241,17 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $headers[] = $authorization;
 
         return parent::httpRequest($url, $content, $headers, $method);
+    }
+
+    /**
+     * Checks whether the class can handle the request.
+     *
+     * @param Request $request
+     *
+     * @return boolean
+     */
+    public function handles(Request $request)
+    {
+        return null !== $request->query->get('oauth_token');
     }
 }
