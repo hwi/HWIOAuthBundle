@@ -131,6 +131,7 @@ class Configuration implements ConfigurationInterface
                             ->useAttributeAsKey('name')
                             ->prototype('scalar')->end()
                         ->end()
+						->scalarNode('request_timeout')->defaultValue(5)->end()
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {
