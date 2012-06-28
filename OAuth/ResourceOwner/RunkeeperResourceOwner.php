@@ -12,9 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 /**
- * FacebookResourceOwner
+ * RunKeeperResourceOwner
  *
- * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ * @author Gavin Williams <gavin.williams@fishrod.co.uk>
  */
 class RunKeeperResourceOwner extends GenericResourceOwner
 {

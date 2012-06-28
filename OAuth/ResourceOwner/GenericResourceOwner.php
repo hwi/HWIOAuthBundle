@@ -33,8 +33,6 @@ class GenericResourceOwner implements ResourceOwnerInterface
      * @var array
      */
     protected $options = array(
-        'client_id' => '',
-        'client_secret' => '',
         'displayname_path' => '',
         'infos_url' => '',
         'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
@@ -121,7 +119,7 @@ class GenericResourceOwner implements ResourceOwnerInterface
 
         $request->setContent($content);
 
-        $this->httpClient->send($request, $response);
+        $this->httpClient->send($request, $response, array(CURLOPT_CONNECTTIMEOUT => 30, CURLOPT_TIMEOUT => 60));
 
         return $response;
     }
