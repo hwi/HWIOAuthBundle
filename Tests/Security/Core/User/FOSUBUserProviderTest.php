@@ -16,6 +16,13 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider,
 
 class FOSUBUserProviderTest extends \PHPUnit_Framework_Testcase
 {
+    protected function setUp()
+    {
+        if (!class_exists('FOS\UserBundle\Model\UserManagerInterface')) {
+            $this->markTestSkipped('FOSUserBundle is not available');
+        }
+    }
+
     /**
      * @expectedException RuntimeException
      * @expectedExceptionMessage No property defined for entity for resource owner 'not_configured'.
