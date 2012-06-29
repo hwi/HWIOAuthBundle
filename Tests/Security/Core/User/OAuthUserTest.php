@@ -15,16 +15,19 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 
 class OAuthUserTest extends \PHPUnit_Framework_Testcase
 {
+    /**
+     * @var OAuthUser
+     */
     private $user;
 
-    public function setup()
+    public function setUp()
     {
         $this->user = new OAuthUser('asm89');
     }
 
     public function testGetRoles()
     {
-        $this->assertEquals(array('ROLE_USER'), $this->user->getRoles());
+        $this->assertEquals(array('ROLE_USER', 'ROLE_OAUTH_USER'), $this->user->getRoles());
     }
 
     public function testGetPassword()
