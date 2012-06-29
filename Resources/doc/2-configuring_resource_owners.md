@@ -8,6 +8,7 @@ need little configuration.
 - [Facebook](2x-facebook.md)
 - [Google](2x-google.md)
 - [GitHub](2x-github.md)
+- [Sensio Connect](2x-sensio_connect.md)
 - [Windows Live](2x-windows_live.md)
 - [Linkedin](2x-linkedin.md)
 - [Others](2x-others.md)
