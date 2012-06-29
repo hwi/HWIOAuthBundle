@@ -70,7 +70,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
         $parameters = array_merge($extraParameters, array(
-            'code'          => $request->get('code'),
+            'code'          => $request->query->get('code'),
             'grant_type'    => 'authorization_code',
             'client_id'     => $this->getOption('client_id'),
             'client_secret' => $this->getOption('client_secret'),
