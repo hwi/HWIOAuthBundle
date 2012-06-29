@@ -15,7 +15,6 @@ use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener,
     Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
     HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 
@@ -74,6 +73,11 @@ class OAuthListener extends AbstractAuthenticationListener
     protected function attemptAuthentication(Request $request)
     {
         list($resourceOwner, $checkPath) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
+
+        if (!$resourceOwner->handles($request)) {
+            // Can't use AuthenticationException below, as it leads to infinity loop
+            throw new \RuntimeException('No oauth code in the request.');
+        }
 
         $accessToken = $resourceOwner->getAccessToken(
             $request,
