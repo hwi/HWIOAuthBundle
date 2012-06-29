@@ -27,7 +27,7 @@ class OAuthUserTest extends \PHPUnit_Framework_Testcase
 
     public function testGetRoles()
     {
-        $this->assertEquals(array('ROLE_USER', 'ROLE_OAUTH_USER'), $this->user->getRoles());
+        $this->assertEquals(array('ROLE_USER'), $this->user->getRoles());
     }
 
     public function testGetPassword()

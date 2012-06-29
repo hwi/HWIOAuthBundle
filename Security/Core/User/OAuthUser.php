@@ -33,7 +33,7 @@ class OAuthUser implements UserInterface
      */
     public function getRoles()
     {
-        return array('ROLE_USER', 'ROLE_OAUTH_USER');
+        return array('ROLE_USER');
     }
 
     /**

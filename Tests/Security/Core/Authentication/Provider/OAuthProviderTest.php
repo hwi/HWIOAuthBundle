@@ -105,8 +105,13 @@ class OAuthProviderTest extends \PHPUnit_Framework_Testcase
         $this->assertEquals($userMock, $token->getUser());
 
         $roles = $token->getRoles();
-        $this->assertCount(1, $roles);
-        $this->assertEquals('ROLE_TEST', $roles[0]->getRole());
+        $this->assertCount(3, $roles);
+
+        foreach ($roles as $i => $role) {
+            $roles[$i] = $role->getRole();
+        }
+
+        $this->assertEquals(array('ROLE_HWI_OAUTH_USER', 'ROLE_HWI_OAUTH_GITHUB', 'ROLE_TEST'), $roles);
     }
 
     public function testOAuthAwareExceptionGetsInfo()
