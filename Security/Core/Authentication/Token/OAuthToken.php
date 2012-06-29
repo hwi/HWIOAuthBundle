@@ -37,9 +37,11 @@ class OAuthToken extends AbstractToken
      */
     public function __construct($accessToken, array $roles = array())
     {
+        parent::__construct($roles);
+
         $this->accessToken = $accessToken;
 
-        parent::__construct($roles);
+        parent::setAuthenticated(count($roles) > 0);
     }
 
     /**
@@ -51,11 +53,19 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * {@inheritDoc}
+     * @param string $accessToken The OAuth access token
      */
-    public function isAuthenticated()
+    public function setAccessToken($accessToken)
     {
-        return count($this->getRoles()) > 0;
+        $this->accessToken = $accessToken;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
     }
 
     /**
