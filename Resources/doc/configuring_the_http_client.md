@@ -6,7 +6,7 @@ owners, it's pre-configured by default, but you can adjust some settings of this
 reflect requirements of your environment.
 
 ``` yaml
-# app/config.yml
+# app/config/config.yml
 
 hwi_oauth:
     http_client:

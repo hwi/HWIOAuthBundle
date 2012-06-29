@@ -35,9 +35,12 @@ Import the `redirect.xml` routing file in your own routing file.
 # app/config/routing.yml
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
-        prefix:   /connect
-
+    prefix:   /connect
 ```
+
+**Note:**
+
+> To prevent strange issues, this route should be imported before your custom ones.
 
 ### D) Working with Symfony 2.0
 

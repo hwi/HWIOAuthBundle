@@ -8,7 +8,7 @@ Next configure a resource owner of type `facebook` with appropriate
 for the available scopes.
 
 ``` yaml
-# app/config.yml
+# app/config/config.yml
 
 hwi_oauth:
     resource_owners:
