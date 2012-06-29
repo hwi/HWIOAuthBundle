@@ -43,10 +43,19 @@ security:
 > Starting from Symfony 2.1 the paths configured at the `resource_owners`
 > section should be defined in your routing.
 >
-> ```
-> # app/routing.yml
+> ``` yaml
+> # app/config/routing.yml
+> facebook_login:
+>     pattern: /login/check-facebook
+>
+> google_login:
+>     pattern: /login/check-google
+>
+> custom_login:
+>     pattern: /login/check-custom
+>
 > github_login:
->     pattern: /login/github
+>     pattern: /login/check-github
 > ```
 
 
