@@ -31,7 +31,17 @@ class SensioConnectUserResponse extends AbstractUserResponse implements Advanced
      */
     public function getUsername()
     {
-        return $this->getNodeValue('./foaf:name', $this->response);
+        $username = null;
+        $accounts = $this->xpath->query('./foaf:account/foaf:OnlineAccount', $this->response);
+        for ($i = 0; $i < $accounts->length; $i++) {
+            $account = $accounts->item($i);
+            if ('SensioLabs Connect' == $this->getNodeValue('./foaf:name', $account)) {
+                $username = $this->getNodeValue('foaf:accountName', $account);
+                break;
+            }
+        }
+
+        return $username ?: $this->getNodeValue('./foaf:name', $this->response);
     }
 
     /**
