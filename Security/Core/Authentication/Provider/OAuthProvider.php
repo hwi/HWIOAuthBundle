@@ -76,7 +76,7 @@ class OAuthProvider implements AuthenticationProviderInterface
         $roles = array_merge(
             array(
                 new Role('ROLE_HWI_OAUTH_USER'),
-                new Role('ROLE_HWI_OAUTH_'.strtolower($token->getResourceOwnerName())),
+                new Role('ROLE_HWI_OAUTH_'.strtoupper($token->getResourceOwnerName())),
             ),
             $user->getRoles()
         );

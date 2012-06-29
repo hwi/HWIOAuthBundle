@@ -67,7 +67,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_Testcase
     public function testAuthenticatesToken()
     {
         $oauthTokenMock = $this->getOAuthTokenMock();
-        $oauthTokenMock->expects($this->once())
+        $oauthTokenMock->expects($this->any())
             ->method('getResourceOwnerName')
             ->will($this->returnValue('github'));
         $oauthTokenMock->expects($this->exactly(2))
