@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser,
     HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider,
-    HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
+    Symfony\Component\Security\Core\User\User;
 
 class OAuthUserProviderTest extends \PHPUnit_Framework_Testcase
 {
@@ -41,11 +41,11 @@ class OAuthUserProviderTest extends \PHPUnit_Framework_Testcase
 
     /**
      * @expectedException Symfony\Component\Security\Core\Exception\UnsupportedUserException
-     * @expectedExceptionMessage Unsupported user class "HWI\Bundle\OAuthBundle\Tests\Fixtures\User"
+     * @expectedExceptionMessage Unsupported user class "Symfony\Component\Security\Core\User\User"
      */
     public function testRefreshUserUnsupportedClass()
     {
-        $user = new User;
+        $user = new User('asm89', 'foo');
 
         $this->provider->refreshUser($user);
     }
