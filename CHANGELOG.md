@@ -3,6 +3,7 @@ Changelog
 
 ### 2012-07-03
 
+* Flickr support
 * `firewall_name` is a required setting
 
 ### 2012-06-28
