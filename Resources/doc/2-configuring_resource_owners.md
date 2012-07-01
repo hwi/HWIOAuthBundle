@@ -19,6 +19,7 @@ hwi_oauth:
 ```
 
 - [Facebook](2x-facebook.md)
+- [Foursquare](2x-foursquare.md)
 - [GitHub](2x-github.md)
 - [Google](2x-google.md)
 - [Linkedin](2x-linkedin.md)
