@@ -11,9 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Client\ClientInterface as HttpClientInterface,
-    Buzz\Message\Request as HttpRequest,
-    Buzz\Message\Response as HttpResponse;
+use Buzz\Client\ClientInterface as HttpClientInterface;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException,
     Symfony\Component\Security\Http\HttpUtils,
