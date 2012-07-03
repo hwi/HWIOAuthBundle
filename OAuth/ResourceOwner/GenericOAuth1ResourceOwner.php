@@ -73,16 +73,16 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'oauth_nonce'            => $this->generateNonce(),
             'oauth_version'          => '1.0',
             'oauth_signature_method' => 'HMAC-SHA1',
-            'oauth_token'            => $accessToken["oauth_token"],
+            'oauth_token'            => $accessToken['oauth_token'],
         );
 
         $url = $this->getOption('infos_url');
-        $parameters['oauth_signature'] = $this->signRequest('GET', $url, $parameters, $accessToken["oauth_token_secret"]);
+        $parameters['oauth_signature'] = $this->signRequest('GET', $url, $parameters, $accessToken['oauth_token_secret']);
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'GET');
+        $content = $this->doGetUserInformationRequest($url, $parameters)->getContent();
 
         $response = $this->getUserResponse();
-        $response->setResponse($apiResponse->getContent());
+        $response->setResponse($content);
         $response->setResourceOwner($this);
 
         return $response;
@@ -113,16 +113,15 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'oauth_nonce'            => $this->generateNonce(),
             'oauth_version'          => '1.0',
             'oauth_signature_method' => 'HMAC-SHA1',
-            'oauth_token'            => $requestToken["oauth_token"],
+            'oauth_token'            => $requestToken['oauth_token'],
             'oauth_verifier'         => $request->query->get('oauth_verifier'),
         ));
 
         $url = $this->getOption('access_token_url');
-        $parameters['oauth_signature'] = $this->signRequest('POST', $url, $parameters, $requestToken["oauth_token_secret"]);
+        $parameters['oauth_signature'] = $this->signRequest('POST', $url, $parameters, $requestToken['oauth_token_secret']);
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
-
-        $response = $this->getResponseContent($apiResponse);
+        $response = $this->doGetAccessTokenRequest($url, $parameters);
+        $response = $this->getResponseContent($response);
 
         if (isset($response['oauth_problem'])) {
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
@@ -188,10 +187,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     protected function generateNonce()
     {
-        $mt = microtime();
-        $rand = mt_rand();
-
-        return md5($mt . $rand);
+        return md5(microtime() . mt_rand());
     }
 
     /**
@@ -212,6 +208,22 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $headers[] = $authorization;
 
         return parent::httpRequest($url, $content, $headers, $method);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function doGetAccessTokenRequest($url, array $parameters = array())
+    {
+        return $this->httpRequest($url, null, $parameters, array(), 'POST');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function doGetUserInformationRequest($url, array $parameters = array())
+    {
+        return $this->httpRequest($url, null, $parameters, array(), 'GET');
     }
 
     /**

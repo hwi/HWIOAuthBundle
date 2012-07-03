@@ -36,7 +36,7 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function doGetAccessTokenRequest(array $parameters)
+    protected function doGetAccessTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($this->getOption('access_token_url'), $parameters, array(), 'POST');
     }
@@ -44,8 +44,8 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function doGetUserInformationRequest($url)
+    protected function doGetUserInformationRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, null, array('Accept: application/vnd.com.sensiolabs.connect+xml'))->getContent();
+        return $this->httpRequest($url, null, array('Accept: application/vnd.com.sensiolabs.connect+xml'));
     }
 }
