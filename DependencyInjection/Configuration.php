@@ -34,7 +34,9 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->fixXmlConfig('resource_owner')
             ->children()
-            ->scalarNode('firewall_name')->defaultValue(false)->end()
+            ->scalarNode('firewall_name')
+                ->cannotBeEmpty()
+            ->end()
             ->arrayNode('http_client')
                 ->addDefaultsIfNotSet()
                 ->children()
