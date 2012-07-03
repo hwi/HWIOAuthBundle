@@ -159,9 +159,8 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $url = $this->getOption('request_token_url');
         $parameters['oauth_signature'] = $this->signRequest('POST', $url, $parameters);
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
-
-        $response = $this->getResponseContent($apiResponse);
+        $response = $this->doGetRequestTokenRequest($url, $parameters);
+        $response = $this->getResponseContent($response);
 
         if (isset($response['oauth_problem']) || (isset($response['oauth_callback_confirmed']) && ($response['oauth_callback_confirmed'] != 'true'))) {
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
@@ -193,17 +192,25 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
     {
-        $authorization = 'Authorization: OAuth';
+        $authorization = '';
         if (null !== $this->getOption('realm')) {
             $authorization = 'Authorization: OAuth realm="' . rawurlencode($this->getOption('realm')) . '"';
         }
 
-        foreach ($parameters as $key => $value) {
-            $value = rawurlencode($value);
-            $authorization .= ", $key=\"$value\"";
+        if (!empty($parameters)) {
+            if (empty($authorization)) {
+                $authorization = 'Authorization: OAuth';
+            }
+
+            foreach ($parameters as $key => $value) {
+                $value = rawurlencode($value);
+                $authorization .= ", $key=\"$value\"";
+            }
         }
 
-        $headers[] = $authorization;
+        if (!empty($authorization)) {
+            $headers[] = $authorization;
+        }
 
         return parent::httpRequest($url, $content, $headers, $method);
     }
@@ -212,6 +219,14 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      * {@inheritDoc}
      */
     protected function doGetAccessTokenRequest($url, array $parameters = array())
+    {
+        return $this->httpRequest($url, null, $parameters, array(), 'POST');
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function doGetRequestTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, null, $parameters, array(), 'POST');
     }
