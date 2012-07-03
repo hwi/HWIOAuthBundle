@@ -171,7 +171,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * Get the 'parsed' content based on the response headers.
      *
-     * @param HttpResponse $response
+     * @param HttpResponse $rawResponse
      *
      * @return mixed
      */
@@ -185,4 +185,20 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
         return $response;
     }
+
+    /**
+     * @param string $url
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    abstract protected function doGetAccessTokenRequest($url, array $parameters = array());
+
+    /**
+     * @param string $url
+     * @param array  $parameters
+     *
+     * @return mixed
+     */
+    abstract protected function doGetUserInformationRequest($url, array $parameters = array());
 }

@@ -40,7 +40,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'access_token' => $accessToken
         ));
 
-        $content = $this->doGetUserInformationRequest($url);
+        $content = $this->doGetUserInformationRequest($url)->getContent();
 
         $response = $this->getUserResponse();
         $response->setResponse($content);
@@ -77,7 +77,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'redirect_uri'  => $redirectUri,
         ));
 
-        $response = $this->doGetAccessTokenRequest($parameters);
+        $response = $this->doGetAccessTokenRequest($this->getOption('access_token_url'), $parameters);
         $response = $this->getResponseContent($response);
 
         if (isset($response['error'])) {
@@ -100,24 +100,18 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * @param string $url
-     *
-     * @return mixed
+     * {@inheritDoc}
      */
-    protected function doGetUserInformationRequest($url)
+    protected function doGetAccessTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url)->getContent();
+        return $this->httpRequest($url, http_build_query($parameters));
     }
 
     /**
-     * @param array $parameters
-     *
-     * @return mixed
+     * {@inheritDoc}
      */
-    protected function doGetAccessTokenRequest(array $parameters)
+    protected function doGetUserInformationRequest($url, array $parameters = array())
     {
-        $content = http_build_query($parameters);
-
-        return $this->httpRequest($this->getOption('access_token_url'), $content);
+        return $this->httpRequest($url);
     }
 }
