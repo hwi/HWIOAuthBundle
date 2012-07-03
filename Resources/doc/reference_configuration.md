@@ -118,9 +118,13 @@ security:
 ``` yaml
 # app/config/routing.yml
 
+# pattern: /connect/{service}
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
-    prefix:   /connect
+
+# pattern: /connect
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
 
 facebook_login:
     pattern: /login/check-facebook

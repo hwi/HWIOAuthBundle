@@ -27,16 +27,26 @@ security:
         secured_area:
             oauth:
                 resource_owners:
-                    facebook:           "/login/check-facebook"
-                    google:             "/login/check-google"
-                    my_custom_provider: "/login/check-custom"
-                    my_github:          "/login/check-github"
-                login_path:        /login
-                failure_path:      /login
+                    facebook:           /login/check-facebook
+                    google:             /login/check-google
+                    my_custom_provider: /login/check-custom
+                    my_github:          /login/check-github
+                login_path:        /connect
+                failure_path:      /connect
 
                 oauth_user_provider:
                     service: my.oauth_aware.user_provider.service
 ```
+
+Import the `login.xml` routing file in your own routing file.
+
+``` yaml
+# app/config/routing.yml
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+```
+
+This allows you to handle some cases when authentication failed on resource owner side.
 
 **Note:**
 

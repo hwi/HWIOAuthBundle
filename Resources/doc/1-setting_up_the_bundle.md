@@ -35,7 +35,6 @@ Import the `redirect.xml` routing file in your own routing file.
 # app/config/routing.yml
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
-    prefix:   /connect
 ```
 
 **Note:**
