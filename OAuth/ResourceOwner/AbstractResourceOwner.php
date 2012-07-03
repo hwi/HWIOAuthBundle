@@ -12,6 +12,8 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Client\ClientInterface as HttpClientInterface,
+    Buzz\Message\RequestInterface as HttpRequestInterface,
+    Buzz\Message\MessageInterface as HttpMessageInterface,
     Buzz\Message\Request as HttpRequest,
     Buzz\Message\Response as HttpResponse;
 
@@ -144,7 +146,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected function httpRequest($url, $content = null, $headers = array(), $method = null)
     {
         if (null === $method) {
-            $method = null === $content ? HttpRequest::METHOD_GET : HttpRequest::METHOD_POST;
+            $method = null === $content ? HttpRequestInterface::METHOD_GET : HttpRequestInterface::METHOD_POST;
         }
 
         $request  = new HttpRequest($method, $url);
@@ -171,11 +173,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * Get the 'parsed' content based on the response headers.
      *
-     * @param HttpResponse $rawResponse
+     * @param HttpMessageInterface $rawResponse
      *
      * @return mixed
      */
-    protected function getResponseContent(HttpResponse $rawResponse)
+    protected function getResponseContent(HttpMessageInterface $rawResponse)
     {
         if (false !== strpos($rawResponse->getHeader('Content-Type'), 'application/json')) {
             $response = json_decode($rawResponse->getContent(), true);
