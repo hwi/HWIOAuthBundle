@@ -138,7 +138,7 @@ class HWIOAuthExtension extends Extension
             }
 
             // todo: come up with a nicer way to do check this
-            if (in_array($type, array('linkedin', 'oauth1', 'twitter'))) {
+            if (in_array($type, array('flickr', 'linkedin', 'oauth1', 'twitter'))) {
                 $definition->addArgument(new Reference('hwi_oauth.storage.session'));
             }
         }

@@ -1,6 +1,10 @@
 Changelog
 =========
 
+### (2012-xx-xx)
+
+* Flickr support
+
 ### (2012-06-28)
 
 * OAuth 1.0a support (linkedin/twitter/generic)
