@@ -11,12 +11,14 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Buzz\Message\MessageInterface as HttpMessageInterface;
+
 /**
  * ViadeoResourceOwner
  *
  * @author Sullivan SENECHAL <soullivaneuh@gmail.com>
  */
-class ViadeoResourceOwner extends GenericResourceOwner
+class ViadeoResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritDoc}
@@ -27,7 +29,6 @@ class ViadeoResourceOwner extends GenericResourceOwner
         'infos_url'           => 'https://api.viadeo.com/me',
         'scope'               => '',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-        'access_token_encode' => 'json'
     );
 
     /**
@@ -38,4 +39,17 @@ class ViadeoResourceOwner extends GenericResourceOwner
         'nickname'   => 'nickname',
         'realname'   => 'name',
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function getResponseContent(HttpMessageInterface $rawResponse)
+    {
+        $response = json_decode($rawResponse->getContent(), true);
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            parse_str($rawResponse->getContent(), $response);
+        }
+
+        return $response;
+    }
 }
