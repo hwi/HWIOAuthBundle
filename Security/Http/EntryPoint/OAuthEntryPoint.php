@@ -56,12 +56,10 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
      * @param ResourceOwnerInterface $resourceOwner
      * @param string                 $checkPath
      */
-    public function __construct(HttpUtils $httpUtils, $loginPath, ResourceOwnerInterface $resourceOwner = null, $checkPath = null)
+    public function __construct(HttpUtils $httpUtils, $loginPath)
     {
         $this->httpUtils     = $httpUtils;
         $this->loginPath     = $loginPath;
-        $this->resourceOwner = $resourceOwner;
-        $this->checkPath     = $checkPath;
     }
 
     /**
@@ -69,17 +67,6 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {
-        // redirect to the login url if there are several resource owners
-        if (null === $this->resourceOwner) {
-
-            return $this->httpUtils->createRedirectResponse($request, $this->loginPath);
-        }
-
-        // otherwise start authentication
-        $authorizationUrl = $this->resourceOwner->getAuthorizationUrl(
-            $this->httpUtils->createRequest($request, $this->checkPath)->getUri()
-        );
-
-        return $this->httpUtils->createRedirectResponse($request, $authorizationUrl);
+        return $this->httpUtils->createRedirectResponse($request, $this->loginPath);
     }
 }
