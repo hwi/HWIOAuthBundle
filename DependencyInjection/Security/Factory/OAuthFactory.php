@@ -118,7 +118,8 @@ class OAuthFactory extends AbstractFactory
             ->addArgument($config['login_path']);
 
         // Inject the resource owners directly if there is only one
-        if (1 === count($config['resource_owners'])) {
+        // and automatic redirection is not disabled
+        if (1 === count($config['resource_owners']) && false !== $config['smart_redirect']) {
             $entryPointDefinition
                 ->addArgument(new Reference('hwi_oauth.resource_owner.'.key($config['resource_owners'])))
                 ->addArgument(current($config['resource_owners']));
@@ -217,6 +218,9 @@ class OAuthFactory extends AbstractFactory
             ->scalarNode('login_path')
                 ->cannotBeEmpty()
                 ->isRequired()
+            ->end()
+            ->booleanNode('smart_redirect')
+                ->defaultTrue()
             ->end();
     }
 
