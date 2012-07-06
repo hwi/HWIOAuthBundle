@@ -1,6 +1,9 @@
 Changelog
 =========
 
+### 2012-07-06
+* All authentication requests are now redirected to the login path
+
 ### 2012-07-03
 
 * `firewall_name` is a required setting
