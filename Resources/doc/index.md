@@ -10,6 +10,7 @@ Getting Started With HWIOAuthBundle
 ## More
 
 - [Configuring the HTTP Client](configuring_the_http_client.md)
+- [Playing with HWIOAuthBundle token roles](playing_with_token_roles.md)
 - [Reference configuration](reference_configuration.md)
 
 ## Todo

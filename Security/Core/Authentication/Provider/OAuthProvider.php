@@ -17,7 +17,8 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
     HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface,
-    Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+    Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
+    Symfony\Component\Security\Core\Role\Role;
 
 /**
  * OAuthProvider
@@ -72,7 +73,15 @@ class OAuthProvider implements AuthenticationProviderInterface
             throw $e;
         }
 
-        $token = new OAuthToken($token->getCredentials(), $user->getRoles());
+        $roles = array_merge(
+            array(
+                new Role('ROLE_HWI_OAUTH_USER'),
+                new Role('ROLE_HWI_OAUTH_'.strtoupper($token->getResourceOwnerName())),
+            ),
+            $user->getRoles()
+        );
+
+        $token = new OAuthToken($token->getCredentials(), $roles);
         $token->setUser($user);
         $token->setAuthenticated(true);
 
