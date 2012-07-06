@@ -117,13 +117,6 @@ class OAuthFactory extends AbstractFactory
             ->addArgument(new Reference('security.http_utils'))
             ->addArgument($config['login_path']);
 
-        // Inject the resource owners directly if there is only one
-        if (1 === count($config['resource_owners'])) {
-            $entryPointDefinition
-                ->addArgument(new Reference('hwi_oauth.resource_owner.'.key($config['resource_owners'])))
-                ->addArgument(current($config['resource_owners']));
-        }
-
         return $entryPointId;
     }
 
