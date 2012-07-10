@@ -41,7 +41,7 @@
 
         Cheers!
         -->
-        <service id="hwi_oauth.authentication.listener.oauth" class="%hwi_oauth.authentication.listener.oauth.class%" parent="security.authentication.listener.abstract" />
+        <service id="hwi_oauth.authentication.listener.oauth" class="%hwi_oauth.authentication.listener.oauth.class%" parent="security.authentication.listener.abstract" abstract="true"/>
         <service id="hwi_oauth.authentication.provider.oauth" class="%hwi_oauth.authentication.provider.oauth.class%" />
         <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" />
         <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" />
