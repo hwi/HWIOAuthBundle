@@ -64,7 +64,6 @@ class HWIOAuthExtension extends Extension
         if (isset($config['fosub'])) {
             $container
                 ->setDefinition('hwi_oauth.user.provider.fosub_bridge', new DefinitionDecorator('hwi_oauth.user.provider.fosub_bridge.def'))
-                ->addArgument(new Reference('fos_user.user_manager'))
                 ->addArgument($config['fosub']['properties']);
         }
 
@@ -78,9 +77,6 @@ class HWIOAuthExtension extends Extension
 
                 $container
                     ->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new DefinitionDecorator('hwi_oauth.registration.form.handler.fosub_bridge.def'))
-                    ->addArgument(new Reference('fos_user.registration.form.handler'))
-                    ->addArgument(new Reference('fos_user.user_manager'))
-                    ->addArgument(new Reference('fos_user.mailer'))
                     ->addArgument($config['fosub']['username_iterations'])
                     ->setScope('request');
 
@@ -115,6 +111,8 @@ class HWIOAuthExtension extends Extension
                 ->setAlias('hwi_oauth.resource_owner.'.$name, $options['service']);
 
             // set the appropriate name for aliased services
+            // TODO fix this. It cannot work as the service definition cannot be accessed
+            // and this id is an alias anyway, not a definition.
             $resourceOwnerDefinition = $container->getDefinition('hwi_oauth.resource_owner.'.$name);
             $resourceOwnerDefinition->addMethodCall('setName', array($name));
         } else {
@@ -127,19 +125,13 @@ class HWIOAuthExtension extends Extension
                 unset($options['paths']);
             }
 
-            $definition = $container->register('hwi_oauth.resource_owner.'.$name, '%hwi_oauth.resource_owner.'.$type.'.class%');
-            $definition->addArgument(new Reference('hwi_oauth.http_client'))
-                ->addArgument(new Reference('security.http_utils'))
-                ->addArgument($options)
-                ->addArgument($name);
+            $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.$type);
+            $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
+            $definition->replaceArgument(2, $options)
+                ->replaceArgument(3, $name);
 
             if (!empty($paths)) {
                 $definition->addMethodCall('addPaths', array($paths));
-            }
-
-            // todo: come up with a nicer way to do check this
-            if (in_array($type, array('linkedin', 'oauth1', 'twitter'))) {
-                $definition->addArgument(new Reference('hwi_oauth.storage.session'));
             }
         }
     }
