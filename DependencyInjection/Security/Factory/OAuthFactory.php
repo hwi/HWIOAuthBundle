@@ -42,11 +42,8 @@ class OAuthFactory extends AbstractFactory
         $container->setParameter('hwi_oauth.resource_ownermap.configured.'.$id, $resourceOwnersMap);
 
         $ownerMapDefinition = $container
-            ->register($this->getResourceOwnerMapReference($id), '%hwi_oauth.resource_ownermap.class%')
-            ->addArgument(new Reference('service_container'))
-            ->addArgument(new Reference('security.http_utils'))
-            ->addArgument(new Parameter('hwi_oauth.resource_owners'))
-            ->addArgument(new Parameter('hwi_oauth.resource_ownermap.configured.'.$id));
+            ->setDefinition($this->getResourceOwnerMapReference($id), new DefinitionDecorator('hwi_oauth.abstract_resource_ownermap'))
+            ->replaceArgument(3, new Parameter('hwi_oauth.resource_ownermap.configured.'.$id));
     }
 
     /**
@@ -114,7 +111,6 @@ class OAuthFactory extends AbstractFactory
 
         $entryPointDefinition = $container
             ->setDefinition($entryPointId, new DefinitionDecorator('hwi_oauth.authentication.entry_point.oauth'))
-            ->addArgument(new Reference('security.http_utils'))
             ->addArgument($config['login_path']);
 
         return $entryPointId;

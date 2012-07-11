@@ -41,15 +41,26 @@
 
         Cheers!
         -->
-        <service id="hwi_oauth.authentication.listener.oauth" class="%hwi_oauth.authentication.listener.oauth.class%" parent="security.authentication.listener.abstract" />
-        <service id="hwi_oauth.authentication.provider.oauth" class="%hwi_oauth.authentication.provider.oauth.class%" />
-        <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" />
-        <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" />
-        <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" />
+        <service id="hwi_oauth.authentication.listener.oauth" class="%hwi_oauth.authentication.listener.oauth.class%"
+                 parent="security.authentication.listener.abstract" public="false" abstract="true" />
+        <service id="hwi_oauth.authentication.provider.oauth" class="%hwi_oauth.authentication.provider.oauth.class%" public="false" />
+        <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" public="false" abstract="true">
+            <argument type="service" id="security.http_utils" />
+        </service>
+        <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" abstract="true" public="false" />
+        <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" abstract="true" public="false">
+            <argument type="service" id="doctrine" />
+        </service>
 
         <!-- fosub bridges -->
-        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="%hwi_oauth.user.provider.fosub_bridge.class%" />
-        <service id="hwi_oauth.registration.form.handler.fosub_bridge.def" class="%hwi_oauth.registration.form.handler.fosub_bridge.class%" />
+        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="%hwi_oauth.user.provider.fosub_bridge.class%" abstract="true">
+            <argument type="service" id="fos_user.user_manager" />
+        </service>
+        <service id="hwi_oauth.registration.form.handler.fosub_bridge.def" class="%hwi_oauth.registration.form.handler.fosub_bridge.class%" abstract="true">
+            <argument type="service" id="fos_user.registration.form.handler" />
+            <argument type="service" id="fos_user.user_manager" />
+            <argument type="service" id="fos_user.mailer" />
+        </service>
 
         <!-- Session storage -->
         <service id="hwi_oauth.storage.session" class="%hwi_oauth.storage.session.class%" public="false">
@@ -59,5 +70,40 @@
         <service id="hwi_oauth.security.oauth_utils" class="%hwi_oauth.security.oauth_utils.class%">
             <argument type="service" id="service_container" />
         </service>
+
+        <!-- resource owners -->
+        <service id="hwi_oauth.abstract_resource_ownermap" class="%hwi_oauth.resource_ownermap.class%" abstract="true">
+            <argument type="service" id="service_container" />
+            <argument type="service" id="security.http_utils" />
+            <argument>%hwi_oauth.resource_owners%</argument>
+            <argument type="collection" /><!-- map -->
+        </service>
+
+        <service id="hwi_oauth.abstract_resource_owner.generic" abstract="true">
+            <argument type="service" id="hwi_oauth.http_client" />
+            <argument type="service" id="security.http_utils" />
+            <argument type="collection" /><!-- options -->
+            <argument /><!-- name -->
+        </service>
+
+        <service id="hwi_oauth.abstract_resource_owner.oauth2" class="%hwi_oauth.resource_owner.oauth2.class%"
+                 parent="hwi_oauth.abstract_resource_owner.generic" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.github" class="%hwi_oauth.resource_owner.github.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.facebook" class="%hwi_oauth.resource_owner.facebook.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.windows_live" class="%hwi_oauth.resource_owner.windows_live.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.vkontakte" class="%hwi_oauth.resource_owner.vkontakte.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+
+        <service id="hwi_oauth.abstract_resource_owner.oauth1" class="%hwi_oauth.resource_owner.oauth1.class%"
+                 parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
+            <argument type="service" id="hwi_oauth.storage.session" />
+        </service>
+        <service id="hwi_oauth.abstract_resource_owner.linkedin" class="%hwi_oauth.resource_owner.linkedin.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.twitter" class="%hwi_oauth.resource_owner.twitter.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
     </services>
 </container>
