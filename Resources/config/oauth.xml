@@ -90,7 +90,11 @@
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.github" class="%hwi_oauth.resource_owner.github.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.google" class="%hwi_oauth.resource_owner.google.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.facebook" class="%hwi_oauth.resource_owner.facebook.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.sensio_connect" class="%hwi_oauth.resource_owner.sensio_connect.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.windows_live" class="%hwi_oauth.resource_owner.windows_live.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
