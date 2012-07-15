@@ -1,7 +1,14 @@
 Changelog
 =========
 
+### 2012-07-15
+
+* `OAuthToken#getCredentials()` returns an empty string to be consistent with
+  the security component. The access token can still be retrieved from the
+  `getAccessToken()` method
+
 ### 2012-07-06
+
 * All authentication requests are now redirected to the login path
 
 ### 2012-07-03
