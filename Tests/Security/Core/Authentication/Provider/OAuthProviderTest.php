@@ -71,7 +71,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_Testcase
             ->method('getResourceOwnerName')
             ->will($this->returnValue('github'));
         $oauthTokenMock->expects($this->exactly(2))
-            ->method('getCredentials')
+            ->method('getAccessToken')
             ->will($this->returnValue('creds'));
 
         $resourceOwnerMock = $this->getResourceOwnerMock();
@@ -101,7 +101,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_Testcase
         $token = $oauthProvider->authenticate($oauthTokenMock);
         $this->assertTrue($token->isAuthenticated());
         $this->assertInstanceof('HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken', $token);
-        $this->assertEquals('creds', $token->getCredentials());
+        $this->assertEquals('creds', $token->getAccessToken());
         $this->assertEquals($userMock, $token->getUser());
 
         $roles = $token->getRoles();
@@ -116,7 +116,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_Testcase
             ->method('getResourceOwnerName')
             ->will($this->returnValue('github'));
         $oauthTokenMock->expects($this->exactly(2))
-            ->method('getCredentials')
+            ->method('getAccessToken')
             ->will($this->returnValue('creds'));
 
         $resourceOwnerMock = $this->getResourceOwnerMock();

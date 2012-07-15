@@ -49,7 +49,7 @@ class OAuthToken extends AbstractToken
      */
     public function getCredentials()
     {
-        return $this->accessToken;
+        return '';
     }
 
     /**
