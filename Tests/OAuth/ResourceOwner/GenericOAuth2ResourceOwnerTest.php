@@ -82,6 +82,7 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
         $userResponse = $this->resourceOwner->getUserInformation('access_token');
 
         $this->assertEquals('bar', $userResponse->getUsername());
+        $this->assertEquals('access_token', $userResponse->getAccessToken());
     }
 
     public function testGetAuthorizationUrl()

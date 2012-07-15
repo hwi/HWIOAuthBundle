@@ -33,4 +33,18 @@ interface UserResponseInterface extends ResponseInterface
      * @return string
      */
     public function getDisplayName();
+
+    /**
+     * Get the access token used for the request.
+     *
+     * @return mixed
+     */
+    public function getAccessToken();
+
+    /**
+     * Set the access token used for the request.
+     *
+     * @param mixed $accessToken
+     */
+    public function setAccessToken($accessToken);
 }

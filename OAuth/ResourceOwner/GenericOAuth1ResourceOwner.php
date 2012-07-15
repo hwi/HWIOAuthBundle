@@ -82,6 +82,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $response = $this->getUserResponse();
         $response->setResponse($content);
         $response->setResourceOwner($this);
+        $response->setAccessToken($accessToken);
 
         return $response;
     }

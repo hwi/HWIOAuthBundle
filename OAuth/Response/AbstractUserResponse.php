@@ -33,6 +33,27 @@ abstract class AbstractUserResponse implements UserResponseInterface
     protected $resourceOwner;
 
     /**
+     * @var mixed
+     */
+    protected $accessToken;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setAccessToken($accessToken)
+    {
+        $this->accessToken = $accessToken;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getResponse()
