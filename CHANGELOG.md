@@ -3,6 +3,7 @@ Changelog
 
 ### 2012-07-15
 
+* Added `UserResponseInterface#getAccessToken()` and `UserResponseInterface#setAccessToken`
 * `OAuthToken#getCredentials()` returns an empty string to be consistent with
   the security component. The access token can still be retrieved from the
   `getAccessToken()` method
