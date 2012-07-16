@@ -47,5 +47,11 @@
         }
     },
 
-    "target-dir": "HWI/Bundle/OAuthBundle"
+    "target-dir": "HWI/Bundle/OAuthBundle",
+
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
 }
