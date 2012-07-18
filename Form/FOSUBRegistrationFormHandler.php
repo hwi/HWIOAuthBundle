@@ -13,7 +13,8 @@ namespace HWI\Bundle\OAuthBundle\Form;
 
 use FOS\UserBundle\Form\Handler\RegistrationFormHandler,
     FOS\UserBundle\Model\UserManagerInterface,
-    FOS\UserBundle\Mailer\MailerInterface;
+    FOS\UserBundle\Mailer\MailerInterface,
+    FOS\UserBundle\Util\TokenGenerator;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedUserResponseInterface,
     HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
@@ -34,6 +35,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     protected $mailer;
     protected $registrationFormHandler;
     protected $iterations;
+    protected $tokenGenerator;
 
     /**
      * Constructor.
@@ -41,14 +43,16 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      * @param RegistrationFormHandler $registrationFormHandler FOSUB registration form handler
      * @param UserManagerInterface    $userManager             FOSUB user manager
      * @param MailerInterface         $mailer                  FOSUB mailer
+     * @param TokenGenerator          $tokenGenerator          FOSUB token generator
      * @param integer                 $iterations              Amount of attempts that should be made to 'guess' a unique username
      */
-    public function __construct(RegistrationFormHandler $registrationFormHandler, UserManagerInterface $userManager, MailerInterface $mailer, $iterations = 5)
+    public function __construct(RegistrationFormHandler $registrationFormHandler, UserManagerInterface $userManager, MailerInterface $mailer, TokenGenerator $tokenGenerator = null, $iterations = 5)
     {
         $this->registrationFormHandler = $registrationFormHandler;
         $this->userManager = $userManager;
         $this->mailer = $mailer;
         $this->iterations = $iterations;
+        $this->tokenGenerator = $tokenGenerator;
     }
 
     /**
