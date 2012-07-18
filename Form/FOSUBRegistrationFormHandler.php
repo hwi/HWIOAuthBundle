@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Form;
 use FOS\UserBundle\Form\Handler\RegistrationFormHandler,
     FOS\UserBundle\Model\UserManagerInterface,
     FOS\UserBundle\Mailer\MailerInterface;
+    FOS\UserBundle\Util\TokenGenerator;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedUserResponseInterface,
     HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
@@ -33,6 +34,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     protected $userManager;
     protected $mailer;
     protected $registrationFormHandler;
+    protected $tokenGenerator;
     protected $iterations;
 
     /**
@@ -43,11 +45,12 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      * @param MailerInterface         $mailer                  FOSUB mailer
      * @param integer                 $iterations              Amount of attempts that should be made to 'guess' a unique username
      */
-    public function __construct(RegistrationFormHandler $registrationFormHandler, UserManagerInterface $userManager, MailerInterface $mailer, $iterations = 5)
+    public function __construct(RegistrationFormHandler $registrationFormHandler, UserManagerInterface $userManager, MailerInterface $mailer, TokenGenerator $tokenGenerator = null, $iterations = 5)
     {
         $this->registrationFormHandler = $registrationFormHandler;
         $this->userManager = $userManager;
         $this->mailer = $mailer;
+        $this->tokenGenerator = $tokenGenerator;
         $this->iterations = $iterations;
     }
 
@@ -114,7 +117,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     {
         $handlerClass = get_class($this->registrationFormHandler);
 
-        return new $handlerClass($form, $request, $this->userManager, $this->mailer);
+        return new $handlerClass($form, $request, $this->userManager, $this->mailer, $this->tokenGenerator);
     }
 
 }
