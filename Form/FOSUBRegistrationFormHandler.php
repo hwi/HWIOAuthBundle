@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Form;
 
 use FOS\UserBundle\Form\Handler\RegistrationFormHandler,
     FOS\UserBundle\Model\UserManagerInterface,
-    FOS\UserBundle\Mailer\MailerInterface;
+    FOS\UserBundle\Mailer\MailerInterface,
     FOS\UserBundle\Util\TokenGenerator;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedUserResponseInterface,
