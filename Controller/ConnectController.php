@@ -165,6 +165,8 @@ class ConnectController extends ContainerAware
             throw new AccessDeniedException('Cannot connect an account.');
         }
 
+        $connectConfirm = $this->container->getParameter('hwi_oauth.connect.confirm_connect'); // flag to skip confirmation page
+
         // Get the data from the resource owner
         $resourceOwner = $this->getResourceOwnerByName($service);
 
@@ -191,18 +193,23 @@ class ConnectController extends ContainerAware
             ->createBuilder('form')
             ->getForm();
 
-        if ('POST' === $request->getMethod()) {
-            $form->bind($request);
-
-            if ($form->isValid()) {
-                $user = $this->container->get('security.context')->getToken()->getUser();
-
-                $this->container->get('hwi_oauth.account.connector')->connect($user, $userInformation);
-
-                return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
-                    'userInformation' => $userInformation,
-                ));
+        $doConnect = true;
+        if( $connectConfirm ) {
+            $doConnect = false;
+            if ('POST' === $request->getMethod()) {
+                $form->bindRequest($request);
+                $doConnect = $form->isValid();
             }
+        }
+        
+        if( $doConnect ) {
+            $user = $this->container->get('security.context')->getToken()->getUser();
+
+            $this->container->get('hwi_oauth.account.connector')->connect($user, $userInformation);
+
+            return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
+                'userInformation' => $userInformation,
+            ));
         }
 
         return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_confirm.html.' . $this->getTemplatingEngine(), array(
