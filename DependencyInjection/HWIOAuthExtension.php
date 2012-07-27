@@ -84,9 +84,12 @@ class HWIOAuthExtension extends Extension
                 $container->setAlias('hwi_oauth.registration.form', 'fos_user.registration.form');
             }
 
-            foreach ($config['connect'] as $key => $serviceId) {
-                 $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), $serviceId);
-            }
+            $container->setParameter('hwi_oauth.connect.confirm_connect', $config['connect']['confirm_connect']);
+            // this looks to be some outdated not functioning code,
+            // removing to be able to add confirm_connect child config option
+            //foreach ($config['connect'] as $key => $serviceId) {
+                 //$container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), $serviceId);
+            //}
 
             $container->setAlias('hwi_oauth.user_checker', 'security.user_checker');
 
