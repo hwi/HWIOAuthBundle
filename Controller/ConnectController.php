@@ -127,7 +127,7 @@ class ConnectController extends ContainerAware
     {
         $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
         $connect = $this->container->getParameter('hwi_oauth.connect');
-        $connect_confirm = $this->container->getParameter('hwi_oauth.connect.confirm_connect'); // flag to skip confirmation page
+        $connectConfirm = $this->container->getParameter('hwi_oauth.connect.confirm_connect'); // flag to skip confirmation page
 
         if (!$connect || !$hasUser) {
             // todo: fix this
@@ -160,7 +160,7 @@ class ConnectController extends ContainerAware
             ->getForm();
 
         $doConnect = true;
-        if( $connect_confirm ) {
+        if( $connectConfirm ) {
             $doConnect = false;
             if ('POST' === $request->getMethod()) {
                 $form->bindRequest($request);
