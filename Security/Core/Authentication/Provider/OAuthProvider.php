@@ -73,6 +73,7 @@ class OAuthProvider implements AuthenticationProviderInterface
         }
 
         $token = new OAuthToken($token->getAccessToken(), $user->getRoles());
+        $token->setResourceOwnerName($resourceOwner->getName());
         $token->setUser($user);
         $token->setAuthenticated(true);
 
