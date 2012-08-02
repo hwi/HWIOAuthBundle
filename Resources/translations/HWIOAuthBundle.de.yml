@@ -1,15 +1,15 @@
 header:
-    connecting: Vebinden
-    success: "'%displayName%' erflogreich mit Benutzer verbunden!"
-    register: "Neuen Benutzer mit dem Namen '%displayName%' erstellen"
-    registration_success: "Benutzer '%username%' erfolgereich angelegt und verknüpft!"
+    connecting: Verbinden
+    success: "'%displayName%' erfolgreich mit Benutzeraccount verbunden!"
+    register: "Neuen Benutzeraccount mit dem Namen '%displayName%' erstellen"
+    registration_success: "Benutzeraccount '%username%' erfolgreich angelegt und verknüpft!"
 
 connect:
     confirm:
         cancel: Abbrechen
         submit: Benutzeraccount verbinden
-        text: "Sicher, das Sie Ihren %service% Account '%displayName%' mit Ihrem aktuellen Benutzer verknüpfen möchten?"
+        text: "Sicher, dass Sie Ihren %service% Account '%displayName%' mit Ihrem aktuellen Benutzeraccount verknüpfen möchten?"
     registration:
-        cancel: Abrechen
-        submit: Account registrieren
+        cancel: Abbrechen
+        submit: Benutzeraccount registrieren
 
