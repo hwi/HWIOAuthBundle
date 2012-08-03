@@ -87,7 +87,15 @@ class PathUserResponse extends AbstractUserResponse
      */
     protected function getValueForPath($path, $exception = true)
     {
-        $steps = explode('.', $this->getPath($path));
+        try {
+            $steps = explode('.', $this->getPath($path));
+        } catch (AuthenticationException $e) {
+            if (!$exception) {
+                return null;
+            }
+
+            throw $e;
+        }
 
         $value = $this->response;
         foreach ($steps as $step) {
