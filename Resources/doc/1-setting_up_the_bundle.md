@@ -50,7 +50,7 @@ If you use Symfony 2.0, you need to import the `security_factory.xml` in your `s
 # app/config/security.yml
 security:
     factories:
-        - "%kernel.root_dir%/../../vendor/bundles/HWI/Bundle/OAuthBundle/Resources/config/security_factory.xml"
+        - "%kernel.root_dir%/../vendor/bundles/HWI/Bundle/OAuthBundle/Resources/config/security_factory.xml"
 ```
 
 **Note:**
