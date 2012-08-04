@@ -62,10 +62,13 @@ hwi_oauth:
 
     # optional FOSUserBundle integration
     fosub:
-        # try 30 times to check if a username is available (foo, foo1, foo2 etc)
+        # try 30 times to check if a username is available (foo, foo1, foo2 etc), default is 5
         username_iterations: 30
 
-        # mapping between resource owners (see below) and properties
+        # Mapping between resource owners (see below) and properties
+        # If using FOSUB the property value should be the column name in your user lookup table
+        # In this example, github_id, google_id, facebook_id, custom_id should all be set in your
+        # User Entity
         properties:
             github: githubId
             google: googleId

@@ -22,7 +22,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 interface AccountConnectorInterface
 {
     /**
-     * Connects the response the the user object.
+     * Connects the response to the user object.
      *
      * @param mixed                 $user     The user object
      * @param UserResponseInterface $response The oauth response

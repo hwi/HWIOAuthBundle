@@ -36,6 +36,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     protected $registrationFormHandler;
     protected $tokenGenerator;
     protected $iterations;
+    protected $tokenGenerator;
 
     /**
      * Constructor.
@@ -43,6 +44,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      * @param RegistrationFormHandler $registrationFormHandler FOSUB registration form handler
      * @param UserManagerInterface    $userManager             FOSUB user manager
      * @param MailerInterface         $mailer                  FOSUB mailer
+     * @param TokenGenerator          $tokenGenerator          FOSUB token generator
      * @param integer                 $iterations              Amount of attempts that should be made to 'guess' a unique username
      */
     public function __construct(RegistrationFormHandler $registrationFormHandler, UserManagerInterface $userManager, MailerInterface $mailer, TokenGenerator $tokenGenerator = null, $iterations = 5)
@@ -52,6 +54,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         $this->mailer = $mailer;
         $this->tokenGenerator = $tokenGenerator;
         $this->iterations = $iterations;
+        $this->tokenGenerator = $tokenGenerator;
     }
 
     /**
