@@ -19,11 +19,12 @@ hwi_oauth:
 ```
 
 - [Facebook](2x-facebook.md)
-- [Google](2x-google.md)
 - [GitHub](2x-github.md)
-- [Sensio Connect](2x-sensio_connect.md)
-- [Windows Live](2x-windows_live.md)
+- [Google](2x-google.md)
 - [Linkedin](2x-linkedin.md)
+- [Sensio Connect](2x-sensio_connect.md)
+- [Vkontakte](2x-vkontakte.md)
+- [Windows Live](2x-windows_live.md)
 - [Others](2x-others.md)
 
 ### Continue to the next step!
