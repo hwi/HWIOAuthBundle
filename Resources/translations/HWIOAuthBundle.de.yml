@@ -1,0 +1,15 @@
+header:
+    connecting: Verbinden
+    success: "'%displayName%' erfolgreich mit Benutzeraccount verbunden!"
+    register: "Neuen Benutzeraccount mit dem Namen '%displayName%' erstellen"
+    registration_success: "Benutzeraccount '%username%' erfolgreich angelegt und verknüpft!"
+
+connect:
+    confirm:
+        cancel: Abbrechen
+        submit: Benutzeraccount verbinden
+        text: "Sicher, dass Sie Ihren %service% Account '%displayName%' mit Ihrem aktuellen Benutzeraccount verknüpfen möchten?"
+    registration:
+        cancel: Abbrechen
+        submit: Benutzeraccount registrieren
+
