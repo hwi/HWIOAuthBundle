@@ -18,7 +18,7 @@ hwi_oauth:
             client_id:           <client_id>
             client_secret:       <client_secret>
             scope:               ""
-            user_response_class: "\Our\Custom\Response\Class"
+            user_response_class: \Our\Custom\Response\Class
             paths:
                 email: email
                 profilepicture: picture
