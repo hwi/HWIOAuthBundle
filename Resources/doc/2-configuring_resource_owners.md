@@ -23,6 +23,7 @@ hwi_oauth:
 - [Google](2x-google.md)
 - [Linkedin](2x-linkedin.md)
 - [Sensio Connect](2x-sensio_connect.md)
+- [Twitter] (2x-twitter.md)
 - [Vkontakte](2x-vkontakte.md)
 - [Windows Live](2x-windows_live.md)
 - [Others](2x-others.md)
