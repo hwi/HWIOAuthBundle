@@ -10,6 +10,29 @@ Step 1: Setting up the bundle
 }
 ```
 
+**OR (if you're using deps file)**
+
+Add HWIOAuthBundle to your deps:
+
+```
+[HWIOAuthBundle]
+    git=git://github.com/hwi/HWIOAuthBundle.git
+    target=bundles/HWI/Bundle/OAuthBundle
+```
+
+Buzz bundle too:
+
+```
+[buzz]
+    git=http://github.com/kriswallsmith/Buzz.git
+
+[SensioBuzzBundle]
+    git=http://github.com/sensio/SensioBuzzBundle.git
+    target=bundles/Sensio/Bundle/BuzzBundle
+```
+
+If you 
+
 ### B) Enable the bundle
 
 Enable the bundle in the kernel:
@@ -25,6 +48,16 @@ public function registerBundles()
         new HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
     );
 }
+```
+
+Add following line to autoload.php:
+
+``` php
+<?php
+// app/autoload.php
+$loader->registerNamespaces(array(
+    'HWI'           => __DIR__.'/../vendor/bundles',
+));
 ```
 
 ### C) Import the routing
