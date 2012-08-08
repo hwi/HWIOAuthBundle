@@ -12,26 +12,18 @@ Step 1: Setting up the bundle
 
 **OR (if you're using deps file)**
 
-Add HWIOAuthBundle to your deps:
-
-```
-[HWIOAuthBundle]
-    git=git://github.com/hwi/HWIOAuthBundle.git
-    target=bundles/HWI/Bundle/OAuthBundle
-```
-
-Buzz bundle too:
+Add the following to the deps file:
 
 ```
 [buzz]
     git=http://github.com/kriswallsmith/Buzz.git
-
 [SensioBuzzBundle]
     git=http://github.com/sensio/SensioBuzzBundle.git
     target=bundles/Sensio/Bundle/BuzzBundle
+[HWIOAuthBundle]
+    git=git://github.com/hwi/HWIOAuthBundle.git
+    target=bundles/HWI/Bundle/OAuthBundle
 ```
-
-If you 
 
 ### B) Enable the bundle
 
@@ -50,14 +42,21 @@ public function registerBundles()
 }
 ```
 
-Add following line to autoload.php:
+Make sure that you also register the namespaces with the autoloader:
 
 ``` php
 <?php
 // app/autoload.php
+
 $loader->registerNamespaces(array(
+    // ...
     'HWI'           => __DIR__.'/../vendor/bundles',
 ));
+```
+
+Now use the vendors script to clone the newly added repositories into your project:
+```
+php bin/vendors install
 ```
 
 ### C) Import the routing
