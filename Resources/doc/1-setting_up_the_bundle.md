@@ -25,6 +25,12 @@ Add the following to the deps file:
     target=bundles/HWI/Bundle/OAuthBundle
 ```
 
+
+Now use the vendors script to clone the newly added repositories into your project:
+```
+php bin/vendors install
+```
+
 ### B) Enable the bundle
 
 Enable the bundle in the kernel:
@@ -54,10 +60,6 @@ $loader->registerNamespaces(array(
 ));
 ```
 
-Now use the vendors script to clone the newly added repositories into your project:
-```
-php bin/vendors install
-```
 
 ### C) Import the routing
 
