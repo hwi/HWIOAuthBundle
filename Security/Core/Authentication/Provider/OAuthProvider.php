@@ -73,6 +73,8 @@ class OAuthProvider implements AuthenticationProviderInterface
 
         try {
             $user = $this->userProvider->loadUserByOAuthUserResponse($userResponse);
+            // Set the user on the previous token, in case the UserChecker fails.
+            $token->setUser($user);
         } catch (OAuthAwareExceptionInterface $e) {
             $e->setAccessToken($token->getAccessToken());
             $e->setResourceOwnerName($token->getResourceOwnerName());
