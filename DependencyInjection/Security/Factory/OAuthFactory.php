@@ -70,7 +70,9 @@ class OAuthFactory extends AbstractFactory
         $container
             ->setDefinition($providerId, new DefinitionDecorator('hwi_oauth.authentication.provider.oauth'))
             ->addArgument($this->createOAuthAwareUserProvider($container, $id, $config['oauth_user_provider']))
-            ->addArgument($this->getResourceOwnerMapReference($id));
+            ->addArgument($this->getResourceOwnerMapReference($id))
+            ->addArgument(new Reference('hwi_oauth.user_checker'))
+        ;
 
         return $providerId;
     }

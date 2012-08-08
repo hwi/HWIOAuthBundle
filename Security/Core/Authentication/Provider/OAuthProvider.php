@@ -17,6 +17,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
     HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface,
+    Symfony\Component\Security\Core\User\UserCheckerInterface,
     Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
@@ -38,13 +39,19 @@ class OAuthProvider implements AuthenticationProviderInterface
     private $userProvider;
 
     /**
+     * @var UserCheckerInterface
+     */
+    private $userChecker;
+
+    /**
      * @param UserProviderInterface $userProvider     User provider
      * @param ResourceOwnerMap      $resourceOwnerMap Resource owner map
      */
-    public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMap $resourceOwnerMap)
+    public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMap $resourceOwnerMap, UserCheckerInterface $userChecker)
     {
         $this->userProvider  = $userProvider;
         $this->resourceOwnerMap = $resourceOwnerMap;
+        $this->userChecker = $userChecker;
     }
 
     /**
@@ -72,10 +79,14 @@ class OAuthProvider implements AuthenticationProviderInterface
             throw $e;
         }
 
+        $this->userChecker->checkPreAuth($user);
+
         $token = new OAuthToken($token->getAccessToken(), $user->getRoles());
         $token->setResourceOwnerName($resourceOwner->getName());
         $token->setUser($user);
         $token->setAuthenticated(true);
+
+        $this->userChecker->checkPostAuth($user);
 
         return $token;
     }
