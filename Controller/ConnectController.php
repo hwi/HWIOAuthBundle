@@ -19,7 +19,9 @@ use Symfony\Component\DependencyInjection\ContainerAware,
     Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken,
     Symfony\Component\Security\Core\Exception\AuthenticationException,
     Symfony\Component\Security\Core\SecurityContext,
-    Symfony\Component\Security\Core\User\UserInterface;
+    Symfony\Component\Security\Core\User\UserInterface,
+    Symfony\Component\Security\Http\Event\InteractiveLoginEvent,
+    Symfony\Component\Security\Http\SecurityEvents;
 
 /**
  * ConnectController
@@ -247,10 +249,10 @@ class ConnectController extends ContainerAware
     }
 
     /**
-    * Authenticate a user with Symfony Security
-    *
-    * @param UserInterface $user
-    */
+     * Authenticate a user with Symfony Security
+     *
+     * @param UserInterface $user
+     */
     protected function authenticateUser(UserInterface $user)
     {
         try {
@@ -264,5 +266,11 @@ class ConnectController extends ContainerAware
         $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
 
         $this->container->get('security.context')->setToken($token);
+
+        // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
+        $this->container->get('event_dispatcher')->dispatch(
+            SecurityEvents::INTERACTIVE_LOGIN,
+            new InteractiveLoginEvent($this->container->get('request'), $token)
+        );
     }
 }
