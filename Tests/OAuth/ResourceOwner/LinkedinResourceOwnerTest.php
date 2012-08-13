@@ -18,14 +18,15 @@ class LinkedinResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected $userResponse = '{"id": "bar"}';
 
-    public function setup()
+    public function setUp()
     {
         $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth1');
     }
 
     protected function getDefaultOptions()
     {
-        return array('client_id' => 'clientid',
+        return array(
+            'client_id' => 'clientid',
             'client_secret' => 'clientsecret',
         );
     }

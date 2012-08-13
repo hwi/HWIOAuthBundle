@@ -33,8 +33,9 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'username'     => 'id',
-        'displayname'  => 'name',
+        'identifier' => 'id',
+        'nickname'   => 'username',
+        'realname'   => 'name',
     );
 
     /**

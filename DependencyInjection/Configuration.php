@@ -22,6 +22,27 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
+     * Array of supported resource owners, indentation is intentional to easily notice
+     * which resource is of which type.
+     *
+     * @var array
+     */
+    private $resourceOwners = array(
+        'oauth2',
+            'facebook',
+            'github',
+            'google',
+            'sensio_connect',
+            'stack_exchange',
+            'vkontakte',
+            'windows_live',
+
+        'oauth1',
+            'linkedin',
+            'twitter',
+    );
+
+    /**
      * Generates the configuration tree builder.
      *
      * @return TreeBuilder $builder The tree builder
@@ -138,7 +159,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('type')
                             ->validate()
-                                ->ifNotInArray(array('facebook', 'oauth2', 'github', 'google', 'sensio_connect', 'windows_live', 'vkontakte', 'oauth1', 'twitter', 'linkedin'))
+                                ->ifNotInArray($this->resourceOwners)
                                 ->thenInvalid('Unknown resource owner type %s.')
                             ->end()
                             ->validate()

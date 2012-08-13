@@ -30,7 +30,7 @@ interface OAuth1RequestTokenStorageInterface
      *
      * @return array
      */
-    function fetch(ResourceOwnerInterface $resourceOwner, $tokenId);
+    public function fetch(ResourceOwnerInterface $resourceOwner, $tokenId);
 
     /**
      * Save a request token to the storage.
@@ -38,5 +38,5 @@ interface OAuth1RequestTokenStorageInterface
      * @param ResourceOwnerInterface $resourceOwner
      * @param array                  $token
      */
-    function save(ResourceOwnerInterface $resourceOwner, $token);
+    public function save(ResourceOwnerInterface $resourceOwner, array $token);
 }

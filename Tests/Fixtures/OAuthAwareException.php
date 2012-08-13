@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 
 /**
- * AbstractUserResponse
+ * OAuthAwareException
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
@@ -43,5 +43,4 @@ class OAuthAwareException extends \Exception
     {
         $this->resourceOwnerName = $resourceOwnerName;
     }
-
 }

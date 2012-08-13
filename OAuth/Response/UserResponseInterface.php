@@ -17,22 +17,30 @@ use HWI\Bundle\OAuthBundle\OAuth\ResponseInterface;
  * UserResponseInterface
  *
  * @author Alexander <iam.asm89@gmail.com>
+ * @author Joseph Bielawski <stloyd@gmail.com>
  */
 interface UserResponseInterface extends ResponseInterface
 {
     /**
-     * Get the username.
+     * Get the unique user identifier.
      *
      * @return string
      */
     public function getUsername();
 
     /**
-     * Get the name to display.
+     * Get the username to display.
      *
      * @return string
      */
-    public function getDisplayName();
+    public function getNickname();
+
+    /**
+     * Get the real name of user.
+     *
+     * @return string
+     */
+    public function getRealName();
 
     /**
      * Get the access token used for the request.

@@ -24,7 +24,13 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
  */
 class OAuthUtils
 {
+    /**
+     * @var ContainerInterface
+     */
     private $container;
+    /**
+     * @var \HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap
+     */
     private $ownerMap;
 
     /**

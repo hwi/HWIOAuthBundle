@@ -22,42 +22,6 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 
 class OAuthProviderTest extends \PHPUnit_Framework_Testcase
 {
-    protected function getOAuthAwareUserProviderMock()
-    {
-        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface')
-            ->getMock();
-    }
-
-    protected function getResourceOwnerMapMock()
-    {
-        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
-            ->disableOriginalConstructor()->getMock();
-    }
-
-    protected function getOAuthTokenMock()
-    {
-        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken')
-            ->disableOriginalConstructor()->getMock();
-    }
-
-    protected function getResourceOwnerMock()
-    {
-        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
-            ->getMock();
-    }
-
-    protected function getUserResponseMock()
-    {
-        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
-            ->getMock();
-    }
-
-    protected function getUserMock()
-    {
-        return $this->getMockBuilder('\Symfony\Component\Security\Core\User\UserInterface')
-            ->getMock();
-    }
-
     public function testSupportsOAuthToken()
     {
         $oauthProvider = new OAuthProvider($this->getOAuthAwareUserProviderMock(), $this->getResourceOwnerMapMock());
@@ -139,7 +103,8 @@ class OAuthProviderTest extends \PHPUnit_Framework_Testcase
         $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock);
 
         try {
-            $token = $oauthProvider->authenticate($oauthTokenMock);
+            $oauthProvider->authenticate($oauthTokenMock);
+
             $this->assertTrue(false, "Exception was not thrown.");
         } catch(OAuthAwareException $e) {
             $this->assertTrue(true, "Exception was thrown.");
@@ -147,5 +112,41 @@ class OAuthProviderTest extends \PHPUnit_Framework_Testcase
             $this->assertEquals('github', $e->getResourceOwnerName());
             $this->assertEquals('creds', $e->getAccessToken());
         }
+    }
+
+    protected function getOAuthAwareUserProviderMock()
+    {
+        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface')
+            ->getMock();
+    }
+
+    protected function getResourceOwnerMapMock()
+    {
+        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
+            ->disableOriginalConstructor()->getMock();
+    }
+
+    protected function getOAuthTokenMock()
+    {
+        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken')
+            ->disableOriginalConstructor()->getMock();
+    }
+
+    protected function getResourceOwnerMock()
+    {
+        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
+            ->getMock();
+    }
+
+    protected function getUserResponseMock()
+    {
+        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
+            ->getMock();
+    }
+
+    protected function getUserMock()
+    {
+        return $this->getMockBuilder('\Symfony\Component\Security\Core\User\UserInterface')
+            ->getMock();
     }
 }

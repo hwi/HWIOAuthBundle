@@ -19,14 +19,15 @@ class GoogleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = '{"id": "bar"}';
 
-    public function setup()
+    public function setUp()
     {
         $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
     }
 
     protected function getDefaultOptions()
     {
-        return array('client_id' => 'clientid',
+        return array(
+            'client_id'     => 'clientid',
             'client_secret' => 'clientsecret',
         );
     }
@@ -69,6 +70,7 @@ class GoogleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     {
         $this->mockBuzz('{"error": "foo"}');
         $request = new Request(array('code' => 'code'));
-        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+
+        $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 }

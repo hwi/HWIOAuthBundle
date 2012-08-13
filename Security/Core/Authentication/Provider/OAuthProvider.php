@@ -33,17 +33,17 @@ class OAuthProvider implements AuthenticationProviderInterface
     private $resourceOwnerMap;
 
     /**
-     * @var Symfony\Component\Security\Core\User\UserProviderInterface
+     * @var OAuthAwareUserProviderInterface
      */
     private $userProvider;
 
     /**
-     * @param UserProviderInterface $userProvider     User provider
-     * @param ResourceOwnerMap      $resourceOwnerMap Resource owner map
+     * @param OAuthAwareUserProviderInterface $userProvider     User provider
+     * @param ResourceOwnerMap                $resourceOwnerMap Resource owner map
      */
     public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMap $resourceOwnerMap)
     {
-        $this->userProvider  = $userProvider;
+        $this->userProvider     = $userProvider;
         $this->resourceOwnerMap = $resourceOwnerMap;
     }
 

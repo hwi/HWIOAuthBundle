@@ -34,16 +34,6 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     private $httpUtils;
 
     /**
-     * @var HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
-     */
-    private $resourceOwner;
-
-    /**
-     * @var string
-     */
-    private $checkPath;
-
-    /**
      * @var string
      */
     private $loginPath;
@@ -53,13 +43,11 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
      *
      * @param HttpUtils              $httpUtils
      * @param string                 $loginPath
-     * @param ResourceOwnerInterface $resourceOwner
-     * @param string                 $checkPath
      */
     public function __construct(HttpUtils $httpUtils, $loginPath)
     {
-        $this->httpUtils     = $httpUtils;
-        $this->loginPath     = $loginPath;
+        $this->httpUtils = $httpUtils;
+        $this->loginPath = $loginPath;
     }
 
     /**
