@@ -16,8 +16,8 @@
             </p>
         </div>
         <div class="span6">
-            {% if userInformation.profilePicture is defined and userInformation.profilePicture%}
-                <img src="{{ userInformation.profilePicture}}" />
+            {% if userInformation.profilePicture is not empty %}
+                <img src="{{ userInformation.profilePicture }}" />
             {% endif %}
         </div>
     </div>

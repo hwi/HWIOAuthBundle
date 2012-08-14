@@ -78,21 +78,29 @@ class PathUserResponse extends AbstractUserResponse
     /**
      * Extracts a value from the response for a given path.
      *
-     * @param string  $path      Name of the path to get the value for
-     * @param boolean $exception Whether to throw an exception or return null
+     * @param string  $path           Name of the path to get the value for
+     * @param boolean $catchException Whether to throw an exception or return null
      *
      * @return null|String
      *
      * @throws AuthenticationException
      */
-    protected function getValueForPath($path, $exception = true)
+    protected function getValueForPath($path, $throwException = true)
     {
-        $steps = explode('.', $this->getPath($path));
+        try {
+            $steps = explode('.', $this->getPath($path));
+        } catch (AuthenticationException $e) {
+            if (!$throwException) {
+                return null;
+            }
+
+            throw $e;
+        }
 
         $value = $this->response;
         foreach ($steps as $step) {
             if (!array_key_exists($step, $value)) {
-                if (!$exception) {
+                if (!$throwException) {
                     return null;
                 }
 
