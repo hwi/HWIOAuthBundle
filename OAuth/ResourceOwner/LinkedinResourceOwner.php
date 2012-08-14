@@ -28,7 +28,8 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
         'infos_url'           => 'http://api.linkedin.com/v1/people/~:(id,formatted-name)',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
         'realm'               => 'http://api.linkedin.com',
-        'scope'               => '' // e.g. r_emailaddress
+        // e.g. r_emailaddress (see https://developer.linkedin.com/documents/profile-fields)
+        'scope'               => null
     );
 
     /**
@@ -56,9 +57,7 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
      */
     protected function getRequestToken($redirectUri, array $extraParameters = array())
     {
-        if ($this->getOption('scope')) {
-            $extraParameters['scope'] = $this->getOption('scope');
-        }
+        $extraParameters['scope'] = $this->getOption('scope');
         
         return parent::getRequestToken($redirectUri, $extraParameters);
     }  
