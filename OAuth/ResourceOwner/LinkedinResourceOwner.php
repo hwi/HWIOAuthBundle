@@ -28,7 +28,6 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
         'infos_url'           => 'http://api.linkedin.com/v1/people/~:(id,formatted-name)',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
         'realm'               => 'http://api.linkedin.com',
-        // e.g. r_emailaddress (see https://developer.linkedin.com/documents/profile-fields)
         'scope'               => null
     );
 
