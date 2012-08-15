@@ -21,22 +21,33 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class PathUserResponse extends AbstractUserResponse
 {
-    protected $paths;
+    /**
+     * @var array
+     */
+    protected $paths = array();
 
     /**
      * {@inheritdoc}
      */
     public function getUsername()
     {
-        return $this->getValueForPath('username');
+        return $this->getValueForPath('identifier');
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDisplayName()
+    public function getNickname()
     {
-        return $this->getValueForPath('displayname');
+        return $this->getValueForPath('nickname');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRealName()
+    {
+        return $this->getValueForPath('realname');
     }
 
     /**
@@ -64,7 +75,7 @@ class PathUserResponse extends AbstractUserResponse
      *
      * @return mixed
      *
-     * @throws \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @throws AuthenticationException
      */
     protected function getPath($name)
     {
@@ -81,7 +92,7 @@ class PathUserResponse extends AbstractUserResponse
      * @param string  $path           Name of the path to get the value for
      * @param boolean $catchException Whether to throw an exception or return null
      *
-     * @return null|String
+     * @return null|string
      *
      * @throws AuthenticationException
      */

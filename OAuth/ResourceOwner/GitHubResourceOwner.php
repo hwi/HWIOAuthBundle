@@ -34,8 +34,9 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'username'       => 'login',
-        'displayname'    => 'name',
+        'identifier'     => 'id',
+        'nickname'       => 'login',
+        'realname'       => 'name',
         'email'          => 'email',
         'profilepicture' => 'avatar_url',
     );

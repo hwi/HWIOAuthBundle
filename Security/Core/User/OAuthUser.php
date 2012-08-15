@@ -21,6 +21,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class OAuthUser implements UserInterface
 {
     /**
+     * @var string
+     */
+    protected $username;
+
+    /**
      * @param string $username
      */
     public function __construct($username)
@@ -73,6 +78,6 @@ class OAuthUser implements UserInterface
      */
     public function equals(UserInterface $user)
     {
-        return $user->getUsername() == $this->getUsername();
+        return $user->getUsername() === $this->username;
     }
 }

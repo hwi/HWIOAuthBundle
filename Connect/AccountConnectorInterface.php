@@ -27,5 +27,5 @@ interface AccountConnectorInterface
      * @param mixed                 $user     The user object
      * @param UserResponseInterface $response The oauth response
      */
-    function connect($user, UserResponseInterface $response);
+    public function connect($user, UserResponseInterface $response);
 }

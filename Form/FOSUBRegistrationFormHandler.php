@@ -43,6 +43,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      * @param RegistrationFormHandler $registrationFormHandler FOSUB registration form handler
      * @param UserManagerInterface    $userManager             FOSUB user manager
      * @param MailerInterface         $mailer                  FOSUB mailer
+     * @param TokenGenerator          $tokenGenerator          FOSUB token generator
      * @param integer                 $iterations              Amount of attempts that should be made to 'guess' a unique username
      */
     public function __construct(RegistrationFormHandler $registrationFormHandler, UserManagerInterface $userManager, MailerInterface $mailer, TokenGenerator $tokenGenerator = null, $iterations = 5)
@@ -55,13 +56,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     }
 
     /**
-     * Processes the form for a given request.
-     *
-     * @param Request               $request         Active request
-     * @param Form                  $form            Form to process
-     * @param UserResponseInterface $userInformation OAuth response
-     *
-     * @return boolean True if the processing was successful
+     * {@inheritDoc}
      */
     public function process(Request $request, Form $form, UserResponseInterface $userInformation)
     {
@@ -76,7 +71,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
 
             $user->setUsername($this->getUniqueUsername($userInformation->getDisplayName()));
 
-            if ($userInformation instanceof AdvancedUserResponseInterface) {
+            if ($userInformation instanceof AdvancedUserResponseInterface && method_exists($user, 'setEmail')) {
                 $user->setEmail($userInformation->getEmail());
             }
 

@@ -45,6 +45,7 @@ class User extends BaseUser
     public function eraseCredentials()
     {
     }
+
     public function getGitHubId()
     {
         return $this->githubId;

@@ -19,8 +19,8 @@ hwi_oauth:
             scope:               ""
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
-                username: id
-                displayname: username
+                identifier: id
+                nickname:   username
 ```
 
 or an oauth1:
@@ -41,8 +41,8 @@ hwi_oauth:
             realm:               ""
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
-                username: id
-                displayname: username
+                identifier: id
+                nickname:   username
 ```
 
 When you're done. Continue by configuring the security layer or go back to

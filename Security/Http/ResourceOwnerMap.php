@@ -60,7 +60,7 @@ class ResourceOwnerMap
     /**
      * Gets the appropriate resource owner given the name.
      *
-     * @param string $id
+     * @param string $name
      *
      * @return null|\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
      */

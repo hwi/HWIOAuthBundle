@@ -24,7 +24,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_Testcase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage No property defined for entity for resource owner 'not_configured'.
      */
     public function testLoadUserByOAuthuserResponseThrowsExceptionWhenNoPropertyIsConfigured()
@@ -34,7 +34,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_Testcase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage User 'asm89' not found.
      */
     public function testLoadUserByOAuthuserResponseThrowsExceptionWhenUserIsNull()
@@ -50,7 +50,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_Testcase
     {
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
-        $user = new User;
+        $user = new User();
         $provider = $this->createEntityUserProvider($user);
 
         $loadedUser = $provider->loadUserByOAuthUserResponse($userResponseMock);
@@ -79,6 +79,22 @@ class EntityUserProviderTest extends \PHPUnit_Framework_Testcase
         return $registryMock;
     }
 
+    public function createRepositoryMock($user = false)
+    {
+        $mock = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        if (false !== $user) {
+            $mock->expects($this->once())
+                ->method('findOneBy')
+                ->with(array('githubId' => 'asm89'))
+                ->will($this->returnValue($user));
+        }
+
+        return $mock;
+    }
+
     protected function createResourceOwnerMock($resourceOwnerName = null)
     {
         $resourceOwnerMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
@@ -103,25 +119,9 @@ class EntityUserProviderTest extends \PHPUnit_Framework_Testcase
         $emMock
             ->expects($this->once())
             ->method('getRepository')
-            ->will($this->returnValue($this->createReposityMock($user)));
+            ->will($this->returnValue($this->createRepositoryMock($user)));
 
         return $emMock;
-    }
-
-    public function createReposityMock($user = false)
-    {
-        $mock = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        if (false !== $user) {
-            $mock->expects($this->once())
-                ->method('findOneBy')
-                ->with(array('githubId' => 'asm89'))
-                ->will($this->returnValue($user));
-        }
-
-        return $mock;
     }
 
     protected function createUserResponseMock($username = null, $resourceOwnerName = null)

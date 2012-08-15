@@ -20,26 +20,26 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 interface OAuthAwareExceptionInterface
 {
     /**
-    * Set the access token of the failed authentication request.
-    *
-    * @param string $accessToken
-    */
+     * Set the access token of the failed authentication request.
+     *
+     * @param string $accessToken
+     */
     public function setAccessToken($accessToken);
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function getAccessToken();
 
     /**
-    * Set the name of the resource owner responsible for the oauth authentication.
-    *
-    * @param string $resourceOwnerName
-    */
+     * Set the name of the resource owner responsible for the oauth authentication.
+     *
+     * @param string $resourceOwnerName
+     */
     public function setResourceOwnerName($resourceOwnerName);
 
     /**
-    * @return string
-    */
+     * @return string
+     */
     public function getResourceOwnerName();
 }

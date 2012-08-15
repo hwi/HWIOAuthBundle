@@ -29,5 +29,5 @@ interface OAuthAwareUserProviderInterface
      *
      * @throws UsernameNotFoundException if the user is not found
      */
-    function loadUserByOAuthUserResponse(UserResponseInterface $response);
+    public function loadUserByOAuthUserResponse(UserResponseInterface $response);
 }

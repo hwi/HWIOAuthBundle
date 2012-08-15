@@ -17,6 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
 {
+    /**
+     * @var GenericOAuth1ResourceOwner
+     */
     protected $resourceOwner;
     protected $buzzClient;
     protected $buzzResponse;
@@ -25,14 +28,15 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
     protected $userResponse = '{"foo": "bar"}';
 
-    public function setup()
+    public function setUp()
     {
         $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth1');
     }
 
     protected function getDefaultOptions()
     {
-        return array('infos_url' => 'http://user.info/', 
+        return array(
+            'infos_url' => 'http://user.info/',
             'client_id' => 'clientid',
             'scope' => '',
             'request_token_url' => 'http://user.request/',
@@ -44,8 +48,10 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
     protected function getDefaultPaths()
     {
-        return array('username' => 'foo',
-            'displayname' => 'foo_disp',
+        return array(
+            'identifier' => 'id',
+            'nickname'   => 'foo',
+            'realname'   => 'foo_disp',
         );
     }
 
@@ -133,7 +139,8 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
             ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
 
         $request = new Request(array('oauth_token' => 'token', 'oauth_verifier' => 'code'));
-        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+
+        $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     /**
@@ -148,7 +155,8 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
             ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
 
         $request = new Request(array('oauth_token' => 'token', 'oauth_verifier' => 'code'));
-        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+
+        $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     public function testGetSetName()
@@ -161,14 +169,18 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
     public function testCustomResponseClass()
     {
         $options = $this->getDefaultOptions();
-        $options['user_response_class'] = "\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse";
+        $options['user_response_class'] = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner($options, 'oauth1');
 
         $this->mockBuzz();
+        /**
+         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+         */
         $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'));
 
         $this->assertInstanceOf($options['user_response_class'], $userResponse);
-        $this->assertEquals('foo', $userResponse->getUsername());
+        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo', $userResponse->getNickname());
     }
 
     protected function mockBuzz($response = '', $contentType = 'text/plain')
