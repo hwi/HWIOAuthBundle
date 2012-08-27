@@ -104,6 +104,14 @@ class Configuration implements ConfigurationInterface
                                 ->thenUnset()
                             ->end()
                         ->end()
+                        ->scalarNode('request_token_url')
+                            ->validate()
+                                ->ifTrue(function($v) {
+                                    return empty($v);
+                                })
+                                ->thenUnset()
+                            ->end()
+                        ->end()
                         ->scalarNode('client_id')
                             ->cannotBeEmpty()
                         ->end()
