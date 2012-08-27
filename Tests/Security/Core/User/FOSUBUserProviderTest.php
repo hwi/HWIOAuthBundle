@@ -18,7 +18,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_Testcase
 {
     protected function setUp()
     {
-        if (!class_exists('FOS\UserBundle\Model\UserManagerInterface')) {
+        if (!interface_exists('FOS\UserBundle\Model\UserManagerInterface')) {
             $this->markTestSkipped('FOSUserBundle is not available');
         }
     }

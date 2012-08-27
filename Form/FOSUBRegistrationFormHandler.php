@@ -69,7 +69,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         if ('POST' !== $request->getMethod()) {
             $user = $form->getData();
 
-            $user->setUsername($this->getUniqueUsername($userInformation->getDisplayName()));
+            $user->setUsername($this->getUniqueUsername($userInformation->getNickname()));
 
             if ($userInformation instanceof AdvancedUserResponseInterface && method_exists($user, 'setEmail')) {
                 $user->setEmail($userInformation->getEmail());

@@ -1,15 +1,17 @@
 Changelog
 =========
 
-### 2012-08-13
-* Added `UserResponseInterface#getRealName()` method, also new default path `realname`
-  was added, this path holds real name of user
-* Added new path `uuid` that now hold an unique user identifier
-* [BC break] Method `UserResponseInterface#getUsername()` now always returns an real
-  unique user identifier, an uses path `uuid`
-* [BC break] Path `username` no longer holds an unique user identifier
-* [BC break] `OAuth1RequestTokenStorageInterface#save()` second param `$token` now
-  must be an array
+### 2012-08-27
+* Added `UserResponseInterface#getRealName()` method, also a new default path `realname`
+  was added, this path holds the real name of user
+* Added `UserResponseInterface#getNickName()` method, also a new default path `nickname`
+  was added, this path holds the nickname of user
+* [BC break] Renamed path `username` to `identifier` to make it more clear that this path should
+  hold the unique user identifier (previously `username`)
+* [BC break] Method `UserResponseInterface#getUsername()` now always returns a real
+  unique user identifier, and uses path `identifier`
+* [BC break] `OAuth1RequestTokenStorageInterface#save()` second param `$token` must
+  now be an array
 
 ### 2012-07-15
 

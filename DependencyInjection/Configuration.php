@@ -229,7 +229,7 @@ class Configuration implements ConfigurationInterface
                                 return false;
                             }
 
-                            $children = array('username', 'displayname');
+                            $children = array('identifier', 'nickname', 'realname');
                             foreach ($children as $child) {
                                 if (!isset($c['paths'][$child])) {
                                     return true;
@@ -239,7 +239,7 @@ class Configuration implements ConfigurationInterface
                             // one of the two should be set
                             return !isset($c['paths']) && !isset($c['user_response_class']);
                         })
-                        ->thenInvalid("At least 'username' and 'displayname' paths should be configured for oauth2 and oauth1 types.")
+                        ->thenInvalid("At least the 'identifier', 'nickname' and 'realname' paths should be configured for oauth2 and oauth1 types.")
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {

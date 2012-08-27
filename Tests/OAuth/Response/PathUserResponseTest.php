@@ -101,10 +101,10 @@ class PathUserResponseTest extends \PHPUnit_Framework_Testcase
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */
-    public function testGetDisplayNameInvalidPath()
+    public function testGetIdentifierInvalidPath()
     {
         // easy path
-        $paths = array('nickname' => 'non_existing');
+        $paths = array('identifier' => 'non_existing');
         $this->responseObject->setPaths($paths);
         $this->responseObject->setResponse(json_encode(array('foo' => 'bar')));
 
@@ -115,7 +115,7 @@ class PathUserResponseTest extends \PHPUnit_Framework_Testcase
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */
-    public function testNoDisplayNamePath()
+    public function testNoIdentifierPath()
     {
         // easy path
         $paths = array('non_username' => 'non_existing');
