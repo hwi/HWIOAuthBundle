@@ -19,7 +19,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException,
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
     HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse,
-    HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface;
+    HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface,
+    HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 
 /**
  * GenericOAuth1ResourceOwner
@@ -75,7 +76,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         );
 
         $url = $this->getOption('infos_url');
-        $parameters['oauth_signature'] = $this->signRequest('GET', $url, $parameters, $accessToken['oauth_token_secret']);
+        $parameters['oauth_signature'] = OAuthUtils::signRequest('GET', $url, $parameters, $this->getOption('client_secret'), $accessToken['oauth_token_secret']);
 
         $content = $this->doGetUserInformationRequest($url, $parameters)->getContent();
 
@@ -117,7 +118,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         ));
 
         $url = $this->getOption('access_token_url');
-        $parameters['oauth_signature'] = $this->signRequest('POST', $url, $parameters, $requestToken['oauth_token_secret']);
+        $parameters['oauth_signature'] = OAuthUtils::signRequest('POST', $url, $parameters, $this->getOption('client_secret'), $requestToken['oauth_token_secret']);
 
         $response = $this->doGetAccessTokenRequest($url, $parameters);
         $response = $this->getResponseContent($response);
@@ -158,7 +159,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         ));
 
         $url = $this->getOption('request_token_url');
-        $parameters['oauth_signature'] = $this->signRequest('POST', $url, $parameters);
+        $parameters['oauth_signature'] = OAuthUtils::signRequest('POST', $url, $parameters, $this->getOption('client_secret'));
 
         $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
 
@@ -223,45 +224,5 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, null, $parameters, array(), 'GET');
-    }
-
-    /**
-     * Sign the request parameters
-     *
-     * @param string $method Request method
-     * @param string $url    Request url
-     * @param array  $parameters  Parameters for the request
-     * @param string $tokenSecret Optional token secret to use with signing
-     *
-     * @return string
-     */
-    protected function signRequest($method, $url, $parameters, $tokenSecret = '')
-    {
-        // Remove oauth_signature if present
-        // Ref: Spec: 9.1.1 ("The oauth_signature parameter MUST be excluded.")
-        if (isset($params['oauth_signature'])) {
-            unset($params['oauth_signature']);
-        }
-
-        // Parameters are sorted by name, using lexicographical byte value ordering.
-        // Ref: Spec: 9.1.1 (1)
-        uksort($parameters, 'strcmp');
-
-        $parts = array(
-            $method,
-            rawurlencode($url),
-            rawurlencode(http_build_query($parameters)),
-        );
-
-        $baseString = implode('&', $parts);
-
-        $keyParts = array(
-            rawurlencode($this->getOption('client_secret')),
-            rawurlencode($tokenSecret),
-        );
-
-        $key = implode('&', $keyParts);
-
-        return base64_encode(hash_hmac('sha1', $baseString, $key, true));
     }
 }
