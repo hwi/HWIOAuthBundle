@@ -112,10 +112,11 @@ class OAuthUtils
         // Ref: Spec: 9.1.1 (1)
         uksort($parameters, 'strcmp');
 
+        // http_build_query should use RFC3986
         $parts = array(
             $method,
             rawurlencode($url),
-            rawurlencode(http_build_query($parameters)),
+            rawurlencode(str_replace(array('%7E','+'), array('~','%20'), http_build_query($parameters))),
         );
 
         $baseString = implode('&', $parts);
