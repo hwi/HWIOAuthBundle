@@ -34,7 +34,7 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'username'     => 'id',
-        'displayname'  => 'screen_name',
+        'username'     => 'screen_name',
+        'displayname'  => 'name',
     );
 }
