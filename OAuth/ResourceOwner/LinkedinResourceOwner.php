@@ -25,8 +25,8 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
         'authorization_url'   => 'https://www.linkedin.com/uas/oauth/authenticate',
         'request_token_url'   => 'https://api.linkedin.com/uas/oauth/requestToken',
         'access_token_url'    => 'https://api.linkedin.com/uas/oauth/accessToken',
-        'infos_url'           => 'http://api.linkedin.com/v1/people/~:(id,formatted-name)',
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+        'infos_url'           => 'http://api.linkedin.com/v1/people/~:(id,formatted-name,email-address,picture-url)',
+        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse',
         'realm'               => 'http://api.linkedin.com',
     );
 
@@ -37,6 +37,8 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
         'identifier' => 'id',
         'nickname'   => 'formattedName',
         'realname'   => 'formattedName',
+        'email'          => 'emailAddress',
+        'profilepicture' => 'pictureUrl',
     );
 
     /**

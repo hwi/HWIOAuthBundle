@@ -55,6 +55,6 @@ class LinkedinResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
     public function testGetOption()
     {
-        $this->assertEquals('http://api.linkedin.com/v1/people/~:(id,formatted-name)', $this->resourceOwner->getOption('infos_url'));
+        $this->assertEquals('http://api.linkedin.com/v1/people/~:(id,formatted-name,email-address,picture-url)', $this->resourceOwner->getOption('infos_url'));
     }
 }
