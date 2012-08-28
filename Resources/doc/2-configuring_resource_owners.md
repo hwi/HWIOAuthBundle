@@ -24,6 +24,7 @@ hwi_oauth:
 - [Linkedin](2x-linkedin.md)
 - [Sensio Connect](2x-sensio_connect.md)
 - [Twitter] (2x-twitter.md)
+- [Viadeo](2x-viadeo.md)
 - [Vkontakte](2x-vkontakte.md)
 - [Windows Live](2x-windows_live.md)
 - [Others](2x-others.md)
