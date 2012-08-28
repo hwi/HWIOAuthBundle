@@ -15,8 +15,12 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
 class OAuthTokenTest extends \PHPUnit_Framework_Testcase
 {
+    /**
+     * @var OAuthToken
+     */
     protected $token;
-    public function setup()
+
+    public function setUp()
     {
         $this->token = new OAuthToken('access_token', array('ROLE_TEST'));
         $this->token->setResourceOwnerName('github');
@@ -40,6 +44,9 @@ class OAuthTokenTest extends \PHPUnit_Framework_Testcase
 
     public function testSerialization()
     {
+        /**
+         * @var $token OAuthToken
+         */
         $token = unserialize(serialize($this->token));
 
         $this->assertEquals('access_token', $token->getAccessToken());

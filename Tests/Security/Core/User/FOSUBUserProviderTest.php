@@ -18,13 +18,13 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_Testcase
 {
     protected function setUp()
     {
-        if (!class_exists('FOS\UserBundle\Model\UserManagerInterface')) {
+        if (!interface_exists('FOS\UserBundle\Model\UserManagerInterface')) {
             $this->markTestSkipped('FOSUserBundle is not available');
         }
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage No property defined for entity for resource owner 'not_configured'.
      */
     public function testLoadUserByOAuthuserResponseThrowsExceptionWhenNoPropertyIsConfigured()
@@ -34,7 +34,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_Testcase
     }
 
     /**
-     * @expectedException HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException
      * @expectedExceptionMessage User 'asm89' not found.
      */
     public function testLoadUserByOAuthuserResponseThrowsExceptionWhenUserIsNull()
@@ -50,7 +50,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_Testcase
     {
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
-        $user = new User;
+        $user = new User();
         $provider = $this->createFOSUBUserProvider($user);
 
         $loadedUser = $provider->loadUserByOAuthUserResponse($userResponseMock);
@@ -60,7 +60,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_Testcase
 
     public function testConnectUser()
     {
-        $user = new User;
+        $user = new User();
 
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
         $provider = $this->createFOSUBUserProvider(false, $user);
@@ -71,12 +71,12 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_Testcase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException \RuntimeException
      * @expectedExceptionMessage Class 'HWI\Bundle\OAuthBundle\Tests\Fixtures\User' should have a method 'setGoogleId'.
      */
     public function testConnectUserWithNoSetterThrowsException()
     {
-        $user = new User;
+        $user = new User();
 
         $userResponseMock = $this->createUserResponseMock(null, 'google');
         $provider = $this->createFOSUBUserProvider();

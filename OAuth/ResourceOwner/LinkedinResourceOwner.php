@@ -34,8 +34,9 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'username'     => 'id',
-        'displayname'  => 'formattedName',
+        'identifier' => 'id',
+        'nickname'   => 'formattedName',
+        'realname'   => 'formattedName',
     );
 
     /**

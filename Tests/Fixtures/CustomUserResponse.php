@@ -22,10 +22,15 @@ class CustomUserResponse extends AbstractUserResponse
 {
     public function getUsername()
     {
+        return 'foo666';
+    }
+
+    public function getNickname()
+    {
         return 'foo';
     }
 
-    public function getDisplayName()
+    public function getRealName()
     {
         return 'foo';
     }

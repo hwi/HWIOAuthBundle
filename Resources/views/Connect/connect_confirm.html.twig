@@ -4,7 +4,7 @@
     <h3>{{ 'header.connecting' | trans({}, 'HWIOAuthBundle')}}</h3>
     <div class="row">
         <div class="span6">
-            <p>{{ 'connect.confirm.text' | trans({'%service%': service | trans({}, 'HWIOAuthBundle'), '%displayName%': userInformation.displayName}, 'HWIOAuthBundle') }}</p>
+            <p>{{ 'connect.confirm.text' | trans({'%service%': service | trans({}, 'HWIOAuthBundle'), '%name%': userInformation.realName}, 'HWIOAuthBundle') }}</p>
             <p>
                 <form action="{{ path('hwi_oauth_connect_service', {'service': service, 'key': key}) }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
                     {{ form_widget(form) }}

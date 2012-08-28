@@ -15,11 +15,14 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 
 class PathUserResponseTest extends \PHPUnit_Framework_Testcase
 {
+    /**
+     * @var PathUserResponse
+     */
     protected $responseObject;
 
-    public function setup()
+    public function setUp()
     {
-        $this->responseObject = new PathUserResponse;
+        $this->responseObject = new PathUserResponse();
     }
 
     public function testGetSetResponse()
@@ -36,7 +39,9 @@ class PathUserResponseTest extends \PHPUnit_Framework_Testcase
     public function testSetInvalidResponse()
     {
         $this->responseObject->setResponse('not_json');
-        $this->assertEquals($response, $this->responseObject->getResponse());
+
+        // should throw exception
+        $this->responseObject->getResponse();
     }
 
     public function testGetSetResourceOwner()
@@ -59,48 +64,58 @@ class PathUserResponseTest extends \PHPUnit_Framework_Testcase
     public function testGetUsername()
     {
         // easy path
-        $paths = array('username' => 'foo');
+        $paths = array('identifier' => 'id');
+        $this->responseObject->setPaths($paths);
+        $this->responseObject->setResponse(json_encode(array('id' => 666)));
+
+        $this->assertEquals(666, $this->responseObject->getUsername());
+    }
+
+    public function testGetNickname()
+    {
+        // easy path
+        $paths = array('nickname' => 'foo');
         $this->responseObject->setPaths($paths);
         $this->responseObject->setResponse(json_encode(array('foo' => 'bar')));
 
-        $this->assertEquals('bar', $this->responseObject->getUsername());
+        $this->assertEquals('bar', $this->responseObject->getNickname());
 
         // nesting
-        $paths = array('username' => 'foo.bar');
+        $paths = array('nickname' => 'foo.bar');
         $this->responseObject->setPaths($paths);
         $this->responseObject->setResponse(json_encode(array('foo' => array('bar' => 'qux'))));
 
-        $this->assertEquals('qux', $this->responseObject->getUsername());
+        $this->assertEquals('qux', $this->responseObject->getNickname());
     }
 
-    public function testGetDisplayName()
+    public function testGetRealName()
     {
         // easy path
-        $paths = array('displayname' => 'foo');
+        $paths = array('realname' => 'foo');
         $this->responseObject->setPaths($paths);
         $this->responseObject->setResponse(json_encode(array('foo' => 'bar')));
 
-        $this->assertEquals('bar', $this->responseObject->getDisplayName());
+        $this->assertEquals('bar', $this->responseObject->getRealName());
     }
 
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */
-    public function testGetUsernameInvalidPath()
+    public function testGetIdentifierInvalidPath()
     {
         // easy path
-        $paths = array('username' => 'non_existing');
+        $paths = array('identifier' => 'non_existing');
         $this->responseObject->setPaths($paths);
         $this->responseObject->setResponse(json_encode(array('foo' => 'bar')));
 
         // should throw exception
-        $this->responseObject->getUsername();
+        $this->responseObject->getNickname();
     }
 
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */
-    public function testNoUsernamePath()
+    public function testNoIdentifierPath()
     {
         // easy path
         $paths = array('non_username' => 'non_existing');
@@ -108,6 +123,6 @@ class PathUserResponseTest extends \PHPUnit_Framework_Testcase
         $this->responseObject->setResponse(json_encode(array('foo' => 'bar')));
 
         // should throw exception
-        $this->responseObject->getUsername();
+        $this->responseObject->getNickname();
     }
 }

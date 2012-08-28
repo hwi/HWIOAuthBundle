@@ -20,7 +20,7 @@ hwi_oauth:
             scope:               ""
             user_response_class: \Our\Custom\Response\Class
             paths:
-                email: email
+                email:          email
                 profilepicture: picture
 
         facebook:
@@ -39,9 +39,9 @@ hwi_oauth:
             scope:               ""
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
             paths:
-                username: id
-                displayname: username
-                email: email
+                identifier: id
+                nickname:   username
+                email:      email
 
         my_custom_oauth1:
             type:                oauth1
@@ -54,8 +54,8 @@ hwi_oauth:
             realm:               ""
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
-                username: id
-                displayname: username
+                identifier: id
+                nickname:   username
 
     # name of the firewall the oauth bundle is active in
     firewall_name: secured_area
