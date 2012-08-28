@@ -95,6 +95,8 @@ class FOSUBUserProvider implements OAuthAwareUserProviderInterface
      * @param UserResponseInterface $response
      *
      * @return string
+     *
+     * @throws \RuntimeException
      */
     protected function getProperty(UserResponseInterface $response)
     {

@@ -28,7 +28,7 @@ interface ResourceOwnerInterface
      *
      * @return UserResponseInterface The wrapped response interface.
      */
-    function getUserInformation($accessToken);
+    public function getUserInformation($accessToken);
 
     /**
      * Returns the provider's authorization url
@@ -38,7 +38,7 @@ interface ResourceOwnerInterface
      *
      * @return string The authorization url
      */
-    function getAuthorizationUrl($redirectUri, array $extraParameters = array());
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = array());
 
     /**
      * Retrieve an access token for a given code
@@ -49,14 +49,14 @@ interface ResourceOwnerInterface
      *
      * @return string The access token
      */
-    function getAccessToken(Request $request, $redirectUri, array $extraParameters = array());
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array());
 
     /**
      * Return a name for the resource owner.
      *
      * @return string
      */
-    function getName();
+    public function getName();
 
     /**
      * Checks whether the class can handle the request.
@@ -65,10 +65,10 @@ interface ResourceOwnerInterface
      *
      * @return boolean
      */
-    function handles(Request $request);
+    public function handles(Request $request);
 
     /**
      * Sets a name for the resource owner.
      */
-    function setName($name);
+    public function setName($name);
 }

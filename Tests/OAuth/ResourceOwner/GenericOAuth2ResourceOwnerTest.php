@@ -17,6 +17,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
 {
+    /**
+     * @var GenericOAuth2ResourceOwner
+     */
     protected $resourceOwner;
     protected $buzzClient;
     protected $buzzResponse;
@@ -24,7 +27,7 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
 
     protected $userResponse = '{"foo": "bar"}';
 
-    public function setup()
+    public function setUp()
     {
         $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
     }
@@ -43,8 +46,9 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
     protected function getDefaultPaths()
     {
         return array(
-            'username' => 'foo',
-            'displayname' => 'foo_disp',
+            'identifier' => 'id',
+            'nickname'   => 'foo',
+            'realname'   => 'foo_disp',
         );
     }
 
@@ -124,7 +128,8 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
     {
         $this->mockBuzz('invalid');
         $request = new Request(array('code' => 'code'));
-        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+
+        $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     /**
@@ -134,7 +139,8 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
     {
         $this->mockBuzz('error=foo');
         $request = new Request(array('code' => 'code'));
-        $accessToken = $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+
+        $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     public function testGetSetName()
@@ -151,10 +157,14 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_Testcase
         $resourceOwner = $this->createResourceOwner($options, 'oauth2');
 
         $this->mockBuzz();
+        /**
+         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+         */
         $userResponse = $resourceOwner->getUserInformation('access_token');
 
         $this->assertInstanceOf($options['user_response_class'], $userResponse);
-        $this->assertEquals('foo', $userResponse->getUsername());
+        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo', $userResponse->getNickname());
     }
 
     protected function mockBuzz($response = '', $contentType = 'text/plain')

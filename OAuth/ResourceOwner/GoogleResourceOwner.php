@@ -30,14 +30,17 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
         'access_token_url'    => 'https://accounts.google.com/o/oauth2/token',
         'infos_url'           => 'https://www.googleapis.com/oauth2/v1/userinfo',
         'scope'               => 'userinfo.profile',
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse',
     );
 
     /**
      * {@inheritDoc}
      */
     protected $paths = array(
-        'username'     => 'id',
-        'displayname'  => 'name',
+        'identifier'     => 'id',
+        'nickname'       => 'name',
+        'realname'       => 'name',
+        'email'          => 'email',
+        'profilepicture' => 'picture',
     );
 }

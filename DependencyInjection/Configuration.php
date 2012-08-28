@@ -22,6 +22,27 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 class Configuration implements ConfigurationInterface
 {
     /**
+     * Array of supported resource owners, indentation is intentional to easily notice
+     * which resource is of which type.
+     *
+     * @var array
+     */
+    private $resourceOwners = array(
+        'oauth2',
+            'facebook',
+            'github',
+            'google',
+            'sensio_connect',
+            'stack_exchange',
+            'vkontakte',
+            'windows_live',
+
+        'oauth1',
+            'linkedin',
+            'twitter',
+    );
+
+    /**
      * Generates the configuration tree builder.
      *
      * @return TreeBuilder $builder The tree builder
@@ -146,7 +167,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('type')
                             ->validate()
-                                ->ifNotInArray(array('facebook', 'oauth2', 'github', 'google', 'sensio_connect', 'windows_live', 'vkontakte', 'oauth1', 'twitter', 'linkedin'))
+                                ->ifNotInArray($this->resourceOwners)
                                 ->thenInvalid('Unknown resource owner type %s.')
                             ->end()
                             ->validate()
@@ -216,7 +237,7 @@ class Configuration implements ConfigurationInterface
                                 return false;
                             }
 
-                            $children = array('username', 'displayname');
+                            $children = array('identifier', 'nickname', 'realname');
                             foreach ($children as $child) {
                                 if (!isset($c['paths'][$child])) {
                                     return true;
@@ -226,7 +247,7 @@ class Configuration implements ConfigurationInterface
                             // one of the two should be set
                             return !isset($c['paths']) && !isset($c['user_response_class']);
                         })
-                        ->thenInvalid("At least 'username' and 'displayname' paths should be configured for oauth2 and oauth1 types.")
+                        ->thenInvalid("At least the 'identifier', 'nickname' and 'realname' paths should be configured for oauth2 and oauth1 types.")
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {

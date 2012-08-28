@@ -51,7 +51,7 @@ class SessionStorage implements OAuth1RequestTokenStorageInterface
     /**
      * {@inheritDoc}
      */
-    public function save(ResourceOwnerInterface $resourceOwner, $token)
+    public function save(ResourceOwnerInterface $resourceOwner, array $token)
     {
         if (!isset($token['oauth_token'])) {
             throw new \RuntimeException('Invalid request token.');

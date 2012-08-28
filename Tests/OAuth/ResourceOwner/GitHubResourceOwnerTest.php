@@ -18,14 +18,15 @@ class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = '{"login": "bar"}';
 
-    public function setup()
+    public function setUp()
     {
         $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
     }
 
     protected function getDefaultOptions()
     {
-        return array('client_id' => 'clientid',
+        return array(
+            'client_id'     => 'clientid',
             'client_secret' => 'clientsecret',
         );
     }

@@ -36,10 +36,8 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @var array
      */
     protected $options = array(
-        'displayname_path'    => '',
         'infos_url'           => '',
         'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-        'username_path'       => '',
         'scope'               => '',
     );
 

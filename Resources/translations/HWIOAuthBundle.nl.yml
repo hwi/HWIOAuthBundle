@@ -1,14 +1,14 @@
 header:
     connecting: Koppelen
-    success: De account '%displayName%' is gekoppeld!
-    register: Registreer met de account '%displayName%'
+    success: De account '%name%' is gekoppeld!
+    register: Registreer met de account '%name%'
     registration_success: De account '%username%' is succesvol geregistreerd en gekoppeld!
 
 connect:
     confirm:
         cancel: Annuleren
         submit: Account koppelen
-        text: Weet je zeker dat je je %service% account '%displayName%' aan je huidige account wil koppelen?
+        text: Weet je zeker dat je je %service% account '%name%' aan je huidige account wil koppelen?
     registration:
         cancel: Annuleren
         submit: Registeer account

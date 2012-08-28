@@ -15,9 +15,9 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse;
 
 class AdvancedPathUserResponseTest extends PathUserResponseTest
 {
-    public function setup()
+    public function setUp()
     {
-        $this->responseObject = new AdvancedPathUserResponse;
+        $this->responseObject = new AdvancedPathUserResponse();
     }
 
     public function testGetEmail()

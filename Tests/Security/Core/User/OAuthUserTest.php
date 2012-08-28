@@ -43,6 +43,9 @@ class OAuthUserTest extends \PHPUnit_Framework_Testcase
     public function testGetUsername()
     {
         $this->assertEquals('asm89', $this->user->getUsername());
+
+        $user = new OAuthUser('other');
+        $this->assertEquals('other', $user->getUsername());
     }
 
     public function testEraseCredentials()
@@ -52,10 +55,10 @@ class OAuthUserTest extends \PHPUnit_Framework_Testcase
 
     public function testEquals()
     {
-        $user = new OAuthUser('other');
-        $user2 = new OAuthUser('asm89');
+        $otherUser = new OAuthUser('other');
+        $sameUser  = new OAuthUser('asm89');
 
-        $this->assertFalse($this->user->equals($user));
-        $this->assertTrue($this->user->equals($user2));
+        $this->assertFalse($this->user->equals($otherUser));
+        $this->assertTrue($this->user->equals($sameUser));
     }
 }

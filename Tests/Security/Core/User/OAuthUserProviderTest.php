@@ -17,18 +17,21 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser,
 
 class OAuthUserProviderTest extends \PHPUnit_Framework_Testcase
 {
+    /**
+     * @var OAuthUserProvider
+     */
     protected $provider;
 
-    public function setup()
+    public function setUp()
     {
-        $this->provider = new OAuthUserProvider;
+        $this->provider = new OAuthUserProvider();
     }
 
     public function testLoadUserByUsername()
     {
         $user = $this->provider->loadUserByUsername('asm89');
         $this->assertInstanceOf('\HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser', $user);
-        $this->assertEquals('asm89', $user->getUserName());
+        $this->assertEquals('asm89', $user->getUsername());
     }
 
     public function testRefreshUser()
@@ -40,7 +43,7 @@ class OAuthUserProviderTest extends \PHPUnit_Framework_Testcase
     }
 
     /**
-     * @expectedException Symfony\Component\Security\Core\Exception\UnsupportedUserException
+     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
      * @expectedExceptionMessage Unsupported user class "Symfony\Component\Security\Core\User\User"
      */
     public function testRefreshUserUnsupportedClass()
@@ -70,6 +73,6 @@ class OAuthUserProviderTest extends \PHPUnit_Framework_Testcase
 
         $user = $this->provider->loadUserByOAuthUserResponse($responseMock);
         $this->assertInstanceOf('\HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser', $user);
-        $this->assertEquals('asm89', $user->getUserName());
+        $this->assertEquals('asm89', $user->getUsername());
     }
 }

@@ -35,6 +35,14 @@ class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserProvider
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function loadUserByOAuthUserResponse(UserResponseInterface $response)
+    {
+        return $this->loadUserByUsername($response->getUsername());
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function refreshUser(UserInterface $user)
@@ -52,13 +60,5 @@ class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserProvider
     public function supportsClass($class)
     {
         return $class === 'HWI\\Bundle\\OAuthBundle\\Security\\Core\\User\\OAuthUser';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function loadUserByOAuthUserResponse(UserResponseInterface $response)
-    {
-        return $this->loadUserByUsername($response->getUsername());
     }
 }
