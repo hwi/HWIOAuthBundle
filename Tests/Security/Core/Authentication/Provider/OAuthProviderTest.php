@@ -24,7 +24,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_Testcase
 {
     public function testSupportsOAuthToken()
     {
-        $oauthProvider = new OAuthProvider($this->getOAuthAwareUserProviderMock(), $this->getResourceOwnerMapMock());
+        $oauthProvider = new OAuthProvider($this->getOAuthAwareUserProviderMock(), $this->getResourceOwnerMapMock(), $this->getUserCheckerMock());
         $this->assertTrue($oauthProvider->supports(new OAuthToken('')));
     }
 
@@ -60,7 +60,12 @@ class OAuthProviderTest extends \PHPUnit_Framework_Testcase
             ->method('loadUserByOAuthUserResponse')
             ->will($this->returnValue($userMock));
 
-        $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock);
+        $userCheckerMock = $this->getUserCheckerMock();
+        $userCheckerMock->expects($this->once())
+            ->method('checkPostAuth')
+            ->with($userMock);
+
+        $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock);
 
         $token = $oauthProvider->authenticate($oauthTokenMock);
         $this->assertTrue($token->isAuthenticated());
@@ -100,7 +105,10 @@ class OAuthProviderTest extends \PHPUnit_Framework_Testcase
             ->method('loadUserByOAuthUserResponse')
              ->will($this->throwException(new OAuthAwareException));
 
-        $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock);
+        $userCheckerMock = $this->getUserCheckerMock();
+
+        $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock);
+
 
         try {
             $oauthProvider->authenticate($oauthTokenMock);
@@ -141,6 +149,12 @@ class OAuthProviderTest extends \PHPUnit_Framework_Testcase
     protected function getUserResponseMock()
     {
         return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
+            ->getMock();
+    }
+
+    protected function getUserCheckerMock()
+    {
+        return $this->getMockBuilder('\Symfony\Component\Security\Core\User\UserCheckerInterface')
             ->getMock();
     }
 
