@@ -44,7 +44,7 @@ class FacebookResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     public function testGetAuthorizationUrl()
     {
         $this->assertEquals(
-            'https://www.facebook.com/dialog/oauth?response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            'https://www.facebook.com/dialog/oauth?response_type=code&client_id=clientid&scope=email&redirect_uri=http%3A%2F%2Fredirect.to%2F',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }

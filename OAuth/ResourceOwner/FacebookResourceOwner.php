@@ -25,8 +25,8 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
         'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
         'infos_url'           => 'https://graph.facebook.com/me',
-        'scope'               => '',
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+        'scope'               => 'email',
+        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\FacebookPathUserResponse',
     );
 
     /**
@@ -36,6 +36,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         'identifier' => 'id',
         'nickname'   => 'username',
         'realname'   => 'name',
+        'email'      => 'email',
     );
 
     /**
