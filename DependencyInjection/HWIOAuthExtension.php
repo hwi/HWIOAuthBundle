@@ -88,12 +88,12 @@ class HWIOAuthExtension extends Extension
                  $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), $serviceId);
             }
 
-            $container->setAlias('hwi_oauth.user_checker', 'security.user_checker');
-
             // setup custom services
         } else {
             $container->setParameter('hwi_oauth.connect', false);
         }
+
+        $container->setAlias('hwi_oauth.user_checker', 'security.user_checker');
     }
 
     /**
