@@ -198,9 +198,17 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $authorization = 'Authorization: OAuth realm="' . rawurlencode($this->getOption('realm')) . '"';
         }
 
+        $authorization .= ' ';
+
+        $parameter_count = count($parameters);
+        $i = 0;
         foreach ($parameters as $key => $value) {
             $value = rawurlencode($value);
-            $authorization .= ", $key=\"$value\"";
+
+            $authorization .= "$key=\"$value\"";
+            if (++$i !== $parameter_count) {
+                $authorization .= ", ";
+            }
         }
 
         $headers[] = $authorization;
