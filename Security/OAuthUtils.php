@@ -69,7 +69,7 @@ class OAuthUtils
         return $resourceOwner->getAuthorizationUrl(
             $connect && $hasUser
                 ? $this->generateUrl('hwi_oauth_connect_service', array('service' => $name), true)
-                : $this->generateUri($checkPath)
+                : $this->generateUri($resourceOwner, $checkPath)
         );
     }
 
@@ -157,18 +157,19 @@ class OAuthUtils
     /**
      * Get the uri for a given path.
      *
-     * @param string $path Path or route
+     * @param ResourceOwnerInterface $resourceOwner Resource owner
+     * @param string                 $path Path or route
      *
      * @return string
      */
-    private function generateUri($path)
+    private function generateUri(ResourceOwnerInterface $resourceOwner, $path)
     {
         if (0 === strpos($path, 'http') || !$path) {
             return $path;
         }
 
         if ($path && '/' === $path[0]) {
-            return $this->container->get('request')->getUriForPath($path);
+            return $resourceOwner->generateUri($this->container->get('request'), $path);
         }
 
         return $this->generateUrl($path, array(), true);

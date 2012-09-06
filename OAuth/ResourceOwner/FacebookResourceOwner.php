@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * FacebookResourceOwner
  *
@@ -45,5 +47,13 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     public function configure()
     {
         $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function generateUri(Request $request, $path)
+    {
+        return $request->getScheme().'://'.$request->getHttpHost().$request->getBaseUrl().$path;
     }
 }

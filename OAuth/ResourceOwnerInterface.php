@@ -71,4 +71,12 @@ interface ResourceOwnerInterface
      * Sets a name for the resource owner.
      */
     public function setName($name);
+
+    /**
+     * @param Request $request
+     * @param string  $path
+     *
+     * @return string
+     */
+    public function generateUri(Request $request, $path);
 }
