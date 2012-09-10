@@ -25,6 +25,9 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
  */
 class OAuthUtils
 {
+    const SIGNATURE_METHOD_HMAC = 'HMAC-SHA1';
+    const SIGNATURE_METHOD_RSA  = 'RSA-SHA1';
+
     /**
      * @var ContainerInterface
      */
@@ -89,17 +92,18 @@ class OAuthUtils
     /**
      * Sign the request parameters
      *
-     * @param string $method       Request method
-     * @param string $url          Request url
-     * @param array  $parameters   Parameters for the request
-     * @param string $clientSecret Client secret to use as key part of signing
-     * @param string $tokenSecret  Optional token secret to use with signing
+     * @param string $method          Request method
+     * @param string $url             Request url
+     * @param array  $parameters      Parameters for the request
+     * @param string $clientSecret    Client secret to use as key part of signing
+     * @param string $tokenSecret     Optional token secret to use with signing
+     * @param string $signatureMethod Optional signature method used to sign token
      *
      * @return string
      *
      * @throws \RuntimeException
      */
-    public static function signRequest($method, $url, $parameters, $clientSecret, $tokenSecret = '')
+    public static function signRequest($method, $url, $parameters, $clientSecret, $tokenSecret = '', $signatureMethod = self::SIGNATURE_METHOD_HMAC)
     {
         // Validate required parameters
         foreach (array('oauth_consumer_key', 'oauth_timestamp', 'oauth_nonce', 'oauth_version', 'oauth_signature_method') as $parameter) {
@@ -127,14 +131,29 @@ class OAuthUtils
 
         $baseString = implode('&', $parts);
 
-        $keyParts = array(
-            rawurlencode($clientSecret),
-            rawurlencode($tokenSecret),
-        );
+        switch ($signatureMethod) {
+            case self::SIGNATURE_METHOD_HMAC:
+                $keyParts = array(
+                    rawurlencode($clientSecret),
+                    rawurlencode($tokenSecret),
+                );
 
-        $key = implode('&', $keyParts);
+                $signature = hash_hmac('sha1', $baseString, implode('&', $keyParts), true);
+                break;
 
-        return base64_encode(hash_hmac('sha1', $baseString, $key, true));
+            case self::SIGNATURE_METHOD_RSA:
+                $privateKey = openssl_get_privatekey(file_get_contents($clientSecret), $tokenSecret);
+                $signature  = false;
+
+                openssl_sign($baseString, $signature, $privateKey);
+                openssl_free_key($privateKey);
+                break;
+
+            default:
+                throw new \RuntimeException(sprintf('Unknown signature method selected %s.', $signatureMethod));
+        }
+
+        return base64_encode($signature);
     }
 
     /**

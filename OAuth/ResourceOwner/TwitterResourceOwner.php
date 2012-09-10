@@ -28,6 +28,7 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
         'infos_url'           => 'http://api.twitter.com/1/account/verify_credentials.json',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
         'realm'               => '',
+        'signature_method'    => 'HMAC-SHA1',
     );
 
     /**
