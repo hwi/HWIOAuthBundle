@@ -40,6 +40,7 @@ class Configuration implements ConfigurationInterface
         'oauth1',
             'linkedin',
             'twitter',
+            'jira',
     );
 
     /**
@@ -109,6 +110,7 @@ class Configuration implements ConfigurationInterface
                 ->useAttributeAsKey('name')
                 ->prototype('array')
                     ->children()
+                        ->scalarNode('base_url')->end()
                         ->scalarNode('access_token_url')
                             ->validate()
                                 ->ifTrue(function($v) {
