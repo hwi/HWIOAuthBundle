@@ -76,7 +76,7 @@ class OAuthListener extends AbstractAuthenticationListener
 
         if (!$resourceOwner->handles($request)) {
             // Can't use AuthenticationException below, as it leads to infinity loop
-            throw new \RuntimeException('No oauth code in the request.');
+            throw new AuthenticationException('No oauth code in the request.');
         }
 
         $accessToken = $resourceOwner->getAccessToken(
