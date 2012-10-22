@@ -49,8 +49,25 @@ class VkontakteResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         );
     }
 
+    public function testCustomResponseClass()
+    {
+        $options = $this->getDefaultOptions();
+        $options['user_response_class'] = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $resourceOwner = $this->createResourceOwner($options, 'oauth2');
+
+        $this->mockBuzz();
+        /**
+         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+         */
+        $userResponse = $resourceOwner->getUserInformation('access_token', 123456);
+
+        $this->assertInstanceOf($options['user_response_class'], $userResponse);
+        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo', $userResponse->getNickname());
+    }
+
     public function testGetOption()
     {
-        $this->assertEquals('https://api.vk.com/method/getUserInfoEx', $this->resourceOwner->getOption('infos_url'));
+        $this->assertEquals('https://api.vk.com/method/users.get', $this->resourceOwner->getOption('infos_url'));
     }
 }

@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * VkontakteResourceOwner
@@ -26,8 +27,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
     protected $options = array(
         'authorization_url'   => 'https://api.vk.com/oauth/authorize',
         'access_token_url'    => 'https://oauth.vk.com/access_token',
-        'infos_url'           => 'https://api.vk.com/method/getUserInfoEx',
-        'extend_info_url'     => 'https://api.vk.com/method/users.get',
+        'infos_url'           => 'https://api.vk.com/method/users.get',
         'scope'               => '',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
@@ -54,12 +54,13 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getUserInformation($accessToken)
+    public function getUserInformation($accessToken, $user_id = null)
     {
         $url = $this->getOption('infos_url');
         $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
-            'access_token' => $accessToken
+            'access_token' => $accessToken,
         ));
+        $url .= '&uids=' . $user_id . '&fields=first_name,last_name,nickname,screen_name,sex,photo_big';
 
         $content = $this->doGetUserInformationRequest($url)->getContent();
 
@@ -68,32 +69,32 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         $response->setResourceOwner($this);
         $response->setAccessToken($accessToken);
 
-        $response = $response->getResponse();
+        return $response;
+    }
 
-        //Create request for more information
-
-        $url = $this->getOption('extend_info_url');
-        $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
-            'access_token' => $accessToken
+    /**
+     * {@inheritDoc}
+     */
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
+    {
+        $parameters = array_merge($extraParameters, array(
+            'code'          => $request->query->get('code'),
+            'grant_type'    => 'authorization_code',
+            'client_id'     => $this->getOption('client_id'),
+            'client_secret' => $this->getOption('client_secret'),
+            'redirect_uri'  => $redirectUri,
         ));
-        $url .= '&uids=' . $response['response']['user_id'] . '&fields=first_name,last_name,nickname,screen_name,sex,photo_big';
 
-        $response = $this->getUserResponse();
+        $response = $this->doGetAccessTokenRequest($this->getOption('access_token_url'), $parameters);
+        $response = $this->getResponseContent($response);
 
-        $content = $this->doGetUserInformationRequest($url)->getContent();
-        $content = json_decode($content, true);
-
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new AuthenticationException(sprintf('Not a valid JSON response.'));
+        if (isset($response['error'])) {
+            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
         }
 
-        $responseParameter = array(
-            'response' => $content['response'][0],
-        );
-
-        $response->setResponse(json_encode($responseParameter));
-        $response->setResourceOwner($this);
-        $response->setAccessToken($accessToken);
+        if (!isset($response['access_token'])) {
+            throw new AuthenticationException('Not a valid access token.');
+        }
 
         return $response;
     }
