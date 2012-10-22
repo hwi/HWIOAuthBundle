@@ -56,16 +56,26 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getUserInformation($accessToken, $user_id = null)
     {
+        if(is_array($accessToken)) {
+            $user_id = $accessToken['user_id'];
+            $accessToken = $accessToken['access_token'];
+        }
         $url = $this->getOption('infos_url');
         $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
             'access_token' => $accessToken,
         ));
         $url .= '&uids=' . $user_id . '&fields=first_name,last_name,nickname,screen_name,sex,photo_big';
 
-        $content = $this->doGetUserInformationRequest($url)->getContent();
+        $userInfo = $this->doGetUserInformationRequest($url)->getContent();
+
+        $content = json_decode($userInfo, true);
+
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            throw new AuthenticationException(sprintf('Not a valid JSON response.'));
+        }
 
         $response = $this->getUserResponse();
-        $response->setResponse($content);
+        $response->setResponse(json_encode(array('response' => $content['response'][0])));
         $response->setResourceOwner($this);
         $response->setAccessToken($accessToken);
 

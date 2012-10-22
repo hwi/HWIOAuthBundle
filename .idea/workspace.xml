@@ -2,9 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e233b45-b14e-4915-9ecd-8c3d65e8e8b1" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Controller/ConnectController.php" afterPath="$PROJECT_DIR$/Controller/ConnectController.php" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/.name" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/HWIOAuthBundle.iml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/encodings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/scopes/scope_settings.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/OAuth/ResourceOwner/VkontakteResourceOwner.php" afterPath="$PROJECT_DIR$/OAuth/ResourceOwner/VkontakteResourceOwner.php" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Tests/OAuth/ResourceOwner/VkontakteResourceOwnerTest.php" afterPath="$PROJECT_DIR$/Tests/OAuth/ResourceOwner/VkontakteResourceOwnerTest.php" />
     </list>
     <ignored path="HWIOAuthBundle.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,7 +33,7 @@
       <file leaf-file-name="VkontakteResourceOwner.php" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/OAuth/ResourceOwner/VkontakteResourceOwner.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="69" column="48" selection-start="2155" selection-end="2155" vertical-scroll-proportion="0.5093333">
+            <state line="111" column="0" selection-start="3576" selection-end="3576" vertical-scroll-proportion="2.1733334">
               <folding />
             </state>
           </provider>
@@ -45,7 +51,7 @@
       <file leaf-file-name="GenericOAuth2ResourceOwnerTest.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Tests/OAuth/ResourceOwner/GenericOAuth2ResourceOwnerTest.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="169" column="23" selection-start="6244" selection-end="6244" vertical-scroll-proportion="-16.04">
+            <state line="150" column="5" selection-start="5504" selection-end="5504" vertical-scroll-proportion="-3.88">
               <folding />
             </state>
           </provider>
@@ -54,7 +60,7 @@
       <file leaf-file-name="ConnectController.php" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Controller/ConnectController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="164" column="12" selection-start="6497" selection-end="6497" vertical-scroll-proportion="-16.88">
+            <state line="211" column="23" selection-start="8027" selection-end="8027" vertical-scroll-proportion="-9.8">
               <folding />
             </state>
           </provider>
@@ -433,13 +439,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Controller/ConnectController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="164" column="12" selection-start="6497" selection-end="6497" vertical-scroll-proportion="-16.88">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/OAuth/ResourceOwner/GenericOAuth2ResourceOwner.php">
       <provider selected="true" editor-type-id="text-editor">
         <state line="42" column="14" selection-start="1221" selection-end="1221" vertical-scroll-proportion="-16.32">
@@ -456,14 +455,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Tests/OAuth/ResourceOwner/GenericOAuth2ResourceOwnerTest.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="169" column="23" selection-start="6244" selection-end="6244" vertical-scroll-proportion="-16.04">
+        <state line="150" column="5" selection-start="5504" selection-end="5504" vertical-scroll-proportion="-3.88">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Controller/ConnectController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="211" column="23" selection-start="8027" selection-end="8027" vertical-scroll-proportion="-9.8">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/OAuth/ResourceOwner/VkontakteResourceOwner.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="69" column="48" selection-start="2155" selection-end="2155" vertical-scroll-proportion="0.5093333">
+        <state line="111" column="0" selection-start="3576" selection-end="3576" vertical-scroll-proportion="2.1733334">
           <folding />
         </state>
       </provider>
