@@ -29,6 +29,27 @@ use Symfony\Component\DependencyInjection\ContainerAware,
 class ConnectController extends ContainerAware
 {
     /**
+     * Choosen templating engine.
+     *
+     * @var string
+     */
+    private $templatingEngine;
+
+    /**
+     * Returns templating engine name.
+     *
+     * @return string
+     */
+    protected function getTemplatingEngine()
+    {
+        if (!isset($this->templatingEngine)) {
+            $this->templatingEngine = $this->container->getParameter('hwi_oauth.templating.engine');
+        }
+
+        return $this->templatingEngine;
+    }
+
+    /**
      * Action that handles the login 'form'. If connecting is enabled the
      * user will be redirected to the appropriate login urls or registration forms.
      *
@@ -60,7 +81,7 @@ class ConnectController extends ContainerAware
             $error = $error->getMessage();
         }
 
-        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:login.html.twig', array(
+        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:login.html.' . $this->getTemplatingEngine(), array(
             'error'   => $error,
         ));
     }
@@ -99,7 +120,7 @@ class ConnectController extends ContainerAware
             // Authenticate the user
             $this->authenticateUser($form->getData());
 
-            return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.twig', array(
+            return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
             ));
         }
@@ -108,7 +129,7 @@ class ConnectController extends ContainerAware
         $key = time();
         $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
-        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration.html.twig', array(
+        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration.html.' . $this->getTemplatingEngine(), array(
             'key' => $key,
             'form' => $form->createView(),
             'userInformation' => $userInformation,
@@ -166,13 +187,13 @@ class ConnectController extends ContainerAware
 
                 $this->container->get('hwi_oauth.account.connector')->connect($user, $userInformation);
 
-                return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.twig', array(
+                return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
                     'userInformation' => $userInformation,
                 ));
             }
         }
 
-        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_confirm.html.twig', array(
+        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_confirm.html.' . $this->getTemplatingEngine(), array(
             'key' => $key,
             'service' => $service,
             'form' => $form->createView(),

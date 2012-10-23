@@ -256,7 +256,8 @@ class Configuration implements ConfigurationInterface
                         ->thenInvalid("If you're setting a service, no other arguments should be set.")
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+            ->scalarNode('templating_engine')->end();
 
         return $builder;
     }
