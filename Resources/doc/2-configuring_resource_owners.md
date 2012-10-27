@@ -40,6 +40,7 @@ hwi_oauth:
 - [Vkontakte](2x-vkontakte.md)
 - [Windows Live](2x-windows_live.md)
 - [Yahoo](2x-yahoo.md)
+- [Yandex](2x-yandex.md)
 - [Others](2x-others.md)
 
 ### Continue to the next step!
