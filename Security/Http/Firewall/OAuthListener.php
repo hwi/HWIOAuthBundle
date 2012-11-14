@@ -75,8 +75,10 @@ class OAuthListener extends AbstractAuthenticationListener
         list($resourceOwner, $checkPath) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
 
         if (!$resourceOwner->handles($request)) {
-            // Can't use AuthenticationException below, as it leads to infinity loop
-            throw new \RuntimeException('No oauth code in the request.');
+            if ($request->query->has('error') && $request->query->has('state')) {
+                throw new AuthenticationException(sprintf('OAuth error %s with state %s', $request->query->get('error'), $request->query->get('state')));
+            }
+            throw new AuthenticationException('Unkonwn OAuth error');
         }
 
         $accessToken = $resourceOwner->getAccessToken(
