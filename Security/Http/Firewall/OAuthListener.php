@@ -78,7 +78,7 @@ class OAuthListener extends AbstractAuthenticationListener
             if ($request->query->has('error') && $request->query->has('state')) {
                 throw new AuthenticationException(sprintf('OAuth error %s with state %s', $request->query->get('error'), $request->query->get('state')));
             }
-            throw new AuthenticationException('Unkonwn OAuth error');
+            throw new AuthenticationException('Unknown OAuth error');
         }
 
         $accessToken = $resourceOwner->getAccessToken(
