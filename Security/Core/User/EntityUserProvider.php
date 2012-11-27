@@ -29,12 +29,12 @@ class EntityUserProvider implements OAuthAwareUserProviderInterface
     /**
      * @var array
      */
-    private $properties;
+    protected $properties;
 
     /**
      * @var mixed
      */
-    private $repository;
+    protected $repository;
 
     /**
      * Constructor.
