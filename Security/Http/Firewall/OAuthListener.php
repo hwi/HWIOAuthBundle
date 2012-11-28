@@ -72,11 +72,12 @@ class OAuthListener extends AbstractAuthenticationListener
      */
     protected function attemptAuthentication(Request $request)
     {
+        $this->handleOAuthError($request);
+
         list($resourceOwner, $checkPath) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
 
         if (!$resourceOwner->handles($request)) {
-            // Can't use AuthenticationException below, as it leads to infinity loop
-            throw new \RuntimeException('No oauth code in the request.');
+            throw new AuthenticationException('No oauth code in the request.');
         }
 
         $accessToken = $resourceOwner->getAccessToken(
@@ -88,5 +89,81 @@ class OAuthListener extends AbstractAuthenticationListener
         $token->setResourceOwnerName($resourceOwner->getName());
 
         return $this->authenticationManager->authenticate($token);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @throws AuthenticationException
+     */
+    private function handleOAuthError(Request $request)
+    {
+        // Try to parse content if error was not in request query
+        if (null === $errorCode = $request->query->get('error')) {
+            $content = json_decode($request->getContent(), true);
+            if (JSON_ERROR_NONE === json_last_error() && isset($content['error'])) {
+                if (isset($content['error']['message'])) {
+                    throw new AuthenticationException($content['error']['message']);
+                }
+
+                if (isset($content['error']['code'])) {
+                    $errorCode = $content['error']['code'];
+                } elseif (isset($content['error']['error-code'])) {
+                    $errorCode = $content['error']['error-code'];
+                }
+            }
+        }
+
+        if (null !== $errorCode) {
+            throw new AuthenticationException($this->transformOAuthError($errorCode));
+        }
+    }
+
+    /**
+     * @param string $errorCode
+     *
+     * @return string
+     */
+    private function transformOAuthError($errorCode)
+    {
+        // "translate" error to human readable format
+        switch ($errorCode) {
+            case 'redirect_uri_mismatch':
+                $error = 'Redirect URI mismatches configured one.';
+                break;
+
+            case 'bad_verification_code':
+                $error = 'Bad verification code.';
+                break;
+
+            case 'incorrect_client_credentials':
+                $error = 'Incorrect client credentials.';
+                break;
+
+            case 'unauthorized_client':
+                $error = 'Unauthorized client.';
+                break;
+
+            case 'invalid_assertion':
+                $error = 'Invalid assertion.';
+                break;
+
+            case 'unknown_format':
+                $error = 'Unknown format.';
+                break;
+
+            case 'authorization_expired':
+                $error = 'Authorization expired.';
+                break;
+
+            case 'access_denied':
+                $error = 'You have refused access for this site.';
+                break;
+
+            default:
+                $error = sprintf('Unknown OAuth error: "%s".', $errorCode);
+        }
+
+        return $error;
     }
 }
