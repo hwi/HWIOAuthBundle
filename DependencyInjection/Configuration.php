@@ -30,6 +30,7 @@ class Configuration implements ConfigurationInterface
     private $resourceOwners = array(
         'oauth2',
             'facebook',
+            'foursquare',
             'github',
             'google',
             'sensio_connect',
