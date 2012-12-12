@@ -41,9 +41,10 @@ class OAuthFactory extends AbstractFactory
         }
         $container->setParameter('hwi_oauth.resource_ownermap.configured.'.$id, $resourceOwnersMap);
 
-        $ownerMapDefinition = $container
+        $container
             ->setDefinition($this->getResourceOwnerMapReference($id), new DefinitionDecorator('hwi_oauth.abstract_resource_ownermap'))
-            ->replaceArgument(3, new Parameter('hwi_oauth.resource_ownermap.configured.'.$id));
+            ->replaceArgument(3, new Parameter('hwi_oauth.resource_ownermap.configured.'.$id))
+        ;
     }
 
     /**
@@ -85,14 +86,16 @@ class OAuthFactory extends AbstractFactory
         switch(key($config)) {
             case 'oauth':
                 $container
-                    ->setDefinition($serviceId, new DefinitionDecorator('hwi_oauth.user.provider'));
+                    ->setDefinition($serviceId, new DefinitionDecorator('hwi_oauth.user.provider'))
+                ;
                 break;
             case 'orm':
                 $container
                     ->setDefinition($serviceId, new DefinitionDecorator('hwi_oauth.user.provider.entity'))
                     ->addArgument($config['orm']['class'])
                     ->addArgument($config['orm']['properties'])
-                    ->addArgument($config['orm']['manager_name']);
+                    ->addArgument($config['orm']['manager_name'])
+                ;
                 break;
             case 'service':
                 $container
@@ -111,9 +114,10 @@ class OAuthFactory extends AbstractFactory
     {
         $entryPointId = 'hwi_oauth.authentication.entry_point.oauth.'.$id;
 
-        $entryPointDefinition = $container
+        $container
             ->setDefinition($entryPointId, new DefinitionDecorator('hwi_oauth.authentication.entry_point.oauth'))
-            ->addArgument($config['login_path']);
+            ->addArgument($config['login_path'])
+        ;
 
         return $entryPointId;
     }
@@ -126,13 +130,15 @@ class OAuthFactory extends AbstractFactory
         $listenerId = parent::createListener($container, $id, $config, $userProvider);
 
         $checkPaths = array();
-        foreach ($config['resource_owners'] as $name => $checkPath) {
+        foreach ($config['resource_owners'] as $checkPath) {
             $checkPaths[] = $checkPath;
         }
 
-        $container->getDefinition($listenerId)
+        $container
+            ->getDefinition($listenerId)
             ->addMethodCall('setResourceOwnerMap', array($this->getResourceOwnerMapReference($id)))
-            ->addMethodCall('setCheckPaths', array($checkPaths));
+            ->addMethodCall('setCheckPaths', array($checkPaths))
+        ;
 
         return $listenerId;
     }
@@ -155,9 +161,8 @@ class OAuthFactory extends AbstractFactory
                 ->validate()
                     ->ifTrue(function($c) {
                         $checkPaths = array();
-                        foreach ($c as $name => $checkPath) {
+                        foreach ($c as $checkPath) {
                             if (in_array($checkPath, $checkPaths)) {
-
                                 return true;
                             }
 

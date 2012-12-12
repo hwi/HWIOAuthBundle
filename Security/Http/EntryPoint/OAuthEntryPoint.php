@@ -16,8 +16,6 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
     Symfony\Component\Security\Http\HttpUtils,
     Symfony\Component\HttpFoundation\Request;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-
 /**
  * OAuthEntryPoint redirects the user to the appropriate login url if there is
  * only one resource owner. Otherwise the user will be redirected to a login

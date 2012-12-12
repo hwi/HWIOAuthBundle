@@ -15,8 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\HttpFoundation\Request,
     Symfony\Component\Templating\Helper\Helper;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
-    HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 
 /**
  * OAuthHelper
