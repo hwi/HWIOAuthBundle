@@ -53,6 +53,9 @@ class HWIOAuthExtension extends Extension
         // set current firewall
         $container->setParameter('hwi_oauth.firewall_name', $config['firewall_name']);
 
+        // set target path parameter
+        $container->setParameter('hwi_oauth.target_path_parameter', $config['target_path_parameter']);
+
         // setup services for all configured resource owners
         $resourceOwners = array();
         foreach ($config['resource_owners'] as $name => $options) {
