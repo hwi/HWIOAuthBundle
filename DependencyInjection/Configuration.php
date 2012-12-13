@@ -59,6 +59,8 @@ class Configuration implements ConfigurationInterface
             ->scalarNode('firewall_name')
                 ->cannotBeEmpty()
             ->end()
+            ->scalarNode('target_path_parameter')
+            ->end()
             ->arrayNode('http_client')
                 ->addDefaultsIfNotSet()
                 ->children()
