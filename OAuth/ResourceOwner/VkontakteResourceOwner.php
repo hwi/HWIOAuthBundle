@@ -25,7 +25,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://api.vk.com/oauth/authorize',
         'access_token_url'    => 'https://oauth.vk.com/access_token',
         'infos_url'           => 'https://api.vk.com/method/getUserInfoEx',
-        'scope'               => '',
+        'scope'               => null,
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
@@ -44,6 +44,8 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function configure()
     {
-        $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+        if (isset($this->options['scope'])) {
+            $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+        }
     }
 }

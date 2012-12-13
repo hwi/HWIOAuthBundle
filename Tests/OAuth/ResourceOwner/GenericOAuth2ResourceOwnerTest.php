@@ -42,7 +42,7 @@ json;
 
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
 
-        'scope'               => '',
+        'scope'               => null,
     );
 
     protected $paths = array(
@@ -87,7 +87,7 @@ json;
     public function testGetAuthorizationUrl()
     {
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
