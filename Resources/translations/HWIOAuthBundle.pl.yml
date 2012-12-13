@@ -1,0 +1,14 @@
+header:
+    connecting: Łączenie
+    success: Łączenie konta '%name%' zakończone sukcesem!
+    register: Zarejestruj się używając konta '%name%'
+    registration_success: Rejestracja oraz łączenie konta '%username%' zakończone sukcesem!
+
+connect:
+    confirm:
+        cancel: Anuluj
+        submit: Połącz konto
+        text: Czy jesteś pewny, że chcesz połączyć konto %service% '%name%' do Twojego konta?
+    registration:
+        cancel: Anuluj
+        submit: Zarejestruj konto
