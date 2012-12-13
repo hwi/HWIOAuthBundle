@@ -189,7 +189,18 @@ class ConnectController extends ContainerAware
      */
     public function redirectToServiceAction($service)
     {
-        return new RedirectResponse($this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($service));
+        // Check for a specified target path and store it before redirect if present
+        $container = $this->container;
+        $request   = $container->get('request');
+        $param     = $container->getParameter('hwi_oauth.target_path_parameter');
+
+        if (!empty($param) && $request->hasSession() && $targetUrl = $request->get($param, null, true))
+        {
+            $providerKey = $container->getParameter('hwi_oauth.firewall_name');
+            $request->getSession()->set('_security.' . $providerKey . '.target_path', $targetUrl);
+        }
+
+        return new RedirectResponse($container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($service));
     }
 
     /**
