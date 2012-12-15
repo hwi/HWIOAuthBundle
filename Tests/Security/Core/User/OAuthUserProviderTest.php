@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser,
     HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider,
     Symfony\Component\Security\Core\User\User;
 
-class OAuthUserProviderTest extends \PHPUnit_Framework_Testcase
+class OAuthUserProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var OAuthUserProvider

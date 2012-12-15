@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SensioConnectResourceOwner;
 
-class SensioConnectResourceOwnerTest extends \PHPUnit_Framework_Testcase
+class SensioConnectResourceOwnerTest extends \PHPUnit_Framework_TestCase
 {
     public function setUp()
     {
