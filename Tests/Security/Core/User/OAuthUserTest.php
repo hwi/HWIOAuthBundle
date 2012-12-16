@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 
-class OAuthUserTest extends \PHPUnit_Framework_Testcase
+class OAuthUserTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var OAuthUser

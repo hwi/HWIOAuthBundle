@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\Response;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 
-class PathUserResponseTest extends \PHPUnit_Framework_Testcase
+class PathUserResponseTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var PathUserResponse

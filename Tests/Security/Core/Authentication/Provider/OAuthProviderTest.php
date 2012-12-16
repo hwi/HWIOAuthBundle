@@ -20,7 +20,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
 
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 
-class OAuthProviderTest extends \PHPUnit_Framework_Testcase
+class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testSupportsOAuthToken()
     {
