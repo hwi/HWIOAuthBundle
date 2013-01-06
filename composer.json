@@ -1,9 +1,9 @@
 {
-    "name":        "hwi/oauth-bundle",
+    "name":        "vcasse/oauth-bundle",
     "type":        "symfony-bundle",
     "description": "Support for authenticating users via oauth in Symfony2.",
     "keywords":    ["security", "firewall", "oauth", "facebook", "oauth2", "github", "google", "windows live", "vkontakte", "oauth1", "twitter", "linkedin", "sensio connect"],
-    "homepage":    "http://github.com/hwi/HWIOAuthBundle",
+    "homepage":    "http://github.com/VincentCasse/HWIOAuthBundle",
     "license":     "MIT",
 
     "authors": [
