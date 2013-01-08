@@ -201,8 +201,8 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         foreach ($parameters as $key => $value) {
             // No coma when parameter is the first after 'Authorization: OAuth'
             $value = rawurlencode($value);
-            reset($array);
-            if (! ($key === key($array) && null === $this->getOption('realm')) ) {    
+            reset($parameters);
+            if (! ($key === key($parameters) && null === $this->getOption('realm')) ) {    
                 $authorization .= ", ";
             } 
             $authorization .= " $key=\"$value\"";
