@@ -44,6 +44,6 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function configure()
     {
-        $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+        $this->options['scope'] = str_replace(' ', ',', $this->options['scope']);
     }
 }
