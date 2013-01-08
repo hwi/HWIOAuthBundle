@@ -22,23 +22,23 @@
     ],
 
     "require": {
-        "php":                ">=5.3.2",
-        "symfony/framework-bundle": ">=2.0,<2.3-dev",
-        "symfony/security-bundle": ">=2.0,<2.3-dev",
-        "kriswallsmith/buzz": "0.7"
+        "php":                          ">=5.3.2",
+        "symfony/framework-bundle":     ">=2.0,<2.3-dev",
+        "symfony/security-bundle":      ">=2.0,<2.3-dev",
+        "kriswallsmith/buzz":           "0.7"
     },
 
     "require-dev": {
-        "doctrine/orm": "*",
-        "symfony/validator": ">=2.0,<2.2-dev",
-        "friendsofsymfony/user-bundle": "*",
-        "symfony/twig-bundle": "*"
+        "doctrine/orm":                 ">=2.1,<2.4-dev",
+        "symfony/validator":            ">=2.0,<2.3-dev",
+        "symfony/twig-bundle":          ">=2.0,<2.3-dev",
+        "friendsofsymfony/user-bundle": ">=1.2,<2.0-dev"
     },
 
     "suggest": {
-        "doctrine/doctrine-bundle": "to use Doctrine user provider",
+        "doctrine/doctrine-bundle":     "to use Doctrine user provider",
         "friendsofsymfony/user-bundle": "to connect FOSUB with this bundle",
-        "symfony/twig-bundle": "to use the Twig hwi_oauth_* functions"
+        "symfony/twig-bundle":          "to use the Twig hwi_oauth_* functions"
     },
 
     "autoload": {
@@ -47,5 +47,11 @@
         }
     },
 
-    "target-dir": "HWI/Bundle/OAuthBundle"
+    "target-dir": "HWI/Bundle/OAuthBundle",
+    
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.2-dev"
+        }
+    }
 }
