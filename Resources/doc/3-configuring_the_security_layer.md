@@ -7,12 +7,12 @@ The bundle needs a service that is able to load users based on the user
 response of the oauth endpoint. If you have a custom service it should
 implement the interface: `HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface`.
 
-The HWIOAuthBundle also ships with two default implementations:
+The HWIOAuthBundle also ships with three default implementations:
 
-- OAuthUserProvider, that doesn't persist users
-- EntityUserProvider, that loads users from a database
-- FOSUserBundle integration. Checkout the documentation for integrating
-  HWIOAuthBundle with FOSUserBundle for more information: (todo)
+- `OAuthUserProvider` (service name: `hwi_oauth.user.provider`) - doesn't persist users
+- `EntityUserProvider` (service name: `hwi_oauth.user.provider.entity`) - loads users from a database
+- `FOSUserBundle` integration  (service name: `hwi_oauth.user.provider.fosub_bridge`). Checkout the documentation for integrating
+  `HWIOAuthBundle` with `FOSUserBundle` for more information: (todo)
 
 ### B) Configure the oauth firewall
 
