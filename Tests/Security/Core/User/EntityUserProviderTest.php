@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider,
     HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 
-class EntityUserProviderTest extends \PHPUnit_Framework_Testcase
+class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
