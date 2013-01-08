@@ -1,6 +1,19 @@
 Changelog
 =========
 
+### 2013-05-07
+* [BC break] Removed `AdvancedPathUserResponse` & `AdvancedUserResponseInterface`
+* [BC break] Added `UserResponseInterface#getEmail()` & `UserResponseInterface#getProfilePicture()`
+  methods
+* [BC break] `PathUserResponse#setPaths()` method no longer overwrite default paths
+* [BC break] `PathUserResponse#getPath()` method no longer throws an exception if path
+  not exists
+* [BC break] `PathUserResponse#getValueForPath()` removed second argument from this method,
+  it will not throw exception anymore if response or value is missing, but now will return
+  `null` instead
+* Added `AbstractResourceOwner#addOptions()` method which allows easy overwriting resource
+  specific options
+
 ### 2013-05-06
 * Added `AbstractUserResponse::getOAuthToken()` method to allow fetching only OAuth token details
 
