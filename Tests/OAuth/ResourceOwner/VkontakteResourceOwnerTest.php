@@ -12,45 +12,35 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner;
-use Symfony\Component\HttpKernel\Kernel;
 
 class VkontakteResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $userResponse = '{"id": "bar"}';
-
-    public function setUp()
-    {
-        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
+    protected $userResponse = <<<json
+{
+    "response": {
+        "user_id": "1",
+        "user_name": "bar"
     }
+}
+json;
 
-    protected function getDefaultOptions()
+    protected $paths = array(
+        'identifier' => 'response.user_id',
+        'nickname'   => 'response.user_name',
+        'realname'   => 'response.user_name',
+    );
+
+    protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return array(
-            'client_id'     => 'clientid',
-            'client_secret' => 'clientsecret',
+        $options = array_merge(
+            array(
+                 'authorization_url'   => 'https://api.vk.com/oauth/authorize',
+                 'access_token_url'    => 'https://oauth.vk.com/access_token',
+                 'infos_url'           => 'https://api.vk.com/method/getUserInfoEx',
+            ),
+            $options
         );
-    }
-
-    protected function createResourceOwner(array $options, $name, $paths = null)
-    {
-        $this->buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
-            ->disableOriginalConstructor()->getMock();
-        $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
-            ->disableOriginalConstructor()->getMock();
 
         return new VkontakteResourceOwner($this->buzzClient, $httpUtils, $options, $name);
-    }
-
-    public function testGetAuthorizationUrl()
-    {
-        $this->assertEquals(
-            'https://api.vk.com/oauth/authorize?response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
-        );
-    }
-
-    public function testGetOption()
-    {
-        $this->assertEquals('https://api.vk.com/method/getUserInfoEx', $this->resourceOwner->getOption('infos_url'));
     }
 }
