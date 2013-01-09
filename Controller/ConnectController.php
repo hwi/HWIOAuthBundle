@@ -74,6 +74,8 @@ class ConnectController extends ContainerAware
      * @param Request $request A request.
      * @param string  $key     Key used for retrieving the right information for the registration form.
      *
+     * @throws \Exception
+     *
      * @return Response
      */
     public function registrationAction(Request $request, $key)
@@ -93,7 +95,12 @@ class ConnectController extends ContainerAware
         $userInformation = $this->getResourceOwnerByName($error->getResourceOwnerName())
             ->getUserInformation($error->getAccessToken());
 
-        $form = $this->container->get('hwi_oauth.registration.form');
+        if ($this->container->has('hwi_oauth.registration.form')) {
+            $form = $this->container->get('hwi_oauth.registration.form');
+        } else {
+            $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
+        }
+
         $formHandler = $this->container->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {
             $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
