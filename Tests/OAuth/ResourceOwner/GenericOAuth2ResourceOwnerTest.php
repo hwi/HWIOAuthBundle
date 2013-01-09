@@ -74,6 +74,9 @@ json;
     {
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
 
+        /**
+         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         */
         $userResponse = $this->resourceOwner->getUserInformation('access_token');
 
         $this->assertEquals('1', $userResponse->getUsername());
@@ -193,8 +196,11 @@ json;
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
 
-        $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
-        $resourceOwner->addPaths(array_merge($this->paths, $paths));
+        $options = array_merge($this->options, $options);
+        $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, $options);
+        if (false !== strpos($options['user_response_class'], '\PathUserResponse')) {
+            $resourceOwner->addPaths(array_merge($this->paths, $paths));
+        }
 
         return $resourceOwner;
     }
