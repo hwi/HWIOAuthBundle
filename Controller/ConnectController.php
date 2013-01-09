@@ -142,18 +142,30 @@ class ConnectController extends ContainerAware
         $key = $request->query->get('key', time());
 
         if ($resourceOwner->handles($request)) {
-            $accessToken = $resourceOwner->getAccessToken(
+            $accessInfo = $resourceOwner->getAccessToken(
                 $request,
                 $this->generate('hwi_oauth_connect_service', array('service' => $service), true)
             );
 
+            if($resourceOwner instanceof \HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner) {
+                $accessToken = $accessInfo['access_token'];
+                $session->set('_hwi_oauth.connect_confirmation.user_id.'.$key, $accessInfo['user_id']);
+            }
+
             // save in session
             $session->set('_hwi_oauth.connect_confirmation.'.$key, $accessToken);
+
         } else {
             $accessToken = $session->get('_hwi_oauth.connect_confirmation.'.$key);
+            if($resourceOwner instanceof \HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner) {
+                $userId = $session->get('_hwi_oauth.connect_confirmation.user_id.'.$key);
+            }
         }
-
-        $userInformation = $resourceOwner->getUserInformation($accessToken);
+        if($resourceOwner instanceof \HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner) {
+            $userInformation = $resourceOwner->getUserInformation($accessToken, $userId);
+        } else {
+            $userInformation = $resourceOwner->getUserInformation($accessToken);
+        }
 
         // Handle the form
         $form = $this->container->get('form.factory')

@@ -17,6 +17,8 @@ hwi_oauth:
             client_id:           <client_id>
             client_secret:       <client_secret>
             scope:               ""
+            #If you want to get extended information about you, such as the profile picture
+            #user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
 ```
 
 When you're done. Continue by configuring the security layer or go back to
