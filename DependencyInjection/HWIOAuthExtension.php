@@ -81,7 +81,7 @@ class HWIOAuthExtension extends Extension
                     ->setScope('request');
 
                 $container->setAlias('hwi_oauth.registration.form.handler', 'hwi_oauth.registration.form.handler.fosub_bridge');
-                $container->setAlias('hwi_oauth.registration.form', 'fos_user.registration.form');
+                $container->setAlias('hwi_oauth.registration.form.factory', 'fos_user.registration.form.factory');
             }
 
             foreach ($config['connect'] as $key => $serviceId) {

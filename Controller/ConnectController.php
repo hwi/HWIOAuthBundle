@@ -93,7 +93,7 @@ class ConnectController extends ContainerAware
         $userInformation = $this->getResourceOwnerByName($error->getResourceOwnerName())
             ->getUserInformation($error->getAccessToken());
 
-        $form = $this->container->get('hwi_oauth.registration.form');
+        $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
         $formHandler = $this->container->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {
             $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
