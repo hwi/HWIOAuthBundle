@@ -29,24 +29,13 @@ use Symfony\Component\DependencyInjection\ContainerAware,
 class ConnectController extends ContainerAware
 {
     /**
-     * Choosen templating engine.
-     *
-     * @var string
-     */
-    private $templatingEngine;
-
-    /**
      * Returns templating engine name.
      *
      * @return string
      */
     protected function getTemplatingEngine()
     {
-        if (!isset($this->templatingEngine)) {
-            $this->templatingEngine = $this->container->getParameter('hwi_oauth.templating.engine');
-        }
-
-        return $this->templatingEngine;
+        return $this->container->getParameter('hwi_oauth.templating.engine');
     }
 
     /**

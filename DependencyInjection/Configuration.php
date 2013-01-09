@@ -257,7 +257,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
-            ->scalarNode('templating_engine')->end();
+            ->scalarNode('templating_engine')->defaultValue('twig')->end();
 
         return $builder;
     }
