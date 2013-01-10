@@ -161,7 +161,7 @@ class ConnectController extends ContainerAware
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
-            $form->bindRequest($request);
+            $form->bind($request);
 
             if ($form->isValid()) {
                 $user = $this->container->get('security.context')->getToken()->getUser();
