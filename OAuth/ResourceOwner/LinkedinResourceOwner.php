@@ -28,6 +28,7 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
         'infos_url'           => 'http://api.linkedin.com/v1/people/~:(id,formatted-name)',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
         'realm'               => 'http://api.linkedin.com',
+        'scope'               => null
     );
 
     /**
@@ -48,4 +49,16 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
 
         return parent::httpRequest($url, $content, $parameters, $headers, $method);
     }
+    
+     /**
+     * Add scope (Required by linkedin API if email address is needed)
+     * 
+     * {@inheritDoc}
+     */
+    protected function getRequestToken($redirectUri, array $extraParameters = array())
+    {
+        $extraParameters['scope'] = $this->getOption('scope');
+        
+        return parent::getRequestToken($redirectUri, $extraParameters);
+    }  
 }

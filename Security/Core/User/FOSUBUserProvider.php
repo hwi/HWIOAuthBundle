@@ -13,8 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
 use FOS\UserBundle\Model\UserManagerInterface;
 
-use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface,
-    HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface,
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface,
     HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException,
     HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 

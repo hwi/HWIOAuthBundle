@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpFoundation\Request;
 
-class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_Testcase
+class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var GenericOAuth1ResourceOwner

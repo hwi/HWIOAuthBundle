@@ -19,10 +19,12 @@ hwi_oauth:
 ```
 
 - [Facebook](2x-facebook.md)
+- [Foursquare](2x-foursquare.md)
 - [GitHub](2x-github.md)
 - [Google](2x-google.md)
 - [Linkedin](2x-linkedin.md)
-- [Sensio Connect](2x-sensio_connect.md)
+- [SensioLabs Connect](2x-sensio_connect.md)
+- [Stack Exchange](2x-stack_exchange.md)
 - [Twitter] (2x-twitter.md)
 - [Vkontakte](2x-vkontakte.md)
 - [Windows Live](2x-windows_live.md)

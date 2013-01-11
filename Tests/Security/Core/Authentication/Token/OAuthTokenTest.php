@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\Authentication\Token;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
-class OAuthTokenTest extends \PHPUnit_Framework_Testcase
+class OAuthTokenTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var OAuthToken

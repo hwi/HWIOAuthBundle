@@ -110,8 +110,8 @@ class OAuthUtils
 
         // Remove oauth_signature if present
         // Ref: Spec: 9.1.1 ("The oauth_signature parameter MUST be excluded.")
-        if (isset($params['oauth_signature'])) {
-            unset($params['oauth_signature']);
+        if (isset($parameters['oauth_signature'])) {
+            unset($parameters['oauth_signature']);
         }
 
         // Parameters are sorted by name, using lexicographical byte value ordering.

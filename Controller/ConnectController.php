@@ -11,15 +11,17 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
+    HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 
 use Symfony\Component\DependencyInjection\ContainerAware,
     Symfony\Component\HttpFoundation\Request,
     Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken,
     Symfony\Component\Security\Core\Exception\AuthenticationException,
     Symfony\Component\Security\Core\SecurityContext,
-    Symfony\Component\Security\Core\User\UserInterface;
+    Symfony\Component\Security\Core\User\UserInterface,
+    Symfony\Component\Security\Http\Event\InteractiveLoginEvent,
+    Symfony\Component\Security\Http\SecurityEvents;
 
 /**
  * ConnectController
@@ -97,7 +99,7 @@ class ConnectController extends ContainerAware
             $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
 
             // Authenticate the user
-            $this->authenticateUser($form->getData());
+            $this->authenticateUser($form->getData(), $error->getResourceOwnerName(), $error->getAccessToken());
 
             return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.twig', array(
                 'userInformation' => $userInformation,
@@ -247,11 +249,13 @@ class ConnectController extends ContainerAware
     }
 
     /**
-    * Authenticate a user with Symfony Security
-    *
-    * @param UserInterface $user
-    */
-    protected function authenticateUser(UserInterface $user)
+     * Authenticate a user with Symfony Security
+     *
+     * @param UserInterface $user
+     * @param string        $resourceOwnerName
+     * @param string        $accessToken
+     */
+    protected function authenticateUser(UserInterface $user, $resourceOwnerName, $accessToken)
     {
         try {
             $this->container->get('hwi_oauth.user_checker')->checkPostAuth($user);
@@ -260,9 +264,17 @@ class ConnectController extends ContainerAware
             return;
         }
 
-        $providerKey = $this->container->getParameter('hwi_oauth.firewall_name');
-        $token = new UsernamePasswordToken($user, null, $providerKey, $user->getRoles());
+        $token = new OAuthToken($accessToken, $user->getRoles());
+        $token->setResourceOwnerName($resourceOwnerName);
+        $token->setUser($user);
+        $token->setAuthenticated(true);
 
         $this->container->get('security.context')->setToken($token);
+
+        // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
+        $this->container->get('event_dispatcher')->dispatch(
+            SecurityEvents::INTERACTIVE_LOGIN,
+            new InteractiveLoginEvent($this->container->get('request'), $token)
+        );
     }
 }
