@@ -64,6 +64,7 @@ class HWIOAuthExtension extends Extension
         if (isset($config['fosub'])) {
             $container
                 ->setDefinition('hwi_oauth.user.provider.fosub_bridge', new DefinitionDecorator('hwi_oauth.user.provider.fosub_bridge.def'))
+                ->addArgument($container)
                 ->addArgument($config['fosub']['properties']);
         }
 

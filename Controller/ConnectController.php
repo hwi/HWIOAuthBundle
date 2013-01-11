@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotConnectedException;
+
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
     HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 
@@ -45,16 +47,17 @@ class ConnectController extends ContainerAware
 
         $error = $this->getErrorForRequest($request);
 
-        // if connecting is enabled and there is no user, redirect to the registration form
-        if ($connect
-            && !$hasUser
-            && $error instanceof AccountNotLinkedException
-        ) {
-            $key = time();
-            $session = $request->getSession();
-            $session->set('_hwi_oauth.registration_error.'.$key, $error);
+        if ($connect) {
+            // if connecting is enabled and there is no user, redirect to the registration form
+            if (!$hasUser && $error instanceof AccountNotLinkedException) {
+                $key = time();
+                $session = $request->getSession();
+                $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
-            return new RedirectResponse($this->generate('hwi_oauth_connect_registration', array('key' => $key)));
+                return new RedirectResponse($this->generate('hwi_oauth_connect_registration', array('key' => $key)));
+            } else if ($hasUser && $error instanceof AccountNotConnectedException) {
+                //redirect to connect confirm
+            }
         }
 
         if ($error) {

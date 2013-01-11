@@ -66,6 +66,8 @@ class OAuthUtils
         $resourceOwner = $this->getResourceOwner($name);
         $checkPath = $this->ownerMap->getResourceOwnerCheckPath($name);
 
+        $connect = false;
+
         return $resourceOwner->getAuthorizationUrl(
             $connect && $hasUser
                 ? $this->generateUrl('hwi_oauth_connect_service', array('service' => $name), true)
