@@ -60,16 +60,16 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getUserInformation($accessToken)
+    public function getUserInformation($accessToken, array $extraParameters = array())
     {
-        $parameters = array(
+        $parameters = array_merge(array(
             'oauth_consumer_key'     => $this->getOption('client_id'),
             'oauth_timestamp'        => time(),
             'oauth_nonce'            => $this->generateNonce(),
             'oauth_version'          => '1.0',
             'oauth_signature_method' => 'HMAC-SHA1',
             'oauth_token'            => $accessToken['oauth_token'],
-        );
+        ), $extraParameters);
 
         $url = $this->getOption('infos_url');
         $parameters['oauth_signature'] = OAuthUtils::signRequest('GET', $url, $parameters, $this->getOption('client_secret'), $accessToken['oauth_token_secret']);
@@ -91,7 +91,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     {
         $token = $this->getRequestToken($redirectUri, $extraParameters);
 
-        return $this->getOption('authorization_url').'?'.http_build_query(array('oauth_token' => $token['oauth_token']));
+        return $this->getOption('authorization_url').'?'.http_build_query(array('oauth_token' => $token['oauth_token'], 'oauth_callback' => $redirectUri));
     }
 
     /**
@@ -103,7 +103,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             throw new \RuntimeException('No request token found in the storage.');
         }
 
-        $parameters = array_merge($extraParameters, array(
+        $parameters = array_merge(array(
             'oauth_consumer_key'     => $this->getOption('client_id'),
             'oauth_timestamp'        => time(),
             'oauth_nonce'            => $this->generateNonce(),
@@ -111,7 +111,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'oauth_signature_method' => 'HMAC-SHA1',
             'oauth_token'            => $requestToken['oauth_token'],
             'oauth_verifier'         => $request->query->get('oauth_verifier'),
-        ));
+        ), $extraParameters);
 
         $url = $this->getOption('access_token_url');
         $parameters['oauth_signature'] = OAuthUtils::signRequest('POST', $url, $parameters, $this->getOption('client_secret'), $requestToken['oauth_token_secret']);
@@ -145,14 +145,14 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     {
         $timestamp = time();
 
-        $parameters = array_merge($extraParameters, array(
+        $parameters = array_merge(array(
             'oauth_consumer_key'     => $this->getOption('client_id'),
             'oauth_timestamp'        => $timestamp,
             'oauth_nonce'            => $this->generateNonce(),
             'oauth_version'          => '1.0',
             'oauth_callback'         => $redirectUri,
             'oauth_signature_method' => 'HMAC-SHA1',
-        ));
+        ), $extraParameters);
 
         $url = $this->getOption('request_token_url');
         $parameters['oauth_signature'] = OAuthUtils::signRequest('POST', $url, $parameters, $this->getOption('client_secret'));

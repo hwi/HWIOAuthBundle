@@ -101,6 +101,8 @@ class OAuthUtils
      */
     public static function signRequest($method, $url, $parameters, $clientSecret, $tokenSecret = '')
     {
+        $signature = '';
+
         // Validate required parameters
         foreach (array('oauth_consumer_key', 'oauth_timestamp', 'oauth_nonce', 'oauth_version', 'oauth_signature_method') as $parameter) {
             if (!isset($parameters[$parameter])) {
@@ -134,7 +136,15 @@ class OAuthUtils
 
         $key = implode('&', $keyParts);
 
-        return base64_encode(hash_hmac('sha1', $baseString, $key, true));
+        switch($parameters['oauth_signature_method']) {
+            case 'PLAINTEXT':
+                $signature = $key;
+                break;
+            case 'HMAC-SHA1':
+            default:
+                $signature = base64_encode(hash_hmac('sha1', $baseString, $key, true));
+        }
+        return $signature;
     }
 
     /**
