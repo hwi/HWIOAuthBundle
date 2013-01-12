@@ -107,6 +107,8 @@ class OAuthUtils
      */
     public static function signRequest($method, $url, $parameters, $clientSecret, $tokenSecret = '', $signatureMethod = self::SIGNATURE_METHOD_HMAC)
     {
+        $signature = '';
+
         // Validate required parameters
         foreach (array('oauth_consumer_key', 'oauth_timestamp', 'oauth_nonce', 'oauth_version', 'oauth_signature_method') as $parameter) {
             if (!isset($parameters[$parameter])) {
@@ -149,6 +151,10 @@ class OAuthUtils
 
                 openssl_sign($baseString, $signature, $privateKey);
                 openssl_free_key($privateKey);
+                break;
+
+            case 'PLAINTEXT':
+                $signature = $key;
                 break;
 
             default:

@@ -41,6 +41,7 @@ hwi_oauth:
 - [Vkontakte](2x-vkontakte.md)
 - [Odnoklassniki](2x-odnoklassniki.md)
 - [Windows Live](2x-windows_live.md)
+- [Dropbox](2x-dropbox.md)
 - [Yahoo](2x-yahoo.md)
 - [Yandex](2x-yandex.md)
 - [Others](2x-others.md)
