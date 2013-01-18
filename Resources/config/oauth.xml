@@ -59,10 +59,12 @@
             <argument type="service" id="fos_user.user_manager" />
         </service>
         <service id="hwi_oauth.registration.form.handler.fosub_bridge.def" class="%hwi_oauth.registration.form.handler.fosub_bridge.class%" abstract="true">
-            <argument type="service" id="fos_user.registration.form.handler" />
             <argument type="service" id="fos_user.user_manager" />
             <argument type="service" id="fos_user.mailer" />
             <argument type="service" id="fos_user.util.token_generator" on-invalid="null"/>
+            <call method="setFormHandler">
+                <argument type="service" id="fos_user.registration.form.handler" on-invalid="null" />
+            </call>
         </service>
 
         <!-- Session storage -->
