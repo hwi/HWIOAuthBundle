@@ -20,7 +20,9 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedUserResponseInterface,
     HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 
 use Symfony\Component\Form\Form,
-    Symfony\Component\HttpFoundation\Request;
+    Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\HttpKernel\Kernel,
+    Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * FormHandlerInterface
@@ -40,15 +42,13 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     /**
      * Constructor.
      *
-     * @param RegistrationFormHandler $registrationFormHandler FOSUB registration form handler
-     * @param UserManagerInterface    $userManager             FOSUB user manager
-     * @param MailerInterface         $mailer                  FOSUB mailer
-     * @param TokenGenerator          $tokenGenerator          FOSUB token generator
-     * @param integer                 $iterations              Amount of attempts that should be made to 'guess' a unique username
+     * @param UserManagerInterface $userManager    FOSUB user manager
+     * @param MailerInterface      $mailer         FOSUB mailer
+     * @param TokenGenerator       $tokenGenerator FOSUB token generator
+     * @param integer              $iterations     Amount of attempts that should be made to 'guess' a unique username
      */
-    public function __construct(RegistrationFormHandler $registrationFormHandler, UserManagerInterface $userManager, MailerInterface $mailer, TokenGenerator $tokenGenerator = null, $iterations = 5)
+    public function __construct(UserManagerInterface $userManager, MailerInterface $mailer, TokenGenerator $tokenGenerator = null, $iterations = 5)
     {
-        $this->registrationFormHandler = $registrationFormHandler;
         $this->userManager = $userManager;
         $this->mailer = $mailer;
         $this->tokenGenerator = $tokenGenerator;
@@ -60,25 +60,49 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      */
     public function process(Request $request, Form $form, UserResponseInterface $userInformation)
     {
-        $formHandler = $this->reconstructFormHandler($request, $form);
+        if (null !== $this->registrationFormHandler) {
+            $formHandler = $this->reconstructFormHandler($request, $form);
 
-        // make FOSUB process the form already
-        $processed = $formHandler->process();
+            // make FOSUB process the form already
+            $processed = $formHandler->process();
 
-        // if the form is not posted we'll try to set some properties
-        if ('POST' !== $request->getMethod()) {
-            $user = $form->getData();
+            // if the form is not posted we'll try to set some properties
+            if ('POST' === $request->getMethod()) {
+                $user = $this->setUserInformation($form->getData(), $userInformation);
 
-            $user->setUsername($this->getUniqueUsername($userInformation->getNickname()));
-
-            if ($userInformation instanceof AdvancedUserResponseInterface && method_exists($user, 'setEmail')) {
-                $user->setEmail($userInformation->getEmail());
+                $form->setData($user);
             }
 
-            $form->setData($user);
+            return $processed;
         }
 
-        return $processed;
+        $form->setData($userInformation);
+
+        if ('POST' === $request->getMethod()) {
+            if ('2' == Kernel::MAJOR_VERSION && '2' <= Kernel::MINOR_VERSION) {
+                $form->bind($request);
+            } else {
+                $form->bindRequest($request);
+            }
+
+            if ($form->isValid()) {
+                $this->setUserInformation($form->getData(), $userInformation);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Set registration form handler.
+     *
+     * @param null|RegistrationFormHandler $registrationFormHandler FOSUB registration form handler
+     */
+    public function setFormHandler(RegistrationFormHandler $registrationFormHandler = null)
+    {
+        $this->registrationFormHandler = $registrationFormHandler;
     }
 
     /**
@@ -115,4 +139,22 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         return new $handlerClass($form, $request, $this->userManager, $this->mailer, $this->tokenGenerator);
     }
 
+    /**
+     * Set user information from form
+     *
+     * @param UserInterface         $user
+     * @param UserResponseInterface $userInformation
+     *
+     * @return UserInterface
+     */
+    protected function setUserInformation(UserInterface $user, UserResponseInterface $userInformation)
+    {
+        $user->setUsername($this->getUniqueUsername($userInformation->getNickname()));
+
+        if ($userInformation instanceof AdvancedUserResponseInterface && method_exists($user, 'setEmail')) {
+            $user->setEmail($userInformation->getEmail());
+        }
+
+        return $user;
+    }
 }
