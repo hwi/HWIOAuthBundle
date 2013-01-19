@@ -12,45 +12,35 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner;
-use Symfony\Component\HttpKernel\Kernel;
 
 class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $userResponse = '{"login": "bar"}';
+    protected $userResponse = <<<json
+{
+    "id": "1",
+    "login": "bar"
+}
+json;
 
-    public function setUp()
-    {
-        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
-    }
+    protected $paths = array(
+        'identifier'     => 'id',
+        'nickname'       => 'login',
+        'realname'       => 'name',
+        'email'          => 'email',
+        'profilepicture' => 'avatar_url',
+    );
 
-    protected function getDefaultOptions()
+    protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return array(
-            'client_id'     => 'clientid',
-            'client_secret' => 'clientsecret',
+        $options = array_merge(
+            array(
+                 'authorization_url'   => 'https://github.com/login/oauth/authorize',
+                 'access_token_url'    => 'https://github.com/login/oauth/access_token',
+                 'infos_url'           => 'https://api.github.com/user',
+            ),
+            $options
         );
-    }
-
-    protected function createResourceOwner(array $options, $name, $paths = null)
-    {
-        $this->buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
-            ->disableOriginalConstructor()->getMock();
-        $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
-            ->disableOriginalConstructor()->getMock();
 
         return new GitHubResourceOwner($this->buzzClient, $httpUtils, $options, $name);
-    }
-
-    public function testGetAuthorizationUrl()
-    {
-        $this->assertEquals(
-            'https://github.com/login/oauth/authorize?response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
-        );
-    }
-
-    public function testGetOption()
-    {
-        $this->assertEquals('https://api.github.com/user', $this->resourceOwner->getOption('infos_url'));
     }
 }

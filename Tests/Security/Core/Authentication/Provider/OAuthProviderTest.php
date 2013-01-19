@@ -12,12 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\Authentication\Provider;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider;
-
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
-    HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface,
-    HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface,
-    HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
-
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 
 class OAuthProviderTest extends \PHPUnit_Framework_TestCase

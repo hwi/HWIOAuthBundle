@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api
+    xmlns:xhtml="http://www.w3.org/1999/xhtml"
+    xmlns:atom="http://www.w3.org/2005/Atom"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:bio="http://purl.org/vocab/bio/0.1/"
+    xmlns:fc="http://xmlns.com/foaf/corp#"
+    xmlns:wot="http://xmlns.com/wot/0.1/"
+    xmlns:vcard="http://www.w3.org/2006/vcard/ns"
+    xmlns:doap="http://usefulinc.com/ns/doap#"
+    xmlns:cv="http://kaste.lv/~captsolo/semweb/resume/cv.rdfs">
+    <foaf:Person id="aa5e22b0-6189-4113-9c68-91d4a3c32b7c">
+        <foaf:name><![CDATA[Fake Guy]]></foaf:name>
+        <foaf:mbox>fake@email.com</foaf:mbox>
+        <atom:link rel="https://rels.connect.sensiolabs.com/image" href="https://connect.sensiolabs.com/api/images/aa5e22b0-6189-4113-9c68-91d4a3c32b7c.png" type="image/png" />
+
+        <foaf:account>
+            <foaf:OnlineAccount>
+                <foaf:name>SensioLabs Connect</foaf:name>
+                <foaf:accountName><![CDATA[bar]]></foaf:accountName>
+                <since>Wed, 29 Oct 2008 12:04:33 +0100</since>
+            </foaf:OnlineAccount>
+            <foaf:OnlineAccount>
+                <foaf:name>github</foaf:name>
+                <foaf:accountName><![CDATA[bar]]></foaf:accountName>
+            </foaf:OnlineAccount>
+            <foaf:OnlineAccount>
+                <foaf:name>twitter</foaf:name>
+                <foaf:accountName><![CDATA[bar]]></foaf:accountName>
+            </foaf:OnlineAccount>
+          </foaf:account>
+
+    </foaf:Person>
+</api>
