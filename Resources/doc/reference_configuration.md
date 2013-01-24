@@ -84,6 +84,13 @@ hwi_oauth:
         verify_peer:   true
         ignore_errors: true
         max_redirects: 5
+    # optional template configuration
+    templates:
+        login:                 MyBundle:OAuth:login.html.twig
+        registration:          MyBundle:OAuth:registration.html.twig
+        registration_success:  MyBundle:OAuth:registration_success.html.twig
+        connect_confirm:       MyBundle:OAuth:connect_confirm.html.twig
+        connect_success:       MyBundle:OAuth:connect_success.html.twig
 ```
 
 ``` yaml

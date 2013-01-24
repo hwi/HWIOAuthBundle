@@ -53,6 +53,13 @@ class HWIOAuthExtension extends Extension
         // set current firewall
         $container->setParameter('hwi_oauth.firewall_name', $config['firewall_name']);
 
+        //set templates
+        $container->setParameter('hwi_oauth.templates.login', $config['templates']['login']);
+        $container->setParameter('hwi_oauth.templates.registration', $config['templates']['registration']);
+        $container->setParameter('hwi_oauth.templates.registration_success', $config['templates']['registration_success']);
+        $container->setParameter('hwi_oauth.templates.connect_confirm', $config['templates']['connect_confirm']);
+        $container->setParameter('hwi_oauth.templates.connect_success', $config['templates']['connect_success']);
+
         // setup services for all configured resource owners
         $resourceOwners = array();
         foreach ($config['resource_owners'] as $name => $options) {
