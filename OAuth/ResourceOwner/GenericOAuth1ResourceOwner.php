@@ -191,17 +191,16 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
     {
-        $authorization = 'Authorization: OAuth';
+        $authorization = 'Authorization: OAuth ';
         if (null !== $this->getOption('realm')) {
-            $authorization = 'Authorization: OAuth realm="' . rawurlencode($this->getOption('realm')) . '"';
+            $authorization .= 'realm="' . rawurlencode($this->getOption('realm')) . '" ';
         }
 
         foreach ($parameters as $key => $value) {
-            $value = rawurlencode($value);
-            $authorization .= ", $key=\"$value\"";
+            $parameters[$key] = $key . '="' . rawurlencode($value) . '"';
         }
 
-        $headers[] = $authorization;
+        $headers[] = $authorization . implode(', ', $parameters);
 
         return parent::httpRequest($url, $content, $headers, $method);
     }
