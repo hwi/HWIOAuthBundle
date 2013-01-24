@@ -12,45 +12,34 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StackExchangeResourceOwner;
-use Symfony\Component\HttpKernel\Kernel;
 
 class StackExchangeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $userResponse = '{"display_name": "Super User"}';
+    protected $userResponse = <<<json
+{
+    "user_id": "1",
+    "display_name": "bar"
+}
+json;
 
-    public function setUp()
-    {
-        $this->resourceOwner = $this->createResourceOwner($this->getDefaultOptions(), 'oauth2');
-    }
+    protected $paths = array(
+        'identifier'  => 'user_id',
+        'nickname'    => 'display_name',
+        'realname'    => 'display_name'
+    );
 
-    protected function getDefaultOptions()
+    protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return array(
-            'client_id'     => 'clientid',
-            'client_secret' => 'clientsecret',
+        $options = array_merge(
+            array(
+                 'authorization_url'   => 'https://stackexchange.com/oauth',
+                 'access_token_url'    => 'https://stackexchange.com/oauth/access_token',
+                 'infos_url'           => 'https://api.stackexchange.com/2.0/me',
+                 'scope'               => 'no_expiry',
+            ),
+            $options
         );
-    }
-
-    protected function createResourceOwner(array $options, $name, $paths = null)
-    {
-        $this->buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
-            ->disableOriginalConstructor()->getMock();
-        $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
-            ->disableOriginalConstructor()->getMock();
 
         return new StackExchangeResourceOwner($this->buzzClient, $httpUtils, $options, $name);
-    }
-
-    public function testGetAuthorizationUrl()
-    {
-        $this->assertEquals(
-            'https://stackexchange.com/oauth?response_type=code&client_id=clientid&scope=no_expiry&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
-        );
-    }
-
-    public function testGetOption()
-    {
-        $this->assertEquals('https://api.stackexchange.com/2.0/me', $this->resourceOwner->getOption('infos_url'));
     }
 }

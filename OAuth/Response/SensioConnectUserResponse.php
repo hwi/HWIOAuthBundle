@@ -31,7 +31,7 @@ class SensioConnectUserResponse extends AbstractUserResponse implements Advanced
      */
     public function getUsername()
     {
-        return $this->getNodeValue('./foaf:uuid', $this->response);
+        return $this->response->attributes->getNamedItem('id')->value;
     }
 
     /**
