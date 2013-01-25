@@ -37,6 +37,8 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
 
+        'signature_method'    => 'HMAC-SHA1',
+
         'realm'               => null,
         'scope'               => null,
     );
@@ -55,6 +57,16 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     public function testGetOption()
     {
         $this->assertEquals($this->options['infos_url'], $this->resourceOwner->getOption('infos_url'));
+        $this->assertEquals($this->options['request_token_url'], $this->resourceOwner->getOption('request_token_url'));
+        $this->assertEquals($this->options['authorization_url'], $this->resourceOwner->getOption('authorization_url'));
+        $this->assertEquals($this->options['access_token_url'], $this->resourceOwner->getOption('access_token_url'));
+
+        $this->assertEquals($this->options['user_response_class'], $this->resourceOwner->getOption('user_response_class'));
+
+        $this->assertEquals($this->options['signature_method'], $this->resourceOwner->getOption('signature_method'));
+
+        $this->assertEquals($this->options['realm'], $this->resourceOwner->getOption('realm'));
+        $this->assertEquals($this->options['scope'], $this->resourceOwner->getOption('scope'));
     }
 
     /**
