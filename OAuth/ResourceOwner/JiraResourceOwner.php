@@ -22,7 +22,9 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
         'request_token_url'   => '{base_url}/plugins/servlet/oauth/request-token',
         'access_token_url'    => '{base_url}/plugins/servlet/oauth/access-token',
         'infos_url'           => '{base_url}/rest/api/2/user',
-        'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
+        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
         'signature_method'    => 'RSA-SHA1',
     );
 
@@ -41,13 +43,11 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
      */
     public function getOption($name)
     {
-        $value = parent::getOption($name);
-
-        if ($name !== 'base_url') {
-            $value = str_replace('{base_url}', $this->getOption('base_url'), $value);
+        if (in_array($name, array('authorization_url', 'request_token_url', 'access_token_url', 'infos_url'))) {
+            return str_replace('{base_url}', $this->getOption('base_url'), parent::getOption($name));
         }
 
-        return $value;
+        return parent::getOption($name);
     }
 
     /**
