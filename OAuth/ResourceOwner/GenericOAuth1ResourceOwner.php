@@ -36,11 +36,12 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      * @var array
      */
     protected $options = array(
-        'client_id' => '',
-        'client_secret' => '',
-        'infos_url' => '',
+        'client_id'           => '',
+        'client_secret'       => '',
+        'infos_url'           => '',
         'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-        'realm' => null,
+        'realm'               => null,
+        'signature_method'    => 'HMAC-SHA1',
     );
 
     /**
@@ -67,12 +68,19 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'oauth_timestamp'        => time(),
             'oauth_nonce'            => $this->generateNonce(),
             'oauth_version'          => '1.0',
-            'oauth_signature_method' => 'HMAC-SHA1',
+            'oauth_signature_method' => $this->getOption('signature_method'),
             'oauth_token'            => $accessToken['oauth_token'],
         );
 
         $url = $this->getOption('infos_url');
-        $parameters['oauth_signature'] = OAuthUtils::signRequest('GET', $url, $parameters, $this->getOption('client_secret'), $accessToken['oauth_token_secret']);
+        $parameters['oauth_signature'] = OAuthUtils::signRequest(
+            'GET',
+            $url,
+            $parameters,
+            $this->getOption('client_secret'),
+            $accessToken['oauth_token_secret'],
+            $this->getOption('signature_method')
+        );
 
         $content = $this->doGetUserInformationRequest($url, $parameters)->getContent();
 
@@ -108,13 +116,20 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'oauth_timestamp'        => time(),
             'oauth_nonce'            => $this->generateNonce(),
             'oauth_version'          => '1.0',
-            'oauth_signature_method' => 'HMAC-SHA1',
+            'oauth_signature_method' => $this->getOption('signature_method'),
             'oauth_token'            => $requestToken['oauth_token'],
             'oauth_verifier'         => $request->query->get('oauth_verifier'),
         ));
 
         $url = $this->getOption('access_token_url');
-        $parameters['oauth_signature'] = OAuthUtils::signRequest('POST', $url, $parameters, $this->getOption('client_secret'), $requestToken['oauth_token_secret']);
+        $parameters['oauth_signature'] = OAuthUtils::signRequest(
+            'POST',
+            $url,
+            $parameters,
+            $this->getOption('client_secret'),
+            $requestToken['oauth_token_secret'],
+            $this->getOption('signature_method')
+        );
 
         $response = $this->doGetAccessTokenRequest($url, $parameters);
         $response = $this->getResponseContent($response);
@@ -151,11 +166,18 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'oauth_nonce'            => $this->generateNonce(),
             'oauth_version'          => '1.0',
             'oauth_callback'         => $redirectUri,
-            'oauth_signature_method' => 'HMAC-SHA1',
+            'oauth_signature_method' => $this->getOption('signature_method'),
         ));
 
         $url = $this->getOption('request_token_url');
-        $parameters['oauth_signature'] = OAuthUtils::signRequest('POST', $url, $parameters, $this->getOption('client_secret'));
+        $parameters['oauth_signature'] = OAuthUtils::signRequest(
+            'POST',
+            $url,
+            $parameters,
+            $this->getOption('client_secret'),
+            '',
+            $this->getOption('signature_method')
+        );
 
         $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
 
