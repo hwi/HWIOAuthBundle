@@ -84,7 +84,43 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             throw new AuthenticationException('Not a valid access token.');
         }
 
-        return $response['access_token'];
+        return $response;
+    }
+
+    /**
+     * Refresh an access token using a refresh token.
+     *
+     * @param  string $refreshToken    Refresh token
+     * @param  array  $extraParameters An array of parameters to add to the url
+     *
+     * @return array Array containing the access token and it's 'expires_in' value,
+     *               along with any other parameters returned from the authentication
+     *               provider.
+     */
+    public function refreshAccessToken($refreshToken, array $extraParameters = array())
+    {
+        $parameters = array_merge($extraParameters, array(
+            'refresh_token' => $refreshToken,
+            'grant_type'    => 'refresh_token',
+            'client_id'     => $this->getOption('client_id'),
+            'client_secret' => $this->getOption('client_secret'),
+        ));
+
+        $response = $this->httpRequest(
+            $this->getOption('access_token_url'),
+            http_build_query($parameters)
+        );
+        $response = $this->getResponseContent($response);
+
+        if (isset($response['error'])) {
+            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
+        }
+
+        if (!isset($response['access_token'])) {
+            throw new AuthenticationException('Not a valid access token.');
+        }
+
+        return $response;
     }
 
     /**
