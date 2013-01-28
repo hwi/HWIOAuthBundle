@@ -171,6 +171,8 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('scope')
                         ->end()
+                        ->scalarNode('access_type')
+                        ->end()
                         ->scalarNode('user_response_class')
                             ->validate()
                                 ->ifTrue(function($v) {

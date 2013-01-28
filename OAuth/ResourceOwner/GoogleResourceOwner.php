@@ -40,4 +40,16 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
         'email'          => 'email',
         'profilepicture' => 'picture',
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    {
+        if (isset($this->options['access_type'])) {
+            $extraParameters['access_type'] = $this->getOption('access_type');
+        }
+
+        return parent::getAuthorizationUrl($redirectUri, $extraParameters);
+    }
 }

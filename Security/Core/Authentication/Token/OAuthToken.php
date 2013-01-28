@@ -29,17 +29,44 @@ class OAuthToken extends AbstractToken
     /**
      * @var string
      */
+    private $refreshToken;
+
+    /**
+     * @var integer
+     */
+    private $expiresIn;
+
+    /**
+     * @var string
+     */
     private $resourceOwnerName;
 
     /**
-     * @param string $accessToken The OAuth access token
-     * @param array  $roles       Roles for the token
+     * @param mixed   $accessToken  The OAuth access token
+     * @param array   $roles        Roles for the token
+     * @param string  $refreshToken The OAuth refresh token
+     * @param integer $expiresIn    The duration in seconds of the access token lifetime
      */
-    public function __construct($accessToken, array $roles = array())
+    public function __construct($accessToken, array $roles = array(),
+        $refreshToken = null, $expiresIn = null)
     {
         parent::__construct($roles);
 
-        $this->accessToken = $accessToken;
+        if (is_array($accessToken)) {
+            $this->accessToken = $accessToken['access_token'];
+            if (isset($accessToken['refresh_token'])) {
+                $this->refreshToken = $accessToken['refresh_token'];
+            }
+
+            if (isset($accessToken['expires_in'])) {
+                $this->expiresIn = $accessToken['expires_in'];
+            }
+
+        } else {
+            $this->accessToken = $accessToken;
+            $this->refreshToken = $refreshToken;
+            $this->expiresIn = $expiresIn;
+        }
 
         parent::setAuthenticated(count($roles) > 0);
     }
@@ -69,6 +96,22 @@ class OAuthToken extends AbstractToken
     }
 
     /**
+     * @return string
+     */
+    public function getRefreshToken()
+    {
+        return $this->refreshToken;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getExpiresIn()
+    {
+        return $this->expiresIn;
+    }
+
+    /**
      * Get the resource owner name.
      *
      * @return string
@@ -95,6 +138,8 @@ class OAuthToken extends AbstractToken
     {
         return serialize(array(
             $this->accessToken,
+            $this->refreshToken,
+            $this->expiresIn,
             $this->resourceOwnerName,
             parent::serialize()
         ));
@@ -107,6 +152,8 @@ class OAuthToken extends AbstractToken
     {
         list(
             $this->accessToken,
+            $this->refreshToken,
+            $this->expiresIn,
             $this->resourceOwnerName,
             $parent,
         ) = unserialize($serialized);
