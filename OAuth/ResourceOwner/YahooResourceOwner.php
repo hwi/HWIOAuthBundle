@@ -35,22 +35,26 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'username'     => 'profile.guid',
-        'displayname'  => 'profile.nickname',
+        'identifier' => 'profile.guid',
+        'nickname'   => 'profile.nickname',
+        'realname'   => 'profile.givenName',
     );
 
     /**
      * Override to replace {guid} in the infos_url with the authenticating user's yahoo id
+     *
      * {@inheritDoc}
      */
     public function getUserInformation($accessToken)
     {
         $this->options['infos_url'] = str_replace('{guid}', $accessToken['xoauth_yahoo_guid'], $this->getOption('infos_url'));
+
         return parent::getUserInformation($accessToken);
     }
 
     /**
      * Override to set the Accept header as otherwise Yahoo defaults to XML
+     *
      * {@inheritDoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
