@@ -41,6 +41,7 @@ class Configuration implements ConfigurationInterface
         'oauth1',
             'linkedin',
             'twitter',
+            'yahoo',
     );
 
     /**
