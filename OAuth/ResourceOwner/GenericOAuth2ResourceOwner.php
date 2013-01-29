@@ -71,7 +71,17 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieve an access token for a given code.
+     *
+     * @param Request $request         The request object from where the code is going to extracted
+     * @param mixed   $redirectUri     The uri to redirect the client back to
+     * @param array   $extraParameters An array of parameters to add to the url
+     *
+     * @return array Array containing the access token and it's 'expires_in' value,
+     *               along with any other parameters returned from the authentication
+     *               provider.
+     *
+     * @throws AuthenticationException If an OAuth error occurred or no access token is found
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
@@ -106,6 +116,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      * @return array Array containing the access token and it's 'expires_in' value,
      *               along with any other parameters returned from the authentication
      *               provider.
+     *
+     * @throws AuthenticationException If an OAuth error occurred or no access token is found
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
