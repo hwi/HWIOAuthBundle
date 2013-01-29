@@ -151,7 +151,6 @@ json;
 
     public function testRefreshAccessToken()
     {
-        $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $refreshToken = 'foo';
         $this->mockBuzz('{"access_token": "bar", "expires_in": 3600}', 'application/json');
         $accessToken = $this->resourceOwner->refreshAccessToken($refreshToken);
@@ -165,7 +164,6 @@ json;
      */
     public function testRefreshAccessTokenError()
     {
-        $this->markTestSkipped('Test will work from PHPUnit 3.7 onwards. See: https://github.com/sebastianbergmann/phpunit-mock-objects/issues/47.');
         $refreshToken = 'foo';
         $this->mockBuzz('{"erro": "error"}', 'application/json');
         $this->resourceOwner->refreshAccessToken($refreshToken);
