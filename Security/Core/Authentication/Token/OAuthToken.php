@@ -44,11 +44,8 @@ class OAuthToken extends AbstractToken
     /**
      * @param mixed   $accessToken  The OAuth access token
      * @param array   $roles        Roles for the token
-     * @param string  $refreshToken The OAuth refresh token
-     * @param integer $expiresIn    The duration in seconds of the access token lifetime
      */
-    public function __construct($accessToken, array $roles = array(),
-        $refreshToken = null, $expiresIn = null)
+    public function __construct($accessToken, array $roles = array())
     {
         parent::__construct($roles);
 
@@ -64,8 +61,6 @@ class OAuthToken extends AbstractToken
 
         } else {
             $this->accessToken = $accessToken;
-            $this->refreshToken = $refreshToken;
-            $this->expiresIn = $expiresIn;
         }
 
         parent::setAuthenticated(count($roles) > 0);
@@ -96,11 +91,27 @@ class OAuthToken extends AbstractToken
     }
 
     /**
+     * @param string $refreshToken The OAuth refresh token
+     */
+    public function setRefreshToken($refreshToken)
+    {
+        $this->refreshToken = $refreshToken;
+    }
+
+    /**
      * @return string
      */
     public function getRefreshToken()
     {
         return $this->refreshToken;
+    }
+
+    /**
+     * @param integer $expiresIn The duration in seconds of the access token lifetime
+     */
+    public function setExpiresIn($expiresIn)
+    {
+        return $this->expiresIn = $expiresIn;
     }
 
     /**

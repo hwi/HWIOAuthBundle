@@ -80,12 +80,12 @@ class OAuthProvider implements AuthenticationProviderInterface
             throw $e;
         }
 
-        $token = new OAuthToken(
-            $token->getAccessToken(),
-            $user->getRoles(),
-            $token->getRefreshToken(),
-            $token->getExpiresIn()
-        );
+        $refreshToken = $token->getRefreshToken();
+        $expiresIn = $token->getExpiresIn();
+
+        $token = new OAuthToken($token->getAccessToken(), $user->getRoles());
+        $token->setRefreshToken($refreshToken);
+        $token->setExpiresIn($expiresIn);
         $token->setResourceOwnerName($resourceOwner->getName());
         $token->setUser($user);
         $token->setAuthenticated(true);
