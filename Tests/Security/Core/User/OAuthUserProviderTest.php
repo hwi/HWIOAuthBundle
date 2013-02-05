@@ -68,8 +68,9 @@ class OAuthUserProviderTest extends \PHPUnit_Framework_TestCase
 
         $responseMock
             ->expects($this->once())
-            ->method('getUsername')
-            ->will($this->returnValue('asm89'));
+            ->method('getNickname')
+            ->will($this->returnValue('asm89'))
+        ;
 
         $user = $this->provider->loadUserByOAuthUserResponse($responseMock);
         $this->assertInstanceOf('\HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser', $user);

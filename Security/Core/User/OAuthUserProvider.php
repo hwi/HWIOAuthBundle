@@ -39,7 +39,7 @@ class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserProvider
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        return $this->loadUserByUsername($response->getUsername());
+        return $this->loadUserByUsername($response->getNickname());
     }
 
     /**
