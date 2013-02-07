@@ -42,6 +42,7 @@ class Configuration implements ConfigurationInterface
             'linkedin',
             'twitter',
             'yahoo',
+            'flickr'
     );
 
     /**
