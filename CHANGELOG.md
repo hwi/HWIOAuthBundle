@@ -5,6 +5,7 @@ Changelog
 * [BC break] `GenericOAuth2ResourceOwner::getAccessToken` now returns an array
   instead of a string. This array contains the access token and its 'expires_in'
   value, along with any other parameters returned from the authentication provider
+* [BC break] Renamed `AbstractResourceOwner::doGetAccessTokenRequest` to `doGetTokenRequest`
 * [BC break] Removed `AdvancedPathUserResponse` & `AdvancedUserResponseInterface`
 * [BC break] Added `UserResponseInterface#getEmail()` & `UserResponseInterface#getProfilePicture()`
   methods
