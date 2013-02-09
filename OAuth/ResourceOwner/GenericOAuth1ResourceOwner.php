@@ -116,7 +116,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $url = $this->getOption('access_token_url');
         $parameters['oauth_signature'] = OAuthUtils::signRequest('POST', $url, $parameters, $this->getOption('client_secret'), $requestToken['oauth_token_secret']);
 
-        $response = $this->doGetAccessTokenRequest($url, $parameters);
+        $response = $this->doGetTokenRequest($url, $parameters);
         $response = $this->getResponseContent($response);
 
         if (isset($response['oauth_problem'])) {
@@ -209,7 +209,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function doGetAccessTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, null, $parameters, array(), 'POST');
     }

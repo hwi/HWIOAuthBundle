@@ -1,11 +1,12 @@
 Changelog
 =========
 
-### 2013-01-29
+### 2013-02-09
 
 * [BC break] `GenericOAuth2ResourceOwner::getAccessToken` now returns an array
   instead of a string. This array contains the access token and it's 'expires_in'
   value, along with any other parameters returned from the authentication provider.
+* [BC break] Renamed `AbstractResourceOwner::doGetAccessTokenRequest` to `doGetTokenRequest`
 
 ### 2012-08-27
 * Added `UserResponseInterface#getRealName()` method, also a new default path `realname`

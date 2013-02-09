@@ -192,7 +192,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return mixed
      */
-    abstract protected function doGetAccessTokenRequest($url, array $parameters = array());
+    abstract protected function doGetTokenRequest($url, array $parameters = array());
 
     /**
      * @param string $url

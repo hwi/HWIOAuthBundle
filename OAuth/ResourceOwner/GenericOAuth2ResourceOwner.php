@@ -83,7 +83,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'redirect_uri'  => $redirectUri,
         ));
 
-        $response = $this->doGetAccessTokenRequest($this->getOption('access_token_url'), $parameters);
+        $response = $this->doGetTokenRequest($this->getOption('access_token_url'), $parameters);
         $response = $this->getResponseContent($response);
 
         if (isset($response['error'])) {
@@ -118,10 +118,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'client_secret' => $this->getOption('client_secret'),
         ));
 
-        $response = $this->httpRequest(
-            $this->getOption('access_token_url'),
-            http_build_query($parameters)
-        );
+        $response = $this->doGetTokenRequest($this->getOption('access_token_url'), $parameters);
         $response = $this->getResponseContent($response);
 
         if (isset($response['error'])) {
@@ -146,7 +143,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function doGetAccessTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, http_build_query($parameters));
     }
