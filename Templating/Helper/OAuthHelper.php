@@ -59,6 +59,18 @@ class OAuthHelper extends Helper
     }
 
     /**
+     * @param string $name
+     * @param string $redirectUrl     Optional
+     * @param array  $extraParameters Optional
+     *
+     * @return string
+     */
+    public function getAuthorizationUrl($name, $redirectUrl = null, array $extraParameters = array())
+    {
+        return $this->oauthUtils->getAuthorizationUrl($name, $redirectUrl, $extraParameters);
+    }
+
+    /**
      * Returns the name of the helper.
      *
      * @return string The helper name
