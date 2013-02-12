@@ -68,9 +68,9 @@ class OAuthUtils
         $resourceOwner = $this->getResourceOwner($name);
         $checkPath = $this->ownerMap->getResourceOwnerCheckPath($name);
 
-        if(!$connect || !$hasUser) {
+        if (!$connect || !$hasUser) {
             $redirectUrl = $this->generateUri($checkPath);
-        } elseif(null === $redirectUrl) {
+        } elseif (null === $redirectUrl) {
             $redirectUrl = $this->generateUrl('hwi_oauth_connect_service', array('service' => $name), true);
         }
 
