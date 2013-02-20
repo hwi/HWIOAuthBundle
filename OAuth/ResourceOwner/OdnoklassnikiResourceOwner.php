@@ -12,9 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 /**
- * FacebookResourceOwner
+ * OdnoklassnikiResourceOwner
  *
- * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ * @author Sergey Polischook <spolischook@gmail.com>
  */
 class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
 {
