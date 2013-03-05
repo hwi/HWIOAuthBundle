@@ -61,7 +61,7 @@ json;
 
     public function testRequestVisibleActions()
     {
-        $resourceOwner = $this->createResourceOwner('google', ['request_visible_actions' => 'http://schemas.google.com/AddActivity']);
+        $resourceOwner = $this->createResourceOwner('google', array('request_visible_actions' => 'http://schemas.google.com/AddActivity'));
         $this->assertEquals(
             $this->options['authorization_url'].'?request_visible_actions=http%3A%2F%2Fschemas.google.com%2FAddActivity&response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
