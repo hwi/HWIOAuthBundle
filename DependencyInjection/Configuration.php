@@ -39,6 +39,7 @@ class Configuration implements ConfigurationInterface
             'vkontakte',
             'windows_live',
             'yandex',
+            'odnoklassniki',
             '37signals',
 
         'oauth1',
