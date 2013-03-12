@@ -65,8 +65,8 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
         return $response;
     }
 
-    public function setParameters($parameters)
+    public function setOdnoklassnikiAppKey($odnoklassnikiAppKey)
     {
-        $this->odnoklassnikiAppKey = $parameters['odnoklassniki_app_key'];
+        $this->odnoklassnikiAppKey = $odnoklassnikiAppKey;
     }
 }

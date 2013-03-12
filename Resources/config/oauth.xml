@@ -123,10 +123,8 @@
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.odnoklassniki" class="%hwi_oauth.resource_owner.odnoklassniki.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true">
-            <call method="setParameters">
-                <argument type="collection">
-                    <argument key="odnoklassniki_app_key">%odnoklassniki_app_key%</argument>
-                </argument>
+            <call method="setOdnoklassnikiAppKey">
+                <argument key="odnoklassniki_app_key">%odnoklassniki_app_key%</argument>
             </call>
         </service>
 
