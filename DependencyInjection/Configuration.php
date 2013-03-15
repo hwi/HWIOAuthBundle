@@ -51,6 +51,8 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
+        $resourceOwners = $this->resourceOwners;
+
         $builder = new TreeBuilder();
 
         $rootNode = $builder->root('hwi_oauth');
@@ -105,6 +107,17 @@ class Configuration implements ConfigurationInterface
                         ->cannotBeEmpty()
                     ->end()
                 ->end()
+            ->end()
+            ->arrayNode('resource_owners_types')
+                ->requiresAtLeastOneElement()
+                ->beforeNormalization()
+                    ->ifTrue(function($v) use (&$resourceOwners) {
+                        $resourceOwners = array_merge($resourceOwners, $v);
+                        return false;
+                    })
+                    ->thenUnset()
+                ->end()
+                ->prototype('scalar')->end()
             ->end()
             ->arrayNode('resource_owners')
                 ->isRequired()
@@ -169,7 +182,9 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->scalarNode('type')
                             ->validate()
-                                ->ifNotInArray($this->resourceOwners)
+                                ->ifTrue(function($v) use (&$resourceOwners) {
+                                    return !in_array($v, $resourceOwners);
+                                })
                                 ->thenInvalid('Unknown resource owner type %s.')
                             ->end()
                             ->validate()
