@@ -99,6 +99,8 @@ class HWIOAuthExtension extends Extension
             $container->setParameter('hwi_oauth.connect', false);
         }
 
+        $container->setParameter('hwi_oauth.templating.engine', $config['templating_engine']);
+
         $container->setAlias('hwi_oauth.user_checker', 'security.user_checker');
     }
 

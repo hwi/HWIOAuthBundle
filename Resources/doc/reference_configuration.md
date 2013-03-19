@@ -84,6 +84,10 @@ hwi_oauth:
         verify_peer:   true
         ignore_errors: true
         max_redirects: 5
+
+    # allows to switch templating engine for bundle views
+    #templating_engine: "php"
+
 ```
 
 ``` yaml
