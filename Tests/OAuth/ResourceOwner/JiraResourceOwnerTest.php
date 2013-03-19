@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\JiraResourceOwner;
 
 class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
-    protected $userResponse = '{"name": "1", "displayName": "bar"}';
+    protected $userResponse = '{"name": "asm89", "displayName": "Alexander"}';
     protected $paths        = array(
         'identifier' => 'name',
         'nickname'   => 'name',
@@ -40,8 +40,8 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         $accessToken  = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret');
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
 
-        $this->assertEquals('1', $userResponse->getUsername());
-        $this->assertEquals('bar', $userResponse->getNickname());
+        $this->assertEquals('asm89', $userResponse->getUsername());
+        $this->assertEquals('asm89', $userResponse->getNickname());
         $this->assertEquals($accessToken, $userResponse->getAccessToken());
     }
 
