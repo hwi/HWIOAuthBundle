@@ -47,7 +47,7 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
      */
     public function getUserInformation($accessToken)
     {
-        $this->options['infos_url'] = str_replace('{guid}', $accessToken['xoauth_yahoo_guid'], $this->getOption('infos_url'));
+        $this->options['infos_url'] = \str_replace('{guid}', $accessToken['xoauth_yahoo_guid'], $this->getOption('infos_url'));
 
         return parent::getUserInformation($accessToken);
     }
