@@ -151,6 +151,14 @@ class Configuration implements ConfigurationInterface
                                 ->thenUnset()
                             ->end()
                         ->end()
+                        ->scalarNode('realm')
+                            ->validate()
+                                ->ifTrue(function($v) {
+                                    return empty($v);
+                                })
+                                ->thenUnset()
+                            ->end()
+                        ->end()
                         ->scalarNode('scope')
                         ->end()
                         ->scalarNode('user_response_class')
