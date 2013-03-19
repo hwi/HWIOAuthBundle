@@ -76,7 +76,7 @@ hwi_oauth:
     connect: ~
 #        registration_form_handler: my_registration_form_handler
 #        registration_form: my_registration_form
-#        connect_provider: my_link_provider # can be the same as your user provider
+#        account_connector: my_link_provider # can be the same as your user provider
 
     # optional HTTP Client configuration
     http_client:
