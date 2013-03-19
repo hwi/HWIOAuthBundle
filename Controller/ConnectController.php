@@ -136,6 +136,7 @@ class ConnectController extends ContainerAware
     {
         $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
         $connect = $this->container->getParameter('hwi_oauth.connect');
+        $connectConfirm = $this->container->getParameter('hwi_oauth.connect.confirm_connect'); // flag to skip confirmation page
 
         if (!$connect || !$hasUser) {
             // todo: fix this
@@ -167,18 +168,23 @@ class ConnectController extends ContainerAware
             ->createBuilder('form')
             ->getForm();
 
-        if ('POST' === $request->getMethod()) {
-            $form->bindRequest($request);
-
-            if ($form->isValid()) {
-                $user = $this->container->get('security.context')->getToken()->getUser();
-
-                $this->container->get('hwi_oauth.account.connector')->connect($user, $userInformation);
-
-                return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.twig', array(
-                    'userInformation' => $userInformation,
-                ));
+        $doConnect = true;
+        if( $connectConfirm ) {
+            $doConnect = false;
+            if ('POST' === $request->getMethod()) {
+                $form->bindRequest($request);
+                $doConnect = $form->isValid();
             }
+        }
+        
+        if( $doConnect ) {
+            $user = $this->container->get('security.context')->getToken()->getUser();
+
+            $this->container->get('hwi_oauth.account.connector')->connect($user, $userInformation);
+
+            return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.twig', array(
+                'userInformation' => $userInformation,
+            ));
         }
 
         return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_confirm.html.twig', array(
