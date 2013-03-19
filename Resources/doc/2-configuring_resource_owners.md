@@ -28,6 +28,7 @@ hwi_oauth:
 - [Twitter] (2x-twitter.md)
 - [Vkontakte](2x-vkontakte.md)
 - [Windows Live](2x-windows_live.md)
+- [Yandex](2x-yandex.md)
 - [Others](2x-others.md)
 
 ### Continue to the next step!
