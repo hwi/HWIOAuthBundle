@@ -57,11 +57,13 @@ class OAuthUtils
     }
 
     /**
-     * @param string  $name
+     * @param string $name
+     * @param string $redirectUrl     Optional
+     * @param array  $extraParameters Optional
      *
      * @return string
      */
-    public function getAuthorizationUrl($name)
+    public function getAuthorizationUrl($name, $redirectUrl = null, array $extraParameters = array())
     {
         $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
         $connect = $this->container->getParameter('hwi_oauth.connect');
@@ -69,11 +71,13 @@ class OAuthUtils
         $resourceOwner = $this->getResourceOwner($name);
         $checkPath = $this->ownerMap->getResourceOwnerCheckPath($name);
 
-        return $resourceOwner->getAuthorizationUrl(
-            $connect && $hasUser
-                ? $this->generateUrl('hwi_oauth_connect_service', array('service' => $name), true)
-                : $this->generateUri($checkPath)
-        );
+        if (!$connect || !$hasUser) {
+            $redirectUrl = $this->generateUri($checkPath);
+        } elseif (null === $redirectUrl) {
+            $redirectUrl = $this->generateUrl('hwi_oauth_connect_service', array('service' => $name), true);
+        }
+
+        return $resourceOwner->getAuthorizationUrl($redirectUrl, $extraParameters);
     }
 
     /**
