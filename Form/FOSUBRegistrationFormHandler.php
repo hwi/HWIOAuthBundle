@@ -67,7 +67,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
             $processed = $formHandler->process();
 
             // if the form is not posted we'll try to set some properties
-            if ('POST' === $request->getMethod()) {
+            if ('POST' !== $request->getMethod()) {
                 $user = $this->setUserInformation($form->getData(), $userInformation);
 
                 $form->setData($user);
