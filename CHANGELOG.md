@@ -1,6 +1,9 @@
 Changelog
 =========
 
+### 2013-03-26
+* Added support for a `target_path_parameter` in order to control the redirect path after login
+
 ### 2012-08-27
 * Added `UserResponseInterface#getRealName()` method, also a new default path `realname`
   was added, this path holds the real name of user
