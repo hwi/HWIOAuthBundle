@@ -59,6 +59,7 @@ class Configuration implements ConfigurationInterface
             ->fixXmlConfig('resource_owner')
             ->children()
             ->scalarNode('firewall_name')
+                ->isRequired()
                 ->cannotBeEmpty()
             ->end()
             ->scalarNode('target_path_parameter')
