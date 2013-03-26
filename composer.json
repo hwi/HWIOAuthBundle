@@ -32,7 +32,7 @@
         "doctrine/orm":                 ">=2.1,<2.4-dev",
         "symfony/validator":            ">=2.0,<2.3-dev",
         "symfony/twig-bundle":          ">=2.0,<2.3-dev",
-        "friendsofsymfony/user-bundle": ">=1.2,<2.0-dev"
+        "friendsofsymfony/user-bundle": "~1.2"
     },
 
     "suggest": {
@@ -48,7 +48,7 @@
     },
 
     "target-dir": "HWI/Bundle/OAuthBundle",
-    
+
     "extra": {
         "branch-alias": {
             "dev-master": "0.2-dev"
