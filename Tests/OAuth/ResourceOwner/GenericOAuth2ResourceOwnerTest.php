@@ -150,6 +150,26 @@ json;
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
+    public function testRefreshAccessToken()
+    {
+        $refreshToken = 'foo';
+        $this->mockBuzz('{"access_token": "bar", "expires_in": 3600}', 'application/json');
+        $accessToken = $this->resourceOwner->refreshAccessToken($refreshToken);
+
+        $this->assertEquals('bar', $accessToken['access_token']);
+        $this->assertEquals(3600, $accessToken['expires_in']);
+    }
+
+    /**
+     * @expectedException Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
+    public function testRefreshAccessTokenError()
+    {
+        $refreshToken = 'foo';
+        $this->mockBuzz('{"erro": "error"}', 'application/json');
+        $this->resourceOwner->refreshAccessToken($refreshToken);
+    }
+
     public function testGetSetName()
     {
         $this->assertEquals('oauth2', $this->resourceOwner->getName());

@@ -18,6 +18,7 @@ hwi_oauth:
             client_id:           <client_id>
             client_secret:       <client_secret>
             scope:               ""
+            access_type:         ""
             user_response_class: \Our\Custom\Response\Class
             paths:
                 email:          email

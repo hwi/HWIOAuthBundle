@@ -61,7 +61,17 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * Retrieve an access token for a given code.
+     *
+     * @param Request $request         The request object from where the code is going to extracted
+     * @param mixed   $redirectUri     The uri to redirect the client back to
+     * @param array   $extraParameters An array of parameters to add to the url
+     *
+     * @return array Array containing the access token and it's 'expires_in' value,
+     *               along with any other parameters returned from the authentication
+     *               provider.
+     *
+     * @throws AuthenticationException If an OAuth error occurred or no access token is found
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
@@ -73,7 +83,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'redirect_uri'  => $redirectUri,
         ));
 
-        $response = $this->doGetAccessTokenRequest($this->getOption('access_token_url'), $parameters);
+        $response = $this->doGetTokenRequest($this->getOption('access_token_url'), $parameters);
         $response = $this->getResponseContent($response);
 
         if (isset($response['error'])) {
@@ -84,7 +94,42 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             throw new AuthenticationException('Not a valid access token.');
         }
 
-        return $response['access_token'];
+        return $response;
+    }
+
+    /**
+     * Refresh an access token using a refresh token.
+     *
+     * @param  string $refreshToken    Refresh token
+     * @param  array  $extraParameters An array of parameters to add to the url
+     *
+     * @return array Array containing the access token and it's 'expires_in' value,
+     *               along with any other parameters returned from the authentication
+     *               provider.
+     *
+     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     */
+    public function refreshAccessToken($refreshToken, array $extraParameters = array())
+    {
+        $parameters = array_merge($extraParameters, array(
+            'refresh_token' => $refreshToken,
+            'grant_type'    => 'refresh_token',
+            'client_id'     => $this->getOption('client_id'),
+            'client_secret' => $this->getOption('client_secret'),
+        ));
+
+        $response = $this->doGetTokenRequest($this->getOption('access_token_url'), $parameters);
+        $response = $this->getResponseContent($response);
+
+        if (isset($response['error'])) {
+            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
+        }
+
+        if (!isset($response['access_token'])) {
+            throw new AuthenticationException('Not a valid access token.');
+        }
+
+        return $response;
     }
 
     /**
@@ -98,7 +143,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function doGetAccessTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, http_build_query($parameters));
     }
