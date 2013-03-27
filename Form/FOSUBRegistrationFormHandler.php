@@ -68,15 +68,16 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
 
             // if the form is not posted we'll try to set some properties
             if ('POST' !== $request->getMethod()) {
-                $user = $this->setUserInformation($form->getData(), $userInformation);
-
-                $form->setData($user);
+                $form->setData($this->setUserInformation($form->getData(), $userInformation));
             }
 
             return $processed;
         }
 
-        $form->setData($userInformation);
+        $user = $this->userManager->createUser();
+        $user->setEnabled(true);
+
+        $form->setData($this->setUserInformation($user, $userInformation));
 
         if ('POST' === $request->getMethod()) {
             if ('2' == Kernel::MAJOR_VERSION && '2' <= Kernel::MINOR_VERSION) {
