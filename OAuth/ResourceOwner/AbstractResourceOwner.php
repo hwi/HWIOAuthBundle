@@ -89,13 +89,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * Retrieve an option by name
-     *
-     * @param string $name The option name
-     *
-     * @return mixed The option value
-     *
-     * @throws \InvalidArgumentException When the option does not exist
+     * {@inheritDoc}
      */
     public function getOption($name)
     {
@@ -171,7 +165,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
         $request  = new HttpRequest($method, $url);
         $response = new HttpResponse();
-        
+
         $headers = array_merge(
             array(
                 'User-Agent: HWIOAuthBundle (https://github.com/hwi/HWIOAuthBundle)',

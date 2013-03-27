@@ -12,7 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**

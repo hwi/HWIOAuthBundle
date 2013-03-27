@@ -12,10 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
 use FOS\UserBundle\Model\UserManagerInterface;
-
-use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface,
-    HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException,
-    HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 
 /**
  * Class providing a bridge to use the FOSUB user provider with HWIOAuth.

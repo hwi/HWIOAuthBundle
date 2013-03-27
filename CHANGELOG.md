@@ -11,6 +11,7 @@ Changelog
 * [BC break] `PathUserResponse#getValueForPath()` removed second argument from this method,
   it will not throw exception anymore if response or value is missing, but now will return
   `null` instead
+* [BC break] Added `ResourceOwnerInterface#getOption($name)` method
 * Added `AbstractResourceOwner#addOptions()` method which allows easy overwriting resource
   specific options
 

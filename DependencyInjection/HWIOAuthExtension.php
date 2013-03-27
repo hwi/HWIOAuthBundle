@@ -11,20 +11,18 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
-use Symfony\Component\Config\FileLocator,
-    Symfony\Component\Config\Definition\Processor,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Reference,
-    Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
-    Symfony\Component\HttpKernel\DependencyInjection\Extension;
-
+use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * HWIOAuthExtension
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
- * @auther Alexander <iam.asm89@gmail.com>
+ * @author Alexander <iam.asm89@gmail.com>
  */
 class HWIOAuthExtension extends Extension
 {

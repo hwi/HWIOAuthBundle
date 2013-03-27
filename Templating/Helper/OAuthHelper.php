@@ -11,11 +11,10 @@
 
 namespace HWI\Bundle\OAuthBundle\Templating\Helper;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Templating\Helper\Helper;
-
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Templating\Helper\Helper;
 
 /**
  * OAuthHelper

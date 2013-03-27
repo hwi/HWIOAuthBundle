@@ -12,10 +12,8 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-
-use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface,
-    HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
-
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 /**

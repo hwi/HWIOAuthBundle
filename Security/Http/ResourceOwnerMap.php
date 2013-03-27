@@ -11,10 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Http;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
-    Symfony\Component\Security\Http\HttpUtils;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * ResourceOwnerMap. Holds several resource owners for a firewall. Lazy
