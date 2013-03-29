@@ -27,6 +27,7 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
         'realm'               => null,
         'perms'               => 'read',
+        'signature_method'    => 'HMAC-SHA1'
     );
 
     /**
@@ -51,7 +52,7 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
             'nojsoncallback' => 1
         );
 
-        return $this->getOption('authorization_url') . '? ' .http_build_query($params);
+        return $this->getOption('authorization_url') . '?' . http_build_query($params);
     }
 
     /**
@@ -60,9 +61,6 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
      * @return \HWI\Bundle\OAuthBundle\OAuth\UserResponseInterface
      *
      * @throws \InvalidArgumentException
-     *
-     * @todo UserResponseInterface::setResponse() does not make much sense here.
-     *       We already have required information parsed. Worth to implement the new UserResponse type.
      */
     public function getUserInformation($accessToken)
     {
