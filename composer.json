@@ -2,7 +2,7 @@
     "name":        "hwi/oauth-bundle",
     "type":        "symfony-bundle",
     "description": "Support for authenticating users via oauth in Symfony2.",
-    "keywords":    ["security", "firewall", "oauth", "facebook", "oauth2", "github", "google", "windows live", "vkontakte", "oauth1", "twitter", "linkedin", "sensio connect", "yahoo"],
+    "keywords":    ["security", "firewall", "oauth", "facebook", "oauth2", "github", "google", "windows live", "vkontakte", "oauth1", "twitter", "linkedin", "sensio connect", "yahoo", "flickr"],
     "homepage":    "http://github.com/hwi/HWIOAuthBundle",
     "license":     "MIT",
 
@@ -48,7 +48,7 @@
     },
 
     "target-dir": "HWI/Bundle/OAuthBundle",
-    
+
     "extra": {
         "branch-alias": {
             "dev-master": "0.2-dev"
