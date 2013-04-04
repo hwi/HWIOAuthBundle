@@ -77,7 +77,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $response = $this->getResponseContent($response);
 
         if (isset($response['error'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
+            throw new AuthenticationException($this->getErrorMessage($response['error']));
         }
 
         if (!isset($response['access_token'])) {
@@ -109,5 +109,16 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url);
+    }
+
+    /**
+     * Creates error message.
+     *
+     * @param mixed $error
+     * @return string
+     */
+    protected function getErrorMessage($error)
+    {
+        return sprintf('OAuth error: "%s"', $error);
     }
 }

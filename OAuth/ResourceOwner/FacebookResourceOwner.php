@@ -46,4 +46,13 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     {
         $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
     }
+
+    /**
+     * Facebook unfortunately breaks the spec by sending an array instead of a string
+     * as an error.
+     */
+    protected function getErrorMessage($error)
+    {
+        return parent::getErrorMessage($error['message']);
+    }
 }
