@@ -37,6 +37,7 @@ class Configuration implements ConfigurationInterface
             'stack_exchange',
             'vkontakte',
             'windows_live',
+            '37signals',
 
         'oauth1',
             'linkedin',
