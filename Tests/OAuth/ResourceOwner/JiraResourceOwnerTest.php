@@ -43,6 +43,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         $this->assertEquals('asm89', $userResponse->getUsername());
         $this->assertEquals('asm89', $userResponse->getNickname());
         $this->assertEquals($accessToken, $userResponse->getAccessToken());
+        $this->assertEquals($accessToken['oauth_token'], $userResponse->getOAuthToken());
     }
 
     public function testCustomResponseClass()

@@ -27,6 +27,19 @@ json;
         'realname'   => 'name',
     );
 
+    public function testGetUserInformation()
+    {
+        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+
+        $accessToken  = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'user_id' => '1', 'screen_name' => 'bar');
+        $userResponse = $this->resourceOwner->getUserInformation($accessToken);
+
+        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('bar', $userResponse->getNickname());
+        $this->assertEquals($accessToken, $userResponse->getAccessToken());
+        $this->assertEquals($accessToken['oauth_token'], $userResponse->getOAuthToken());
+    }
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         $options = array_merge(
