@@ -91,15 +91,15 @@ firewalls:
             FB.getLoginStatus(function(response) {
                 if (response.status === 'connected') {
                     // connected
-                    alert('connected');
-                    document.location = "http://hb.com/Acme/web/app_dev.php/demo/secured/connect/facebook";
+                    alert('Already connected, redirect to login page to create token.');
+                    document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
                 } else {
                     // not_authorized
                     FB.login(function(response) {
                         if (response.authResponse) {
-                            document.location = "http://hb.com/Acme/web/app_dev.php/demo/secured/connect/facebook";
+                            document.location = "{{ url("hwi_oauth_service_redirect", {service: "facebook"}) }}";
                         } else {
-                            alert('cancelled');
+                            alert('Cancelled.');
                         }
                     });
                 }
