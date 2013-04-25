@@ -1,7 +1,7 @@
 Facebook Connect
-===========================
+================
 
-This guide use Symfony 2.2 and use the default AcmeBundle as base. Assuming you have installed the bundle via Composer correctly.
+This guide use Symfony 2.2 (and should work in 2.1 too) and use the [standard AcmeDemoBundle](https://github.com/symfony/symfony-standard/tree/2.2) as base. Assuming you have installed the bundle via Composer correctly.
 
 ## Configuration
 
@@ -42,11 +42,8 @@ facebook_login:
 ```yaml
 # app/config/security.yml
 
-providers:
-    oauth_user_provider:
-        id: hwi_oauth.user.provider.entity
-
 firewalls:
+    ...
     secured_area:
         pattern:    ^/demo/secured/
         oauth:
@@ -56,13 +53,15 @@ firewalls:
             failure_path:      /demo/secured/login
             oauth_user_provider:
                 service: hwi_oauth.user.provider.entity
-    # Turn on anonymous for testing's need.
-    anonymous: true
+        # Turn on anonymous for testing's need.
+        anonymous: true
 ```
 
-## Login button
+## Adding the Facebook Login Button
 
-```twig
+The following example follow the Facebook's ["Login with Javascript SDK"](https://developers.facebook.com/docs/howtos/login/getting-started/) guide. 
+
+```jinja
 # src/Acme/DemoBundle/Resources/views/Secured/hello.html.twig
 
 {% block content %}
@@ -115,6 +114,7 @@ firewalls:
         <a href="#" onclick="fb_login();">Facebook Connect Button (Dialog)</a>
     </p>
 
+    <!-- Bonus: Show all available login link in HWIOAuthBundle -->
     {% render(controller('HWIOAuthBundle:Connect:connect')) %}
 {% endblock %}
 ```
