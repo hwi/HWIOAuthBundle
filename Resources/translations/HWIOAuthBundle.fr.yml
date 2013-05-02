@@ -1,6 +1,6 @@
 header:
     connecting: Connexion en cours
-    success: Connexion réussie avec le compte '%name%'!
+    success: Connexion réussie avec le compte '%name%' !
     register: S'incrire avec le compte '%name%'
     registration_success: Enregistrement et connexion du compte '%username%' réussis !
 
