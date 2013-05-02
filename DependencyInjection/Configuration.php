@@ -181,6 +181,7 @@ class Configuration implements ConfigurationInterface
                                 ->thenUnset()
                             ->end()
                         ->end()
+                        ->scalarNode('id')->defaultValue(null)->end()
                         ->scalarNode('type')
                             ->validate()
                                 ->ifNotInArray($this->resourceOwners)
@@ -206,16 +207,27 @@ class Configuration implements ConfigurationInterface
                             }
 
                             // for each type at least these have to be set
-                            $children = array('type', 'client_id', 'client_secret');
+                            $children = array(array('id', 'type'), 'client_id', 'client_secret');
                             foreach ($children as $child) {
-                                if (!isset($c[$child])) {
+                                if (is_array($child)) {
+                                    $ret = true;
+                                    foreach ($child as $v) {
+                                        if (isset($c[$v])) {
+                                            $ret = false;
+                                        }
+                                    }
+                                    if ($ret) {
+                                        return $ret;
+                                    }
+                                }
+                                else if (!isset($c[$child])) {
                                     return true;
                                 }
                             }
 
                             return false;
                         })
-                        ->thenInvalid('You should set at least the type, client_id and the client_secret of a resource owner.')
+                        ->thenInvalid('You should set at least the id or type, client_id and the client_secret of a resource owner.')
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {
@@ -225,7 +237,7 @@ class Configuration implements ConfigurationInterface
                             }
 
                             // Only validate the 'oauth2' and 'oauth1' type
-                            if ('oauth2' !== $c['type'] && 'oauth1' !== $c['type']) {
+                            if (!isset($c['type']) || 'oauth2' !== $c['type'] && 'oauth1' !== $c['type']) {
                                 return false;
                             }
 
@@ -249,7 +261,7 @@ class Configuration implements ConfigurationInterface
                             }
 
                             // Only validate the 'oauth2' and 'oauth1' type
-                            if ('oauth2' !== $c['type'] && 'oauth1' !== $c['type']) {
+                            if (!isset($c['type']) || 'oauth2' !== $c['type'] && 'oauth1' !== $c['type']) {
                                 return false;
                             }
 
