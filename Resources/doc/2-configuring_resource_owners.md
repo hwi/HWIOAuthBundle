@@ -5,9 +5,9 @@ use in your application. These resource owners will be used in the oauth
 firewall. The bundle ships several pre-configured resource owners that need
 only a little configuration.
 
-To make this bundle work you need to add the following to your app/config/config.yml:
+To make this bundle work you need to add the following to your `app/config/config.yml`:
 
-``` yaml
+```yaml
 # app/config/config.yml
 
 hwi_oauth:
@@ -19,7 +19,7 @@ hwi_oauth:
     # redirect the user to /my/destination after facebook authenticates them.  If this is not
     # set then the user will be redirected to the original resource that they requested, or 
     # the base address if no resource was requested.  This is similar to the behaviour of
-    # [target_path_parameter for form login](http://symfony.com/doc/2.0/cookbook/security/form_login.html).
+    # [target_path_parameter for form login](http://symfony.com/doc/current/cookbook/security/form_login.html).
     # target_path_parameter: _destination
 
     # here you will add one (or more) configurations for resource owners
@@ -30,6 +30,7 @@ hwi_oauth:
 - [Foursquare](2x-foursquare.md)
 - [GitHub](2x-github.md)
 - [Google](2x-google.md)
+- [JIRA] (2x-jira.md)
 - [Linkedin](2x-linkedin.md)
 - [SensioLabs Connect](2x-sensio_connect.md)
 - [Stack Exchange](2x-stack_exchange.md)
@@ -41,3 +42,5 @@ hwi_oauth:
 ### Continue to the next step!
 When you're done. Continue by configuring the security layer.
 [Step 3: Configuring the security layer](3-configuring_the_security_layer.md).
+
+[Return to the index.](index.md)
