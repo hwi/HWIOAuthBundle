@@ -172,6 +172,8 @@ json;
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
         $this->assertEquals('foo', $userResponse->getNickname());
+        $this->assertEquals('access_token', $userResponse->getAccessToken());
+        $this->assertEquals('access_token', $userResponse->getOAuthToken());
     }
 
     public function buzzSendMock($request, $response)
