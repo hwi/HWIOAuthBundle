@@ -27,7 +27,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage No property defined for entity for resource owner 'not_configured'.
      */
-    public function testLoadUserByOAuthuserResponseThrowsExceptionWhenNoPropertyIsConfigured()
+    public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured()
     {
         $provider = $this->createEntityUserProvider();
         $provider->loadUserByOAuthUserResponse($this->createUserResponseMock(null, 'not_configured'));
@@ -37,16 +37,16 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage User 'asm89' not found.
      */
-    public function testLoadUserByOAuthuserResponseThrowsExceptionWhenUserIsNull()
+    public function testLoadUserByOAuthUserResponseThrowsExceptionWhenUserIsNull()
     {
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
-        $provider = $this->createEntityUserProvider(null);
+        $provider = $this->createEntityUserProvider();
 
         $provider->loadUserByOAuthUserResponse($userResponseMock);
     }
 
-    public function testLoadUserByOAuthuserResponse()
+    public function testLoadUserByOAuthUserResponse()
     {
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
@@ -58,7 +58,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($user, $loadedUser);
     }
 
-    protected function createEntityUserProvider($user = false)
+    protected function createEntityUserProvider($user = null)
     {
         $class = 'HWI\Bundle\OAuthBundle\Tests\Fixtures\User';
         $properties = array('github' => 'githubId');
@@ -66,7 +66,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
         return new EntityUserProvider($this->createManagerRegistryMock($user), $class, $properties);
     }
 
-    public function createManagerRegistryMock($user = false)
+    public function createManagerRegistryMock($user = null)
     {
         $registryMock = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
             ->getMock();
@@ -79,13 +79,13 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
         return $registryMock;
     }
 
-    public function createRepositoryMock($user = false)
+    public function createRepositoryMock($user = null)
     {
         $mock = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
             ->disableOriginalConstructor()
             ->getMock();
 
-        if (false !== $user) {
+        if (null !== $user) {
             $mock->expects($this->once())
                 ->method('findOneBy')
                 ->with(array('githubId' => 'asm89'))
@@ -110,7 +110,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
         return $resourceOwnerMock;
     }
 
-    protected function createEntityManagerMock($user = false)
+    protected function createEntityManagerMock($user = null)
     {
         $emMock = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
