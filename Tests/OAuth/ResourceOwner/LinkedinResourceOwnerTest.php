@@ -22,6 +22,19 @@ class LinkedinResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         'realname'   => 'formattedName',
     );
 
+    public function testGetUserInformation()
+    {
+        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+
+        $accessToken  = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'oauth_expires_in' => '5183997', 'oauth_authorization_expires_in' => '5183997');
+        $userResponse = $this->resourceOwner->getUserInformation($accessToken);
+
+        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('bar', $userResponse->getNickname());
+        $this->assertEquals($accessToken, $userResponse->getAccessToken());
+        $this->assertEquals($accessToken['oauth_token'], $userResponse->getOAuthToken());
+    }
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         $options = array_merge(

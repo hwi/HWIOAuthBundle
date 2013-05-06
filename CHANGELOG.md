@@ -1,6 +1,9 @@
 Changelog
 =========
 
+### 2013-05-06
+* Added `AbstractUserResponse::getOAuthToken()` method to allow fetching only OAuth token details
+
 ### 2013-03-26
 * Added support for a `target_path_parameter` in order to control the redirect path after login
 
