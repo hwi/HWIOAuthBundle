@@ -76,6 +76,10 @@ class OAuthListener extends AbstractAuthenticationListener
 
         list($resourceOwner, $checkPath) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
 
+        if (!$resourceOwner) {
+            throw new AuthenticationException('No resource owner match the request.');
+        }
+
         if (!$resourceOwner->handles($request)) {
             throw new AuthenticationException('No oauth code in the request.');
         }
