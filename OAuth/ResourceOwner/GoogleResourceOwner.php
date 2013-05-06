@@ -43,4 +43,13 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
         'email'          => 'email',
         'profilepicture' => 'picture',
     );
+
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    {
+        if (($requestVisibleActions = $this->getOption('request_visible_actions')) && !isset($extraParameters['request_visible_actions'])) {
+            $extraParameters['request_visible_actions'] = $requestVisibleActions;
+        }
+        return parent::getAuthorizationUrl($redirectUri, $extraParameters);
+    }
+
 }

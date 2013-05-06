@@ -197,6 +197,9 @@ class Configuration implements ConfigurationInterface
                             ->useAttributeAsKey('name')
                             ->prototype('scalar')->end()
                         ->end()
+                        ->scalarNode('request_visible_actions')
+                            ->defaultValue('')
+                        ->end()
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {

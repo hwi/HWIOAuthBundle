@@ -30,6 +30,20 @@ json;
         'profilepicture' => 'picture',
     );
 
+    protected $options = array(
+        'client_id'           => 'clientid',
+        'client_secret'       => 'clientsecret',
+
+        'infos_url'           => 'http://user.info/',
+        'authorization_url'   => 'http://user.auth/',
+        'access_token_url'    => 'http://user.access/',
+
+        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
+        'scope'               => '',
+        'request_visible_actions' => '',
+    );
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         $options = array_merge(
@@ -43,5 +57,14 @@ json;
         );
 
         return new GoogleResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+    }
+
+    public function testRequestVisibleActions()
+    {
+        $resourceOwner = $this->createResourceOwner('google', array('request_visible_actions' => 'http://schemas.google.com/AddActivity'));
+        $this->assertEquals(
+            $this->options['authorization_url'].'?request_visible_actions=http%3A%2F%2Fschemas.google.com%2FAddActivity&response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
     }
 }
