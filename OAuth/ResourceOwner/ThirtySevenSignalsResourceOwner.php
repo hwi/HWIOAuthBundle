@@ -27,8 +27,8 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://launchpad.37signals.com/authorization/new',
         'access_token_url'    => 'https://launchpad.37signals.com/authorization/token',
         'infos_url'           => 'https://launchpad.37signals.com/authorization.json',
-        'scope'               => '',
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse',
+        'scope'               => null,
+        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
     /**
@@ -43,25 +43,11 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
 
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
-        $mergedParameters = array_merge(
-            array(
-                'type' => 'web_server',
-            ),
-            $extraParameters
-        );
-
-        return parent::getAuthorizationUrl($redirectUri, $mergedParameters);
+        return parent::getAuthorizationUrl($redirectUri, array_merge(array('type' => 'web_server'), $extraParameters));
     }
 
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
-        $mergedParameters = array_merge(
-            array(
-                'type' => 'web_server',
-            ),
-            $extraParameters
-        );
-        
-        return parent::getAccessToken($request, $redirectUri, $mergedParameters);
+        return parent::getAccessToken($request, $redirectUri, array_merge(array('type' => 'web_server'), $extraParameters));
     }
 }
