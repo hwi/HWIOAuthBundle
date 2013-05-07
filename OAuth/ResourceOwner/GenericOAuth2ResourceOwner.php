@@ -46,12 +46,12 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
-        $parameters = array_merge($extraParameters, array(
+        $parameters = array_merge(array(
             'response_type' => 'code',
             'client_id'     => $this->getOption('client_id'),
             'scope'         => $this->getOption('scope'),
             'redirect_uri'  => $redirectUri,
-        ));
+        ), $extraParameters);
 
         return $this->normalizeUrl($this->getOption('authorization_url'), $parameters);
     }
@@ -61,13 +61,13 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
-        $parameters = array_merge($extraParameters, array(
+        $parameters = array_merge(array(
             'code'          => $request->query->get('code'),
             'grant_type'    => 'authorization_code',
             'client_id'     => $this->getOption('client_id'),
             'client_secret' => $this->getOption('client_secret'),
             'redirect_uri'  => $redirectUri,
-        ));
+        ), $extraParameters);
 
         $response = $this->doGetAccessTokenRequest($this->getOption('access_token_url'), $parameters);
         $response = $this->getResponseContent($response);
