@@ -152,8 +152,7 @@ class ConnectController extends ContainerAware
         $connect = $this->container->getParameter('hwi_oauth.connect');
 
         if (!$connect || !$hasUser) {
-            // todo: fix this
-            throw new \Exception('Cannot connect an account.');
+            return $this->redirectToServiceAction($service);
         }
 
         // Get the data from the resource owner
