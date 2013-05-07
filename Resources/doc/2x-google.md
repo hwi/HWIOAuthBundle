@@ -24,6 +24,21 @@ hwi_oauth:
             scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
 ```
 
+In case you want to [insert moments](https://developers.google.com/+/api/latest/moments/insert) you will need [`request_visible_actions`](https://developers.google.com/+/web/app-activities/#writing_an_app_activity_using_the_google_apis_client_libraries) for each activity you're planning to use.
+As an example consider following:
+``` yaml
+# app/config/config.yml
+hwi_oauth:
+    resource_owners:
+        any_name:
+            type:                google
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+            options:
+                request_visible_actions: "http://schemas.google.com/AddActivity http://schemas.google.com/CommentActivity"
+```
+
 When you're done. Continue by configuring the security layer or go back to
 setup more resource owners.
 
