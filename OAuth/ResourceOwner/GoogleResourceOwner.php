@@ -28,6 +28,9 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
         'infos_url'           => 'https://www.googleapis.com/oauth2/v1/userinfo',
 
         'scope'               => 'https://www.googleapis.com/auth/userinfo.profile',
+
+        // @link https://developers.google.com/accounts/docs/OAuth2WebServer#offline
+        'access_type'         => null,
     );
 
     /**
@@ -46,10 +49,6 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
-        if (isset($this->options['access_type'])) {
-            $extraParameters['access_type'] = $this->getOption('access_type');
-        }
-
-        return parent::getAuthorizationUrl($redirectUri, $extraParameters);
+        return parent::getAuthorizationUrl($redirectUri, array_merge(array('access_type' => $this->getOption('access_type')), $extraParameters));
     }
 }

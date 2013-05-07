@@ -27,6 +27,11 @@ class OAuthToken extends AbstractToken
     private $accessToken;
 
     /**
+     * @var array
+     */
+    private $rawToken;
+
+    /**
      * @var string
      */
     private $refreshToken;
@@ -42,26 +47,14 @@ class OAuthToken extends AbstractToken
     private $resourceOwnerName;
 
     /**
-     * @param mixed   $accessToken  The OAuth access token
-     * @param array   $roles        Roles for the token
+     * @param array|string $accessToken  The OAuth access token
+     * @param array        $roles        Roles for the token
      */
     public function __construct($accessToken, array $roles = array())
     {
         parent::__construct($roles);
 
-        if (is_array($accessToken)) {
-            $this->accessToken = $accessToken['access_token'];
-            if (isset($accessToken['refresh_token'])) {
-                $this->refreshToken = $accessToken['refresh_token'];
-            }
-
-            if (isset($accessToken['expires_in'])) {
-                $this->expiresIn = $accessToken['expires_in'];
-            }
-
-        } else {
-            $this->accessToken = $accessToken;
-        }
+        $this->setRawToken($accessToken);
 
         parent::setAuthenticated(count($roles) > 0);
     }
@@ -91,6 +84,37 @@ class OAuthToken extends AbstractToken
     }
 
     /**
+     * @param array|string $token The OAuth token
+     */
+    public function setRawToken($token)
+    {
+        if (is_array($token)) {
+            $this->accessToken = $token['access_token'];
+
+            if (isset($token['refresh_token'])) {
+                $this->refreshToken = $token['refresh_token'];
+            }
+
+            if (isset($token['expires_in'])) {
+                $this->expiresIn = $token['expires_in'];
+            }
+
+            $this->rawToken = $token;
+        } else {
+            $this->accessToken = $token;
+            $this->rawToken    = array('access_token' => $token);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getRawToken()
+    {
+        return $this->rawToken;
+    }
+
+    /**
      * @param string $refreshToken The OAuth refresh token
      */
     public function setRefreshToken($refreshToken)
@@ -111,7 +135,7 @@ class OAuthToken extends AbstractToken
      */
     public function setExpiresIn($expiresIn)
     {
-        return $this->expiresIn = $expiresIn;
+        $this->expiresIn = $expiresIn;
     }
 
     /**
@@ -149,6 +173,7 @@ class OAuthToken extends AbstractToken
     {
         return serialize(array(
             $this->accessToken,
+            $this->rawToken,
             $this->refreshToken,
             $this->expiresIn,
             $this->resourceOwnerName,
@@ -163,6 +188,7 @@ class OAuthToken extends AbstractToken
     {
         list(
             $this->accessToken,
+            $this->rawToken,
             $this->refreshToken,
             $this->expiresIn,
             $this->resourceOwnerName,

@@ -18,27 +18,55 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class OAuthAwareException extends \Exception
-    implements OAuthAwareExceptionInterface
+class OAuthAwareException extends \Exception implements OAuthAwareExceptionInterface
 {
     private $accessToken;
+    private $rawToken;
     private $resourceOwnerName;
 
+    /**
+     * {@inheritdoc}
+     */
     public function getAccessToken()
     {
         return $this->accessToken;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setAccessToken($accessToken)
     {
         $this->accessToken = $accessToken;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getRawToken()
+    {
+        return $this->rawToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRawToken($token)
+    {
+        $this->rawToken = is_string($token) ? array('access_token' => $token) : $token;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getResourceOwnerName()
     {
         return $this->resourceOwnerName;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setResourceOwnerName($resourceOwnerName)
     {
         $this->resourceOwnerName = $resourceOwnerName;

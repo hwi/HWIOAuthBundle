@@ -81,6 +81,7 @@ json;
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
         $this->assertEquals('access_token', $userResponse->getAccessToken());
+        $this->assertEquals('access_token', $userResponse->getOAuthToken());
     }
 
     public function testGetAuthorizationUrl()
@@ -98,7 +99,7 @@ json;
         $request = new Request(array('code' => 'somecode'));
 
         $this->assertEquals(
-            'code',
+            array('access_token' => 'code'),
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -110,7 +111,7 @@ json;
         $request = new Request(array('code' => 'somecode'));
 
         $this->assertEquals(
-            'code',
+            array('access_token' => 'code'),
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -122,7 +123,7 @@ json;
         $request = new Request(array('code' => 'somecode'));
 
         $this->assertEquals(
-            'code',
+            array('access_token' => 'code'),
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -151,22 +152,31 @@ json;
 
     public function testRefreshAccessToken()
     {
-        $refreshToken = 'foo';
         $this->mockBuzz('{"access_token": "bar", "expires_in": 3600}', 'application/json');
-        $accessToken = $this->resourceOwner->refreshAccessToken($refreshToken);
+        $accessToken = $this->resourceOwner->refreshAccessToken('foo');
 
         $this->assertEquals('bar', $accessToken['access_token']);
         $this->assertEquals(3600, $accessToken['expires_in']);
     }
 
     /**
-     * @expectedException Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
+    public function testRefreshAccessTokenInvalid()
+    {
+        $this->mockBuzz('invalid');
+
+        $this->resourceOwner->refreshAccessToken('foo');
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */
     public function testRefreshAccessTokenError()
     {
-        $refreshToken = 'foo';
-        $this->mockBuzz('{"erro": "error"}', 'application/json');
-        $this->resourceOwner->refreshAccessToken($refreshToken);
+        $this->mockBuzz('{"error": "invalid"}', 'application/json');
+
+        $this->resourceOwner->refreshAccessToken('foo');
     }
 
     public function testGetSetName()
