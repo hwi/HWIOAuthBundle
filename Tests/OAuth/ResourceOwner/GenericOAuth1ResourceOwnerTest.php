@@ -30,10 +30,10 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         'client_id'           => 'clientid',
         'client_secret'       => 'clientsecret',
 
-        'infos_url'           => 'http://user.info/',
-        'request_token_url'   => 'http://user.request/',
-        'authorization_url'   => 'http://user.auth/',
-        'access_token_url'    => 'http://user.access/',
+        'infos_url'           => 'http://user.info/?test=1',
+        'request_token_url'   => 'http://user.request/?test=2',
+        'authorization_url'   => 'http://user.auth/?test=3',
+        'access_token_url'    => 'http://user.access/?test=4',
 
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
 
@@ -99,7 +99,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
             ->with($this->resourceOwner, array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'timestamp' => time()));
 
         $this->assertEquals(
-            $this->options['authorization_url'].'?oauth_token=token',
+            $this->options['authorization_url'].'&oauth_token=token',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
