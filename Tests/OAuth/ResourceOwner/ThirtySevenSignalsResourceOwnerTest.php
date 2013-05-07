@@ -24,21 +24,20 @@ class ThirtySevenSignalsResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     }
 }
 json;
-
-    public function testGetAuthorizationUrl()
-    {
-        $this->assertEquals(
-            $this->options['authorization_url'].'?type=web_server&response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
-        );
-    }
-
     protected $paths = array(
         'identifier'     => 'identity.id',
         'nickname'       => 'identity.email_address',
         'realname'       => 'identity.last_name',
         'firstName'      => 'identity.first_name'
     );
+
+    public function testGetAuthorizationUrl()
+    {
+        $this->assertEquals(
+            $this->options['authorization_url'].'&type=web_server&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
+    }
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
