@@ -36,7 +36,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $options = array(
         'infos_url'           => '',
         'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-        'scope'               => '',
+        'scope'               => null,
     );
 
     /**
@@ -50,7 +50,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $httpClient;
 
     /**
-     * @access string
+     * @var string
      */
     protected $name;
 
@@ -62,12 +62,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name)
     {
-        $this->options = array_merge($this->options, $options);
-
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
         $this->name       = $name;
 
+        $this->addOptions($options);
         $this->configure();
     }
 
@@ -80,13 +79,17 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * Retrieve an option by name
+     * Add (extra) options to the configuration.
      *
-     * @param string $name The option name
-     *
-     * @return mixed The option value
-     *
-     * @throws \InvalidArgumentException When the option does not exist
+     * @param array $options
+     */
+    public function addOptions(array $options)
+    {
+        $this->options = array_merge($this->options, $options);
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getOption($name)
     {
@@ -162,7 +165,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
         $request  = new HttpRequest($method, $url);
         $response = new HttpResponse();
-        
+
         $headers = array_merge(
             array(
                 'User-Agent: HWIOAuthBundle (https://github.com/hwi/HWIOAuthBundle)',

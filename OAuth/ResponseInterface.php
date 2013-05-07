@@ -11,8 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-
 /**
  * ResponseInterface
  *
@@ -23,7 +21,7 @@ interface ResponseInterface
     /**
      * Get the api response.
      *
-     * @return mixed
+     * @return array
      */
     public function getResponse();
 

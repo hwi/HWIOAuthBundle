@@ -11,17 +11,17 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
-    HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
-
-use Symfony\Component\DependencyInjection\ContainerAware,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\Security\Core\Exception\AuthenticationException,
-    Symfony\Component\Security\Core\SecurityContext,
-    Symfony\Component\Security\Core\User\UserInterface,
-    Symfony\Component\Security\Http\Event\InteractiveLoginEvent,
-    Symfony\Component\Security\Http\SecurityEvents;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccountStatusException;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 /**
  * ConnectController
@@ -102,8 +102,10 @@ class ConnectController extends ContainerAware
             throw new \Exception('Cannot register an account.');
         }
 
-        $userInformation = $this->getResourceOwnerByName($error->getResourceOwnerName())
-            ->getUserInformation($error->getAccessToken());
+        $userInformation = $this
+            ->getResourceOwnerByName($error->getResourceOwnerName())
+            ->getUserInformation($error->getAccessToken())
+        ;
 
         if ($this->container->has('hwi_oauth.registration.form')) {
             $form = $this->container->get('hwi_oauth.registration.form');
@@ -139,6 +141,8 @@ class ConnectController extends ContainerAware
      *
      * @param Request $request The active request.
      * @param string  $service Name of the resource owner to connect to.
+     *
+     * @throws \Exception
      *
      * @return Response
      */
@@ -200,6 +204,7 @@ class ConnectController extends ContainerAware
     }
 
     /**
+     * @param Request $request
      * @param string  $service
      *
      * @return RedirectResponse
@@ -207,8 +212,7 @@ class ConnectController extends ContainerAware
     public function redirectToServiceAction(Request $request, $service)
     {
         // Check for a specified target path and store it before redirect if present
-        $param     = $this->container->getParameter('hwi_oauth.target_path_parameter');
-
+        $param = $this->container->getParameter('hwi_oauth.target_path_parameter');
         if (!empty($param) && $request->hasSession() && $targetUrl = $request->get($param, null, true)) {
             $providerKey = $this->container->getParameter('hwi_oauth.firewall_name');
             $request->getSession()->set('_security.' . $providerKey . '.target_path', $targetUrl);
@@ -222,7 +226,7 @@ class ConnectController extends ContainerAware
      *
      * @param Request $request
      *
-     * @return string|Exception
+     * @return string|\Exception
      */
     protected function getErrorForRequest(Request $request)
     {

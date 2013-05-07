@@ -11,8 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorage;
 
-use HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface,
-    HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 
 /**
  * Request token storage implementation using the Symfony session.

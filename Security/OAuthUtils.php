@@ -11,10 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Security;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\HttpFoundation\Request;
-
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * OAuthUtils

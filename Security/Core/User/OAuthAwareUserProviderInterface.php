@@ -12,6 +12,8 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Represents a class that loads UserInterface objects for a given oauth response.

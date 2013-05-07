@@ -26,8 +26,8 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://github.com/login/oauth/authorize',
         'access_token_url'    => 'https://github.com/login/oauth/access_token',
         'infos_url'           => 'https://api.github.com/user',
-        'scope'               => '',
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse',
+        'scope'               => null,
+        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
     /**
@@ -47,6 +47,8 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function configure()
     {
-        $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+        if (isset($this->options['scope'])) {
+            $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+        }
     }
 }
