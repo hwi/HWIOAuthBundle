@@ -43,6 +43,7 @@ class Configuration implements ConfigurationInterface
             'twitter',
             'yahoo',
             'jira',
+            'flickr'
     );
 
     /**

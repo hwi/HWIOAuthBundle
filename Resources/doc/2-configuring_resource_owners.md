@@ -36,6 +36,7 @@ hwi_oauth:
 - [Twitter] (2x-twitter.md)
 - [Vkontakte](2x-vkontakte.md)
 - [Windows Live](2x-windows_live.md)
+- [Flickr](2x-flickr.md)
 - [Others](2x-others.md)
 
 ### Continue to the next step!
