@@ -11,14 +11,13 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
-    HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface,
-    HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface,
-    HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
-
-use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface,
-    Symfony\Component\Security\Core\User\UserCheckerInterface,
-    Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
 
 /**
  * OAuthProvider
@@ -68,6 +67,7 @@ class OAuthProvider implements AuthenticationProviderInterface
      */
     public function authenticate(TokenInterface $token)
     {
+        /* @var OAuthToken $token */
         $resourceOwner = $this->resourceOwnerMap->getResourceOwnerByName($token->getResourceOwnerName());
 
         $userResponse = $resourceOwner->getUserInformation($token->getAccessToken());

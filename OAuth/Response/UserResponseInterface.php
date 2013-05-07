@@ -24,6 +24,10 @@ interface UserResponseInterface extends ResponseInterface
     /**
      * Get the unique user identifier.
      *
+     * Note that this is not always common known "username" because of implementation
+     * in Symfony2 framework. For more details follow link below.
+     * @link https://github.com/symfony/symfony/blob/2.1/src/Symfony/Component/Security/Core/User/UserProviderInterface.php#L20-L28
+     *
      * @return string
      */
     public function getUsername();
@@ -38,9 +42,23 @@ interface UserResponseInterface extends ResponseInterface
     /**
      * Get the real name of user.
      *
-     * @return string
+     * @return null|string
      */
     public function getRealName();
+
+    /**
+     * Get the email address.
+     *
+     * @return null|string
+     */
+    public function getEmail();
+
+    /**
+     * Get the url to the profile picture.
+     *
+     * @return null|string
+     */
+    public function getProfilePicture();
 
     /**
      * Get the access token used for the request.

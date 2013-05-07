@@ -28,7 +28,7 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
         'access_token_url'    => 'https://foursquare.com/oauth2/access_token',
         'infos_url'           => 'https://api.foursquare.com/v2/users/self',
         'scope'               => null,
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse',
+        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
         // @link https://developer.foursquare.com/overview/versioning
         'version'             => '20121206',
     );

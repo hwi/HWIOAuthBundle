@@ -12,9 +12,8 @@
 namespace HWI\Bundle\OAuthBundle\Form;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-
-use Symfony\Component\Form\Form,
-    Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * RegistrationFormHandlerInterface
