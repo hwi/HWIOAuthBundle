@@ -11,11 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Client\ClientInterface as HttpClientInterface;
-
-use Symfony\Component\Security\Core\Exception\AuthenticationException,
-    Symfony\Component\Security\Http\HttpUtils,
-    Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * GenericOAuth2ResourceOwner
@@ -30,8 +27,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getUserInformation($accessToken)
     {
-        $url = $this->getOption('infos_url');
-        $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
+        $url = $this->normalizeUrl($this->getOption('infos_url'), array(
             'access_token' => $accessToken
         ));
 
@@ -57,7 +53,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'redirect_uri'  => $redirectUri,
         ));
 
-        return $this->getOption('authorization_url').'?'.http_build_query($parameters);
+        return $this->normalizeUrl($this->getOption('authorization_url'), $parameters);
     }
 
     /**

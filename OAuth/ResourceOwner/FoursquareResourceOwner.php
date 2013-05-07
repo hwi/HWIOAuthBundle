@@ -76,7 +76,7 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         // Foursquare require to pass the 'v' ('version' = date in format 'YYYYMMDD') parameter when requesting API
-        $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
+        $url = $this->normalizeUrl($url, array(
             'v' => $this->options['version']
         ));
 
