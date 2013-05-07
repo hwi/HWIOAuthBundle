@@ -109,7 +109,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->arrayNode('connect')
                 ->children()
-                    ->booleanNode('confirm_connect')
+                    ->booleanNode('confirmation')
                         ->defaultTrue()
                     ->end()
                     ->scalarNode('account_connector')

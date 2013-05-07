@@ -76,6 +76,7 @@ hwi_oauth:
 
     # if you want to use 'connect' and do not use the FOSUB integration, configure these separately
     connect: ~
+#        confirmation: true # should show confirmation page or not
 #        registration_form_handler: my_registration_form_handler
 #        registration_form: my_registration_form
 #        account_connector: my_link_provider # can be the same as your user provider

@@ -19,6 +19,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
@@ -165,8 +166,6 @@ class ConnectController extends ContainerAware
             throw new AccessDeniedException('Cannot connect an account.');
         }
 
-        $connectConfirm = $this->container->getParameter('hwi_oauth.connect.confirm_connect'); // flag to skip confirmation page
-
         // Get the data from the resource owner
         $resourceOwner = $this->getResourceOwnerByName($service);
 
@@ -187,35 +186,41 @@ class ConnectController extends ContainerAware
 
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
+        // Show confirmation page?
+        if (!$this->container->getParameter('hwi_oauth.connect.confirmation')) {
+            goto show_confirmation_page;
+        }
+
         // Handle the form
         /** @var $form Form */
         $form = $this->container->get('form.factory')
             ->createBuilder('form')
             ->getForm();
 
-        $doConnect = true;
-        if( $connectConfirm ) {
-            $doConnect = false;
-            if ('POST' === $request->getMethod()) {
+        if ('POST' === $request->getMethod()) {
+            if ('2' == Kernel::MAJOR_VERSION && '2' <= Kernel::MINOR_VERSION) {
+                $form->bind($request);
+            } else {
                 $form->bindRequest($request);
-                $doConnect = $form->isValid();
             }
-        }
-        
-        if( $doConnect ) {
-            $user = $this->container->get('security.context')->getToken()->getUser();
 
-            $this->container->get('hwi_oauth.account.connector')->connect($user, $userInformation);
+            if ($form->isValid()) {
+                show_confirmation_page:
 
-            return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
-                'userInformation' => $userInformation,
-            ));
+                $user = $this->container->get('security.context')->getToken()->getUser();
+
+                $this->container->get('hwi_oauth.account.connector')->connect($user, $userInformation);
+
+                return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
+                    'userInformation' => $userInformation,
+                ));
+            }
         }
 
         return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_confirm.html.' . $this->getTemplatingEngine(), array(
-            'key' => $key,
-            'service' => $service,
-            'form' => $form->createView(),
+            'key'             => $key,
+            'service'         => $service,
+            'form'            => $form->createView(),
             'userInformation' => $userInformation,
         ));
     }

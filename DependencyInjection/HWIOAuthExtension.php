@@ -93,12 +93,14 @@ class HWIOAuthExtension extends Extension
                 }
             }
 
-            $container->setParameter('hwi_oauth.connect.confirm_connect', $config['connect']['confirm_connect']);
-            $connectServices = array('registration_form_handler','registration_form','connect_provider'); // connect subnodes that need to register a service
-            foreach ($connectServices as $service) {
-                if (isset($config['connect'][$service])) {
-                    $container->setAlias('hwi_oauth.'.str_replace('_', '.', $service), $config['connect'][$service]);
+            foreach ($config['connect'] as $key => $serviceId) {
+                if ('confirmation' == $key) {
+                    $container->setParameter('hwi_oauth.connect.confirmation', $config['connect']['confirmation']);
+
+                    continue;
                 }
+
+                $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), $serviceId);
             }
 
             // setup custom services
