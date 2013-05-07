@@ -17,7 +17,7 @@ hwi_oauth:
     # an optional setting to configure a query string parameter which can be used to redirect
     # the user after authentication, e.g. /connect/facebook?_destination=/my/destination will
     # redirect the user to /my/destination after facebook authenticates them.  If this is not
-    # set then the user will be redirected to the original resource that they requested, or 
+    # set then the user will be redirected to the original resource that they requested, or
     # the base address if no resource was requested.  This is similar to the behaviour of
     # [target_path_parameter for form login](http://symfony.com/doc/2.0/cookbook/security/form_login.html).
     # target_path_parameter: _destination
@@ -26,6 +26,7 @@ hwi_oauth:
     # and other settings you want to adjust in this bundle, just checkout the list below!
 ```
 
+- [37signals](2x-37signals.md)
 - [Facebook](2x-facebook.md)
 - [Foursquare](2x-foursquare.md)
 - [GitHub](2x-github.md)
