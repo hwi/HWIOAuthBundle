@@ -12,13 +12,11 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Client\ClientInterface as HttpClientInterface;
-
-use Symfony\Component\Security\Core\Exception\AuthenticationException,
-    Symfony\Component\Security\Http\HttpUtils,
-    Symfony\Component\HttpFoundation\Request;
-
-use HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface,
-    HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface;
+use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * GenericOAuth1ResourceOwner
@@ -99,7 +97,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     {
         $token = $this->getRequestToken($redirectUri, $extraParameters);
 
-        return $this->getOption('authorization_url').'?'.http_build_query(array('oauth_token' => $token['oauth_token']));
+        return $this->normalizeUrl($this->getOption('authorization_url'), array('oauth_token' => $token['oauth_token']));
     }
 
     /**

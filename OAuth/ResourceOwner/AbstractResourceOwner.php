@@ -11,17 +11,15 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Client\ClientInterface as HttpClientInterface,
-    Buzz\Message\RequestInterface as HttpRequestInterface,
-    Buzz\Message\MessageInterface as HttpMessageInterface,
-    Buzz\Message\Request as HttpRequest,
-    Buzz\Message\Response as HttpResponse;
-
-use Symfony\Component\Security\Core\Exception\AuthenticationException,
-    Symfony\Component\Security\Http\HttpUtils;
-
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
-    HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
+use Buzz\Client\ClientInterface as HttpClientInterface;
+use Buzz\Message\MessageInterface as HttpMessageInterface;
+use Buzz\Message\Request as HttpRequest;
+use Buzz\Message\RequestInterface as HttpRequestInterface;
+use Buzz\Message\Response as HttpResponse;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * AbstractResourceOwner
@@ -130,6 +128,21 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
         return $response;
     }
+
+    /**
+     * @param string $url
+     * @param array  $parameters
+     *
+     * @return string
+     */
+    protected function normalizeUrl($url, array $parameters = array())
+    {
+        $normalizedUrl  = $url;
+        $normalizedUrl .= (false !== strpos($url, '?') ? '&' : '?').http_build_query($parameters);
+
+        return $normalizedUrl;
+    }
+
     /**
      *
      * Performs an HTTP request
