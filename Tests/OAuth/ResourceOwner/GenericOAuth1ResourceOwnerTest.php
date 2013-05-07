@@ -205,6 +205,9 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
             ->method('fetch')
             ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
 
+        $this->storage->expects($this->never())
+            ->method('save');
+
         $request = new Request(array('oauth_token' => 'token', 'oauth_verifier' => 'code'));
 
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
@@ -220,6 +223,9 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $this->storage->expects($this->once())
             ->method('fetch')
             ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
+
+        $this->storage->expects($this->never())
+            ->method('save');
 
         $request = new Request(array('oauth_token' => 'token', 'oauth_verifier' => 'code'));
 
