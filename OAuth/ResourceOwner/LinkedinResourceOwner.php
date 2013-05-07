@@ -58,8 +58,6 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
      */
     protected function getRequestToken($redirectUri, array $extraParameters = array())
     {
-        $extraParameters['scope'] = $this->getOption('scope');
-
-        return parent::getRequestToken($redirectUri, $extraParameters);
+        return parent::getRequestToken($redirectUri, array_merge(array('scope' => $this->getOption('scope')), $extraParameters));
     }
 }
