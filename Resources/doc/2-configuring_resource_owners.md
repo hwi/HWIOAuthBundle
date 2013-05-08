@@ -7,7 +7,7 @@ only a little configuration.
 
 To make this bundle work you need to add the following to your app/config/config.yml:
 
-``` yaml
+```yaml
 # app/config/config.yml
 
 hwi_oauth:
@@ -27,16 +27,19 @@ hwi_oauth:
 ```
 
 - [37signals](2x-37signals.md)
+- [Disqus](2x-disqus.md)
 - [Facebook](2x-facebook.md)
 - [Foursquare](2x-foursquare.md)
 - [GitHub](2x-github.md)
 - [Google](2x-google.md)
+- [Jira](2x-jira.md)
 - [Linkedin](2x-linkedin.md)
 - [SensioLabs Connect](2x-sensio_connect.md)
 - [Stack Exchange](2x-stack_exchange.md)
 - [Twitter] (2x-twitter.md)
 - [Vkontakte](2x-vkontakte.md)
 - [Windows Live](2x-windows_live.md)
+- [Yahoo](2x-yahoo.md)
 - [Others](2x-others.md)
 
 ### Continue to the next step!
