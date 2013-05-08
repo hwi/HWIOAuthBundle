@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 /**
  * DisqusResourceOwner
  *
- * @author Alexander Müller <amr@kapthon.com>
+ * @author Alexander MÃ¼ller <amr@kapthon.com>
  */
 class DisqusResourceOwner extends GenericOAuth2ResourceOwner
 {
@@ -25,7 +25,7 @@ class DisqusResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://disqus.com/api/oauth/2.0/authorize/',
         'access_token_url'    => 'https://disqus.com/api/oauth/2.0/access_token/',
         'infos_url'           => 'https://disqus.com/api/3.0/users/details.json',
-        'scope'               => '',
+        'scope'               => 'read',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
@@ -44,16 +44,18 @@ class DisqusResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function configure()
     {
-        $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+        if (isset($this->options['scope'])) {
+            $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+        }
     }
-    
+
     /**
      * {@inheritDoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         /* DISQUS requires api key and secret for user information requests */
-        $url .= '&' . http_build_query(array(
+        $url = $this->normalizeUrl($url, array(
             'api_key'    => $this->getOption('client_id'),
             'api_secret' => $this->getOption('client_secret'),
         ));

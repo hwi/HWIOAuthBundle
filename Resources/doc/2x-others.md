@@ -4,7 +4,7 @@ If the resource owners you are looking for isn't implemented in this bundle yet
 (implement it and send a PR! ;) ). Alternatively you can configure a general
 resource owner:
 
-``` yaml
+```yaml
 # app/config/config.yml
 
 hwi_oauth:
@@ -16,7 +16,7 @@ hwi_oauth:
             access_token_url:    https://path.to/oauth/v2/token
             authorization_url:   https://path.to/oauth/v2/authorize
             infos_url:           https://path.to/api/user
-            scope:               ""
+            scope:               "read"
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: id
@@ -25,7 +25,7 @@ hwi_oauth:
 
 or an oauth1:
 
-``` yaml
+```yaml
 # app/config/config.yml
 
 hwi_oauth:
@@ -38,7 +38,7 @@ hwi_oauth:
             access_token_url:    https://path.to/oauth/v1/token
             authorization_url:   https://path.to/oauth/v1/authorize
             infos_url:           https://path.to/api/user
-            realm:               ""
+            realm:               "read"
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: id
