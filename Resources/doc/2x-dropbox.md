@@ -6,7 +6,7 @@ documentation for more information: https://www.dropbox.com/developers/apps.
 Next configure a resource owner of type `dropbox` with appropriate
 `client_id`, `client_secret`.
 
-``` yaml
+```yaml
 # app/config/config.yml
 
 hwi_oauth:

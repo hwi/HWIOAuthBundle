@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 0.3.0 (2013-05-07)
+## 0.3.0 (2013-05-xx)
 * [BC break] Removed `AdvancedPathUserResponse` & `AdvancedUserResponseInterface`
 * [BC break] Added `UserResponseInterface#getEmail()` & `UserResponseInterface#getProfilePicture()`
   methods
@@ -16,6 +16,7 @@ Changelog
   methods which allows easy overwriting resource specific options
 * Added 37signals resource owner
 * Added Disqus resource owner
+* Added Dropbox resource owner
 * Added Flickr resource owner
 * Added Odnoklassniki resource owner
 * Added Yandex resource owner

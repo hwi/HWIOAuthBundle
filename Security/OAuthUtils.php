@@ -23,8 +23,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class OAuthUtils
 {
-    const SIGNATURE_METHOD_HMAC = 'HMAC-SHA1';
-    const SIGNATURE_METHOD_RSA  = 'RSA-SHA1';
+    const SIGNATURE_METHOD_HMAC      = 'HMAC-SHA1';
+    const SIGNATURE_METHOD_RSA       = 'RSA-SHA1';
+    const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
 
     /**
      * @var ContainerInterface
@@ -107,8 +108,6 @@ class OAuthUtils
      */
     public static function signRequest($method, $url, $parameters, $clientSecret, $tokenSecret = '', $signatureMethod = self::SIGNATURE_METHOD_HMAC)
     {
-        $signature = '';
-
         // Validate required parameters
         foreach (array('oauth_consumer_key', 'oauth_timestamp', 'oauth_nonce', 'oauth_version', 'oauth_signature_method') as $parameter) {
             if (!isset($parameters[$parameter])) {
@@ -153,7 +152,7 @@ class OAuthUtils
                 openssl_free_key($privateKey);
                 break;
 
-            case 'PLAINTEXT':
+            case self::SIGNATURE_METHOD_PLAINTEXT:
                 $signature = $key;
                 break;
 

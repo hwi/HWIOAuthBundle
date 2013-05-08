@@ -102,7 +102,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     {
         $token = $this->getRequestToken($redirectUri, $extraParameters);
 
-        return $this->normalizeUrl($this->getOption('authorization_url'), array('oauth_token' => $token['oauth_token'], 'oauth_callback' => $redirectUri));
+        return $this->normalizeUrl($this->getOption('authorization_url'), array('oauth_token' => $token['oauth_token']));
     }
 
     /**
