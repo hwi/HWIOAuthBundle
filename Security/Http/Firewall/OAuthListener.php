@@ -102,8 +102,10 @@ class OAuthListener extends AbstractAuthenticationListener
      */
     private function handleOAuthError(Request $request)
     {
+        $error = null;
+
         // Try to parse content if error was not in request query
-        if (null === $errorCode = $request->query->get('error')) {
+        if ($request->query->has('error')) {
             $content = json_decode($request->getContent(), true);
             if (JSON_ERROR_NONE === json_last_error() && isset($content['error'])) {
                 if (isset($content['error']['message'])) {
@@ -111,19 +113,25 @@ class OAuthListener extends AbstractAuthenticationListener
                 }
 
                 if (isset($content['error']['code'])) {
-                    $errorCode = $content['error']['code'];
+                    $error = $content['error']['code'];
                 } elseif (isset($content['error']['error-code'])) {
-                    $errorCode = $content['error']['error-code'];
+                    $error = $content['error']['error-code'];
+                } else {
+                    $error = $request->query->get('error');
                 }
             }
+        } elseif ($request->query->has('oauth_problem')) {
+            $error = $request->query->get('oauth_problem');
         }
 
-        if (null !== $errorCode) {
-            throw new AuthenticationException($this->transformOAuthError($errorCode));
+        if (null !== $error) {
+            throw new AuthenticationException($this->transformOAuthError($error));
         }
     }
 
     /**
+     * Transforms OAuth error codes into human readable format
+     *
      * @param string $errorCode
      *
      * @return string
@@ -132,36 +140,40 @@ class OAuthListener extends AbstractAuthenticationListener
     {
         // "translate" error to human readable format
         switch ($errorCode) {
-            case 'redirect_uri_mismatch':
-                $error = 'Redirect URI mismatches configured one.';
-                break;
-
-            case 'bad_verification_code':
-                $error = 'Bad verification code.';
-                break;
-
-            case 'incorrect_client_credentials':
-                $error = 'Incorrect client credentials.';
-                break;
-
-            case 'unauthorized_client':
-                $error = 'Unauthorized client.';
-                break;
-
-            case 'invalid_assertion':
-                $error = 'Invalid assertion.';
-                break;
-
-            case 'unknown_format':
-                $error = 'Unknown format.';
+            case 'access_denied':
+                $error = 'You have refused access for this site.';
                 break;
 
             case 'authorization_expired':
                 $error = 'Authorization expired.';
                 break;
 
-            case 'access_denied':
+            case 'bad_verification_code':
+                $error = 'Bad verification code.';
+                break;
+
+            case 'consumer_key_rejected':
                 $error = 'You have refused access for this site.';
+                break;
+
+            case 'incorrect_client_credentials':
+                $error = 'Incorrect client credentials.';
+                break;
+
+            case 'invalid_assertion':
+                $error = 'Invalid assertion.';
+                break;
+
+            case 'redirect_uri_mismatch':
+                $error = 'Redirect URI mismatches configured one.';
+                break;
+
+            case 'unauthorized_client':
+                $error = 'Unauthorized client.';
+                break;
+
+            case 'unknown_format':
+                $error = 'Unknown format.';
                 break;
 
             default:
