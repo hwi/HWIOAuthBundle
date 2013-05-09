@@ -122,11 +122,7 @@
         <service id="hwi_oauth.abstract_resource_owner.37signals" class="%hwi_oauth.resource_owner.37signals.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.odnoklassniki" class="%hwi_oauth.resource_owner.odnoklassniki.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true">
-            <call method="setOdnoklassnikiAppKey">
-                <argument key="odnoklassniki_app_key">%odnoklassniki_app_key%</argument>
-            </call>
-        </service>
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
 
         <service id="hwi_oauth.abstract_resource_owner.oauth1" class="%hwi_oauth.resource_owner.oauth1.class%"
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">

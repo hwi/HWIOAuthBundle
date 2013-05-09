@@ -16,6 +16,8 @@ hwi_oauth:
             client_id:           %odnoklassniki_app_id%
             client_secret:       %odnoklassniki_app_secret%
             scope:               ""
+            options:
+                odnoklassniki_app_key:    "%odnoklassniki_app_key%"
 ```
 
 ``` yaml

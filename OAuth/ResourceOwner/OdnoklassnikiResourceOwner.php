@@ -18,8 +18,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  */
 class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
 {
-    private $odnoklassnikiAppKey;
-
     /**
      * {@inheritDoc}
      */
@@ -44,13 +42,13 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
     {
         $url = $this->getOption('infos_url');
         $sig = md5(
-            'application_key=' . $this->odnoklassnikiAppKey .
+            'application_key=' . $this->options['odnoklassniki_app_key'] .
                 'method=users.getCurrentUser' .
                 md5($accessToken . $this->getOption('client_secret'))
         );
         $arrayParameters = array(
             'access_token' => $accessToken,
-            'application_key' => $this->odnoklassnikiAppKey,
+            'application_key' => $this->options['odnoklassniki_app_key'],
             'sig' => $sig,
         );
         $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query($arrayParameters);
@@ -63,10 +61,5 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
         $response->setAccessToken($accessToken);
 
         return $response;
-    }
-
-    public function setOdnoklassnikiAppKey($odnoklassnikiAppKey)
-    {
-        $this->odnoklassnikiAppKey = $odnoklassnikiAppKey;
     }
 }
