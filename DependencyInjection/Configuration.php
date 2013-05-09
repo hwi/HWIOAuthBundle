@@ -34,12 +34,12 @@ class Configuration implements ConfigurationInterface
             'foursquare',
             'github',
             'google',
+            'odnoklassniki',
             'sensio_connect',
             'stack_exchange',
             'vkontakte',
             'windows_live',
             'yandex',
-            'odnoklassniki',
             '37signals',
 
         'oauth1',
