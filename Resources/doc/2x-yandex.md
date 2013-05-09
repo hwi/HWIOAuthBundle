@@ -1,11 +1,11 @@
 Step 2x: Setup Yandex
-========================
-First you will have to register your application on Yandex here https://oauth.yandex.ru/client/new.
+=====================
+First you will have to register your application on Yandex here: https://oauth.yandex.ru/client/new.
 
-Next configure a resource owner of type `yandex` with appropriate
-`client_id` and `client_secret`. You don't need a scope, because it's value you set while register your app.
+Next configure a resource owner of type `yandex` with appropriate `client_id` and `client_secret`.
+You don't need a scope, because it's a value you set while register your app.
 
-``` yaml
+```yaml
 # app/config/config.yml
 
 hwi_oauth:

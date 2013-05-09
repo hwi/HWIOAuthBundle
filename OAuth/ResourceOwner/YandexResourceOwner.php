@@ -25,7 +25,7 @@ class YandexResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://oauth.yandex.ru/authorize',
         'access_token_url'    => 'https://oauth.yandex.ru/token',
         'infos_url'           => 'https://login.yandex.ru/info?format=json',
-        'scope'               => '',
+        'scope'               => null,
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
@@ -38,10 +38,12 @@ class YandexResourceOwner extends GenericOAuth2ResourceOwner
         'realname'   => 'real_name',
     );
 
+    /**
+     * {@inheritDoc}
+     */
     public function getUserInformation($accessToken)
     {
-        $url = $this->getOption('infos_url');
-        $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
+        $url = $this->normalizeUrl($this->getOption('infos_url'), array(
             'oauth_token' => $accessToken
         ));
 
