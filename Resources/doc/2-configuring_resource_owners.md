@@ -38,6 +38,7 @@ hwi_oauth:
 - [Stack Exchange](2x-stack_exchange.md)
 - [Twitter] (2x-twitter.md)
 - [Vkontakte](2x-vkontakte.md)
+- [Odnoklassniki](2x-odnoklassniki.md)
 - [Windows Live](2x-windows_live.md)
 - [Yahoo](2x-yahoo.md)
 - [Yandex](2x-yandex.md)
