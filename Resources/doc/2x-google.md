@@ -39,7 +39,7 @@ hwi_oauth:
                 request_visible_actions: "http://schemas.google.com/AddActivity http://schemas.google.com/CommentActivity"
 ```
 
-Add activity types that are used as `type` for moment insert. Please note that you also need `https://www.googleapis.com/auth/plus.login` to be able insert moments.
+In option `request_visible_actions` there are listed activity types that will be used while inserting as type for Google Moments API. Please also note that you need to add additional scope `https://www.googleapis.com/auth/plus.login`, to be able use the that API.
 
 When you're done. Continue by configuring the security layer or go back to
 setup more resource owners.
