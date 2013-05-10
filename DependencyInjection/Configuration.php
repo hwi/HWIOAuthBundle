@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
             'foursquare',
             'github',
             'google',
+            'odnoklassniki',
             'sensio_connect',
             'stack_exchange',
             'vkontakte',
