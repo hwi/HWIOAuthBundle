@@ -43,10 +43,11 @@ class Configuration implements ConfigurationInterface
             '37signals',
 
         'oauth1',
+            'flickr',
+            'jira',
             'linkedin',
             'twitter',
             'yahoo',
-            'jira',
     );
 
     /**

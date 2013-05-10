@@ -29,6 +29,7 @@ hwi_oauth:
 - [37signals](2x-37signals.md)
 - [Disqus](2x-disqus.md)
 - [Facebook](2x-facebook.md)
+- [Flickr](2x-flickr.md)
 - [Foursquare](2x-foursquare.md)
 - [GitHub](2x-github.md)
 - [Google](2x-google.md)
