@@ -14,6 +14,11 @@ Changelog
 * [BC break] Added `ResourceOwnerInterface#getOption($name)` method
 * Added `AbstractResourceOwner#addOptions()` & `ResourceOwnerInterface#setOption($name, $value)`
   methods which allows easy overwriting resource specific options
+* Added 37signals resource owner
+* Added Disqus resource owner
+* Added Flickr resource owner
+* Added Odnoklassniki resource owner
+* Added Yandex resource owner
 
 ## 0.2.3 (2013-05-06)
 * Added `AbstractUserResponse::getOAuthToken()` method to allow fetching only OAuth token details
