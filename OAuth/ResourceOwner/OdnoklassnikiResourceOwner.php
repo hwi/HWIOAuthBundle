@@ -25,8 +25,6 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'http://www.odnoklassniki.ru/oauth/authorize',
         'access_token_url'    => 'http://api.odnoklassniki.ru/oauth/token.do',
         'infos_url'           => 'http://api.odnoklassniki.ru/fb.do?method=users.getCurrentUser',
-        'scope'               => null,
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
 
         'application_key'     => null,
     );

@@ -23,6 +23,20 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 {
     /**
+     * @var array
+     */
+    protected $defaultOptions = array(
+        'client_id'           => null,
+        'client_secret'       => null,
+
+        'infos_url'           => null,
+
+        'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
+        'scope'               => null,
+    );
+
+    /**
      * {@inheritDoc}
      */
     public function getUserInformation($accessToken)

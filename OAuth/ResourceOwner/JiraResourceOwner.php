@@ -23,8 +23,6 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
         'access_token_url'    => '{base_url}/plugins/servlet/oauth/access-token',
         'infos_url'           => '{base_url}/rest/api/2/user',
 
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-
         'signature_method'    => 'RSA-SHA1',
     );
 

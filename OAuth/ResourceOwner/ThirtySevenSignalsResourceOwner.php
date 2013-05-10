@@ -27,8 +27,6 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://launchpad.37signals.com/authorization/new',
         'access_token_url'    => 'https://launchpad.37signals.com/authorization/token',
         'infos_url'           => 'https://launchpad.37signals.com/authorization.json',
-        'scope'               => null,
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
     /**

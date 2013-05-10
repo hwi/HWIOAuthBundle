@@ -25,8 +25,6 @@ class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://login.live.com/oauth20_authorize.srf',
         'access_token_url'    => 'https://login.live.com/oauth20_token.srf',
         'infos_url'           => 'https://apis.live.net/v5.0/me',
-        'scope'               => null,
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
     /**

@@ -26,8 +26,8 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://accounts.google.com/o/oauth2/auth',
         'access_token_url'    => 'https://accounts.google.com/o/oauth2/token',
         'infos_url'           => 'https://www.googleapis.com/oauth2/v1/userinfo',
-        'scope'               => 'userinfo.profile',
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
+        'scope'               => 'https://www.googleapis.com/auth/userinfo.profile',
     );
 
     /**
