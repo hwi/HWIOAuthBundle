@@ -4,25 +4,25 @@ First you will have to register your application on Odnoklassniki. Check out the
 documentation for more information: http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=13992188.
 
 Next configure a resource owner of type `odnoklassniki` with appropriate
-`client_id`, `client_secret`, `scope` and `application_key`.
+`client_id`, `client_secret`, `scope` (optional) and `application_key`.
 
-``` yaml
+```yaml
 # app/config/config.yml
 
 hwi_oauth:
     resource_owners:
         any_name:
             type:                odnoklassniki
-            client_id:           %odnoklassniki_app_id%
-            client_secret:       %odnoklassniki_app_secret%
+            client_id:           <client_id>
+            client_secret:       <client_secret>
             options:
-                odnoklassniki_app_key:    "%odnoklassniki_app_key%"
+                application_key: <application_key>
 ```
 
-Scopes are separate by semicolon, you can those scopes: VALUABLE ACCESS, SET STATUS, PHOTO CONTENT
-It's important! You can use `users.getLoggedInUser` & `users.getCurrentUser without scope`. It's unbelievable but if you need
-some more, you must write letter to oauth@odnoklassniki.ru for give you permission to use scope!
-More information about [Odnoklassniki OAuth2 authorization](http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=12878032)
+Scopes are separate by semicolon, you can those scopes: `VALUABLE ACCESS`, `SET STATUS`, `PHOTO CONTENT`.
+It's important! You can use `users.getLoggedInUser` & `users.getCurrentUser` without scope. If your application
+requires some additional data, you must write an email to `oauth@odnoklassniki.ru` and ask for giving you additional
+permissions! More information about [Odnoklassniki OAuth2 authorization](http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=12878032).
 
 When you're done. Continue by configuring the security layer or go back to
 setup more resource owners.
