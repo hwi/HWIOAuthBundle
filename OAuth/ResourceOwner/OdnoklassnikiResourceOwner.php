@@ -27,6 +27,8 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
         'infos_url'           => 'http://api.odnoklassniki.ru/fb.do?method=users.getCurrentUser',
         'scope'               => null,
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
+        'application_key'     => null,
     );
 
     /**
@@ -38,21 +40,17 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
         'realname'   => 'name',
     );
 
+    /**
+     * {@inheritDoc}
+     */
     public function getUserInformation($accessToken)
     {
-        $url = $this->getOption('infos_url');
-        $sig = md5(
-            sprintf('application_key=%smethod=users.getCurrentUser%s',
-                $this->getOption('odnoklassniki_app_key'),
-                md5($accessToken . $this->getOption('client_secret'))
-            )
+        $parameters = array(
+            'access_token'    => $accessToken,
+            'application_key' => $this->getOption('application_key'),
+            'sig'             => md5(sprintf('application_key=%smethod=users.getCurrentUser%s', $this->getOption('application_key'), md5($accessToken.$this->getOption('client_secret')))),
         );
-        $arrayParameters = array(
-            'access_token' => $accessToken,
-            'application_key' => $this->getOption('odnoklassniki_app_key'),
-            'sig' => $sig,
-        );
-        $url = $this->normalizeUrl($url, $arrayParameters);
+        $url = $this->normalizeUrl($this->getOption('infos_url'), $parameters);
 
         $content = $this->doGetUserInformationRequest($url)->getContent();
 
