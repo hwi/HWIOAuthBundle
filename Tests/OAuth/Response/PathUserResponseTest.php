@@ -25,11 +25,19 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
         $this->responseObject = new PathUserResponse();
     }
 
-    public function testGetSetResponse()
+    public function testGetSetResponseWithJsonString()
     {
         $response = array('foo' => 'bar');
 
         $this->responseObject->setResponse(json_encode($response));
+        $this->assertEquals($response, $this->responseObject->getResponse());
+    }
+
+    public function testGetSetResponseWithPhpArray()
+    {
+        $response = array('foo' => 'bar');
+
+        $this->responseObject->setResponse($response);
         $this->assertEquals($response, $this->responseObject->getResponse());
     }
 
