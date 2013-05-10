@@ -33,12 +33,17 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * @var array
      */
-    protected $options = array(
-        'client_id'           => '',
-        'client_secret'       => '',
-        'infos_url'           => '',
+    protected $defaultOptions = array(
+        'client_id'           => null,
+        'client_secret'       => null,
+
+        'infos_url'           => null,
+
         'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
         'realm'               => null,
+        'scope'               => null,
+
         'signature_method'    => 'HMAC-SHA1',
     );
 

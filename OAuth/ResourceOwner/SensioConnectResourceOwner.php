@@ -25,8 +25,9 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://connect.sensiolabs.com/oauth/authorize',
         'access_token_url'    => 'https://connect.sensiolabs.com/oauth/access_token',
         'infos_url'           => 'https://connect.sensiolabs.com/api',
-        'scope'               => null,
+
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse',
+
         'response_type'       => 'code',
     );
 

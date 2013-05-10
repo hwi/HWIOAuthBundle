@@ -23,11 +23,8 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
         'authorization_url'   => 'http://www.flickr.com/services/oauth/authorize',
         'request_token_url'   => 'http://www.flickr.com/services/oauth/request_token',
         'access_token_url'    => 'http://www.flickr.com/services/oauth/access_token',
-        'infos_url'           => null,
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
         'perms'               => 'read',
-        'realm'               => null,
-        'signature_method'    => 'HMAC-SHA1',
     );
 
     /**

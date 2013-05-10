@@ -25,8 +25,8 @@ class DisqusResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://disqus.com/api/oauth/2.0/authorize/',
         'access_token_url'    => 'https://disqus.com/api/oauth/2.0/access_token/',
         'infos_url'           => 'https://disqus.com/api/3.0/users/details.json',
+
         'scope'               => 'read',
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
     /**

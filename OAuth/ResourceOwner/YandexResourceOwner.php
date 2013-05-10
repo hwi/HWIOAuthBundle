@@ -25,8 +25,6 @@ class YandexResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://oauth.yandex.ru/authorize',
         'access_token_url'    => 'https://oauth.yandex.ru/token',
         'infos_url'           => 'https://login.yandex.ru/info?format=json',
-        'scope'               => null,
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
     /**

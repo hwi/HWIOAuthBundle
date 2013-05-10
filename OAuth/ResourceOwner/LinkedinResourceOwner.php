@@ -26,10 +26,8 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
         'request_token_url'   => 'https://api.linkedin.com/uas/oauth/requestToken',
         'access_token_url'    => 'https://api.linkedin.com/uas/oauth/accessToken',
         'infos_url'           => 'http://api.linkedin.com/v1/people/~:(id,formatted-name)',
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
         'realm'               => 'http://api.linkedin.com',
-        'signature_method'    => 'HMAC-SHA1',
-        'scope'               => null
     );
 
     /**
