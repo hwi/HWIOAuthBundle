@@ -32,12 +32,12 @@ abstract class AbstractUserResponse implements UserResponseInterface
     protected $resourceOwner;
 
     /**
-     * @var mixed
+     * @var string|array
      */
     protected $accessToken;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $oauthToken;
 
@@ -78,7 +78,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
     }
 
     /**
-     * @return array|null
+     * @return string|array
      */
     public function getOAuthToken()
     {
@@ -98,10 +98,14 @@ abstract class AbstractUserResponse implements UserResponseInterface
      */
     public function setResponse($response)
     {
-        $this->response = json_decode($response, true);
+        if (is_array($response)) {
+            $this->response = $response;
+        } else {
+            $this->response = json_decode($response, true);
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new AuthenticationException('Response is not a valid JSON code.');
+            if (JSON_ERROR_NONE !== json_last_error()) {
+                throw new AuthenticationException('Response is not a valid JSON code.');
+            }
         }
     }
 
