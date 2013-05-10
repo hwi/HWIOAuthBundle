@@ -28,7 +28,7 @@ interface ResponseInterface
     /**
      * Set the raw api response.
      *
-     * @param string $response
+     * @param string|array $response
      */
     public function setResponse($response);
 

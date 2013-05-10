@@ -63,14 +63,14 @@ interface UserResponseInterface extends ResponseInterface
     /**
      * Get the access token used for the request.
      *
-     * @return mixed
+     * @return string|array
      */
     public function getAccessToken();
 
     /**
      * Set the access token used for the request.
      *
-     * @param mixed $accessToken
+     * @param string|array $accessToken
      */
     public function setAccessToken($accessToken);
 }
