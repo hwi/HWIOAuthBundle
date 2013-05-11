@@ -17,6 +17,7 @@
         <parameter key="hwi_oauth.resource_owner.oauth2.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner</parameter>
 
         <parameter key="hwi_oauth.resource_owner.disqus.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DisqusResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.dropbox.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DropboxResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.facebook.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FacebookResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.flickr.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FlickrResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.foursquare.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FoursquareResourceOwner</parameter>
@@ -129,6 +130,8 @@
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.storage.session" />
         </service>
+        <service id="hwi_oauth.abstract_resource_owner.dropbox" class="%hwi_oauth.resource_owner.dropbox.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.flickr" class="%hwi_oauth.resource_owner.flickr.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.jira" class="%hwi_oauth.resource_owner.jira.class%"

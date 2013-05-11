@@ -23,8 +23,9 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 class OAuthUtils
 {
-    const SIGNATURE_METHOD_HMAC = 'HMAC-SHA1';
-    const SIGNATURE_METHOD_RSA  = 'RSA-SHA1';
+    const SIGNATURE_METHOD_HMAC      = 'HMAC-SHA1';
+    const SIGNATURE_METHOD_RSA       = 'RSA-SHA1';
+    const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
 
     /**
      * @var ContainerInterface
@@ -149,6 +150,10 @@ class OAuthUtils
 
                 openssl_sign($baseString, $signature, $privateKey);
                 openssl_free_key($privateKey);
+                break;
+
+            case self::SIGNATURE_METHOD_PLAINTEXT:
+                $signature = $key;
                 break;
 
             default:
