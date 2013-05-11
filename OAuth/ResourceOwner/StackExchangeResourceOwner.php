@@ -25,8 +25,8 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://stackexchange.com/oauth',
         'access_token_url'    => 'https://stackexchange.com/oauth/access_token',
         'infos_url'           => 'https://api.stackexchange.com/2.0/me',
+
         'scope'               => 'no_expiry',
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
     /**

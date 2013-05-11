@@ -26,8 +26,6 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://github.com/login/oauth/authorize',
         'access_token_url'    => 'https://github.com/login/oauth/access_token',
         'infos_url'           => 'https://api.github.com/user',
-        'scope'               => null,
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
     /**

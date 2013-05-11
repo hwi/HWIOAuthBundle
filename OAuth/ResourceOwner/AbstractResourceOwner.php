@@ -33,11 +33,12 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * @var array
      */
-    protected $options = array(
-        'infos_url'           => '',
-        'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-        'scope'               => null,
-    );
+    protected $defaultOptions = array();
+
+    /**
+     * @var array
+     */
+    protected $options = array();
 
     /**
      * @var array
@@ -94,6 +95,10 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     public function getOption($name)
     {
         if (!array_key_exists($name, $this->options)) {
+            if (array_key_exists($name, $this->defaultOptions)) {
+                return $this->defaultOptions[$name];
+            }
+
             throw new \InvalidArgumentException(sprintf('Unknown option "%s"', $name));
         }
 
@@ -123,7 +128,8 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     protected function getUserResponse()
     {
-        $response = new $this->options['user_response_class'];
+        $response = $this->getOption('user_response_class');
+        $response = new $response;
 
         if ($response instanceof PathUserResponse) {
             $response->setPaths($this->paths);
@@ -147,7 +153,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     *
      * Performs an HTTP request
      *
      * @param string $url     The url to fetch
@@ -155,7 +160,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param array  $headers The headers of the request
      * @param string $method  The HTTP method to use
      *
-     * @return string The response content
+     * @return HttpMessageInterface The response content
      */
     protected function httpRequest($url, $content = null, $headers = array(), $method = null)
     {
