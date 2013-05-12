@@ -11,13 +11,17 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
+    HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
     HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 
 use Symfony\Component\DependencyInjection\ContainerAware,
     Symfony\Component\HttpFoundation\Request,
+    Symfony\Component\HttpFoundation\Response,
     Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\Security\Core\Exception\AuthenticationException,
+    Symfony\Component\HttpKernel\Exception\NotFoundHttpException,
+    Symfony\Component\Security\Core\Exception\AccessDeniedException,
+    Symfony\Component\Security\Core\Exception\AccountStatusException,
     Symfony\Component\Security\Core\SecurityContext,
     Symfony\Component\Security\Core\User\UserInterface,
     Symfony\Component\Security\Http\Event\InteractiveLoginEvent,
@@ -30,16 +34,6 @@ use Symfony\Component\DependencyInjection\ContainerAware,
  */
 class ConnectController extends ContainerAware
 {
-    /**
-     * Returns templating engine name.
-     *
-     * @return string
-     */
-    protected function getTemplatingEngine()
-    {
-        return $this->container->getParameter('hwi_oauth.templating.engine');
-    }
-
     /**
      * Action that handles the login 'form'. If connecting is enabled the
      * user will be redirected to the appropriate login urls or registration forms.
@@ -84,20 +78,29 @@ class ConnectController extends ContainerAware
      * @param Request $request A request.
      * @param string  $key     Key used for retrieving the right information for the registration form.
      *
-     * @throws \Exception
-     *
      * @return Response
+     *
+     * @throws NotFoundHttpException if `connect` functionality was not enabled
+     * @throws AccessDeniedException if any user is authenticated
+     * @throws \Exception
      */
     public function registrationAction(Request $request, $key)
     {
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
         $connect = $this->container->getParameter('hwi_oauth.connect');
+        if (!$connect) {
+            throw new NotFoundHttpException();
+        }
+
+        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        if ($hasUser) {
+            throw new AccessDeniedException('Cannot connect already registered account.');
+        }
 
         $session = $request->getSession();
         $error = $session->get('_hwi_oauth.registration_error.'.$key);
         $session->remove('_hwi_oauth.registration_error.'.$key);
 
-        if (!$connect || $hasUser || !($error instanceof AccountNotLinkedException) || (time() - $key > 300)) {
+        if (!($error instanceof AccountNotLinkedException) || (time() - $key > 300)) {
             // todo: fix this
             throw new \Exception('Cannot register an account.');
         }
@@ -141,15 +144,20 @@ class ConnectController extends ContainerAware
      * @param string  $service Name of the resource owner to connect to.
      *
      * @return Response
+     *
+     * @throws NotFoundHttpException if `connect` functionality was not enabled
+     * @throws AccessDeniedException if no user is authenticated
      */
     public function connectServiceAction(Request $request, $service)
     {
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
         $connect = $this->container->getParameter('hwi_oauth.connect');
+        if (!$connect) {
+            throw new NotFoundHttpException();
+        }
 
-        if (!$connect || !$hasUser) {
-            // todo: fix this
-            throw new \Exception('Cannot connect an account.');
+        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        if (!$hasUser) {
+            throw new AccessDeniedException('Cannot connect an account.');
         }
 
         // Get the data from the resource owner
@@ -200,6 +208,7 @@ class ConnectController extends ContainerAware
     }
 
     /**
+     * @param Request $request
      * @param string  $service
      *
      * @return RedirectResponse
@@ -207,7 +216,7 @@ class ConnectController extends ContainerAware
     public function redirectToServiceAction(Request $request, $service)
     {
         // Check for a specified target path and store it before redirect if present
-        $param     = $this->container->getParameter('hwi_oauth.target_path_parameter');
+        $param = $this->container->getParameter('hwi_oauth.target_path_parameter');
 
         if (!empty($param) && $request->hasSession() && $targetUrl = $request->get($param, null, true)) {
             $providerKey = $this->container->getParameter('hwi_oauth.firewall_name');
@@ -222,7 +231,7 @@ class ConnectController extends ContainerAware
      *
      * @param Request $request
      *
-     * @return string|Exception
+     * @return string|\Exception
      */
     protected function getErrorForRequest(Request $request)
     {
@@ -301,5 +310,15 @@ class ConnectController extends ContainerAware
             SecurityEvents::INTERACTIVE_LOGIN,
             new InteractiveLoginEvent($this->container->get('request'), $token)
         );
+    }
+
+    /**
+     * Returns templating engine name.
+     *
+     * @return string
+     */
+    protected function getTemplatingEngine()
+    {
+        return $this->container->getParameter('hwi_oauth.templating.engine');
     }
 }
