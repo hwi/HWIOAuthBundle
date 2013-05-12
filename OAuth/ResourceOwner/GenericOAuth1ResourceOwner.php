@@ -134,7 +134,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $this->getOption('signature_method')
         );
 
-        $response = $this->doGetAccessTokenRequest($url, $parameters);
+        $response = $this->doGetTokenRequest($url, $parameters);
         $response = $this->getResponseContent($response);
 
         if (isset($response['oauth_problem'])) {
@@ -232,7 +232,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function doGetAccessTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, null, $parameters, array(), 'POST');
     }

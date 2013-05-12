@@ -1,9 +1,29 @@
 HWIOAuthBundle
 ==============
 
-The HWIOAuthBundle adds support for authenticating users via oauth in Symfony2. The bundle was forked of [KnpOAuthBundle](https://github.com/KnpLabs/KnpOAuthBundle) with consent of the primary maintainer [ubermuda](https://github.com/ubermuda) in order to push the bundle forward faster as original creator currently didn't have the desired time for it.
-
 [![Build Status](https://secure.travis-ci.org/hwi/HWIOAuthBundle.png?branch=master)](http://travis-ci.org/hwi/HWIOAuthBundle)
+
+The HWIOAuthBundle adds support for authenticating users via OAuth1.0a or OAuth2 in Symfony2.
+
+This bundle contains support for 18 different providers:
+* 37signals,
+* Disqus,
+* Dropbox,
+* Facebook,
+* Flickr,
+* Foursquare,
+* GitHub,
+* Google,
+* JIRA,
+* LinkedIn,
+* Odnoklassniki,
+* Sensio Connect,
+* Stack Exchange,
+* Twitter,
+* VKontakte,
+* Windows Live,
+* Yahoo,
+* Yandex
 
 Documentation
 -------------
@@ -16,7 +36,7 @@ file in this bundle:
 Installation
 ------------
 
-All the installation instructions are located in [documentation](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md).
+All the installation instructions are located in [documentation](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md).
 
 License
 -------
@@ -24,4 +44,3 @@ License
 This bundle is under the MIT license. See the complete license in the bundle:
 
     Resources/meta/LICENSE
-

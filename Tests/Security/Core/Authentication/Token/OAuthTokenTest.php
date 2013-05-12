@@ -26,9 +26,21 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
         $this->token->setResourceOwnerName('github');
     }
 
-    public function testGetAccessToken()
+    public function testGets()
     {
-        $this->assertEquals('access_token', $this->token->getAccessToken());
+        $expectedToken = array(
+            'access_token'  => 'access_token',
+            'refresh_token' => 'refresh_token',
+            'expires_in'    => '666',
+        );
+        $token = new OAuthToken($expectedToken, array('ROLE_TEST'));
+        $token->setResourceOwnerName('github');
+
+        $this->assertEquals($expectedToken, $token->getRawToken());
+        $this->assertEquals($expectedToken['access_token'], $token->getAccessToken());
+        $this->assertEquals($expectedToken['refresh_token'], $token->getRefreshToken());
+        $this->assertEquals($expectedToken['expires_in'], $token->getExpiresIn());
+        $this->assertEquals('github', $token->getResourceOwnerName());
     }
 
     public function testIsAuthenticated()
@@ -38,8 +50,9 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSetResourceOwnerName()
     {
-        $this->token->setResourceOwnerName('github');
         $this->assertEquals('github', $this->token->getResourceOwnerName());
+        $this->token->setResourceOwnerName('foobar');
+        $this->assertEquals('foobar', $this->token->getResourceOwnerName());
     }
 
     public function testSerialization()

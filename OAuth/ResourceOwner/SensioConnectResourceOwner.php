@@ -34,7 +34,7 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function doGetAccessTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($this->getOption('access_token_url'), $parameters, array(), 'POST');
     }

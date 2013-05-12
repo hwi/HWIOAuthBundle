@@ -13,11 +13,19 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
-class AccountNotLinkedException extends UsernameNotFoundException
-    implements OAuthAwareExceptionInterface
+class AccountNotLinkedException extends UsernameNotFoundException implements OAuthAwareExceptionInterface
 {
     private $accessToken;
+    private $rawToken;
     private $resourceOwnerName;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAccessToken()
+    {
+        return $this->accessToken;
+    }
 
     /**
      * {@inheritdoc}
@@ -30,9 +38,17 @@ class AccountNotLinkedException extends UsernameNotFoundException
     /**
      * {@inheritdoc}
      */
-    public function getAccessToken()
+    public function getRawToken()
     {
-        return $this->accessToken;
+        return $this->rawToken;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRawToken($token)
+    {
+        $this->rawToken = is_string($token) ? array('access_token' => $token) : $token;
     }
 
     /**
@@ -55,6 +71,7 @@ class AccountNotLinkedException extends UsernameNotFoundException
     {
         return serialize(array(
             $this->accessToken,
+            $this->rawToken,
             $this->resourceOwnerName,
             parent::serialize(),
         ));
@@ -64,6 +81,7 @@ class AccountNotLinkedException extends UsernameNotFoundException
     {
         list(
             $this->accessToken,
+            $this->rawToken,
             $this->resourceOwnerName,
             $parentData
         ) = unserialize($str);

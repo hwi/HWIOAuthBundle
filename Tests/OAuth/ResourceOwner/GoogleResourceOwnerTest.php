@@ -30,14 +30,29 @@ json;
         'profilepicture' => 'picture',
     );
 
+    public function testGetOptionAccessType()
+    {
+        $this->assertEquals('offline', $this->resourceOwner->getOption('access_type'));
+    }
+
+    public function testGetAuthorizationUrl()
+    {
+        $this->assertEquals(
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline',
+            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
+    }
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         $options = array_merge(
             array(
-                 'authorization_url'   => 'https://accounts.google.com/o/oauth2/auth',
-                 'access_token_url'    => 'https://accounts.google.com/o/oauth2/token',
-                 'infos_url'           => 'https://www.googleapis.com/oauth2/v1/userinfo',
-                 'scope'               => 'userinfo.profile',
+                'authorization_url' => 'https://accounts.google.com/o/oauth2/auth',
+                'access_token_url'  => 'https://accounts.google.com/o/oauth2/token',
+                'infos_url'         => 'https://www.googleapis.com/oauth2/v1/userinfo',
+                'scope'             => 'https://www.googleapis.com/auth/userinfo.profile',
+
+                'access_type'       => 'offline'
             ),
             $options
         );
