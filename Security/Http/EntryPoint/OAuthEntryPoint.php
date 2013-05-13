@@ -39,8 +39,8 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     /**
      * Constructor
      *
-     * @param HttpUtils              $httpUtils
-     * @param string                 $loginPath
+     * @param HttpUtils $httpUtils
+     * @param string    $loginPath
      */
     public function __construct(HttpUtils $httpUtils, $loginPath)
     {

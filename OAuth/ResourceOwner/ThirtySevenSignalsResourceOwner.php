@@ -36,14 +36,20 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
         'identifier'     => 'identity.id',
         'nickname'       => 'identity.email_address',
         'realname'       => 'identity.last_name',
-        'firstName'      => 'identity.first_name'
+        'firstName'      => 'identity.first_name',
     );
 
+    /**
+     * {@inheritDoc}
+     */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         return parent::getAuthorizationUrl($redirectUri, array_merge(array('type' => 'web_server'), $extraParameters));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
         return parent::getAccessToken($request, $redirectUri, array_merge(array('type' => 'web_server'), $extraParameters));

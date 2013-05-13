@@ -86,7 +86,7 @@ class SensioConnectUserResponse extends AbstractUserResponse
             if (!$dom->loadXML($response)) {
                 throw new \ErrorException('Could not transform this xml to a \DOMDocument instance.');
             };
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             throw new AuthenticationException('Could not retrieve valid user info.');
         }
         $this->xpath = new \DOMXpath($dom);
