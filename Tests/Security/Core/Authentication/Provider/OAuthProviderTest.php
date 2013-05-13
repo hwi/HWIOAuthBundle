@@ -104,12 +104,11 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
         $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock);
 
-
         try {
             $oauthProvider->authenticate($oauthTokenMock);
 
             $this->assertTrue(false, "Exception was not thrown.");
-        } catch(OAuthAwareException $e) {
+        } catch (OAuthAwareException $e) {
             $this->assertTrue(true, "Exception was thrown.");
             $this->assertInstanceOf('HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface', $e);
             $this->assertEquals('github', $e->getResourceOwnerName());

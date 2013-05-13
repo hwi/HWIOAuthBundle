@@ -47,7 +47,7 @@ class OAuthHelper extends Helper
     }
 
     /**
-     * @param string  $name
+     * @param string $name
      *
      * @return string
      *

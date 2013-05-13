@@ -50,14 +50,14 @@ class LinkedinResourceOwner extends GenericOAuth1ResourceOwner
 
         return parent::httpRequest($url, $content, $parameters, $headers, $method);
     }
-    
+
     /**
      * Add scope (Required by linkedin API if email address is needed)
-     * 
+     *
      * {@inheritDoc}
      */
     protected function getRequestToken($redirectUri, array $extraParameters = array())
     {
         return parent::getRequestToken($redirectUri, array_merge(array('scope' => $this->getOption('scope')), $extraParameters));
-    }  
+    }
 }
