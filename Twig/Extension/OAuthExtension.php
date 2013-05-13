@@ -54,7 +54,7 @@ class OAuthExtension extends \Twig_Extension
     }
 
     /**
-     * @param string  $name
+     * @param string $name
      *
      * @return string
      */

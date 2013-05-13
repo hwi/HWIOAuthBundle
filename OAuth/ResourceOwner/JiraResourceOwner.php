@@ -11,6 +11,11 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+/**
+ * JiraResourceOwner
+ *
+ * @author Benjamin Eberlei <kontakt@beberlei.de>
+ */
 class JiraResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
@@ -64,4 +69,3 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
         return $this->httpRequest($url, null, $parameters, array(), 'GET');
     }
 }
-
