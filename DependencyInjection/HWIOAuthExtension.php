@@ -14,7 +14,6 @@ namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator,
     Symfony\Component\Config\Definition\Processor,
     Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Reference,
     Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
     Symfony\Component\HttpKernel\DependencyInjection\Extension;
 

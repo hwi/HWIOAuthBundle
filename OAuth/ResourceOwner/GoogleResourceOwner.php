@@ -11,9 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Security\Core\Exception\AuthenticationException;
-
 /**
  * GoogleResourceOwner
  *

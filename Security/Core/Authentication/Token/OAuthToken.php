@@ -22,7 +22,7 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 class OAuthToken extends AbstractToken
 {
     /**
-     * @var string
+     * @var string|array
      */
     private $accessToken;
 
@@ -32,8 +32,8 @@ class OAuthToken extends AbstractToken
     private $resourceOwnerName;
 
     /**
-     * @param string $accessToken The OAuth access token
-     * @param array  $roles       Roles for the token
+     * @param string|array $accessToken The OAuth access token
+     * @param array        $roles       Roles for the token
      */
     public function __construct($accessToken, array $roles = array())
     {
@@ -53,7 +53,7 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * @param string $accessToken The OAuth access token
+     * @param string|array $accessToken The OAuth access token
      */
     public function setAccessToken($accessToken)
     {
@@ -61,7 +61,7 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * @return string
+     * @return string|array
      */
     public function getAccessToken()
     {
