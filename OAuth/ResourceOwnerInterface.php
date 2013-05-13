@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth;
 
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

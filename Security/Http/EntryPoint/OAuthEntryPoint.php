@@ -27,7 +27,7 @@ use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface
 class OAuthEntryPoint implements AuthenticationEntryPointInterface
 {
     /**
-     * @var Symfony\Component\Security\Http\HttpUtils
+     * @var HttpUtils
      */
     private $httpUtils;
 
