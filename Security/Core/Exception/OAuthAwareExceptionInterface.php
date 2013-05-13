@@ -20,6 +20,13 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 interface OAuthAwareExceptionInterface
 {
     /**
+     * Get the access token information.
+     *
+     * @return string
+     */
+    public function getAccessToken();
+
+    /**
      * Set the access token of the failed authentication request.
      *
      * @param string $accessToken
@@ -27,9 +34,18 @@ interface OAuthAwareExceptionInterface
     public function setAccessToken($accessToken);
 
     /**
-     * @return string
+     * Get the raw token data.
+     *
+     * @return array
      */
-    public function getAccessToken();
+    public function getRawToken();
+
+    /**
+     * Set the raw token of the failed authentication request.
+     *
+     * @param array|string $token
+     */
+    public function setRawToken($token);
 
     /**
      * Set the name of the resource owner responsible for the oauth authentication.
@@ -39,6 +55,8 @@ interface OAuthAwareExceptionInterface
     public function setResourceOwnerName($resourceOwnerName);
 
     /**
+     * Get the name of resource owner.
+     *
      * @return string
      */
     public function getResourceOwnerName();

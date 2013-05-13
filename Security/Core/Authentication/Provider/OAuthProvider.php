@@ -76,11 +76,13 @@ class OAuthProvider implements AuthenticationProviderInterface
             $user = $this->userProvider->loadUserByOAuthUserResponse($userResponse);
         } catch (OAuthAwareExceptionInterface $e) {
             $e->setAccessToken($token->getAccessToken());
+            $e->setRawToken($token->getRawToken());
             $e->setResourceOwnerName($token->getResourceOwnerName());
+
             throw $e;
         }
 
-        $token = new OAuthToken($token->getAccessToken(), $user->getRoles());
+        $token = new OAuthToken($token->getRawToken(), $user->getRoles());
         $token->setResourceOwnerName($resourceOwner->getName());
         $token->setUser($user);
         $token->setAuthenticated(true);

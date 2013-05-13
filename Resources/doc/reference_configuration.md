@@ -1,7 +1,7 @@
 Reference configuration
 =======================
 
-``` yaml
+```yaml
 # app/config.yml
 
 hwi_oauth:
@@ -17,11 +17,13 @@ hwi_oauth:
             type:                google
             client_id:           <client_id>
             client_secret:       <client_secret>
-            scope:               ""
+            scope:               "https://www.googleapis.com/auth/userinfo.profile"
             user_response_class: \Our\Custom\Response\Class
             paths:
-                email:          email
-                profilepicture: picture
+                email:           email
+                profilepicture:  picture
+            options:
+                access_type:     offline
 
         facebook:
             type:                facebook
@@ -119,7 +121,7 @@ security:
                     service: hwi_oauth.user.provider.fosub_bridge
 ```
 
-``` yaml
+```yaml
 # app/config/routing.yml
 
 hwi_oauth_redirect:
