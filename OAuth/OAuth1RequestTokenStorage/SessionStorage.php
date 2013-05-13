@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorage;
 
-use HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface,
+use HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -68,7 +68,7 @@ class SessionStorage implements OAuth1RequestTokenStorageInterface
      * Key to for fetching or saving a token.
      *
      * @param ResourceOwnerInterface $resourceOwner
-     * @param mixed                  $tokenId
+     * @param string                 $tokenId
      *
      * @return string
      */

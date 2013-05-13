@@ -13,7 +13,6 @@ namespace HWI\Bundle\OAuthBundle\Security\Http;
 
 use Symfony\Component\DependencyInjection\ContainerInterface,
     Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Security\Core\Authentication\Token\TokenInterface,
     Symfony\Component\Security\Http\HttpUtils;
 
 /**

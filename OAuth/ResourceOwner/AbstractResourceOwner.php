@@ -152,7 +152,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param array  $headers The headers of the request
      * @param string $method  The HTTP method to use
      *
-     * @return string The response content
+     * @return HttpMessageInterface The response content
      */
     protected function httpRequest($url, $content = null, $headers = array(), $method = null)
     {
