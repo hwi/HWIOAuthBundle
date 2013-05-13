@@ -52,7 +52,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      * @param HttpUtils                          $httpUtils  Http utils
      * @param array                              $options    Options for the resource owner
      * @param string                             $name       Name for the resource owner
-     * @param OAuth1RequestTokenStorageInterface $storage Request token storage
+     * @param OAuth1RequestTokenStorageInterface $storage    Request token storage
      */
     public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, OAuth1RequestTokenStorageInterface $storage)
     {
