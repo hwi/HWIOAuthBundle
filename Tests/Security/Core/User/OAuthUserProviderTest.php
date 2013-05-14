@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser,
     HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider,
+    HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
     Symfony\Component\Security\Core\User\User;
 
 class OAuthUserProviderTest extends \PHPUnit_Framework_TestCase
@@ -72,7 +73,7 @@ class OAuthUserProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('asm89'))
         ;
 
-        $user = $this->provider->loadUserByOAuthUserResponse($responseMock);
+        $user = $this->provider->loadUserByOAuthUserResponse($responseMock, new OAuthToken('mock'));
         $this->assertInstanceOf('\HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser', $user);
         $this->assertEquals('asm89', $user->getUsername());
     }
