@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FacebookResourceOwner;
+use Symfony\Component\HttpFoundation\Request;
 
 class FacebookResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
@@ -27,6 +28,17 @@ json;
         'nickname'   => 'username',
         'realname'   => 'name',
     );
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
+    public function testGetAccessTokenFailedResponse()
+    {
+        $this->mockBuzz('{"error": {"message": "invalid"}}', 'application/json; charset=utf-8');
+        $request = new Request(array('code' => 'code'));
+
+        $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+    }
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {

@@ -11,18 +11,15 @@
 
 namespace HWI\Bundle\OAuthBundle\Form;
 
-use FOS\UserBundle\Form\Handler\RegistrationFormHandler,
-    FOS\UserBundle\Model\UserManagerInterface,
-    FOS\UserBundle\Mailer\MailerInterface,
-    FOS\UserBundle\Util\TokenGenerator;
-
-use HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedUserResponseInterface,
-    HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-
-use Symfony\Component\Form\Form,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpKernel\Kernel,
-    Symfony\Component\Security\Core\User\UserInterface;
+use FOS\UserBundle\Form\Handler\RegistrationFormHandler;
+use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Model\UserManagerInterface;
+use FOS\UserBundle\Util\TokenGenerator;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * FormHandlerInterface
@@ -67,16 +64,17 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
             $processed = $formHandler->process();
 
             // if the form is not posted we'll try to set some properties
-            if ('POST' === $request->getMethod()) {
-                $user = $this->setUserInformation($form->getData(), $userInformation);
-
-                $form->setData($user);
+            if ('POST' !== $request->getMethod()) {
+                $form->setData($this->setUserInformation($form->getData(), $userInformation));
             }
 
             return $processed;
         }
 
-        $form->setData($userInformation);
+        $user = $this->userManager->createUser();
+        $user->setEnabled(true);
+
+        $form->setData($this->setUserInformation($user, $userInformation));
 
         if ('POST' === $request->getMethod()) {
             if ('2' == Kernel::MAJOR_VERSION && '2' <= Kernel::MINOR_VERSION) {
@@ -85,11 +83,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
                 $form->bindRequest($request);
             }
 
-            if ($form->isValid()) {
-                $this->setUserInformation($form->getData(), $userInformation);
-
-                return true;
-            }
+            return $form->isValid();
         }
 
         return false;
@@ -151,7 +145,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     {
         $user->setUsername($this->getUniqueUsername($userInformation->getNickname()));
 
-        if ($userInformation instanceof AdvancedUserResponseInterface && method_exists($user, 'setEmail')) {
+        if (method_exists($user, 'setEmail')) {
             $user->setEmail($userInformation->getEmail());
         }
 

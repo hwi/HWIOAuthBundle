@@ -1,8 +1,8 @@
 header:
     connecting: Connecting
-    success: Successfuly connected the account '%name%'!
+    success: Successfully connected the account '%name%'!
     register: Register with the account '%name%'
-    registration_success: Successfuly registered and connected the account '%username%'!
+    registration_success: Successfully registered and connected the account '%username%'!
 
 connect:
     confirm:

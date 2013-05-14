@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth;
 
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -59,6 +60,17 @@ interface ResourceOwnerInterface
     public function getName();
 
     /**
+     * Retrieve an option by name
+     *
+     * @param string $name The option name
+     *
+     * @return mixed The option value
+     *
+     * @throws \InvalidArgumentException When the option does not exist
+     */
+    public function getOption($name);
+
+    /**
      * Checks whether the class can handle the request.
      *
      * @param Request $request
@@ -69,6 +81,8 @@ interface ResourceOwnerInterface
 
     /**
      * Sets a name for the resource owner.
+     *
+     * @param string $name
      */
     public function setName($name);
 }

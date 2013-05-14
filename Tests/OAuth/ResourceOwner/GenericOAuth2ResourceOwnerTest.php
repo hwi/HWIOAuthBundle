@@ -36,13 +36,13 @@ json;
         'client_id'           => 'clientid',
         'client_secret'       => 'clientsecret',
 
-        'infos_url'           => 'http://user.info/',
-        'authorization_url'   => 'http://user.auth/',
-        'access_token_url'    => 'http://user.access/',
+        'infos_url'           => 'http://user.info/?test=1',
+        'authorization_url'   => 'http://user.auth/?test=2',
+        'access_token_url'    => 'http://user.access/?test=3',
 
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
 
-        'scope'               => '',
+        'scope'               => null,
     );
 
     protected $paths = array(
@@ -87,7 +87,7 @@ json;
     public function testGetAuthorizationUrl()
     {
         $this->assertEquals(
-            $this->options['authorization_url'].'?response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -172,6 +172,8 @@ json;
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
         $this->assertEquals('foo', $userResponse->getNickname());
+        $this->assertEquals('access_token', $userResponse->getAccessToken());
+        $this->assertEquals('access_token', $userResponse->getOAuthToken());
     }
 
     public function buzzSendMock($request, $response)

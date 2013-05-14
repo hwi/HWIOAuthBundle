@@ -18,13 +18,20 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
+ * @author Joseph Bielawski <stloyd@gmail.com>
  */
 class PathUserResponse extends AbstractUserResponse
 {
     /**
      * @var array
      */
-    protected $paths = array();
+    protected $paths = array(
+        'identifier'     => null,
+        'nickname'       => null,
+        'realname'       => null,
+        'email'          => null,
+        'profilepicture' => null,
+    );
 
     /**
      * {@inheritdoc}
@@ -51,6 +58,22 @@ class PathUserResponse extends AbstractUserResponse
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getEmail()
+    {
+        return $this->getValueForPath('email');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProfilePicture()
+    {
+        return $this->getValueForPath('profilepicture');
+    }
+
+    /**
      * Get the configured paths.
      *
      * @return array
@@ -67,56 +90,44 @@ class PathUserResponse extends AbstractUserResponse
      */
     public function setPaths(array $paths)
     {
-        $this->paths = $paths;
+        $this->paths = array_merge($this->paths, $paths);
     }
 
     /**
-     * @param $name
+     * @param string $name
      *
      * @return mixed
-     *
-     * @throws AuthenticationException
      */
     protected function getPath($name)
     {
-        if (!isset($this->paths[$name])) {
-            throw new AuthenticationException(sprintf('No path with name "%s" configured.', $name));
-        }
-
-        return $this->paths[$name];
+        return array_key_exists($name, $this->paths) ? $this->paths[$name] : null;
     }
 
     /**
      * Extracts a value from the response for a given path.
      *
-     * @param string  $path           Name of the path to get the value for
-     * @param boolean $catchException Whether to throw an exception or return null
+     * @param  string      $path Name of the path to get the value for
      *
      * @return null|string
-     *
-     * @throws AuthenticationException
      */
-    protected function getValueForPath($path, $throwException = true)
+    protected function getValueForPath($path)
     {
-        try {
-            $steps = explode('.', $this->getPath($path));
-        } catch (AuthenticationException $e) {
-            if (!$throwException) {
+        $value = $this->response;
+        if (!$value) {
+            return null;
+        }
+
+        $steps = $this->getPath($path);
+        if (!$steps) {
+            return null;
+        }
+
+        $steps = explode('.', $steps);
+        foreach ($steps as $step) {
+            if (!array_key_exists($step, $value)) {
                 return null;
             }
 
-            throw $e;
-        }
-
-        $value = $this->response;
-        foreach ($steps as $step) {
-            if (!array_key_exists($step, $value)) {
-                if (!$throwException) {
-                    return null;
-                }
-
-                throw new AuthenticationException(sprintf('Could not follow path "%s" in OAuth provider response: %s', $this->paths[$path], var_export($this->response, true)));
-            }
             $value = $value[$step];
         }
 

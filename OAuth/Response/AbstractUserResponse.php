@@ -12,7 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -38,6 +37,27 @@ abstract class AbstractUserResponse implements UserResponseInterface
     protected $accessToken;
 
     /**
+     * @var string
+     */
+    protected $oauthToken;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getEmail()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProfilePicture()
+    {
+        return null;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getAccessToken()
@@ -50,7 +70,19 @@ abstract class AbstractUserResponse implements UserResponseInterface
      */
     public function setAccessToken($accessToken)
     {
+        if (is_array($accessToken) && isset($accessToken['oauth_token'])) {
+            $this->oauthToken = $accessToken['oauth_token'];
+        }
+
         $this->accessToken = $accessToken;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getOAuthToken()
+    {
+        return $this->oauthToken ?: $this->accessToken;
     }
 
     /**
@@ -69,7 +101,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
         $this->response = json_decode($response, true);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new AuthenticationException(sprintf('Not a valid JSON response.'));
+            throw new AuthenticationException('Response is not a valid JSON code.');
         }
     }
 

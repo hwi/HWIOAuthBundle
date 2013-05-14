@@ -1,7 +1,7 @@
 {
     "name":        "hwi/oauth-bundle",
     "type":        "symfony-bundle",
-    "description": "Support for authenticating users via oauth in Symfony2.",
+    "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
     "keywords":    ["security", "firewall", "oauth", "facebook", "oauth2", "github", "google", "windows live", "vkontakte", "oauth1", "twitter", "linkedin", "sensio connect", "yahoo"],
     "homepage":    "http://github.com/hwi/HWIOAuthBundle",
     "license":     "MIT",
@@ -9,7 +9,11 @@
     "authors": [
         {
             "name": "Alexander",
-            "email": "alexander@hardware.info"
+            "email": "iam.asm89@gmail.com"
+        },
+        {
+            "name": "Joseph Bielawski",
+            "email": "stloyd@gmail.com"
         },
         {
             "name": "Geoffrey Bachelet",
@@ -22,17 +26,16 @@
     ],
 
     "require": {
-        "php":                          ">=5.3.2",
-        "symfony/framework-bundle":     ">=2.0,<2.3-dev",
-        "symfony/security-bundle":      ">=2.0,<2.3-dev",
-        "kriswallsmith/buzz":           "0.7"
+        "php":                          ">=5.3.3",
+        "symfony/framework-bundle":     "~2.1",
+        "symfony/security-bundle":      "~2.1",
+        "kriswallsmith/buzz":           "~0.7"
     },
 
     "require-dev": {
-        "doctrine/orm":                 ">=2.1,<2.4-dev",
-        "symfony/validator":            ">=2.0,<2.3-dev",
-        "symfony/twig-bundle":          ">=2.0,<2.3-dev",
-        "friendsofsymfony/user-bundle": ">=1.2,<2.0-dev"
+        "doctrine/orm":                 "~2.2",
+        "symfony/validator":            "~2.1",
+        "symfony/twig-bundle":          "~2.1"
     },
 
     "suggest": {
@@ -48,10 +51,10 @@
     },
 
     "target-dir": "HWI/Bundle/OAuthBundle",
-    
+
     "extra": {
         "branch-alias": {
-            "dev-master": "0.2-dev"
+            "dev-master": "0.3-dev"
         }
     }
 }

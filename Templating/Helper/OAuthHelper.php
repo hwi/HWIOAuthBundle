@@ -11,11 +11,10 @@
 
 namespace HWI\Bundle\OAuthBundle\Templating\Helper;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Templating\Helper\Helper;
-
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Templating\Helper\Helper;
 
 /**
  * OAuthHelper
@@ -56,6 +55,18 @@ class OAuthHelper extends Helper
     public function getLoginUrl($name)
     {
         return $this->oauthUtils->getLoginUrl($name);
+    }
+
+    /**
+     * @param string $name
+     * @param string $redirectUrl     Optional
+     * @param array  $extraParameters Optional
+     *
+     * @return string
+     */
+    public function getAuthorizationUrl($name, $redirectUrl = null, array $extraParameters = array())
+    {
+        return $this->oauthUtils->getAuthorizationUrl($name, $redirectUrl, $extraParameters);
     }
 
     /**

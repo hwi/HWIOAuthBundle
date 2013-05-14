@@ -11,16 +11,16 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 
-use Symfony\Component\Security\Core\User\UserInterface;
+use FOS\UserBundle\Model\User as BaseUser;
 
-class User implements UserInterface
+/**
+ * User class.
+ *
+ * @author Alexander <iam.asm89@gmail.com>
+ */
+class FOSUser extends BaseUser
 {
     private $githubId;
-
-    public function getId()
-    {
-        return '1';
-    }
 
     public function getUsername()
     {

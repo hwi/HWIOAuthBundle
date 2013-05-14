@@ -11,20 +11,18 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
-use Symfony\Component\Config\FileLocator,
-    Symfony\Component\Config\Definition\Processor,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\Reference,
-    Symfony\Component\DependencyInjection\Loader\XmlFileLoader,
-    Symfony\Component\HttpKernel\DependencyInjection\Extension;
-
+use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * HWIOAuthExtension
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
- * @auther Alexander <iam.asm89@gmail.com>
+ * @author Alexander <iam.asm89@gmail.com>
  */
 class HWIOAuthExtension extends Extension
 {
@@ -53,6 +51,9 @@ class HWIOAuthExtension extends Extension
         // set current firewall
         $container->setParameter('hwi_oauth.firewall_name', $config['firewall_name']);
 
+        // set target path parameter
+        $container->setParameter('hwi_oauth.target_path_parameter', $config['target_path_parameter']);
+
         // setup services for all configured resource owners
         $resourceOwners = array();
         foreach ($config['resource_owners'] as $name => $options) {
@@ -64,7 +65,8 @@ class HWIOAuthExtension extends Extension
         if (isset($config['fosub'])) {
             $container
                 ->setDefinition('hwi_oauth.user.provider.fosub_bridge', new DefinitionDecorator('hwi_oauth.user.provider.fosub_bridge.def'))
-                ->addArgument($config['fosub']['properties']);
+                ->addArgument($config['fosub']['properties'])
+            ;
         }
 
         // check of the connect controllers etc should be enabled
@@ -78,7 +80,8 @@ class HWIOAuthExtension extends Extension
                 $container
                     ->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new DefinitionDecorator('hwi_oauth.registration.form.handler.fosub_bridge.def'))
                     ->addArgument($config['fosub']['username_iterations'])
-                    ->setScope('request');
+                    ->setScope('request')
+                ;
 
                 $container->setAlias('hwi_oauth.registration.form.handler', 'hwi_oauth.registration.form.handler.fosub_bridge');
 
@@ -99,6 +102,8 @@ class HWIOAuthExtension extends Extension
             $container->setParameter('hwi_oauth.connect', false);
         }
 
+        $container->setParameter('hwi_oauth.templating.engine', $config['templating_engine']);
+
         $container->setAlias('hwi_oauth.user_checker', 'security.user_checker');
     }
 
@@ -113,8 +118,7 @@ class HWIOAuthExtension extends Extension
     {
         // alias services
         if (isset($options['service'])) {
-            $container
-                ->setAlias('hwi_oauth.resource_owner.'.$name, $options['service']);
+            $container->setAlias('hwi_oauth.resource_owner.'.$name, $options['service']);
 
             // set the appropriate name for aliased services
             // TODO fix this. It cannot work as the service definition cannot be accessed
@@ -125,19 +129,29 @@ class HWIOAuthExtension extends Extension
             $type = $options['type'];
             unset($options['type']);
 
-            $paths = array();
-            if (isset($options['paths'])) {
+            if (!empty($options['paths'])) {
                 $paths = $options['paths'];
                 unset($options['paths']);
             }
 
+            if (!empty($options['options'])) {
+                $customOptions = $options['options'];
+                unset($options['options']);
+            }
+
             $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.$type);
             $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
-            $definition->replaceArgument(2, $options)
-                ->replaceArgument(3, $name);
+            $definition
+                ->replaceArgument(2, $options)
+                ->replaceArgument(3, $name)
+            ;
 
-            if (!empty($paths)) {
+            if (isset($paths)) {
                 $definition->addMethodCall('addPaths', array($paths));
+            }
+
+            if (isset($customOptions)) {
+                $definition->addMethodCall('addOptions', array($customOptions));
             }
         }
     }

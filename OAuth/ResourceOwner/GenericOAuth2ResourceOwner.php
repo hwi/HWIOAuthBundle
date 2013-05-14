@@ -11,11 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Client\ClientInterface as HttpClientInterface;
-
-use Symfony\Component\Security\Core\Exception\AuthenticationException,
-    Symfony\Component\Security\Http\HttpUtils,
-    Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * GenericOAuth2ResourceOwner
@@ -30,8 +27,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getUserInformation($accessToken)
     {
-        $url = $this->getOption('infos_url');
-        $url .= (false !== strpos($url, '?') ? '&' : '?').http_build_query(array(
+        $url = $this->normalizeUrl($this->getOption('infos_url'), array(
             'access_token' => $accessToken
         ));
 
@@ -50,14 +46,14 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
-        $parameters = array_merge($extraParameters, array(
+        $parameters = array_merge(array(
             'response_type' => 'code',
             'client_id'     => $this->getOption('client_id'),
             'scope'         => $this->getOption('scope'),
             'redirect_uri'  => $redirectUri,
-        ));
+        ), $extraParameters);
 
-        return $this->getOption('authorization_url').'?'.http_build_query($parameters);
+        return $this->normalizeUrl($this->getOption('authorization_url'), $parameters);
     }
 
     /**
@@ -65,19 +61,19 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
-        $parameters = array_merge($extraParameters, array(
+        $parameters = array_merge(array(
             'code'          => $request->query->get('code'),
             'grant_type'    => 'authorization_code',
             'client_id'     => $this->getOption('client_id'),
             'client_secret' => $this->getOption('client_secret'),
             'redirect_uri'  => $redirectUri,
-        ));
+        ), $extraParameters);
 
         $response = $this->doGetAccessTokenRequest($this->getOption('access_token_url'), $parameters);
         $response = $this->getResponseContent($response);
 
         if (isset($response['error'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']));
+            throw new AuthenticationException(sprintf('OAuth error: "%s"', isset($response['error']['message']) ? $response['error']['message'] : $response['error']));
         }
 
         if (!isset($response['access_token'])) {

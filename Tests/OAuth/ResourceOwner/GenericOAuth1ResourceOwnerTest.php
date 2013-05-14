@@ -30,12 +30,14 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         'client_id'           => 'clientid',
         'client_secret'       => 'clientsecret',
 
-        'infos_url'           => 'http://user.info/',
-        'request_token_url'   => 'http://user.request/',
-        'authorization_url'   => 'http://user.auth/',
-        'access_token_url'    => 'http://user.access/',
+        'infos_url'           => 'http://user.info/?test=1',
+        'request_token_url'   => 'http://user.request/?test=2',
+        'authorization_url'   => 'http://user.auth/?test=3',
+        'access_token_url'    => 'http://user.access/?test=4',
 
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
+        'signature_method'    => 'HMAC-SHA1',
 
         'realm'               => null,
         'scope'               => null,
@@ -55,6 +57,16 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     public function testGetOption()
     {
         $this->assertEquals($this->options['infos_url'], $this->resourceOwner->getOption('infos_url'));
+        $this->assertEquals($this->options['request_token_url'], $this->resourceOwner->getOption('request_token_url'));
+        $this->assertEquals($this->options['authorization_url'], $this->resourceOwner->getOption('authorization_url'));
+        $this->assertEquals($this->options['access_token_url'], $this->resourceOwner->getOption('access_token_url'));
+
+        $this->assertEquals($this->options['user_response_class'], $this->resourceOwner->getOption('user_response_class'));
+
+        $this->assertEquals($this->options['signature_method'], $this->resourceOwner->getOption('signature_method'));
+
+        $this->assertEquals($this->options['realm'], $this->resourceOwner->getOption('realm'));
+        $this->assertEquals($this->options['scope'], $this->resourceOwner->getOption('scope'));
     }
 
     /**
@@ -75,6 +87,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
         $this->assertEquals($accessToken, $userResponse->getAccessToken());
+        $this->assertEquals($accessToken['oauth_token'], $userResponse->getOAuthToken());
     }
 
     public function testGetAuthorizationUrlContainOAuthTokenAndSecret()
@@ -86,7 +99,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
             ->with($this->resourceOwner, array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'timestamp' => time()));
 
         $this->assertEquals(
-            $this->options['authorization_url'].'?oauth_token=token',
+            $this->options['authorization_url'].'&oauth_token=token',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -192,6 +205,9 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
             ->method('fetch')
             ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
 
+        $this->storage->expects($this->never())
+            ->method('save');
+
         $request = new Request(array('oauth_token' => 'token', 'oauth_verifier' => 'code'));
 
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
@@ -207,6 +223,9 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $this->storage->expects($this->once())
             ->method('fetch')
             ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
+
+        $this->storage->expects($this->never())
+            ->method('save');
 
         $request = new Request(array('oauth_token' => 'token', 'oauth_verifier' => 'code'));
 

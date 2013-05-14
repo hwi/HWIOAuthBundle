@@ -76,7 +76,7 @@ hwi_oauth:
     connect: ~
 #        registration_form_handler: my_registration_form_handler
 #        registration_form: my_registration_form
-#        connect_provider: my_link_provider # can be the same as your user provider
+#        account_connector: my_link_provider # can be the same as your user provider
 
     # optional HTTP Client configuration
     http_client:
@@ -84,6 +84,10 @@ hwi_oauth:
         verify_peer:   true
         ignore_errors: true
         max_redirects: 5
+
+    # allows to switch templating engine for bundle views
+    #templating_engine: "php"
+
 ```
 
 ``` yaml

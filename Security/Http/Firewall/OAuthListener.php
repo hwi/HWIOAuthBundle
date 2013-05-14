@@ -11,12 +11,11 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
-use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\Security\Core\Exception\AuthenticationException;
-
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
-    HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener;
 
 /**
  * OAuthListener
@@ -75,6 +74,11 @@ class OAuthListener extends AbstractAuthenticationListener
         $this->handleOAuthError($request);
 
         list($resourceOwner, $checkPath) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
+
+        /* @var \HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner */
+        if (!$resourceOwner) {
+            throw new AuthenticationException('No resource owner match the request.');
+        }
 
         if (!$resourceOwner->handles($request)) {
             throw new AuthenticationException('No oauth code in the request.');

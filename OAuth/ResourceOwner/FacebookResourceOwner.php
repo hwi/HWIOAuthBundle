@@ -25,7 +25,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
         'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
         'infos_url'           => 'https://graph.facebook.com/me',
-        'scope'               => '',
+        'scope'               => null,
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
     );
 
@@ -44,6 +44,8 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function configure()
     {
-        $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+        if (isset($this->options['scope'])) {
+            $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+        }
     }
 }

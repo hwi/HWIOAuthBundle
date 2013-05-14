@@ -37,11 +37,13 @@ class Configuration implements ConfigurationInterface
             'stack_exchange',
             'vkontakte',
             'windows_live',
+            '37signals',
 
         'oauth1',
             'linkedin',
             'twitter',
             'yahoo',
+            'jira',
     );
 
     /**
@@ -58,7 +60,11 @@ class Configuration implements ConfigurationInterface
             ->fixXmlConfig('resource_owner')
             ->children()
             ->scalarNode('firewall_name')
+                ->isRequired()
                 ->cannotBeEmpty()
+            ->end()
+            ->scalarNode('target_path_parameter')
+                ->defaultNull()
             ->end()
             ->arrayNode('http_client')
                 ->addDefaultsIfNotSet()
@@ -111,6 +117,7 @@ class Configuration implements ConfigurationInterface
                 ->useAttributeAsKey('name')
                 ->prototype('array')
                     ->children()
+                        ->scalarNode('base_url')->end()
                         ->scalarNode('access_token_url')
                             ->validate()
                                 ->ifTrue(function($v) {
@@ -142,6 +149,14 @@ class Configuration implements ConfigurationInterface
                             ->cannotBeEmpty()
                         ->end()
                         ->scalarNode('infos_url')
+                            ->validate()
+                                ->ifTrue(function($v) {
+                                    return empty($v);
+                                })
+                                ->thenUnset()
+                            ->end()
+                        ->end()
+                        ->scalarNode('realm')
                             ->validate()
                                 ->ifTrue(function($v) {
                                     return empty($v);
@@ -183,8 +198,9 @@ class Configuration implements ConfigurationInterface
                             ->useAttributeAsKey('name')
                             ->prototype('scalar')->end()
                         ->end()
-                        ->scalarNode('request_visible_actions')
-                            ->defaultValue('')
+                        ->arrayNode('options')
+                            ->useAttributeAsKey('name')
+                            ->prototype('scalar')->end()
                         ->end()
                     ->end()
                     ->validate()
@@ -261,7 +277,8 @@ class Configuration implements ConfigurationInterface
                         ->thenInvalid("If you're setting a service, no other arguments should be set.")
                     ->end()
                 ->end()
-            ->end();
+            ->end()
+            ->scalarNode('templating_engine')->defaultValue('twig')->end();
 
         return $builder;
     }

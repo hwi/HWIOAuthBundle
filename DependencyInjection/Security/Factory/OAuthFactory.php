@@ -11,12 +11,12 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
-use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory,
-    Symfony\Component\Config\Definition\Builder\NodeDefinition,
-    Symfony\Component\DependencyInjection\ContainerBuilder,
-    Symfony\Component\DependencyInjection\DefinitionDecorator,
-    Symfony\Component\DependencyInjection\Parameter,
-    Symfony\Component\DependencyInjection\Reference;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
+use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Parameter;
+use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * OAuthFactory
