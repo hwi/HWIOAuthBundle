@@ -33,7 +33,7 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
         'access_type'             => null,
         'request_visible_actions' => null,
         //sometimes we need to force for approval prompt (e.g. when we lost refresh token)
-        'approval_prompt'         => 'auto',
+        'approval_prompt'         => null,
     );
 
     /**
@@ -52,14 +52,10 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
-        $params = array(
+        return parent::getAuthorizationUrl($redirectUri, array_merge(array(
             'access_type' => $this->getOption('access_type'),
-            'approval_prompt' => $this->getOption('approval_prompt')
-        );
-        if ($requestVisibleActions = $this->getOption('request_visible_actions')) {
-            $params['request_visible_actions'] = $requestVisibleActions;
-        }
-
-        return parent::getAuthorizationUrl($redirectUri, array_merge($params, $extraParameters));
+            'approval_prompt' => $this->getOption('approval_prompt'),
+            'request_visible_actions' => $this->getOption('request_visible_options')
+        ), $extraParameters));
     }
 }
