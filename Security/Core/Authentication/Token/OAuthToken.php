@@ -47,8 +47,8 @@ class OAuthToken extends AbstractToken
     private $resourceOwnerName;
 
     /**
-     * @param array|string $accessToken  The OAuth access token
-     * @param array        $roles        Roles for the token
+     * @param string|array $accessToken The OAuth access token
+     * @param array        $roles       Roles for the token
      */
     public function __construct($accessToken, array $roles = array())
     {

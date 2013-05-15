@@ -35,6 +35,6 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier'  => 'user_id',
         'nickname'    => 'display_name',
-        'realname'    => 'display_name'
+        'realname'    => 'display_name',
     );
 }

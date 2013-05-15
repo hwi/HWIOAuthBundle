@@ -11,8 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 
-use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider,
-    HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser;
+use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser;
 
 class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 {

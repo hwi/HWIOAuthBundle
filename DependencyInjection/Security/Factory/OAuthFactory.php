@@ -83,7 +83,7 @@ class OAuthFactory extends AbstractFactory
         $serviceId = 'hwi_oauth.user.provider.entity.'.$id;
 
         // todo: move this to factories?
-        switch(key($config)) {
+        switch (key($config)) {
             case 'oauth':
                 $container
                     ->setDefinition($serviceId, new DefinitionDecorator('hwi_oauth.user.provider'))
@@ -102,7 +102,6 @@ class OAuthFactory extends AbstractFactory
                     ->setAlias($serviceId, $config['service']);
                 break;
         }
-
 
         return new Reference($serviceId);
     }
