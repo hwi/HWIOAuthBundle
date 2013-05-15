@@ -15,40 +15,33 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class AccountNotLinkedException extends UsernameNotFoundException implements OAuthAwareExceptionInterface
 {
-    private $accessToken;
-    private $rawToken;
-    private $resourceOwnerName;
+    /**
+     * @var string
+     */
+    protected $resourceOwnerName;
 
     /**
      * {@inheritdoc}
      */
     public function getAccessToken()
     {
-        return $this->accessToken;
+        return $this->getToken()->getAccessToken();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setAccessToken($accessToken)
+    public function getRefreshToken()
     {
-        $this->accessToken = $accessToken;
+        return $this->getToken()->getRefreshToken();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getRawToken()
+    public function getExpiresIn()
     {
-        return $this->rawToken;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setRawToken($token)
-    {
-        $this->rawToken = is_string($token) ? array('access_token' => $token) : $token;
+        return $this->getToken()->getExpiresIn();
     }
 
     /**
@@ -70,8 +63,6 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
     public function serialize()
     {
         return serialize(array(
-            $this->accessToken,
-            $this->rawToken,
             $this->resourceOwnerName,
             parent::serialize(),
         ));
@@ -80,8 +71,6 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
     public function unserialize($str)
     {
         list(
-            $this->accessToken,
-            $this->rawToken,
             $this->resourceOwnerName,
             $parentData
         ) = unserialize($str);

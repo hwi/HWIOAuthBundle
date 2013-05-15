@@ -11,8 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-
 /**
  * Class parsing the properties by given path options.
  *

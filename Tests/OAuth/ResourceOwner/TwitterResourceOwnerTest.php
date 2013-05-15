@@ -36,8 +36,9 @@ json;
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
-        $this->assertEquals($accessToken, $userResponse->getAccessToken());
-        $this->assertEquals($accessToken['oauth_token'], $userResponse->getOAuthToken());
+        $this->assertEquals($accessToken['oauth_token'], $userResponse->getAccessToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
     }
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)

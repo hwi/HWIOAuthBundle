@@ -5,12 +5,15 @@ Changelog
 * [BC break] `GenericOAuth2ResourceOwner::getAccessToken` now returns an array
   instead of a string. This array contains the access token and its 'expires_in'
   value, along with any other parameters returned from the authentication provider
-* [BC break] Added `OAuthAwareExceptionInterface#getRawToken()` & `OAuthAwareExceptionInterface#setRawToken()`
-  methods
+* [BC break] Added `OAuthAwareExceptionInterface#setToken()`, `OAuthAwareExceptionInterface#getRefreshToken()`,
+  `OAuthAwareExceptionInterface#getExpiresIn()` methods
 * [BC break] Renamed `AbstractResourceOwner::doGetAccessTokenRequest` to `doGetTokenRequest`
 * [BC break] Removed `AdvancedPathUserResponse` & `AdvancedUserResponseInterface`
-* [BC break] Added `UserResponseInterface#getEmail()` & `UserResponseInterface#getProfilePicture()`
-  methods
+* [BC break] Added `UserResponseInterface#getEmail()`, `UserResponseInterface#getProfilePicture()`,
+  `UserResponseInterface#getRefreshToken()`, `UserResponseInterface#getExpiresIn()`,
+  `UserResponseInterface#setOAuthToken()` methods
+* [BC break] Removed `UserResponseInterface::setAccessToken()` method
+* [BC break] Removed `AbstractUserResponse::getOAuthToken()` method because it was ambiguous
 * [BC break] `PathUserResponse#setPaths()` method no longer overwrite default paths
 * [BC break] `PathUserResponse#getPath()` method no longer throws an exception if path
   not exists
@@ -22,6 +25,8 @@ Changelog
   `OAuthToken::setExpiresIn()`, `OAuthToken::getRawToken()`, `OAuthToken::setRawToken()`
 * Added `AbstractResourceOwner#addOptions()` & `ResourceOwnerInterface#setOption($name, $value)`
   methods which allows easy overwriting resource specific options
+* Added support for options: `access_type`, `request_visible_actions`, `approval_prompt`
+  in Google resource owner
 * Added 37signals resource owner
 * Added Disqus resource owner
 * Added Dropbox resource owner
