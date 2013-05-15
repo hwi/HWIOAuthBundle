@@ -29,6 +29,7 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
         'infos_url'           => 'http://social.yahooapis.com/v1/user/{guid}/profile',
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
         'realm'               => 'yahooapis.com',
+        'signature_method'    => 'HMAC-SHA1',
     );
 
     /**
