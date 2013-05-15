@@ -56,5 +56,9 @@ github_login:
 ```
 
 ## That was it!
-That's the basic setup of the bundle. [Return to the index.](index.md) If you
-are interested in giving users the option to "connect" social accounts check out: (todo).
+
+That's the basic setup of the bundle. If you are interested in giving users the option to "connect"
+social accounts check out this (todo), you may check also how to implement [Facebook Connect](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/facebook-connect.md)
+functionality.
+
+[Return to the index.](index.md)
