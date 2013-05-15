@@ -13,7 +13,6 @@ namespace HWI\Bundle\OAuthBundle;
 
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory;
-use HWI\Bundle\OAuthBundle\Security\Core\UserProvider\EntityFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\Kernel;

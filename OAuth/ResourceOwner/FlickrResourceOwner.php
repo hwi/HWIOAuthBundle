@@ -12,6 +12,8 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 /**
+ * FlickrResourceOwner
+ *
  * @author Dmitri Lakachauskis <lakiboy83@gmail.com>
  */
 class FlickrResourceOwner extends GenericOAuth1ResourceOwner
