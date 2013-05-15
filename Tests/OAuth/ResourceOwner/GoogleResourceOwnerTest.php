@@ -38,8 +38,26 @@ json;
     public function testGetAuthorizationUrl()
     {
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&approval_prompt=auto',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
+    }
+
+    public function testRequestVisibleActions()
+    {
+        $resourceOwner = $this->createResourceOwner('google', array('request_visible_actions' => 'http://schemas.google.com/AddActivity'));
+        $this->assertEquals(
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&request_visible_actions=http%3A%2F%2Fschemas.google.com%2FAddActivity',
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
+    }
+    
+    public function testApprovalPromptForce()
+    {
+        $resourceOwner = $this->createResourceOwner('google', array('approval_prompt' => 'force'));
+        $this->assertEquals(
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&approval_prompt=force',
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 
@@ -58,23 +76,5 @@ json;
         );
 
         return new GoogleResourceOwner($this->buzzClient, $httpUtils, $options, $name);
-    }
-
-    public function testRequestVisibleActions()
-    {
-        $resourceOwner = $this->createResourceOwner('google', array('request_visible_actions' => 'http://schemas.google.com/AddActivity'));
-        $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&approval_prompt=auto&request_visible_actions=http%3A%2F%2Fschemas.google.com%2FAddActivity',
-            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
-        );
-    }
-    
-    public function testApprovalPromptForce()
-    {
-        $resourceOwner = $this->createResourceOwner('google', array('approval_prompt' => 'force'));
-        $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&approval_prompt=force',
-            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
-        );
     }
 }
