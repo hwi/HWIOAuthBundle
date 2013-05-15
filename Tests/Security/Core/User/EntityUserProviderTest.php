@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider,
     HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 
@@ -30,7 +31,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured()
     {
         $provider = $this->createEntityUserProvider();
-        $provider->loadUserByOAuthUserResponse($this->createUserResponseMock(null, 'not_configured'));
+        $provider->loadUserByOAuthUserResponse($this->createUserResponseMock(null, 'not_configured'), new OAuthToken('mock'));
     }
 
     /**
@@ -43,7 +44,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
 
         $provider = $this->createEntityUserProvider();
 
-        $provider->loadUserByOAuthUserResponse($userResponseMock);
+        $provider->loadUserByOAuthUserResponse($userResponseMock, new OAuthToken('mock'));
     }
 
     public function testLoadUserByOAuthUserResponse()
@@ -53,7 +54,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
         $user = new User();
         $provider = $this->createEntityUserProvider($user);
 
-        $loadedUser = $provider->loadUserByOAuthUserResponse($userResponseMock);
+        $loadedUser = $provider->loadUserByOAuthUserResponse($userResponseMock, new OAuthToken('mock'));
 
         $this->assertEquals($user, $loadedUser);
     }

@@ -18,6 +18,7 @@ Changelog
   it will not throw exception anymore if response or value is missing, but now will return
   `null` instead
 * [BC break] Added `ResourceOwnerInterface#getOption($name)` method
+* [BC break] Added argument `OAuthToken` to `OAuthUserAwareProviderInterface::loadUserByOAuthUserResponse()`
 * Added `OAuthToken::getRefreshToken()`, `OAuthToken::setRefreshToken()`, `OAuthToken::getExpiresIn()`,
   `OAuthToken::setExpiresIn()`, `OAuthToken::getRawToken()`, `OAuthToken::setRawToken()`
 * Added `AbstractResourceOwner#addOptions()` & `ResourceOwnerInterface#setOption($name, $value)`
