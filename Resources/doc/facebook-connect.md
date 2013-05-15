@@ -1,7 +1,7 @@
 Facebook Connect
 ================
 
-This guide use Symfony 2.2 (and should work in 2.1 too) and use the [standard AcmeDemoBundle](https://github.com/symfony/symfony-standard/tree/2.2) as base. Assuming you have installed the bundle via Composer correctly.
+This guide bases on Symfony 2.1+ and the [AcmeDemoBundle](https://github.com/symfony/symfony-standard/tree/2.2).
 
 ## Configuration
 
@@ -43,7 +43,7 @@ facebook_login:
 # app/config/security.yml
 
 firewalls:
-    ...
+    # ...
     secured_area:
         pattern:    ^/demo/secured/
         oauth:
@@ -59,9 +59,9 @@ firewalls:
 
 ## Adding the Facebook Login Button
 
-The following example follow the Facebook's ["Login with Javascript SDK"](https://developers.facebook.com/docs/howtos/login/getting-started/) guide. 
+The following example bases also on the Facebook ["Login with Javascript SDK"](https://developers.facebook.com/docs/howtos/login/getting-started/) guide. 
 
-```jinja
+```html+jinja
 # src/Acme/DemoBundle/Resources/views/Secured/hello.html.twig
 
 {% block content %}
@@ -119,4 +119,8 @@ The following example follow the Facebook's ["Login with Javascript SDK"](https:
 {% endblock %}
 ```
 
-Browse to `/demo/secured/hello/World` and test the login button.
+## Watch the results!
+
+Open the browser and go at `/demo/secured/hello/World` too see the login button, and test it!
+
+[Return to the index.](index.md)
