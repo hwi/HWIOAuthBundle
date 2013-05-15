@@ -51,7 +51,7 @@ json;
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
-    
+
     public function testApprovalPromptForce()
     {
         $resourceOwner = $this->createResourceOwner('google', array('approval_prompt' => 'force'));

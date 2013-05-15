@@ -104,7 +104,7 @@ class PathUserResponse extends AbstractUserResponse
     /**
      * Extracts a value from the response for a given path.
      *
-     * @param  string      $path Name of the path to get the value for
+     * @param string $path Name of the path to get the value for
      *
      * @return null|string
      */
