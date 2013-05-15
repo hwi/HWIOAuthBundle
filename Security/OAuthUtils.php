@@ -153,7 +153,7 @@ class OAuthUtils
                 break;
 
             case self::SIGNATURE_METHOD_PLAINTEXT:
-                $signature = $key;
+                $signature = $baseString;
                 break;
 
             default:
