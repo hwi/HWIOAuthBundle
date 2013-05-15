@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 0.2.4 (2013-05-xx)
+## 0.2.4 (2013-05-15)
 * Fix: Throw `Symfony\Component\Security\Core\Exception\AccessDeniedException`
   & `Symfony\Component\HttpKernel\Exception\NotFoundHttpException` instead of `\Exception`
   to make cases more clear
@@ -9,6 +9,7 @@ Changelog
   in background
 * Fix: Request extra parameters should have higher priority than default
 * Fix: How urls are build in resource owners
+* Fix: Missing parameter in `YahooResourceOwner`
 
 ## 0.2.3 (2013-05-06)
 * Added `AbstractUserResponse::getOAuthToken()` method to allow fetching only OAuth token details
