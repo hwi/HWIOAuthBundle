@@ -25,7 +25,8 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
         'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
         'infos_url'           => 'https://graph.facebook.com/me',
-        'display'             => null
+        // @link https://developers.facebook.com/docs/reference/dialogs/#display
+        'display'             => null, 
     );
 
     /**

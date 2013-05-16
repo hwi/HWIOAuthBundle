@@ -16,7 +16,6 @@ hwi_oauth:
             type:                facebook
             client_id:           <client_id>
             client_secret:       <client_secret>
-            scope:               ""
 ```
 
 Optionally you can tune how dialog is displaying by changing [`display`](https://developers.facebook.com/docs/reference/dialogs/#display) option
@@ -30,7 +29,6 @@ hwi_oauth:
             type:                facebook
             client_id:           <client_id>
             client_secret:       <client_secret>
-            scope:               ""
             options:
                 display: popup #dialog is optimized for popup window
 ```

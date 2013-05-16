@@ -40,32 +40,27 @@ json;
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
+    public function testDisplayPopup()
+    {
+        $resourceOwner = $this->createResourceOwner('facebook', array('display' => 'popup'));
+        $this->assertEquals('popup', $resourceOwner->getOption('display'));
+        $this->assertEquals(
+            $this->options['authorization_url'] . '&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&display=popup',
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
+    }
+    
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         $options = array_merge(
             array(
-                 'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
-                 'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
-                 'infos_url'           => 'https://graph.facebook.com/me',
+                'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
+                'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
+                'infos_url'           => 'https://graph.facebook.com/me',
             ),
             $options
         );
 
         return new FacebookResourceOwner($this->buzzClient, $httpUtils, $options, $name);
-    }
-    
-    public function testDisplayPopupOption()
-    {
-        $resourceOwner = $this->createResourceOwner('facebook', array('display' => 'popup'));
-        $this->assertEquals('popup', $resourceOwner->getOption('display'));
-    }
-    
-    public function testDisplayPopup()
-    {
-        $resourceOwner = $this->createResourceOwner('facebook', array('display' => 'popup'));
-        $this->assertEquals(
-            $this->options['authorization_url'] . '&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&display=popup',
-            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
-        );
     }
 }
