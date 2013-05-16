@@ -61,6 +61,25 @@ json;
         $this->assertEquals($this->options['client_id'], $this->resourceOwner->getOption('client_id'));
     }
 
+    public function testGetOptionWithDefaults()
+    {
+        $buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
+            ->disableOriginalConstructor()->getMock();
+        $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
+            ->disableOriginalConstructor()->getMock();
+
+        $resourceOwner = new GenericOAuth2ResourceOwner($buzzClient, $httpUtils, array(), 'oauth2');
+
+        $this->assertNull($resourceOwner->getOption('client_id'));
+        $this->assertNull($resourceOwner->getOption('client_secret'));
+
+        $this->assertNull($resourceOwner->getOption('infos_url'));
+
+        $this->assertEquals('HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse', $resourceOwner->getOption('user_response_class'));
+
+        $this->assertNull($resourceOwner->getOption('scope'));
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -81,7 +100,8 @@ json;
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
         $this->assertEquals('access_token', $userResponse->getAccessToken());
-        $this->assertEquals('access_token', $userResponse->getOAuthToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
     }
 
     public function testGetAuthorizationUrl()
@@ -202,7 +222,8 @@ json;
         $this->assertEquals('foo666', $userResponse->getUsername());
         $this->assertEquals('foo', $userResponse->getNickname());
         $this->assertEquals('access_token', $userResponse->getAccessToken());
-        $this->assertEquals('access_token', $userResponse->getOAuthToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
     }
 
     public function buzzSendMock($request, $response)

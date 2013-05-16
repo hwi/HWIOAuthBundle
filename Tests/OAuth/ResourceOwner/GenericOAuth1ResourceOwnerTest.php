@@ -69,6 +69,30 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->options['scope'], $this->resourceOwner->getOption('scope'));
     }
 
+    public function testGetOptionWithDefaults()
+    {
+        $buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
+            ->disableOriginalConstructor()->getMock();
+        $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
+            ->disableOriginalConstructor()->getMock();
+
+        $storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface');
+
+        $resourceOwner = new GenericOAuth1ResourceOwner($buzzClient, $httpUtils, array(), 'oauth1', $storage);
+
+        $this->assertNull($resourceOwner->getOption('client_id'));
+        $this->assertNull($resourceOwner->getOption('client_secret'));
+
+        $this->assertNull($resourceOwner->getOption('infos_url'));
+
+        $this->assertEquals('HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse', $resourceOwner->getOption('user_response_class'));
+
+        $this->assertNull($resourceOwner->getOption('realm'));
+        $this->assertNull($resourceOwner->getOption('scope'));
+
+        $this->assertEquals('HMAC-SHA1', $resourceOwner->getOption('signature_method'));
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -86,8 +110,9 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
-        $this->assertEquals($accessToken, $userResponse->getAccessToken());
-        $this->assertEquals($accessToken['oauth_token'], $userResponse->getOAuthToken());
+        $this->assertEquals($accessToken['oauth_token'], $userResponse->getAccessToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
     }
 
     public function testGetAuthorizationUrlContainOAuthTokenAndSecret()
@@ -254,6 +279,9 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
         $this->assertEquals('foo', $userResponse->getNickname());
+        $this->assertEquals('token', $userResponse->getAccessToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
     }
 
     public function buzzSendMock($request, $response)

@@ -11,7 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
  * OAuthAwareException
@@ -20,40 +22,37 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
  */
 class OAuthAwareException extends \Exception implements OAuthAwareExceptionInterface
 {
-    private $accessToken;
-    private $rawToken;
-    private $resourceOwnerName;
+    /**
+     * @var OAuthToken
+     */
+    protected $token;
+    /**
+     * @var string
+     */
+    protected $resourceOwnerName;
 
     /**
      * {@inheritdoc}
      */
     public function getAccessToken()
     {
-        return $this->accessToken;
+        return $this->token->getAccessToken();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setAccessToken($accessToken)
+    public function getRefreshToken()
     {
-        $this->accessToken = $accessToken;
+        return $this->token->getRefreshToken();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getRawToken()
+    public function getExpiresIn()
     {
-        return $this->rawToken;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setRawToken($token)
-    {
-        $this->rawToken = is_string($token) ? array('access_token' => $token) : $token;
+        return $this->token->getExpiresIn();
     }
 
     /**
@@ -70,5 +69,21 @@ class OAuthAwareException extends \Exception implements OAuthAwareExceptionInter
     public function setResourceOwnerName($resourceOwnerName)
     {
         $this->resourceOwnerName = $resourceOwnerName;
+    }
+
+    /**
+     * @return OAuthToken
+     */
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setToken(TokenInterface $token)
+    {
+        $this->token = $token;
     }
 }

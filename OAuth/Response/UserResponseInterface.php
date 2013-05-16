@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
 /**
  * UserResponseInterface
@@ -63,14 +64,28 @@ interface UserResponseInterface extends ResponseInterface
     /**
      * Get the access token used for the request.
      *
-     * @return string|array
+     * @return string
      */
     public function getAccessToken();
 
     /**
-     * Set the access token used for the request.
+     * Get the access token used for the request.
      *
-     * @param string|array $accessToken
+     * @return null|string
      */
-    public function setAccessToken($accessToken);
+    public function getRefreshToken();
+
+    /**
+     * Get the info when token will expire.
+     *
+     * @return null|string
+     */
+    public function getExpiresIn();
+
+    /**
+     * Set the raw token data from the request.
+     *
+     * @param OAuthToken $token
+     */
+    public function setOAuthToken(OAuthToken $token);
 }

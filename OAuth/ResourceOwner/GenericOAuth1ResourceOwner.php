@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Client\ClientInterface as HttpClientInterface;
 use HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -90,7 +91,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $response = $this->getUserResponse();
         $response->setResponse($content);
         $response->setResourceOwner($this);
-        $response->setAccessToken($accessToken);
+        $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
     }

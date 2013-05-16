@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -32,14 +33,9 @@ abstract class AbstractUserResponse implements UserResponseInterface
     protected $resourceOwner;
 
     /**
-     * @var string|array
+     * @var OAuthToken
      */
-    protected $accessToken;
-
-    /**
-     * @var string|null
-     */
-    protected $oauthToken;
+    protected $oAuthToken;
 
     /**
      * {@inheritdoc}
@@ -62,27 +58,31 @@ abstract class AbstractUserResponse implements UserResponseInterface
      */
     public function getAccessToken()
     {
-        return $this->accessToken;
+        return $this->oAuthToken->getAccessToken();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setAccessToken($accessToken)
+    public function getRefreshToken()
     {
-        if (is_array($accessToken) && isset($accessToken['oauth_token'])) {
-            $this->oauthToken = $accessToken['oauth_token'];
-        }
-
-        $this->accessToken = $accessToken;
+        return $this->oAuthToken->getRefreshToken();
     }
 
     /**
-     * @return string|array
+     * {@inheritdoc}
      */
-    public function getOAuthToken()
+    public function getExpiresIn()
     {
-        return $this->oauthToken ?: $this->accessToken;
+        return $this->oAuthToken->getExpiresIn();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOAuthToken(OAuthToken $token)
+    {
+        $this->oAuthToken = $token;
     }
 
     /**

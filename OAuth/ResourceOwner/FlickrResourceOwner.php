@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+
 /**
  * FlickrResourceOwner
  *
@@ -62,7 +64,7 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
         $response = $this->getUserResponse();
         $response->setResponse($accessToken);
         $response->setResourceOwner($this);
-        $response->setAccessToken($accessToken);
+        $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
     }
