@@ -101,6 +101,8 @@ class OAuthToken extends AbstractToken
 
             if (isset($token['expires_in'])) {
                 $this->expiresIn = $token['expires_in'];
+            } elseif (isset($token['oauth_expires_in'])) {
+                $this->expiresIn = $token['oauth_expires_in'];
             }
 
             $this->rawToken = $token;
