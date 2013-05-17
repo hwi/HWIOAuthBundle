@@ -109,16 +109,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * Refresh an access token using a refresh token.
-     *
-     * @param string $refreshToken    Refresh token
-     * @param array  $extraParameters An array of parameters to add to the url
-     *
-     * @return array Array containing the access token and it's 'expires_in' value,
-     *               along with any other parameters returned from the authentication
-     *               provider.
-     *
-     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     * {@inheritDoc}
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {

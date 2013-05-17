@@ -23,6 +23,7 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     protected $buzzClient;
     protected $buzzResponse;
     protected $buzzResponseContentType;
+    protected $buzzResponseHttpCode = 200;
 
     protected $userResponse = <<<json
 {
@@ -199,6 +200,13 @@ json;
         $this->resourceOwner->refreshAccessToken('foo');
     }
 
+    public function testRevokeToken()
+    {
+        $this->setExpectedException('\Symfony\Component\Security\Core\Exception\AuthenticationException');
+
+        $this->resourceOwner->revokeToken('token');
+    }
+
     public function testGetSetName()
     {
         $this->assertEquals('oauth2', $this->resourceOwner->getName());
@@ -226,10 +234,15 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
+    /**
+     * @param \Buzz\Message\Request  $request
+     * @param \Buzz\Message\Response $response
+     */
     public function buzzSendMock($request, $response)
     {
         $response->setContent($this->buzzResponse);
-        $response->addHeader('Content-Type: ' . $this->buzzResponseContentType);
+        $response->addHeader('HTTP/1.1 '.$this->buzzResponseHttpCode.' Some text');
+        $response->addHeader('Content-Type: '.$this->buzzResponseContentType);
     }
 
     protected function mockBuzz($response = '', $contentType = 'text/plain')

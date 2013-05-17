@@ -49,4 +49,26 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
             $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
         }
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function revokeToken($token)
+    {
+        $parameters = array(
+            'client_id'     => $this->getOption('client_id'),
+            'client_secret' => $this->getOption('client_secret'),
+        );
+
+        /* @var $response \Buzz\Message\Response */
+        $response = $this->httpRequest(sprintf('https://api.github.com/applications/%s/tokens/%s', $this->getOption('client_id'), $token), $parameters);
+        if (404 === $response->getStatusCode()) {
+            return false;
+        }
+
+        $response = $this->getResponseContent($response);
+        $response = $this->httpRequest(sprintf('https://api.github.com/authorizations/%s', $response['id']), $parameters, array(), 'DELETE');
+
+        return 204 === $response->getStatusCode();
+    }
 }

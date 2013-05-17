@@ -49,6 +49,20 @@ json;
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
+
+    public function testRevokeToken()
+    {
+        $this->mockBuzz('true', 'application/json');
+
+        $this->assertTrue($this->resourceOwner->revokeToken('token'));
+    }
+
+    public function testRevokeTokenFails()
+    {
+        $this->mockBuzz('false', 'application/json');
+
+        $this->assertFalse($this->resourceOwner->revokeToken('token'));
+    }
     
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
