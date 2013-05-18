@@ -11,8 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-
 /**
  * YandexResourceOwner
  *
@@ -37,23 +35,4 @@ class YandexResourceOwner extends GenericOAuth2ResourceOwner
         'nickname'   => 'display_name',
         'realname'   => 'real_name',
     );
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUserInformation($accessToken)
-    {
-        $url = $this->normalizeUrl($this->getOption('infos_url'), array(
-            'oauth_token' => $accessToken
-        ));
-
-        $content = $this->doGetUserInformationRequest($url)->getContent();
-
-        $response = $this->getUserResponse();
-        $response->setResponse($content);
-        $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
-
-        return $response;
-    }
 }

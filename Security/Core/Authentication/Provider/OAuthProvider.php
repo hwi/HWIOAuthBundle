@@ -70,7 +70,7 @@ class OAuthProvider implements AuthenticationProviderInterface
         /* @var OAuthToken $token */
         $resourceOwner = $this->resourceOwnerMap->getResourceOwnerByName($token->getResourceOwnerName());
 
-        $userResponse = $resourceOwner->getUserInformation($token->getAccessToken());
+        $userResponse = $resourceOwner->getUserInformation($token->getRawToken());
 
         try {
             $user = $this->userProvider->loadUserByOAuthUserResponse($userResponse);

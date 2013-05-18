@@ -49,9 +49,11 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         return parent::getAuthorizationUrl($redirectUri, array_merge(array('display' => $this->getOption('display')), $extraParameters));
     }
-
 }

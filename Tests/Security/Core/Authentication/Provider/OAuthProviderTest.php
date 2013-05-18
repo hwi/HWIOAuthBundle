@@ -35,17 +35,14 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $oauthTokenMock->expects($this->once())
             ->method('getResourceOwnerName')
             ->will($this->returnValue('github'));
-        $oauthTokenMock->expects($this->once())
-            ->method('getAccessToken')
-            ->will($this->returnValue($expectedToken['access_token']));
-        $oauthTokenMock->expects($this->once())
+        $oauthTokenMock->expects($this->exactly(2))
             ->method('getRawToken')
             ->will($this->returnValue($expectedToken));
 
         $resourceOwnerMock = $this->getResourceOwnerMock();
         $resourceOwnerMock->expects($this->once())
             ->method('getUserInformation')
-            ->with($this->equalTo($expectedToken['access_token']))
+            ->with($expectedToken)
             ->will($this->returnValue($this->getUserResponseMock()));
         $resourceOwnerMock->expects($this->once())
             ->method('getName')
@@ -101,7 +98,10 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $oauthTokenMock->expects($this->exactly(2))
             ->method('getResourceOwnerName')
             ->will($this->returnValue('github'));
-        $oauthTokenMock->expects($this->exactly(2))
+        $oauthTokenMock->expects($this->once())
+            ->method('getRawToken')
+            ->will($this->returnValue($expectedToken));
+        $oauthTokenMock->expects($this->once())
             ->method('getAccessToken')
             ->will($this->returnValue($expectedToken['access_token']));
         $oauthTokenMock->expects($this->once())
@@ -114,7 +114,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $resourceOwnerMock = $this->getResourceOwnerMock();
         $resourceOwnerMock->expects($this->once())
             ->method('getUserInformation')
-            ->with($this->equalTo($expectedToken['access_token']))
+            ->with($expectedToken)
             ->will($this->returnValue($this->getUserResponseMock()));
 
         $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
