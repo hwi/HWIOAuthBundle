@@ -25,7 +25,7 @@ interface ResourceOwnerInterface
     /**
      * Retrieves the user's information from an access_token
      *
-     * @param string $accessToken
+     * @param string|array $accessToken
      *
      * @return UserResponseInterface The wrapped response interface.
      */
