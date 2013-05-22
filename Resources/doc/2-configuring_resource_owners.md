@@ -46,6 +46,8 @@ hwi_oauth:
 - [Yandex](2x-yandex.md)
 - [Others](2x-others.md)
 
+> Bonus: [Overwriting default configuration](2x-overwriting-defaults.md) of built-in resource owners.
+
 ### Continue to the next step!
 When you're done. Continue by configuring the security layer.
 [Step 3: Configuring the security layer](3-configuring_the_security_layer.md).
