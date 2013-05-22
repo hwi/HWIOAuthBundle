@@ -26,6 +26,8 @@ hwi_oauth:
     # and other settings you want to adjust in this bundle, just checkout the list below!
 ```
 
+##### Built-in resource owners:
+
 - [37signals](2x-37signals.md)
 - [Disqus](2x-disqus.md)
 - [Dropbox](2x-dropbox.md)
@@ -46,7 +48,10 @@ hwi_oauth:
 - [Yandex](2x-yandex.md)
 - [Others](2x-others.md)
 
-> Bonus: [Overwriting default configuration](2x-overwriting-defaults.md) of built-in resource owners.
+##### Bonus: 
+
+- [Overwriting default configuration](2x-overwriting-defaults.md) of built-in resource owners.
+- Add [Facebook Connect](2x-facebook-connect.md) functionality.
 
 ### Continue to the next step!
 When you're done. Continue by configuring the security layer.

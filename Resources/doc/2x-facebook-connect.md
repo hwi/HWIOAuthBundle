@@ -1,11 +1,11 @@
-Facebook Connect
-================
+Step 2x: Facebook Connect
+=========================
 
 This guide bases on Symfony 2.1+ and the [AcmeDemoBundle](https://github.com/symfony/symfony-standard/tree/2.2).
 
 ## Configuration
 
-### Configurating the Resource Owner
+### Configuration of the Resource Owner
 
 ```yaml
 # app/config/config.yml
@@ -37,7 +37,7 @@ facebook_login:
     pattern: /demo/secured/login_facebook
 ```
 
-### Configurating the Security Layer
+### Configuration of the Security Layer
 
 ```yaml
 # app/config/security.yml
@@ -53,7 +53,7 @@ firewalls:
             failure_path:      /demo/secured/login
             oauth_user_provider:
                 service: hwi_oauth.user.provider.entity
-        # Turn on anonymous for testing's need.
+        # Turn on anonymous for testings need.
         anonymous: true
 ```
 
@@ -114,7 +114,7 @@ The following example bases also on the Facebook ["Login with Javascript SDK"](h
         <a href="#" onclick="fb_login();">Facebook Connect Button (Dialog)</a>
     </p>
 
-    <!-- Bonus: Show all available login link in HWIOAuthBundle -->
+    {# Bonus: Show all available login link in HWIOAuthBundle #}
     {% render(controller('HWIOAuthBundle:Connect:connect')) %}
 {% endblock %}
 ```
@@ -123,4 +123,5 @@ The following example bases also on the Facebook ["Login with Javascript SDK"](h
 
 Open the browser and go at `/demo/secured/hello/World` too see the login button, and test it!
 
-[Return to the index.](index.md)
+- [Step 2: Configuring resource owners (Facebook, GitHub, Google, Windows Live and others](2-configuring_resource_owners.md)
+- [Step 3: Configuring the security layer](3-configuring_the_security_layer.md)
