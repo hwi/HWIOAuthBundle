@@ -257,6 +257,20 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
+    public function testRefreshAccessToken()
+    {
+        $this->setExpectedException('\Symfony\Component\Security\Core\Exception\AuthenticationException');
+
+        $this->resourceOwner->refreshAccessToken('token');
+    }
+
+    public function testRevokeToken()
+    {
+        $this->setExpectedException('\Symfony\Component\Security\Core\Exception\AuthenticationException');
+
+        $this->resourceOwner->revokeToken('token');
+    }
+
     public function testGetSetName()
     {
         $this->assertEquals('oauth1', $this->resourceOwner->getName());

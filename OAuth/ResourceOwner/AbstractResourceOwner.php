@@ -19,6 +19,7 @@ use Buzz\Message\Response as HttpResponse;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
@@ -122,6 +123,47 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
+     * Add extra paths to the configuration.
+     *
+     * @param array $paths
+     */
+    public function addPaths(array $paths)
+    {
+        $this->paths = array_merge($this->paths, $paths);
+    }
+
+    /**
+     * Refresh an access token using a refresh token.
+     *
+     * @param string $refreshToken    Refresh token
+     * @param array  $extraParameters An array of parameters to add to the url
+     *
+     * @return array Array containing the access token and it's 'expires_in' value,
+     *               along with any other parameters returned from the authentication
+     *               provider.
+     *
+     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     */
+    public function refreshAccessToken($refreshToken, array $extraParameters = array())
+    {
+        throw new AuthenticationException('OAuth error: "Method unsupported."');
+    }
+
+    /**
+     * Revoke an OAuth access token or refresh token.
+     *
+     * @param string $token The token (access token or a refresh token) that should be revoked.
+     *
+     * @return Boolean Returns True if the revocation was successful, otherwise False.
+     *
+     * @throws AuthenticationException If an OAuth error occurred
+     */
+    public function revokeToken($token)
+    {
+        throw new AuthenticationException('OAuth error: "Method unsupported."');
+    }
+
+    /**
      * Get the response object to return.
      *
      * @return UserResponseInterface
@@ -184,16 +226,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $this->httpClient->send($request, $response);
 
         return $response;
-    }
-
-    /**
-     * Add extra paths to the configuration.
-     *
-     * @param array $paths
-     */
-    public function addPaths(array $paths)
-    {
-        $this->paths = array_merge($this->paths, $paths);
     }
 
     /**
