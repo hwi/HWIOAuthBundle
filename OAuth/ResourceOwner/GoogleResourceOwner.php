@@ -25,6 +25,7 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
     protected $options = array(
         'authorization_url'       => 'https://accounts.google.com/o/oauth2/auth',
         'access_token_url'        => 'https://accounts.google.com/o/oauth2/token',
+        'revoke_token_url'        => 'https://accounts.google.com/o/oauth2/revoke',
         'infos_url'               => 'https://www.googleapis.com/oauth2/v1/userinfo',
 
         'scope'                   => 'https://www.googleapis.com/auth/userinfo.profile',
@@ -57,5 +58,21 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
             'approval_prompt'         => $this->getOption('approval_prompt'),
             'request_visible_actions' => $this->getOption('request_visible_actions')
         ), $extraParameters));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function revokeToken($token)
+    {
+        $parameters = array(
+            'client_id'     => $this->getOption('client_id'),
+            'client_secret' => $this->getOption('client_secret'),
+        );
+
+        /* @var $response \Buzz\Message\Response */
+        $response = $this->httpRequest($this->normalizeUrl($this->getOption('revoke_token_url'), array('token' => $token)), $parameters, array(), 'DELETE');
+
+        return 200 === $response->getStatusCode();
     }
 }
