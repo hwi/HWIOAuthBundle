@@ -76,7 +76,7 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     {
         // Foursquare require to pass the 'v' ('version' = date in format 'YYYYMMDD') parameter when requesting API
         $url = $this->normalizeUrl($url, array(
-            'v' => $this->options['version']
+            'v' => $this->getOption('version')
         ));
 
         // Foursquare require to pass the OAuth token as 'oauth_token' instead of 'access_token'
