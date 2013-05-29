@@ -34,6 +34,11 @@ Changelog
 * Added Odnoklassniki resource owner
 * Added Yandex resource owner
 
+## 0.2.5 (2013-05-29)
+* Fix: Use user identifier represented as string for Twitter to prevent issues with
+  losing accuracy for large numbers (i.e. Javascript) or type comparison (i.e. MongoDB)
+* Fix: Don't depend on `arg_separator.output` data for URL generation to prevent issues
+
 ## 0.2.4 (2013-05-15)
 * Fix: Throw `Symfony\Component\Security\Core\Exception\AccessDeniedException`
   & `Symfony\Component\HttpKernel\Exception\NotFoundHttpException` instead of `\Exception`

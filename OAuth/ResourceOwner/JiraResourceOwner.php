@@ -58,9 +58,9 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
-        $response = $this->httpRequest($this->getOption('base_url').'/rest/auth/1/session', null, $parameters, array(), 'GET');
+        $response = $this->httpRequest($this->getOption('base_url').'/rest/auth/1/session', null, $parameters);
         $data     = json_decode($response->getContent(), true);
 
-        return $this->httpRequest($this->normalizeUrl($url, array('username' => $data['name'])), null, $parameters, array(), 'GET');
+        return $this->httpRequest($this->normalizeUrl($url, array('username' => $data['name'])), null, $parameters);
     }
 }
