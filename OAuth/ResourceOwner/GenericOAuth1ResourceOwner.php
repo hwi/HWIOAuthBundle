@@ -66,7 +66,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getUserInformation($accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $parameters = array_merge(array(
             'oauth_consumer_key'     => $this->getOption('client_id'),

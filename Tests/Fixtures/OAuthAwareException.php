@@ -56,6 +56,14 @@ class OAuthAwareException extends \Exception implements OAuthAwareExceptionInter
     }
 
     /**
+     * @return OAuthToken
+     */
+    public function getRawToken()
+    {
+        return $this->token->getRawToken();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getResourceOwnerName()
@@ -69,14 +77,6 @@ class OAuthAwareException extends \Exception implements OAuthAwareExceptionInter
     public function setResourceOwnerName($resourceOwnerName)
     {
         $this->resourceOwnerName = $resourceOwnerName;
-    }
-
-    /**
-     * @return OAuthToken
-     */
-    public function getToken()
-    {
-        return $this->token;
     }
 
     /**

@@ -2,11 +2,12 @@ Changelog
 =========
 
 ## 0.3.0 (2013-05-xx)
-* [BC break] `GenericOAuth2ResourceOwner::getAccessToken` now returns an array
+* [BC break] `GenericOAuth2ResourceOwner::getAccessToken()` now returns an array
   instead of a string. This array contains the access token and its 'expires_in'
   value, along with any other parameters returned from the authentication provider
 * [BC break] Added `OAuthAwareExceptionInterface#setToken()`, `OAuthAwareExceptionInterface#getRefreshToken()`,
-  `OAuthAwareExceptionInterface#getExpiresIn()` methods
+  `OAuthAwareExceptionInterface#getRawToken()`, `OAuthAwareExceptionInterface#getExpiresIn()`
+  methods
 * [BC break] Renamed `AbstractResourceOwner::doGetAccessTokenRequest` to `doGetTokenRequest`
 * [BC break] Removed `AdvancedPathUserResponse` & `AdvancedUserResponseInterface`
 * [BC break] Added `UserResponseInterface#getEmail()`, `UserResponseInterface#getProfilePicture()`,
@@ -21,6 +22,9 @@ Changelog
   it will not throw exception anymore if response or value is missing, but now will return
   `null` instead
 * [BC break] Added `ResourceOwnerInterface#getOption($name)` method
+* [BC break] `ResourceOwnerInterface#getUserInformation()` now must receive array (`$accessToken`)
+  as first parameter, also added second parameter (`$extraParameters`) to be consistent
+  along all implementations
 * Added `OAuthToken::getRefreshToken()`, `OAuthToken::setRefreshToken()`, `OAuthToken::getExpiresIn()`,
   `OAuthToken::setExpiresIn()`, `OAuthToken::getRawToken()`, `OAuthToken::setRawToken()`
 * Added `AbstractResourceOwner#addOptions()` & `ResourceOwnerInterface#setOption($name, $value)`

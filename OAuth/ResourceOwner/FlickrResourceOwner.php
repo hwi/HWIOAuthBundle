@@ -59,7 +59,7 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getUserInformation($accessToken)
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $response = $this->getUserResponse();
         $response->setResponse($accessToken);

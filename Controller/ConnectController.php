@@ -106,7 +106,7 @@ class ConnectController extends ContainerAware
 
         $userInformation = $this
             ->getResourceOwnerByName($error->getResourceOwnerName())
-            ->getUserInformation($error->getAccessToken())
+            ->getUserInformation($error->getRawToken())
         ;
 
         if ($this->container->has('hwi_oauth.registration.form')) {
@@ -120,7 +120,7 @@ class ConnectController extends ContainerAware
             $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
 
             // Authenticate the user
-            $this->authenticateUser($form->getData(), $error->getResourceOwnerName(), $error->getAccessToken());
+            $this->authenticateUser($form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
 
             return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,

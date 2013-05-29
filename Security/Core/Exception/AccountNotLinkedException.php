@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class AccountNotLinkedException extends UsernameNotFoundException implements OAuthAwareExceptionInterface
@@ -19,13 +21,25 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      * @var string
      */
     protected $resourceOwnerName;
+    /**
+     * @var OAuthToken
+     */
+    protected $token;
 
     /**
      * {@inheritdoc}
      */
     public function getAccessToken()
     {
-        return $this->getToken()->getAccessToken();
+        return $this->token->getAccessToken();
+    }
+
+    /**
+     * @return OAuthToken
+     */
+    public function getRawToken()
+    {
+        return $this->token->getRawToken();
     }
 
     /**
@@ -33,7 +47,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function getRefreshToken()
     {
-        return $this->getToken()->getRefreshToken();
+        return $this->token->getRefreshToken();
     }
 
     /**
@@ -41,7 +55,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function getExpiresIn()
     {
-        return $this->getToken()->getExpiresIn();
+        return $this->token->getExpiresIn();
     }
 
     /**
@@ -60,18 +74,34 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
         $this->resourceOwnerName = $resourceOwnerName;
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function setToken(TokenInterface $token)
+    {
+        $this->token = $token;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function serialize()
     {
         return serialize(array(
             $this->resourceOwnerName,
+            $this->token,
             parent::serialize(),
         ));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function unserialize($str)
     {
         list(
             $this->resourceOwnerName,
+            $this->token,
             $parentData
         ) = unserialize($str);
         parent::unserialize($parentData);
