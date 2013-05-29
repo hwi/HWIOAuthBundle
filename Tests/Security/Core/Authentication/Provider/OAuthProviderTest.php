@@ -98,7 +98,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $oauthTokenMock->expects($this->exactly(2))
             ->method('getResourceOwnerName')
             ->will($this->returnValue('github'));
-        $oauthTokenMock->expects($this->once())
+        $oauthTokenMock->expects($this->exactly(2))
             ->method('getRawToken')
             ->will($this->returnValue($expectedToken));
         $oauthTokenMock->expects($this->once())
@@ -140,10 +140,10 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue(true, "Exception was thrown.");
             $this->assertInstanceOf('HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface', $e);
             $this->assertEquals('github', $e->getResourceOwnerName());
-            $this->assertInstanceOf('HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken', $e->getToken());
             $this->assertEquals($expectedToken['access_token'], $e->getAccessToken());
             $this->assertEquals($expectedToken['refresh_token'], $e->getRefreshToken());
             $this->assertEquals($expectedToken['expires_in'], $e->getExpiresIn());
+            $this->assertEquals($expectedToken, $e->getRawToken());
         }
     }
 

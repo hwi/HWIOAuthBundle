@@ -96,11 +96,11 @@ json;
         /**
          * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation('access_token');
+        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
-        $this->assertEquals('access_token', $userResponse->getAccessToken());
+        $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
@@ -224,12 +224,12 @@ json;
         /**
          * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
          */
-        $userResponse = $resourceOwner->getUserInformation('access_token');
+        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
         $this->assertEquals('foo', $userResponse->getNickname());
-        $this->assertEquals('access_token', $userResponse->getAccessToken());
+        $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
