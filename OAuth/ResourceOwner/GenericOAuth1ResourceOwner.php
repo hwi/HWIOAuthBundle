@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Client\ClientInterface as HttpClientInterface;
+use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,7 +73,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $url = $this->getOption('infos_url');
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
-            'GET',
+            HttpRequestInterface::METHOD_GET,
             $url,
             $parameters,
             $this->getOption('client_secret'),
@@ -121,7 +122,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $url = $this->getOption('access_token_url');
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
-            'POST',
+            HttpRequestInterface::METHOD_POST,
             $url,
             $parameters,
             $this->getOption('client_secret'),
@@ -169,7 +170,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $url = $this->getOption('request_token_url');
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
-            'POST',
+            HttpRequestInterface::METHOD_POST,
             $url,
             $parameters,
             $this->getOption('client_secret'),
@@ -203,7 +204,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     protected function generateNonce()
     {
-        return md5(microtime() . mt_rand());
+        return md5(microtime().mt_rand());
     }
 
     /**
@@ -229,7 +230,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     protected function doGetAccessTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, null, $parameters, array(), 'POST');
+        return $this->httpRequest($url, null, $parameters, array(), HttpRequestInterface::METHOD_POST);
     }
 
     /**
@@ -237,6 +238,6 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, null, $parameters, array(), 'GET');
+        return $this->httpRequest($url, null, $parameters);
     }
 }

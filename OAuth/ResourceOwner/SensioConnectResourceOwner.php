@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Buzz\Message\RequestInterface as HttpRequestInterface;
+
 /**
  * SensioConnectResourceOwner
  *
@@ -35,7 +37,7 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetAccessTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($this->getOption('access_token_url'), $parameters, array(), 'POST');
+        return $this->httpRequest($this->getOption('access_token_url'), $parameters, array(), HttpRequestInterface::METHOD_POST);
     }
 
     /**
