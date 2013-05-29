@@ -22,9 +22,10 @@ class TwitterResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 }
 json;
     protected $paths = array(
-        'identifier' => 'id',
-        'nickname'   => 'screen_name',
-        'realname'   => 'name',
+        'identifier'        => 'id_str',
+        'nickname'          => 'screen_name',
+        'realname'          => 'name',
+        'profilepicture'    => 'profile_image_url',
     );
 
     public function testGetUserInformation()
