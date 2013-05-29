@@ -57,6 +57,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $state;
+
+    /**
      * @param HttpClientInterface $httpClient Buzz http client
      * @param HttpUtils           $httpUtils  Http utils
      * @param array               $options    Options for the resource owner
@@ -249,6 +254,16 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         }
 
         return $response;
+    }
+
+    /**
+     * Generate a non-guessable nonce value.
+     *
+     * @return string
+     */
+    protected function generateNonce()
+    {
+        return md5(microtime(true).uniqid('', true));
     }
 
     /**

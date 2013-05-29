@@ -61,10 +61,15 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
+        if (null === $this->state) {
+            $this->state = $this->generateNonce();
+        }
+
         $parameters = array_merge(array(
             'response_type' => 'code',
             'client_id'     => $this->getOption('client_id'),
             'scope'         => $this->getOption('scope'),
+            'state'         => urlencode($this->state),
             'redirect_uri'  => $redirectUri,
         ), $extraParameters);
 

@@ -204,16 +204,6 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * Generate a non-guessable nonce value.
-     *
-     * @return string
-     */
-    protected function generateNonce()
-    {
-        return md5(microtime().mt_rand());
-    }
-
-    /**
      * {@inheritDoc}
      */
     protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
