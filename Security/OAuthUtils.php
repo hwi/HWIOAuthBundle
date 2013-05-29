@@ -130,7 +130,7 @@ class OAuthUtils
         $parts = array(
             $method,
             rawurlencode($url),
-            rawurlencode(str_replace(array('%7E','+'), array('~','%20'), http_build_query($parameters))),
+            rawurlencode(str_replace(array('%7E','+'), array('~','%20'), http_build_query($parameters, '', '&'))),
         );
 
         $baseString = implode('&', $parts);
@@ -146,7 +146,7 @@ class OAuthUtils
                 break;
 
             case self::SIGNATURE_METHOD_RSA:
-                $privateKey = openssl_get_privatekey(file_get_contents($clientSecret), $tokenSecret);
+                $privateKey = openssl_pkey_get_private(file_get_contents($clientSecret), $tokenSecret);
                 $signature  = false;
 
                 openssl_sign($baseString, $signature, $privateKey);

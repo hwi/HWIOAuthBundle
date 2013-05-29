@@ -17,12 +17,12 @@ class TwitterResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected $userResponse = <<<json
 {
-    "id": "1",
+    "id_str": "1",
     "screen_name": "bar"
 }
 json;
     protected $paths = array(
-        'identifier' => 'id',
+        'identifier' => 'id_str',
         'nickname'   => 'screen_name',
         'realname'   => 'name',
     );
