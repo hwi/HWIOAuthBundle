@@ -43,13 +43,12 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getUserInformation($accessToken)
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        $token      = is_array($accessToken) ? $accessToken['access_token'] : $accessToken;
         $parameters = array(
-            'access_token'    => $token,
+            'access_token'    => $accessToken['access_token'],
             'application_key' => $this->getOption('application_key'),
-            'sig'             => md5(sprintf('application_key=%smethod=users.getCurrentUser%s', $this->getOption('application_key'), md5($token.$this->getOption('client_secret')))),
+            'sig'             => md5(sprintf('application_key=%smethod=users.getCurrentUser%s', $this->getOption('application_key'), md5($accessToken['access_token'].$this->getOption('client_secret')))),
         );
         $url = $this->normalizeUrl($this->getOption('infos_url'), $parameters);
 

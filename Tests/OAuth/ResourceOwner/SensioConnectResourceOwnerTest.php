@@ -32,14 +32,14 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         /**
          * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse
          */
-        $userResponse = $resourceOwner->getUserInformation('access_token');
+        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('aa5e22b0-6189-4113-9c68-91d4a3c32b7c', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
         $this->assertEquals('Fake Guy', $userResponse->getRealName());
         $this->assertEquals('fake@email.com', $userResponse->getEmail());
-        $this->assertEquals('access_token', $userResponse->getAccessToken());
+        $this->assertEquals('token', $userResponse->getAccessToken());
     }
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)

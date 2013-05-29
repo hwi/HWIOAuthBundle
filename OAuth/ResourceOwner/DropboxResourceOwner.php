@@ -54,7 +54,7 @@ class DropboxResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getUserInformation($accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $extraParameters = array_merge(array('oauth_signature_method' => $this->getOption('signature_method')), $extraParameters);
 

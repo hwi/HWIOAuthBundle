@@ -29,6 +29,13 @@ interface OAuthAwareExceptionInterface
     public function getAccessToken();
 
     /**
+     * Get the raw version of received token.
+     *
+     * @return array
+     */
+    public function getRawToken();
+
+    /**
      * Get the refresh token information.
      *
      * @return null|string
