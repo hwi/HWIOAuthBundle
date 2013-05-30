@@ -35,6 +35,8 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
         'request_visible_actions' => null,
         // sometimes we need to force for approval prompt (e.g. when we lost refresh token)
         'approval_prompt'         => null,
+        // Identifying a particular hosted domain account to be accessed (for example, 'mycollege.edu')
+        'hd'                      => null,
     );
 
     /**
@@ -56,7 +58,8 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
         return parent::getAuthorizationUrl($redirectUri, array_merge(array(
             'access_type'             => $this->getOption('access_type'),
             'approval_prompt'         => $this->getOption('approval_prompt'),
-            'request_visible_actions' => $this->getOption('request_visible_actions')
+            'request_visible_actions' => $this->getOption('request_visible_actions'),
+            'hd'                      => $this->getOption('hd')
         ), $extraParameters));
     }
 
