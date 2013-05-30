@@ -1,7 +1,9 @@
 Step 2x: Setup Instagram
 ======================
 First you will have to register your application on Instagram. Check out the
-documentation for more information: http://instagram.com/developer/clients/manage/.
+documentation for more information: instagram.com/developer/authentication/
+
+For the API Keys, go to: http://instagram.com/developer/clients/manage/
 
 Your OAuth redirect_uri looks like: https://yourwebsite.com/login/service/instagram (depending on your routing.yml documentation)
 

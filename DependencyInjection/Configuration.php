@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
             'foursquare',
             'github',
             'google',
+            'instagram',
             'odnoklassniki',
             'sensio_connect',
             'stack_exchange',
@@ -41,7 +42,6 @@ class Configuration implements ConfigurationInterface
             'windows_live',
             'yandex',
             '37signals',
-						'instagram',
 
         'oauth1',
             'dropbox',
