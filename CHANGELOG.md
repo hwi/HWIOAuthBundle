@@ -35,6 +35,7 @@ Changelog
 * Added Disqus resource owner
 * Added Dropbox resource owner
 * Added Flickr resource owner
+* Added Instagram resource owner
 * Added Odnoklassniki resource owner
 * Added Yandex resource owner
 
