@@ -41,6 +41,7 @@ class Configuration implements ConfigurationInterface
             'windows_live',
             'yandex',
             '37signals',
+						'instagram',
 
         'oauth1',
             'dropbox',
