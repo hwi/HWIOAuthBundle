@@ -41,6 +41,6 @@ json;
             $options
         );
 
-        return new DisqusResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new DisqusResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

@@ -24,6 +24,8 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     protected $buzzResponse;
     protected $buzzResponseContentType;
     protected $buzzResponseHttpCode = 200;
+    protected $storage;
+    protected $state = 'random';
 
     protected $userResponse = <<<json
 {
@@ -69,7 +71,9 @@ json;
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
 
-        $resourceOwner = new GenericOAuth2ResourceOwner($buzzClient, $httpUtils, array(), 'oauth2');
+        $storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
+
+        $resourceOwner = new GenericOAuth2ResourceOwner($buzzClient, $httpUtils, array(), 'oauth2', $storage);
 
         $this->assertNull($resourceOwner->getOption('client_id'));
         $this->assertNull($resourceOwner->getOption('client_secret'));
@@ -107,8 +111,12 @@ json;
 
     public function testGetAuthorizationUrl()
     {
+        $this->storage->expects($this->once())
+            ->method('save')
+            ->with($this->resourceOwner, $this->state, 'csrf_state');
+
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -238,6 +246,29 @@ json;
         $this->assertEquals('foo', $this->resourceOwner->getName());
     }
 
+    public function testCsrfTokenValid()
+    {
+        $this->storage->expects($this->once())
+            ->method('fetch')
+            ->with($this->resourceOwner, 'valid_token', 'csrf_state')
+            ->will($this->returnValue('valid_token'));
+
+        $this->assertTrue($this->resourceOwner->isCsrfTokenValid('valid_token'));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
+    public function testCsrfTokenInvalid()
+    {
+        $this->storage->expects($this->once())
+            ->method('fetch')
+            ->with($this->resourceOwner, 'invalid_token', 'csrf_state')
+            ->will($this->throwException(new \InvalidArgumentException('No data available in storage.')));
+
+        $this->resourceOwner->isCsrfTokenValid('invalid_token');
+    }
+
     public function testCustomResponseClass()
     {
         $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
@@ -285,17 +316,24 @@ json;
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
 
+        $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
+
         $options = array_merge($this->options, $options);
         $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, $options);
         if (false !== strpos($options['user_response_class'], '\PathUserResponse')) {
             $resourceOwner->addPaths(array_merge($this->paths, $paths));
         }
 
+        $reflection = new \ReflectionClass(get_class($resourceOwner));
+        $stateProperty = $reflection->getProperty('state');
+        $stateProperty->setAccessible(true);
+        $stateProperty->setValue($resourceOwner, $this->state);
+
         return $resourceOwner;
     }
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

@@ -40,6 +40,6 @@ json;
             $options
         );
 
-        return new StackExchangeResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new StackExchangeResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

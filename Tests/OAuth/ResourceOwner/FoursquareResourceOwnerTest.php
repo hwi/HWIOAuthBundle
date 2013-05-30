@@ -50,6 +50,6 @@ json;
             $options
         );
 
-        return new FoursquareResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new FoursquareResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

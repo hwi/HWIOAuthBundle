@@ -76,7 +76,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
 
-        $storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface');
+        $storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
 
         $resourceOwner = new GenericOAuth1ResourceOwner($buzzClient, $httpUtils, array(), 'oauth1', $storage);
 
@@ -320,7 +320,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
 
-        $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface');
+        $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
 
         $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
         $resourceOwner->addPaths(array_merge($this->paths, $paths));

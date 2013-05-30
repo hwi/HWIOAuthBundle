@@ -55,6 +55,6 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
             $options
         );
 
-        return new SensioConnectResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new SensioConnectResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

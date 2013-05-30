@@ -41,6 +41,6 @@ json;
             $options
         );
 
-        return new VkontakteResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new VkontakteResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

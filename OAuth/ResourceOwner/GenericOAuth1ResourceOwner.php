@@ -28,11 +28,6 @@ use Symfony\Component\Security\Http\HttpUtils;
 class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 {
     /**
-     * @var OAuth1RequestTokenStorageInterface
-     */
-    protected $storage;
-
-    /**
      * @var array
      */
     protected $defaultOptions = array(
@@ -48,20 +43,6 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         'signature_method'    => 'HMAC-SHA1',
     );
-
-    /**
-     * @param HttpClientInterface                $httpClient Buzz http client
-     * @param HttpUtils                          $httpUtils  Http utils
-     * @param array                              $options    Options for the resource owner
-     * @param string                             $name       Name for the resource owner
-     * @param OAuth1RequestTokenStorageInterface $storage    Request token storage
-     */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, OAuth1RequestTokenStorageInterface $storage)
-    {
-        parent::__construct($httpClient, $httpUtils, $options, $name);
-
-        $this->storage = $storage;
-    }
 
     /**
      * {@inheritDoc}

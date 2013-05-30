@@ -52,6 +52,6 @@ json;
             $options
         );
 
-        return new InstagramResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new InstagramResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

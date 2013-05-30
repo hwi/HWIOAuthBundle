@@ -65,6 +65,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             $this->state = $this->generateNonce();
         }
 
+        $this->storage->save($this, $this->state, 'csrf_state');
+
         $parameters = array_merge(array(
             'response_type' => 'code',
             'client_id'     => $this->getOption('client_id'),
@@ -133,6 +135,18 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function handles(Request $request)
     {
         return $request->query->has('code');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCsrfTokenValid($csrfToken)
+    {
+        try {
+            return null !== $this->storage->fetch($this, urldecode($csrfToken), 'csrf_state');
+        } catch (\InvalidArgumentException $e) {
+            throw new AuthenticationException('Given CSRF token is not valid.');
+        }
     }
 
     /**

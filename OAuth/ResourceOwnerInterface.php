@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * ResourceOwnerInterface
@@ -52,6 +53,17 @@ interface ResourceOwnerInterface
      * @return array The access token
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array());
+
+    /**
+     * Check whatever CSRF token from request is valid or not
+     *
+     * @param string $csrfToken
+     *
+     * @return boolean True if CSRF token is valid
+     *
+     * @throws AuthenticationException When token is not valid
+     */
+    public function isCsrfTokenValid($csrfToken);
 
     /**
      * Return a name for the resource owner.
