@@ -36,6 +36,7 @@ hwi_oauth:
 - [Foursquare](2x-foursquare.md)
 - [GitHub](2x-github.md)
 - [Google](2x-google.md)
+- [Instagram](2x-instagram.md)
 - [Jira](2x-jira.md)
 - [Linkedin](2x-linkedin.md)
 - [Odnoklassniki](2x-odnoklassniki.md)

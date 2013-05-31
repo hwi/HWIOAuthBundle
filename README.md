@@ -14,6 +14,7 @@ This bundle contains support for 18 different providers:
 * Foursquare,
 * GitHub,
 * Google,
+* Instagram,
 * JIRA,
 * LinkedIn,
 * Odnoklassniki,
