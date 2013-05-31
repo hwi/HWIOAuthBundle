@@ -5,7 +5,7 @@ HWIOAuthBundle
 
 The HWIOAuthBundle adds support for authenticating users via OAuth1.0a or OAuth2 in Symfony2.
 
-This bundle contains support for 18 different providers:
+This bundle contains support for 19 different providers:
 * 37signals,
 * Disqus,
 * Dropbox,

@@ -13,13 +13,13 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\InstagramResourceOwner;
 
-class InstagramResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $paths = array(
-      'identifier'      => 'user.id',
-      'nickname'        => 'user.username',
-      'realname'        => 'user.full_name',
-      'profilepicture'  => 'user.profile_picture',
+        'identifier'      => 'user.id',
+        'nickname'        => 'user.username',
+        'realname'        => 'user.full_name',
+        'profilepicture'  => 'user.profile_picture',
     );
 
     /**
@@ -28,12 +28,12 @@ class InstagramResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     public function testGetUserInformation()
     {
         $accessToken = array(
-            'oauth_token' => 'token',
-            'user' => array(
-              'id' => '1574083',
-              'full_name' => 'Snoop Dogg',
-              'username' => 'snoopdogg',
-              'profilepicture' => 'http://distillery.s3.amazonaws.com/profiles/profile_1574083_75sq_1295469061.jpg'
+            'access_token' => 'token',
+            'user'         => array(
+                'id'              => '1574083',
+                'username'        => 'snoopdogg',
+                'full_name'       => 'Snoop Dogg',
+                'profile_picture' => 'http://distillery.s3.amazonaws.com/profiles/profile_1574083_75sq_1295469061.jpg'
             )
         );
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
@@ -42,23 +42,21 @@ class InstagramResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         $this->assertEquals('snoopdogg', $userResponse->getNickname());
         $this->assertEquals('Snoop Dogg', $userResponse->getRealName());
         $this->assertEquals('http://distillery.s3.amazonaws.com/profiles/profile_1574083_75sq_1295469061.jpg', $userResponse->getProfilePicture());
-        $this->assertEquals($accessToken['oauth_token'], $userResponse->getAccessToken());
+        $this->assertEquals($accessToken['access_token'], $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    /**
-     * Flickr resource owner relies on user data sent with OAuth token, hence no request is made to get user information.
-     */
     public function testCustomResponseClass()
     {
         $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner('instagram', array('user_response_class' => $class));
 
         /* @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */
-        $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token'));
+        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
 
         $this->assertInstanceOf($class, $userResponse);
+        $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertEquals('foo666', $userResponse->getUsername());
         $this->assertEquals('foo', $userResponse->getNickname());
     }
@@ -67,12 +65,12 @@ class InstagramResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     {
         $options = array_merge(
             array(
-              'authorization_url' => 'https://api.instagram.com/oauth/authorize',
-              'access_token_url'  => 'https://api.instagram.com/oauth/access_token',
+                'authorization_url' => 'https://api.instagram.com/oauth/authorize',
+                'access_token_url'  => 'https://api.instagram.com/oauth/access_token',
             ),
             $options
         );
 
-        return new InstagramResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new InstagramResourceOwner($this->buzzClient, $httpUtils, $options, $name);
     }
 }

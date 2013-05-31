@@ -26,8 +26,6 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
     protected $options = array(
         'authorization_url' => 'https://api.instagram.com/oauth/authorize',
         'access_token_url'  => 'https://api.instagram.com/oauth/access_token',
-        // 'revoke_token_url'  => 'https://instagram.com/accounts/manage_access',
-        // 'infos_url'         => 'https://api.instagram.com/v1/users/self',
     );
 
     /**
@@ -39,7 +37,7 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
         'realname'        => 'user.full_name',
         'profilepicture'  => 'user.profile_picture',
     );
-    
+
     /**
      * {@inheritDoc}
      */
@@ -52,5 +50,4 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
 
         return $response;
     }
-
 }
