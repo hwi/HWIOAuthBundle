@@ -44,6 +44,7 @@ class Configuration implements ConfigurationInterface
             '37signals',
 
         'oauth1',
+            'bitbucket',
             'dropbox',
             'flickr',
             'jira',
