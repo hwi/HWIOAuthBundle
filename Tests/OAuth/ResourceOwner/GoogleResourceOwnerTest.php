@@ -61,6 +61,15 @@ json;
         );
     }
 
+    public function testHdParameter()
+    {
+        $resourceOwner = $this->createResourceOwner('google', array('hd' => 'mycollege.edu'));
+        $this->assertEquals(
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&hd=mycollege.edu',
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
+    }
+
     public function testRevokeToken()
     {
         $this->buzzResponseHttpCode = 200;
