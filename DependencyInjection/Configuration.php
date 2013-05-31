@@ -279,7 +279,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {
-                            return isset($c['service']) && 1 !== count($c);
+                            return isset($c['service']) && 2 < count($c);
                         })
                         ->thenInvalid("If you're setting a service, no other arguments should be set.")
                     ->end()
