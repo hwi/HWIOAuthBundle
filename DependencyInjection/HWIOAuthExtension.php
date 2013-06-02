@@ -123,7 +123,7 @@ class HWIOAuthExtension extends Extension
             // set the appropriate name for aliased services
             // TODO fix this. It cannot work as the service definition cannot be accessed
             // and this id is an alias anyway, not a definition.
-            $resourceOwnerDefinition = $container->getDefinition('hwi_oauth.resource_owner.'.$name);
+            $resourceOwnerDefinition = $container->findDefinition('hwi_oauth.resource_owner.'.$name);
             $resourceOwnerDefinition->addMethodCall('setName', array($name));
         } else {
             $type = $options['type'];
