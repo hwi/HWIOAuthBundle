@@ -172,6 +172,12 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                         ->scalarNode('scope')
+                            ->validate()
+                                ->ifTrue(function($v) {
+                                    return empty($v);
+                                })
+                                ->thenUnset()
+                            ->end()
                         ->end()
                         ->scalarNode('user_response_class')
                             ->validate()
@@ -192,7 +198,7 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('type')
                             ->validate()
                                 ->ifNotInArray($this->resourceOwners)
-                                ->thenInvalid('Unknown resource owner type %s.')
+                                ->thenInvalid('Unknown resource owner type "%s".')
                             ->end()
                             ->validate()
                                 ->ifTrue(function($v) {
@@ -218,8 +224,7 @@ class Configuration implements ConfigurationInterface
                             }
 
                             // for each type at least these have to be set
-                            $children = array('type', 'client_id', 'client_secret');
-                            foreach ($children as $child) {
+                            foreach (array('type', 'client_id', 'client_secret') as $child) {
                                 if (!isset($c[$child])) {
                                     return true;
                                 }
@@ -227,7 +232,7 @@ class Configuration implements ConfigurationInterface
 
                             return false;
                         })
-                        ->thenInvalid('You should set at least the type, client_id and the client_secret of a resource owner.')
+                        ->thenInvalid("You should set at least the 'type', 'client_id' and the 'client_secret' of a resource owner.")
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {
@@ -241,17 +246,21 @@ class Configuration implements ConfigurationInterface
                                 return false;
                             }
 
-                            $children = array('authorization_url', 'access_token_url', 'infos_url');
+                            $children = array('authorization_url', 'access_token_url', 'request_token_url', 'infos_url');
                             foreach ($children as $child) {
+                                // This option exists only for OAuth1.0a
+                                if ('request_token_url' === $child && 'oauth2' === $c['type']) {
+                                    continue;
+                                }
+
                                 if (!isset($c[$child])) {
                                     return true;
                                 }
                             }
 
-                            // one of the two should be set
-                            return !isset($c['paths']) && !isset($c['user_response_class']);
+                            return false;
                         })
-                        ->thenInvalid("All parameters are mandatory for types 'oauth2' and 'oauth1'. Check if you're missing one of: access_token_url, authorization_url, infos_url or paths or user_response_class.")
+                        ->thenInvalid("All parameters are mandatory for types 'oauth2' and 'oauth1'. Check if you're missing one of: 'access_token_url', 'authorization_url', 'infos_url' and 'request_token_url' for 'oauth1'.")
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {
@@ -265,23 +274,31 @@ class Configuration implements ConfigurationInterface
                                 return false;
                             }
 
-                            $children = array('identifier', 'nickname', 'realname');
-                            foreach ($children as $child) {
+                            // one of this two options must be set
+                            if (0 === count($c['paths'])) {
+                                return !isset($c['user_response_class']);
+                            }
+
+                            foreach (array('identifier', 'nickname', 'realname') as $child) {
                                 if (!isset($c['paths'][$child])) {
                                     return true;
                                 }
                             }
 
-                            // one of the two should be set
-                            return !isset($c['paths']) && !isset($c['user_response_class']);
+                            return false;
                         })
-                        ->thenInvalid("At least the 'identifier', 'nickname' and 'realname' paths should be configured for oauth2 and oauth1 types.")
+                        ->thenInvalid("At least the 'identifier', 'nickname' and 'realname' paths should be configured for 'oauth2' and 'oauth1' types.")
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {
-                            return isset($c['service']) && 1 !== count($c);
+                            if (isset($c['service'])) {
+                                // ignore paths & options if none were set
+                                return 0 !== count($c['paths']) || 0 !== count($c['options']) || 3 < count($c);
+                            }
+
+                            return false;
                         })
-                        ->thenInvalid("If you're setting a service, no other arguments should be set.")
+                        ->thenInvalid("If you're setting a 'service', no other arguments should be set.")
                     ->end()
                 ->end()
             ->end()
