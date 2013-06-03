@@ -139,6 +139,9 @@ class OAuthFactory extends AbstractFactory
             ->addMethodCall('setCheckPaths', array($checkPaths))
         ;
 
+        $container->setParameter('hwi_oauth.use_referer', $config['use_referer']);
+        $container->setParameter('hwi_oauth.login_path', $config['login_path']);
+
         return $listenerId;
     }
 

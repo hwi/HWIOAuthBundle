@@ -68,16 +68,14 @@ class OAuthUtils
         $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
         $connect = $this->container->getParameter('hwi_oauth.connect');
 
-        $resourceOwner = $this->getResourceOwner($name);
-        $checkPath = $this->ownerMap->getResourceOwnerCheckPath($name);
-
         if (!$connect || !$hasUser) {
+            $checkPath   = $this->ownerMap->getResourceOwnerCheckPath($name);
             $redirectUrl = $this->generateUri($checkPath);
         } elseif (null === $redirectUrl) {
             $redirectUrl = $this->generateUrl('hwi_oauth_connect_service', array('service' => $name), true);
         }
 
-        return $resourceOwner->getAuthorizationUrl($redirectUrl, $extraParameters);
+        return $this->getResourceOwner($name)->getAuthorizationUrl($redirectUrl, $extraParameters);
     }
 
     /**
@@ -91,6 +89,31 @@ class OAuthUtils
         $this->getResourceOwner($name);
 
         return $this->generateUrl('hwi_oauth_service_redirect', array('service' => $name));
+    }
+
+    /**
+     * Get the uri for a given path.
+     *
+     * @param string       $path    Path or route
+     * @param null|Request $request A Request instance
+     *
+     * @return string
+     */
+    public function generateUri($path, Request $request = null)
+    {
+        if (0 === strpos($path, 'http') || !$path) {
+            return $path;
+        }
+
+        if (null === $request) {
+            $request = $this->container->get('request');
+        }
+
+        if ($path && '/' === $path[0]) {
+            return $request->getUriForPath($path);
+        }
+
+        return $this->generateUrl($path, $request->attributes->all(), true);
     }
 
     /**
@@ -175,26 +198,6 @@ class OAuthUtils
         }
 
         return $resourceOwner;
-    }
-
-    /**
-     * Get the uri for a given path.
-     *
-     * @param string $path Path or route
-     *
-     * @return string
-     */
-    private function generateUri($path)
-    {
-        if (0 === strpos($path, 'http') || !$path) {
-            return $path;
-        }
-
-        if ($path && '/' === $path[0]) {
-            return $this->container->get('request')->getUriForPath($path);
-        }
-
-        return $this->generateUrl($path, array(), true);
     }
 
     /**
