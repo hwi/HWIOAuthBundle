@@ -26,6 +26,8 @@ use Symfony\Component\DependencyInjection\ContainerAware,
     Symfony\Component\Security\Core\User\UserInterface,
     Symfony\Component\Security\Http\Event\InteractiveLoginEvent,
     Symfony\Component\Security\Http\SecurityEvents;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * ConnectController
@@ -181,12 +183,17 @@ class ConnectController extends ContainerAware
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
         // Handle the form
+        /** @var $form Form */
         $form = $this->container->get('form.factory')
             ->createBuilder('form')
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
-            $form->bindRequest($request);
+            if ('2' == Kernel::MAJOR_VERSION && '1' <= Kernel::MINOR_VERSION) {
+                $form->bind($request);
+            } else {
+                $form->bindRequest($request);
+            }
 
             if ($form->isValid()) {
                 $user = $this->container->get('security.context')->getToken()->getUser();

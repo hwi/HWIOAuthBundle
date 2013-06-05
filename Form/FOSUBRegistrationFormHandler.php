@@ -80,7 +80,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         $form->setData($this->setUserInformation($user, $userInformation));
 
         if ('POST' === $request->getMethod()) {
-            if ('2' == Kernel::MAJOR_VERSION && '2' <= Kernel::MINOR_VERSION) {
+            if ('2' == Kernel::MAJOR_VERSION && '1' <= Kernel::MINOR_VERSION) {
                 $form->bind($request);
             } else {
                 $form->bindRequest($request);
