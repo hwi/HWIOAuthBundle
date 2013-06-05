@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -184,12 +185,13 @@ class ConnectController extends ContainerAware
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
         // Handle the form
+        /** @var $form Form */
         $form = $this->container->get('form.factory')
             ->createBuilder('form')
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
-            $form->bindRequest($request);
+            $form->bind($request);
 
             if ($form->isValid()) {
                 $user = $this->container->get('security.context')->getToken()->getUser();

@@ -18,7 +18,6 @@ use FOS\UserBundle\Util\TokenGenerator;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -77,11 +76,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         $form->setData($this->setUserInformation($user, $userInformation));
 
         if ('POST' === $request->getMethod()) {
-            if ('2' == Kernel::MAJOR_VERSION && '2' <= Kernel::MINOR_VERSION) {
-                $form->bind($request);
-            } else {
-                $form->bindRequest($request);
-            }
+            $form->bind($request);
 
             return $form->isValid();
         }
