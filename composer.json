@@ -4,9 +4,9 @@
     "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
     "keywords":    [
         "authentication", "firewall", "oauth", "oauth1", "oauth2", "security",
-        "bitbucket", "disqus", "dropbox", "facebook", "flickr", "foursquare", "github", "google", "instagram", "jira",
-        "linkedin", "odnoklassniki", "sensio connect", "stack exchange", "twitter", "vkontakte", "windows live", "yahoo",
-        "yandex", "37signals"
+        "amazon", "bitbucket", "disqus", "dropbox", "facebook", "flickr", "foursquare", "github", "google", "instagram",
+        "jira", "linkedin", "odnoklassniki", "sensio connect", "stack exchange", "twitter", "vkontakte", "windows live",
+        "yahoo", "yandex", "37signals"
     ],
     "homepage":    "http://github.com/hwi/HWIOAuthBundle",
     "license":     "MIT",
