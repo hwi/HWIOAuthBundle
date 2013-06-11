@@ -97,13 +97,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $response = $this->doGetTokenRequest($this->getOption('access_token_url'), $parameters);
         $response = $this->getResponseContent($response);
 
-        if (isset($response['error'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', isset($response['error']['message']) ? $response['error']['message'] : $response['error']));
-        }
-
-        if (!isset($response['access_token'])) {
-            throw new AuthenticationException('Not a valid access token.');
-        }
+        $this->validateResponseContent($response);
 
         return $response;
     }
@@ -123,13 +117,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $response = $this->doGetTokenRequest($this->getOption('access_token_url'), $parameters);
         $response = $this->getResponseContent($response);
 
-        if (isset($response['error'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', isset($response['error']['message']) ? $response['error']['message'] : $response['error']));
-        }
-
-        if (!isset($response['access_token'])) {
-            throw new AuthenticationException('Not a valid access token.');
-        }
+        $this->validateResponseContent($response);
 
         return $response;
     }
@@ -156,5 +144,25 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url);
+    }
+
+    /**
+     * @param mixed $response the 'parsed' content based on the response headers
+     *
+     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     */
+    protected function validateResponseContent($response)
+    {
+        if (isset($response['error_description'])) {
+            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error_description']));
+        }
+
+        if (isset($response['error'])) {
+            throw new AuthenticationException(sprintf('OAuth error: "%s"', isset($response['error']['message']) ? $response['error']['message'] : $response['error']));
+        }
+
+        if (!isset($response['access_token'])) {
+            throw new AuthenticationException('Not a valid access token.');
+        }
     }
 }

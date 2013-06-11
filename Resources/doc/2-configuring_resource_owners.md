@@ -29,6 +29,7 @@ hwi_oauth:
 ##### Built-in resource owners:
 
 - [37signals](2x-37signals.md)
+- [Amazon](2x-amazon.md)
 - [Bitbucket](2x-bitbucket.md)
 - [Disqus](2x-disqus.md)
 - [Dropbox](2x-dropbox.md)

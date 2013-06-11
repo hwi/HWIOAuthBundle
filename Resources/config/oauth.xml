@@ -16,6 +16,7 @@
         <parameter key="hwi_oauth.resource_owner.oauth1.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.oauth2.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner</parameter>
 
+        <parameter key="hwi_oauth.resource_owner.amazon.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AmazonResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.bitbucket.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitbucketResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.disqus.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DisqusResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.dropbox.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DropboxResourceOwner</parameter>
@@ -103,6 +104,8 @@
 
         <service id="hwi_oauth.abstract_resource_owner.oauth2" class="%hwi_oauth.resource_owner.oauth2.class%"
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.amazon" class="%hwi_oauth.resource_owner.amazon.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.disqus" class="%hwi_oauth.resource_owner.disqus.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.facebook" class="%hwi_oauth.resource_owner.facebook.class%"
