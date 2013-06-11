@@ -29,6 +29,7 @@ class Configuration implements ConfigurationInterface
      */
     private $resourceOwners = array(
         'oauth2',
+            'amazon',
             'disqus',
             'facebook',
             'foursquare',
