@@ -44,4 +44,6 @@ hwi_oauth_redirect:
 ### Continue to the next step!
 When you're done. Continue by configuring the resource owners you want to use
 in your application!
+
+
 [Step 2: Configuring resource owners (Facebook, GitHub, Google, Windows Live and others](2-configuring_resource_owners.md)
