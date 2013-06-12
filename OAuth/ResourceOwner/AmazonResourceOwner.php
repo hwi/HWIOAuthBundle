@@ -23,7 +23,7 @@ class AmazonResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $options = array(
         'authorization_url' => 'https://www.amazon.com/ap/oa',
-        'access_token_url'  => 'https://www.amazon.com/auth/o2/token',
+        'access_token_url'  => 'https://api.amazon.com/auth/o2/token',
         'infos_url'         => 'https://api.amazon.com/user/profile',
 
         'scope'             => 'profile',
