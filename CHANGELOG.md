@@ -32,6 +32,7 @@ Changelog
 * Added support for options: `access_type`, `request_visible_actions`, `approval_prompt`
   in Google resource owner
 * Added 37signals resource owner
+* Added Amazon resource owner
 * Added Bitbucket resource owner
 * Added Disqus resource owner
 * Added Dropbox resource owner
