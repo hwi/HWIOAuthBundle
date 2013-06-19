@@ -55,4 +55,4 @@ hwi_oauth:
 When you're done. Continue by configuring the security layer.
 
 
-[Step 3: Configuring the security layer](../3-configuring_the_security_layer.md).
+[Step 3: Configuring the security layer](3-configuring_the_security_layer.md).
