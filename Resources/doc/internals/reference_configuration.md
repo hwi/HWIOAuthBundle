@@ -1,5 +1,5 @@
-Reference configuration
-=======================
+Internals: Reference configuration
+==================================
 
 ```yaml
 # app/config.yml
@@ -11,7 +11,7 @@ hwi_oauth:
             type:                github
             client_id:           <client_id>
             client_secret:       <client_secret>
-            scope:               ""
+            scope:               "user:email"
 
         google:
             type:                google
@@ -38,7 +38,7 @@ hwi_oauth:
             access_token_url:    https://path.to/oauth/v2/token
             authorization_url:   https://path.to/oauth/v2/authorize
             infos_url:           https://path.to/api/user
-            scope:               ""
+            scope:               "user_details"
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
             paths:
                 identifier: id
@@ -53,7 +53,7 @@ hwi_oauth:
             access_token_url:    https://path.to/oauth/v1/token
             authorization_url:   https://path.to/oauth/v1/authorize
             infos_url:           https://path.to/api/user
-            realm:               ""
+            realm:               "whatever"
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: id
@@ -141,4 +141,4 @@ github_login:
     pattern: /login/check-github
 ```
 
-[Return to the index.](index.md)
+[Return to the index.](../index.md)
