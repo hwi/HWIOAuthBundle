@@ -137,7 +137,8 @@ class HWIOAuthExtension extends Extension
             $type = $options['type'];
             unset($options['type']);
 
-            $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.$type);
+            $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.Configuration::getResourceOwnerType($type));
+            $definition->setClass("%hwi_oauth.resource_owner.$type.class%");
             $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
             $definition
                 ->replaceArgument(2, $options)

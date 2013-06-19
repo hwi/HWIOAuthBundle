@@ -28,8 +28,8 @@ class Configuration implements ConfigurationInterface
      *
      * @var array
      */
-    private $resourceOwners = array(
-        'oauth2',
+    private static $resourceOwners = array(
+        'oauth2' => array(
             'amazon',
             'bitly',
             'box',
@@ -56,8 +56,8 @@ class Configuration implements ConfigurationInterface
             'wordpress',
             'yandex',
             '37signals',
-
-        'oauth1',
+        ),
+        'oauth1' => array(
             'bitbucket',
             'dropbox',
             'flickr',
@@ -66,7 +66,44 @@ class Configuration implements ConfigurationInterface
             'trello',
             'twitter',
             'yahoo',
+        ),
     );
+
+    /**
+     * Return the type (OAuth1 or OAuth2) of given resource owner.
+     *
+     * @param string $resourceOwner
+     *
+     * @return string
+     */
+    public static function getResourceOwnerType($resourceOwner)
+    {
+        if ('oauth1' === $resourceOwner || 'oauth2' === $resourceOwner) {
+            return $resourceOwner;
+        }
+
+        if (in_array($resourceOwner, static::$resourceOwners['oauth1'])) {
+            return 'oauth1';
+        }
+
+        return 'oauth2';
+    }
+
+    /**
+     * Checks that given resource owner is supported by this bundle.
+     *
+     * @param string $resourceOwner
+     *
+     * @return Boolean
+     */
+    public static function isResourceOwnerSupported($resourceOwner)
+    {
+        if ('oauth1' === $resourceOwner || 'oauth2' === $resourceOwner) {
+            return true;
+        }
+
+        return in_array($resourceOwner, static::$resourceOwners['oauth1']) || in_array($resourceOwner, static::$resourceOwners['oauth2']);
+    }
 
     /**
      * Generates the configuration tree builder.
@@ -182,7 +219,9 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->scalarNode('type')
                                 ->validate()
-                                    ->ifNotInArray($this->resourceOwners)
+                                    ->ifTrue(function($type) {
+                                        return !Configuration::isResourceOwnerSupported($type);
+                                    })
                                     ->thenInvalid('Unknown resource owner type "%s".')
                                 ->end()
                                 ->validate()
