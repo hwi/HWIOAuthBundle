@@ -5,7 +5,7 @@ Step 1: Setting up the bundle
 ``` yaml
 {
     "require": {
-        "hwi/oauth-bundle": "*"
+        "hwi/oauth-bundle": "0.2.*"
     }
 }
 ```
