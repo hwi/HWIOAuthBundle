@@ -1,6 +1,5 @@
-Step 2x: Facebook Connect
-=========================
-
+Bonus: Facebook Connect
+=======================
 This guide bases on Symfony 2.1+ and the [AcmeDemoBundle](https://github.com/symfony/symfony-standard/tree/2.2).
 
 ## Configuration
@@ -11,12 +10,12 @@ This guide bases on Symfony 2.1+ and the [AcmeDemoBundle](https://github.com/sym
 # app/config/config.yml
 
 hwi_oauth:
-    firewall_name: secured_area
+    firewall_name:         secured_area
     resource_owners:
         facebook:
             type:          facebook
-            client_id:     12345678910
-            client_secret: asdfg8d77b5ac56804b89e9be31d161e
+            client_id:     <client_id>
+            client_secret: <client_secret>
             scope:         "email"
 
 services:
@@ -123,5 +122,5 @@ The following example bases also on the Facebook ["Login with Javascript SDK"](h
 
 Open the browser and go at `/demo/secured/hello/World` too see the login button, and test it!
 
-- [Step 2: Configuring resource owners (Facebook, GitHub, Google, Windows Live and others](2-configuring_resource_owners.md)
-- [Step 3: Configuring the security layer](3-configuring_the_security_layer.md)
+- [Step 2: Configuring resource owners (Facebook, GitHub, Google, Windows Live and others](../2-configuring_resource_owners.md)
+- [Step 3: Configuring the security layer](../3-configuring_the_security_layer.md)

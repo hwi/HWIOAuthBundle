@@ -28,34 +28,31 @@ hwi_oauth:
 
 ##### Built-in resource owners:
 
-- [37signals](2x-37signals.md)
-- [Amazon](2x-amazon.md)
-- [Bitbucket](2x-bitbucket.md)
-- [Disqus](2x-disqus.md)
-- [Dropbox](2x-dropbox.md)
-- [Facebook](2x-facebook.md)
-- [Flickr](2x-flickr.md)
-- [Foursquare](2x-foursquare.md)
-- [GitHub](2x-github.md)
-- [Google](2x-google.md)
-- [Instagram](2x-instagram.md)
-- [Jira](2x-jira.md)
-- [Linkedin](2x-linkedin.md)
-- [Odnoklassniki](2x-odnoklassniki.md)
-- [SensioLabs Connect](2x-sensio_connect.md)
-- [Stack Exchange](2x-stack_exchange.md)
-- [Twitter] (2x-twitter.md)
-- [Vkontakte](2x-vkontakte.md)
-- [Windows Live](2x-windows_live.md)
-- [Yahoo](2x-yahoo.md)
-- [Yandex](2x-yandex.md)
-- [Others](2x-others.md)
-
-##### Bonus: 
-
-- [Overwriting default configuration](2x-overwriting-defaults.md) of built-in resource owners.
-- Add [Facebook Connect](2x-facebook-connect.md) functionality.
+- [37signals](resource_owners/37signals.md)
+- [Amazon](resource_owners/amazon.md)
+- [Bitbucket](resource_owners/bitbucket.md)
+- [Disqus](resource_owners/disqus.md)
+- [Dropbox](resource_owners/dropbox.md)
+- [Facebook](resource_owners/facebook.md)
+- [Flickr](resource_owners/flickr.md)
+- [Foursquare](resource_owners/foursquare.md)
+- [GitHub](resource_owners/github.md)
+- [Google](resource_owners/google.md)
+- [Instagram](resource_owners/instagram.md)
+- [Jira](resource_owners/jira.md)
+- [Linkedin](resource_owners/linkedin.md)
+- [Odnoklassniki](resource_owners/odnoklassniki.md)
+- [SensioLabs Connect](resource_owners/sensio_connect.md)
+- [Stack Exchange](resource_owners/stack_exchange.md)
+- [Twitter] (resource_owners/twitter.md)
+- [Vkontakte](resource_owners/vkontakte.md)
+- [Windows Live](resource_owners/windows_live.md)
+- [Yahoo](resource_owners/yahoo.md)
+- [Yandex](resource_owners/yandex.md)
+- [Others](resource_owners/others.md)
 
 ### Continue to the next step!
 When you're done. Continue by configuring the security layer.
-[Step 3: Configuring the security layer](3-configuring_the_security_layer.md).
+
+
+[Step 3: Configuring the security layer](../3-configuring_the_security_layer.md).
