@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 0.2.6 (2013-06-xx)
+* Fix: User-land aliased (resource owner) services have the appropriate name
+
 ## 0.2.5 (2013-05-29)
 * Fix: Use user identifier represented as string for Twitter to prevent issues with
   losing accuracy for large numbers (i.e. Javascript) or type comparison (i.e. MongoDB)
