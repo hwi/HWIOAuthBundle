@@ -16,8 +16,8 @@ use Symfony\Component\HttpKernel\Bundle\Bundle,
     Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension,
-    HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory,
-    HWI\Bundle\OAuthBundle\Security\Core\UserProvider\EntityFactory;
+    HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\SetResourceOwnerServiceNameCompilerPass,
+    HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory;
 
 /**
  * HWIOAuthBundle
@@ -43,6 +43,7 @@ class HWIOAuthBundle extends Bundle
             $extension = $container->getExtension('security');
             $extension->addSecurityListenerFactory(new OAuthFactory());
         }
+        $container->addCompilerPass(new SetResourceOwnerServiceNameCompilerPass());
     }
 
     /**
