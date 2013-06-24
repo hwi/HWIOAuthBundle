@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 0.3.0 (2013-05-xx)
+## 0.3.0 (2013-xx-xx)
 * [BC break] `GenericOAuth2ResourceOwner::getAccessToken()` now returns an array
   instead of a string. This array contains the access token and its 'expires_in'
   value, along with any other parameters returned from the authentication provider
@@ -41,7 +41,9 @@ Changelog
 * Added Odnoklassniki resource owner
 * Added Yandex resource owner
 
-## 0.2.6 (2013-06-xx)
+## 0.2.6 (2013-06-24)
+* Fix: Use same check for FOSUserBundle compatibility to prevent strange errors
+  with calls of undefined services
 * Fix: User-land aliased (resource owner) services have the appropriate name
 
 ## 0.2.5 (2013-05-29)
