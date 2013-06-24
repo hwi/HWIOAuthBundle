@@ -1,7 +1,9 @@
 Changelog
 =========
 
-## 0.2.6 (2013-06-xx)
+## 0.2.6 (2013-06-24)
+* Fix: Use same check for FOSUserBundle compatibility to prevent strange errors
+  with calls of undefined services
 * Fix: User-land aliased (resource owner) services have the appropriate name
 
 ## 0.2.5 (2013-05-29)
