@@ -72,6 +72,14 @@ abstract class AbstractUserResponse implements UserResponseInterface
     /**
      * {@inheritdoc}
      */
+    public function getTokenSecret()
+    {
+       return $this->oAuthToken->getTokenSecret();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getExpiresIn()
     {
         return $this->oAuthToken->getExpiresIn();
