@@ -44,6 +44,11 @@ class OAuthToken extends AbstractToken
     /**
      * @var string
      */
+    private $tokenSecret;
+
+    /**
+     * @var string
+     */
     private $resourceOwnerName;
 
     /**
@@ -105,6 +110,10 @@ class OAuthToken extends AbstractToken
                 $this->expiresIn = $token['oauth_expires_in'];
             }
 
+            if (isset($token['oauth_token_secret'])) {
+                $this->tokenSecret = $token['oauth_token_secret'];
+            }
+
             $this->rawToken = $token;
         } else {
             $this->accessToken = $token;
@@ -150,6 +159,22 @@ class OAuthToken extends AbstractToken
     public function getExpiresIn()
     {
         return $this->expiresIn;
+    }
+
+    /**
+     * @param string $tokenSecret
+     */
+    public function setTokenSecret($tokenSecret)
+    {
+        $this->tokenSecret = $tokenSecret;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getTokenSecret()
+    {
+        return $this->tokenSecret;
     }
 
     /**

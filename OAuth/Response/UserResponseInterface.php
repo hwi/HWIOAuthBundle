@@ -76,6 +76,13 @@ interface UserResponseInterface extends ResponseInterface
     public function getRefreshToken();
 
     /**
+     * Get oauth token secret used for the request.
+     * 
+     * @return null|string
+     */
+    public function getTokenSecret();
+
+    /**
      * Get the info when token will expire.
      *
      * @return null|string

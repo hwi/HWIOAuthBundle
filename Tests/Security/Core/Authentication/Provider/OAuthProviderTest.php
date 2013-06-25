@@ -29,6 +29,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
             'access_token'  => 'access_token',
             'refresh_token' => 'refresh_token',
             'expires_in'    => '666',
+            'oauth_token_secret' => 'secret'
         );
 
         $oauthTokenMock = $this->getOAuthTokenMock();
@@ -78,6 +79,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedToken['access_token'], $token->getAccessToken());
         $this->assertEquals($expectedToken['refresh_token'], $token->getRefreshToken());
         $this->assertEquals($expectedToken['expires_in'], $token->getExpiresIn());
+        $this->assertEquals($expectedToken['oauth_token_secret'], $token->getTokenSecret());
         $this->assertEquals($userMock, $token->getUser());
         $this->assertEquals('github', $token->getResourceOwnerName());
 
@@ -92,6 +94,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
             'access_token'  => 'access_token',
             'refresh_token' => 'refresh_token',
             'expires_in'    => '666',
+            'oauth_token_secret' => 'secret'
         );
 
         $oauthTokenMock = $this->getOAuthTokenMock();
@@ -110,7 +113,10 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $oauthTokenMock->expects($this->once())
             ->method('getExpiresIn')
             ->will($this->returnValue($expectedToken['expires_in']));
-
+        $oauthTokenMock->expects($this->once())
+            ->method('getTokenSecret')
+            ->will($this->returnValue($expectedToken['oauth_token_secret']));
+        
         $resourceOwnerMock = $this->getResourceOwnerMock();
         $resourceOwnerMock->expects($this->once())
             ->method('getUserInformation')
@@ -143,6 +149,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($expectedToken['access_token'], $e->getAccessToken());
             $this->assertEquals($expectedToken['refresh_token'], $e->getRefreshToken());
             $this->assertEquals($expectedToken['expires_in'], $e->getExpiresIn());
+            $this->assertEquals($expectedToken['oauth_token_secret'], $e->getTokenSecret());
             $this->assertEquals($expectedToken, $e->getRawToken());
         }
     }
