@@ -50,6 +50,13 @@ interface OAuthAwareExceptionInterface
     public function getExpiresIn();
 
     /**
+     * Get the oauth secret token 
+     * 
+     * @return null|string
+     */
+    public function getTokenSecret();
+
+    /**
      * Set the token.
      *
      * @param TokenInterface $token

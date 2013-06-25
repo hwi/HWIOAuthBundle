@@ -61,6 +61,14 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
     /**
      * {@inheritdoc}
      */
+    public function getTokenSecret()
+    {
+        return $this->token->getTokenSecret();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getResourceOwnerName()
     {
         return $this->resourceOwnerName;
