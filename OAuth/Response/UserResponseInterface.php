@@ -78,7 +78,7 @@ interface UserResponseInterface extends ResponseInterface
     /**
      * Get oauth token secret used for the request.
      * 
-     * @return string
+     * @return null|string
      */
     public function getTokenSecret();
 

@@ -62,7 +62,10 @@ class OAuthAwareException extends \Exception implements OAuthAwareExceptionInter
     {
         return $this->token->getRawToken();
     }
-    
+
+    /**
+     * {@inheritdoc}
+     */
     public function getTokenSecret()
     {
         return $this->token->getTokenSecret();

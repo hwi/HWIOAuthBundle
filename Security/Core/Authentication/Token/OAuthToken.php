@@ -109,7 +109,7 @@ class OAuthToken extends AbstractToken
             } elseif (isset($token['oauth_expires_in'])) {
                 $this->expiresIn = $token['oauth_expires_in'];
             }
-            
+
             if (isset($token['oauth_token_secret'])) {
                 $this->tokenSecret = $token['oauth_token_secret'];
             }
@@ -170,7 +170,7 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getTokenSecret()
     {
