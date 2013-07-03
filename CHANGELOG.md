@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 0.3.0 (2013-xx-xx)
+## 0.3.0-alpha1 (2013-07-03)
 * [BC break] `GenericOAuth2ResourceOwner::getAccessToken()` now returns an array
   instead of a string. This array contains the access token and its 'expires_in'
   value, along with any other parameters returned from the authentication provider
