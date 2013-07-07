@@ -52,6 +52,7 @@ class Configuration implements ConfigurationInterface
             'linkedin',
             'twitter',
             'yahoo',
+            'stereomood',
     );
 
     /**
