@@ -22,6 +22,7 @@ hwi_oauth:
             paths:
                 identifier: id
                 nickname:   username
+                realname:   fullname
 ```
 
 #### OAuth1.0a
@@ -44,6 +45,7 @@ hwi_oauth:
             paths:
                 identifier: id
                 nickname:   username
+                realname:   fullname
 ```
 
 When you're done. Continue by configuring the security layer or go back to
