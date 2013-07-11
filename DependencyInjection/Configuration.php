@@ -50,9 +50,9 @@ class Configuration implements ConfigurationInterface
             'flickr',
             'jira',
             'linkedin',
+            'stereomood',
             'twitter',
             'yahoo',
-            'stereomood',
     );
 
     /**
