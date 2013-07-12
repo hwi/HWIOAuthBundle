@@ -15,37 +15,18 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\InstagramResourceOwner;
 
 class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $paths = array(
-        'identifier'      => 'user.id',
-        'nickname'        => 'user.username',
-        'realname'        => 'user.full_name',
-        'profilepicture'  => 'user.profile_picture',
-    );
-
-    /**
-     * Together with OAuth token Instagram sends user data.
-     */
-    public function testGetUserInformation()
-    {
-        $accessToken = array(
-            'access_token' => 'token',
-            'user'         => array(
-                'id'              => '1574083',
-                'username'        => 'snoopdogg',
-                'full_name'       => 'Snoop Dogg',
-                'profile_picture' => 'http://distillery.s3.amazonaws.com/profiles/profile_1574083_75sq_1295469061.jpg'
-            )
-        );
-        $userResponse = $this->resourceOwner->getUserInformation($accessToken);
-
-        $this->assertEquals('1574083', $userResponse->getUsername());
-        $this->assertEquals('snoopdogg', $userResponse->getNickname());
-        $this->assertEquals('Snoop Dogg', $userResponse->getRealName());
-        $this->assertEquals('http://distillery.s3.amazonaws.com/profiles/profile_1574083_75sq_1295469061.jpg', $userResponse->getProfilePicture());
-        $this->assertEquals($accessToken['access_token'], $userResponse->getAccessToken());
-        $this->assertNull($userResponse->getRefreshToken());
-        $this->assertNull($userResponse->getExpiresIn());
+    protected $userResponse = <<<json
+{
+    "data": {
+        "id":  "1",
+        "username": "bar"
     }
+}
+json;
+    protected $paths = array(
+        'identifier'      => 'data.id',
+        'nickname'        => 'data.username',
+    );
 
     public function testCustomResponseClass()
     {
