@@ -24,7 +24,7 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
     protected $options = array(
         'authorization_url' => 'https://api.instagram.com/oauth/authorize',
         'access_token_url'  => 'https://api.instagram.com/oauth/access_token',
-        'infos_url'  => 'https://api.instagram.com/v1/users/self',
+        'infos_url'         => 'https://api.instagram.com/v1/users/self',
     );
 
     /**
