@@ -11,8 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-
 /**
  * InstagramResourceOwner
  *
@@ -26,28 +24,16 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
     protected $options = array(
         'authorization_url' => 'https://api.instagram.com/oauth/authorize',
         'access_token_url'  => 'https://api.instagram.com/oauth/access_token',
+        'infos_url'         => 'https://api.instagram.com/v1/users/self',
     );
 
     /**
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier'      => 'user.id',
-        'nickname'        => 'user.username',
-        'realname'        => 'user.full_name',
-        'profilepicture'  => 'user.profile_picture',
+        'identifier'      => 'data.id',
+        'nickname'        => 'data.username',
+        'realname'        => 'data.full_name',
+        'profilepicture'  => 'data.profile_picture',
     );
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
-    {
-        $response = $this->getUserResponse();
-        $response->setResponse($accessToken);
-        $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
-
-        return $response;
-    }
 }
