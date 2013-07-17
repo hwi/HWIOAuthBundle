@@ -2,10 +2,10 @@ Step 1: Setting up the bundle
 =============================
 ### A) Add HWIOAuthBundle to your composer.json
 
-``` yaml
+```yaml
 {
     "require": {
-        "hwi/oauth-bundle": "0.2.*"
+        "hwi/oauth-bundle": "0.3.*@dev"
     }
 }
 ```
@@ -14,8 +14,7 @@ Step 1: Setting up the bundle
 
 Enable the bundle in the kernel:
 
-``` php
-<?php
+```php
 // app/AppKernel.php
 
 public function registerBundles()
@@ -31,7 +30,7 @@ public function registerBundles()
 
 Import the `redirect.xml` routing file in your own routing file.
 
-``` yaml
+```yaml
 # app/config/routing.yml
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
@@ -42,22 +41,9 @@ hwi_oauth_redirect:
 
 > To prevent strange issues, this route should be imported before your custom ones.
 
-### D) Working with Symfony 2.0
-
-If you use Symfony 2.0, you need to import the `security_factory.xml` in your `security.yml`:
-
-``` yaml
-# app/config/security.yml
-security:
-    factories:
-        - "%kernel.root_dir%/../vendor/bundles/HWI/Bundle/OAuthBundle/Resources/config/security_factory.xml"
-```
-
-**Note:**
-
-> This step is done automatically if you use Symfony 2.1
-
 ### Continue to the next step!
 When you're done. Continue by configuring the resource owners you want to use
 in your application!
+
+
 [Step 2: Configuring resource owners (Facebook, GitHub, Google, Windows Live and others](2-configuring_resource_owners.md)

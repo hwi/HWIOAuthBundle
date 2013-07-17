@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -33,41 +33,64 @@ abstract class AbstractUserResponse implements UserResponseInterface
     protected $resourceOwner;
 
     /**
-     * @var mixed
+     * @var OAuthToken
      */
-    protected $accessToken;
+    protected $oAuthToken;
 
     /**
-     * @var string
+     * {@inheritdoc}
      */
-    protected $oauthToken;
+    public function getEmail()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getProfilePicture()
+    {
+        return null;
+    }
 
     /**
      * {@inheritdoc}
      */
     public function getAccessToken()
     {
-        return $this->accessToken;
+        return $this->oAuthToken->getAccessToken();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setAccessToken($accessToken)
+    public function getRefreshToken()
     {
-        if (is_array($accessToken) && isset($accessToken['oauth_token'])) {
-            $this->oauthToken = $accessToken['oauth_token'];
-        }
-
-        $this->accessToken = $accessToken;
+        return $this->oAuthToken->getRefreshToken();
     }
 
     /**
-     * @return array|null
+     * {@inheritdoc}
      */
-    public function getOAuthToken()
+    public function getTokenSecret()
     {
-        return $this->oauthToken ?: $this->accessToken;
+        return $this->oAuthToken->getTokenSecret();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExpiresIn()
+    {
+        return $this->oAuthToken->getExpiresIn();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setOAuthToken(OAuthToken $token)
+    {
+        $this->oAuthToken = $token;
     }
 
     /**
@@ -83,10 +106,14 @@ abstract class AbstractUserResponse implements UserResponseInterface
      */
     public function setResponse($response)
     {
-        $this->response = json_decode($response, true);
+        if (is_array($response)) {
+            $this->response = $response;
+        } else {
+            $this->response = json_decode($response, true);
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw new AuthenticationException('Not a valid JSON response.');
+            if (JSON_ERROR_NONE !== json_last_error()) {
+                throw new AuthenticationException('Response is not a valid JSON code.');
+            }
         }
     }
 

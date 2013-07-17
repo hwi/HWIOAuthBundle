@@ -29,20 +29,29 @@ class Configuration implements ConfigurationInterface
      */
     private $resourceOwners = array(
         'oauth2',
+            'amazon',
+            'disqus',
             'facebook',
             'foursquare',
             'github',
             'google',
+            'instagram',
+            'odnoklassniki',
             'sensio_connect',
             'stack_exchange',
             'vkontakte',
             'windows_live',
+            'yandex',
+            '37signals',
 
         'oauth1',
+            'bitbucket',
+            'dropbox',
+            'flickr',
+            'jira',
             'linkedin',
             'twitter',
             'yahoo',
-            'jira',
     );
 
     /**
@@ -203,6 +212,10 @@ class Configuration implements ConfigurationInterface
                             ->useAttributeAsKey('name')
                             ->prototype('scalar')->end()
                         ->end()
+                        ->arrayNode('options')
+                            ->useAttributeAsKey('name')
+                            ->prototype('scalar')->end()
+                        ->end()
                     ->end()
                     ->validate()
                         ->ifTrue(function($c) {
@@ -280,8 +293,8 @@ class Configuration implements ConfigurationInterface
                     ->validate()
                         ->ifTrue(function($c) {
                             if (isset($c['service'])) {
-                                // ignore paths if none were set
-                                return 0 !== count($c['paths']) || 2 < count($c);
+                                // ignore paths & options if none were set
+                                return 0 !== count($c['paths']) || 0 !== count($c['options']) || 3 < count($c);
                             }
 
                             return false;

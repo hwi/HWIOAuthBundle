@@ -25,17 +25,18 @@ interface ResourceOwnerInterface
     /**
      * Retrieves the user's information from an access_token
      *
-     * @param string $accessToken
+     * @param array $accessToken     The access token
+     * @param array $extraParameters An array of parameters to add to the url
      *
      * @return UserResponseInterface The wrapped response interface.
      */
-    public function getUserInformation($accessToken);
+    public function getUserInformation(array $accessToken, array $extraParameters = array());
 
     /**
      * Returns the provider's authorization url
      *
-     * @param mixed $redirectUri     The uri to redirect the client back to
-     * @param array $extraParameters An array of parameters to add to the url
+     * @param string $redirectUri     The uri to redirect the client back to
+     * @param array  $extraParameters An array of parameters to add to the url
      *
      * @return string The authorization url
      */
@@ -45,10 +46,10 @@ interface ResourceOwnerInterface
      * Retrieve an access token for a given code
      *
      * @param Request $request         The request object where is going to extract the code from
-     * @param mixed   $redirectUri     The uri to redirect the client back to
+     * @param string  $redirectUri     The uri to redirect the client back to
      * @param array   $extraParameters An array of parameters to add to the url
      *
-     * @return string The access token
+     * @return array The access token
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array());
 
@@ -58,6 +59,17 @@ interface ResourceOwnerInterface
      * @return string
      */
     public function getName();
+
+    /**
+     * Retrieve an option by name
+     *
+     * @param string $name The option name
+     *
+     * @return mixed The option value
+     *
+     * @throws \InvalidArgumentException When the option does not exist
+     */
+    public function getOption($name);
 
     /**
      * Checks whether the class can handle the request.
@@ -70,6 +82,8 @@ interface ResourceOwnerInterface
 
     /**
      * Sets a name for the resource owner.
+     *
+     * @param string $name
      */
     public function setName($name);
 }

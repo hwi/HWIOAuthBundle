@@ -1,8 +1,13 @@
 {
     "name":        "hwi/oauth-bundle",
     "type":        "symfony-bundle",
-    "description": "Support for authenticating users via oauth in Symfony2.",
-    "keywords":    ["security", "firewall", "oauth", "facebook", "oauth2", "github", "google", "windows live", "vkontakte", "oauth1", "twitter", "linkedin", "sensio connect", "yahoo"],
+    "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
+    "keywords":    [
+        "authentication", "firewall", "oauth", "oauth1", "oauth2", "security",
+        "amazon", "bitbucket", "disqus", "dropbox", "facebook", "flickr", "foursquare", "github", "google", "instagram",
+        "jira", "linkedin", "odnoklassniki", "sensio connect", "stack exchange", "twitter", "vkontakte", "windows live",
+        "yahoo", "yandex", "37signals"
+    ],
     "homepage":    "http://github.com/hwi/HWIOAuthBundle",
     "license":     "MIT",
 
@@ -13,7 +18,7 @@
         },
         {
             "name": "Joseph Bielawski",
-            "email": "stloyd+gh@gmail.com"
+            "email": "stloyd@gmail.com"
         },
         {
             "name": "Geoffrey Bachelet",
@@ -26,17 +31,16 @@
     ],
 
     "require": {
-        "php":                          ">=5.3.2",
-        "symfony/framework-bundle":     ">=2.0,<2.3-dev",
-        "symfony/security-bundle":      ">=2.0,<2.3-dev",
+        "php":                          ">=5.3.3",
+        "symfony/framework-bundle":     "~2.1",
+        "symfony/security-bundle":      "~2.1",
         "kriswallsmith/buzz":           "~0.7"
     },
 
     "require-dev": {
-        "doctrine/orm":                 ">=2.1,<2.4-dev",
-        "symfony/validator":            ">=2.0,<2.3-dev",
-        "symfony/twig-bundle":          ">=2.0,<2.3-dev",
-        "friendsofsymfony/user-bundle": "~1.2"
+        "doctrine/orm":                 "~2.2",
+        "symfony/validator":            "~2.1",
+        "symfony/twig-bundle":          "~2.1"
     },
 
     "suggest": {
@@ -55,7 +59,7 @@
 
     "extra": {
         "branch-alias": {
-            "dev-master": "0.2-dev"
+            "dev-master": "0.3-dev"
         }
     }
 }

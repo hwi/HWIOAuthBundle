@@ -31,8 +31,9 @@ class LinkedinResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
-        $this->assertEquals($accessToken, $userResponse->getAccessToken());
-        $this->assertEquals($accessToken['oauth_token'], $userResponse->getOAuthToken());
+        $this->assertEquals($accessToken['oauth_token'], $userResponse->getAccessToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertEquals($accessToken['oauth_expires_in'], $userResponse->getExpiresIn());
     }
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)

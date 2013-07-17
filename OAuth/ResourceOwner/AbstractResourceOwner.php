@@ -19,6 +19,7 @@ use Buzz\Message\Response as HttpResponse;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
@@ -33,11 +34,12 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * @var array
      */
-    protected $options = array(
-        'infos_url'           => '',
-        'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-        'scope'               => '',
-    );
+    protected $defaultOptions = array();
+
+    /**
+     * @var array
+     */
+    protected $options = array();
 
     /**
      * @var array
@@ -50,7 +52,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $httpClient;
 
     /**
-     * @access string
+     * @var string
      */
     protected $name;
 
@@ -62,12 +64,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name)
     {
-        $this->options = array_merge($this->options, $options);
-
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
         $this->name       = $name;
 
+        $this->addOptions($options);
         $this->configure();
     }
 
@@ -80,17 +81,25 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * Retrieve an option by name
+     * Add (extra) options to the configuration.
      *
-     * @param string $name The option name
-     *
-     * @return mixed The option value
-     *
-     * @throws \InvalidArgumentException When the option does not exist
+     * @param array $options
+     */
+    public function addOptions(array $options)
+    {
+        $this->options = array_merge($this->options, $options);
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public function getOption($name)
     {
         if (!array_key_exists($name, $this->options)) {
+            if (array_key_exists($name, $this->defaultOptions)) {
+                return $this->defaultOptions[$name];
+            }
+
             throw new \InvalidArgumentException(sprintf('Unknown option "%s"', $name));
         }
 
@@ -114,13 +123,55 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
+     * Add extra paths to the configuration.
+     *
+     * @param array $paths
+     */
+    public function addPaths(array $paths)
+    {
+        $this->paths = array_merge($this->paths, $paths);
+    }
+
+    /**
+     * Refresh an access token using a refresh token.
+     *
+     * @param string $refreshToken    Refresh token
+     * @param array  $extraParameters An array of parameters to add to the url
+     *
+     * @return array Array containing the access token and it's 'expires_in' value,
+     *               along with any other parameters returned from the authentication
+     *               provider.
+     *
+     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     */
+    public function refreshAccessToken($refreshToken, array $extraParameters = array())
+    {
+        throw new AuthenticationException('OAuth error: "Method unsupported."');
+    }
+
+    /**
+     * Revoke an OAuth access token or refresh token.
+     *
+     * @param string $token The token (access token or a refresh token) that should be revoked.
+     *
+     * @return Boolean Returns True if the revocation was successful, otherwise False.
+     *
+     * @throws AuthenticationException If an OAuth error occurred
+     */
+    public function revokeToken($token)
+    {
+        throw new AuthenticationException('OAuth error: "Method unsupported."');
+    }
+
+    /**
      * Get the response object to return.
      *
      * @return UserResponseInterface
      */
     protected function getUserResponse()
     {
-        $response = new $this->options['user_response_class'];
+        $response = $this->getOption('user_response_class');
+        $response = new $response;
 
         if ($response instanceof PathUserResponse) {
             $response->setPaths($this->paths);
@@ -144,7 +195,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     *
      * Performs an HTTP request
      *
      * @param string $url     The url to fetch
@@ -179,16 +229,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * Add extra paths to the configuration.
-     *
-     * @param array $paths
-     */
-    public function addPaths(array $paths)
-    {
-        $this->paths = array_merge($this->paths, $paths);
-    }
-
-    /**
      * Get the 'parsed' content based on the response headers.
      *
      * @param HttpMessageInterface $rawResponse
@@ -212,7 +252,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return mixed
      */
-    abstract protected function doGetAccessTokenRequest($url, array $parameters = array());
+    abstract protected function doGetTokenRequest($url, array $parameters = array());
 
     /**
      * @param string $url

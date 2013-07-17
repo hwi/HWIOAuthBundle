@@ -11,23 +11,21 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface,
-    HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken,
-    HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
-
-use Symfony\Component\DependencyInjection\ContainerAware,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpFoundation\Response,
-    Symfony\Component\HttpFoundation\RedirectResponse,
-    Symfony\Component\HttpKernel\Exception\NotFoundHttpException,
-    Symfony\Component\Security\Core\Exception\AccessDeniedException,
-    Symfony\Component\Security\Core\Exception\AccountStatusException,
-    Symfony\Component\Security\Core\SecurityContext,
-    Symfony\Component\Security\Core\User\UserInterface,
-    Symfony\Component\Security\Http\Event\InteractiveLoginEvent,
-    Symfony\Component\Security\Http\SecurityEvents;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Form\Form;
-use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AccountStatusException;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 /**
  * ConnectController
@@ -107,8 +105,10 @@ class ConnectController extends ContainerAware
             throw new \Exception('Cannot register an account.');
         }
 
-        $userInformation = $this->getResourceOwnerByName($error->getResourceOwnerName())
-            ->getUserInformation($error->getAccessToken());
+        $userInformation = $this
+            ->getResourceOwnerByName($error->getResourceOwnerName())
+            ->getUserInformation($error->getRawToken())
+        ;
 
         // enable compatibility with FOSUserBundle 1.3.x and 2.x
         if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
@@ -122,7 +122,7 @@ class ConnectController extends ContainerAware
             $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
 
             // Authenticate the user
-            $this->authenticateUser($form->getData(), $error->getResourceOwnerName(), $error->getAccessToken());
+            $this->authenticateUser($form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
 
             return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
@@ -145,6 +145,8 @@ class ConnectController extends ContainerAware
      *
      * @param Request $request The active request.
      * @param string  $service Name of the resource owner to connect to.
+     *
+     * @throws \Exception
      *
      * @return Response
      *
@@ -190,11 +192,7 @@ class ConnectController extends ContainerAware
             ->getForm();
 
         if ('POST' === $request->getMethod()) {
-            if ('2' == Kernel::MAJOR_VERSION && '1' <= Kernel::MINOR_VERSION) {
-                $form->bind($request);
-            } else {
-                $form->bindRequest($request);
-            }
+            $form->bind($request);
 
             if ($form->isValid()) {
                 $user = $this->container->get('security.context')->getToken()->getUser();

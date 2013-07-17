@@ -1,7 +1,7 @@
-Reference configuration
-=======================
+Internals: Reference configuration
+==================================
 
-``` yaml
+```yaml
 # app/config.yml
 
 hwi_oauth:
@@ -11,17 +11,19 @@ hwi_oauth:
             type:                github
             client_id:           <client_id>
             client_secret:       <client_secret>
-            scope:               ""
+            scope:               "user:email"
 
         google:
             type:                google
             client_id:           <client_id>
             client_secret:       <client_secret>
-            scope:               ""
+            scope:               "https://www.googleapis.com/auth/userinfo.profile"
             user_response_class: \Our\Custom\Response\Class
             paths:
-                email:          email
-                profilepicture: picture
+                email:           email
+                profilepicture:  picture
+            options:
+                access_type:     offline
 
         facebook:
             type:                facebook
@@ -36,7 +38,7 @@ hwi_oauth:
             access_token_url:    https://path.to/oauth/v2/token
             authorization_url:   https://path.to/oauth/v2/authorize
             infos_url:           https://path.to/api/user
-            scope:               ""
+            scope:               "user_details"
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
             paths:
                 identifier: id
@@ -51,7 +53,7 @@ hwi_oauth:
             access_token_url:    https://path.to/oauth/v1/token
             authorization_url:   https://path.to/oauth/v1/authorize
             infos_url:           https://path.to/api/user
-            realm:               ""
+            realm:               "whatever"
             user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: id
@@ -119,7 +121,7 @@ security:
                     service: hwi_oauth.user.provider.fosub_bridge
 ```
 
-``` yaml
+```yaml
 # app/config/routing.yml
 
 hwi_oauth_redirect:
@@ -139,4 +141,4 @@ github_login:
     pattern: /login/check-github
 ```
 
-[Return to the index.](index.md)
+[Return to the index.](../index.md)

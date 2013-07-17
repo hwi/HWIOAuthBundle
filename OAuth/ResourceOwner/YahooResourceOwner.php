@@ -27,9 +27,8 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
         'request_token_url'   => 'https://api.login.yahoo.com/oauth/v2/get_request_token',
         'access_token_url'    => 'https://api.login.yahoo.com/oauth/v2/get_token',
         'infos_url'           => 'http://social.yahooapis.com/v1/user/{guid}/profile',
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
         'realm'               => 'yahooapis.com',
-        'signature_method'    => 'HMAC-SHA1',
     );
 
     /**
@@ -46,11 +45,11 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
      *
      * {@inheritDoc}
      */
-    public function getUserInformation($accessToken)
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $this->options['infos_url'] = str_replace('{guid}', $accessToken['xoauth_yahoo_guid'], $this->getOption('infos_url'));
 
-        return parent::getUserInformation($accessToken);
+        return parent::getUserInformation($accessToken, $extraParameters);
     }
 
     /**

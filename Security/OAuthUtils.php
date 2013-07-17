@@ -11,10 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Security;
 
-use Symfony\Component\DependencyInjection\ContainerInterface,
-    Symfony\Component\HttpFoundation\Request;
-
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * OAuthUtils
@@ -25,8 +23,9 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
  */
 class OAuthUtils
 {
-    const SIGNATURE_METHOD_HMAC = 'HMAC-SHA1';
-    const SIGNATURE_METHOD_RSA  = 'RSA-SHA1';
+    const SIGNATURE_METHOD_HMAC      = 'HMAC-SHA1';
+    const SIGNATURE_METHOD_RSA       = 'RSA-SHA1';
+    const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
 
     /**
      * @var ContainerInterface
@@ -151,6 +150,10 @@ class OAuthUtils
 
                 openssl_sign($baseString, $signature, $privateKey);
                 openssl_free_key($privateKey);
+                break;
+
+            case self::SIGNATURE_METHOD_PLAINTEXT:
+                $signature = $baseString;
                 break;
 
             default:

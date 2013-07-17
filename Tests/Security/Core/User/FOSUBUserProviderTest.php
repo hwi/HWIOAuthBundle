@@ -11,8 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 
-use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider,
-    HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
+use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser;
 
 class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -27,7 +27,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
      * @expectedException \RuntimeException
      * @expectedExceptionMessage No property defined for entity for resource owner 'not_configured'.
      */
-    public function testLoadUserByOAuthuserResponseThrowsExceptionWhenNoPropertyIsConfigured()
+    public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured()
     {
         $provider = $this->createFOSUBUserProvider();
         $provider->loadUserByOAuthUserResponse($this->createUserResponseMock(null, 'not_configured'));
@@ -37,20 +37,20 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
      * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException
      * @expectedExceptionMessage User 'asm89' not found.
      */
-    public function testLoadUserByOAuthuserResponseThrowsExceptionWhenUserIsNull()
+    public function testLoadUserByOAuthUserResponseThrowsExceptionWhenUserIsNull()
     {
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
-        $provider = $this->createFOSUBUserProvider(null);
+        $provider = $this->createFOSUBUserProvider();
 
         $provider->loadUserByOAuthUserResponse($userResponseMock);
     }
 
-    public function testLoadUserByOAuthuserResponse()
+    public function testLoadUserByOAuthUserResponse()
     {
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
-        $user = new User();
+        $user = new FOSUser();
         $provider = $this->createFOSUBUserProvider($user);
 
         $loadedUser = $provider->loadUserByOAuthUserResponse($userResponseMock);
@@ -60,10 +60,10 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testConnectUser()
     {
-        $user = new User();
+        $user = new FOSUser();
 
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
-        $provider = $this->createFOSUBUserProvider(false, $user);
+        $provider = $this->createFOSUBUserProvider(null, $user);
 
         $provider->connect($user, $userResponseMock);
 
@@ -72,11 +72,11 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Class 'HWI\Bundle\OAuthBundle\Tests\Fixtures\User' should have a method 'setGoogleId'.
+     * @expectedExceptionMessage Class 'HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser' should have a method 'setGoogleId'.
      */
     public function testConnectUserWithNoSetterThrowsException()
     {
-        $user = new User();
+        $user = new FOSUser();
 
         $userResponseMock = $this->createUserResponseMock(null, 'google');
         $provider = $this->createFOSUBUserProvider();
@@ -84,21 +84,21 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
         $provider->connect($user, $userResponseMock);
     }
 
-    protected function createFOSUBUserProvider($user = false, $updateUser = false)
+    protected function createFOSUBUserProvider($user = null, $updateUser = null)
     {
         $properties = array('github' => 'githubId', 'google' => 'googleId');
 
         $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')
             ->getMock();
 
-        if (false !== $user) {
+        if (null !== $user) {
             $userManagerMock->expects($this->once())
                 ->method('findUserBy')
                 ->with(array('githubId' => 'asm89'))
                 ->will($this->returnValue($user));
         }
 
-        if (false !== $updateUser) {
+        if (null !== $updateUser) {
             $userManagerMock->expects($this->once())
                 ->method('updateUser')
                 ->with($updateUser);

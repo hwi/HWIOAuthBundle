@@ -11,18 +11,14 @@
 
 namespace HWI\Bundle\OAuthBundle\Form;
 
-use FOS\UserBundle\Form\Handler\RegistrationFormHandler,
-    FOS\UserBundle\Model\UserManagerInterface,
-    FOS\UserBundle\Mailer\MailerInterface,
-    FOS\UserBundle\Util\TokenGenerator;
-
-use HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedUserResponseInterface,
-    HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-
-use Symfony\Component\Form\Form,
-    Symfony\Component\HttpFoundation\Request,
-    Symfony\Component\HttpKernel\Kernel,
-    Symfony\Component\Security\Core\User\UserInterface;
+use FOS\UserBundle\Form\Handler\RegistrationFormHandler;
+use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Model\UserManagerInterface;
+use FOS\UserBundle\Util\TokenGenerator;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\Form\Form;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * FormHandlerInterface
@@ -80,11 +76,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         $form->setData($this->setUserInformation($user, $userInformation));
 
         if ('POST' === $request->getMethod()) {
-            if ('2' == Kernel::MAJOR_VERSION && '1' <= Kernel::MINOR_VERSION) {
-                $form->bind($request);
-            } else {
-                $form->bindRequest($request);
-            }
+            $form->bind($request);
 
             return $form->isValid();
         }
@@ -148,7 +140,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     {
         $user->setUsername($this->getUniqueUsername($userInformation->getNickname()));
 
-        if ($userInformation instanceof AdvancedUserResponseInterface && method_exists($user, 'setEmail')) {
+        if (method_exists($user, 'setEmail')) {
             $user->setEmail($userInformation->getEmail());
         }
 

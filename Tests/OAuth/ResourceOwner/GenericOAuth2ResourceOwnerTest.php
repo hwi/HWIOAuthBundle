@@ -23,6 +23,7 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     protected $buzzClient;
     protected $buzzResponse;
     protected $buzzResponseContentType;
+    protected $buzzResponseHttpCode = 200;
 
     protected $userResponse = <<<json
 {
@@ -41,7 +42,7 @@ json;
 
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
 
-        'scope'               => '',
+        'scope'               => null,
     );
 
     protected $paths = array(
@@ -61,6 +62,25 @@ json;
         $this->assertEquals($this->options['client_id'], $this->resourceOwner->getOption('client_id'));
     }
 
+    public function testGetOptionWithDefaults()
+    {
+        $buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
+            ->disableOriginalConstructor()->getMock();
+        $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
+            ->disableOriginalConstructor()->getMock();
+
+        $resourceOwner = new GenericOAuth2ResourceOwner($buzzClient, $httpUtils, array(), 'oauth2');
+
+        $this->assertNull($resourceOwner->getOption('client_id'));
+        $this->assertNull($resourceOwner->getOption('client_secret'));
+
+        $this->assertNull($resourceOwner->getOption('infos_url'));
+
+        $this->assertEquals('HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse', $resourceOwner->getOption('user_response_class'));
+
+        $this->assertNull($resourceOwner->getOption('scope'));
+    }
+
     /**
      * @expectedException \InvalidArgumentException
      */
@@ -76,17 +96,19 @@ json;
         /**
          * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation('access_token');
+        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
-        $this->assertEquals('access_token', $userResponse->getAccessToken());
+        $this->assertEquals('token', $userResponse->getAccessToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
     }
 
     public function testGetAuthorizationUrl()
     {
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -98,7 +120,7 @@ json;
         $request = new Request(array('code' => 'somecode'));
 
         $this->assertEquals(
-            'code',
+            array('access_token' => 'code'),
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -110,7 +132,7 @@ json;
         $request = new Request(array('code' => 'somecode'));
 
         $this->assertEquals(
-            'code',
+            array('access_token' => 'code'),
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -122,7 +144,7 @@ json;
         $request = new Request(array('code' => 'somecode'));
 
         $this->assertEquals(
-            'code',
+            array('access_token' => 'code'),
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -149,6 +171,42 @@ json;
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
+    public function testRefreshAccessToken()
+    {
+        $this->mockBuzz('{"access_token": "bar", "expires_in": 3600}', 'application/json');
+        $accessToken = $this->resourceOwner->refreshAccessToken('foo');
+
+        $this->assertEquals('bar', $accessToken['access_token']);
+        $this->assertEquals(3600, $accessToken['expires_in']);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
+    public function testRefreshAccessTokenInvalid()
+    {
+        $this->mockBuzz('invalid');
+
+        $this->resourceOwner->refreshAccessToken('foo');
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
+    public function testRefreshAccessTokenError()
+    {
+        $this->mockBuzz('{"error": "invalid"}', 'application/json');
+
+        $this->resourceOwner->refreshAccessToken('foo');
+    }
+
+    public function testRevokeToken()
+    {
+        $this->setExpectedException('\Symfony\Component\Security\Core\Exception\AuthenticationException');
+
+        $this->resourceOwner->revokeToken('token');
+    }
+
     public function testGetSetName()
     {
         $this->assertEquals('oauth2', $this->resourceOwner->getName());
@@ -166,19 +224,25 @@ json;
         /**
          * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
          */
-        $userResponse = $resourceOwner->getUserInformation('access_token');
+        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
         $this->assertEquals('foo', $userResponse->getNickname());
-        $this->assertEquals('access_token', $userResponse->getAccessToken());
-        $this->assertEquals('access_token', $userResponse->getOAuthToken());
+        $this->assertEquals('token', $userResponse->getAccessToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
     }
 
+    /**
+     * @param \Buzz\Message\Request  $request
+     * @param \Buzz\Message\Response $response
+     */
     public function buzzSendMock($request, $response)
     {
         $response->setContent($this->buzzResponse);
-        $response->addHeader('Content-Type: ' . $this->buzzResponseContentType);
+        $response->addHeader('HTTP/1.1 '.$this->buzzResponseHttpCode.' Some text');
+        $response->addHeader('Content-Type: '.$this->buzzResponseContentType);
     }
 
     protected function mockBuzz($response = '', $contentType = 'text/plain')

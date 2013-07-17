@@ -22,11 +22,13 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $options = array(
-        'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
-        'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
-        'infos_url'           => 'https://graph.facebook.com/me',
-        'scope'               => '',
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+        'authorization_url' => 'https://www.facebook.com/dialog/oauth',
+        'access_token_url'  => 'https://graph.facebook.com/oauth/access_token',
+        'revoke_token_url'  => 'https://graph.facebook.com/me/permissions',
+        'infos_url'         => 'https://graph.facebook.com/me',
+
+        // @link https://developers.facebook.com/docs/reference/dialogs/#display
+        'display'           => null, 
     );
 
     /**
@@ -44,6 +46,32 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function configure()
     {
-        $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+        if (isset($this->options['scope'])) {
+            $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    {
+        return parent::getAuthorizationUrl($redirectUri, array_merge(array('display' => $this->getOption('display')), $extraParameters));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function revokeToken($token)
+    {
+        $parameters = array(
+            'client_id'     => $this->getOption('client_id'),
+            'client_secret' => $this->getOption('client_secret'),
+        );
+
+        $response = $this->httpRequest($this->normalizeUrl($this->getOption('revoke_token_url'), array('token' => $token)), $parameters, array(), 'POST');
+        $response = $this->getResponseContent($response);
+
+        return 'true' == $response;
     }
 }

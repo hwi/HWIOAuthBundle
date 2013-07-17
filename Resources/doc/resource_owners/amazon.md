@@ -1,10 +1,11 @@
-Step 2x: Setup Twitter
-======================
-First you will have to register your application on Twitter. Check out the
-documentation for more information: https://dev.twitter.com/docs/auth/oauth.
+Step 2x: Setup Amazon
+=====================
+First you will have to register your application on Amazon. Check out the
+documentation for more information: https://login.amazon.com/documentation.
 
-Next configure a resource owner of type `twitter` with appropriate
-`client_id`, `client_secret`.
+Next configure a resource owner of type `amazon` with appropriate
+`client_id`, `client_secret` and `scope`. Refer to the Amazon documentation
+for the available scopes.
 
 ``` yaml
 # app/config/config.yml
@@ -12,7 +13,7 @@ Next configure a resource owner of type `twitter` with appropriate
 hwi_oauth:
     resource_owners:
         any_name:
-            type:                twitter
+            type:                amazon
             client_id:           <client_id>
             client_secret:       <client_secret>
 ```

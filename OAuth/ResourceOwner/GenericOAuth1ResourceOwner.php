@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Buzz\Client\ClientInterface as HttpClientInterface;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -34,12 +35,17 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * @var array
      */
-    protected $options = array(
-        'client_id'           => '',
-        'client_secret'       => '',
-        'infos_url'           => '',
+    protected $defaultOptions = array(
+        'client_id'           => null,
+        'client_secret'       => null,
+
+        'infos_url'           => null,
+
         'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+
         'realm'               => null,
+        'scope'               => null,
+
         'signature_method'    => 'HMAC-SHA1',
     );
 
@@ -60,16 +66,16 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getUserInformation($accessToken)
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        $parameters = array(
+        $parameters = array_merge(array(
             'oauth_consumer_key'     => $this->getOption('client_id'),
             'oauth_timestamp'        => time(),
             'oauth_nonce'            => $this->generateNonce(),
             'oauth_version'          => '1.0',
             'oauth_signature_method' => $this->getOption('signature_method'),
             'oauth_token'            => $accessToken['oauth_token'],
-        );
+        ), $extraParameters);
 
         $url = $this->getOption('infos_url');
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
@@ -86,7 +92,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $response = $this->getUserResponse();
         $response->setResponse($content);
         $response->setResourceOwner($this);
-        $response->setAccessToken($accessToken);
+        $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
     }
@@ -130,7 +136,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $this->getOption('signature_method')
         );
 
-        $response = $this->doGetAccessTokenRequest($url, $parameters);
+        $response = $this->doGetTokenRequest($url, $parameters);
         $response = $this->getResponseContent($response);
 
         if (isset($response['oauth_problem'])) {
@@ -178,7 +184,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $this->getOption('signature_method')
         );
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, array(), 'POST');
+        $apiResponse = $this->httpRequest($url, null, $parameters, array(), HttpRequestInterface::METHOD_POST);
 
         $response = $this->getResponseContent($apiResponse);
 
@@ -228,7 +234,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function doGetAccessTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, null, $parameters, array(), HttpRequestInterface::METHOD_POST);
     }

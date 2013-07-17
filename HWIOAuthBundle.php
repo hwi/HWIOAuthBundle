@@ -11,13 +11,12 @@
 
 namespace HWI\Bundle\OAuthBundle;
 
-use Symfony\Component\HttpKernel\Bundle\Bundle,
-    Symfony\Component\HttpKernel\Kernel,
-    Symfony\Component\DependencyInjection\ContainerBuilder;
-
-use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension,
-    HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\SetResourceOwnerServiceNameCompilerPass,
-    HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory;
+use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
+use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\SetResourceOwnerServiceNameCompilerPass;
+use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * HWIOAuthBundle

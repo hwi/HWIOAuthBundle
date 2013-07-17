@@ -11,10 +11,10 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Http\EntryPoint;
 
-use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface,
-    Symfony\Component\Security\Core\Exception\AuthenticationException,
-    Symfony\Component\Security\Http\HttpUtils,
-    Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
+use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * OAuthEntryPoint redirects the user to the appropriate login url if there is

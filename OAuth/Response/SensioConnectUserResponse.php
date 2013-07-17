@@ -14,12 +14,12 @@ namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * SensioUserResponse
+ * SensioConnectUserResponse
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  * @author SensioLabs <contact@sensiolabs.com>
  */
-class SensioConnectUserResponse extends AbstractUserResponse implements AdvancedUserResponseInterface
+class SensioConnectUserResponse extends AbstractUserResponse
 {
     /**
      * @var \DOMXpath

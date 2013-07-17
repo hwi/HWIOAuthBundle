@@ -7,7 +7,7 @@ only a little configuration.
 
 To make this bundle work you need to add the following to your app/config/config.yml:
 
-``` yaml
+```yaml
 # app/config/config.yml
 
 hwi_oauth:
@@ -17,7 +17,7 @@ hwi_oauth:
     # an optional setting to configure a query string parameter which can be used to redirect
     # the user after authentication, e.g. /connect/facebook?_destination=/my/destination will
     # redirect the user to /my/destination after facebook authenticates them.  If this is not
-    # set then the user will be redirected to the original resource that they requested, or 
+    # set then the user will be redirected to the original resource that they requested, or
     # the base address if no resource was requested.  This is similar to the behaviour of
     # [target_path_parameter for form login](http://symfony.com/doc/2.0/cookbook/security/form_login.html).
     # target_path_parameter: _destination
@@ -26,18 +26,33 @@ hwi_oauth:
     # and other settings you want to adjust in this bundle, just checkout the list below!
 ```
 
-- [Facebook](2x-facebook.md)
-- [Foursquare](2x-foursquare.md)
-- [GitHub](2x-github.md)
-- [Google](2x-google.md)
-- [Linkedin](2x-linkedin.md)
-- [SensioLabs Connect](2x-sensio_connect.md)
-- [Stack Exchange](2x-stack_exchange.md)
-- [Twitter] (2x-twitter.md)
-- [Vkontakte](2x-vkontakte.md)
-- [Windows Live](2x-windows_live.md)
-- [Others](2x-others.md)
+##### Built-in resource owners:
+
+- [37signals](resource_owners/37signals.md)
+- [Amazon](resource_owners/amazon.md)
+- [Bitbucket](resource_owners/bitbucket.md)
+- [Disqus](resource_owners/disqus.md)
+- [Dropbox](resource_owners/dropbox.md)
+- [Facebook](resource_owners/facebook.md)
+- [Flickr](resource_owners/flickr.md)
+- [Foursquare](resource_owners/foursquare.md)
+- [GitHub](resource_owners/github.md)
+- [Google](resource_owners/google.md)
+- [Instagram](resource_owners/instagram.md)
+- [Jira](resource_owners/jira.md)
+- [Linkedin](resource_owners/linkedin.md)
+- [Odnoklassniki](resource_owners/odnoklassniki.md)
+- [SensioLabs Connect](resource_owners/sensio_connect.md)
+- [Stack Exchange](resource_owners/stack_exchange.md)
+- [Twitter] (resource_owners/twitter.md)
+- [Vkontakte](resource_owners/vkontakte.md)
+- [Windows Live](resource_owners/windows_live.md)
+- [Yahoo](resource_owners/yahoo.md)
+- [Yandex](resource_owners/yandex.md)
+- [Others](resource_owners/others.md)
 
 ### Continue to the next step!
 When you're done. Continue by configuring the security layer.
+
+
 [Step 3: Configuring the security layer](3-configuring_the_security_layer.md).

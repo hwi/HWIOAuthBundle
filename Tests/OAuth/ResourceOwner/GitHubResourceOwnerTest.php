@@ -30,6 +30,33 @@ json;
         'profilepicture' => 'avatar_url',
     );
 
+    public function testRevokeToken()
+    {
+        $this->buzzResponseHttpCode = 204;
+        $this->buzzResponse = '{"id": "666"}';
+        $this->buzzResponseContentType = 'application/json';
+
+        $this->buzzClient->expects($this->at(0))
+            ->method('send')
+            ->will($this->returnCallback(array($this, 'buzzSendMock')));
+
+        $this->buzzResponse = '';
+
+        $this->buzzClient->expects($this->at(1))
+            ->method('send')
+            ->will($this->returnCallback(array($this, 'buzzSendMock')));
+
+        $this->assertTrue($this->resourceOwner->revokeToken('token'));
+    }
+
+    public function testRevokeTokenFails()
+    {
+        $this->buzzResponseHttpCode = 404;
+        $this->mockBuzz('{"id": "666"}', 'application/json');
+
+        $this->assertFalse($this->resourceOwner->revokeToken('token'));
+    }
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         $options = array_merge(

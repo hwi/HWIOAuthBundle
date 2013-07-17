@@ -22,9 +22,29 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 class OAuthToken extends AbstractToken
 {
     /**
-     * @var string|array
+     * @var string
      */
     private $accessToken;
+
+    /**
+     * @var array
+     */
+    private $rawToken;
+
+    /**
+     * @var string
+     */
+    private $refreshToken;
+
+    /**
+     * @var integer
+     */
+    private $expiresIn;
+
+    /**
+     * @var string
+     */
+    private $tokenSecret;
 
     /**
      * @var string
@@ -39,7 +59,7 @@ class OAuthToken extends AbstractToken
     {
         parent::__construct($roles);
 
-        $this->accessToken = $accessToken;
+        $this->setRawToken($accessToken);
 
         parent::setAuthenticated(count($roles) > 0);
     }
@@ -53,7 +73,7 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * @param string|array $accessToken The OAuth access token
+     * @param string $accessToken The OAuth access token
      */
     public function setAccessToken($accessToken)
     {
@@ -61,11 +81,100 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * @return string|array
+     * @return string
      */
     public function getAccessToken()
     {
         return $this->accessToken;
+    }
+
+    /**
+     * @param array|string $token The OAuth token
+     */
+    public function setRawToken($token)
+    {
+        if (is_array($token)) {
+            if (isset($token['access_token'])) {
+                $this->accessToken = $token['access_token'];
+            } elseif (isset($token['oauth_token'])) {
+                $this->accessToken = $token['oauth_token'];
+            }
+
+            if (isset($token['refresh_token'])) {
+                $this->refreshToken = $token['refresh_token'];
+            }
+
+            if (isset($token['expires_in'])) {
+                $this->expiresIn = $token['expires_in'];
+            } elseif (isset($token['oauth_expires_in'])) {
+                $this->expiresIn = $token['oauth_expires_in'];
+            }
+
+            if (isset($token['oauth_token_secret'])) {
+                $this->tokenSecret = $token['oauth_token_secret'];
+            }
+
+            $this->rawToken = $token;
+        } else {
+            $this->accessToken = $token;
+            $this->rawToken    = array('access_token' => $token);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getRawToken()
+    {
+        return $this->rawToken;
+    }
+
+    /**
+     * @param string $refreshToken The OAuth refresh token
+     */
+    public function setRefreshToken($refreshToken)
+    {
+        $this->refreshToken = $refreshToken;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRefreshToken()
+    {
+        return $this->refreshToken;
+    }
+
+    /**
+     * @param integer $expiresIn The duration in seconds of the access token lifetime
+     */
+    public function setExpiresIn($expiresIn)
+    {
+        $this->expiresIn = $expiresIn;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getExpiresIn()
+    {
+        return $this->expiresIn;
+    }
+
+    /**
+     * @param string $tokenSecret
+     */
+    public function setTokenSecret($tokenSecret)
+    {
+        $this->tokenSecret = $tokenSecret;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getTokenSecret()
+    {
+        return $this->tokenSecret;
     }
 
     /**
@@ -95,6 +204,9 @@ class OAuthToken extends AbstractToken
     {
         return serialize(array(
             $this->accessToken,
+            $this->rawToken,
+            $this->refreshToken,
+            $this->expiresIn,
             $this->resourceOwnerName,
             parent::serialize()
         ));
@@ -107,6 +219,9 @@ class OAuthToken extends AbstractToken
     {
         list(
             $this->accessToken,
+            $this->rawToken,
+            $this->refreshToken,
+            $this->expiresIn,
             $this->resourceOwnerName,
             $parent,
         ) = unserialize($serialized);

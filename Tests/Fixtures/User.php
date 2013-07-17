@@ -11,16 +11,16 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 
-use FOS\UserBundle\Model\User as BaseUser;
+use Symfony\Component\Security\Core\User\UserInterface;
 
-/**
- * User class.
- *
- * @author Alexander <iam.asm89@gmail.com>
- */
-class User extends BaseUser
+class User implements UserInterface
 {
     private $githubId;
+
+    public function getId()
+    {
+        return '1';
+    }
 
     public function getUsername()
     {
@@ -46,12 +46,12 @@ class User extends BaseUser
     {
     }
 
-    public function getGitHubId()
+    public function getGithubId()
     {
         return $this->githubId;
     }
 
-    public function setGitHubId($githubId)
+    public function setGithubId($githubId)
     {
         $this->githubId = $githubId;
     }

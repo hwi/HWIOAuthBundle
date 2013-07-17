@@ -17,10 +17,10 @@ The HWIOAuthBundle also ships with three default implementations:
 ### B) Configure the oauth firewall
 
 In the firewall configuration you will need to configure a login path for the
-resource owners you configured in step 2. Additionally you will need to point
-the oauth firewall to the appropriate service to use for loading users:
+resource owners you configured in [step 2](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/2-configuring_resource_owners.md).
+Additionally you will need to point the oauth firewall to the appropriate service to use for loading users:
 
-``` yaml
+```yaml
 # app/config/security.yml
 security:
     firewalls:
@@ -38,27 +38,26 @@ security:
                     service: my.oauth_aware.user_provider.service
 ```
 
-**Note:**
+The paths configured at the `resource_owners` section should be defined in your routing.
 
-> Starting from Symfony 2.1 the paths configured at the `resource_owners`
-> section should be defined in your routing.
->
-> ``` yaml
-> # app/config/routing.yml
-> facebook_login:
->     pattern: /login/check-facebook
->
-> google_login:
->     pattern: /login/check-google
->
-> custom_login:
->     pattern: /login/check-custom
->
-> github_login:
->     pattern: /login/check-github
-> ```
+```yaml
+# app/config/routing.yml
+facebook_login:
+    pattern: /login/check-facebook
 
+google_login:
+    pattern: /login/check-google
+
+custom_login:
+    pattern: /login/check-custom
+
+github_login:
+    pattern: /login/check-github
+```
 
 ## That was it!
-That's the basic setup of the bundle. [Return to the index.](index.md) If you
-are interested in giving users the option to "connect" social accounts check out: (todo).
+
+That's the basic setup of the bundle. If you are interested in giving users the option to "connect"
+social accounts check out this (todo).
+
+[Return to the index.](index.md)

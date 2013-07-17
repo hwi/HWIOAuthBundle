@@ -27,15 +27,16 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://connect.sensiolabs.com/oauth/authorize',
         'access_token_url'    => 'https://connect.sensiolabs.com/oauth/access_token',
         'infos_url'           => 'https://connect.sensiolabs.com/api',
-        'scope'               => '',
+
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse',
+
         'response_type'       => 'code',
     );
 
     /**
      * {@inheritDoc}
      */
-    protected function doGetAccessTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($this->getOption('access_token_url'), $parameters, array(), HttpRequestInterface::METHOD_POST);
     }

@@ -27,8 +27,7 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
         'authorization_url'   => 'https://foursquare.com/oauth2/authorize',
         'access_token_url'    => 'https://foursquare.com/oauth2/access_token',
         'infos_url'           => 'https://api.foursquare.com/v2/users/self',
-        'scope'               => null,
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse',
+
         // @link https://developer.foursquare.com/overview/versioning
         'version'             => '20121206',
     );
@@ -77,7 +76,7 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     {
         // Foursquare require to pass the 'v' ('version' = date in format 'YYYYMMDD') parameter when requesting API
         $url = $this->normalizeUrl($url, array(
-            'v' => $this->options['version']
+            'v' => $this->getOption('version')
         ));
 
         // Foursquare require to pass the OAuth token as 'oauth_token' instead of 'access_token'

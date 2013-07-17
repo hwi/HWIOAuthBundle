@@ -11,36 +11,87 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
  * OAuthAwareException
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class OAuthAwareException extends \Exception
-    implements OAuthAwareExceptionInterface
+class OAuthAwareException extends \Exception implements OAuthAwareExceptionInterface
 {
-    private $accessToken;
-    private $resourceOwnerName;
+    /**
+     * @var OAuthToken
+     */
+    protected $token;
+    /**
+     * @var string
+     */
+    protected $resourceOwnerName;
 
+    /**
+     * {@inheritdoc}
+     */
     public function getAccessToken()
     {
-        return $this->accessToken;
+        return $this->token->getAccessToken();
     }
 
-    public function setAccessToken($accessToken)
+    /**
+     * {@inheritdoc}
+     */
+    public function getRefreshToken()
     {
-        $this->accessToken = $accessToken;
+        return $this->token->getRefreshToken();
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function getExpiresIn()
+    {
+        return $this->token->getExpiresIn();
+    }
+
+    /**
+     * @return OAuthToken
+     */
+    public function getRawToken()
+    {
+        return $this->token->getRawToken();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTokenSecret()
+    {
+        return $this->token->getTokenSecret();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getResourceOwnerName()
     {
         return $this->resourceOwnerName;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setResourceOwnerName($resourceOwnerName)
     {
         $this->resourceOwnerName = $resourceOwnerName;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setToken(TokenInterface $token)
+    {
+        $this->token = $token;
     }
 }

@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+
 /**
  * OAuthAwareExceptionInterface
  *
@@ -20,16 +22,46 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 interface OAuthAwareExceptionInterface
 {
     /**
-     * Set the access token of the failed authentication request.
+     * Get the access token information.
      *
-     * @param string $accessToken
-     */
-    public function setAccessToken($accessToken);
-
-    /**
      * @return string
      */
     public function getAccessToken();
+
+    /**
+     * Get the raw version of received token.
+     *
+     * @return array
+     */
+    public function getRawToken();
+
+    /**
+     * Get the refresh token information.
+     *
+     * @return null|string
+     */
+    public function getRefreshToken();
+
+    /**
+     * Get the info when token will expire.
+     *
+     * @return null|integer
+     */
+    public function getExpiresIn();
+
+    /**
+     * Get the oauth secret token 
+     * 
+     * @return null|string
+     */
+    public function getTokenSecret();
+
+    /**
+     * Set the token.
+     *
+     * @param TokenInterface $token
+     */
+    public function setToken(TokenInterface $token);
 
     /**
      * Set the name of the resource owner responsible for the oauth authentication.
@@ -39,6 +71,8 @@ interface OAuthAwareExceptionInterface
     public function setResourceOwnerName($resourceOwnerName);
 
     /**
+     * Get the name of resource owner.
+     *
      * @return string
      */
     public function getResourceOwnerName();

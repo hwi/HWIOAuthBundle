@@ -298,7 +298,7 @@ resource_owners:
         client_id:           client_id
         client_secret:       client_secret
     some_service:
-        service:             hwi_oauth.abstract_resource_owner.google
+        service:             hwi_oauth.abstract_resource_owner.generic
 EOF;
         $parser = new Parser();
 
