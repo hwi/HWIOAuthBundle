@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 0.2.7 (2013-xx-xx)
+* Fix: Changed authorization url for Vkontakte resource owner
+
 ## 0.2.6 (2013-06-24)
 * Fix: Use same check for FOSUserBundle compatibility to prevent strange errors
   with calls of undefined services
