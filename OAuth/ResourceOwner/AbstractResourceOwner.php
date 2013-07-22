@@ -237,7 +237,8 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     protected function getResponseContent(HttpMessageInterface $rawResponse)
     {
-        if (false !== strpos($rawResponse->getHeader('Content-Type'), 'application/json')) {
+        $contentType = $rawResponse->getHeader('Content-Type');
+        if (false !== strpos($contentType, 'application/json') || false !== strpos($contentType, 'text/javascript')) {
             $response = json_decode($rawResponse->getContent(), true);
         } else {
             parse_str($rawResponse->getContent(), $response);
