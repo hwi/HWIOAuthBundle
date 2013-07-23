@@ -149,6 +149,30 @@ json;
         );
     }
 
+    public function testGetAccessTokenTextJavascriptResponse()
+    {
+        $this->mockBuzz('{"access_token": "code"}', 'text/javascript');
+
+        $request = new Request(array('code' => 'somecode'));
+
+        $this->assertEquals(
+            array('access_token' => 'code'),
+            $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
+        );
+    }
+
+    public function testGetAccessTokenTextJavascriptCharsetResponse()
+    {
+        $this->mockBuzz('{"access_token": "code"}', 'text/javascript; charset=utf-8');
+
+        $request = new Request(array('code' => 'somecode'));
+
+        $this->assertEquals(
+            array('access_token' => 'code'),
+            $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
+        );
+    }
+
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */
