@@ -233,15 +233,19 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @param HttpMessageInterface $rawResponse
      *
-     * @return mixed
+     * @return array
      */
     protected function getResponseContent(HttpMessageInterface $rawResponse)
     {
-        $contentType = $rawResponse->getHeader('Content-Type');
-        if (false !== strpos($contentType, 'application/json') || false !== strpos($contentType, 'text/javascript')) {
-            $response = json_decode($rawResponse->getContent(), true);
-        } else {
-            parse_str($rawResponse->getContent(), $response);
+        // First check that content in response exists, due too bug: https://bugs.php.net/bug.php?id=54484
+        $content = $rawResponse->getContent();
+        if (!$content) {
+            return array();
+        }
+
+        $response = json_decode($content, true);
+        if (JSON_ERROR_NONE !== json_last_error()) {
+            parse_str($content, $response);
         }
 
         return $response;

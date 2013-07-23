@@ -40,8 +40,6 @@ json;
             ->method('send')
             ->will($this->returnCallback(array($this, 'buzzSendMock')));
 
-        $this->buzzResponse = '';
-
         $this->buzzClient->expects($this->at(1))
             ->method('send')
             ->will($this->returnCallback(array($this, 'buzzSendMock')));
