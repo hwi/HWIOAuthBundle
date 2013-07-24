@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
@@ -26,6 +27,41 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class OAuthFactory extends AbstractFactory
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function addConfiguration(NodeDefinition $node)
+    {
+        parent::addConfiguration($node);
+
+        $builder = $node->children();
+        $builder
+            ->scalarNode('login_path')
+                ->cannotBeEmpty()
+                ->isRequired()
+            ->end()
+        ;
+
+        $this->addOAuthProviderConfiguration($builder);
+        $this->addResourceOwnersConfiguration($builder);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getKey()
+    {
+        return 'oauth';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPosition()
+    {
+        return 'http';
+    }
+
     /**
      * Creates a resource owner map for the given configuration.
      *
@@ -109,7 +145,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    protected function createEntryPoint($container, $id, $config, $defaultEntryPoint)
+    protected function createEntryPoint(ContainerBuilder $container, $id, $config, $defaultEntryPoint)
     {
         $entryPointId = 'hwi_oauth.authentication.entry_point.oauth.'.$id;
 
@@ -124,7 +160,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    protected function createListener($container, $id, $config, $userProvider)
+    protected function createListener(ContainerBuilder $container, $id, $config, $userProvider)
     {
         $listenerId = parent::createListener($container, $id, $config, $userProvider);
 
@@ -145,97 +181,88 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    public function addConfiguration(NodeDefinition $node)
-    {
-        parent::addConfiguration($node);
-
-        $builder = $node->children();
-
-        $builder
-            ->arrayNode('resource_owners')
-                ->isRequired()
-                ->useAttributeAsKey('name')
-                ->prototype('scalar')
-                ->end()
-                ->validate()
-                    ->ifTrue(function($c) {
-                        $checkPaths = array();
-                        foreach ($c as $checkPath) {
-                            if (in_array($checkPath, $checkPaths)) {
-                                return true;
-                            }
-
-                            $checkPaths[] = $checkPath;
-                        }
-
-                        return false;
-                    })
-                    ->thenInvalid("Each resource owner should have a unique check_path.")
-                ->end()
-            ->end()
-            ->arrayNode('oauth_user_provider')
-                ->isRequired()
-                ->children()
-                    ->arrayNode('orm')
-                        ->children()
-                            ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
-                            ->scalarNode('manager_name')->defaultNull()->end()
-                            ->arrayNode('properties')
-                                ->isRequired()
-                                ->useAttributeAsKey('name')
-                                ->prototype('scalar')
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                    ->scalarNode('service')->cannotBeEmpty()->end()
-                    ->scalarNode('oauth')->end()
-                    ->arrayNode('fosub')
-                        ->children()
-                            ->arrayNode('properties')
-                                ->isRequired()
-                                ->useAttributeAsKey('name')
-                                ->prototype('scalar')
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-                ->validate()
-                    ->ifTrue(function($c) {
-                        return 1 !== count($c)
-                            || !in_array(key($c), array('fosub', 'oauth','orm', 'service'));
-                    })
-                    ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
-                ->end()
-            ->end()
-            ->scalarNode('login_path')
-                ->cannotBeEmpty()
-                ->isRequired()
-            ->end();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     protected function getListenerId()
     {
-      return 'hwi_oauth.authentication.listener.oauth';
+        return 'hwi_oauth.authentication.listener.oauth';
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getKey()
+    private function addOAuthProviderConfiguration(ArrayNodeDefinition $node)
     {
-        return 'oauth';
+        $node
+            ->children()
+                ->arrayNode('oauth_user_provider')
+                    ->isRequired()
+                    ->children()
+                        ->arrayNode('orm')
+                            ->children()
+                                ->scalarNode('class')
+                                    ->isRequired()
+                                    ->cannotBeEmpty()
+                                ->end()
+                                ->scalarNode('manager_name')
+                                    ->defaultNull()
+                                ->end()
+                                ->arrayNode('properties')
+                                    ->isRequired()
+                                    ->useAttributeAsKey('name')
+                                        ->prototype('scalar')
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                        ->scalarNode('service')
+                            ->cannotBeEmpty()
+                        ->end()
+                        ->scalarNode('oauth')
+                        ->end()
+                        ->arrayNode('fosub')
+                            ->children()
+                                ->arrayNode('properties')
+                                    ->isRequired()
+                                    ->useAttributeAsKey('name')
+                                        ->prototype('scalar')
+                                    ->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                    ->validate()
+                        ->ifTrue(function($c) {
+                            return 1 !== count($c) || !in_array(key($c), array('fosub', 'oauth', 'orm', 'service'));
+                        })
+                        ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
+                    ->end()
+                ->end()
+            ->end()
+        ;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getPosition()
+    private function addResourceOwnersConfiguration(ArrayNodeDefinition $node)
     {
-        return 'http';
+        $node
+            ->children()
+                ->arrayNode('resource_owners')
+                    ->isRequired()
+                    ->useAttributeAsKey('name')
+                        ->prototype('scalar')
+                    ->end()
+                    ->validate()
+                        ->ifTrue(function($c) {
+                            $checkPaths = array();
+                            foreach ($c as $checkPath) {
+                                if (in_array($checkPath, $checkPaths)) {
+                                    return true;
+                                }
+
+                                $checkPaths[] = $checkPath;
+                            }
+
+                            return false;
+                        })
+                        ->thenInvalid('Each resource owner should have a unique "check_path".')
+                    ->end()
+                ->end()
+            ->end()
+        ;
     }
 }

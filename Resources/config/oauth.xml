@@ -95,12 +95,13 @@
         </service>
 
         <service id="hwi_oauth.security.oauth_utils" class="%hwi_oauth.security.oauth_utils.class%">
-            <argument type="service" id="service_container" />
+            <argument type="service" id="security.http_utils" />
+            <argument type="service" id="security.context" />
+            <argument>%hwi_oauth.connect%</argument>
         </service>
 
         <!-- resource owners -->
         <service id="hwi_oauth.abstract_resource_ownermap" class="%hwi_oauth.resource_ownermap.class%" abstract="true">
-            <argument type="service" id="service_container" />
             <argument type="service" id="security.http_utils" />
             <argument>%hwi_oauth.resource_owners%</argument>
             <argument type="collection" /><!-- map -->

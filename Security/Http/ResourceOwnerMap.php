@@ -11,7 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Http;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -21,13 +22,8 @@ use Symfony\Component\Security\Http\HttpUtils;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class ResourceOwnerMap
+class ResourceOwnerMap extends ContainerAware
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
     /**
      * @var HttpUtils
      */
@@ -38,19 +34,20 @@ class ResourceOwnerMap
      */
     protected $resourceOwners;
 
+    /**
+     * @var array
+     */
     protected $possibleResourceOwners;
 
     /**
      * Constructor.
      *
-     * @param ContainerInterface $container              Container used to lazy load the resource owners.
      * @param HttpUtils          $httpUtils              HttpUtils
      * @param array              $possibleResourceOwners Array with possible resource owners names.
      * @param array              $resourceOwners         Array with configured resource owners.
      */
-    public function __construct(ContainerInterface $container, HttpUtils $httpUtils, array $possibleResourceOwners, $resourceOwners)
+    public function __construct(HttpUtils $httpUtils, array $possibleResourceOwners, $resourceOwners)
     {
-        $this->container              = $container;
         $this->httpUtils              = $httpUtils;
         $this->possibleResourceOwners = $possibleResourceOwners;
         $this->resourceOwners         = $resourceOwners;
@@ -61,7 +58,7 @@ class ResourceOwnerMap
      *
      * @param string $name
      *
-     * @return null|\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
+     * @return null|ResourceOwnerInterface
      */
     public function getResourceOwnerByName($name)
     {

@@ -241,7 +241,7 @@ class ConnectController extends ContainerAware
             $request->getSession()->set('_security.' . $providerKey . '.target_path', $targetUrl);
         }
 
-        return new RedirectResponse($this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($service));
+        return new RedirectResponse($this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($request, $service));
     }
 
     /**

@@ -12,7 +12,10 @@
 namespace HWI\Bundle\OAuthBundle\Security;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * OAuthUtils
@@ -28,21 +31,43 @@ class OAuthUtils
     const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
 
     /**
-     * @var ContainerInterface
+     * @var boolean
      */
-    private $container;
+    private $connect;
+
     /**
-     * @var \HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap
+     * @var HttpUtils
+     */
+    private $httpUtils;
+
+    /**
+     * @var ResourceOwnerMap
      */
     private $ownerMap;
 
     /**
-     * @param ContainerInterface $container
+     * @var ResourceOwnerMap
      */
-    public function __construct(ContainerInterface $container)
+    private $securityContext;
+
+    /**
+     * @param HttpUtils       $httpUtils
+     * @param SecurityContext $securityContext
+     * @param boolean         $connect
+     */
+    public function __construct(HttpUtils $httpUtils, SecurityContext $securityContext, $connect)
     {
-        $this->container = $container;
-        $this->ownerMap  = $this->container->get('hwi_oauth.resource_ownermap.'.$this->container->getParameter('hwi_oauth.firewall_name'));
+        $this->httpUtils       = $httpUtils;
+        $this->securityContext = $securityContext;
+        $this->connect         = $connect;
+    }
+
+    /**
+     * @param ResourceOwnerMap $ownerMap
+     */
+    public function setResourceOwnerMap(ResourceOwnerMap $ownerMap)
+    {
+        $this->ownerMap = $ownerMap;
     }
 
     /**
@@ -56,25 +81,23 @@ class OAuthUtils
     }
 
     /**
-     * @param string $name
-     * @param string $redirectUrl     Optional
-     * @param array  $extraParameters Optional
+     * @param Request $request
+     * @param string  $name
+     * @param string  $redirectUrl     Optional
+     * @param array   $extraParameters Optional
      *
      * @return string
      */
-    public function getAuthorizationUrl($name, $redirectUrl = null, array $extraParameters = array())
+    public function getAuthorizationUrl(Request $request, $name, $redirectUrl = null, array $extraParameters = array())
     {
         $resourceOwner = $this->getResourceOwner($name);
 
-        if ($redirectUrl === null) {
-            $connect = $this->container->getParameter('hwi_oauth.connect');
-            $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
-            $checkPath = $this->ownerMap->getResourceOwnerCheckPath($name);
-
-            if (!$connect || !$hasUser) {
-                $redirectUrl = $this->generateUri($checkPath);
-            } else {
-                $redirectUrl = $this->generateUrl('hwi_oauth_connect_service', array('service' => $name), true);
+        if (null === $redirectUrl) {
+           if (!$this->connect || !$this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                $redirectUrl = $this->httpUtils->generateUri($request, $resourceOwner);
+           } else {
+                $request->attributes->set('service', $name);
+                $redirectUrl = $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service');
             }
         }
 
@@ -82,16 +105,19 @@ class OAuthUtils
     }
 
     /**
-     * @param string $name
+     * @param Request $request
+     * @param string  $name
      *
      * @return string
      */
-    public function getLoginUrl($name)
+    public function getLoginUrl(Request $request, $name)
     {
         // Just to check that this resource owner exists
         $this->getResourceOwner($name);
 
-        return $this->generateUrl('hwi_oauth_service_redirect', array('service' => $name));
+        $request->attributes->set('service', $name);
+
+        return $this->httpUtils->generateUri($request, 'hwi_oauth_service_redirect');
     }
 
     /**
@@ -193,37 +219,5 @@ class OAuthUtils
         }
 
         return $resourceOwner;
-    }
-
-    /**
-     * Get the uri for a given path.
-     *
-     * @param string $path Path or route
-     *
-     * @return string
-     */
-    private function generateUri($path)
-    {
-        if (0 === strpos($path, 'http') || !$path) {
-            return $path;
-        }
-
-        if ($path && '/' === $path[0]) {
-            return $this->container->get('request')->getUriForPath($path);
-        }
-
-        return $this->generateUrl($path, array(), true);
-    }
-
-    /**
-     * @param string  $route
-     * @param array   $params
-     * @param boolean $absolute
-     *
-     * @return string
-     */
-    private function generateUrl($route, array $params = array(), $absolute = false)
-    {
-        return $this->container->get('router')->generate($route, $params, $absolute);
     }
 }
