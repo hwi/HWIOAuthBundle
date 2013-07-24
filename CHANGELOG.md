@@ -1,6 +1,13 @@
 Changelog
 =========
 
+## 0.3.0-alpha2 (2013-xx-xx)
+* Added ability to disable confirmation page when connecting accounts
+* Fix: Yandex resource owner using invalid parameter when requesting user data
+* Fix: To prevent unusual content headers response from resource owners should 
+  be first threated as json and only in case of failure threated as query text
+* Fix: Instagram resource owner is not able to receive user data more than once
+
 ## 0.3.0-alpha1 (2013-07-03)
 * [BC break] `GenericOAuth2ResourceOwner::getAccessToken()` now returns an array
   instead of a string. This array contains the access token and its 'expires_in'
