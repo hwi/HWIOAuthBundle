@@ -94,7 +94,13 @@ class HWIOAuthExtension extends Extension
             }
 
             foreach ($config['connect'] as $key => $serviceId) {
-                 $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), $serviceId);
+                if ('confirmation' == $key) {
+                    $container->setParameter('hwi_oauth.connect.confirmation', $config['connect']['confirmation']);
+
+                    continue;
+                }
+
+                $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), $serviceId);
             }
 
             // setup custom services
