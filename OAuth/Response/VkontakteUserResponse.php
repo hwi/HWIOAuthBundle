@@ -34,4 +34,4 @@ class VkontakteUserResponse extends PathUserResponse
 
         return null;
     }
-} 
+}
