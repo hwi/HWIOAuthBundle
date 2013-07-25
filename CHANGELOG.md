@@ -8,10 +8,10 @@ Changelog
   instance as last argument
 * Fix: Yandex resource owner using invalid parameter when requesting user data
 * Fix: To prevent unusual content headers response from resource owners should 
-  be first threated as json and only in case of failure threated as query text
+  be first threaten as json and only in case of failure threaten as query text
 * Fix: Instagram resource owner is not able to receive user data more than once
 * Added ability to disable confirmation page when connecting accounts
-* Added CSRF protection for OAuth2 providers
+* Added CSRF protection for OAuth2 providers (turned off by default)
 * Added `RequestDataStorageInterface` along with implementation
 
 ## 0.3.0-alpha1 (2013-07-03)

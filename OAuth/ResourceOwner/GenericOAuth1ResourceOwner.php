@@ -41,6 +41,8 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         'realm'               => null,
         'scope'               => null,
 
+        'csrf'                => false,
+
         'signature_method'    => 'HMAC-SHA1',
     );
 

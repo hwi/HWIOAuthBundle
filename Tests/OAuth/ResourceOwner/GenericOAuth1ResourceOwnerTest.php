@@ -39,6 +39,8 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
         'signature_method'    => 'HMAC-SHA1',
 
+        'csrf'                => false,
+
         'realm'               => null,
         'scope'               => null,
     );
@@ -67,6 +69,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($this->options['realm'], $this->resourceOwner->getOption('realm'));
         $this->assertEquals($this->options['scope'], $this->resourceOwner->getOption('scope'));
+        $this->assertEquals($this->options['csrf'], $this->resourceOwner->getOption('csrf'));
     }
 
     public function testGetOptionWithDefaults()
@@ -89,6 +92,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertNull($resourceOwner->getOption('realm'));
         $this->assertNull($resourceOwner->getOption('scope'));
+        $this->assertFalse($resourceOwner->getOption('csrf'));
 
         $this->assertEquals('HMAC-SHA1', $resourceOwner->getOption('signature_method'));
     }
@@ -269,6 +273,26 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException('\Symfony\Component\Security\Core\Exception\AuthenticationException');
 
         $this->resourceOwner->revokeToken('token');
+    }
+
+    public function testCsrfTokenIsAlwaysValidForOAuth1()
+    {
+        $this->storage->expects($this->never())
+            ->method('fetch');
+
+        $this->assertFalse($this->resourceOwner->getOption('csrf'));
+        $this->assertTrue($this->resourceOwner->isCsrfTokenValid('valid_token'));
+    }
+
+    public function testCsrfTokenValid()
+    {
+        $resourceOwner = $this->createResourceOwner('oauth1', array('csrf' => true));
+
+        $this->storage->expects($this->never())
+            ->method('fetch');
+
+        $this->assertTrue($resourceOwner->getOption('csrf'));
+        $this->assertTrue($resourceOwner->isCsrfTokenValid('valid_token'));
     }
 
     public function testGetSetName()

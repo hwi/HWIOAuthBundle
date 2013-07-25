@@ -44,6 +44,7 @@ json;
 
         'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
 
+        'csrf'                => false,
         'scope'               => null,
     );
 
@@ -62,6 +63,7 @@ json;
     {
         $this->assertEquals($this->options['infos_url'], $this->resourceOwner->getOption('infos_url'));
         $this->assertEquals($this->options['client_id'], $this->resourceOwner->getOption('client_id'));
+        $this->assertEquals($this->options['csrf'], $this->resourceOwner->getOption('csrf'));
     }
 
     public function testGetOptionWithDefaults()
@@ -83,6 +85,7 @@ json;
         $this->assertEquals('HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse', $resourceOwner->getOption('user_response_class'));
 
         $this->assertNull($resourceOwner->getOption('scope'));
+        $this->assertFalse($resourceOwner->getOption('csrf'));
     }
 
     /**
@@ -111,13 +114,32 @@ json;
 
     public function testGetAuthorizationUrl()
     {
+        $this->state = null;
+
+        $resourceOwner = $this->createResourceOwner('oauth2');
+
+        $this->storage->expects($this->never())
+            ->method('save');
+
+        $this->assertStringStartsWith(
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
+
+        $this->state = 'random';
+    }
+
+    public function testGetAuthorizationUrlWithEnabledCsrf()
+    {
+        $resourceOwner = $this->createResourceOwner('oauth2', array('csrf' => true));
+
         $this->storage->expects($this->once())
             ->method('save')
-            ->with($this->resourceOwner, $this->state, 'csrf_state');
+            ->with($resourceOwner, $this->state, 'csrf_state');
 
-        $this->assertEquals(
+        $this->assertStringStartsWith(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 
@@ -246,14 +268,26 @@ json;
         $this->assertEquals('foo', $this->resourceOwner->getName());
     }
 
+    public function testCsrfTokenIsValidWhenDisabled()
+    {
+        $this->storage->expects($this->never())
+            ->method('fetch');
+
+        $this->assertFalse($this->resourceOwner->getOption('csrf'));
+        $this->assertTrue($this->resourceOwner->isCsrfTokenValid('whatever you want'));
+    }
+
     public function testCsrfTokenValid()
     {
+        $resourceOwner = $this->createResourceOwner('oauth2', array('csrf' => true));
+
         $this->storage->expects($this->once())
             ->method('fetch')
-            ->with($this->resourceOwner, 'valid_token', 'csrf_state')
+            ->with($resourceOwner, 'valid_token', 'csrf_state')
             ->will($this->returnValue('valid_token'));
 
-        $this->assertTrue($this->resourceOwner->isCsrfTokenValid('valid_token'));
+        $this->assertTrue($resourceOwner->getOption('csrf'));
+        $this->assertTrue($resourceOwner->isCsrfTokenValid('valid_token'));
     }
 
     /**
@@ -261,12 +295,14 @@ json;
      */
     public function testCsrfTokenInvalid()
     {
+        $resourceOwner = $this->createResourceOwner('oauth2', array('csrf' => true));
+
         $this->storage->expects($this->once())
             ->method('fetch')
-            ->with($this->resourceOwner, 'invalid_token', 'csrf_state')
+            ->with($resourceOwner, 'invalid_token', 'csrf_state')
             ->will($this->throwException(new \InvalidArgumentException('No data available in storage.')));
 
-        $this->resourceOwner->isCsrfTokenValid('invalid_token');
+        $resourceOwner->isCsrfTokenValid('invalid_token');
     }
 
     public function testCustomResponseClass()

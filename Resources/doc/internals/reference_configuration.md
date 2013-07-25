@@ -12,6 +12,8 @@ hwi_oauth:
             client_id:           <client_id>
             client_secret:       <client_secret>
             scope:               "user:email"
+            options:
+                csrf:            true
 
         google:
             type:                google
