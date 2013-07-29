@@ -38,7 +38,7 @@ json;
     public function testGetAuthorizationUrl()
     {
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -47,7 +47,7 @@ json;
     {
         $resourceOwner = $this->createResourceOwner('google', array('request_visible_actions' => 'http://schemas.google.com/AddActivity'));
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&request_visible_actions=http%3A%2F%2Fschemas.google.com%2FAddActivity',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&request_visible_actions=http%3A%2F%2Fschemas.google.com%2FAddActivity',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -56,7 +56,7 @@ json;
     {
         $resourceOwner = $this->createResourceOwner('google', array('approval_prompt' => 'force'));
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&approval_prompt=force',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&approval_prompt=force',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -65,7 +65,7 @@ json;
     {
         $resourceOwner = $this->createResourceOwner('google', array('hd' => 'mycollege.edu'));
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&hd=mycollege.edu',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&hd=mycollege.edu',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -100,6 +100,6 @@ json;
             $options
         );
 
-        return new GoogleResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new GoogleResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

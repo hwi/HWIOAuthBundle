@@ -42,6 +42,11 @@ class OAuthToken extends AbstractToken
     private $expiresIn;
 
     /**
+     * @var integer
+     */
+    private $createdAt;
+
+    /**
      * @var string
      */
     private $tokenSecret;
@@ -105,9 +110,9 @@ class OAuthToken extends AbstractToken
             }
 
             if (isset($token['expires_in'])) {
-                $this->expiresIn = $token['expires_in'];
+                $this->setExpiresIn($token['expires_in']);
             } elseif (isset($token['oauth_expires_in'])) {
-                $this->expiresIn = $token['oauth_expires_in'];
+                $this->setExpiresIn($token['oauth_expires_in']);
             }
 
             if (isset($token['oauth_token_secret'])) {
@@ -150,6 +155,7 @@ class OAuthToken extends AbstractToken
      */
     public function setExpiresIn($expiresIn)
     {
+        $this->createdAt = time();
         $this->expiresIn = $expiresIn;
     }
 
@@ -175,6 +181,20 @@ class OAuthToken extends AbstractToken
     public function getTokenSecret()
     {
         return $this->tokenSecret;
+    }
+
+    /**
+     * Returns if the `access_token` is expired.
+     *
+     * @return boolean True if the `access_token` is expired.
+     */
+    public function isExpired()
+    {
+        if (null === $this->expiresIn) {
+            return false;
+        }
+
+        return ($this->createdAt + ($this->expiresIn - time())) < 30;
     }
 
     /**

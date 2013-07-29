@@ -39,6 +39,6 @@ json;
             $options
         );
 
-        return new WindowsLiveResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new WindowsLiveResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

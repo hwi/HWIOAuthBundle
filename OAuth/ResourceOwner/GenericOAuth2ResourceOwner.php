@@ -35,6 +35,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
 
         'scope'               => null,
+
+        'csrf'                => false,
     );
 
     /**
@@ -61,10 +63,19 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
+        if ($this->getOption('csrf')) {
+            if (null === $this->state) {
+                $this->state = $this->generateNonce();
+            }
+
+            $this->storage->save($this, $this->state, 'csrf_state');
+        }
+
         $parameters = array_merge(array(
             'response_type' => 'code',
             'client_id'     => $this->getOption('client_id'),
             'scope'         => $this->getOption('scope'),
+            'state'         => $this->state ? urlencode($this->state) : null,
             'redirect_uri'  => $redirectUri,
         ), $extraParameters);
 
@@ -128,6 +139,23 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function handles(Request $request)
     {
         return $request->query->has('code');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCsrfTokenValid($csrfToken)
+    {
+        // Mark token valid when validation is disabled
+        if (!$this->getOption('csrf')) {
+            return true;
+        }
+
+        try {
+            return null !== $this->storage->fetch($this, urldecode($csrfToken), 'csrf_state');
+        } catch (\InvalidArgumentException $e) {
+            throw new AuthenticationException('Given CSRF token is not valid.');
+        }
     }
 
     /**
