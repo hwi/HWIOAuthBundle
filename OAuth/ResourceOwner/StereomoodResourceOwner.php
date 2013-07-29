@@ -24,12 +24,16 @@ class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
      * {@inheritDoc}
      */
     protected $options = array(
-        'authorization_url'   => 'http://www.stereomood.com/api/oauth/authenticate',
-        'request_token_url'   => 'http://www.stereomood.com/api/oauth/request_token',
-        'access_token_url'    => 'http://www.stereomood.com/api/oauth/access_token',
+        'authorization_url' => 'http://www.stereomood.com/api/oauth/authenticate',
+        'request_token_url' => 'http://www.stereomood.com/api/oauth/request_token',
+        'access_token_url'  => 'http://www.stereomood.com/api/oauth/access_token',
     );
 
-    
+    protected $paths = array(
+        'identifier' => 'oauth_token',
+        'nickname'   => 'oauth_token'
+    );
+
     /**
      * {@inheritDoc}
      */

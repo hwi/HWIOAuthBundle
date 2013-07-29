@@ -13,6 +13,7 @@ Changelog
 * Added ability to disable confirmation page when connecting accounts
 * Added CSRF protection for OAuth2 providers (turned off by default)
 * Added `RequestDataStorageInterface` along with implementation
+* Added Stereomood resource owner
 
 ## 0.3.0-alpha1 (2013-07-03)
 * [BC break] `GenericOAuth2ResourceOwner::getAccessToken()` now returns an array

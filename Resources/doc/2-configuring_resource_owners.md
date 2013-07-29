@@ -44,6 +44,7 @@ hwi_oauth:
 - [Odnoklassniki](resource_owners/odnoklassniki.md)
 - [SensioLabs Connect](resource_owners/sensio_connect.md)
 - [Stack Exchange](resource_owners/stack_exchange.md)
+- [Stereomood](resource_owners/stereomood.md)
 - [Twitter] (resource_owners/twitter.md)
 - [Vkontakte](resource_owners/vkontakte.md)
 - [Windows Live](resource_owners/windows_live.md)

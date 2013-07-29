@@ -11,14 +11,11 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Client\ClientInterface as HttpClientInterface;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
-use HWI\Bundle\OAuthBundle\OAuth\OAuth1RequestTokenStorageInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * GenericOAuth1ResourceOwner

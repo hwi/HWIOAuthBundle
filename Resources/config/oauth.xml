@@ -154,6 +154,6 @@
         <service id="hwi_oauth.abstract_resource_owner.twitter" class="%hwi_oauth.resource_owner.twitter.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.yahoo" class="%hwi_oauth.resource_owner.yahoo.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />    
+                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
     </services>
 </container>

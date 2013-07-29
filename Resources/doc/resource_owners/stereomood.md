@@ -1,11 +1,10 @@
 Step 2x: Setup Stereomood
-=====================
+=========================
 First you will have to register your application in Stereomood's ["Api Apps Register"](http://www.stereomood.com/api/apps/register).
 
 Next configure a resource owner of type `stereomood` with appropriate `client_id` and `client_secret`.
 
-
-``` yaml
+```yaml
 # app/config.yml
 
 hwi_oauth:
