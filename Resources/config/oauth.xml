@@ -30,6 +30,7 @@
         <parameter key="hwi_oauth.resource_owner.linkedin.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LinkedinResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.sensio_connect.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SensioConnectResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.stack_exchange.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StackExchangeResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.stereomood.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StereomoodResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.twitter.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.vkontakte.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.windows_live.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WindowsLiveResourceOwner</parameter>
@@ -148,9 +149,11 @@
                  parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.linkedin" class="%hwi_oauth.resource_owner.linkedin.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.stereomood" class="%hwi_oauth.resource_owner.stereomood.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.twitter" class="%hwi_oauth.resource_owner.twitter.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.yahoo" class="%hwi_oauth.resource_owner.yahoo.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
+                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />    
     </services>
 </container>
