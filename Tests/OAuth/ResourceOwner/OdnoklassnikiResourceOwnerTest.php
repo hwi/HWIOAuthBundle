@@ -46,6 +46,6 @@ json;
             $options
         );
 
-        return new OdnoklassnikiResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new OdnoklassnikiResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

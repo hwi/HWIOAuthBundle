@@ -34,7 +34,7 @@ json;
     public function testGetAuthorizationUrl()
     {
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&type=web_server',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&type=web_server',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -50,6 +50,6 @@ json;
             $options
         );
 
-        return new ThirtySevenSignalsResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new ThirtySevenSignalsResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

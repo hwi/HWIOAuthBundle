@@ -40,6 +40,6 @@ json;
             $options
         );
 
-        return new YandexResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new YandexResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

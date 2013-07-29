@@ -2,11 +2,17 @@ Changelog
 =========
 
 ## 0.3.0-alpha2 (2013-xx-xx)
-* Added ability to disable confirmation page when connecting accounts
+* [BC break] Added `ResourceOwnerInterface::isCsrfTokenValid()` method
+* [BC break] Removed `OAuth1RequestTokenStorageInterface` along with the implementations
+* [BC break] `AbstractResourceOwner::__construct()` now requires `RequestDataStorageInterface`
+  instance as last argument
 * Fix: Yandex resource owner using invalid parameter when requesting user data
 * Fix: To prevent unusual content headers response from resource owners should 
-  be first threated as json and only in case of failure threated as query text
+  be first threaten as json and only in case of failure threaten as query text
 * Fix: Instagram resource owner is not able to receive user data more than once
+* Added ability to disable confirmation page when connecting accounts
+* Added CSRF protection for OAuth2 providers (turned off by default)
+* Added `RequestDataStorageInterface` along with implementation
 
 ## 0.3.0-alpha1 (2013-07-03)
 * [BC break] `GenericOAuth2ResourceOwner::getAccessToken()` now returns an array
@@ -36,7 +42,7 @@ Changelog
   `OAuthToken::setExpiresIn()`, `OAuthToken::getRawToken()`, `OAuthToken::setRawToken()`
 * Added `AbstractResourceOwner#addOptions()` & `ResourceOwnerInterface#setOption($name, $value)`
   methods which allows easy overwriting resource specific options
-* Added support for options: `access_type`, `request_visible_actions`, `approval_prompt`
+* Added support for options: `access_type`, `request_visible_actions`, `approval_prompt` & `hd`
   in Google resource owner
 * Added 37signals resource owner
 * Added Amazon resource owner

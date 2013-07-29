@@ -16,6 +16,7 @@ use Buzz\Message\MessageInterface as HttpMessageInterface;
 use Buzz\Message\Request as HttpRequest;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Buzz\Message\Response as HttpResponse;
+use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
@@ -28,6 +29,7 @@ use Symfony\Component\Security\Http\HttpUtils;
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
  * @author Francisco Facioni <fran6co@gmail.com>
+ * @author Joseph Bielawski <stloyd@gmail.com>
  */
 abstract class AbstractResourceOwner implements ResourceOwnerInterface
 {
@@ -57,16 +59,28 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $name;
 
     /**
-     * @param HttpClientInterface $httpClient Buzz http client
-     * @param HttpUtils           $httpUtils  Http utils
-     * @param array               $options    Options for the resource owner
-     * @param string              $name       Name for the resource owner
+     * @var string
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name)
+    protected $state;
+
+    /**
+     * @var RequestDataStorageInterface
+     */
+    protected $storage;
+
+    /**
+     * @param HttpClientInterface         $httpClient Buzz http client
+     * @param HttpUtils                   $httpUtils  Http utils
+     * @param array                       $options    Options for the resource owner
+     * @param string                      $name       Name for the resource owner
+     * @param RequestDataStorageInterface $storage    Request token storage
+     */
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage)
     {
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
         $this->name       = $name;
+        $this->storage    = $storage;
 
         $this->addOptions($options);
         $this->configure();
@@ -78,6 +92,16 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     public function configure()
     {
 
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isCsrfTokenValid($csrfToken)
+    {
+        // OAuth1.0a passes token with every call, so only OAuth2
+        // are vulnerable to CSRF
+        return true;
     }
 
     /**
@@ -249,6 +273,16 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         }
 
         return $response;
+    }
+
+    /**
+     * Generate a non-guessable nonce value.
+     *
+     * @return string
+     */
+    protected function generateNonce()
+    {
+        return md5(microtime(true).uniqid('', true));
     }
 
     /**

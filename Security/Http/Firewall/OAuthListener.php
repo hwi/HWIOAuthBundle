@@ -84,6 +84,8 @@ class OAuthListener extends AbstractAuthenticationListener
             throw new AuthenticationException('No oauth code in the request.');
         }
 
+        $resourceOwner->isCsrfTokenValid($request->get('state'));
+
         $accessToken = $resourceOwner->getAccessToken(
             $request,
             $this->httpUtils->createRequest($request, $checkPath)->getUri()

@@ -14,29 +14,35 @@ namespace HWI\Bundle\OAuthBundle\OAuth;
 /**
  * Interface for classes providing a request tokens storage.
  *
- * The storage is needed because the oauth1.0a authentication flow requires
+ * The storage is needed because the OAuth1.0a authentication flow requires
  * requests to be signed with the same values in consecutive requests.
+ *
+ * Additionally we require this to provide CSRF protection for all resource
+ * owners.
  *
  * @author Alexander <iam.asm89@gmail.com>
  * @author Francisco Facioni <fran6co@gmail.com>
+ * @author Joseph Bielawski <stloyd@gmail.com>
  */
-interface OAuth1RequestTokenStorageInterface
+interface RequestDataStorageInterface
 {
     /**
-     * Fetch a request token from the storage.
+     * Fetch a request data from the storage.
      *
      * @param ResourceOwnerInterface $resourceOwner
-     * @param string                 $tokenId
+     * @param string                 $key
+     * @param string                 $type
      *
      * @return array
      */
-    public function fetch(ResourceOwnerInterface $resourceOwner, $tokenId);
+    public function fetch(ResourceOwnerInterface $resourceOwner, $key, $type = 'token');
 
     /**
-     * Save a request token to the storage.
+     * Save a request data to the storage.
      *
      * @param ResourceOwnerInterface $resourceOwner
-     * @param array                  $token
+     * @param array|string           $value
+     * @param string                 $type
      */
-    public function save(ResourceOwnerInterface $resourceOwner, array $token);
+    public function save(ResourceOwnerInterface $resourceOwner, $value, $type = 'token');
 }

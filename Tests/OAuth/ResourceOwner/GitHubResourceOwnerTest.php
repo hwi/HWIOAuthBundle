@@ -66,6 +66,6 @@ json;
             $options
         );
 
-        return new GitHubResourceOwner($this->buzzClient, $httpUtils, $options, $name);
+        return new GitHubResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }
