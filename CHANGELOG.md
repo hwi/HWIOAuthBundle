@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 0.3.0-alpha2 (2013-xx-xx)
+## 0.3.0-alpha2 (2013-07-29)
 * [BC break] Added `ResourceOwnerInterface::isCsrfTokenValid()` method
 * [BC break] Removed `OAuth1RequestTokenStorageInterface` along with the implementations
 * [BC break] `AbstractResourceOwner::__construct()` now requires `RequestDataStorageInterface`
