@@ -59,7 +59,6 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
 
         $this->responseObject->setResourceOwner($resourceOwner);
         $this->assertEquals($resourceOwner, $this->responseObject->getResourceOwner());
-
     }
 
     public function testGetPathsReturnsDefaultDefinedPaths()
@@ -195,5 +194,19 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
         $this->responseObject->setResponse(json_encode(array('no_picture' => 'foo@bar.baz')));
 
         $this->assertNull($this->responseObject->getProfilePicture());
+    }
+
+    public function testGetMergeOfPathsIntoSingleField()
+    {
+        $paths = array('realname' => array('first_name', 'last_name'));
+
+        $this->responseObject->setPaths($paths);
+        $this->responseObject->setResponse(array('first_name' => 'foo', 'last_name' => 'bar'));
+
+        $this->assertEquals('foo bar', $this->responseObject->getRealName());
+
+        $this->responseObject->setResponse(array('first_name' => null, 'last_name' => 'bar'));
+
+        $this->assertEquals('bar', $this->responseObject->getRealName());
     }
 }

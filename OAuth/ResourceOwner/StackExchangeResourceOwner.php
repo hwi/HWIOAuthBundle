@@ -33,8 +33,9 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier'  => 'user_id',
-        'nickname'    => 'display_name',
-        'realname'    => 'display_name',
+        'identifier'     => 'user_id',
+        'nickname'       => 'display_name',
+        'realname'       => 'display_name',
+        'profilepicture' => 'profile_image',
     );
 }
