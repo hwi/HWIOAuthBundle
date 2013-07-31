@@ -214,7 +214,26 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->arrayNode('paths')
                             ->useAttributeAsKey('name')
-                            ->prototype('scalar')->end()
+                            ->prototype('variable')
+                                ->validate()
+                                    ->ifTrue(function($v) {
+                                        if (null === $v) {
+                                            return true;
+                                        }
+
+                                        if (is_array($v)) {
+                                            return 0 === count($v);
+                                        }
+
+                                        if (is_string($v)) {
+                                            return empty($v);
+                                        }
+
+                                        return !is_numeric($v);
+                                    })
+                                    ->thenInvalid('Path can be only string or array type.')
+                                ->end()
+                            ->end()
                         ->end()
                         ->arrayNode('options')
                             ->useAttributeAsKey('name')

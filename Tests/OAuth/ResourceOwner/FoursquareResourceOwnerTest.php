@@ -20,7 +20,8 @@ class FoursquareResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "response": {
         "user": {
             "id": "1",
-            "firstName": "bar"
+            "firstName": "bar",
+            "lastName": "foo"
         }
     }
 }
@@ -29,7 +30,7 @@ json;
     protected $paths = array(
         'identifier' => 'response.user.id',
         'nickname'   => 'response.user.firstName',
-        'realname'   => 'response.user.lastName',
+        'realname'   => array('response.user.firstName', 'response.user.lastName'),
     );
 
     public function testGetOptionVersion()

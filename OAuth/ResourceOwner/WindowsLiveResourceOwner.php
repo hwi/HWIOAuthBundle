@@ -34,5 +34,6 @@ class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
         'identifier' => 'id',
         'nickname'   => 'name',
         'realname'   => 'name',
+        'email'      => 'emails.account', // requires 'wl.emails' scope
     );
 }

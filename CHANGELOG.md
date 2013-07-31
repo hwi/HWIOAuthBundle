@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 0.3.0-alpha3 (2013-xx-xx)
+* Added ability to merge response parts into single path
+
 ## 0.3.0-alpha2 (2013-07-29)
 * [BC break] Added `ResourceOwnerInterface::isCsrfTokenValid()` method
 * [BC break] Removed `OAuth1RequestTokenStorageInterface` along with the implementations

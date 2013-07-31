@@ -38,7 +38,7 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier'     => 'response.user.id',
         'nickname'       => 'response.user.firstName',
-        'realname'       => 'response.user.lastName',
+        'realname'       => array('response.user.firstName', 'response.user.lastName'),
         'email'          => 'response.user.contact.email',
         'profilepicture' => 'response.user.photo',
     );
