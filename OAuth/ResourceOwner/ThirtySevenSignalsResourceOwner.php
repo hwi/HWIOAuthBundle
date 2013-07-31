@@ -33,10 +33,10 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier'     => 'identity.id',
-        'nickname'       => 'identity.email_address',
-        'realname'       => 'identity.last_name',
-        'firstName'      => 'identity.first_name',
+        'identifier' => 'identity.id',
+        'nickname'   => 'identity.email_address',
+        'realname'   => array('identity.last_name', 'identity.first_name'),
+        'email'      => 'identity.email_address',
     );
 
     /**

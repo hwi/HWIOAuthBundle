@@ -76,6 +76,20 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
+    public function testConfigurationThrowsExceptionWhenPathIsEmpty()
+    {
+        $loader = new HWIOAuthExtension();
+        $config = $this->getEmptyConfig();
+        $config['resource_owners']['any_name']['paths'] = array(
+            'path' => ''
+        );
+
+        $loader->load(array($config), $this->containerBuilder);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
     public function testConfigurationThrowsExceptionWhenUnknownResourceOwnerIsCalled()
     {
         $loader = new HWIOAuthExtension();
@@ -179,6 +193,29 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
+    public function testConfigurationPassValidOAuth2WithDeepPaths()
+    {
+        $loader = new HWIOAuthExtension();
+        $config = $this->getEmptyConfig();
+        $config['resource_owners'] = array(
+            'valid' => array(
+                'type'              => 'oauth2',
+                'client_id'         => 'client_id',
+                'client_secret'     => 'client_secret',
+                'authorization_url' => 'http://test.pl/authorization_url',
+                'access_token_url'  => 'http://test.pl/access_token_url',
+                'infos_url'         => 'http://test.pl/infos_url',
+                'paths'             => array(
+                    'identifier' => 'some_id',
+                    'nickname'   => 'some_nick',
+                    'realname'   => array('first_name', 'last_name'),
+                ),
+            ),
+        );
+
+        $loader->load(array($config), $this->containerBuilder);
+    }
+
     public function testConfigurationPassValidOAuth2WithResponseClass()
     {
         $loader = new HWIOAuthExtension();
@@ -268,6 +305,39 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
                 'infos_url'         => 'http://test.pl/infos_url',
                 'paths'             => array()
             ),
+            'path_is_null' => array(
+                'type'              => 'oauth2',
+                'client_id'         => 'client_id',
+                'client_secret'     => 'client_secret',
+                'authorization_url' => 'http://test.pl/authorization_url',
+                'access_token_url'  => 'http://test.pl/access_token_url',
+                'infos_url'         => 'http://test.pl/infos_url',
+                'paths'             => array(
+                    'path' => null,
+                )
+            ),
+            'path_is_empty_array' => array(
+                'type'              => 'oauth2',
+                'client_id'         => 'client_id',
+                'client_secret'     => 'client_secret',
+                'authorization_url' => 'http://test.pl/authorization_url',
+                'access_token_url'  => 'http://test.pl/access_token_url',
+                'infos_url'         => 'http://test.pl/infos_url',
+                'paths'             => array(
+                    'path' => array(),
+                )
+            ),
+            'path_is_empty_string' => array(
+                'type'              => 'oauth2',
+                'client_id'         => 'client_id',
+                'client_secret'     => 'client_secret',
+                'authorization_url' => 'http://test.pl/authorization_url',
+                'access_token_url'  => 'http://test.pl/access_token_url',
+                'infos_url'         => 'http://test.pl/infos_url',
+                'paths'             => array(
+                    'path' => '',
+                )
+            ),
         );
     }
 
@@ -332,6 +402,8 @@ resource_owners:
         client_id:           client_id
         client_secret:       client_secret
         scope:               ""
+        paths:
+            nickname:        [email, id]
 
     my_custom_oauth2:
         type:                oauth2

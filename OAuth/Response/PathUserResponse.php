@@ -110,8 +110,8 @@ class PathUserResponse extends AbstractUserResponse
      */
     protected function getValueForPath($path)
     {
-        $value = $this->response;
-        if (!$value) {
+        $response = $this->response;
+        if (!$response) {
             return null;
         }
 
@@ -120,6 +120,33 @@ class PathUserResponse extends AbstractUserResponse
             return null;
         }
 
+        if (is_array($steps)) {
+            if (1 === count($steps)) {
+                return $this->getValue(current($steps), $response);
+            }
+
+            $value = array();
+            foreach ($steps as $step) {
+                $value[] = $this->getValue($step, $response);
+            }
+
+            $value = trim(implode(' ', $value));
+
+            return $value ?: null;
+        }
+
+        return $this->getValue($steps, $response);
+    }
+
+    /**
+     * @param string $steps
+     * @param array  $response
+     *
+     * @return null|string
+     */
+    private function getValue($steps, array $response)
+    {
+        $value = $response;
         $steps = explode('.', $steps);
         foreach ($steps as $step) {
             if (!array_key_exists($step, $value)) {

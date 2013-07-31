@@ -72,6 +72,31 @@ var_dump(
 );
 ```
 
+Our path api is so flexible that you can merge individual fields returned in response from resource
+owner into one! Check how this could look:
+
+```yaml
+# app/config/config.yml
+hwi_oauth:
+   firewall_name:         secured_area
+   resource_owners:
+       linkedin:
+           type:          vkontakte
+           client_id:     <client_id>
+           client_secret: <client_secret>
+           paths:
+               realname:  ["first_name", "last_name"]
+```
+
+Now just check the results:
+
+```php
+/* @var $response \HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface */
+var_dump(
+    $response->getRealName()
+);
+```
+
 That's all! In this way you can overwrite any parameter of built-in resource owners
 and adjust them to your needs. For more details about configuration check
 ["Reference configuration"](../internals/reference_configuration.md) chapter.
