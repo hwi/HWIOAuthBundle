@@ -30,6 +30,10 @@ class Configuration implements ConfigurationInterface
     private $resourceOwners = array(
         'oauth2',
             'amazon',
+            'bitly',
+            'box',
+            'dailymotion',
+            'deviantart',
             'disqus',
             'facebook',
             'foursquare',
@@ -41,6 +45,7 @@ class Configuration implements ConfigurationInterface
             'stack_exchange',
             'vkontakte',
             'windows_live',
+            'wordpress',
             'yandex',
             '37signals',
 
