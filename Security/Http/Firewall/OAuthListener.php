@@ -96,6 +96,9 @@ class OAuthListener extends AbstractAuthenticationListener
     }
 
     /**
+     * Detects errors returned by resource owners and transform them into
+     * human readable messages
+     *
      * @param Request $request
      *
      * @throws AuthenticationException
@@ -105,7 +108,11 @@ class OAuthListener extends AbstractAuthenticationListener
         $error = null;
 
         // Try to parse content if error was not in request query
-        if ($request->query->has('error')) {
+        if ($request->query->has('error') || $request->query->has('error_code')) {
+            if ($request->query->has('error_message')) {
+                throw new AuthenticationException(rawurldecode($request->query->get('error_message')));
+            }
+
             $content = json_decode($request->getContent(), true);
             if (JSON_ERROR_NONE === json_last_error() && isset($content['error'])) {
                 if (isset($content['error']['message'])) {
@@ -141,45 +148,33 @@ class OAuthListener extends AbstractAuthenticationListener
         // "translate" error to human readable format
         switch ($errorCode) {
             case 'access_denied':
-                $error = 'You have refused access for this site.';
-                break;
+                return 'You have refused access for this site.';
 
             case 'authorization_expired':
-                $error = 'Authorization expired.';
-                break;
+                return 'Authorization expired.';
 
             case 'bad_verification_code':
-                $error = 'Bad verification code.';
-                break;
+                return 'Bad verification code.';
 
             case 'consumer_key_rejected':
-                $error = 'You have refused access for this site.';
-                break;
+                return 'You have refused access for this site.';
 
             case 'incorrect_client_credentials':
-                $error = 'Incorrect client credentials.';
-                break;
+                return 'Incorrect client credentials.';
 
             case 'invalid_assertion':
-                $error = 'Invalid assertion.';
-                break;
+                return 'Invalid assertion.';
 
             case 'redirect_uri_mismatch':
-                $error = 'Redirect URI mismatches configured one.';
-                break;
+                return 'Redirect URI mismatches configured one.';
 
             case 'unauthorized_client':
-                $error = 'Unauthorized client.';
-                break;
+                return 'Unauthorized client.';
 
             case 'unknown_format':
-                $error = 'Unknown format.';
-                break;
-
-            default:
-                $error = sprintf('Unknown OAuth error: "%s".', $errorCode);
+                return 'Unknown format.';
         }
 
-        return $error;
+        return sprintf('Unknown OAuth error: "%s".', $errorCode);
     }
 }
