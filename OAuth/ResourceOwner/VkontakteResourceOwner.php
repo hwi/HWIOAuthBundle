@@ -29,8 +29,6 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         'access_token_url'    => 'https://oauth.vk.com/access_token',
         'infos_url'           => 'https://api.vk.com/method/users.get',
 
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\VkontakteUserResponse',
-
         'fields' => 'nickname,photo_50',
         'name_case' => null,
     );
