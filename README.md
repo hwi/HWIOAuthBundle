@@ -9,6 +9,10 @@ This bundle contains support for 20+ different providers:
 * 37signals,
 * Amazon,
 * Bitbucket,
+* Bitly,
+* Box,
+* Dailymotion,
+* DeviantArt,
 * Disqus,
 * Dropbox,
 * Facebook,
@@ -22,9 +26,11 @@ This bundle contains support for 20+ different providers:
 * Odnoklassniki,
 * Sensio Connect,
 * Stack Exchange,
+* Stereomood,
 * Twitter,
 * VKontakte,
 * Windows Live,
+* Wordpress,
 * Yahoo,
 * Yandex
 

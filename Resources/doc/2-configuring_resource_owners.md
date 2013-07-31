@@ -31,6 +31,8 @@ hwi_oauth:
 - [37signals](resource_owners/37signals.md)
 - [Amazon](resource_owners/amazon.md)
 - [Bitbucket](resource_owners/bitbucket.md)
+- [Bitly](resource_owners/bitly.md)
+- [DeviantArt](resource_owners/deviantart.md)
 - [Disqus](resource_owners/disqus.md)
 - [Dropbox](resource_owners/dropbox.md)
 - [Facebook](resource_owners/facebook.md)
