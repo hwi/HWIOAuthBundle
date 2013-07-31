@@ -3,6 +3,8 @@ Changelog
 
 ## 0.3.0-alpha3 (2013-xx-xx)
 * Added ability to merge response parts into single path
+* Added Bitly resource owner
+* Added DeviantArt resource owner
 
 ## 0.3.0-alpha2 (2013-07-29)
 * [BC break] Added `ResourceOwnerInterface::isCsrfTokenValid()` method
