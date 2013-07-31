@@ -29,12 +29,12 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     /**
      * @var HttpUtils
      */
-    private $httpUtils;
+    protected $httpUtils;
 
     /**
      * @var string
      */
-    private $loginPath;
+    protected $loginPath;
 
     /**
      * Constructor
