@@ -4,6 +4,7 @@ Changelog
 ## 0.3.0-alpha3 (2013-xx-xx)
 * Added ability to merge response parts into single path
 * Added Bitly resource owner
+* Added Box resource owner
 * Added Dailymotion resource owner
 * Added DeviantArt resource owner
 

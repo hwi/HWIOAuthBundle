@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
         'oauth2',
             'amazon',
             'bitly',
+            'box',
             'dailymotion',
             'deviantart',
             'disqus',

@@ -10,6 +10,7 @@ This bundle contains support for 20+ different providers:
 * Amazon,
 * Bitbucket,
 * Bitly,
+* Box,
 * Dailymotion,
 * DeviantArt,
 * Disqus,
