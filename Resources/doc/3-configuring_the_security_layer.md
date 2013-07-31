@@ -20,7 +20,7 @@ In the firewall configuration you will need to configure a login path for the
 resource owners you configured in step 2. Additionally you will need to point
 the oauth firewall to the appropriate service to use for loading users:
 
-``` yaml
+```yaml
 # app/config/security.yml
 security:
     firewalls:
@@ -33,9 +33,13 @@ security:
                     my_github:          "/login/check-github"
                 login_path:        /login
                 failure_path:      /login
+                anonymous:         ~
 
                 oauth_user_provider:
                     service: my.oauth_aware.user_provider.service
+                    
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 ```
 
 **Note:**
@@ -43,7 +47,7 @@ security:
 > Starting from Symfony 2.1 the paths configured at the `resource_owners`
 > section should be defined in your routing.
 >
-> ``` yaml
+> ```yaml
 > # app/config/routing.yml
 > facebook_login:
 >     pattern: /login/check-facebook
