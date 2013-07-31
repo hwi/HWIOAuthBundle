@@ -30,6 +30,7 @@ This bundle contains support for 20+ different providers:
 * Twitter,
 * VKontakte,
 * Windows Live,
+* Wordpress,
 * Yahoo,
 * Yandex
 
