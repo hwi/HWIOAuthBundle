@@ -2,6 +2,8 @@ Changelog
 =========
 
 ## 0.3.0-alpha3 (2013-xx-xx)
+* [BC break] Removed `ResourceOwnerInterface::getOption()` method
+* [BC break] Removed `AbstractResourceOwner::addOptions()` method
 * [BC break] LinkedIn resource owner now uses OAuth2 approach, visit official
   web page for details how to migrate: https://developer.linkedin.com/documents/authentication#migration
 * [BC break] Dropbox resource owner now uses OAuth2 approach

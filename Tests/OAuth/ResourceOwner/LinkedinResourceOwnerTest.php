@@ -31,16 +31,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://www.linkedin.com/uas/oauth2/authorization',
-                'access_token_url'    => 'https://www.linkedin.com/uas/oauth2/accessToken',
-                'infos_url'           => 'https://api.linkedin.com/v1/people/~:(id,formatted-name,email-address,picture-url)?format=json',
-                'csrf'                => true,
-            ),
-            $options
-        );
-
         return new LinkedinResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

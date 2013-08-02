@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * FlickrResourceOwner
@@ -20,17 +21,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
  */
 class FlickrResourceOwner extends GenericOAuth1ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'authorization_url'   => 'http://www.flickr.com/services/oauth/authorize',
-        'request_token_url'   => 'http://www.flickr.com/services/oauth/request_token',
-        'access_token_url'    => 'http://www.flickr.com/services/oauth/access_token',
-
-        'perms'               => 'read',
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -49,11 +39,11 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
 
         $params = array(
             'oauth_token'    => $token['oauth_token'],
-            'perms'          => $this->getOption('perms'),
+            'perms'          => $this->options['perms'],
             'nojsoncallback' => 1,
         );
 
-        return $this->normalizeUrl($this->getOption('authorization_url'), $params);
+        return $this->normalizeUrl($this->options['authorization_url'], $params);
     }
 
     /**
@@ -67,5 +57,21 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
         $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'http://www.flickr.com/services/oauth/authorize',
+            'request_token_url' => 'http://www.flickr.com/services/oauth/request_token',
+            'access_token_url'  => 'http://www.flickr.com/services/oauth/access_token',
+
+            'perms'             => 'read',
+        ));
     }
 }

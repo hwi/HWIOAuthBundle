@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Message\RequestInterface as HttpRequestInterface;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * SensioConnectResourceOwner
@@ -23,22 +24,9 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url'   => 'https://connect.sensiolabs.com/oauth/authorize',
-        'access_token_url'    => 'https://connect.sensiolabs.com/oauth/access_token',
-        'infos_url'           => 'https://connect.sensiolabs.com/api',
-
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse',
-
-        'response_type'       => 'code',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($this->getOption('access_token_url'), $parameters, array(), HttpRequestInterface::METHOD_POST);
+        return $this->httpRequest($this->options['access_token_url'], $parameters, array(), HttpRequestInterface::METHOD_POST);
     }
 
     /**
@@ -47,5 +35,23 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, null, array('Accept: application/vnd.com.sensiolabs.connect+xml'));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url'   => 'https://connect.sensiolabs.com/oauth/authorize',
+            'access_token_url'    => 'https://connect.sensiolabs.com/oauth/access_token',
+            'infos_url'           => 'https://connect.sensiolabs.com/api',
+
+            'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse',
+
+            'response_type'       => 'code',
+        ));
     }
 }

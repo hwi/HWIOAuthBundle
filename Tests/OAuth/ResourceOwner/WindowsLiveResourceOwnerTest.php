@@ -30,15 +30,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                 'authorization_url'   => 'https://login.live.com/oauth20_authorize.srf',
-                 'access_token_url'    => 'https://login.live.com/oauth20_token.srf',
-                 'infos_url'           => 'https://apis.live.net/v5.0/me',
-            ),
-            $options
-        );
-
         return new WindowsLiveResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

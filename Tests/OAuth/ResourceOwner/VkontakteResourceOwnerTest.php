@@ -32,15 +32,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                 'authorization_url'   => 'https://oauth.vk.com/authorize',
-                 'access_token_url'    => 'https://oauth.vk.com/access_token',
-                 'infos_url'           => 'https://api.vk.com/method/getUserInfoEx',
-            ),
-            $options
-        );
-
         return new VkontakteResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * DeviantartResourceOwner
  *
@@ -21,18 +23,23 @@ class DeviantartResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url'   => 'https://www.deviantart.com/oauth2/draft15/authorize',
-        'access_token_url'    => 'https://www.deviantart.com/oauth2/draft15/token',
-        'infos_url'           => 'https://www.deviantart.com/api/draft15/user/whoami',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected $paths = array(
         'identifier'     => 'username',
         'nickname'       => 'username',
         'profilepicture' => 'usericonurl',
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://www.deviantart.com/oauth2/draft15/authorize',
+            'access_token_url'  => 'https://www.deviantart.com/oauth2/draft15/token',
+            'infos_url'         => 'https://www.deviantart.com/api/draft15/user/whoami',
+        ));
+    }
 }

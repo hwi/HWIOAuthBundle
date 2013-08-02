@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * FacebookResourceOwner
  *
@@ -18,19 +20,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  */
 class FacebookResourceOwner extends GenericOAuth2ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'authorization_url' => 'https://www.facebook.com/dialog/oauth',
-        'access_token_url'  => 'https://graph.facebook.com/oauth/access_token',
-        'revoke_token_url'  => 'https://graph.facebook.com/me/permissions',
-        'infos_url'         => 'https://graph.facebook.com/me',
-
-        // @link https://developers.facebook.com/docs/reference/dialogs/#display
-        'display'           => null, 
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -42,22 +31,11 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * Facebook unfortunately breaks the spec by using commas instead of spaces
-     * to separate scopes
-     */
-    public function configure()
-    {
-        if (isset($this->options['scope'])) {
-            $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
-        return parent::getAuthorizationUrl($redirectUri, array_merge(array('display' => $this->getOption('display')), $extraParameters));
+        return parent::getAuthorizationUrl($redirectUri, array_merge(array('display' => $this->options['display']), $extraParameters));
     }
 
     /**
@@ -66,13 +44,37 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     public function revokeToken($token)
     {
         $parameters = array(
-            'client_id'     => $this->getOption('client_id'),
-            'client_secret' => $this->getOption('client_secret'),
+            'client_id'     => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
         );
 
-        $response = $this->httpRequest($this->normalizeUrl($this->getOption('revoke_token_url'), array('token' => $token)), $parameters, array(), 'POST');
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), 'POST');
         $response = $this->getResponseContent($response);
 
         return 'true' == $response;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
+            'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
+            'revoke_token_url'    => 'https://graph.facebook.com/me/permissions',
+            'infos_url'           => 'https://graph.facebook.com/me',
+
+            'use_commas_in_scope' => true,
+
+            'display'             => null,
+        ));
+
+        $resolver->setAllowedValues(array(
+            // @link https://developers.facebook.com/docs/reference/dialogs/#display
+            'display' => array('page', 'popup', 'touch'),
+        ));
     }
 }

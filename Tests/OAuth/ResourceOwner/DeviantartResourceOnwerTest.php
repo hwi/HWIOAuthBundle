@@ -48,15 +48,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://www.deviantart.com/oauth2/draft15/authorize',
-                'access_token_url'    => 'https://www.deviantart.com/oauth2/draft15/token',
-                'infos_url'           => 'https://www.deviantart.com/api/draft15/user/whoami',
-            ),
-            $options
-        );
-
         return new DeviantartResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

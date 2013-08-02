@@ -83,7 +83,7 @@ class FOSUBUserProvider implements AccountConnectorInterface, OAuthAwareUserProv
     /**
      * {@inheritDoc}
      */
-    public function connect($user, UserResponseInterface $response)
+    public function connect(UserInterface $user, UserResponseInterface $response)
     {
         $property = $this->getProperty($response);
         $setter = 'set'.ucfirst($property);

@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * YandexResourceOwner
  *
@@ -18,15 +20,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  */
 class YandexResourceOwner extends GenericOAuth2ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'authorization_url'   => 'https://oauth.yandex.ru/authorize',
-        'access_token_url'    => 'https://oauth.yandex.ru/token',
-        'infos_url'           => 'https://login.yandex.ru/info?format=json',
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -45,5 +38,19 @@ class YandexResourceOwner extends GenericOAuth2ResourceOwner
         $url = str_replace('access_token', 'oauth_token', $url);
 
         return $this->httpRequest($url);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://oauth.yandex.ru/authorize',
+            'access_token_url'  => 'https://oauth.yandex.ru/token',
+            'infos_url'         => 'https://login.yandex.ru/info?format=json',
+        ));
     }
 }

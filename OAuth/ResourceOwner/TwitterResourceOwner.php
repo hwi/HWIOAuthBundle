@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * TwitterResourceOwner
  *
@@ -21,19 +23,24 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url'   => 'https://api.twitter.com/oauth/authenticate',
-        'request_token_url'   => 'https://api.twitter.com/oauth/request_token',
-        'access_token_url'    => 'https://api.twitter.com/oauth/access_token',
-        'infos_url'           => 'http://api.twitter.com/1.1/account/verify_credentials.json',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected $paths = array(
         'identifier' => 'id_str',
         'nickname'   => 'screen_name',
         'realname'   => 'name',
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://api.twitter.com/oauth/authenticate',
+            'request_token_url' => 'https://api.twitter.com/oauth/request_token',
+            'access_token_url'  => 'https://api.twitter.com/oauth/access_token',
+            'infos_url'         => 'http://api.twitter.com/1.1/account/verify_credentials.json',
+        ));
+    }
 }

@@ -186,6 +186,10 @@ class OAuthUtils
                 break;
 
             case self::SIGNATURE_METHOD_RSA:
+                if (!function_exists('openssl_pkey_get_private')) {
+                    throw new \RuntimeException('RSA-SHA1 signature method requires the OpenSSL extension.');
+                }
+
                 $privateKey = openssl_pkey_get_private(file_get_contents($clientSecret), $tokenSecret);
                 $signature  = false;
 

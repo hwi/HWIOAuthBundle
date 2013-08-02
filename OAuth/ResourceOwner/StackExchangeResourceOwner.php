@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * StackExchangeResourceOwner
  *
@@ -21,21 +23,26 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url'   => 'https://stackexchange.com/oauth',
-        'access_token_url'    => 'https://stackexchange.com/oauth/access_token',
-        'infos_url'           => 'https://api.stackexchange.com/2.0/me',
-
-        'scope'               => 'no_expiry',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected $paths = array(
         'identifier'     => 'user_id',
         'nickname'       => 'display_name',
         'realname'       => 'display_name',
         'profilepicture' => 'profile_image',
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://stackexchange.com/oauth',
+            'access_token_url'  => 'https://stackexchange.com/oauth/access_token',
+            'infos_url'         => 'https://api.stackexchange.com/2.0/me',
+
+            'scope'             => 'no_expiry',
+        ));
+    }
 }

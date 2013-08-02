@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * GitHubResourceOwner
  *
@@ -19,15 +21,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  */
 class GitHubResourceOwner extends GenericOAuth2ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'authorization_url'   => 'https://github.com/login/oauth/authorize',
-        'access_token_url'    => 'https://github.com/login/oauth/access_token',
-        'infos_url'           => 'https://api.github.com/user',
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -40,28 +33,17 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * Github unfortunately breaks the spec by using commas instead of spaces
-     * to separate scopes
-     */
-    public function configure()
-    {
-        if (isset($this->options['scope'])) {
-            $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function revokeToken($token)
     {
         $parameters = array(
-            'client_id'     => $this->getOption('client_id'),
-            'client_secret' => $this->getOption('client_secret'),
+            'client_id'     => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
         );
 
         /* @var $response \Buzz\Message\Response */
-        $response = $this->httpRequest(sprintf('https://api.github.com/applications/%s/tokens/%s', $this->getOption('client_id'), $token), $parameters);
+        $response = $this->httpRequest(sprintf('https://api.github.com/applications/%s/tokens/%s', $this->options['client_id'], $token), $parameters);
         if (404 === $response->getStatusCode()) {
             return false;
         }
@@ -70,5 +52,21 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
         $response = $this->httpRequest(sprintf('https://api.github.com/authorizations/%s', $response['id']), $parameters, array(), 'DELETE');
 
         return 204 === $response->getStatusCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url'   => 'https://github.com/login/oauth/authorize',
+            'access_token_url'    => 'https://github.com/login/oauth/access_token',
+            'infos_url'           => 'https://api.github.com/user',
+
+            'use_commas_in_scope' => true,
+        ));
     }
 }

@@ -31,7 +31,7 @@ json;
     public function testCustomResponseClass()
     {
         $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
-        $resourceOwner = $this->createResourceOwner('instagram', array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         /* @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */
         $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
@@ -44,14 +44,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url' => 'https://api.instagram.com/oauth/authorize',
-                'access_token_url'  => 'https://api.instagram.com/oauth/access_token',
-            ),
-            $options
-        );
-
         return new InstagramResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

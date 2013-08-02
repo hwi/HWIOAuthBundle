@@ -13,6 +13,8 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -24,27 +26,11 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 {
     /**
-     * @var array
-     */
-    protected $defaultOptions = array(
-        'client_id'           => null,
-        'client_secret'       => null,
-
-        'infos_url'           => null,
-
-        'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-
-        'scope'               => null,
-
-        'csrf'                => false,
-    );
-
-    /**
      * {@inheritDoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        $url = $this->normalizeUrl($this->getOption('infos_url'), array(
+        $url = $this->normalizeUrl($this->options['infos_url'], array(
             'access_token' => $accessToken['access_token']
         ));
 
@@ -63,7 +49,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
-        if ($this->getOption('csrf')) {
+        if ($this->options['csrf']) {
             if (null === $this->state) {
                 $this->state = $this->generateNonce();
             }
@@ -73,13 +59,13 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 
         $parameters = array_merge(array(
             'response_type' => 'code',
-            'client_id'     => $this->getOption('client_id'),
-            'scope'         => $this->getOption('scope'),
+            'client_id'     => $this->options['client_id'],
+            'scope'         => $this->options['scope'],
             'state'         => $this->state ? urlencode($this->state) : null,
             'redirect_uri'  => $redirectUri,
         ), $extraParameters);
 
-        return $this->normalizeUrl($this->getOption('authorization_url'), $parameters);
+        return $this->normalizeUrl($this->options['authorization_url'], $parameters);
     }
 
     /**
@@ -100,12 +86,12 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $parameters = array_merge(array(
             'code'          => $request->query->get('code'),
             'grant_type'    => 'authorization_code',
-            'client_id'     => $this->getOption('client_id'),
-            'client_secret' => $this->getOption('client_secret'),
+            'client_id'     => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
             'redirect_uri'  => $redirectUri,
         ), $extraParameters);
 
-        $response = $this->doGetTokenRequest($this->getOption('access_token_url'), $parameters);
+        $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
 
         $this->validateResponseContent($response);
@@ -121,11 +107,11 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $parameters = array_merge( array(
             'refresh_token' => $refreshToken,
             'grant_type'    => 'refresh_token',
-            'client_id'     => $this->getOption('client_id'),
-            'client_secret' => $this->getOption('client_secret'),
+            'client_id'     => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
         ), $extraParameters);
 
-        $response = $this->doGetTokenRequest($this->getOption('access_token_url'), $parameters);
+        $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
 
         $this->validateResponseContent($response);
@@ -147,7 +133,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function isCsrfTokenValid($csrfToken)
     {
         // Mark token valid when validation is disabled
-        if (!$this->getOption('csrf')) {
+        if (!$this->options['csrf']) {
             return true;
         }
 
@@ -192,5 +178,37 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         if (!isset($response['access_token'])) {
             throw new AuthenticationException('Not a valid access token.');
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        parent::setDefaultOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'use_commas_in_scope' => false,
+        ));
+
+        $resolver->setOptional(array(
+            'revoke_token_url',
+        ));
+
+        $resolver->setNormalizers(array(
+            // Unfortunately some resource owners break the spec by using commas instead
+            // of spaces to separate scopes (Disqus, Facebook, Github, Vkontante)
+            'scope' => function (Options $options, $value) {
+                if (!$value) {
+                    return null;
+                }
+
+                if (!$options['use_commas_in_scope']) {
+                    return $value;
+                }
+
+                return str_replace(',', ' ', $value);
+            },
+        ));
     }
 }

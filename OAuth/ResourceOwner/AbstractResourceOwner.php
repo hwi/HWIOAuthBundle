@@ -20,6 +20,8 @@ use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -33,11 +35,6 @@ use Symfony\Component\Security\Http\HttpUtils;
  */
 abstract class AbstractResourceOwner implements ResourceOwnerInterface
 {
-    /**
-     * @var array
-     */
-    protected $defaultOptions = array();
-
     /**
      * @var array
      */
@@ -82,7 +79,10 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $this->name       = $name;
         $this->storage    = $storage;
 
-        $this->addOptions($options);
+        $resolver = new OptionsResolver();
+        $this->setDefaultOptions($resolver);
+        $this->options = $resolver->resolve($options);
+
         $this->configure();
     }
 
@@ -92,42 +92,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     public function configure()
     {
 
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isCsrfTokenValid($csrfToken)
-    {
-        // OAuth1.0a passes token with every call, so only OAuth2
-        // are vulnerable to CSRF
-        return true;
-    }
-
-    /**
-     * Add (extra) options to the configuration.
-     *
-     * @param array $options
-     */
-    public function addOptions(array $options)
-    {
-        $this->options = array_merge($this->options, $options);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getOption($name)
-    {
-        if (!array_key_exists($name, $this->options)) {
-            if (array_key_exists($name, $this->defaultOptions)) {
-                return $this->defaultOptions[$name];
-            }
-
-            throw new \InvalidArgumentException(sprintf('Unknown option "%s"', $name));
-        }
-
-        return $this->options[$name];
     }
 
     /**
@@ -194,9 +158,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     protected function getUserResponse()
     {
-        $response = $this->getOption('user_response_class');
-        $response = new $response;
-
+        $response = new $this->options['user_response_class'];
         if ($response instanceof PathUserResponse) {
             $response->setPaths($this->paths);
         }
@@ -300,4 +262,31 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @return mixed
      */
     abstract protected function doGetUserInformationRequest($url, array $parameters = array());
+
+    /**
+     * Configure the option resolver
+     *
+     * @param OptionsResolverInterface $resolver
+     */
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setRequired(array(
+            'client_id',
+            'client_secret',
+
+            'authorization_url',
+            'access_token_url',
+            'infos_url',
+        ));
+
+        $resolver->setDefaults(array(
+            'scope'               => null,
+            'csrf'                => false,
+            'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+        ));
+
+        $resolver->setAllowedValues(array(
+            'csrf' => array(true, false),
+        ));
+    }
 }

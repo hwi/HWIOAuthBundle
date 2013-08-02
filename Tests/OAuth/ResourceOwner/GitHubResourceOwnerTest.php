@@ -57,15 +57,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                 'authorization_url'   => 'https://github.com/login/oauth/authorize',
-                 'access_token_url'    => 'https://github.com/login/oauth/access_token',
-                 'infos_url'           => 'https://api.github.com/user',
-            ),
-            $options
-        );
-
         return new GitHubResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

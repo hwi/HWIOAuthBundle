@@ -62,15 +62,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url' => 'http://www.stereomood.com/api/oauth/authenticate',
-                'request_token_url' => 'http://www.stereomood.com/api/oauth/request_token',
-                'access_token_url'  => 'http://www.stereomood.com/api/oauth/access_token',
-            ),
-            $options
-        );
-
         return new StereomoodResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

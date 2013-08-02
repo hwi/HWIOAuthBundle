@@ -11,6 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * JiraResourceOwner
  *
@@ -18,19 +21,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  */
 class JiraResourceOwner extends GenericOAuth1ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'base_url'            => '',
-        'authorization_url'   => '{base_url}/plugins/servlet/oauth/authorize',
-        'request_token_url'   => '{base_url}/plugins/servlet/oauth/request-token',
-        'access_token_url'    => '{base_url}/plugins/servlet/oauth/access-token',
-        'infos_url'           => '{base_url}/rest/api/2/user',
-
-        'signature_method'    => 'RSA-SHA1',
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -44,23 +34,40 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getOption($name)
+    protected function doGetUserInformationRequest($url, array $parameters = array())
     {
-        if (in_array($name, array('authorization_url', 'request_token_url', 'access_token_url', 'infos_url'))) {
-            return str_replace('{base_url}', $this->getOption('base_url'), parent::getOption($name));
-        }
+        $response = $this->httpRequest($this->options['base_url'].'/rest/auth/1/session', null, $parameters);
+        $data     = json_decode($response->getContent(), true);
 
-        return parent::getOption($name);
+        return $this->httpRequest($this->normalizeUrl($url, array('username' => $data['name'])), null, $parameters);
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    protected function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $response = $this->httpRequest($this->getOption('base_url').'/rest/auth/1/session', null, $parameters);
-        $data     = json_decode($response->getContent(), true);
+        parent::setDefaultOptions($resolver);
 
-        return $this->httpRequest($this->normalizeUrl($url, array('username' => $data['name'])), null, $parameters);
+        $resolver->setDefaults(array(
+            'base_url'          => '',
+            'authorization_url' => '{base_url}/plugins/servlet/oauth/authorize',
+            'request_token_url' => '{base_url}/plugins/servlet/oauth/request-token',
+            'access_token_url'  => '{base_url}/plugins/servlet/oauth/access-token',
+            'infos_url'         => '{base_url}/rest/api/2/user',
+
+            'signature_method'  => 'RSA-SHA1',
+        ));
+
+        $normalizer = function (Options $options, $value) {
+            return str_replace('{base_url}', $options['base_url'], $value);
+        };
+
+        $resolver->setNormalizers(array(
+            'authorization_url' => $normalizer,
+            'request_token_url' => $normalizer,
+            'access_token_url'  => $normalizer,
+            'infos_url'         => $normalizer,
+        ));
     }
 }

@@ -30,17 +30,13 @@ json;
         'email'      => 'email',
     );
 
+    protected $expectedUrls = array(
+        'authorization_url'      => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=profile&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+        'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+    );
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                 'authorization_url' => 'https://www.amazon.com/ap/oa',
-                 'access_token_url'  => 'https://api.amazon.com/auth/o2/token',
-                 'infos_url'         => 'https://api.amazon.com/user/profile',
-            ),
-            $options
-        );
-
         return new AmazonResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

@@ -73,17 +73,6 @@ interface ResourceOwnerInterface
     public function getName();
 
     /**
-     * Retrieve an option by name
-     *
-     * @param string $name The option name
-     *
-     * @return mixed The option value
-     *
-     * @throws \InvalidArgumentException When the option does not exist
-     */
-    public function getOption($name);
-
-    /**
      * Checks whether the class can handle the request.
      *
      * @param Request $request

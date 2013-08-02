@@ -24,23 +24,20 @@ class DisqusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     }
 }
 json;
+
     protected $paths = array(
         'identifier' => 'response.id',
         'nickname'   => 'response.username',
         'realname'   => 'response.name',
     );
 
+    protected $expectedUrls = array(
+        'authorization_url'      => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+        'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+    );
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://disqus.com/api/oauth/2.0/authorize/',
-                'access_token_url'    => 'https://disqus.com/api/oauth/2.0/access_token/',
-                'infos_url'           => 'https://disqus.com/api/3.0/users/details.json',
-            ),
-            $options
-        );
-
         return new DisqusResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }
