@@ -2,6 +2,7 @@ Changelog
 =========
 
 ## 0.2.7 (2013-xx-xx)
+* Fix: Polish oauth error detection to cover cases from i.e. Facebook resource owner
 * Fix: Changed authorization url for Vkontakte resource owner
 
 ## 0.2.6 (2013-06-24)
