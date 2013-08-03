@@ -62,14 +62,17 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolverInterface $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
             'authorization_url' => 'http://www.flickr.com/services/oauth/authorize',
             'request_token_url' => 'http://www.flickr.com/services/oauth/request_token',
             'access_token_url'  => 'http://www.flickr.com/services/oauth/access_token',
+
+            // Flickr don't use `infos_url`
+            'infos_url'         => null,
 
             'perms'             => 'read',
         ));

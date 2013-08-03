@@ -42,9 +42,9 @@ class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolverInterface $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://api.dailymotion.com/oauth/authorize',
@@ -56,7 +56,7 @@ class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setAllowedValues(array(
             // @link http://www.dailymotion.com/doc/api/authentication.html#dialog-form-factors
-            'display' => array('page', 'popup', 'mobile'),
+            'display' => array('page', 'popup', 'mobile', null),
         ));
     }
 }

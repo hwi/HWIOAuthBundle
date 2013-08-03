@@ -183,9 +183,9 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolverInterface $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
             'use_commas_in_scope' => false,

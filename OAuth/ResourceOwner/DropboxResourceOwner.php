@@ -30,18 +30,17 @@ class DropboxResourceOwner extends GenericOAuth2ResourceOwner
         'email'      => 'email',
     );
 
-
     /**
      * {@inheritDoc}
      */
-    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolverInterface $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://www.dropbox.com/1/oauth2/authorize',
-            'access_token_url'    => 'https://api.dropbox.com/1/oauth2/token',
-            'infos_url'           => 'https://api.dropbox.com/1/account/info',
+            'authorization_url' => 'https://www.dropbox.com/1/oauth2/authorize',
+            'access_token_url'  => 'https://api.dropbox.com/1/oauth2/token',
+            'infos_url'         => 'https://api.dropbox.com/1/account/info',
         ));
     }
 }

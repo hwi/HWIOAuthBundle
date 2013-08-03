@@ -105,6 +105,7 @@
             <argument type="service" id="security.http_utils" />
             <argument>%hwi_oauth.resource_owners%</argument>
             <argument type="collection" /><!-- map -->
+            <call method="setContainer"><argument type="service" id="service_container" /> </call>
         </service>
 
         <service id="hwi_oauth.abstract_resource_owner.generic" abstract="true">

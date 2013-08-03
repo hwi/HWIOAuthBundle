@@ -42,7 +42,7 @@ class OAuthHelper extends Helper
     }
 
     /**
-     * @param Request $request
+     * @param null|Request $request
      */
     public function setRequest(Request $request = null)
     {

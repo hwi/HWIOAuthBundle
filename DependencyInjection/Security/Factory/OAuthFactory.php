@@ -12,7 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
@@ -36,14 +35,11 @@ class OAuthFactory extends AbstractFactory
 
         $builder = $node->children();
         $builder
-            ->scalarNode('login_path')
-                ->cannotBeEmpty()
-                ->isRequired()
-            ->end()
+            ->scalarNode('login_path')->cannotBeEmpty()->isRequired()->end()
         ;
 
-        $this->addOAuthProviderConfiguration($builder);
-        $this->addResourceOwnersConfiguration($builder);
+        $this->addOAuthProviderConfiguration($node);
+        $this->addResourceOwnersConfiguration($node);
     }
 
     /**
@@ -79,7 +75,7 @@ class OAuthFactory extends AbstractFactory
 
         $container
             ->setDefinition($this->getResourceOwnerMapReference($id), new DefinitionDecorator('hwi_oauth.abstract_resource_ownermap'))
-            ->replaceArgument(3, new Parameter('hwi_oauth.resource_ownermap.configured.'.$id))
+            ->replaceArgument(2, new Parameter('hwi_oauth.resource_ownermap.configured.'.$id))
         ;
     }
 
@@ -145,7 +141,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    protected function createEntryPoint(ContainerBuilder $container, $id, $config, $defaultEntryPoint)
+    protected function createEntryPoint($container, $id, $config, $defaultEntryPoint)
     {
         $entryPointId = 'hwi_oauth.authentication.entry_point.oauth.'.$id;
 
@@ -160,7 +156,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    protected function createListener(ContainerBuilder $container, $id, $config, $userProvider)
+    protected function createListener($container, $id, $config, $userProvider)
     {
         $listenerId = parent::createListener($container, $id, $config, $userProvider);
 
@@ -186,81 +182,71 @@ class OAuthFactory extends AbstractFactory
         return 'hwi_oauth.authentication.listener.oauth';
     }
 
-    private function addOAuthProviderConfiguration(ArrayNodeDefinition $node)
+    private function addOAuthProviderConfiguration(NodeDefinition $node)
     {
-        $node
-            ->children()
-                ->arrayNode('oauth_user_provider')
-                    ->isRequired()
-                    ->children()
-                        ->arrayNode('orm')
-                            ->children()
-                                ->scalarNode('class')
-                                    ->isRequired()
-                                    ->cannotBeEmpty()
-                                ->end()
-                                ->scalarNode('manager_name')
-                                    ->defaultNull()
-                                ->end()
-                                ->arrayNode('properties')
-                                    ->isRequired()
-                                    ->useAttributeAsKey('name')
-                                        ->prototype('scalar')
-                                    ->end()
-                                ->end()
-                            ->end()
-                        ->end()
-                        ->scalarNode('service')
-                            ->cannotBeEmpty()
-                        ->end()
-                        ->scalarNode('oauth')
-                        ->end()
-                        ->arrayNode('fosub')
-                            ->children()
-                                ->arrayNode('properties')
-                                    ->isRequired()
-                                    ->useAttributeAsKey('name')
-                                        ->prototype('scalar')
-                                    ->end()
+        $builder = $node->children();
+        $builder
+            ->arrayNode('oauth_user_provider')
+                ->isRequired()
+                ->children()
+                    ->arrayNode('orm')
+                        ->children()
+                            ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('manager_name')->defaultNull()->end()
+                            ->arrayNode('properties')
+                                ->isRequired()
+                                ->useAttributeAsKey('name')
+                                    ->prototype('scalar')
                                 ->end()
                             ->end()
                         ->end()
                     ->end()
-                    ->validate()
-                        ->ifTrue(function($c) {
-                            return 1 !== count($c) || !in_array(key($c), array('fosub', 'oauth', 'orm', 'service'));
-                        })
-                        ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
+                    ->scalarNode('service')->cannotBeEmpty()->end()
+                    ->scalarNode('oauth')->end()
+                    ->arrayNode('fosub')
+                        ->children()
+                            ->arrayNode('properties')
+                                ->isRequired()
+                                ->useAttributeAsKey('name')
+                                    ->prototype('scalar')
+                                ->end()
+                            ->end()
+                        ->end()
                     ->end()
+                ->end()
+                ->validate()
+                    ->ifTrue(function($c) {
+                        return 1 !== count($c) || !in_array(key($c), array('fosub', 'oauth', 'orm', 'service'));
+                    })
+                    ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
                 ->end()
             ->end()
         ;
     }
 
-    private function addResourceOwnersConfiguration(ArrayNodeDefinition $node)
+    private function addResourceOwnersConfiguration(NodeDefinition $node)
     {
-        $node
-            ->children()
-                ->arrayNode('resource_owners')
-                    ->isRequired()
-                    ->useAttributeAsKey('name')
-                        ->prototype('scalar')
-                    ->end()
-                    ->validate()
-                        ->ifTrue(function($c) {
-                            $checkPaths = array();
-                            foreach ($c as $checkPath) {
-                                if (in_array($checkPath, $checkPaths)) {
-                                    return true;
-                                }
-
-                                $checkPaths[] = $checkPath;
+        $builder = $node->children();
+        $builder
+            ->arrayNode('resource_owners')
+                ->isRequired()
+                ->useAttributeAsKey('name')
+                    ->prototype('scalar')
+                ->end()
+                ->validate()
+                    ->ifTrue(function($c) {
+                        $checkPaths = array();
+                        foreach ($c as $checkPath) {
+                            if (in_array($checkPath, $checkPaths)) {
+                                return true;
                             }
 
-                            return false;
-                        })
-                        ->thenInvalid('Each resource owner should have a unique "check_path".')
-                    ->end()
+                            $checkPaths[] = $checkPath;
+                        }
+
+                        return false;
+                    })
+                    ->thenInvalid('Each resource owner should have a unique "check_path".')
                 ->end()
             ->end()
         ;

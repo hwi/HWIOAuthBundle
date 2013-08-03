@@ -52,8 +52,9 @@ firewalls:
             failure_path:      /demo/secured/login
             oauth_user_provider:
                 service: hwi_oauth.user.provider.entity
+
         # Turn on anonymous for testings need.
-        anonymous: true
+        anonymous: ~
 ```
 
 ## Adding the Facebook Login Button

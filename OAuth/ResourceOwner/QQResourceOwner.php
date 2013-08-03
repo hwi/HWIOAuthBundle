@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Message\MessageInterface as HttpMessageInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class QQResourceOwner extends GenericOAuth2ResourceOwner
@@ -20,20 +21,10 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url' => 'https://graph.qq.com/oauth2.0/authorize?format=json',
-        'access_token_url' => 'https://graph.qq.com/oauth2.0/token',
-        'infos_url' => 'https://graph.qq.com/user/get_user_info',
-        'me_url' => 'https://graph.qq.com/oauth2.0/me',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected $paths = array(
-        'identifier' => 'openid',
-        'nickname' => 'nickname',
-        'realname' => 'nickname',
+        'identifier'     => 'openid',
+        'nickname'       => 'nickname',
+        'realname'       => 'nickname',
         'profilepicture' => 'figureurl_qq_1',
     );
 
@@ -57,11 +48,11 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
     {
         $openid = isset($extraParameters['openid']) ? $extraParameters['openid'] : $this->requestUserIdentifier($accessToken);
 
-        $url = $this->normalizeUrl($this->getOption('infos_url'), array(
-            'oauth_consumer_key' => $this->getOption('client_id'),
-            'access_token' => $accessToken['access_token'],
-            'openid' => $openid,
-            'format' => 'json',
+        $url = $this->normalizeUrl($this->options['infos_url'], array(
+            'oauth_consumer_key' => $this->options['client_id'],
+            'access_token'       => $accessToken['access_token'],
+            'openid'             => $openid,
+            'format'             => 'json',
         ));
 
         $response = $this->doGetUserInformationRequest($url);
@@ -82,9 +73,24 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
         return $response;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://graph.qq.com/oauth2.0/authorize?format=json',
+            'access_token_url'  => 'https://graph.qq.com/oauth2.0/token',
+            'infos_url'         => 'https://graph.qq.com/user/get_user_info',
+            'me_url'            => 'https://graph.qq.com/oauth2.0/me',
+        ));
+    }
+
     private function requestUserIdentifier(array $accessToken = null)
     {
-        $url = $this->normalizeUrl($this->getOption('me_url'), array(
+        $url = $this->normalizeUrl($this->options['me_url'], array(
             'access_token' => $accessToken['access_token'],
         ));
 

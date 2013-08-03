@@ -53,16 +53,16 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolverInterface $resolver)
     {
-        parent::setDefaultOptions($resolver);
+        parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://www.linkedin.com/uas/oauth2/authorization',
             'access_token_url'  => 'https://www.linkedin.com/uas/oauth2/accessToken',
             'infos_url'         => 'https://api.linkedin.com/v1/people/~:(id,formatted-name,email-address,picture-url)?format=json',
 
-            'csrf'                => true,
+            'csrf'              => true,
         ));
     }
 }

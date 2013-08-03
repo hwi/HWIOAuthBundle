@@ -29,6 +29,7 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     protected $buzzResponseHttpCode = 200;
     protected $storage;
     protected $state = 'random';
+    protected $csrf = false;
 
     protected $options = array(
         'client_id'           => 'clientid',
@@ -97,12 +98,20 @@ json;
 
     public function testGetAuthorizationUrl()
     {
-        $this->state = null;
+        if (!$this->csrf) {
+            $this->state = null;
+        }
 
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName);
 
-        $this->storage->expects($this->never())
-            ->method('save');
+        if (!$this->csrf) {
+            $this->storage->expects($this->never())
+                ->method('save');
+        } else {
+            $this->storage->expects($this->once())
+                ->method('save')
+                ->with($resourceOwner, $this->state, 'csrf_state');
+        }
 
         $this->assertEquals(
             $this->expectedUrls['authorization_url'],
@@ -114,6 +123,10 @@ json;
 
     public function testGetAuthorizationUrlWithEnabledCsrf()
     {
+        if ($this->csrf) {
+            $this->markTestSkipped('CSRF is enabled for this Resource Owner.');
+        }
+
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('csrf' => true));
 
         $this->storage->expects($this->once())
@@ -254,6 +267,10 @@ json;
 
     public function testCsrfTokenIsValidWhenDisabled()
     {
+        if ($this->csrf) {
+            $this->markTestSkipped('CSRF is enabled for this Resource Owner.');
+        }
+
         $this->storage->expects($this->never())
             ->method('fetch');
 

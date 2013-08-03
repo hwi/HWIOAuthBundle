@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
@@ -46,16 +46,16 @@ class OAuthUtils
     private $ownerMap;
 
     /**
-     * @var ResourceOwnerMap
+     * @var SecurityContextInterface
      */
     private $securityContext;
 
     /**
-     * @param HttpUtils       $httpUtils
-     * @param SecurityContext $securityContext
-     * @param boolean         $connect
+     * @param HttpUtils                $httpUtils
+     * @param SecurityContextInterface $securityContext
+     * @param boolean                  $connect
      */
-    public function __construct(HttpUtils $httpUtils, SecurityContext $securityContext, $connect)
+    public function __construct(HttpUtils $httpUtils, SecurityContextInterface $securityContext, $connect)
     {
         $this->httpUtils       = $httpUtils;
         $this->securityContext = $securityContext;
@@ -90,18 +90,16 @@ class OAuthUtils
      */
     public function getAuthorizationUrl(Request $request, $name, $redirectUrl = null, array $extraParameters = array())
     {
-        $resourceOwner = $this->getResourceOwner($name);
-
         if (null === $redirectUrl) {
-           if (!$this->connect || !$this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $redirectUrl = $this->httpUtils->generateUri($request, $resourceOwner);
-           } else {
+            if (!$this->connect || !$this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                $redirectUrl = $this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($name));
+            } else {
                 $request->attributes->set('service', $name);
                 $redirectUrl = $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service');
             }
         }
 
-        return $resourceOwner->getAuthorizationUrl($redirectUrl, $extraParameters);
+        return $this->getResourceOwner($name)->getAuthorizationUrl($redirectUrl, $extraParameters);
     }
 
     /**

@@ -79,9 +79,22 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $this->name       = $name;
         $this->storage    = $storage;
 
+        if (!empty($options['paths'])) {
+            $this->addPaths($options['paths']);
+        }
+        unset($options['paths']);
+
+        if (!empty($options['options'])) {
+            $options += $options['options'];
+            unset($options['options']);
+        }
+        unset($options['options']);
+
+        // Resolve merged options
         $resolver = new OptionsResolver();
-        $this->setDefaultOptions($resolver);
-        $this->options = $resolver->resolve($options);
+        $this->configureOptions($resolver);
+        $options = $resolver->resolve($options);
+        $this->options = $options;
 
         $this->configure();
     }
@@ -108,6 +121,18 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getOption($name)
+    {
+        if (!array_key_exists($name, $this->options)) {
+            throw new \InvalidArgumentException(sprintf('Unknown option "%s"', $name));
+        }
+
+        return $this->options[$name];
     }
 
     /**
@@ -268,12 +293,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @param OptionsResolverInterface $resolver
      */
-    protected function setDefaultOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setRequired(array(
             'client_id',
             'client_secret',
-
             'authorization_url',
             'access_token_url',
             'infos_url',

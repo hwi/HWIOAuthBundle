@@ -134,30 +134,12 @@ class HWIOAuthExtension extends Extension
             $type = $options['type'];
             unset($options['type']);
 
-            if (!empty($options['paths'])) {
-                $paths = $options['paths'];
-                unset($options['paths']);
-            }
-
-            if (!empty($options['options'])) {
-                $customOptions = $options['options'];
-                unset($options['options']);
-            }
-
             $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.$type);
             $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
             $definition
                 ->replaceArgument(2, $options)
                 ->replaceArgument(3, $name)
             ;
-
-            if (isset($paths)) {
-                $definition->addMethodCall('addPaths', array($paths));
-            }
-
-            if (isset($customOptions)) {
-                $definition->addMethodCall('addOptions', array($customOptions));
-            }
         }
     }
 
