@@ -24,7 +24,9 @@ This bundle contains support for 20+ different providers:
 * JIRA,
 * LinkedIn,
 * Odnoklassniki,
+* QQ,
 * Sensio Connect,
+* Sina Weibo
 * Stack Exchange,
 * Stereomood,
 * Twitter,
