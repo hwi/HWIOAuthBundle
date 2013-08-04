@@ -18,18 +18,15 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @author Jamie Sutherland<me@jamiesutherland.com>
  */
-class DropboxResourceOwner extends GenericOAuth1ResourceOwner
+class DropboxResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritDoc}
      */
     protected $options = array(
-        'authorization_url'   => 'https://api.dropbox.com/1/oauth/authorize',
-        'request_token_url'   => 'https://api.dropbox.com/1/oauth/request_token',
-        'access_token_url'    => 'https://api.dropbox.com/1/oauth/access_token',
+        'authorization_url'   => 'https://www.dropbox.com/1/oauth2/authorize',
+        'access_token_url'    => 'https://api.dropbox.com/1/oauth2/token',
         'infos_url'           => 'https://api.dropbox.com/1/account/info',
-
-        'signature_method'    => 'PLAINTEXT',
     );
 
     /**
@@ -41,43 +38,4 @@ class DropboxResourceOwner extends GenericOAuth1ResourceOwner
         'realname'   => 'display_name',
     );
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
-    {
-        $token = $this->getRequestToken($redirectUri, $extraParameters);
-
-        return $this->normalizeUrl($this->getOption('authorization_url'), array('oauth_token' => $token['oauth_token'], 'oauth_callback' => $redirectUri));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
-    {
-        $extraParameters = array_merge(array('oauth_signature_method' => $this->getOption('signature_method')), $extraParameters);
-
-        return parent::getUserInformation($accessToken, $extraParameters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
-    {
-        $extraParameters = array_merge(array('oauth_signature_method' => $this->getOption('signature_method')), $extraParameters);
-
-        return parent::getAccessToken($request, $redirectUri, $extraParameters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getRequestToken($redirectUri, array $extraParameters = array())
-    {
-        $extraParameters = array_merge(array('oauth_signature_method' => $this->getOption('signature_method')), $extraParameters);
-
-        return parent::getRequestToken($redirectUri, $extraParameters);
-    }
 }
