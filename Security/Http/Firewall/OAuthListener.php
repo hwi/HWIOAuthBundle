@@ -73,7 +73,7 @@ class OAuthListener extends AbstractAuthenticationListener
      */
     protected function attemptAuthentication(Request $request)
     {
-        $this->handleOAuthError($request);
+        //$this->handleOAuthError($request);
 
         /* @var ResourceOwnerInterface $resourceOwner */
         list($resourceOwner, $checkPath) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
@@ -82,6 +82,7 @@ class OAuthListener extends AbstractAuthenticationListener
             throw new AuthenticationException('No resource owner match the request.');
         }
 
+        /*
         if (!$resourceOwner->handles($request)) {
             throw new AuthenticationException('No oauth code in the request.');
         }
@@ -94,6 +95,7 @@ class OAuthListener extends AbstractAuthenticationListener
         }
 
         $resourceOwner->isCsrfTokenValid($request->get('state'));
+        */
 
         $accessToken = $resourceOwner->getAccessToken(
             $request,
@@ -113,6 +115,7 @@ class OAuthListener extends AbstractAuthenticationListener
      * @param Request $request
      *
      * @throws AuthenticationException
+     * @deprecated
      */
     private function handleOAuthError(Request $request)
     {

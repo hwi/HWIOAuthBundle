@@ -85,6 +85,15 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
+        $this->handleOAuthError($request);
+
+        if (!$request->query->get('code')) {
+            throw new AuthenticationException('No oauth code in the request.');
+        }
+
+        //@todo: maybe remove isCsrfTokenValid method and move code in this block?
+        $this->isCsrfTokenValid($request->get('state'));
+
         $parameters = array_merge(array(
             'code' => $request->query->get('code'),
             'grant_type' => 'authorization_code',

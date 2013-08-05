@@ -74,6 +74,12 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
+        $this->handleOAuthError($request);
+
+        if (!$request->query->has('oauth_token')) {
+            throw new AuthenticationException('No oauth code in the request.');
+        }
+
         try {
             if (null === $requestToken = $this->storage->fetch($this, $request->query->get('oauth_token'))) {
                 throw new \RuntimeException('No request token found in the storage.');
