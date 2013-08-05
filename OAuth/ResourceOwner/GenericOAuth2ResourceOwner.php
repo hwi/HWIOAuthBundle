@@ -81,6 +81,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
+        $this->handles($request);
+
         $parameters = array_merge(array(
             'code'          => $request->query->get('code'),
             'grant_type'    => 'authorization_code',
@@ -122,7 +124,11 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function handles(Request $request)
     {
-        return $request->query->has('code');
+        $this->handleOAuthError($request);
+
+        if (!$request->query->get('code')) {
+            throw new AuthenticationException('No oauth code in the request.');
+        }
     }
 
     /**
