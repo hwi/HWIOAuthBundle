@@ -133,6 +133,8 @@
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.instagram" class="%hwi_oauth.resource_owner.instagram.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.linkedin" class="%hwi_oauth.resource_owner.linkedin.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.sensio_connect" class="%hwi_oauth.resource_owner.sensio_connect.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.stack_exchange" class="%hwi_oauth.resource_owner.stack_exchange.class%"
@@ -161,8 +163,6 @@
         <service id="hwi_oauth.abstract_resource_owner.flickr" class="%hwi_oauth.resource_owner.flickr.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.jira" class="%hwi_oauth.resource_owner.jira.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.linkedin" class="%hwi_oauth.resource_owner.linkedin.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.stereomood" class="%hwi_oauth.resource_owner.stereomood.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
