@@ -2,6 +2,7 @@ Changelog
 =========
 
 ## 0.3.0-alpha3 (2013-xx-xx)
+* [BC break] Dropbox resource owner now uses OAuth2 approach
 * Added ability to merge response parts into single path
 * Added Bitly resource owner
 * Added Box resource owner
