@@ -13,38 +13,30 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LinkedinResourceOwner;
 
-class LinkedinResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+class LinkedinResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $userResponse = '{"id": "1", "formattedName": "bar"}';
+    protected $userResponse = <<<json
+{
+    "id": "1",
+    "formattedName": "bar"
+}
+json;
     protected $paths        = array(
-        'identifier' => 'id',
-        'nickname'   => 'formattedName',
-        'realname'   => 'formattedName',
+        'identifier'     => 'id',
+        'nickname'       => 'formattedName',
+        'realname'       => 'formattedName',
+        'email'          => 'emailAddress',
+        'profilepicture' => 'pictureUrl',
     );
-
-    public function testGetUserInformation()
-    {
-        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
-
-        $accessToken  = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'oauth_expires_in' => '5183997', 'oauth_authorization_expires_in' => '5183997');
-        $userResponse = $this->resourceOwner->getUserInformation($accessToken);
-
-        $this->assertEquals('1', $userResponse->getUsername());
-        $this->assertEquals('bar', $userResponse->getNickname());
-        $this->assertEquals($accessToken['oauth_token'], $userResponse->getAccessToken());
-        $this->assertNull($userResponse->getRefreshToken());
-        $this->assertEquals($accessToken['oauth_expires_in'], $userResponse->getExpiresIn());
-    }
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         $options = array_merge(
             array(
-                'authorization_url'   => 'https://www.linkedin.com/uas/oauth/authenticate',
-                'request_token_url'   => 'https://api.linkedin.com/uas/oauth/requestToken',
-                'access_token_url'    => 'https://api.linkedin.com/uas/oauth/accessToken',
-                'infos_url'           => 'http://api.linkedin.com/v1/people/~:(id,formatted-name)',
-                'realm'               => 'http://api.linkedin.com'
+                'authorization_url'   => 'https://www.linkedin.com/uas/oauth2/authorization',
+                'access_token_url'    => 'https://www.linkedin.com/uas/oauth2/accessToken',
+                'infos_url'           => 'https://api.linkedin.com/v1/people/~:(id,formatted-name,email-address,picture-url)?format=json',
+                'csrf'                => true,
             ),
             $options
         );
