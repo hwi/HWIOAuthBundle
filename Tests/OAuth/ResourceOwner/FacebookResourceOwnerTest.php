@@ -63,7 +63,22 @@ json;
 
         $this->assertFalse($this->resourceOwner->revokeToken('token'));
     }
-    
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
+    public function testGetAccessTokenErrorResponse()
+    {
+        $this->mockBuzz();
+
+        $request = new Request(array(
+            'error_code'    => 901,
+            'error_message' => 'This app is in sandbox mode.  Edit the app configuration at http://developers.facebook.com/apps to make the app publicly visible.'
+        ));
+
+        $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+    }
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         $options = array_merge(

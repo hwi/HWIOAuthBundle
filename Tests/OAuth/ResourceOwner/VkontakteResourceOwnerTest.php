@@ -34,7 +34,7 @@ json;
     {
         $options = array_merge(
             array(
-                 'authorization_url'   => 'https://api.vk.com/oauth/authorize',
+                 'authorization_url'   => 'https://oauth.vk.com/authorize',
                  'access_token_url'    => 'https://oauth.vk.com/access_token',
                  'infos_url'           => 'https://api.vk.com/method/getUserInfoEx',
             ),

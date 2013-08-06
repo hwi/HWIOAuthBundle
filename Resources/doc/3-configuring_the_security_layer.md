@@ -33,9 +33,13 @@ security:
                     my_github:          "/login/check-github"
                 login_path:        /login
                 failure_path:      /login
+                anonymous:         ~
 
                 oauth_user_provider:
                     service: my.oauth_aware.user_provider.service
+
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 ```
 
 The paths configured at the `resource_owners` section should be defined in your routing.

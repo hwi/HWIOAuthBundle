@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
+use Buzz\Message\MessageInterface;
+use Buzz\Message\RequestInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -326,8 +328,8 @@ json;
     }
 
     /**
-     * @param \Buzz\Message\Request  $request
-     * @param \Buzz\Message\Response $response
+     * @param RequestInterface $request
+     * @param MessageInterface $response
      */
     public function buzzSendMock($request, $response)
     {

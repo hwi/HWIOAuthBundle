@@ -63,6 +63,10 @@ Changelog
 * Added Odnoklassniki resource owner
 * Added Yandex resource owner
 
+## 0.2.7 (2013-08-03)
+* Fix: Polish oauth error detection to cover cases from i.e. Facebook resource owner
+* Fix: Changed authorization url for Vkontakte resource owner
+
 ## 0.2.6 (2013-06-24)
 * Fix: Use same check for FOSUserBundle compatibility to prevent strange errors
   with calls of undefined services
