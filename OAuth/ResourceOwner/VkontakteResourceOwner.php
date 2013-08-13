@@ -39,8 +39,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier' => 'response.0.uid',
         'nickname'   => 'response.0.nickname',
-        'last_name'   => 'response.0.last_name',
-        'first_name' => 'response.0.first_name',
+        'realname'   => array('response.0.last_name', 'response.0.first_name')
     );
 
     /**
