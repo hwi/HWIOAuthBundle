@@ -43,6 +43,7 @@ hwi_oauth:
 - [Instagram](resource_owners/instagram.md)
 - [Jira](resource_owners/jira.md)
 - [Linkedin](resource_owners/linkedin.md)
+- [Mail.ru](resource_owners/mailru.md)
 - [Odnoklassniki](resource_owners/odnoklassniki.md)
 - [QQ](resource_owners/qq.md)
 - [SensioLabs Connect](resource_owners/sensio_connect.md)
