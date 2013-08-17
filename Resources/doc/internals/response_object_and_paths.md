@@ -30,6 +30,7 @@ hwi_oauth:
                 email:          email
                 profilepicture: picture.data.url
 ```
+Also, make sure you add `{scope: 'email'}` as the second argument to FB.login. Or elsewhere, you would have to prompt the user with the authentification for the basic data, and then ask him again to accept that you need his email.
 
 Yep, that's all! Now you can receive require details in i.e. `loadUserByOAuthUserResponse(UserResponseInterface $response)`:
 
