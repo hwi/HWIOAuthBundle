@@ -65,4 +65,20 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('access_token', $token->getAccessToken());
         $this->assertEquals('github', $token->getResourceOwnerName());
     }
+
+    public function testSerializationOfOAuth1Token()
+    {
+        $oauth1Token = new OAuthToken(array(
+            'oauth_token' => 'oauth1_access_token',
+            'oauth_token_secret' => 'oauth1_token_secret'
+        ), array('ROLE_TEST'));
+
+        $oauth1Token->setResourceOwnerName('twitter');
+
+        $oauth1Token = unserialize(serialize($oauth1Token));
+
+        $this->assertEquals('oauth1_access_token', $oauth1Token->getAccessToken());
+        $this->assertEquals('oauth1_token_secret', $oauth1Token->getTokenSecret());
+        $this->assertEquals('twitter', $oauth1Token->getResourceOwnerName());
+    }
 }
