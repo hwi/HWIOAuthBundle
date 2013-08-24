@@ -41,6 +41,7 @@ hwi_oauth:
 - [GitHub](resource_owners/github.md)
 - [Google](resource_owners/google.md)
 - [Instagram](resource_owners/instagram.md)
+- [Mail.ru](resource_owners/mailru.md)
 - [Jira](resource_owners/jira.md)
 - [Linkedin](resource_owners/linkedin.md)
 - [Odnoklassniki](resource_owners/odnoklassniki.md)

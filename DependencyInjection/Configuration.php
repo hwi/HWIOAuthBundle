@@ -40,6 +40,7 @@ class Configuration implements ConfigurationInterface
             'github',
             'google',
             'instagram',
+            'mailru',
             'odnoklassniki',
             'sensio_connect',
             'stack_exchange',

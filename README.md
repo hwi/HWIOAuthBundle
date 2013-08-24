@@ -21,6 +21,7 @@ This bundle contains support for 20+ different providers:
 * GitHub,
 * Google,
 * Instagram,
+* Mail.ru
 * JIRA,
 * LinkedIn,
 * Odnoklassniki,
