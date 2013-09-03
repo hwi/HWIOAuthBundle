@@ -13,9 +13,9 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Buzz\Message\MessageInterface as HttpMessageInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 /**
- * AmazonResourceOwner
+ * Salesforce Resource Owner
  *
- * @author Fabian Kiss <fabian.kiss@ymc.ch>
+ * @author Tyler Pugh <tylerism@gmail.com>
  */
 class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
 {
