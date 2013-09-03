@@ -52,7 +52,6 @@ class Configuration implements ConfigurationInterface
             'wordpress',
             'yandex',
             '37signals',
-            
         'oauth1',
             'bitbucket',
             'dropbox',
