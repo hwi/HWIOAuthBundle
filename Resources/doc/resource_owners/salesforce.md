@@ -3,7 +3,7 @@ Step 2x: Setup Salesforce
 First you will have to register your application on Salesforce. Check out the
 documentation for more information: https://help.salesforce.com/help/doc/en/remoteaccess_oauth_web_server_flow.htm
 
-**Please note that Salesforce requires your callback url to be in https.**
+**Please note that Salesforce requires your callback url to be in HTTPS.**
 
 Next configure a resource owner of type `salesforce` with appropriate
 `client_id`, and `client_secret`.
