@@ -43,6 +43,7 @@ class Configuration implements ConfigurationInterface
             'linkedin',
             'odnoklassniki',
             'qq',
+            'salesforce',
             'sensio_connect',
             'sina_weibo',
             'stack_exchange',
@@ -51,8 +52,7 @@ class Configuration implements ConfigurationInterface
             'wordpress',
             'yandex',
             '37signals',
-            'salesforce',
-
+            
         'oauth1',
             'bitbucket',
             'dropbox',
