@@ -38,7 +38,10 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
         'realname'   => 'nick_name',
         'email'      => 'email',
     );
-    
+
+    /**
+     * {@inheritDoc}
+     */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $url = $this->normalizeUrl($accessToken['id'], array(
@@ -54,7 +57,7 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
 	
         return $response;
     }
-  
+
     /**
      * {@inheritDoc}
      */
