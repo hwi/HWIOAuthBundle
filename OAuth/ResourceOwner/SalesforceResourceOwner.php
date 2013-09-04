@@ -10,7 +10,6 @@
  */
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
-use Buzz\Message\MessageInterface as HttpMessageInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 /**
  * Salesforce Resource Owner
