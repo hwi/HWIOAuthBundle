@@ -29,6 +29,7 @@ json;
         'realname'   => 'nick_name',
         'email'      => 'email',
     );
+
     public function testGetUserInformation()
     {
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
@@ -44,6 +45,7 @@ json;
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         $options = array_merge(
