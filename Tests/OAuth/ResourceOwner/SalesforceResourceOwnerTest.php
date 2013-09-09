@@ -45,7 +45,26 @@ json;
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
+    
+    public function testCustomResponseClass()
+    {
+        $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $resourceOwner = $this->createResourceOwner('oauth2', array('user_response_class' => $class));
 
+        $this->mockBuzz();
+        /**
+         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+         */
+        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token','id'=>'test'));
+
+        $this->assertInstanceOf($class, $userResponse);
+        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo', $userResponse->getNickname());
+        $this->assertEquals('token', $userResponse->getAccessToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
+    }
+    
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         $options = array_merge(
