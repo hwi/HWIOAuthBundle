@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterfacee;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Component\DependencyInjection\ContainerAware;
