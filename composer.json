@@ -1,9 +1,36 @@
 {
-    "name": "tylerism/HWIOAuthBundle",
+    "name":        "tylerism/oauth-bundle",
+    "type":        "symfony-bundle",
+    "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
+   
+
+    "license":     "MIT",
+
     "require": {
-        "php": ">=5.3.0"
+        "php":                          ">=5.3.3",
+        "symfony/framework-bundle":     "~2.1",
+        "symfony/security-bundle":      "~2.1",
+        "kriswallsmith/buzz":           "~0.7"
     },
+
+    "require-dev": {
+        "doctrine/orm":                 "~2.2",
+        "symfony/validator":            "~2.1",
+        "symfony/twig-bundle":          "~2.1"
+    },
+
+
     "autoload": {
-        "classmap": ["twitteroauth"]
+        "psr-0": {
+            "HWI\\Bundle\\OAuthBundle": ""
+        }
+    },
+
+    "target-dir": "HWI/Bundle/OAuthBundle",
+
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.3-dev"
+        }
     }
 }
