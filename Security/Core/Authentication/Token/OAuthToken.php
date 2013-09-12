@@ -246,9 +246,10 @@ class OAuthToken extends AbstractToken
             $parent,
         ) = unserialize($serialized);
 
-        parent::unserialize($parent);
+        if (!$this->tokenSecret && isset($this->rawToken['oauth_token_secret'])) {
+            $this->tokenSecret = $this->rawToken['oauth_token_secret'];
+        }
 
-        if (isset($this->rawToken['oauth_token_secret']) && ! $this->tokenSecret)
-            $this->setTokenSecret($this->rawToken['oauth_token_secret']);
+        parent::unserialize($parent);
     }
 }
