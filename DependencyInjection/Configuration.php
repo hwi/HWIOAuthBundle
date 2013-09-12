@@ -41,6 +41,7 @@ class Configuration implements ConfigurationInterface
             'google',
             'instagram',
             'linkedin',
+            'mailru',
             'odnoklassniki',
             'qq',
             'sensio_connect',

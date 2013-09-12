@@ -10,6 +10,7 @@ Changelog
 * Added Box resource owner
 * Added Dailymotion resource owner
 * Added DeviantArt resource owner
+* Added Mail.ru resource owner
 * Added Sina Weibo resource owner
 * Added QQ.com resource owner
 * Added Wordpress resource owner
