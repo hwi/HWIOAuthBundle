@@ -23,6 +23,7 @@ This bundle contains support for 20+ different providers:
 * Instagram,
 * JIRA,
 * LinkedIn,
+* Mail.ru
 * Odnoklassniki,
 * QQ,
 * Sensio Connect,
