@@ -25,6 +25,7 @@ This bundle contains support for 20+ different providers:
 * LinkedIn,
 * Odnoklassniki,
 * QQ,
+* Salesforce,
 * Sensio Connect,
 * Sina Weibo
 * Stack Exchange,

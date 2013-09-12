@@ -1,66 +1,10 @@
 {
-    "name":        "hwi/oauth-bundle",
+    "name":        "tylerism/oauth-bundle",
     "type":        "symfony-bundle",
     "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
-    "keywords":    [
-        "authentication",
-        "firewall",
-        "oauth",
-        "oauth1",
-        "oauth2",
-        "security",
+   
 
-        "amazon",
-        "bitbucket",
-        "bitly",
-        "box",
-        "dailymotion",
-        "deviantart",
-        "disqus",
-        "dropbox",
-        "facebook",
-        "flickr",
-        "foursquare",
-        "github",
-        "google",
-        "instagram",
-        "jira",
-        "linkedin",
-        "odnoklassniki",
-        "qq",
-        "sensio connect",
-        "stack exchange",
-        "stereomood",
-        "sina weibo",
-        "twitter",
-        "vkontakte",
-        "windows live",
-        "wordpress",
-        "yahoo",
-        "yandex",
-        "37signals"
-    ],
-    "homepage":    "http://github.com/hwi/HWIOAuthBundle",
     "license":     "MIT",
-
-    "authors": [
-        {
-            "name": "Alexander",
-            "email": "iam.asm89@gmail.com"
-        },
-        {
-            "name": "Joseph Bielawski",
-            "email": "stloyd@gmail.com"
-        },
-        {
-            "name": "Geoffrey Bachelet",
-            "email": "geoffrey.bachelet@gmail.com"
-        },
-        {
-            "name": "Contributors",
-            "homepage": "https://github.com/hwi/HWIOAuthBundle/contributors"
-        }
-    ],
 
     "require": {
         "php":                          ">=5.3.3",
@@ -75,11 +19,6 @@
         "symfony/twig-bundle":          "~2.1"
     },
 
-    "suggest": {
-        "doctrine/doctrine-bundle":     "to use Doctrine user provider",
-        "friendsofsymfony/user-bundle": "to connect FOSUB with this bundle",
-        "symfony/twig-bundle":          "to use the Twig hwi_oauth_* functions"
-    },
 
     "autoload": {
         "psr-0": {

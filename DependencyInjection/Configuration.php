@@ -43,6 +43,7 @@ class Configuration implements ConfigurationInterface
             'linkedin',
             'odnoklassniki',
             'qq',
+            'salesforce',
             'sensio_connect',
             'sina_weibo',
             'stack_exchange',
