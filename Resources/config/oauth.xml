@@ -38,6 +38,7 @@
         <parameter key="hwi_oauth.resource_owner.sina_weibo.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SinaWeiboResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.stack_exchange.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StackExchangeResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.stereomood.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StereomoodResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.twitch.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitchResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.twitter.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.vkontakte.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.windows_live.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WindowsLiveResourceOwner</parameter>
@@ -147,6 +148,8 @@
         <service id="hwi_oauth.abstract_resource_owner.sina_weibo" class="%hwi_oauth.resource_owner.sina_weibo.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.stack_exchange" class="%hwi_oauth.resource_owner.stack_exchange.class%"
+                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
+        <service id="hwi_oauth.abstract_resource_owner.twitch" class="%hwi_oauth.resource_owner.twitch.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
         <service id="hwi_oauth.abstract_resource_owner.windows_live" class="%hwi_oauth.resource_owner.windows_live.class%"
                  parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />

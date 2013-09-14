@@ -47,6 +47,7 @@ class Configuration implements ConfigurationInterface
             'sensio_connect',
             'sina_weibo',
             'stack_exchange',
+            'twitch',
             'vkontakte',
             'windows_live',
             'wordpress',

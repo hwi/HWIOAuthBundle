@@ -30,6 +30,7 @@ This bundle contains support for 20+ different providers:
 * Sina Weibo
 * Stack Exchange,
 * Stereomood,
+* Twitch,
 * Twitter,
 * VKontakte,
 * Windows Live,
