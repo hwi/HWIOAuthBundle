@@ -1,8 +1,10 @@
-Step 2x: Setup Stereomood
+Step 2x: Setup Twitch
 =========================
-First you will have to register your application in Stereomood's ["Api Apps Register"](http://www.stereomood.com/api/apps/register).
+First you will have to register your application on Twitch. Check out the
+documentation for more information: https://github.com/justintv/Twitch-API.
 
-Next configure a resource owner of type `stereomood` with appropriate `client_id` and `client_secret`.
+
+Next configure a resource owner of type `twitch` with appropriate `client_id` and `client_secret`.
 
 ```yaml
 # app/config.yml
@@ -10,7 +12,7 @@ Next configure a resource owner of type `stereomood` with appropriate `client_id
 hwi_oauth:
     resource_owners:
         any_name:
-            type:          stereomood
+            type:          twitch
             client_id:     <client_id>
             client_secret: <client_secret>
 ```
