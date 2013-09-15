@@ -99,7 +99,7 @@ The following example bases also on the Facebook ["Login with Javascript SDK"](h
                         } else {
                             alert('Cancelled.');
                         }
-                    });
+                    }, {scope: 'email'});
                 }
             });
         }
@@ -117,6 +117,8 @@ The following example bases also on the Facebook ["Login with Javascript SDK"](h
     {% render(controller('HWIOAuthBundle:Connect:connect')) %}
 {% endblock %}
 ```
+
+Make sure `{scope: 'email'}` is added as the second argument to FB.login. Or elsewhere, you would have to prompt the user with the authentification for the basic data, and then ask him again to accept that you need his email.
 
 ## Watch the results!
 
