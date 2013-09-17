@@ -70,6 +70,7 @@ class FOSUBUserProvider implements OAuthAwareUserProviderInterface
     {
         $property = $this->getProperty($response);
         $setter = 'set'.ucfirst($property);
+        $oauth_extractor = 'populate'.ucfirst($response->getResourceOwner()->getName()).'OAuthData';
 
         if (!method_exists($user, $setter)) {
             throw new \RuntimeException(sprintf("Class '%s' should have a method '%s'.", get_class($user), $setter));
@@ -83,6 +84,10 @@ class FOSUBUserProvider implements OAuthAwareUserProviderInterface
         }
 
         $user->$setter($username);
+
+        if (method_exists($user, $oauth_extractor)) {
+            $user->$oauth_extractor($response->getResponse());
+        }
 
         $this->userManager->updateUser($user);
     }
