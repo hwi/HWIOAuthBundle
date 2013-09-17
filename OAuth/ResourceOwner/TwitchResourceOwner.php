@@ -44,38 +44,6 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
-    {
-        $parameters = array_merge(array(
-            'response_type' => 'code',
-            'client_id'     => $this->getOption('client_id'),
-            'redirect_uri'  => $redirectUri,
-            'scope'         => $this->getOption('scope'),
-
-        ), $extraParameters);
-        return parent::getAuthorizationUrl($redirectUri, $parameters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
-    {
-
-        $parameters = array_merge(array(
-            'client_id'     => $this->getOption('client_id'),
-            'client_secret' => $this->getOption('client_secret'),
-            'grant_type' => 'authorization_code',
-            'redirect_uri'  => $redirectUri,
-            'code'          => $request->query->get('code'),
-        ), $extraParameters);
-
-        return parent::getAccessToken($request, $redirectUri, $parameters);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, http_build_query($parameters, '', '&'), array(), 'POST');
@@ -84,20 +52,11 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    protected function doGetUserInformationRequest($url, array $parameters = array())
     {
+        // Twitch require to pass the OAuth token as 'oauth_token' instead of 'access_token'
+        $url = str_replace('access_token', 'oauth_token', $url);
 
-        $url = $this->normalizeUrl($this->getOption('infos_url'), array(
-            'oauth_token' => $accessToken['access_token']
-        ));
-
-        $content = $this->doGetUserInformationRequest($url)->getContent();
-
-        $response = $this->getUserResponse();
-        $response->setResponse($content);
-        $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
-
-        return $response;
+        return $this->httpRequest($url);
     }
 }

@@ -1,8 +1,7 @@
 Step 2x: Setup Twitch
-=========================
+=====================
 First you will have to register your application on Twitch. Check out the
 documentation for more information: https://github.com/justintv/Twitch-API.
-
 
 Next configure a resource owner of type `twitch` with appropriate `client_id` and `client_secret`.
 

@@ -50,6 +50,7 @@ hwi_oauth:
 - [Sina Weibo](resource_owners/sina_weibo.md)
 - [Stack Exchange](resource_owners/stack_exchange.md)
 - [Stereomood](resource_owners/stereomood.md)
+- [Twitch] (resource_owners/twitch.md)
 - [Twitter] (resource_owners/twitter.md)
 - [Vkontakte](resource_owners/vkontakte.md)
 - [Windows Live](resource_owners/windows_live.md)
