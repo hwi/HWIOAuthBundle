@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\HttpFoundation\Request;
+
 /**
  * FacebookResourceOwner
  *
@@ -58,6 +60,21 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         return parent::getAuthorizationUrl($redirectUri, array_merge(array('display' => $this->getOption('display')), $extraParameters));
+    }
+
+    /**
+     * Facebook unfortunately breaks the spec by using 'expires' instead of 'expires_in'
+     */
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
+    {
+        $accessToken = parent::getAccessToken($request, $redirectUri, $extraParameters);
+
+        if (isset($accessToken['expires'])) {
+            $accessToken['expires_in'] = $accessToken['expires'];
+            unset($accessToken['expires']);
+        }
+
+        return $accessToken;
     }
 
     /**
