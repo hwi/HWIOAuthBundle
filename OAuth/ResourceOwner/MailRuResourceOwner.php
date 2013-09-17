@@ -45,15 +45,13 @@ class MailRuResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $params = array(
-            'app_id'    => $this->getOption('client_id'),
-            'method' => 'users.getInfo',
-            'secure' => '1',
+            'app_id'      => $this->getOption('client_id'),
+            'method'      => 'users.getInfo',
+            'secure'      => '1',
             'session_key' => $accessToken['access_token'],
         );
 
-        $sig = vprintf('app_id=%smethod=%ssecure=%ssession_key=%s', $params);
-
-        $params['sig'] = md5($sig . $this->getOption('client_secret'));
+        $params['sig'] = md5(vsprintf('app_id=%smethod=%ssecure=%ssession_key=%s', $params).$this->getOption('client_secret'));
 
         $url = $this->normalizeUrl($this->getOption('infos_url'), $params);
 
