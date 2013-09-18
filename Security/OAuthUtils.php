@@ -128,7 +128,9 @@ class OAuthUtils
 
         // http_build_query should use RFC3986
         $parts = array(
-            $method,
+            // HTTP method name must be uppercase
+            // Ref: Spec: 9.1.3 (1)
+            strtoupper($method),
             rawurlencode($url),
             rawurlencode(str_replace(array('%7E','+'), array('~','%20'), http_build_query($parameters, '', '&'))),
         );
