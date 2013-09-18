@@ -15,11 +15,9 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
@@ -197,12 +195,8 @@ class ConnectController extends ContainerAware
             ->createBuilder('form')
             ->getForm();
 
-        if ('POST' === $request->getMethod()) {
-            if ('2' == Kernel::MAJOR_VERSION && '2' <= Kernel::MINOR_VERSION) {
-                $form->bind($request);
-            } else {
-                $form->bindRequest($request);
-            }
+        if ($request->isMethod('POST')) {
+            $form->bind($request);
 
             if ($form->isValid()) {
                 show_confirmation_page:
