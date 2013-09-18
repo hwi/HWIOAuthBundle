@@ -35,6 +35,7 @@ class Configuration implements ConfigurationInterface
             'dailymotion',
             'deviantart',
             'disqus',
+            'eventbrite',
             'facebook',
             'foursquare',
             'github',
@@ -60,6 +61,7 @@ class Configuration implements ConfigurationInterface
             'flickr',
             'jira',
             'stereomood',
+            'trello',
             'twitter',
             'yahoo',
     );

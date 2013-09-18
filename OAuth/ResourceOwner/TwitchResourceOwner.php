@@ -11,9 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\HttpFoundation\Request;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-
 /**
  * TwitchResourceOwner
  *

@@ -10,9 +10,11 @@ Changelog
 * Added Box resource owner
 * Added Dailymotion resource owner
 * Added DeviantArt resource owner
+* Added Eventbrite resource owner
 * Added Mail.ru resource owner
 * Added Sina Weibo resource owner
 * Added QQ.com resource owner
+* Added Trello resource owner
 * Added Wordpress resource owner
 
 ## 0.3.0-alpha2 (2013-07-29)
