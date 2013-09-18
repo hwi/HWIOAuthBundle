@@ -51,19 +51,19 @@
         <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" public="false" abstract="true">
             <argument type="service" id="security.http_utils" />
         </service>
-        <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" abstract="true" public="false" />
+        <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" public="false" />
         <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" abstract="true" public="false">
             <argument type="service" id="doctrine" />
         </service>
 
         <!-- fosub bridges -->
-        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="%hwi_oauth.user.provider.fosub_bridge.class%" abstract="true">
+        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="%hwi_oauth.user.provider.fosub_bridge.class%">
             <argument type="service" id="fos_user.user_manager" />
         </service>
         <service id="hwi_oauth.registration.form.handler.fosub_bridge.def" class="%hwi_oauth.registration.form.handler.fosub_bridge.class%" abstract="true">
             <argument type="service" id="fos_user.user_manager" />
             <argument type="service" id="fos_user.mailer" />
-            <argument type="service" id="fos_user.util.token_generator" on-invalid="null"/>
+            <argument type="service" id="fos_user.util.token_generator" on-invalid="null" />
             <call method="setFormHandler">
                 <argument type="service" id="fos_user.registration.form.handler" on-invalid="null" />
             </call>
