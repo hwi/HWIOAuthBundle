@@ -113,6 +113,9 @@ class OAuthToken extends AbstractToken
                 $this->setExpiresIn($token['expires_in']);
             } elseif (isset($token['oauth_expires_in'])) {
                 $this->setExpiresIn($token['oauth_expires_in']);
+            } elseif (isset($token['expires'])) {
+                // Facebook unfortunately breaks the spec by using 'expires' instead of 'expires_in'
+                $this->setExpiresIn($token['expires']);
             }
 
             if (isset($token['oauth_token_secret'])) {
