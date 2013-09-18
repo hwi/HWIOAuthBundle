@@ -122,6 +122,17 @@ class OAuthUtils
             unset($parameters['oauth_signature']);
         }
 
+        // Parse & add query params as base string parameters if they exists
+        $url = parse_url($url);
+        if (isset($url['query'])) {
+            parse_str($url['query'], $queryParams);
+            $parameters += $queryParams;
+        }
+
+        // Remove query params from URL
+        // Ref: Spec: 9.1.2
+        $url = strtolower(sprintf('%s://%s%s', $url['scheme'], $url['host'], isset($url['path']) ? $url['path'] : ''));
+
         // Parameters are sorted by name, using lexicographical byte value ordering.
         // Ref: Spec: 9.1.1 (1)
         uksort($parameters, 'strcmp');
@@ -132,7 +143,7 @@ class OAuthUtils
             // Ref: Spec: 9.1.3 (1)
             strtoupper($method),
             rawurlencode($url),
-            rawurlencode(str_replace(array('%7E','+'), array('~','%20'), http_build_query($parameters, '', '&'))),
+            rawurlencode(str_replace(array('%7E', '+'), array('~', '%20'), http_build_query($parameters, '', '&'))),
         );
 
         $baseString = implode('&', $parts);
