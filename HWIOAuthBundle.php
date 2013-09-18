@@ -16,7 +16,6 @@ use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\SetResourceOwnerServ
 use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * HWIOAuthBundle
@@ -33,15 +32,9 @@ class HWIOAuthBundle extends Bundle
     {
         parent::build($container);
 
-        // We can only register the security listener factory in sf2.1
-        // If you're using 2.0, import the security_factory.xml in your security.yml:
-        //
-        //     factories:
-        //             - "%kernel.root_dir%/../../vendor/bundles/HWI/Bundle/OAuthBundle/Resources/config/security_factory.xml"
-        if (version_compare(Kernel::VERSION, '2.1-DEV', '>=')) {
-            $extension = $container->getExtension('security');
-            $extension->addSecurityListenerFactory(new OAuthFactory());
-        }
+        $extension = $container->getExtension('security');
+        $extension->addSecurityListenerFactory(new OAuthFactory());
+
         $container->addCompilerPass(new SetResourceOwnerServiceNameCompilerPass());
     }
 
