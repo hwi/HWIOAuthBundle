@@ -25,6 +25,7 @@ the oauth firewall to the appropriate service to use for loading users:
 security:
     firewalls:
         secured_area:
+            anonymous: ~
             oauth:
                 resource_owners:
                     facebook:           "/login/check-facebook"
@@ -33,7 +34,6 @@ security:
                     my_github:          "/login/check-github"
                 login_path:        /login
                 failure_path:      /login
-                anonymous:         ~
 
                 oauth_user_provider:
                     service: my.oauth_aware.user_provider.service
