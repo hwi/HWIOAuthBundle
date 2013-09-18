@@ -116,7 +116,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $oauthTokenMock->expects($this->once())
             ->method('getTokenSecret')
             ->will($this->returnValue($expectedToken['oauth_token_secret']));
-        
+
         $resourceOwnerMock = $this->getResourceOwnerMock();
         $resourceOwnerMock->expects($this->once())
             ->method('getUserInformation')
