@@ -21,18 +21,35 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * FormHandlerInterface
- *
- * Interface for objects that are able to handle a form.
+ * FOSUBRegistrationFormHandler
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
 class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
 {
+    /**
+     * @var UserManagerInterface
+     */
     protected $userManager;
+
+    /**
+     * @var MailerInterface
+     */
     protected $mailer;
+
+    /**
+     * @var RegistrationFormHandler
+     */
     protected $registrationFormHandler;
+
+    /**
+     * @var TokenGenerator
+     */
     protected $tokenGenerator;
+
+    /**
+     * @var integer
+     */
     protected $iterations;
 
     /**
@@ -63,7 +80,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
             $processed = $formHandler->process();
 
             // if the form is not posted we'll try to set some properties
-            if ('POST' !== $request->getMethod()) {
+            if (!$request->isMethod('POST')) {
                 $form->setData($this->setUserInformation($form->getData(), $userInformation));
             }
 
@@ -75,7 +92,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
 
         $form->setData($this->setUserInformation($user, $userInformation));
 
-        if ('POST' === $request->getMethod()) {
+        if ($request->isMethod('POST')) {
             $form->bind($request);
 
             return $form->isValid();
