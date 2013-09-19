@@ -20,6 +20,7 @@ class DropboxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         'identifier' => 'uid',
         'nickname'   => 'email',
         'realname'   => 'display_name',
+        'email'      => 'email',
     );
 
     public function testGetAuthorizationUrl()

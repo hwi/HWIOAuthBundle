@@ -34,6 +34,7 @@ class DropboxResourceOwner extends GenericOAuth2ResourceOwner
         'identifier' => 'uid',
         'nickname'   => 'email',
         'realname'   => 'display_name',
+        'email'      => 'email',
     );
 
 }
