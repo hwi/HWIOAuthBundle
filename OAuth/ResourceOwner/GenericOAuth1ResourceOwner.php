@@ -48,6 +48,14 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
+        return $this->getCustomInformation($accessToken, $this->getOption('infos_url'), $extraParameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCustomInformation(array $accessToken, $url, array $extraParameters = array())
+    {
         $parameters = array_merge(array(
             'oauth_consumer_key'     => $this->getOption('client_id'),
             'oauth_timestamp'        => time(),
@@ -57,7 +65,6 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'oauth_token'            => $accessToken['oauth_token'],
         ), $extraParameters);
 
-        $url = $this->getOption('infos_url');
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
             HttpRequestInterface::METHOD_GET,
             $url,
