@@ -19,14 +19,14 @@ This bundle is mainly for authentication, but you can get custom information fro
         if ($resourceOwner->handles($request)) {
             $accessToken = $resourceOwner->getAccessToken(
                 $request,
-                $this->generateUrl('hrm_project_worktime_index', array(), true)
+                $this->generateUrl('your_route_name', array(), true)
             );
 
             $request->getSession()->set('linkedin_access_token', $accessToken);
         } else {
             return new RedirectResponse(
                 $this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl(
-                        'linkedin', $this->generateUrl('hrm_project_worktime_index', array(), true))
+                        'linkedin', $this->generateUrl('your_route_name', array(), true))
             );
         }
     }
