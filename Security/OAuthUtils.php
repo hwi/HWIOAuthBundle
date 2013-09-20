@@ -73,7 +73,7 @@ class OAuthUtils
         if ($redirectUrl === null) {
             if (!$connect || !$hasUser) {
                 $redirectUrl = $this->generateUri($checkPath);
-            } elseif (null === $redirectUrl) {
+            } else {
                 $redirectUrl = $this->generateUrl('hwi_oauth_connect_service', array('service' => $name), true);
             }
         }
