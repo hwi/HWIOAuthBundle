@@ -10,6 +10,7 @@ Getting Started With HWIOAuthBundle
 ## Bonus:
 
 - [Adding "Facebook Connect" functionality](bonus/facebook-connect.md)
+- [Using the bundle for purposes other than authentication](bonus/custom-queries.md)
 
 ## Internals
 
