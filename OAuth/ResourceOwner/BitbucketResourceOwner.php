@@ -22,10 +22,10 @@ class BitbucketResourceOwner extends GenericOAuth1ResourceOwner
      * {@inheritDoc}
      */
     protected $options = array(
-        'authorization_url'   => 'https://bitbucket.org/!api/1.0/oauth/request_token?format=yaml',
-        'request_token_url'   => 'https://bitbucket.org/!api/1.0/oauth/authenticate?format=yaml',
-        'access_token_url'    => 'https://bitbucket.org/!api/1.0/oauth/access_token?format=yaml',
-        'infos_url'           => 'https://api.bitbucket.org/1.0/user?format=yaml',
+        'authorization_url' => 'https://bitbucket.org/api/1.0/oauth/authenticate',
+        'request_token_url' => 'https://bitbucket.org/api/1.0/oauth/request_token',
+        'access_token_url'  => 'https://bitbucket.org/api/1.0/oauth/access_token',
+        'infos_url'         => 'https://bitbucket.org/api/1.0/user',
     );
 
     /**
