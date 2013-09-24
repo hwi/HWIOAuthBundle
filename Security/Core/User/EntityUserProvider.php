@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use FOS\UserBundle\Model\UserInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 /**
@@ -24,6 +25,11 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
  */
 class EntityUserProvider implements OAuthAwareUserProviderInterface
 {
+    /**
+     * @var string
+     */
+    protected $class;
+
     /**
      * @var array
      */
@@ -40,13 +46,27 @@ class EntityUserProvider implements OAuthAwareUserProviderInterface
      * @param ManagerRegistry $registry    Manager registry.
      * @param string          $class       User entity class to load.
      * @param array           $properties  Mapping of resource owners to properties
-     * @param string          $managerName Optional name of the entitymanager to use
+     * @param string          $managerName Optional name of the entity manager to use
      */
     public function __construct(ManagerRegistry $registry, $class, array $properties, $managerName = null)
     {
         $em = $registry->getManager($managerName);
+        $this->class      = $class;
         $this->repository = $em->getRepository($class);
         $this->properties = $properties;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadUserByUsername($username)
+    {
+        $user = $this->repository->findOneBy(array('username' => $username));
+        if (!$user) {
+            throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
+        }
+
+        return $user;
     }
 
     /**
@@ -68,5 +88,30 @@ class EntityUserProvider implements OAuthAwareUserProviderInterface
         }
 
         return $user;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function refreshUser(UserInterface $user)
+    {
+        if (!$this->supportsClass(get_class($user))) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+        }
+
+        $user = $this->repository->findOneBy(array('id' => $user->getId()));
+        if (!$user) {
+            throw new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $user->getId()));
+        }
+
+        return $user;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function supportsClass($class)
+    {
+        return $class === $this->class || is_subclass_of($class, $this->class);
     }
 }

@@ -71,6 +71,12 @@ Changelog
 * Added Odnoklassniki resource owner
 * Added Yandex resource owner
 
+## 0.2.8 (2013-09-19)
+* Fix: Added missing parts in user providers like: `loadUserByUsername()`
+  or `refreshUser()` methods
+* Fix: Registering of user provider services
+* Fix: Make `OAuthUtils::signRequest()` compatible with OAuth1.0a specification
+
 ## 0.2.7 (2013-08-03)
 * Fix: Polish oauth error detection to cover cases from i.e. Facebook resource owner
 * Fix: Changed authorization url for Vkontakte resource owner

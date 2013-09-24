@@ -11,10 +11,14 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
+use FOS\UserBundle\Model\User;
 use FOS\UserBundle\Model\UserManagerInterface;
+use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
-use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class providing a bridge to use the FOSUB user provider with HWIOAuth.
@@ -24,7 +28,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class FOSUBUserProvider implements OAuthAwareUserProviderInterface
+class FOSUBUserProvider implements AccountConnectorInterface, OAuthAwareUserProviderInterface
 {
     /**
      * @var UserManagerInterface
@@ -46,6 +50,19 @@ class FOSUBUserProvider implements OAuthAwareUserProviderInterface
     {
         $this->userManager = $userManager;
         $this->properties  = $properties;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function loadUserByUsername($username)
+    {
+        // Compatibility with FOSUserBundle < 2.0
+        if (class_exists('FOS\UserBundle\Form\Handler\RegistrationFormHandler')) {
+            return $this->userManager->loadUserByUsername($username);
+        }
+
+        return $this->userManager->findUserByUsername($username);
     }
 
     /**
@@ -85,6 +102,35 @@ class FOSUBUserProvider implements OAuthAwareUserProviderInterface
         $user->$setter($username);
 
         $this->userManager->updateUser($user);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function refreshUser(UserInterface $user)
+    {
+        // Compatibility with FOSUserBundle < 2.0
+        if (class_exists('FOS\UserBundle\Form\Handler\RegistrationFormHandler')) {
+            return $this->userManager->refreshUser($user);
+        }
+
+        if (!$user instanceof User) {
+            throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', get_class($user)));
+        }
+
+        if (null === $reloadedUser = $this->userManager->findUserBy(array('id' => $user->getId()))) {
+            throw new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $user->getId()));
+        }
+
+        return $user;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function supportsClass($class)
+    {
+        return $this->userManager->supportsClass($class);
     }
 
     /**

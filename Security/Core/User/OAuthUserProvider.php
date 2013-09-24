@@ -12,8 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
