@@ -58,7 +58,7 @@ firewalls:
 
 ## Adding the Facebook Login Button
 
-The following example bases also on the Facebook ["Login with Javascript SDK"](https://developers.facebook.com/docs/howtos/login/getting-started/) guide. 
+The following example bases also on the Facebook ["Login with Javascript SDK"](https://developers.facebook.com/docs/howtos/login/getting-started/) guide.
 
 ```html+jinja
 # src/Acme/DemoBundle/Resources/views/Secured/hello.html.twig

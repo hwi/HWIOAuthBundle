@@ -34,6 +34,17 @@ interface ResourceOwnerInterface
     public function getUserInformation(array $accessToken, array $extraParameters = array());
 
     /**
+     * Retrieves the information requested by url from an access_token
+     *
+     * @param array  $accessToken     The access token
+     * @param string $url             The desired url
+     * @param array  $extraParameters An array of parameters to add to the url
+     *
+     * @return UserResponseInterface The wrapped response interface.
+     */
+    public function getCustomInformation(array $accessToken, $url, array $extraParameters = array());
+
+    /**
      * Returns the provider's authorization url
      *
      * @param string $redirectUri     The uri to redirect the client back to

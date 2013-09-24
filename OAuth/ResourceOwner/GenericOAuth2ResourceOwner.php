@@ -44,7 +44,15 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        $url = $this->normalizeUrl($this->getOption('infos_url'), array(
+        return $this->getCustomInformation($accessToken, $this->getOption('infos_url'), $extraParameters);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getCustomInformation(array $accessToken, $url, array $extraParameters = array())
+    {
+        $url = $this->normalizeUrl($url, array(
             'access_token' => $accessToken['access_token']
         ));
 
