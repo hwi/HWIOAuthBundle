@@ -70,6 +70,7 @@
         "php":                          ">=5.3.3",
         "symfony/framework-bundle":     "~2.1",
         "symfony/security-bundle":      "~2.1",
+        "symfony/yaml":                 "~2.1",
         "kriswallsmith/buzz":           "~0.7"
     },
 
