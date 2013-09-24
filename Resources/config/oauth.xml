@@ -57,7 +57,7 @@
         </service>
 
         <!-- fosub bridges -->
-        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="%hwi_oauth.user.provider.fosub_bridge.class%">
+        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="%hwi_oauth.user.provider.fosub_bridge.class%" abstract="true">
             <argument type="service" id="fos_user.user_manager" />
         </service>
         <service id="hwi_oauth.registration.form.handler.fosub_bridge.def" class="%hwi_oauth.registration.form.handler.fosub_bridge.class%" abstract="true">
