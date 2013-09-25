@@ -71,6 +71,10 @@ Changelog
 * Added Odnoklassniki resource owner
 * Added Yandex resource owner
 
+## 0.2.9 (2013-09-25)
+* Fix: Regression done in version `0.2.8` blocking usage without `FOSUserBundle`
+* Fix: `OAuthUtils::getAuthorizationUrl()` ignoring given redirect URL
+
 ## 0.2.8 (2013-09-19)
 * Fix: Added missing parts in user providers like: `loadUserByUsername()`
   or `refreshUser()` methods
