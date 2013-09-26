@@ -33,15 +33,6 @@ class DropboxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://www.dropbox.com/1/oauth2/authorize',
-                'access_token_url'    => 'https://api.dropbox.com/1/oauth2/token',
-                'infos_url'           => 'https://api.dropbox.com/1/account/info',
-            ),
-            $options
-        );
-
         return new DropboxResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

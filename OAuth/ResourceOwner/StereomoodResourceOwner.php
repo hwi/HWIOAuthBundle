@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * StereomoodResourceOwner
@@ -20,15 +21,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
  */
 class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'authorization_url' => 'http://www.stereomood.com/api/oauth/authenticate',
-        'request_token_url' => 'http://www.stereomood.com/api/oauth/request_token',
-        'access_token_url'  => 'http://www.stereomood.com/api/oauth/access_token',
-    );
-
     protected $paths = array(
         'identifier' => 'oauth_token',
         'nickname'   => 'oauth_token'
@@ -45,5 +37,22 @@ class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
         $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'http://www.stereomood.com/api/oauth/authenticate',
+            'request_token_url' => 'http://www.stereomood.com/api/oauth/request_token',
+            'access_token_url'  => 'http://www.stereomood.com/api/oauth/access_token',
+
+            // Stereomood don't use `infos_url`
+            'infos_url'         => null,
+        ));
     }
 }

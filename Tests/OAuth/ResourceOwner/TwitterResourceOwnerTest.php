@@ -44,16 +44,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://api.twitter.com/oauth/authenticate',
-                'request_token_url'   => 'https://api.twitter.com/oauth/request_token',
-                'access_token_url'    => 'https://api.twitter.com/oauth/access_token',
-                'infos_url'           => 'http://api.twitter.com/1.1/account/verify_credentials.json',
-            ),
-            $options
-        );
-
         return new TwitterResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

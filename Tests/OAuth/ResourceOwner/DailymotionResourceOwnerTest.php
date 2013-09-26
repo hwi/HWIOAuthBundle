@@ -30,25 +30,24 @@ json;
 
     public function testDisplayPopup()
     {
-        $resourceOwner = $this->createResourceOwner('facebook', array('display' => 'popup'));
-        $this->assertEquals('popup', $resourceOwner->getOption('display'));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('display' => 'popup'));
+
         $this->assertEquals(
             $this->options['authorization_url'] . '&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&display=popup',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
-    
+
+    /**
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function testInvalidDisplayOptionValueThrowsException()
+    {
+        $this->createResourceOwner($this->resourceOwnerName, array('display' => 'invalid'));
+    }
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url' => 'https://api.dailymotion.com/oauth/authorize',
-                'access_token_url'  => 'https://api.dailymotion.com/oauth/token',
-                'infos_url'         => 'https://api.dailymotion.com/me',
-            ),
-            $options
-        );
-
         return new DailymotionResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

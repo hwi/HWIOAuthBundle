@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * ThirtySevenSignalsResourceOwner (37signals)
@@ -20,15 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'authorization_url'   => 'https://launchpad.37signals.com/authorization/new',
-        'access_token_url'    => 'https://launchpad.37signals.com/authorization/token',
-        'infos_url'           => 'https://launchpad.37signals.com/authorization.json',
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -53,5 +45,19 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
         return parent::getAccessToken($request, $redirectUri, array_merge(array('type' => 'web_server'), $extraParameters));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://launchpad.37signals.com/authorization/new',
+            'access_token_url'  => 'https://launchpad.37signals.com/authorization/token',
+            'infos_url'         => 'https://launchpad.37signals.com/authorization.json',
+        ));
     }
 }

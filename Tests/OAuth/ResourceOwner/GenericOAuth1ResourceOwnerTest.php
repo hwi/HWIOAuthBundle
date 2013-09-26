@@ -20,12 +20,12 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
      * @var GenericOAuth1ResourceOwner
      */
     protected $resourceOwner;
+    protected $resourceOwnerName;
     protected $buzzClient;
     protected $buzzResponse;
     protected $buzzResponseContentType;
     protected $storage;
 
-    protected $userResponse = '{"id": "1", "foo": "bar"}';
     protected $options = array(
         'client_id'           => 'clientid',
         'client_secret'       => 'clientsecret',
@@ -34,16 +34,9 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         'request_token_url'   => 'http://user.request/?test=2',
         'authorization_url'   => 'http://user.auth/?test=3',
         'access_token_url'    => 'http://user.access/?test=4',
-
-        'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-
-        'signature_method'    => 'HMAC-SHA1',
-
-        'csrf'                => false,
-
-        'realm'               => null,
-        'scope'               => null,
     );
+
+    protected $userResponse = '{"id": "1", "foo": "bar"}';
 
     protected $paths = array(
         'identifier' => 'id',
@@ -53,56 +46,24 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->resourceOwner = $this->createResourceOwner('oauth1');
-    }
-
-    public function testGetOption()
-    {
-        $this->assertEquals($this->options['infos_url'], $this->resourceOwner->getOption('infos_url'));
-        $this->assertEquals($this->options['request_token_url'], $this->resourceOwner->getOption('request_token_url'));
-        $this->assertEquals($this->options['authorization_url'], $this->resourceOwner->getOption('authorization_url'));
-        $this->assertEquals($this->options['access_token_url'], $this->resourceOwner->getOption('access_token_url'));
-
-        $this->assertEquals($this->options['user_response_class'], $this->resourceOwner->getOption('user_response_class'));
-
-        $this->assertEquals($this->options['signature_method'], $this->resourceOwner->getOption('signature_method'));
-
-        $this->assertEquals($this->options['realm'], $this->resourceOwner->getOption('realm'));
-        $this->assertEquals($this->options['scope'], $this->resourceOwner->getOption('scope'));
-        $this->assertEquals($this->options['csrf'], $this->resourceOwner->getOption('csrf'));
-    }
-
-    public function testGetOptionWithDefaults()
-    {
-        $buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
-            ->disableOriginalConstructor()->getMock();
-        $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
-            ->disableOriginalConstructor()->getMock();
-
-        $storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
-
-        $resourceOwner = new GenericOAuth1ResourceOwner($buzzClient, $httpUtils, array(), 'oauth1', $storage);
-
-        $this->assertNull($resourceOwner->getOption('client_id'));
-        $this->assertNull($resourceOwner->getOption('client_secret'));
-
-        $this->assertNull($resourceOwner->getOption('infos_url'));
-
-        $this->assertEquals('HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse', $resourceOwner->getOption('user_response_class'));
-
-        $this->assertNull($resourceOwner->getOption('realm'));
-        $this->assertNull($resourceOwner->getOption('scope'));
-        $this->assertFalse($resourceOwner->getOption('csrf'));
-
-        $this->assertEquals('HMAC-SHA1', $resourceOwner->getOption('signature_method'));
+        $this->resourceOwnerName = str_replace(array('generic', 'resourceownertest'), '', strtolower(__CLASS__));
+        $this->resourceOwner     = $this->createResourceOwner($this->resourceOwnerName);
     }
 
     /**
-     * @expectedException \InvalidArgumentException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
      */
     public function testGetInvalidOptionThrowsException()
     {
-        $this->resourceOwner->getOption('non_existing');
+        $this->createResourceOwner($this->resourceOwnerName, array('non_existing' => null));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function testInvalidOptionValueThrowsException()
+    {
+        $this->createResourceOwner($this->resourceOwnerName, array('csrf' => 'invalid'));
     }
 
     public function testGetUserInformation()
@@ -261,17 +222,19 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
     public function testRefreshAccessToken()
     {
-        $this->setExpectedException('\Symfony\Component\Security\Core\Exception\AuthenticationException');
-
         $this->resourceOwner->refreshAccessToken('token');
     }
 
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
     public function testRevokeToken()
     {
-        $this->setExpectedException('\Symfony\Component\Security\Core\Exception\AuthenticationException');
-
         $this->resourceOwner->revokeToken('token');
     }
 
@@ -280,24 +243,22 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $this->storage->expects($this->never())
             ->method('fetch');
 
-        $this->assertFalse($this->resourceOwner->getOption('csrf'));
         $this->assertTrue($this->resourceOwner->isCsrfTokenValid('valid_token'));
     }
 
     public function testCsrfTokenValid()
     {
-        $resourceOwner = $this->createResourceOwner('oauth1', array('csrf' => true));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('csrf' => true));
 
         $this->storage->expects($this->never())
             ->method('fetch');
 
-        $this->assertTrue($resourceOwner->getOption('csrf'));
         $this->assertTrue($resourceOwner->isCsrfTokenValid('valid_token'));
     }
 
     public function testGetSetName()
     {
-        $this->assertEquals('oauth1', $this->resourceOwner->getName());
+        $this->assertEquals($this->resourceOwnerName, $this->resourceOwner->getName());
         $this->resourceOwner->setName('foo');
         $this->assertEquals('foo', $this->resourceOwner->getName());
     }
@@ -305,7 +266,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     public function testCustomResponseClass()
     {
         $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
-        $resourceOwner = $this->createResourceOwner('oauth1', array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         $this->mockBuzz();
 

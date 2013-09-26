@@ -12,26 +12,17 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 class SinaWeiboResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url' => 'https://api.weibo.com/oauth2/authorize',
-        'access_token_url' => 'https://api.weibo.com/oauth2/access_token',
-        'revoke_token_url' => 'https://api.weibo.com/oauth2/revokeoauth2',
-        'infos_url' => 'https://api.weibo.com/2/users/show.json',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected $paths = array(
-        'identifier' => 'id',
-        'nickname' => 'screen_name',
-        'realname' => 'screen_name',
+        'identifier'     => 'id',
+        'nickname'       => 'screen_name',
+        'realname'       => 'screen_name',
         'profilepicture' => 'profile_image_url',
     );
 
@@ -40,9 +31,9 @@ class SinaWeiboResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getUserInformation(array $accessToken = null, array $extraParameters = array())
     {
-        $url = $this->normalizeUrl($this->getOption('infos_url'), array(
+        $url = $this->normalizeUrl($this->options['infos_url'], array(
             'access_token' => $accessToken['access_token'],
-            'uid' => $accessToken['uid'],
+            'uid'          => $accessToken['uid'],
         ));
 
         $content = $this->doGetUserInformationRequest($url)->getContent();
@@ -53,5 +44,20 @@ class SinaWeiboResourceOwner extends GenericOAuth2ResourceOwner
         $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://api.weibo.com/oauth2/authorize',
+            'access_token_url'  => 'https://api.weibo.com/oauth2/access_token',
+            'revoke_token_url'  => 'https://api.weibo.com/oauth2/revokeoauth2',
+            'infos_url'         => 'https://api.weibo.com/2/users/show.json',
+        ));
     }
 }

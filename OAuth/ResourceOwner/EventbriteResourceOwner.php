@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * EventbriteResourceOwner
@@ -21,15 +22,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
  */
 class EventbriteResourceOwner extends GenericOAuth2ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'authorization_url' => 'https://www.eventbrite.com/oauth/authorize',
-        'access_token_url'  => 'https://www.eventbrite.com/oauth/token',
-        'infos_url'         => 'https://www.eventbrite.com/json/user_get',
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -65,5 +57,19 @@ class EventbriteResourceOwner extends GenericOAuth2ResourceOwner
     protected function doGetTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, http_build_query($parameters, '', '&'), array(), HttpRequestInterface::METHOD_POST);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://www.eventbrite.com/oauth/authorize',
+            'access_token_url'  => 'https://www.eventbrite.com/oauth/token',
+            'infos_url'         => 'https://www.eventbrite.com/json/user_get',
+        ));
     }
 }

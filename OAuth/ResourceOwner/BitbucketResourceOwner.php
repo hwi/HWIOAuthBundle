@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * BitbucketResourceOwner
  *
@@ -21,20 +23,25 @@ class BitbucketResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url' => 'https://bitbucket.org/api/1.0/oauth/authenticate',
-        'request_token_url' => 'https://bitbucket.org/api/1.0/oauth/request_token',
-        'access_token_url'  => 'https://bitbucket.org/api/1.0/oauth/access_token',
-        'infos_url'         => 'https://bitbucket.org/api/1.0/user',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected $paths = array(
         'identifier'     => 'user.username',
         'nickname'       => 'user.username',
         'realname'       => 'user.display_name',
         'profilepicture' => 'user.avatar',
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://bitbucket.org/api/1.0/oauth/authenticate',
+            'request_token_url' => 'https://bitbucket.org/api/1.0/oauth/request_token',
+            'access_token_url'  => 'https://bitbucket.org/api/1.0/oauth/access_token',
+            'infos_url'         => 'https://bitbucket.org/api/1.0/user',
+        ));
+    }
 }

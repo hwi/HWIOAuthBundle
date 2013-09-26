@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * DropboxResourceOwner
  *
@@ -21,15 +23,6 @@ class DropboxResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url'   => 'https://www.dropbox.com/1/oauth2/authorize',
-        'access_token_url'    => 'https://api.dropbox.com/1/oauth2/token',
-        'infos_url'           => 'https://api.dropbox.com/1/account/info',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected $paths = array(
         'identifier' => 'uid',
         'nickname'   => 'email',
@@ -37,4 +30,17 @@ class DropboxResourceOwner extends GenericOAuth2ResourceOwner
         'email'      => 'email',
     );
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://www.dropbox.com/1/oauth2/authorize',
+            'access_token_url'  => 'https://api.dropbox.com/1/oauth2/token',
+            'infos_url'         => 'https://api.dropbox.com/1/account/info',
+        ));
+    }
 }

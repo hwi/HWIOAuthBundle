@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * DailymotionResourceOwner
  *
@@ -18,18 +20,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  */
 class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'authorization_url' => 'https://api.dailymotion.com/oauth/authorize',
-        'access_token_url'  => 'https://api.dailymotion.com/oauth/token',
-        'infos_url'         => 'https://api.dailymotion.com/me',
-
-        // @link http://www.dailymotion.com/doc/api/authentication.html#dialog-form-factors
-        'display'           => null,
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -46,6 +36,27 @@ class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
-        return parent::getAuthorizationUrl($redirectUri, array_merge(array('display' => $this->getOption('display')), $extraParameters));
+        return parent::getAuthorizationUrl($redirectUri, array_merge(array('display' => $this->options['display']), $extraParameters));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://api.dailymotion.com/oauth/authorize',
+            'access_token_url'  => 'https://api.dailymotion.com/oauth/token',
+            'infos_url'         => 'https://api.dailymotion.com/me',
+
+            'display'           => null,
+        ));
+
+        $resolver->setAllowedValues(array(
+            // @link http://www.dailymotion.com/doc/api/authentication.html#dialog-form-factors
+            'display' => array('page', 'popup', 'mobile', null),
+        ));
     }
 }

@@ -35,15 +35,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://public-api.wordpress.com/oauth2/authorize',
-                'access_token_url'    => 'https://public-api.wordpress.com/oauth2/token',
-                'infos_url'           => 'https://public-api.wordpress.com/rest/v1/me',
-            ),
-            $options
-        );
-
         return new WordpressResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

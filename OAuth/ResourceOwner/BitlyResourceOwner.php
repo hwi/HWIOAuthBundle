@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * BitlyResourceOwner
  *
@@ -21,19 +23,24 @@ class BitlyResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url'   => 'https://bitly.com/oauth/authorize',
-        'access_token_url'    => 'https://api-ssl.bitly.com/oauth/access_token',
-        'infos_url'           => 'https://api-ssl.bitly.com/v3/user/info?format=json',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected $paths = array(
         'identifier'     => 'data.login',
         'nickname'       => 'data.display_name',
         'realname'       => 'data.full_name',
         'profilepicture' => 'data.profile_image',
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://bitly.com/oauth/authorize',
+            'access_token_url'  => 'https://api-ssl.bitly.com/oauth/access_token',
+            'infos_url'         => 'https://api-ssl.bitly.com/v3/user/info?format=json',
+        ));
+    }
 }

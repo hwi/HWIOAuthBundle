@@ -27,6 +27,38 @@ use Symfony\Component\DependencyInjection\Reference;
 class OAuthFactory extends AbstractFactory
 {
     /**
+     * {@inheritDoc}
+     */
+    public function addConfiguration(NodeDefinition $node)
+    {
+        parent::addConfiguration($node);
+
+        $builder = $node->children();
+        $builder
+            ->scalarNode('login_path')->cannotBeEmpty()->isRequired()->end()
+        ;
+
+        $this->addOAuthProviderConfiguration($node);
+        $this->addResourceOwnersConfiguration($node);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getKey()
+    {
+        return 'oauth';
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getPosition()
+    {
+        return 'http';
+    }
+
+    /**
      * Creates a resource owner map for the given configuration.
      *
      * @param ContainerBuilder $container Container to build for
@@ -43,7 +75,7 @@ class OAuthFactory extends AbstractFactory
 
         $container
             ->setDefinition($this->getResourceOwnerMapReference($id), new DefinitionDecorator('hwi_oauth.abstract_resource_ownermap'))
-            ->replaceArgument(3, new Parameter('hwi_oauth.resource_ownermap.configured.'.$id))
+            ->replaceArgument(2, new Parameter('hwi_oauth.resource_ownermap.configured.'.$id))
         ;
     }
 
@@ -145,17 +177,61 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritDoc}
      */
-    public function addConfiguration(NodeDefinition $node)
+    protected function getListenerId()
     {
-        parent::addConfiguration($node);
+        return 'hwi_oauth.authentication.listener.oauth';
+    }
 
+    private function addOAuthProviderConfiguration(NodeDefinition $node)
+    {
         $builder = $node->children();
+        $builder
+            ->arrayNode('oauth_user_provider')
+                ->isRequired()
+                ->children()
+                    ->arrayNode('orm')
+                        ->children()
+                            ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
+                            ->scalarNode('manager_name')->defaultNull()->end()
+                            ->arrayNode('properties')
+                                ->isRequired()
+                                ->useAttributeAsKey('name')
+                                    ->prototype('scalar')
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                    ->scalarNode('service')->cannotBeEmpty()->end()
+                    ->scalarNode('oauth')->end()
+                    ->arrayNode('fosub')
+                        ->children()
+                            ->arrayNode('properties')
+                                ->isRequired()
+                                ->useAttributeAsKey('name')
+                                    ->prototype('scalar')
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->validate()
+                    ->ifTrue(function($c) {
+                        return 1 !== count($c) || !in_array(key($c), array('fosub', 'oauth', 'orm', 'service'));
+                    })
+                    ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
+                ->end()
+            ->end()
+        ;
+    }
 
+    private function addResourceOwnersConfiguration(NodeDefinition $node)
+    {
+        $builder = $node->children();
         $builder
             ->arrayNode('resource_owners')
                 ->isRequired()
                 ->useAttributeAsKey('name')
-                ->prototype('scalar')
+                    ->prototype('scalar')
                 ->end()
                 ->validate()
                     ->ifTrue(function($c) {
@@ -170,72 +246,9 @@ class OAuthFactory extends AbstractFactory
 
                         return false;
                     })
-                    ->thenInvalid("Each resource owner should have a unique check_path.")
+                    ->thenInvalid('Each resource owner should have a unique "check_path".')
                 ->end()
             ->end()
-            ->arrayNode('oauth_user_provider')
-                ->isRequired()
-                ->children()
-                    ->arrayNode('orm')
-                        ->children()
-                            ->scalarNode('class')->isRequired()->cannotBeEmpty()->end()
-                            ->scalarNode('manager_name')->defaultNull()->end()
-                            ->arrayNode('properties')
-                                ->isRequired()
-                                ->useAttributeAsKey('name')
-                                ->prototype('scalar')
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                    ->scalarNode('service')->cannotBeEmpty()->end()
-                    ->scalarNode('oauth')->end()
-                    ->arrayNode('fosub')
-                        ->children()
-                            ->arrayNode('properties')
-                                ->isRequired()
-                                ->useAttributeAsKey('name')
-                                ->prototype('scalar')
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-                ->validate()
-                    ->ifTrue(function($c) {
-                        return 1 !== count($c)
-                            || !in_array(key($c), array('fosub', 'oauth','orm', 'service'));
-                    })
-                    ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
-                ->end()
-            ->end()
-            ->scalarNode('login_path')
-                ->cannotBeEmpty()
-                ->isRequired()
-            ->end();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    protected function getListenerId()
-    {
-      return 'hwi_oauth.authentication.listener.oauth';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getKey()
-    {
-        return 'oauth';
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function getPosition()
-    {
-        return 'http';
+        ;
     }
 }

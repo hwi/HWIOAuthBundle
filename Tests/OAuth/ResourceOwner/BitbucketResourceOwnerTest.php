@@ -46,16 +46,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url' => 'https://bitbucket.org/api/1.0/oauth/authenticate',
-                'request_token_url' => 'https://bitbucket.org/api/1.0/oauth/request_token',
-                'access_token_url'  => 'https://bitbucket.org/api/1.0/oauth/access_token',
-                'infos_url'         => 'https://bitbucket.org/api/1.0/user',
-            ),
-            $options
-        );
-
         return new BitbucketResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

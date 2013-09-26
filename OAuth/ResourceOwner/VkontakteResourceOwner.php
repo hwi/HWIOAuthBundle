@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * VkontakteResourceOwner
@@ -24,18 +25,6 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url'   => 'https://oauth.vk.com/authorize',
-        'access_token_url'    => 'https://oauth.vk.com/access_token',
-        'infos_url'           => 'https://api.vk.com/method/users.get',
-
-        'fields' => 'nickname,photo_50',
-        'name_case' => null,
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected $paths = array(
         'identifier' => 'response.0.uid',
         'nickname'   => 'response.0.nickname',
@@ -43,27 +32,16 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * Vkontakte unfortunately breaks the spec by using commas instead of spaces
-     * to separate scopes
-     */
-    public function configure()
-    {
-        if (isset($this->options['scope'])) {
-            $this->options['scope'] = str_replace(',', ' ', $this->options['scope']);
-        }
-    }
-
-    /**
      * {@inheritDoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $parameters = array(
-            'access_token'    => $accessToken['access_token'],
-            'fields' => is_array($fields = $this->getOption('fields')) ? implode(',', $fields) : $fields,
-            'name_case' => $this->getOption('name_case'),
+            'access_token' => $accessToken['access_token'],
+            'fields'       => $this->options['fields'],
+            'name_case'    => $this->options['name_case'],
         );
-        $url = $this->normalizeUrl($this->getOption('infos_url'), $parameters);
+        $url = $this->normalizeUrl($this->options['infos_url'], $parameters);
 
         $content = $this->doGetUserInformationRequest($url)->getContent();
 
@@ -73,5 +51,34 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url'   => 'https://oauth.vk.com/authorize',
+            'access_token_url'    => 'https://oauth.vk.com/access_token',
+            'infos_url'           => 'https://api.vk.com/method/users.get',
+
+            'use_commas_in_scope' => true,
+
+            'fields'              => 'nickname,photo_50',
+            'name_case'           => null,
+        ));
+
+        $resolver->setNormalizers(array(
+            'fields' => function ($value) {
+                if (!$value) {
+                    return null;
+                }
+
+                return is_array($value) ? implode(',', $value) : $value;
+            },
+        ));
     }
 }

@@ -22,11 +22,6 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         'realname'   => 'displayName',
     );
 
-    public function testGetBaseUrlOption()
-    {
-        $this->assertEquals('www.fake.url', $this->resourceOwner->getOption('base_url'));
-    }
-
     public function testGetUserInformation()
     {
         $this
@@ -50,7 +45,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     public function testCustomResponseClass()
     {
         $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
-        $resourceOwner = $this->createResourceOwner('oauth1', array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         $this
             ->buzzClient->expects($this->exactly(2))
@@ -74,14 +69,8 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     {
         $options = array_merge(
             array(
-                'authorization_url'   => '{base_url}/plugins/servlet/oauth/authorize',
-                'request_token_url'   => '{base_url}/plugins/servlet/oauth/request-token',
-                'access_token_url'    => '{base_url}/plugins/servlet/oauth/access-token',
-                'infos_url'           => '{base_url}/rest/api/2/user',
-
-                'signature_method'    => 'RSA-SHA1',
-
-                'base_url'            => 'www.fake.url',
+                // This is to prevent errors with not existing .pem file
+                'signature_method' => 'PLAINTEXT'
             ),
             $options
         );

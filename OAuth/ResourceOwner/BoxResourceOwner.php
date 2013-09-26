@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * BoxResourceOwner
  *
@@ -18,16 +20,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  */
 class BoxResourceOwner extends GenericOAuth2ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'authorization_url'   => 'https://www.box.com/api/oauth2/authorize',
-        'access_token_url'    => 'https://www.box.com/api/oauth2/token',
-        'revoke_token_url'    => 'https://www.box.com/api/oauth2/revoke',
-        'infos_url'           => 'https://api.box.com/2.0/users/me',
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -45,14 +37,29 @@ class BoxResourceOwner extends GenericOAuth2ResourceOwner
     public function revokeToken($token)
     {
         $parameters = array(
-            'client_id'     => $this->getOption('client_id'),
-            'client_secret' => $this->getOption('client_secret'),
+            'client_id'     => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
             'token'         => $token
         );
 
         /* @var $response \Buzz\Message\Response */
-        $response = $this->httpRequest($this->normalizeUrl($this->getOption('revoke_token_url')), $parameters, array(), 'POST');
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url']), $parameters, array(), 'POST');
 
         return 200 === $response->getStatusCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://www.box.com/api/oauth2/authorize',
+            'access_token_url'  => 'https://www.box.com/api/oauth2/token',
+            'revoke_token_url'  => 'https://www.box.com/api/oauth2/revoke',
+            'infos_url'         => 'https://api.box.com/2.0/users/me',
+        ));
     }
 }

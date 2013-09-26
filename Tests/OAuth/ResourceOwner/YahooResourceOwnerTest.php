@@ -62,17 +62,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://api.login.yahoo.com/oauth/v2/request_auth',
-                'request_token_url'   => 'https://api.login.yahoo.com/oauth/v2/get_request_token',
-                'access_token_url'    => 'https://api.login.yahoo.com/oauth/v2/get_token',
-                'infos_url'           => 'http://social.yahooapis.com/v1/user/{guid}/profile',
-                'realm'               => 'yahooapis.com',
-            ),
-            $options
-        );
-
         return new YahooResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

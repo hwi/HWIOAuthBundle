@@ -50,16 +50,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://www.box.com/api/oauth2/authorize',
-                'access_token_url'    => 'https://www.box.com/api/oauth2/token',
-                'revoke_token_url'    => 'https://www.box.com/api/oauth2/revoke',
-                'infos_url'           => 'https://api.box.com/2.0/users/me',
-            ),
-            $options
-        );
-
         return new BoxResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

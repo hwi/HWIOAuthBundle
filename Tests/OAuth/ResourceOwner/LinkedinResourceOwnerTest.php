@@ -28,19 +28,14 @@ json;
         'email'          => 'emailAddress',
         'profilepicture' => 'pictureUrl',
     );
+    protected $csrf = true;
+
+    protected $expectedUrls = array(
+        'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+    );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://www.linkedin.com/uas/oauth2/authorization',
-                'access_token_url'    => 'https://www.linkedin.com/uas/oauth2/accessToken',
-                'infos_url'           => 'https://api.linkedin.com/v1/people/~:(id,formatted-name,email-address,picture-url)?format=json',
-                'csrf'                => true,
-            ),
-            $options
-        );
-
         return new LinkedinResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }
