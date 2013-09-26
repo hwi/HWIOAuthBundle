@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -190,7 +191,7 @@ class ConnectController extends ContainerAware
         }
 
         // Handle the form
-        /** @var $form Form */
+        /** @var $form FormInterface */
         $form = $this->container->get('form.factory')
             ->createBuilder('form')
             ->getForm();
@@ -201,9 +202,14 @@ class ConnectController extends ContainerAware
             if ($form->isValid()) {
                 show_confirmation_page:
 
-                $user = $this->container->get('security.context')->getToken()->getUser();
+                /** @var $currentToken OAuthToken */
+                $currentToken = $this->container->get('security.context')->getToken();
+                $currentUser  = $currentToken->getUser();
 
-                $this->container->get('hwi_oauth.account.connector')->connect($user, $userInformation);
+                $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
+
+                // Update user token with new details
+                $this->authenticateUser($currentUser, $service, $currentToken->getRawToken(), false);
 
                 return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
                     'userInformation' => $userInformation,
@@ -300,8 +306,9 @@ class ConnectController extends ContainerAware
      * @param UserInterface $user
      * @param string        $resourceOwnerName
      * @param string        $accessToken
+     * @param boolean       $fakeLogin
      */
-    protected function authenticateUser(UserInterface $user, $resourceOwnerName, $accessToken)
+    protected function authenticateUser(UserInterface $user, $resourceOwnerName, $accessToken, $fakeLogin = true)
     {
         try {
             $this->container->get('hwi_oauth.user_checker')->checkPostAuth($user);
@@ -317,11 +324,13 @@ class ConnectController extends ContainerAware
 
         $this->container->get('security.context')->setToken($token);
 
-        // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
-        $this->container->get('event_dispatcher')->dispatch(
-            SecurityEvents::INTERACTIVE_LOGIN,
-            new InteractiveLoginEvent($this->container->get('request'), $token)
-        );
+        if ($fakeLogin) {
+            // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
+            $this->container->get('event_dispatcher')->dispatch(
+                SecurityEvents::INTERACTIVE_LOGIN,
+                new InteractiveLoginEvent($this->container->get('request'), $token)
+            );
+        }
     }
 
     /**
