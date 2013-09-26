@@ -34,15 +34,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://bitly.com/oauth/authorize',
-                'access_token_url'    => 'https://api-ssl.bitly.com/oauth/access_token',
-                'infos_url'           => 'https://api-ssl.bitly.com/v3/user/info?format=json',
-            ),
-            $options
-        );
-
         return new BitlyResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

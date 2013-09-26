@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * InstagramResourceOwner
  *
@@ -21,19 +23,24 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url' => 'https://api.instagram.com/oauth/authorize',
-        'access_token_url'  => 'https://api.instagram.com/oauth/access_token',
-        'infos_url'         => 'https://api.instagram.com/v1/users/self',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected $paths = array(
         'identifier'      => 'data.id',
         'nickname'        => 'data.username',
         'realname'        => 'data.full_name',
         'profilepicture'  => 'data.profile_picture',
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://api.instagram.com/oauth/authorize',
+            'access_token_url'  => 'https://api.instagram.com/oauth/access_token',
+            'infos_url'         => 'https://api.instagram.com/v1/users/self',
+        ));
+    }
 }

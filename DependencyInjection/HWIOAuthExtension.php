@@ -16,6 +16,7 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
@@ -61,6 +62,9 @@ class HWIOAuthExtension extends Extension
             $this->createResourceOwnerService($container, $name, $options);
         }
         $container->setParameter('hwi_oauth.resource_owners', $resourceOwners);
+
+        $oauthUtils = $container->getDefinition('hwi_oauth.security.oauth_utils');
+        $oauthUtils->addMethodCall('setResourceOwnerMap', array(new Reference('hwi_oauth.resource_ownermap.'.$config['firewall_name'])));
 
         if (isset($config['fosub'])) {
             $container
@@ -130,30 +134,12 @@ class HWIOAuthExtension extends Extension
             $type = $options['type'];
             unset($options['type']);
 
-            if (!empty($options['paths'])) {
-                $paths = $options['paths'];
-                unset($options['paths']);
-            }
-
-            if (!empty($options['options'])) {
-                $customOptions = $options['options'];
-                unset($options['options']);
-            }
-
             $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.$type);
             $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
             $definition
                 ->replaceArgument(2, $options)
                 ->replaceArgument(3, $name)
             ;
-
-            if (isset($paths)) {
-                $definition->addMethodCall('addPaths', array($paths));
-            }
-
-            if (isset($customOptions)) {
-                $definition->addMethodCall('addOptions', array($customOptions));
-            }
         }
     }
 

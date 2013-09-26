@@ -30,42 +30,60 @@ json;
         'profilepicture' => 'picture',
     );
 
-    public function testGetOptionAccessType()
+    protected $expectedUrls = array(
+        'authorization_url'      => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+        'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline',
+    );
+
+    /**
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function testInvalidAccessTypeOptionValueThrowsException()
     {
-        $this->assertEquals('offline', $this->resourceOwner->getOption('access_type'));
+        $this->createResourceOwner($this->resourceOwnerName, array('access_type' => 'invalid'));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     */
+    public function testInvalidApprovalPromptOptionValueThrowsException()
+    {
+        $this->createResourceOwner($this->resourceOwnerName, array('approval_prompt' => 'invalid'));
     }
 
     public function testGetAuthorizationUrl()
     {
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 
     public function testRequestVisibleActions()
     {
-        $resourceOwner = $this->createResourceOwner('google', array('request_visible_actions' => 'http://schemas.google.com/AddActivity'));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('request_visible_actions' => 'http://schemas.google.com/AddActivity'));
+
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&request_visible_actions=http%3A%2F%2Fschemas.google.com%2FAddActivity',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&request_visible_actions=http%3A%2F%2Fschemas.google.com%2FAddActivity',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 
     public function testApprovalPromptForce()
     {
-        $resourceOwner = $this->createResourceOwner('google', array('approval_prompt' => 'force'));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('approval_prompt' => 'force'));
+
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&approval_prompt=force',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&approval_prompt=force',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 
     public function testHdParameter()
     {
-        $resourceOwner = $this->createResourceOwner('google', array('hd' => 'mycollege.edu'));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('hd' => 'mycollege.edu'));
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&hd=mycollege.edu',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&hd=mycollege.edu',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -90,12 +108,7 @@ json;
     {
         $options = array_merge(
             array(
-                'authorization_url' => 'https://accounts.google.com/o/oauth2/auth',
-                'access_token_url'  => 'https://accounts.google.com/o/oauth2/token',
-                'infos_url'         => 'https://www.googleapis.com/oauth2/v1/userinfo',
-                'scope'             => 'https://www.googleapis.com/auth/userinfo.profile',
-
-                'access_type'       => 'offline'
+                'access_type' => 'offline'
             ),
             $options
         );

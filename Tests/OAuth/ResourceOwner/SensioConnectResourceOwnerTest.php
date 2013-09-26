@@ -25,7 +25,7 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     public function testGetUserInformation()
     {
         $class         = '\HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse';
-        $resourceOwner = $this->createResourceOwner('oauth2', array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         $this->mockBuzz($this->userResponse);
 
@@ -44,17 +44,6 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                 'authorization_url'   => 'https://connect.sensiolabs.com/oauth/authorize',
-                 'access_token_url'    => 'https://connect.sensiolabs.com/oauth/access_token',
-                 'infos_url'           => 'https://connect.sensiolabs.com/api',
-
-                 'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse',
-            ),
-            $options
-        );
-
         return new SensioConnectResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * MailRuResourceOwner
@@ -20,15 +21,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
  */
 class MailRuResourceOwner extends GenericOAuth2ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'authorization_url'   => 'https://connect.mail.ru/oauth/authorize',
-        'access_token_url'    => 'https://connect.mail.ru/oauth/token',
-        'infos_url'           => 'http://www.appsmail.ru/platform/api',
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -45,15 +37,15 @@ class MailRuResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $params = array(
-            'app_id'      => $this->getOption('client_id'),
+            'app_id'      => $this->options['client_id'],
             'method'      => 'users.getInfo',
             'secure'      => '1',
             'session_key' => $accessToken['access_token'],
         );
 
-        $params['sig'] = md5(vsprintf('app_id=%smethod=%ssecure=%ssession_key=%s', $params).$this->getOption('client_secret'));
+        $params['sig'] = md5(vsprintf('app_id=%smethod=%ssecure=%ssession_key=%s', $params).$this->options['client_secret']);
 
-        $url = $this->normalizeUrl($this->getOption('infos_url'), $params);
+        $url = $this->normalizeUrl($this->options['infos_url'], $params);
 
         $content = $this->doGetUserInformationRequest($url)->getContent();
         $content = json_decode($content);
@@ -67,5 +59,19 @@ class MailRuResourceOwner extends GenericOAuth2ResourceOwner
         $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url'   => 'https://connect.mail.ru/oauth/authorize',
+            'access_token_url'    => 'https://connect.mail.ru/oauth/token',
+            'infos_url'           => 'http://www.appsmail.ru/platform/api',
+        ));
     }
 }

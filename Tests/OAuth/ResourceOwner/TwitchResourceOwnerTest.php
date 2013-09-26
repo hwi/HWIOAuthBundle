@@ -35,16 +35,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'       => 'https://api.twitch.tv/kraken/oauth2/authorize',
-                'access_token_url'        => 'https://api.twitch.tv/kraken/oauth2/token',
-                'infos_url'               => 'https://api.twitch.tv/kraken/user',
-                'scope'                   => 'user_read'
-            ),
-            $options
-        );
-
         return new TwitchResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

@@ -31,15 +31,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://oauth.yandex.ru/authorize',
-                'access_token_url'    => 'https://oauth.yandex.ru/token',
-                'infos_url'           => 'https://login.yandex.ru/info?format=json',
-            ),
-            $options
-        );
-
         return new YandexResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

@@ -33,24 +33,8 @@ json;
         'realname'   => array('response.user.firstName', 'response.user.lastName'),
     );
 
-    public function testGetOptionVersion()
-    {
-        $this->assertEquals('FAKE_VERSION', $this->resourceOwner->getOption('version'));
-    }
-
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                 'authorization_url'   => 'https://foursquare.com/oauth2/authorize',
-                 'access_token_url'    => 'https://foursquare.com/oauth2/access_token',
-                 'infos_url'           => 'https://api.foursquare.com/v2/users/self',
-
-                 'version'             => 'FAKE_VERSION',
-            ),
-            $options
-        );
-
         return new FoursquareResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

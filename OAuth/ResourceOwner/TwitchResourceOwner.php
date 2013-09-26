@@ -11,6 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Buzz\Message\RequestInterface as HttpRequestInterfacee;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * TwitchResourceOwner
  *
@@ -18,15 +21,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
  */
 class TwitchResourceOwner extends GenericOAuth2ResourceOwner
 {
-    /**
-     * {@inheritDoc}
-     */
-    protected $options = array(
-        'authorization_url'       => 'https://api.twitch.tv/kraken/oauth2/authorize',
-        'access_token_url'        => 'https://api.twitch.tv/kraken/oauth2/token',
-        'infos_url'               => 'https://api.twitch.tv/kraken/user',
-    );
-
     /**
      * {@inheritDoc}
      */
@@ -43,7 +37,7 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, http_build_query($parameters, '', '&'), array(), 'POST');
+        return $this->httpRequest($url, http_build_query($parameters, '', '&'), array(), HttpRequestInterfacee::METHOD_POST);
     }
 
     /**
@@ -52,8 +46,20 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         // Twitch require to pass the OAuth token as 'oauth_token' instead of 'access_token'
-        $url = str_replace('access_token', 'oauth_token', $url);
+        return parent::doGetUserInformationRequest(str_replace('access_token', 'oauth_token', $url), $parameters);
+    }
 
-        return $this->httpRequest($url);
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://api.twitch.tv/kraken/oauth2/authorize',
+            'access_token_url'  => 'https://api.twitch.tv/kraken/oauth2/token',
+            'infos_url'         => 'https://api.twitch.tv/kraken/user',
+        ));
     }
 }

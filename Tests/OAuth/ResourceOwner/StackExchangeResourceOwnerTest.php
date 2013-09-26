@@ -28,18 +28,13 @@ json;
         'realname'    => 'display_name'
     );
 
+    protected $expectedUrls = array(
+        'authorization_url'      => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=no_expiry&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+        'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=no_expiry&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+    );
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                 'authorization_url'   => 'https://stackexchange.com/oauth',
-                 'access_token_url'    => 'https://stackexchange.com/oauth/access_token',
-                 'infos_url'           => 'https://api.stackexchange.com/2.0/me',
-                 'scope'               => 'no_expiry',
-            ),
-            $options
-        );
-
         return new StackExchangeResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

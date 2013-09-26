@@ -28,20 +28,11 @@ json;
         'realname'   => 'name',
     );
 
-    public function testGetOptionAppKey()
-    {
-        $this->assertEquals('123456', $this->resourceOwner->getOption('application_key'));
-    }
-
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         $options = array_merge(
             array(
-                'authorization_url' => 'http://www.odnoklassniki.ru/oauth/authorize',
-                'access_token_url'  => 'http://api.odnoklassniki.ru/oauth/token.do',
-                'infos_url'         => 'http://api.odnoklassniki.ru/fb.do?method=users.getCurrentUser',
-
-                'application_key'   => '123456',
+                'application_key' => '123456',
             ),
             $options
         );

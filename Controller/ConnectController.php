@@ -122,7 +122,7 @@ class ConnectController extends ContainerAware
             $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
 
             // Authenticate the user
-            $this->authenticateUser($form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
+            $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
 
             return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
@@ -209,7 +209,7 @@ class ConnectController extends ContainerAware
                 $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
 
                 // Update user token with new details
-                $this->authenticateUser($currentUser, $service, $currentToken->getRawToken(), false);
+                $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
 
                 return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
                     'userInformation' => $userInformation,
@@ -241,7 +241,7 @@ class ConnectController extends ContainerAware
             $request->getSession()->set('_security.' . $providerKey . '.target_path', $targetUrl);
         }
 
-        return new RedirectResponse($this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($service));
+        return new RedirectResponse($this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($request, $service));
     }
 
     /**
@@ -303,12 +303,13 @@ class ConnectController extends ContainerAware
     /**
      * Authenticate a user with Symfony Security
      *
+     * @param Request       $request
      * @param UserInterface $user
      * @param string        $resourceOwnerName
      * @param string        $accessToken
      * @param boolean       $fakeLogin
      */
-    protected function authenticateUser(UserInterface $user, $resourceOwnerName, $accessToken, $fakeLogin = true)
+    protected function authenticateUser(Request $request, UserInterface $user, $resourceOwnerName, $accessToken, $fakeLogin = true)
     {
         try {
             $this->container->get('hwi_oauth.user_checker')->checkPostAuth($user);
@@ -328,7 +329,7 @@ class ConnectController extends ContainerAware
             // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
             $this->container->get('event_dispatcher')->dispatch(
                 SecurityEvents::INTERACTIVE_LOGIN,
-                new InteractiveLoginEvent($this->container->get('request'), $token)
+                new InteractiveLoginEvent($request, $token)
             );
         }
     }

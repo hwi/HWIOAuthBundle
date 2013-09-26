@@ -67,7 +67,7 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     public function testCustomResponseClass()
     {
         $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
-        $resourceOwner = $this->createResourceOwner('flickr', array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         /* @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */
         $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'));
@@ -79,16 +79,6 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url' => 'http://www.flickr.com/services/oauth/authoriz',
-                'request_token_url' => 'http://www.flickr.com/services/oauth/request_token',
-                'access_token_url'  => 'http://www.flickr.com/services/oauth/access_token',
-                'perms'             => 'read',
-            ),
-            $options
-        );
-
         return new FlickrResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

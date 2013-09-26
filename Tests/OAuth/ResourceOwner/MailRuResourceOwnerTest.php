@@ -33,15 +33,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url' => 'https://connect.mail.ru/oauth/authorize',
-                'access_token_url'  => 'https://connect.mail.ru/oauth/token',
-                'infos_url'         => 'http://www.appsmail.ru/platform/api?method=users.getInfo',
-            ),
-            $options
-        );
-
         return new MailRuResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 } 

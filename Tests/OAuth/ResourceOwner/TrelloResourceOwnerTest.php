@@ -32,16 +32,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url' => 'https://trello.com/1/OAuthAuthorizeToken',
-                'request_token_url' => 'https://trello.com/1/OAuthGetRequestToken',
-                'access_token_url'  => 'https://trello.com/1/OAuthGetAccessToken',
-                'infos_url'         => 'https://api.trello.com/1/members/me?fields=username,fullName,avatarSource,email',
-            ),
-            $options
-        );
-
         return new TrelloResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

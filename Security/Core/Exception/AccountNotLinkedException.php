@@ -35,7 +35,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
     }
 
     /**
-     * @return OAuthToken
+     * @return array
      */
     public function getRawToken()
     {

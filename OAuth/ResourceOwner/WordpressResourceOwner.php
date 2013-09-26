@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+
 /**
  * WordpressResourceOwner
  *
@@ -21,15 +23,6 @@ class WordpressResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected $options = array(
-        'authorization_url'   => 'https://public-api.wordpress.com/oauth2/authorize',
-        'access_token_url'    => 'https://public-api.wordpress.com/oauth2/token',
-        'infos_url'           => 'https://public-api.wordpress.com/rest/v1/me',
-    );
-
-    /**
-     * {@inheritDoc}
-     */
     protected $paths = array(
         'identifier'     => 'ID',
         'nickname'       => 'username',
@@ -37,4 +30,18 @@ class WordpressResourceOwner extends GenericOAuth2ResourceOwner
         'email'          => 'email',
         'profilepicture' => 'avatar_URL',
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://public-api.wordpress.com/oauth2/authorize',
+            'access_token_url'  => 'https://public-api.wordpress.com/oauth2/token',
+            'infos_url'         => 'https://public-api.wordpress.com/rest/v1/me',
+        ));
+    }
 }
