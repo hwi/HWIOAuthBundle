@@ -208,8 +208,10 @@ class ConnectController extends ContainerAware
 
                 $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
 
-                // Update user token with new details
-                $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
+                if ($currentToken instanceof OAuthToken) {
+                    // Update user token with new details
+                    $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
+                }
 
                 return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
                     'userInformation' => $userInformation,
