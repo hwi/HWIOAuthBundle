@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 0.3.0-alpha3 (2013-xx-xx)
+## 0.3.0 (2013-09-28)
 * [BC break] `AccountConnectorInterface::connect()` method now requires the first
   parameter to be instance of `Symfony\Component\Security\Core\User\UserInterface`
 * [BC break] `ConnectController::authenticateUser()` method now requires the first
