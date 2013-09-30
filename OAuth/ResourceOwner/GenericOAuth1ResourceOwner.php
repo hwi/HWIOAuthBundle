@@ -26,6 +26,11 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 {
     /**
+     * {@inheritdoc}
+     */
+    protected $errorField = 'oauth_token';
+
+    /**
      * {@inheritDoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
@@ -76,7 +81,6 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     {
         $this->handles($request);
 
-
         if (null === $requestToken = $this->storage->fetch($this, $request->query->get('oauth_token'))) {
             throw new \RuntimeException('No request token found in the storage.');
         }
@@ -113,18 +117,6 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         }
 
         return $response;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function handles(Request $request)
-    {
-        $this->handleOAuthError($request);
-
-        if (!$request->query->has('oauth_token')) {
-            throw new AuthenticationException('No oauth code in the request.');
-        }
     }
 
     /**

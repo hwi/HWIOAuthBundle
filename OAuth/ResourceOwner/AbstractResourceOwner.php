@@ -16,10 +16,13 @@ use Buzz\Message\MessageInterface as HttpMessageInterface;
 use Buzz\Message\Request as HttpRequest;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Buzz\Message\Response as HttpResponse;
+use HWI\Bundle\OAuthBundle\Event\RequestEvent;
+use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -62,9 +65,19 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $state;
 
     /**
+     * @var string
+     */
+    protected $errorField;
+
+    /**
      * @var RequestDataStorageInterface
      */
     protected $storage;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
 
     /**
      * @param HttpClientInterface         $httpClient Buzz http client
@@ -72,13 +85,15 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param array                       $options    Options for the resource owner
      * @param string                      $name       Name for the resource owner
      * @param RequestDataStorageInterface $storage    Request token storage
+     * @param EventDispatcherInterface    $eventDispatcher
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage)
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage, EventDispatcherInterface $eventDispatcher)
     {
-        $this->httpClient = $httpClient;
-        $this->httpUtils  = $httpUtils;
-        $this->name       = $name;
-        $this->storage    = $storage;
+        $this->httpClient      = $httpClient;
+        $this->httpUtils       = $httpUtils;
+        $this->name            = $name;
+        $this->storage         = $storage;
+        $this->eventDispatcher = $eventDispatcher;
 
         if (!empty($options['paths'])) {
             $this->addPaths($options['paths']);
@@ -144,6 +159,20 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     public function addPaths(array $paths)
     {
         $this->paths = array_merge($this->paths, $paths);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handles(Request $request)
+    {
+        $this->eventDispatcher->dispatch(HWIOAuthEvents::RESOURCE_OWNER_INITIALIZE, new RequestEvent($request));
+
+        if (!$request->query->get($this->errorField)) {
+            throw new AuthenticationException('No oauth code in the request.');
+        }
+
+        $this->isCsrfTokenValid($request->get('state'));
     }
 
     /**
@@ -281,97 +310,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected function generateNonce()
     {
         return md5(microtime(true).uniqid('', true));
-    }
-
-    /**
-     * Detects errors returned by resource owners and transform them into
-     * human readable messages
-     *
-     * @param Request $request
-     *
-     * @throws AuthenticationException
-     */
-    protected function handleOAuthError(Request $request)
-    {
-        $error = null;
-
-        // Try to parse content if error was not in request query
-        if ($request->query->has('error')) {
-            $content = json_decode($request->getContent(), true);
-            if (JSON_ERROR_NONE === json_last_error() && isset($content['error'])) {
-                if (isset($content['error']['message'])) {
-                    throw new AuthenticationException($content['error']['message']);
-                }
-
-                if (isset($content['error']['code'])) {
-                    $error = $content['error']['code'];
-                } elseif (isset($content['error']['error-code'])) {
-                    $error = $content['error']['error-code'];
-                } else {
-                    $error = $request->query->get('error');
-                }
-            }
-        } elseif ($request->query->has('oauth_problem')) {
-            $error = $request->query->get('oauth_problem');
-        }
-
-        if (null !== $error) {
-            throw new AuthenticationException($this->transformOAuthError($error));
-        }
-    }
-
-    /**
-     * Transforms OAuth error codes into human readable format
-     *
-     * @param string $errorCode
-     *
-     * @return string
-     */
-    protected function transformOAuthError($errorCode)
-    {
-        // "translate" error to human readable format
-        switch ($errorCode) {
-            case 'access_denied':
-                $error = 'You have refused access for this site.';
-                break;
-
-            case 'authorization_expired':
-                $error = 'Authorization expired.';
-                break;
-
-            case 'bad_verification_code':
-                $error = 'Bad verification code.';
-                break;
-
-            case 'consumer_key_rejected':
-                $error = 'You have refused access for this site.';
-                break;
-
-            case 'incorrect_client_credentials':
-                $error = 'Incorrect client credentials.';
-                break;
-
-            case 'invalid_assertion':
-                $error = 'Invalid assertion.';
-                break;
-
-            case 'redirect_uri_mismatch':
-                $error = 'Redirect URI mismatches configured one.';
-                break;
-
-            case 'unauthorized_client':
-                $error = 'Unauthorized client.';
-                break;
-
-            case 'unknown_format':
-                $error = 'Unknown format.';
-                break;
-
-            default:
-                $error = sprintf('Unknown OAuth error: "%s".', $errorCode);
-        }
-
-        return $error;
     }
 
     /**

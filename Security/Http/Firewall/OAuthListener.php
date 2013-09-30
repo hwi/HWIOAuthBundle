@@ -80,9 +80,7 @@ class OAuthListener extends AbstractAuthenticationListener
             throw new AuthenticationException('No resource owner match the request.');
         }
 
-        if (!$resourceOwner->handles($request)) {
-            throw new AuthenticationException('No oauth code in the request.');
-        }
+        $resourceOwner->handles($request);
 
         // If resource owner supports only one url authentication, call redirect
         if ($request->query->has('authenticated') && $resourceOwner->getOption('auth_with_one_url')) {
@@ -90,8 +88,6 @@ class OAuthListener extends AbstractAuthenticationListener
 
             return new RedirectResponse(sprintf('%s?code=%s&authenticated=true', $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service'), $request->query->get('code')));
         }
-
-        $resourceOwner->isCsrfTokenValid($request->get('state'));
 
         $accessToken = $resourceOwner->getAccessToken(
             $request,
