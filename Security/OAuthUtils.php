@@ -91,7 +91,7 @@ class OAuthUtils
     public function getAuthorizationUrl(Request $request, $name, $redirectUrl = null, array $extraParameters = array())
     {
         if (null === $redirectUrl) {
-            if (!$this->connect || !$this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            if (!$this->connect || !$this->securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
                 $redirectUrl = $this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($name));
             } else {
                 $request->attributes->set('service', $name);
