@@ -31,21 +31,6 @@ json;
         'profilepicture' => 'figureurl_qq_1',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        $options = array_merge(
-            array(
-                'authorization_url' => 'https://graph.qq.com/oauth2.0/authorize?format=json',
-                'access_token_url' => 'https://graph.qq.com/oauth2.0/token',
-                'infos_url' => 'https://graph.qq.com/user/get_user_info',
-                'me_url' => 'https://graph.qq.com/oauth2.0/me',
-            ),
-            $options
-        );
-
-        return new QQResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -97,8 +82,12 @@ json;
 
         $request = new Request(array('code' => 'somecode'));
 
+        $response = array('access_token' => 'code');
+
+        $this->mockDispatcher($request, true, false, $response);
+
         $this->assertEquals(
-            array('access_token' => 'code'),
+            $response,
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -110,10 +99,17 @@ json;
      */
     public function testGetAccessTokenErrorResponse()
     {
-        $this->mockBuzz('callback({"error": 1, "msg": "error"})');
+        $this->mockBuzz('callback({"error": 1, "msg": "error"});');
 
         $request = new Request(array('code' => 'code'));
 
+        $this->mockDispatcher($request, true, true, array('error' => '1', 'msg' => 'error'));
+
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+    }
+
+    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    {
+        return new QQResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->dispatcher);
     }
 }

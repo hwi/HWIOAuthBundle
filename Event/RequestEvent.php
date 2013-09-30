@@ -19,7 +19,7 @@ class RequestEvent extends Event
     /**
      * @var Request
      */
-    private $request;
+    protected $request;
 
     /**
      * @param Request $request
@@ -36,4 +36,4 @@ class RequestEvent extends Event
     {
         return $this->request;
     }
-} 
+}

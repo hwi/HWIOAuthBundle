@@ -33,6 +33,6 @@ class DropboxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new DropboxResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new DropboxResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->dispatcher);
     }
 }

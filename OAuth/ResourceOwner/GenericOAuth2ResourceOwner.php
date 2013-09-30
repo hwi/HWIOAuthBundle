@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Event\ResponseEvent;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\EventDispatcher\GenericEvent;
@@ -102,7 +101,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
 
-        $this->eventDispatcher->dispatch(HWIOAuthEvents::RESOURCE_OWNER_COMPLETE, new GenericEvent($this, $response));
+        $this->dispatcher->dispatch(HWIOAuthEvents::RESOURCE_OWNER_COMPLETE, new GenericEvent($this, $response));
 
         return $response;
     }
@@ -122,7 +121,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
 
-        $this->eventDispatcher->dispatch(HWIOAuthEvents::RESOURCE_OWNER_COMPLETE, new GenericEvent($this, $response));
+        $this->dispatcher->dispatch(HWIOAuthEvents::RESOURCE_OWNER_COMPLETE, new GenericEvent($this, $response));
 
         return $response;
     }

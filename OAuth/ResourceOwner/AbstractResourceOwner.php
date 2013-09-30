@@ -77,7 +77,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * @var EventDispatcherInterface
      */
-    protected $eventDispatcher;
+    protected $dispatcher;
 
     /**
      * @param HttpClientInterface         $httpClient Buzz http client
@@ -85,15 +85,15 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param array                       $options    Options for the resource owner
      * @param string                      $name       Name for the resource owner
      * @param RequestDataStorageInterface $storage    Request token storage
-     * @param EventDispatcherInterface    $eventDispatcher
+     * @param EventDispatcherInterface    $dispatcher
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage, EventDispatcherInterface $eventDispatcher)
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage, EventDispatcherInterface $dispatcher)
     {
-        $this->httpClient      = $httpClient;
-        $this->httpUtils       = $httpUtils;
-        $this->name            = $name;
-        $this->storage         = $storage;
-        $this->eventDispatcher = $eventDispatcher;
+        $this->httpClient = $httpClient;
+        $this->httpUtils  = $httpUtils;
+        $this->name       = $name;
+        $this->storage    = $storage;
+        $this->dispatcher = $dispatcher;
 
         if (!empty($options['paths'])) {
             $this->addPaths($options['paths']);
@@ -166,7 +166,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     public function handles(Request $request)
     {
-        $this->eventDispatcher->dispatch(HWIOAuthEvents::RESOURCE_OWNER_INITIALIZE, new RequestEvent($request));
+        $this->dispatcher->dispatch(HWIOAuthEvents::RESOURCE_OWNER_INITIALIZE, new RequestEvent($request));
 
         if (!$request->query->get($this->errorField)) {
             throw new AuthenticationException('No oauth code in the request.');
