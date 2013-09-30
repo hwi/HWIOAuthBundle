@@ -22,6 +22,12 @@ hwi_oauth:
     # [target_path_parameter for form login](http://symfony.com/doc/2.0/cookbook/security/form_login.html).
     # target_path_parameter: _destination
 
+    # an optional setting to use the HTTP REFERER header to be used in case no
+    # previous URL was stored in the session (i.e. no resource was requested).
+    # This is similar to the behaviour of
+    # [using the referring URL for form login](http://symfony.com/doc/2.0/cookbook/security/form_login.html#using-the-referring-url).
+    # use_referer: true
+
     # here you will add one (or more) configurations for resource owners
     # and other settings you want to adjust in this bundle, just checkout the list below!
 ```
