@@ -45,7 +45,7 @@ class ConnectController extends ContainerAware
     public function connectAction(Request $request)
     {
         $connect = $this->container->getParameter('hwi_oauth.connect');
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY');
 
         $error = $this->getErrorForRequest($request);
 
@@ -91,7 +91,7 @@ class ConnectController extends ContainerAware
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY');
         if ($hasUser) {
             throw new AccessDeniedException('Cannot connect already registered account.');
         }
@@ -160,7 +160,7 @@ class ConnectController extends ContainerAware
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_FULLY');
         if (!$hasUser) {
             throw new AccessDeniedException('Cannot connect an account.');
         }
