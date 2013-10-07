@@ -19,6 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  *
  * @author Adrov Igor <nucleartux@gmail.com>
  * @author Vladislav Vlastovskiy <me@vlastv.ru>
+ * @author Alexander Latushkin <alex@skazo4neg.ru> 
  */
 class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 {
@@ -28,6 +29,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier' => 'response.0.uid',
         'nickname'   => 'response.0.nickname',
+        'profilepicture' => 'response.0.photo_50',
         'realname'   => array('response.0.last_name', 'response.0.first_name')
     );
 
