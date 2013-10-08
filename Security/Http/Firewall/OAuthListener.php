@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use Symfony\Component\HttpFoundation\Request;
@@ -73,7 +74,14 @@ class OAuthListener extends AbstractAuthenticationListener
     {
         $this->handleOAuthError($request);
 
+        /** @var ResourceOwnerInterface $resourceOwner */
         list($resourceOwner, $checkPath) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
+
+        if($resourceOwner && $resourceOwner->isOneUrlAuth() && $request->query->get('authenticated')) {
+            $request->attributes->set('service', $resourceOwner->getName());
+            header("Location:{$this->httpUtils->generateUri($request, 'hwi_oauth_connect_service')}?code={$request->query->get('code')}&authenticated=true");
+            exit;
+        }
 
         /* @var \HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface $resourceOwner */
         if (!$resourceOwner) {

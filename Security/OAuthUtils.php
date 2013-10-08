@@ -94,12 +94,24 @@ class OAuthUtils
             if (!$this->connect || !$this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                 $redirectUrl = $this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($name));
             } else {
-                $request->attributes->set('service', $name);
-                $redirectUrl = $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service');
+                $redirectUrl = $this->getServiceAuthUrl($request, $name);
             }
         }
 
         return $this->getResourceOwner($name)->getAuthorizationUrl($redirectUrl, $extraParameters);
+    }
+
+    public function getServiceAuthUrl(Request $request, $name)
+    {
+        $resourceOwner = $this->getResourceOwner($name);
+        if($resourceOwner->isOneUrlAuth()) {
+            $redirectUrl = "{$this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($name))}?authenticated=true";
+        }
+        else {
+            $request->attributes->set('service', $name);
+            $redirectUrl = $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service');
+        }
+        return $redirectUrl;
     }
 
     /**
