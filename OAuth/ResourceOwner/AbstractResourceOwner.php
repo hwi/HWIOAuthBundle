@@ -56,6 +56,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $name;
 
     /**
+     * @var bool
+     */
+    protected $oneUrlAuth = false;
+
+    /**
      * @var string
      */
     protected $state;
@@ -312,5 +317,13 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $resolver->setAllowedValues(array(
             'csrf' => array(true, false),
         ));
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isOneUrlAuth()
+    {
+        return $this->oneUrlAuth;
     }
 }
