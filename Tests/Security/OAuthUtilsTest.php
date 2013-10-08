@@ -27,7 +27,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $mock, true);
-        $utils->setResourceOwnerMap($this->getMap($url, $redirect));
+        $utils->setResourceOwnerMap($this->getMap($url, $redirect, false, true));
 
         $this->assertEquals(
             $redirect,
@@ -43,7 +43,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request = $this->getRequest($url);
 
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
-        $mapMock  = $this->getMap($url, $redirect);
+        $mapMock  = $this->getMap($url, $redirect, true);
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getSecurity(true), true);
         $utils->setResourceOwnerMap($mapMock);
@@ -65,7 +65,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request = $this->getRequest($url);
 
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
-        $mapMock  = $this->getMap($url, $redirect, true);
+        $mapMock  = $this->getMap($url, $redirect);
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getSecurity(false), true);
         $utils->setResourceOwnerMap($mapMock);
@@ -132,7 +132,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         return Request::create($url, 'get', array(), array(), array(), array('SERVER_PORT' => 8080));
     }
 
-    private function getMap($url, $redirect, $hasUser = false)
+    private function getMap($url, $redirect, $hasUser = false, $hasRedirectUrl = false)
     {
         $resource = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
             ->getMock();
@@ -145,18 +145,26 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $mapMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
             ->disableOriginalConstructor()
             ->getMock();
-        $mapMock
-            ->expects($this->once())
-            ->method('getResourceOwnerByName')
-            ->with('instagram')
-            ->will($this->returnValue($resource));
 
         if ($hasUser) {
             $mapMock
-                ->expects($this->once())
-                ->method('getResourceOwnerCheckPath')
+                ->expects($this->exactly(2))
+                ->method('getResourceOwnerByName')
                 ->with('instagram')
-                ->will($this->returnValue('/login/check-instagram'));
+                ->will($this->returnValue($resource));
+        } else {
+            $mapMock
+                ->expects($this->once())
+                ->method('getResourceOwnerByName')
+                ->with('instagram')
+                ->will($this->returnValue($resource));
+            if(!$hasRedirectUrl) {
+                $mapMock
+                    ->expects($this->once())
+                    ->method('getResourceOwnerCheckPath')
+                    ->with('instagram')
+                    ->will($this->returnValue('/login/check-instagram'));
+            }
         }
 
         return $mapMock;
