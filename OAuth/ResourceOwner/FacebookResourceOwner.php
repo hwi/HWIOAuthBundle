@@ -28,6 +28,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         'nickname'   => 'username',
         'realname'   => 'name',
         'email'      => 'email',
+        'profilepicture' => 'picture.data.url',
     );
 
     /**
@@ -65,7 +66,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
             'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
             'revoke_token_url'    => 'https://graph.facebook.com/me/permissions',
-            'infos_url'           => 'https://graph.facebook.com/me',
+            'infos_url'           => 'https://graph.facebook.com/me?fields=id,name,first_name,last_name,username,email,picture',
 
             'use_commas_in_scope' => true,
 
