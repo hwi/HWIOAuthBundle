@@ -28,6 +28,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         'nickname'   => 'username',
         'realname'   => 'name',
         'email'      => 'email',
+        'profilepicture' => 'picture.data.url',
     );
 
     /**
