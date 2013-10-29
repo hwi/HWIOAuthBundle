@@ -230,6 +230,7 @@ class OAuthToken extends AbstractToken
             $this->rawToken,
             $this->refreshToken,
             $this->expiresIn,
+            $this->createdAt,
             $this->resourceOwnerName,
             parent::serialize()
         ));
@@ -245,6 +246,7 @@ class OAuthToken extends AbstractToken
             $this->rawToken,
             $this->refreshToken,
             $this->expiresIn,
+            $this->createdAt,
             $this->resourceOwnerName,
             $parent,
         ) = unserialize($serialized);
