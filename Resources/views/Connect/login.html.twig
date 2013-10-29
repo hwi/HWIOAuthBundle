@@ -1,7 +1,7 @@
 {% extends 'HWIOAuthBundle::layout.html.twig' %}
 
 {% block hwi_oauth_content %}
-    {% if error %}
+    {% if error is defined and error %}
         <span>{{ error }}</span>
     {% endif %}
     {% for owner in hwi_oauth_resource_owners() %}
