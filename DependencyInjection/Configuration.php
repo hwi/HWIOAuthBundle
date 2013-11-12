@@ -46,6 +46,7 @@ class Configuration implements ConfigurationInterface
             'mailru',
             'odnoklassniki',
             'qq',
+            'salesforce',
             'sensio_connect',
             'sina_weibo',
             'stack_exchange',
