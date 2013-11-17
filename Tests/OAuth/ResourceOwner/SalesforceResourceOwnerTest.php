@@ -19,7 +19,10 @@ class SalesforceResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     "user_id": "1",
     "nick_name": "bar",
-    "email": "baz"
+    "email": "baz",
+    "photos": {
+        "picture": "url"
+    }
 }
 json;
 
@@ -42,39 +45,18 @@ json;
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
         $this->assertEquals('token', $userResponse->getAccessToken());
+        $this->assertEquals('url', $userResponse->getProfilePicture());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
     
     public function testCustomResponseClass()
     {
-        $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
-        $resourceOwner = $this->createResourceOwner('oauth2', array('user_response_class' => $class));
-
-        $this->mockBuzz();
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
-         */
-        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token','id'=>'test'));
-
-        $this->assertInstanceOf($class, $userResponse);
-        $this->assertEquals('foo666', $userResponse->getUsername());
-        $this->assertEquals('foo', $userResponse->getNickname());
-        $this->assertEquals('token', $userResponse->getAccessToken());
-        $this->assertNull($userResponse->getRefreshToken());
-        $this->assertNull($userResponse->getExpiresIn());
+        /* not necessary for salesforce */
     }
     
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url'   => 'https://login.salesforce.com/services/oauth2/authorize',
-                'access_token_url'    => 'https://login.salesforce.com/services/oauth2/token',
-            ),
-            $options
-        );
-
         return new SalesforceResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
     

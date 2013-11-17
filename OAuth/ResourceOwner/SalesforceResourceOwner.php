@@ -29,7 +29,10 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
         'nickname'   => 'nick_name',
         'realname'   => 'nick_name',
         'email'      => 'email',
+        'profilepicture' => 'photos.picture',
     );
+
+
 
     /**
      * {@inheritDoc}
