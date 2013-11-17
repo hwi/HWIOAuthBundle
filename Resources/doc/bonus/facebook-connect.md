@@ -17,10 +17,6 @@ hwi_oauth:
             client_id:     <client_id>
             client_secret: <client_secret>
             scope:         "email"
-
-services:
-    hwi_oauth.user.provider.entity:
-        class: HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider
 ```
 
 ### Import Routing
@@ -41,6 +37,11 @@ facebook_login:
 ```yaml
 # app/config/security.yml
 
+providers:
+    # you can have multiple user provider here...
+    hwi_oauth_user_provider:
+        id: hwi_oauth.user.provider
+
 firewalls:
     # ...
     secured_area:
@@ -51,7 +52,7 @@ firewalls:
             login_path:        /demo/secured/login
             failure_path:      /demo/secured/login
             oauth_user_provider:
-                service: hwi_oauth.user.provider.entity
+                service: hwi_oauth.user.provider
 
         # Turn on anonymous for testings need.
         anonymous: ~
