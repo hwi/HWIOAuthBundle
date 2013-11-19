@@ -82,6 +82,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('firewall_name')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('target_path_parameter')->defaultNull()->end()
                 ->scalarNode('templating_engine')->defaultValue('twig')->end()
+                ->scalarNode('oauth_factory')->defaultValue('HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory')->end()
             ->end()
         ;
 
