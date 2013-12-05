@@ -32,8 +32,6 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
         'profilepicture' => 'photos.picture',
     );
 
-
-
     /**
      * {@inheritDoc}
      */
@@ -57,7 +55,7 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
 
         // Salesforce require to pass the OAuth token as 'oauth_token' instead of 'access_token'
         $url = str_replace('access_token', 'oauth_token', $url);
-        
+
         return $this->httpRequest($url);
     }
 
@@ -71,12 +69,12 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
         $resolver->setDefaults(array(
             'authorization_url' => 'https://login.salesforce.com/services/oauth2/authorize',
             'access_token_url'  => 'https://login.salesforce.com/services/oauth2/token',
-            
+
             // @see SalesforceResourceOwner::getUserInformation()
             'infos_url' => null,
 
             // @see SalesforceResourceOwner::doGetUserInformationRequest()
-            'format' => 'json'
+            'format' => 'json',
         ));
     }
 

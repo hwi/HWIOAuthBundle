@@ -49,15 +49,14 @@ json;
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
-    
+
     public function testCustomResponseClass()
     {
         /* not necessary for salesforce */
     }
-    
+
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         return new SalesforceResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
-    
 }
