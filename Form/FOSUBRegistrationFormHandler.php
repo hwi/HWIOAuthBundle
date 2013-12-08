@@ -93,7 +93,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         $form->setData($this->setUserInformation($user, $userInformation));
 
         if ($request->isMethod('POST')) {
-            $form->bind($request);
+            $form->submit($request);
 
             return $form->isValid();
         }
