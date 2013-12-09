@@ -33,22 +33,22 @@ class OAuthUtils
     /**
      * @var boolean
      */
-    private $connect;
+    protected $connect;
 
     /**
      * @var HttpUtils
      */
-    private $httpUtils;
+    protected $httpUtils;
 
     /**
      * @var ResourceOwnerMap
      */
-    private $ownerMap;
+    protected $ownerMap;
 
     /**
      * @var SecurityContextInterface
      */
-    private $securityContext;
+    protected $securityContext;
 
     /**
      * @param HttpUtils                $httpUtils
@@ -213,7 +213,7 @@ class OAuthUtils
      *
      * @throws \RuntimeException
      */
-    private function getResourceOwner($name)
+    protected function getResourceOwner($name)
     {
         $resourceOwner = $this->ownerMap->getResourceOwnerByName($name);
         if (!$resourceOwner instanceof ResourceOwnerInterface) {
