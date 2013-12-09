@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage;
 
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Request token storage implementation using the Symfony session.
@@ -23,9 +24,15 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
  */
 class SessionStorage implements RequestDataStorageInterface
 {
+    /**
+     * @var SessionInterface
+     */
     private $session;
 
-    public function __construct($session)
+    /**
+     * @param SessionInterface $session
+     */
+    public function __construct(SessionInterface $session)
     {
         $this->session = $session;
     }
