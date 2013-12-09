@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\Options;
 
 /**
  * VkontakteResourceOwner
@@ -74,7 +75,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         ));
 
         $resolver->setNormalizers(array(
-            'fields' => function ($options,$value) {
+            'fields' => function (Options $options,$value) {
                 if (!$value) {
                     return null;
                 }
