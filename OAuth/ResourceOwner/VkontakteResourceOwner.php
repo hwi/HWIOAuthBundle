@@ -75,7 +75,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         ));
 
         $resolver->setNormalizers(array(
-            'fields' => function (Options $options,$value) {
+            'fields' => function (Options $options, $value) {
                 if (!$value) {
                     return null;
                 }
