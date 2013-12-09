@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 
-use FOS\UserBundle\Model\UserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface,
     HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 
