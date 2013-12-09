@@ -12,10 +12,10 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use FOS\UserBundle\Model\UserInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * User provider for the ORM that loads users given a mapping between resource
