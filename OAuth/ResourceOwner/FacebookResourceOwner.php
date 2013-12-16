@@ -11,7 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use \Symfony\Component\HttpFoundation\Request;
+use \Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * FacebookResourceOwner
@@ -76,5 +77,18 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             // @link https://developers.facebook.com/docs/reference/dialogs/#display
             'display' => array('page', 'popup', 'touch'),
         ));
+    }
+    
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array()) {
+        $redirectUri = $request->getSchemeAndHttpHost().$request->getBaseUrl().$request->getPathInfo()."?";
+        
+        foreach($request->query->all() as $param => $value){
+            if($param !== "code")
+                $redirectUri .= $param."=".$value."&";
+        }
+        
+        $redirectUri = substr($redirectUri,0, -1);
+        
+        return parent::getAccessToken($request, $redirectUri, $extraParameters);
     }
 }
