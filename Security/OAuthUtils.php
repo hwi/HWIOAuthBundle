@@ -156,7 +156,7 @@ class OAuthUtils
 
         // Remove query params from URL
         // Ref: Spec: 9.1.2
-        $url = strtolower(sprintf('%s://%s%s', $url['scheme'], $url['host'], isset($url['path']) ? $url['path'] : ''));
+        $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], isset($url['path']) ? $url['path'] : '');
 
         // Parameters are sorted by name, using lexicographical byte value ordering.
         // Ref: Spec: 9.1.1 (1)
