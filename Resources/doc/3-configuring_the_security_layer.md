@@ -33,6 +33,7 @@ security:
                     my_custom_provider: "/login/check-custom"
                     my_github:          "/login/check-github"
                 login_path:        /login
+                use_forward:       false
                 failure_path:      /login
 
                 oauth_user_provider:
