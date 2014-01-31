@@ -156,7 +156,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      */
     protected function setUserInformation(UserInterface $user, UserResponseInterface $userInformation)
     {
-        foreach($userInformation->getPaths() as $path){
+        foreach($userInformation->getPaths() as $path => $source){
             $func = 'set'.ucfirst($path);
             if(method_exists($user, $func)){
                 $value = $userInformation->getValueForPath($path);
