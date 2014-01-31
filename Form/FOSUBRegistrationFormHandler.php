@@ -163,6 +163,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
                 if($path == 'username'){
                     $value = $this->getUniqueUsername($value);
                 }
+                $user->$func($value);
             }
         }
         return $user;

@@ -22,7 +22,6 @@ class FOSUser extends BaseUser
 {
     private $githubId;
     
-    /*
     public function getUsername()
     {
         if(isset($this->username)){
@@ -30,7 +29,7 @@ class FOSUser extends BaseUser
         }
         return 'foo';
     }
-    */
+    
 
     public function getRoles()
     {
