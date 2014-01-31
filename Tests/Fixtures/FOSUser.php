@@ -21,11 +21,16 @@ use FOS\UserBundle\Model\User as BaseUser;
 class FOSUser extends BaseUser
 {
     private $githubId;
-
+    
+    /*
     public function getUsername()
     {
+        if(isset($this->username)){
+           return parent::getUsername(); 
+        }
         return 'foo';
     }
+    */
 
     public function getRoles()
     {
