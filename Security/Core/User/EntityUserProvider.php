@@ -27,6 +27,11 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
 {
     /**
+     * @var mixed
+     */
+    protected $em;
+    
+    /**
      * @var string
      */
     protected $class;
@@ -51,9 +56,9 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
      */
     public function __construct(ManagerRegistry $registry, $class, array $properties, $managerName = null)
     {
-        $em = $registry->getManager($managerName);
+        $this->em = $registry->getManager($managerName);
         $this->class      = $class;
-        $this->repository = $em->getRepository($class);
+        $this->repository = $this->em->getRepository($class);
         $this->properties = $properties;
     }
 
