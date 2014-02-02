@@ -132,7 +132,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function getRequestToken($redirectUri, array $extraParameters = array())
+    public function getRequestToken($redirectUri, array $extraParameters = array())
     {
         $timestamp = time();
 
