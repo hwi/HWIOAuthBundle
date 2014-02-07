@@ -69,14 +69,14 @@
 
     "require": {
         "php":                          ">=5.3.3",
-        "symfony/framework-bundle":     "~2.1",
+        "symfony/framework-bundle":     "~2.3",
         "symfony/security-bundle":      "~2.1",
         "symfony/options-resolver":     "~2.1",
         "kriswallsmith/buzz":           "~0.7"
     },
 
     "require-dev": {
-        "doctrine/orm":                 "~2.2",
+        "doctrine/orm":                 "~2.3",
         "symfony/validator":            "~2.1",
         "symfony/twig-bundle":          "~2.1"
     },
@@ -89,7 +89,7 @@
 
     "autoload": {
         "psr-0": {
-            "HWI\\Bundle\\OAuthBundle": ""
+            "HWI\\Bundle\\OAuthBundle\\": ""
         }
     },
 
