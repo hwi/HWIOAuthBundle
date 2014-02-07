@@ -111,8 +111,8 @@ class OAuthListener extends AbstractAuthenticationListener
 
         // Try to parse content if error was not in request query
         if ($request->query->has('error') || $request->query->has('error_code')) {
-            if ($request->query->has('error_message')) {
-                throw new AuthenticationException(rawurldecode($request->query->get('error_message')));
+            if ($request->query->has('error_description') || $request->query->has('error_message')) {
+                throw new AuthenticationException(rawurldecode($request->query->get('error_description', $request->query->get('error_message'))));
             }
 
             $content = json_decode($request->getContent(), true);
