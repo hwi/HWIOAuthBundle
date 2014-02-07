@@ -159,8 +159,12 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $response = $this->getResponseContent($apiResponse);
 
-        if (isset($response['oauth_problem']) || (isset($response['oauth_callback_confirmed']) && ($response['oauth_callback_confirmed'] != 'true'))) {
+        if (isset($response['oauth_problem'])) {
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
+        }
+
+        if (isset($response['oauth_callback_confirmed']) && ($response['oauth_callback_confirmed'] != 'true')) {
+            throw new AuthenticationException('Defined OAuth callback was not confirmed.');
         }
 
         if (!isset($response['oauth_token']) || !isset($response['oauth_token_secret'])) {

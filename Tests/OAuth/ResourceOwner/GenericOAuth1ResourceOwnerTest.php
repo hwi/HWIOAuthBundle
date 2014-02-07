@@ -123,6 +123,19 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */
+    public function testGetAuthorizationUrlFailedResponseContainCallbackNotConfirmed()
+    {
+        $this->mockBuzz('oauth_callback_confirmed=false');
+
+        $this->storage->expects($this->never())
+            ->method('save');
+
+        $this->resourceOwner->getAuthorizationUrl('http://redirect.to/');
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     */
     public function testGetAuthorizationUrlFailedResponseNotContainOAuthTokenOrSecret()
     {
         $this->mockBuzz('invalid');
