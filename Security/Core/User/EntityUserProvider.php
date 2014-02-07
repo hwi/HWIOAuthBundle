@@ -16,6 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * User provider for the ORM that loads users given a mapping between resource
@@ -23,7 +24,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class EntityUserProvider implements OAuthAwareUserProviderInterface
+class EntityUserProvider implements OAuthAwareUserProviderInterface, UserProviderInterface
 {
     /**
      * @var string
