@@ -64,6 +64,12 @@ hwi_oauth:
     # name of the firewall the oauth bundle is active in
     firewall_name: secured_area
 
+    # optional target_path_parameter to provide an explicit return URL
+    #target_path_parameter: _destination
+
+    # use referer as fallback to determine default return URL
+    #use_referer: true
+
     # optional FOSUserBundle integration
     fosub:
         # try 30 times to check if a username is available (foo, foo1, foo2 etc)
