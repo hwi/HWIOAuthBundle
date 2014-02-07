@@ -15,6 +15,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -25,8 +26,22 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
  */
-class HWIOAuthExtension extends Extension
+class HWIOAuthExtension extends Extension implements PrependExtensionInterface
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        $bundleConfigs = $container->getExtensionConfig($this->getAlias());
+        $config = $this->processConfiguration(new Configuration(), $bundleConfigs);
+
+        // inject configured factory into SF2 security extension
+        $factoryClass      = $config['oauth_factory'];
+        $securityExtension = $container->getExtension('security');
+        $securityExtension->addSecurityListenerFactory(new $factoryClass);
+    }
+
     /**
      * {@inheritDoc}
      */

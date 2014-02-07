@@ -84,6 +84,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('target_path_parameter')->defaultNull()->end()
                 ->booleanNode('use_referer')->defaultFalse()->end()
                 ->scalarNode('templating_engine')->defaultValue('twig')->end()
+                ->scalarNode('oauth_factory')->defaultValue('HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory')->end()
             ->end()
         ;
 
