@@ -172,10 +172,9 @@ class ConnectController extends ContainerAware
         $key = $request->query->get('key', time());
 
         if ($resourceOwner->handles($request)) {
-
             $accessToken = $resourceOwner->getAccessToken(
                 $request,
-                $this->container->get('hwi_oauth.security.oauth_utils')->getServiceAuthUrl($request, $service)
+                $this->container->get('hwi_oauth.security.oauth_utils')->getServiceAuthUrl($request, $resourceOwner)
             );
 
             // save in session

@@ -42,9 +42,9 @@ class ResourceOwnerMap extends ContainerAware
     /**
      * Constructor.
      *
-     * @param HttpUtils          $httpUtils              HttpUtils
-     * @param array              $possibleResourceOwners Array with possible resource owners names.
-     * @param array              $resourceOwners         Array with configured resource owners.
+     * @param HttpUtils $httpUtils              HttpUtils
+     * @param array     $possibleResourceOwners Array with possible resource owners names.
+     * @param array     $resourceOwners         Array with configured resource owners.
      */
     public function __construct(HttpUtils $httpUtils, array $possibleResourceOwners, $resourceOwners)
     {

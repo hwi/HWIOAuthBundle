@@ -90,27 +90,33 @@ class OAuthUtils
      */
     public function getAuthorizationUrl(Request $request, $name, $redirectUrl = null, array $extraParameters = array())
     {
+        $resourceOwner = $this->getResourceOwner($name);
         if (null === $redirectUrl) {
             if (!$this->connect || !$this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                 $redirectUrl = $this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($name));
             } else {
-                $redirectUrl = $this->getServiceAuthUrl($request, $name);
+                $redirectUrl = $this->getServiceAuthUrl($request, $resourceOwner);
             }
         }
 
-        return $this->getResourceOwner($name)->getAuthorizationUrl($redirectUrl, $extraParameters);
+        return $resourceOwner->getAuthorizationUrl($redirectUrl, $extraParameters);
     }
 
-    public function getServiceAuthUrl(Request $request, $name)
+    /**
+     * @param Request                $request
+     * @param ResourceOwnerInterface $resourceOwner
+     *
+     * @return string
+     */
+    public function getServiceAuthUrl(Request $request, ResourceOwnerInterface $resourceOwner)
     {
-        $resourceOwner = $this->getResourceOwner($name);
-        if($resourceOwner->isOneUrlAuth()) {
-            $redirectUrl = "{$this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($name))}?authenticated=true";
-        }
-        else {
-            $request->attributes->set('service', $name);
+        if ($resourceOwner->getOption('auth_with_one_url')) {
+            $redirectUrl = $this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($resourceOwner->getName())).'?authenticated=true';
+        } else {
+            $request->attributes->set('service', $resourceOwner->getName());
             $redirectUrl = $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service');
         }
+
         return $redirectUrl;
     }
 

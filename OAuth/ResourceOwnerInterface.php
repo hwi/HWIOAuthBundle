@@ -98,9 +98,4 @@ interface ResourceOwnerInterface
      * @param string $name
      */
     public function setName($name);
-
-    /**
-     * @return bool
-     */
-    public function isOneUrlAuth();
 }
