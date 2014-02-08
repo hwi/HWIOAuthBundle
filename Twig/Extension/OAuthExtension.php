@@ -44,7 +44,7 @@ class OAuthExtension extends \Twig_Extension
             'hwi_oauth_resource_owners'   => new \Twig_Function_Method($this, 'getResourceOwners')
         );
     }
-
+    
     /**
      * @return array
      */
@@ -74,7 +74,7 @@ class OAuthExtension extends \Twig_Extension
     {
         return $this->helper->getAuthorizationUrl($name, $redirectUrl, $extraParameters);
     }
-
+    
     /**
      * Returns the name of the extension.
      *
