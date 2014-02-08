@@ -13,14 +13,7 @@
             </form>
         </div>
         <div class="span6">
-            {% if userInformation.profilePicture is not empty %}
-                
-                {% if userInformation.profilePicture is iterable %}
-                      <img src="{{ userInformation.profilePicture|foursquareProfilePicture }}" />
-                {% else %}
-                      <img src="{{ userInformation.profilePicture }}" />
-                {% endif %}
-                      
+           <img src="{{ userInformation.profilePicture }}" />                      
         </div>
     </div>
 
