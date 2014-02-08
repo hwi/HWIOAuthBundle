@@ -71,9 +71,9 @@ class FOSUBUserProvider implements AccountConnectorInterface, OAuthAwareUserProv
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
         $username = $response->getUsername();
-        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
 
-        if (null === $user) {
+        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
+        if (null === $user || null === $username) {
             throw new AccountNotLinkedException(sprintf("User '%s' not found.", $username));
         }
 

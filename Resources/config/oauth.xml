@@ -70,6 +70,7 @@
                  parent="security.authentication.listener.abstract" public="false" abstract="true" />
         <service id="hwi_oauth.authentication.provider.oauth" class="%hwi_oauth.authentication.provider.oauth.class%" public="false" />
         <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" public="false" abstract="true">
+            <argument type="service" id="http_kernel" />
             <argument type="service" id="security.http_utils" />
         </service>
         <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" public="false" />

@@ -13,12 +13,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\Options;
 
 /**
  * VkontakteResourceOwner
  *
  * @author Adrov Igor <nucleartux@gmail.com>
  * @author Vladislav Vlastovskiy <me@vlastv.ru>
+ * @author Alexander Latushkin <alex@skazo4neg.ru> 
  */
 class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 {
@@ -28,6 +30,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier' => 'response.0.uid',
         'nickname'   => 'response.0.nickname',
+        'profilepicture' => 'response.0.photo_50',
         'realname'   => array('response.0.last_name', 'response.0.first_name')
     );
 
@@ -72,7 +75,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         ));
 
         $resolver->setNormalizers(array(
-            'fields' => function ($value) {
+            'fields' => function (Options $options, $value) {
                 if (!$value) {
                     return null;
                 }

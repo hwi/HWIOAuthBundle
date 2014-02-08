@@ -82,6 +82,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->scalarNode('firewall_name')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('target_path_parameter')->defaultNull()->end()
+                ->booleanNode('use_referer')->defaultFalse()->end()
                 ->scalarNode('templating_engine')->defaultValue('twig')->end()
             ->end()
         ;

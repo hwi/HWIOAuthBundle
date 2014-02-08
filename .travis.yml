@@ -7,12 +7,12 @@ php:
   - 5.5
 
 env:
-  - SYMFONY_VERSION='2.1.*'
-  - SYMFONY_VERSION='2.2.*'
-  - SYMFONY_VERSION='2.3.*'
+  - SYMFONY_VERSION='2.3.*' FOSUSERBUNDLE_VERSION='~1.2'
+  - SYMFONY_VERSION='2.4.*' FOSUSERBUNDLE_VERSION='~1.2'
+  - SYMFONY_VERSION='2.3.*' FOSUSERBUNDLE_VERSION='2.0.*@dev'
+  - SYMFONY_VERSION='2.4.*' FOSUSERBUNDLE_VERSION='2.0.*@dev'
 
 before_script:
-    - composer require --no-update symfony/framework-bundle=$SYMFONY_VERSION
-    - composer require --no-update symfony/security-bundle=$SYMFONY_VERSION
-    - composer require --no-update friendsofsymfony/user-bundle='~1.2'
-    - composer install --dev --prefer-source
+    - composer require --no-update symfony/symfony=${SYMFONY_VERSION}
+    - composer require --no-update friendsofsymfony/user-bundle=${FOSUSERBUNDLE_VERSION}
+    - composer install --prefer-source

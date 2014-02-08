@@ -16,6 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * User provider for the ORM that loads users given a mapping between resource
@@ -23,8 +24,13 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class EntityUserProvider implements OAuthAwareUserProviderInterface
+class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
 {
+    /**
+     * @var mixed
+     */
+    protected $em;
+    
     /**
      * @var string
      */
@@ -50,9 +56,9 @@ class EntityUserProvider implements OAuthAwareUserProviderInterface
      */
     public function __construct(ManagerRegistry $registry, $class, array $properties, $managerName = null)
     {
-        $em = $registry->getManager($managerName);
+        $this->em = $registry->getManager($managerName);
         $this->class      = $class;
-        $this->repository = $em->getRepository($class);
+        $this->repository = $this->em->getRepository($class);
         $this->properties = $properties;
     }
 
