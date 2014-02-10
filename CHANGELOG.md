@@ -1,7 +1,17 @@
 Changelog
 =========
 
-## 0.3.1 (XXXX-XX-XX)
+## 0.3.2 (2014-02-07)
+* Fix: Prevent `SessionUnavailableException` when returns back from service,
+* Fix: `EntityUserProvider` should implement `UserProviderInterface`,
+* Fix: `createdAt` property was missing when serializing the `OAuthToken`,
+* Added Italian translations
+
+## 0.3.1 (2014-01-17)
+* Fix: Change Twitter API call to use SSL URL,
+* Fix: Problems with options in `VkontakteResourceOwner`,
+* Fix: Problems with OAuth 1.0a token & `YahooResourceOwner`,
+* Fix: Throw exception in `FOSUBUserProvider` when username is missing
 * Added SalesForce resource owner
 
 ## 0.3.0 (2013-09-28)
