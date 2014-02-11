@@ -240,7 +240,8 @@ class ConnectController extends ContainerAware
 
         if ($request->hasSession()) {
             // initialize the session for preventing SessionUnavailableException
-            $request->getSession()->start();
+            $session = $request->getSession();
+            $session->start();
 
             if (!empty($param) && $targetUrl = $request->get($param, null, true)) {
                 $providerKey = $this->container->getParameter('hwi_oauth.firewall_name');
