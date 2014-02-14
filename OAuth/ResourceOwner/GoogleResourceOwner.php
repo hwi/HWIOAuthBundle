@@ -41,7 +41,8 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
             'access_type'             => $this->options['access_type'],
             'approval_prompt'         => $this->options['approval_prompt'],
             'request_visible_actions' => $this->options['request_visible_actions'],
-            'hd'                      => $this->options['hd']
+            'hd'                      => $this->options['hd'],
+            'prompt'                  => $this->options['prompt']
         ), $extraParameters));
     }
 
