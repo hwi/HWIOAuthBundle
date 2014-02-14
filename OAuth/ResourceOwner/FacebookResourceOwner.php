@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -36,6 +37,23 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         return parent::getAuthorizationUrl($redirectUri, array_merge(array('display' => $this->options['display']), $extraParameters));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
+    {
+        $parameters = array();
+        if ($request->query->has('fb_source')) {
+            $parameters['fb_source'] = $request->query->get('fb_source');
+        }
+
+        if ($request->query->has('fb_appcenter')) {
+            $parameters['fb_appcenter'] = $request->query->get('fb_appcenter');
+        }
+
+        return parent::getAccessToken($request, $this->normalizeUrl($redirectUri, $parameters), $extraParameters);
     }
 
     /**
