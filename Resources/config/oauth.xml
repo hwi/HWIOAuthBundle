@@ -102,12 +102,14 @@
             <argument>%hwi_oauth.connect%</argument>
         </service>
 
-        <!-- resource owners -->
+        <!-- Resource owners -->
         <service id="hwi_oauth.abstract_resource_ownermap" class="%hwi_oauth.resource_ownermap.class%" abstract="true">
             <argument type="service" id="security.http_utils" />
             <argument>%hwi_oauth.resource_owners%</argument>
             <argument type="collection" /><!-- map -->
-            <call method="setContainer"><argument type="service" id="service_container" /> </call>
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
         </service>
 
         <service id="hwi_oauth.abstract_resource_owner.generic" abstract="true">
@@ -121,78 +123,10 @@
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.storage.session" />
         </service>
-        <service id="hwi_oauth.abstract_resource_owner.amazon" class="%hwi_oauth.resource_owner.amazon.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.bitly" class="%hwi_oauth.resource_owner.bitly.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.box" class="%hwi_oauth.resource_owner.box.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.dailymotion" class="%hwi_oauth.resource_owner.dailymotion.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.deviantart" class="%hwi_oauth.resource_owner.deviantart.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.disqus" class="%hwi_oauth.resource_owner.disqus.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.eventbrite" class="%hwi_oauth.resource_owner.eventbrite.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.facebook" class="%hwi_oauth.resource_owner.facebook.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.foursquare" class="%hwi_oauth.resource_owner.foursquare.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.github" class="%hwi_oauth.resource_owner.github.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.google" class="%hwi_oauth.resource_owner.google.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.instagram" class="%hwi_oauth.resource_owner.instagram.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.linkedin" class="%hwi_oauth.resource_owner.linkedin.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.mailru" class="%hwi_oauth.resource_owner.mailru.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.qq" class="%hwi_oauth.resource_owner.qq.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.sensio_connect" class="%hwi_oauth.resource_owner.sensio_connect.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.sina_weibo" class="%hwi_oauth.resource_owner.sina_weibo.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.stack_exchange" class="%hwi_oauth.resource_owner.stack_exchange.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.twitch" class="%hwi_oauth.resource_owner.twitch.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.windows_live" class="%hwi_oauth.resource_owner.windows_live.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.wordpress" class="%hwi_oauth.resource_owner.wordpress.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.vkontakte" class="%hwi_oauth.resource_owner.vkontakte.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.yandex" class="%hwi_oauth.resource_owner.yandex.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.37signals" class="%hwi_oauth.resource_owner.37signals.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.odnoklassniki" class="%hwi_oauth.resource_owner.odnoklassniki.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.salesforce" class="%hwi_oauth.resource_owner.salesforce.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth2" abstract="true" />
 
         <service id="hwi_oauth.abstract_resource_owner.oauth1" class="%hwi_oauth.resource_owner.oauth1.class%"
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.storage.session" />
         </service>
-        <service id="hwi_oauth.abstract_resource_owner.bitbucket" class="%hwi_oauth.resource_owner.bitbucket.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.dropbox" class="%hwi_oauth.resource_owner.dropbox.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.flickr" class="%hwi_oauth.resource_owner.flickr.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.jira" class="%hwi_oauth.resource_owner.jira.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.stereomood" class="%hwi_oauth.resource_owner.stereomood.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.trello" class="%hwi_oauth.resource_owner.trello.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.twitter" class="%hwi_oauth.resource_owner.twitter.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
-        <service id="hwi_oauth.abstract_resource_owner.yahoo" class="%hwi_oauth.resource_owner.yahoo.class%"
-                 parent="hwi_oauth.abstract_resource_owner.oauth1" abstract="true" />
     </services>
 </container>
