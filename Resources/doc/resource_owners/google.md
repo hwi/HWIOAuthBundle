@@ -7,10 +7,10 @@ Next configure a resource owner of type `google` with appropriate
 `client_id`, `client_secret` and `scope`.
 
 Example `scope` values include:
-* `https://www.googleapis.com/auth/userinfo.profile`
-* `https://www.googleapis.com/auth/userinfo.email`
+* `email`
+* `profile`
 
-They are to be space delimited. Refer to the Google documentation for more information.
+They are to be space delimited. Refer to the [Google documentation](https://developers.google.com/accounts/docs/OAuth2Login#scope-param) for more information.
 
 ```yaml
 # app/config/config.yml
@@ -21,7 +21,7 @@ hwi_oauth:
             type:                google
             client_id:           <client_id>
             client_secret:       <client_secret>
-            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+            scope:               "email profile"
 ```
 
 If you want to use [offline access](https://developers.google.com/accounts/docs/OAuth2WebServer#offline) you need to add option
