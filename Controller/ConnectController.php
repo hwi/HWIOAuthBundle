@@ -240,7 +240,8 @@ class ConnectController extends ContainerAware
         // Check for a return path and store it before redirect
         if ($request->hasSession()) {
             // initialize the session for preventing SessionUnavailableException
-            $session = $request->getSession()->start();
+            $session = $request->getSession();
+            $session->start();
 
             $providerKey = $this->container->getParameter('hwi_oauth.firewall_name');
             $sessionKey = '_security.' . $providerKey . '.target_path';
