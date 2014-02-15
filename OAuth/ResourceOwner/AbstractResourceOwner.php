@@ -200,7 +200,9 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected function normalizeUrl($url, array $parameters = array())
     {
         $normalizedUrl  = $url;
-        $normalizedUrl .= (false !== strpos($url, '?') ? '&' : '?').http_build_query($parameters, '', '&');
+        if (!empty($parameters)) {
+            $normalizedUrl .= (false !== strpos($url, '?') ? '&' : '?').http_build_query($parameters, '', '&');
+        }
 
         return $normalizedUrl;
     }
