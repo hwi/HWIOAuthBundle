@@ -19,6 +19,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -67,7 +68,7 @@ class ConnectController extends Controller
         }
 
         return $this->render('HWIOAuthBundle:Connect:login.html.'.$this->getTemplatingEngine(), array(
-            'error'   => $error,
+            'error' => $error,
         ));
     }
 
@@ -123,6 +124,10 @@ class ConnectController extends Controller
 
             // Authenticate the user
             $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
+
+            if ($targetPath = $this->getTargetPath($session)) {
+                return $this->redirect($targetPath);
+            }
 
             return $this->render('HWIOAuthBundle:Connect:registration_success.html.'.$this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
@@ -187,7 +192,7 @@ class ConnectController extends Controller
         if (null === $accessToken) {
             return $this->redirectToRoute($this->container->getParameter('hwi_oauth.failed_auth_path'));
         }
-        
+
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
         // Show confirmation page?
@@ -198,7 +203,6 @@ class ConnectController extends Controller
         // Handle the form
         /** @var $form FormInterface */
         $form = $this->createForm('form');
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -213,6 +217,10 @@ class ConnectController extends Controller
             if ($currentToken instanceof OAuthToken) {
                 // Update user token with new details
                 $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
+            }
+
+            if ($targetPath = $this->getTargetPath($session)) {
+                return $this->redirect($targetPath);
             }
 
             return $this->render('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
@@ -430,5 +438,22 @@ class ConnectController extends Controller
         }
 
         return $this->get('security.context')->setToken($token);
+    }
+
+    /**
+     * @param SessionInterface $session
+     *
+     * @return string|null
+     */
+    private function getTargetPath(SessionInterface $session)
+    {
+        foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
+            $sessionKey = '_security.'.$providerKey.'.target_path';
+            if ($session->has($sessionKey)) {
+                return $session->get($sessionKey);
+            }
+        }
+
+        return null;
     }
 }
