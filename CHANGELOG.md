@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## 0.3.3 (2014-02-17)
+* Fix: Incorrect redirect URL when no parameters are set,
+* Fix: Add missing parameter `prompt` for `GoogleResourceOwner`,
+* Fix: `WordpressResourceOwner` user details API call,
+* Fix: PHP Notice when `oauth_callback_confirmed` was set too `false`,
+* Fix: PHP Fatal when session returns boolean instead of object,
+* Fix: Add missing query parameters for `FacebookResourceOwner`
+
 ## 0.3.2 (2014-02-07)
 * Fix: Prevent `SessionUnavailableException` when returns back from service,
 * Fix: `EntityUserProvider` should implement `UserProviderInterface`,
