@@ -124,6 +124,13 @@ class ConnectController extends ContainerAware
             // Authenticate the user
             $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
 
+            $providerKey = $this->container->getParameter('hwi_oauth.firewall_name');
+            $sessionKey = '_security.' . $providerKey . '.target_path';
+
+            if ($session->has($sessionKey)) {
+                return new RedirectResponse($session->get($sessionKey));
+            }
+
             return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
             ));
@@ -211,6 +218,13 @@ class ConnectController extends ContainerAware
                 if ($currentToken instanceof OAuthToken) {
                     // Update user token with new details
                     $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
+                }
+
+                $providerKey = $this->container->getParameter('hwi_oauth.firewall_name');
+                $sessionKey = '_security.' . $providerKey . '.target_path';
+
+                if ($session->has($sessionKey)) {
+                    return new RedirectResponse($session->get($sessionKey));
                 }
 
                 return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
