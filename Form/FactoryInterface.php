@@ -13,5 +13,8 @@ namespace HWI\Bundle\OAuthBundle\Form;
 
 interface FactoryInterface
 {
+    /**
+     * @return \Symfony\Component\Form\FormInterface
+     */
     public function create();
 }
