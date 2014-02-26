@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the HWIOAuthBundle package.
+ *
+ * (c) Hardware.Info <opensource@hardware.info>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace HWI\Bundle\OAuthBundle\Tests\Form;
 
 use HWI\Bundle\OAuthBundle\Form\FOSUBFactory;
@@ -8,10 +17,6 @@ class FOSUBFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateCallsFOSUBFormFactoryCreate()
     {
-        if (!interface_exists('Symfony\Component\Form\FormFactoryInterface')) {
-            $this->markTestSkipped('Symfony Form component not installed');
-        }
-
         if (!interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
             $this->markTestSkipped('FOSUserBundle 2.x not installed');
         }

@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the HWIOAuthBundle package.
+ *
+ * (c) Hardware.Info <opensource@hardware.info>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace HWI\Bundle\OAuthBundle\Tests\Form;
 
 use HWI\Bundle\OAuthBundle\Form\CustomTypeFactory;
@@ -8,10 +17,6 @@ class CustomTypeFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreatePassesTypeToFormFactory()
     {
-        if (!interface_exists('Symfony\Component\Form\FormFactoryInterface')) {
-            $this->markTestSkipped('Symfony Form component not installed');
-        }
-
         $form = $this->getMockBuilder('Symfony\Component\Form\Form')
             ->disableOriginalConstructor()
             ->getMock();
