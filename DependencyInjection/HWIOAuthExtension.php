@@ -107,6 +107,12 @@ class HWIOAuthExtension extends Extension
                     continue;
                 }
 
+                if ('registration_form' == $key) {
+                    $container->setParameter('hwi_oauth.connect.registration_form', $serviceId);
+
+                    continue;
+                }
+
                 $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), $serviceId);
             }
 

@@ -110,12 +110,7 @@ class ConnectController extends ContainerAware
             ->getUserInformation($error->getRawToken())
         ;
 
-        // enable compatibility with FOSUserBundle 1.3.x and 2.x
-        if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
-            $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
-        } else {
-            $form = $this->container->get('hwi_oauth.registration.form');
-        }
+        $form = $this->container->get('hwi_oauth.form.resolver')->resolve();
 
         $formHandler = $this->container->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {
