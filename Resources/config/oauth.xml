@@ -96,7 +96,7 @@
         <service id="hwi_oauth.registration.form.fosub_factory.def" class="%hwi_oauth.registration.form.factory.fosub.class%" abstract="true">
             <argument type="service" id="fos_user.registration.form.factory" />
         </service>
-        <service id="hwi_oauth.registration.form.custom_type_factory.def" class="%hwi_oauth.registration.form.factory.custom_type.class%" abstract="true">
+        <service id="hwi_oauth.registration.form.custom_type_factory.def" class="%hwi_oauth.registration.form.factory.custom_type.class%">
             <argument type="service" id="form.factory" />
         </service>
 
@@ -136,11 +136,6 @@
         <service id="hwi_oauth.abstract_resource_owner.oauth1" class="%hwi_oauth.resource_owner.oauth1.class%"
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.storage.session" />
-        </service>
-
-        <service id="hwi_oauth.form.resolver" class="HWI\Bundle\OAuthBundle\Form\Resolver">
-            <argument type="service" id="service_container" />
-            <argument>%hwi_oauth.connect.registration_form%</argument>
         </service>
     </services>
 </container>

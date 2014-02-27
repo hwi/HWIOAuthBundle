@@ -92,7 +92,8 @@ class HWIOAuthExtension extends Extension
 
                 $container->setAlias('hwi_oauth.registration.form.handler', 'hwi_oauth.registration.form.handler.fosub_bridge');
 
-                $container->setDefinition('hwi_oauth.registration.form.factory', new DefinitionDecorator('hwi_oauth.registration.form.fosub_factory.def'));
+                $container->setDefinition('hwi_oauth.registration.form.fosub_factory', new DefinitionDecorator('hwi_oauth.registration.form.fosub_factory.def'));
+                $container->setAlias('hwi_oauth.registration.form.factory', 'hwi_oauth.registration.form.fosub_factory');
             }
 
             foreach ($config['connect'] as $key => $serviceId) {
@@ -105,7 +106,8 @@ class HWIOAuthExtension extends Extension
                 if ('registration_form' == $key) {
                     $customTypeFactory = $container->getDefinition('hwi_oauth.registration.form.custom_type_factory.def');
                     $customTypeFactory->addArgument($config['connect']['registration_form']);
-                    $container->setDefinition('hwi_oauth.registration.form.factory', $customTypeFactory);
+                    $container->setDefinition('hwi_oauth.registration.form.custom_type_factory', $customTypeFactory);
+                    $container->setAlias('hwi_oauth.registration.form.factory', 'hwi_oauth.registration.form.custom_type_factory');
 
                     continue;
                 }
