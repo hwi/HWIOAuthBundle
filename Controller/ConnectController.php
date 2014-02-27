@@ -110,7 +110,7 @@ class ConnectController extends ContainerAware
             ->getUserInformation($error->getRawToken())
         ;
 
-        $form = $this->container->get('hwi_oauth.form.resolver')->resolve();
+        $form = $this->container->get('hwi_oauth.registration.form.factory')->create();
 
         $formHandler = $this->container->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {

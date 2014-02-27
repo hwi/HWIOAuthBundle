@@ -92,12 +92,7 @@ class HWIOAuthExtension extends Extension
 
                 $container->setAlias('hwi_oauth.registration.form.handler', 'hwi_oauth.registration.form.handler.fosub_bridge');
 
-                // enable compatibility with FOSUserBundle 1.3.x and 2.x
-                if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
-                    $container->setAlias('hwi_oauth.registration.form.factory', 'fos_user.registration.form.factory');
-                } else {
-                    $container->setAlias('hwi_oauth.registration.form', 'fos_user.registration.form');
-                }
+                $container->setDefinition('hwi_oauth.registration.form.factory', new DefinitionDecorator('hwi_oauth.registration.form.fosub_factory.def'));
             }
 
             foreach ($config['connect'] as $key => $serviceId) {
@@ -108,7 +103,9 @@ class HWIOAuthExtension extends Extension
                 }
 
                 if ('registration_form' == $key) {
-                    $container->setParameter('hwi_oauth.connect.registration_form', $serviceId);
+                    $customTypeFactory = $container->getDefinition('hwi_oauth.registration.form.custom_type_factory.def');
+                    $customTypeFactory->addArgument($config['connect']['registration_form']);
+                    $container->setDefinition('hwi_oauth.registration.form.factory', $customTypeFactory);
 
                     continue;
                 }
