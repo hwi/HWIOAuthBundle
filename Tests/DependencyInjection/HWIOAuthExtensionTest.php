@@ -261,7 +261,10 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
 
         $loader->load(array($config), $this->containerBuilder);
 
-        $this->assertTrue($this->containerBuilder->hasDefinition('hwi_oauth.registration.form.factory'));
+        $this->assertAlias(
+            'hwi_oauth.registration.form.custom_type_factory',
+            'hwi_oauth.registration.form.factory'
+        );
     }
 
     public function testConfigurationSetsFOSUBRegistrationFormFactoryWhenConnectEnabled()
@@ -273,7 +276,10 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
 
         $loader->load(array($config), $this->containerBuilder);
 
-        $this->assertTrue($this->containerBuilder->hasDefinition('hwi_oauth.registration.form.factory'));
+        $this->assertAlias(
+            'hwi_oauth.registration.form.fosub_factory',
+            'hwi_oauth.registration.form.factory'
+        );
     }
 
     public function provideInvalidData()
