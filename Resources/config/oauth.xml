@@ -137,10 +137,5 @@
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.storage.session" />
         </service>
-
-        <service id="hwi_oauth.form.resolver" class="HWI\Bundle\OAuthBundle\Form\Resolver">
-            <argument type="service" id="service_container" />
-            <argument>%hwi_oauth.connect.registration_form%</argument>
-        </service>
     </services>
 </container>
