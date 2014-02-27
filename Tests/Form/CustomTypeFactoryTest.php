@@ -29,7 +29,7 @@ class CustomTypeFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($typeName)
             ->will($this->returnValue($form));
 
-        $sut = new CustomTypeFactory($typeName, $formFactory);
+        $sut = new CustomTypeFactory($formFactory, $typeName);
         $result = $sut->create();
 
         $this->assertSame($form, $result);

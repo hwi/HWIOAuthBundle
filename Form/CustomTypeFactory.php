@@ -29,7 +29,7 @@ class CustomTypeFactory implements FactoryInterface
      * @param FormFactoryInterface $formFactory
      * @param string $type
      */
-    public function __construct($type, FormFactoryInterface $formFactory)
+    public function __construct(FormFactoryInterface $formFactory, $type)
     {
         $this->formFactory = $formFactory;
         $this->type = $type;
