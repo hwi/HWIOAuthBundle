@@ -269,6 +269,12 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
 
     public function testConfigurationSetsFOSUBRegistrationFormFactoryWhenConnectEnabled()
     {
+        if (!class_exists('FOS\UserBundle\FOSUserBundle')
+            || !interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')
+        ) {
+            $this->markTestSkipped('FOSUserBundle 2.x not installed');
+        }
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['fosub'] = array('properties' => array());
@@ -278,6 +284,27 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertAlias(
             'hwi_oauth.registration.form.fosub_factory',
+            'hwi_oauth.registration.form.factory'
+        );
+    }
+
+    public function testConfigurationSetsLegacyFOSUBRegistrationFormFactory()
+    {
+        if (!class_exists('FOS\UserBundle\FOSUserBundle')
+            || interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')
+        ) {
+            $this->markTestSkipped('Legacy FOSUserBundle 1.x not installed');
+        }
+
+        $loader = new HWIOAuthExtension();
+        $config = $this->getEmptyConfig();
+        $config['fosub'] = array('properties' => array());
+        $config['connect'] = true;
+
+        $loader->load(array($config), $this->containerBuilder);
+
+        $this->assertAlias(
+            'hwi_oauth.registration.form.legacy_fosub_factory',
             'hwi_oauth.registration.form.factory'
         );
     }
