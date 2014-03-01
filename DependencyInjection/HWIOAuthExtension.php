@@ -94,9 +94,27 @@ class HWIOAuthExtension extends Extension
 
                 // enable compatibility with FOSUserBundle 1.3.x and 2.x
                 if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
-                    $container->setAlias('hwi_oauth.registration.form.factory', 'fos_user.registration.form.factory');
+                    $container->setDefinition(
+                        'hwi_oauth.registration.form.fosub_factory',
+                        new DefinitionDecorator('hwi_oauth.registration.form.fosub_factory.def')
+                    )
+                        ->addArgument(new Reference('fos_user.registration.form.factory'));
+
+                    $container->setAlias(
+                        'hwi_oauth.registration.form.factory',
+                        'hwi_oauth.registration.form.fosub_factory'
+                    );
                 } else {
-                    $container->setAlias('hwi_oauth.registration.form', 'fos_user.registration.form');
+                    $container->setDefinition(
+                        'hwi_oauth.registration.form.legacy_fosub_factory',
+                        new DefinitionDecorator('hwi_oauth.registration.form.legacy_fosub_factory.def')
+                    )
+                        ->addArgument(new Reference('fos_user.registration.form'));
+
+                    $container->setAlias(
+                        'hwi_oauth.registration.form.factory',
+                        'hwi_oauth.registration.form.legacy_fosub_factory'
+                    );
                 }
             }
 
@@ -107,10 +125,22 @@ class HWIOAuthExtension extends Extension
                     continue;
                 }
 
+                if ('registration_form' == $key) {
+                    $container->setDefinition(
+                        'hwi_oauth.registration.form.custom_type_factory',
+                        new DefinitionDecorator('hwi_oauth.registration.form.custom_type_factory.def')
+                    )
+                        ->addArgument($config['connect']['registration_form']);
+                    $container->setAlias(
+                        'hwi_oauth.registration.form.factory',
+                        'hwi_oauth.registration.form.custom_type_factory'
+                    );
+
+                    continue;
+                }
+
                 $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), $serviceId);
             }
-
-            // setup custom services
         } else {
             $container->setParameter('hwi_oauth.connect', false);
         }
