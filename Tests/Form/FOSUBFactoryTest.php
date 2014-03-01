@@ -17,7 +17,9 @@ class FOSUBFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateCallsFOSUBFormFactoryCreate()
     {
-        if (!interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
+        if (!class_exists('FOS\UserBundle\FOSUserBundle')
+            || !interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')
+        ) {
             $this->markTestSkipped('FOSUserBundle 2.x not installed');
         }
 

@@ -8,7 +8,9 @@ class LegacyFOSUBFactoryTest extends \PHPUnit_Framework_TestCase
 {
     public function testCreateReturnsLegacyFOSUBRegistrationForm()
     {
-        if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
+        if (!class_exists('FOS\UserBundle\FOSUserBundle')
+            || interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')
+        ) {
             $this->markTestSkipped('Legacy FOSUserBundle 1.x not installed');
         }
 
