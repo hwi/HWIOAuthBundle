@@ -17,6 +17,7 @@ class ElsevierResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
          * Since Elsevier API does not provide any entry point for user
          * information retrieval, we could not and should not test that.
          */
+        $this->markTestSkipped(); 
     }
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
