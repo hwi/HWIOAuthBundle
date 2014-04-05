@@ -53,6 +53,7 @@ hwi_oauth:
 - [Mail.ru](resource_owners/mailru.md)
 - [Odnoklassniki](resource_owners/odnoklassniki.md)
 - [QQ](resource_owners/qq.md)
+- [Reddit](resource_owners/reddit.md)
 - [Salesforce](resource_owners/salesforce.md)
 - [SensioLabs Connect](resource_owners/sensio_connect.md)
 - [Sina Weibo](resource_owners/sina_weibo.md)
