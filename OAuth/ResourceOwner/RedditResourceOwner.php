@@ -30,9 +30,9 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'username',
-        'realname'   => 'name',
-        'email'      => 'email',
+        'nickname'   => 'name',
+        'realname'   => null,
+        'email'      => null,
     );
 
     /**
