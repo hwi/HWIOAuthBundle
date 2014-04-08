@@ -173,7 +173,19 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     public function revokeToken($token)
     {
-        throw new AuthenticationException('OAuth error: "Method unsupported."');
+        if (!isset($this->options['revoke_token_url'])) {
+            throw new AuthenticationException('OAuth error: "Method unsupported."');
+        }
+
+        $parameters = array(
+            'client_id'     => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
+        );
+
+        /* @var $response \Buzz\Message\Response */
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), 'DELETE');
+
+        return 200 === $response->getStatusCode();
     }
 
     /**
@@ -303,6 +315,10 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
             'authorization_url',
             'access_token_url',
             'infos_url',
+        ));
+
+        $resolver->setOptional(array(
+            'revoke_token_url',
         ));
 
         $resolver->setDefaults(array(
