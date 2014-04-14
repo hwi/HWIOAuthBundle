@@ -86,7 +86,8 @@ class FOSUBUserProvider implements AccountConnectorInterface, OAuthAwareUserProv
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
         $property = $this->getProperty($response);
-        $setter = 'set'.ucfirst($property);
+        // This is done because for fields like some_property are generated setters like setSomeProperty()
+        $setter = sprintf("set%s", \Doctrine\Common\Inflector\Inflector::classify($property));
 
         if (!method_exists($user, $setter)) {
             throw new \RuntimeException(sprintf("Class '%s' should have a method '%s'.", get_class($user), $setter));
