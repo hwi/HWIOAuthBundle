@@ -35,7 +35,6 @@ json;
             array(
                 'authorization_url' => 'https://api.weibo.com/oauth2/authorize',
                 'access_token_url' => 'https://api.weibo.com/oauth2/access_token',
-                'revoke_token_url' => 'https://api.weibo.com/oauth2/revokeoauth2',
                 'infos_url' => 'https://api.weibo.com/2/users/show.json',
             ),
             $options
@@ -78,13 +77,5 @@ json;
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
-    }
-
-    public function testRevokeToken()
-    {
-        $this->buzzResponseHttpCode = 200;
-        $this->mockBuzz('{"access_token": "bar"}', 'application/json');
-
-        $this->assertTrue($this->resourceOwner->revokeToken('token'));
     }
 }
