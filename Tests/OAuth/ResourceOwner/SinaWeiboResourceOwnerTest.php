@@ -79,4 +79,12 @@ json;
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
+
+    public function testRevokeToken()
+    {
+        $this->buzzResponseHttpCode = 200;
+        $this->mockBuzz('{"access_token": "bar"}', 'application/json');
+
+        $this->assertTrue($this->resourceOwner->revokeToken('token'));
+    }
 }
