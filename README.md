@@ -20,6 +20,7 @@ This bundle contains support for 20+ different providers:
 * Foursquare,
 * GitHub,
 * Google,
+* Hubic,
 * Instagram,
 * JIRA,
 * LinkedIn,

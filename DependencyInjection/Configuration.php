@@ -41,6 +41,7 @@ class Configuration implements ConfigurationInterface
             'foursquare',
             'github',
             'google',
+            'hubic',
             'instagram',
             'linkedin',
             'mailru',
