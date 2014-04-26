@@ -63,7 +63,7 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
             'authorization_url' => 'https://api.login.yahoo.com/oauth/v2/request_auth',
             'request_token_url' => 'https://api.login.yahoo.com/oauth/v2/get_request_token',
             'access_token_url'  => 'https://api.login.yahoo.com/oauth/v2/get_token',
-            'infos_url'         => 'http://social.yahooapis.com/v1/user/{guid}/profile',
+            'infos_url'         => 'https://social.yahooapis.com/v1/user/{guid}/profile',
 
             'realm'             => 'yahooapis.com',
         ));
