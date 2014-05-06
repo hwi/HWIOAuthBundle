@@ -1,0 +1,14 @@
+header:
+    connecting: Bağlantı
+    success: Başarı ile '%name%' hesabına bağlanıldı !
+    register: '%name%' üyeliğim ile kayıt ol
+    registration_success: '%username%' başarı ile kayıt oldunuz ve bağlandınız!
+
+connect:
+    confirm:
+        cancel: İptal
+        submit: Üyeliğim ile bağlan
+        text: %service% üzerinden '%name%' ile bağlanmak istediğinize eminmisiniz?
+    registration:
+        cancel: İptal
+        submit: Hesabımı kaydet
