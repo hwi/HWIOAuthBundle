@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Buzz\Message\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -37,19 +38,13 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function revokeToken($token)
     {
-        $parameters = array(
-            'client_id'     => $this->options['client_id'],
-            'client_secret' => $this->options['client_secret'],
+        /* @var $response Response */
+        $response = $this->httpRequest(
+            sprintf($this->options['revoke_token_url'], $this->options['client_id'], $token),
+            null,
+            array('Authorization: Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])),
+            'DELETE'
         );
-
-        /* @var $response \Buzz\Message\Response */
-        $response = $this->httpRequest(sprintf('https://api.github.com/applications/%s/tokens/%s', $this->options['client_id'], $token), $parameters);
-        if (404 === $response->getStatusCode()) {
-            return false;
-        }
-
-        $response = $this->getResponseContent($response);
-        $response = $this->httpRequest(sprintf('https://api.github.com/authorizations/%s', $response['id']), $parameters, array(), 'DELETE');
 
         return 204 === $response->getStatusCode();
     }
@@ -64,6 +59,7 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
         $resolver->setDefaults(array(
             'authorization_url'   => 'https://github.com/login/oauth/authorize',
             'access_token_url'    => 'https://github.com/login/oauth/access_token',
+            'revoke_token_url'    => 'https://api.github.com/applications/%s/tokens/%s',
             'infos_url'           => 'https://api.github.com/user',
 
             'use_commas_in_scope' => true,

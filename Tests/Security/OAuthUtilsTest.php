@@ -20,14 +20,11 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
     public function testGetAuthorizationUrlWithRedirectUrl()
     {
         $url      = 'http://localhost:8080/login/check-instagram';
-        $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
         $request  = $this->getRequest($url);
+        $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $mock = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')
-            ->getMock();
-
-        $utils = new OAuthUtils($this->getHttpUtils($url), $mock, true);
-        $utils->setResourceOwnerMap($this->getMap($url, $redirect));
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface'), true);
+        $utils->setResourceOwnerMap($this->getMap($url, $redirect, false, true));
 
         $this->assertEquals(
             $redirect,
@@ -39,14 +36,12 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAuthorizationUrlWithConnectAndUserToken()
     {
-        $url     = 'http://localhost:8080/login/check-instagram';
-        $request = $this->getRequest($url);
-
+        $url      = 'http://localhost:8080/login/check-instagram';
+        $request  = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
-        $mapMock  = $this->getMap($url, $redirect);
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getSecurity(true), true);
-        $utils->setResourceOwnerMap($mapMock);
+        $utils->setResourceOwnerMap($this->getMap($url, $redirect, true));
 
         $this->assertEquals(
             $redirect,
@@ -61,14 +56,12 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAuthorizationUrlWithoutUserToken()
     {
-        $url     = 'http://localhost:8080/login/check-instagram';
-        $request = $this->getRequest($url);
-
+        $url      = 'http://localhost:8080/login/check-instagram';
+        $request  = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
-        $mapMock  = $this->getMap($url, $redirect, true);
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getSecurity(false), true);
-        $utils->setResourceOwnerMap($mapMock);
+        $utils->setResourceOwnerMap($this->getMap($url, $redirect));
 
         $this->assertEquals(
             $redirect,
@@ -132,7 +125,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         return Request::create($url, 'get', array(), array(), array(), array('SERVER_PORT' => 8080));
     }
 
-    private function getMap($url, $redirect, $hasUser = false)
+    private function getMap($url, $redirect, $hasUser = false, $hasOneRedirectUrl = false)
     {
         $resource = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
             ->getMock();
@@ -141,6 +134,12 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
             ->method('getAuthorizationUrl')
             ->with($url, array())
             ->will($this->returnValue($redirect));
+
+        $resource
+            ->expects($this->any())
+            ->method('getOption')
+            ->with('auth_with_one_url')
+            ->will($this->returnValue($hasOneRedirectUrl));
 
         $mapMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
             ->disableOriginalConstructor()
@@ -151,12 +150,19 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
             ->with('instagram')
             ->will($this->returnValue($resource));
 
-        if ($hasUser) {
+        if (!$hasUser && !$hasOneRedirectUrl) {
             $mapMock
                 ->expects($this->once())
                 ->method('getResourceOwnerCheckPath')
                 ->with('instagram')
                 ->will($this->returnValue('/login/check-instagram'));
+        }
+
+        if ($hasUser) {
+            $resource
+                ->expects($this->once())
+                ->method('getName')
+                ->will($this->returnValue('instagram'));
         }
 
         return $mapMock;
@@ -176,8 +182,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     private function getSecurity($hasUser)
     {
-        $mock = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')
-            ->getMock();
+        $mock = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
         $mock
             ->expects($this->once())
             ->method('isGranted')

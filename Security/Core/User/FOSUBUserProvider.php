@@ -19,6 +19,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * Class providing a bridge to use the FOSUB user provider with HWIOAuth.
@@ -28,7 +29,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class FOSUBUserProvider implements AccountConnectorInterface, OAuthAwareUserProviderInterface
+class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterface, OAuthAwareUserProviderInterface
 {
     /**
      * @var UserManagerInterface

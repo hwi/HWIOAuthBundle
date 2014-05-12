@@ -33,16 +33,7 @@ json;
     public function testRevokeToken()
     {
         $this->buzzResponseHttpCode = 204;
-        $this->buzzResponse = '{"id": "666"}';
-        $this->buzzResponseContentType = 'application/json';
-
-        $this->buzzClient->expects($this->at(0))
-            ->method('send')
-            ->will($this->returnCallback(array($this, 'buzzSendMock')));
-
-        $this->buzzClient->expects($this->at(1))
-            ->method('send')
-            ->will($this->returnCallback(array($this, 'buzzSendMock')));
+        $this->mockBuzz(null, 'application/json');
 
         $this->assertTrue($this->resourceOwner->revokeToken('token'));
     }
