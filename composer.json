@@ -86,6 +86,7 @@
     "suggest": {
         "doctrine/doctrine-bundle":     "to use Doctrine user provider",
         "friendsofsymfony/user-bundle": "to connect FOSUB with this bundle",
+        "doctrine/inflector":           "to connect FOSUB with this bundle",
         "symfony/twig-bundle":          "to use the Twig hwi_oauth_* functions"
     },
 
