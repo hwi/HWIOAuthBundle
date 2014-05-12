@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
+use HWI\Bundle\OAuthBundle\Event\GetResponseConnectEvent;
+use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
@@ -19,6 +21,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
@@ -44,21 +47,17 @@ class ConnectController extends ContainerAware
      */
     public function connectAction(Request $request)
     {
-        $connect = $this->container->getParameter('hwi_oauth.connect');
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
-
         $error = $this->getErrorForRequest($request);
 
         // if connecting is enabled and there is no user, redirect to the registration form
-        if ($connect
-            && !$hasUser
-            && $error instanceof AccountNotLinkedException
-        ) {
-            $key = time();
-            $session = $request->getSession();
-            $session->set('_hwi_oauth.registration_error.'.$key, $error);
+        if ($this->container->getParameter('hwi_oauth.connect')) {
+            $event = new GetResponseConnectEvent($request, $error);
 
-            return new RedirectResponse($this->generate('hwi_oauth_connect_registration', array('key' => $key)));
+            $this->container->get('event_dispatcher')->dispatch(HWIOAuthEvents::USER_CONNECT_INITIALIZE, $event);
+
+            if ($event->hasResponse()) {
+                return $event->getResponse();
+            }
         }
 
         if ($error) {
@@ -66,8 +65,8 @@ class ConnectController extends ContainerAware
             $error = $error->getMessage();
         }
 
-        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:login.html.' . $this->getTemplatingEngine(), array(
-            'error'   => $error,
+        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:login.html.'.$this->getTemplatingEngine(), array(
+            'error' => $error,
         ));
     }
 
@@ -93,16 +92,34 @@ class ConnectController extends ContainerAware
 
         $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
         if ($hasUser) {
-            throw new AccessDeniedException('Cannot connect already registered account.');
+            $error = 'Cannot connect already registered account.';
+            $event = new GetResponseConnectEvent($request, $error);
+
+            $this->container->get('event_dispatcher')->dispatch(HWIOAuthEvents::USER_CONNECT_ERROR, $event);
+
+            if ($event->hasResponse()) {
+                return $event->getResponse();
+            }
+
+            throw new AccessDeniedException($error);
         }
 
         $session = $request->getSession();
-        $error = $session->get('_hwi_oauth.registration_error.'.$key);
+        $error   = $session->get('_hwi_oauth.registration_error.'.$key);
         $session->remove('_hwi_oauth.registration_error.'.$key);
 
-        if (!($error instanceof AccountNotLinkedException) || (time() - $key > 300)) {
+        if (!$error instanceof AccountNotLinkedException || (time() - $key > 300)) {
             // todo: fix this
-            throw new \Exception('Cannot register an account.');
+            $error = 'Cannot register an account.';
+            $event = new GetResponseConnectEvent($request, $error);
+
+            $this->container->get('event_dispatcher')->dispatch(HWIOAuthEvents::USER_CONNECT_ERROR, $event);
+
+            if ($event->hasResponse()) {
+                return $event->getResponse();
+            }
+
+            throw new \Exception($error);
         }
 
         $userInformation = $this
@@ -124,7 +141,7 @@ class ConnectController extends ContainerAware
             // Authenticate the user
             $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
 
-            return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(), array(
+            return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.'.$this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
             ));
         }
@@ -133,7 +150,7 @@ class ConnectController extends ContainerAware
         $key = time();
         $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
-        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration.html.' . $this->getTemplatingEngine(), array(
+        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration.html.'.$this->getTemplatingEngine(), array(
             'key' => $key,
             'form' => $form->createView(),
             'userInformation' => $userInformation,
@@ -196,30 +213,28 @@ class ConnectController extends ContainerAware
             ->createBuilder('form')
             ->getForm();
 
-        if ($request->isMethod('POST')) {
-            $form->bind($request);
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            show_confirmation_page:
 
-            if ($form->isValid()) {
-                show_confirmation_page:
+            /** @var $currentToken OAuthToken */
+            $currentToken = $this->container->get('security.context')->getToken();
+            /** @var $currentUser UserInterface */
+            $currentUser  = $currentToken->getUser();
 
-                /** @var $currentToken OAuthToken */
-                $currentToken = $this->container->get('security.context')->getToken();
-                $currentUser  = $currentToken->getUser();
+            $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
 
-                $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
-
-                if ($currentToken instanceof OAuthToken) {
-                    // Update user token with new details
-                    $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
-                }
-
-                return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
-                    'userInformation' => $userInformation,
-                ));
+            if ($currentToken instanceof OAuthToken) {
+                // Update user token with new details
+                $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
             }
+
+            return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.'.$this->getTemplatingEngine(), array(
+                'userInformation' => $userInformation,
+            ));
         }
 
-        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_confirm.html.' . $this->getTemplatingEngine(), array(
+        return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_confirm.html.'.$this->getTemplatingEngine(), array(
             'key'             => $key,
             'service'         => $service,
             'form'            => $form->createView(),
@@ -240,11 +255,11 @@ class ConnectController extends ContainerAware
         // Check for a return path and store it before redirect
         if ($request->hasSession()) {
             // initialize the session for preventing SessionUnavailableException
+            /* @var $session SessionInterface */
             $session = $request->getSession();
             $session->start();
 
-            $providerKey = $this->container->getParameter('hwi_oauth.firewall_name');
-            $sessionKey = '_security.' . $providerKey . '.target_path';
+            $sessionKey = '_security.'.$this->container->getParameter('hwi_oauth.firewall_name').'.target_path';
 
             $param = $this->container->getParameter('hwi_oauth.target_path_parameter');
             if (!empty($param) && $targetUrl = $request->get($param, null, true)) {

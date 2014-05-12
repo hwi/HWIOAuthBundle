@@ -11,7 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -25,6 +27,11 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 {
+    /**
+     * {@inheritdoc}
+     */
+    protected $errorField = 'code';
+
     /**
      * {@inheritDoc}
      */
@@ -81,6 +88,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
+        $this->handles($request);
+
         $parameters = array_merge(array(
             'code'          => $request->query->get('code'),
             'grant_type'    => 'authorization_code',
@@ -92,7 +101,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
 
-        $this->validateResponseContent($response);
+        $this->dispatcher->dispatch(HWIOAuthEvents::RESOURCE_OWNER_COMPLETE, new GenericEvent($this, $response));
 
         return $response;
     }
@@ -112,17 +121,9 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
 
-        $this->validateResponseContent($response);
+        $this->dispatcher->dispatch(HWIOAuthEvents::RESOURCE_OWNER_COMPLETE, new GenericEvent($this, $response));
 
         return $response;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function handles(Request $request)
-    {
-        return $request->query->has('code');
     }
 
     /**
@@ -156,26 +157,6 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url);
-    }
-
-    /**
-     * @param mixed $response the 'parsed' content based on the response headers
-     *
-     * @throws AuthenticationException If an OAuth error occurred or no access token is found
-     */
-    protected function validateResponseContent($response)
-    {
-        if (isset($response['error_description'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error_description']));
-        }
-
-        if (isset($response['error'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', isset($response['error']['message']) ? $response['error']['message'] : $response['error']));
-        }
-
-        if (!isset($response['access_token'])) {
-            throw new AuthenticationException('Not a valid access token.');
-        }
     }
 
     /**

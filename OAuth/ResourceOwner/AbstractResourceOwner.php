@@ -16,10 +16,14 @@ use Buzz\Message\MessageInterface as HttpMessageInterface;
 use Buzz\Message\Request as HttpRequest;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Buzz\Message\Response as HttpResponse;
+use HWI\Bundle\OAuthBundle\Event\RequestEvent;
+use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -61,9 +65,19 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $state;
 
     /**
+     * @var string
+     */
+    protected $errorField;
+
+    /**
      * @var RequestDataStorageInterface
      */
     protected $storage;
+
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $dispatcher;
 
     /**
      * @param HttpClientInterface         $httpClient Buzz http client
@@ -71,13 +85,15 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param array                       $options    Options for the resource owner
      * @param string                      $name       Name for the resource owner
      * @param RequestDataStorageInterface $storage    Request token storage
+     * @param EventDispatcherInterface    $dispatcher
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage)
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage, EventDispatcherInterface $dispatcher)
     {
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
         $this->name       = $name;
         $this->storage    = $storage;
+        $this->dispatcher = $dispatcher;
 
         if (!empty($options['paths'])) {
             $this->addPaths($options['paths']);
@@ -143,6 +159,20 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     public function addPaths(array $paths)
     {
         $this->paths = array_merge($this->paths, $paths);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function handles(Request $request)
+    {
+        $this->dispatcher->dispatch(HWIOAuthEvents::RESOURCE_OWNER_INITIALIZE, new RequestEvent($request));
+
+        if (!$request->query->get($this->errorField)) {
+            throw new AuthenticationException('No oauth code in the request.');
+        }
+
+        $this->isCsrfTokenValid($request->get('state'));
     }
 
     /**

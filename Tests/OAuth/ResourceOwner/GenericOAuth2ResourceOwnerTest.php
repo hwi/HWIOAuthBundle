@@ -13,8 +13,15 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use Buzz\Message\MessageInterface;
 use Buzz\Message\RequestInterface;
+use HWI\Bundle\OAuthBundle\Event\RequestEvent;
+use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
+use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,10 +30,20 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceOwner;
     protected $resourceOwnerName;
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $dispatcher;
+    /**
+     * @var \Buzz\Client\ClientInterface
+     */
     protected $buzzClient;
     protected $buzzResponse;
     protected $buzzResponseContentType;
     protected $buzzResponseHttpCode = 200;
+    /**
+     * @var RequestDataStorageInterface
+     */
     protected $storage;
     protected $state = 'random';
     protected $csrf = false;
@@ -145,8 +162,12 @@ json;
 
         $request = new Request(array('code' => 'somecode'));
 
+        $response = array('access_token' => 'code');
+
+        $this->mockDispatcher($request, true, false, $response);
+
         $this->assertEquals(
-            array('access_token' => 'code'),
+            $response,
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -157,8 +178,12 @@ json;
 
         $request = new Request(array('code' => 'somecode'));
 
+        $response = array('access_token' => 'code');
+
+        $this->mockDispatcher($request, true, false, $response);
+
         $this->assertEquals(
-            array('access_token' => 'code'),
+            $response,
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -169,8 +194,12 @@ json;
 
         $request = new Request(array('code' => 'somecode'));
 
+        $response = array('access_token' => 'code');
+
+        $this->mockDispatcher($request, true, false, $response);
+
         $this->assertEquals(
-            array('access_token' => 'code'),
+            $response,
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -181,8 +210,12 @@ json;
 
         $request = new Request(array('code' => 'somecode'));
 
+        $response = array('access_token' => 'code');
+
+        $this->mockDispatcher($request, true, false, $response);
+
         $this->assertEquals(
-            array('access_token' => 'code'),
+            $response,
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -193,8 +226,12 @@ json;
 
         $request = new Request(array('code' => 'somecode'));
 
+        $response = array('access_token' => 'code');
+
+        $this->mockDispatcher($request, true, false, $response);
+
         $this->assertEquals(
-            array('access_token' => 'code'),
+            $response,
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -207,6 +244,8 @@ json;
         $this->mockBuzz('invalid');
         $request = new Request(array('code' => 'code'));
 
+        $this->mockDispatcher($request, true, true, array('invalid' => ''));
+
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
@@ -217,6 +256,8 @@ json;
     {
         $this->mockBuzz('error=foo');
         $request = new Request(array('code' => 'code'));
+
+        $this->mockDispatcher($request, true, true, array('error' => 'foo'));
 
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
@@ -237,6 +278,11 @@ json;
     {
         $this->mockBuzz('invalid');
 
+        $this->dispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with(HWIOAuthEvents::RESOURCE_OWNER_COMPLETE, new GenericEvent($this->resourceOwner, array('invalid' => '')))
+            ->will($this->throwException(new AuthenticationException('')));
+
         $this->resourceOwner->refreshAccessToken('foo');
     }
 
@@ -246,6 +292,11 @@ json;
     public function testRefreshAccessTokenError()
     {
         $this->mockBuzz('{"error": "invalid"}', 'application/json');
+
+        $this->dispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with(HWIOAuthEvents::RESOURCE_OWNER_COMPLETE, new GenericEvent($this->resourceOwner, array('error' => 'invalid')))
+            ->will($this->throwException(new AuthenticationException('')));
 
         $this->resourceOwner->refreshAccessToken('foo');
     }
@@ -344,6 +395,26 @@ json;
         $this->buzzResponseContentType = $contentType;
     }
 
+    protected function mockDispatcher(Request $request, $callComplete = true, $throwException = false, array $callCompleteData = array())
+    {
+        $this->dispatcher->expects($this->at(0))
+            ->method('dispatch')
+            ->with(HWIOAuthEvents::RESOURCE_OWNER_INITIALIZE, new RequestEvent($request));
+
+        if ($callComplete) {
+            if ($throwException) {
+                $this->dispatcher->expects($this->at(1))
+                    ->method('dispatch')
+                    ->with(HWIOAuthEvents::RESOURCE_OWNER_COMPLETE, new GenericEvent($this->resourceOwner, $callCompleteData))
+                    ->will($this->throwException(new AuthenticationException('')));
+            } else {
+                $this->dispatcher->expects($this->at(1))
+                    ->method('dispatch')
+                    ->with(HWIOAuthEvents::RESOURCE_OWNER_COMPLETE, new GenericEvent($this->resourceOwner, $callCompleteData));
+            }
+        }
+    }
+
     protected function createResourceOwner($name, array $options = array(), array $paths = array())
     {
         $this->buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
@@ -351,7 +422,8 @@ json;
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
 
-        $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
+        $this->storage    = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
+        $this->dispatcher = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
 
         $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
         $resourceOwner->addPaths(array_merge($this->paths, $paths));
@@ -364,8 +436,15 @@ json;
         return $resourceOwner;
     }
 
+    /**
+     * @param string    $name
+     * @param HttpUtils $httpUtils
+     * @param array     $options
+     *
+     * @return GenericOAuth2ResourceOwner
+     */
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->dispatcher);
     }
 }

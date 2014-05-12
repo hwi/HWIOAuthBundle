@@ -113,6 +113,6 @@ json;
             $options
         );
 
-        return new GoogleResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new GoogleResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->dispatcher);
     }
 }
