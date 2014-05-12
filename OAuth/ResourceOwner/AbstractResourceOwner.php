@@ -309,6 +309,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
             'scope'               => null,
             'csrf'                => false,
             'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+            'auth_with_one_url'   => false,
         ));
 
         $resolver->setAllowedValues(array(
