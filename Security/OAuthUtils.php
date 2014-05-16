@@ -174,9 +174,9 @@ class OAuthUtils
 
         // Remove default ports
         // Ref: Spec: 9.1.2
-        $explicitPort = (isset($url['port']) ? $url['port'] : null);
+        $explicitPort = isset($url['port']) ? $url['port'] : null;
         if (('https' === $url['scheme'] && $explicitPort === 443) || ('http' === $url['scheme'] && $explicitPort === 80)) {
-                $explicitPort = null;
+            $explicitPort = null;
         }
 
         // Remove query params from URL
