@@ -189,10 +189,6 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'use_commas_in_scope' => false,
         ));
 
-        $resolver->setOptional(array(
-            'revoke_token_url',
-        ));
-
         $resolver->setNormalizers(array(
             // Unfortunately some resource owners break the spec by using commas instead
             // of spaces to separate scopes (Disqus, Facebook, Github, Vkontante)

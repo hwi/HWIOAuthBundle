@@ -35,7 +35,6 @@ json;
             array(
                 'authorization_url' => 'https://api.weibo.com/oauth2/authorize',
                 'access_token_url' => 'https://api.weibo.com/oauth2/access_token',
-                'revoke_token_url' => 'https://api.weibo.com/oauth2/revokeoauth2',
                 'infos_url' => 'https://api.weibo.com/2/users/show.json',
             ),
             $options
