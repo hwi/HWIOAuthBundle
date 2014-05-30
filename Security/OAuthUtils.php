@@ -172,9 +172,16 @@ class OAuthUtils
             $parameters += $queryParams;
         }
 
+        // Remove default ports
+        // Ref: Spec: 9.1.2
+        $explicitPort = isset($url['port']) ? $url['port'] : null;
+        if (('https' === $url['scheme'] && 443 === $explicitPort) || ('http' === $url['scheme'] && 80 === $explicitPort)) {
+            $explicitPort = null;
+        }
+
         // Remove query params from URL
         // Ref: Spec: 9.1.2
-        $url = sprintf('%s://%s%s', $url['scheme'], $url['host'], isset($url['path']) ? $url['path'] : '');
+        $url = sprintf('%s://%s%s%s', $url['scheme'], $url['host'], ($explicitPort ? ':'.$explicitPort : ''), isset($url['path']) ? $url['path'] : '');
 
         // Parameters are sorted by name, using lexicographical byte value ordering.
         // Ref: Spec: 9.1.1 (1)

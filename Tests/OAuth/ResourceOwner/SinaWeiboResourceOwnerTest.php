@@ -31,16 +31,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'authorization_url' => 'https://api.weibo.com/oauth2/authorize',
-                'access_token_url' => 'https://api.weibo.com/oauth2/access_token',
-                'revoke_token_url' => 'https://api.weibo.com/oauth2/revokeoauth2',
-                'infos_url' => 'https://api.weibo.com/2/users/show.json',
-            ),
-            $options
-        );
-
         return new SinaWeiboResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 

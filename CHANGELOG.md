@@ -1,6 +1,12 @@
 Changelog
 =========
 
+## 0.3.5 (2014-05-30)
+* Fix: `LinkedinResourceOwner` regression while getting user details,
+* Fix: OAuth `revoke` functionality to be available wider,
+* Fix: Removed undocumented functionality from `SinaWeiboResourceOwner`,
+* Fix: Always remove default ports from URLs to match OAuth 1.0a, Spec: 9.1.2
+
 ## 0.3.4 (2014-05-12)
 * Fix: Instagram OAuth redirect to one url,
 * Fix: `FOSUBUserProvider` should also implement `UserProviderInterface`,

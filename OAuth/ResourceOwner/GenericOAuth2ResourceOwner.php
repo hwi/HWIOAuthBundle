@@ -30,12 +30,18 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        $url = $this->normalizeUrl($this->options['infos_url']);
+        if ($this->options['use_bearer_authorization']) {
+            $url = $this->normalizeUrl($this->options['infos_url']);
 
-        $content = $this->httpRequest($url, null, array('Authorization: Bearer '.$accessToken['access_token']))->getContent();
+            $content = $this->httpRequest($url, null, array('Authorization: Bearer '.$accessToken['access_token']));
+        } else {
+            $url = $this->normalizeUrl($this->options['infos_url'], array('access_token' => $accessToken['access_token']));
+
+            $content = $this->doGetUserInformationRequest($url);
+        }
 
         $response = $this->getUserResponse();
-        $response->setResponse($content);
+        $response->setResponse($content->getContent());
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
@@ -120,6 +126,26 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
+    public function revokeToken($token)
+    {
+        if (!isset($this->options['revoke_token_url'])) {
+            throw new AuthenticationException('OAuth error: "Method unsupported."');
+        }
+
+        $parameters = array(
+            'client_id'     => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
+        );
+
+        /* @var $response \Buzz\Message\Response */
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), 'DELETE');
+
+        return 200 === $response->getStatusCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function handles(Request $request)
     {
         return $request->query->has('code');
@@ -186,7 +212,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'use_commas_in_scope' => false,
+            'use_commas_in_scope'      => false,
+            'use_bearer_authorization' => true,
         ));
 
         $resolver->setOptional(array(
