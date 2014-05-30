@@ -30,12 +30,18 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        $url = $this->normalizeUrl($this->options['infos_url']);
+        if ($this->options['use_bearer_authorization']) {
+            $url = $this->normalizeUrl($this->options['infos_url']);
 
-        $content = $this->httpRequest($url, null, array('Authorization: Bearer '.$accessToken['access_token']))->getContent();
+            $content = $this->httpRequest($url, null, array('Authorization: Bearer '.$accessToken['access_token']));
+        } else {
+            $url = $this->normalizeUrl($this->options['infos_url'], array('access_token' => $accessToken['access_token']));
+
+            $content = $this->doGetUserInformationRequest($url);
+        }
 
         $response = $this->getUserResponse();
-        $response->setResponse($content);
+        $response->setResponse($content->getContent());
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
@@ -186,7 +192,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'use_commas_in_scope' => false,
+            'use_commas_in_scope'      => false,
+            'use_bearer_authorization' => true,
         ));
 
         $resolver->setOptional(array(
