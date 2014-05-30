@@ -49,22 +49,6 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function revokeToken($token)
-    {
-        $parameters = array(
-            'client_id'     => $this->options['client_id'],
-            'client_secret' => $this->options['client_secret'],
-        );
-
-        /* @var $response \Buzz\Message\Response */
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), 'DELETE');
-
-        return 200 === $response->getStatusCode();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     protected function configureOptions(OptionsResolverInterface $resolver)
     {
         parent::configureOptions($resolver);

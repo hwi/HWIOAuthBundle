@@ -120,6 +120,26 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
+    public function revokeToken($token)
+    {
+        if (!isset($this->options['revoke_token_url'])) {
+            throw new AuthenticationException('OAuth error: "Method unsupported."');
+        }
+
+        $parameters = array(
+            'client_id'     => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
+        );
+
+        /* @var $response \Buzz\Message\Response */
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), 'DELETE');
+
+        return 200 === $response->getStatusCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function handles(Request $request)
     {
         return $request->query->has('code');
