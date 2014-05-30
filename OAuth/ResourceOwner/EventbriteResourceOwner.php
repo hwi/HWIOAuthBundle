@@ -35,25 +35,6 @@ class EventbriteResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
-    {
-        $url = $this->normalizeUrl($this->getOption('infos_url'), array(
-            'access_token' => $accessToken['access_token']
-        ));
-
-        $content = $this->httpRequest($url, null, array('Authorization: Bearer '.$accessToken['access_token']))->getContent();
-
-        $response = $this->getUserResponse();
-        $response->setResponse($content);
-        $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
-
-        return $response;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, http_build_query($parameters, '', '&'), array(), HttpRequestInterface::METHOD_POST);
