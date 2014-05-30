@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -45,5 +46,21 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
             // Instagram supports authentication with only one defined URL
             'auth_with_one_url' => true,
         ));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    {
+        $url = $this->normalizeUrl($this->options['infos_url'], array('access_token' => $accessToken['access_token']));
+        $content = $this->httpRequest($url)->getContent();
+
+        $response = $this->getUserResponse();
+        $response->setResponse($content);
+        $response->setResourceOwner($this);
+        $response->setOAuthToken(new OAuthToken($accessToken));
+
+        return $response;
     }
 }
