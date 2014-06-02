@@ -241,15 +241,30 @@ class OAuthToken extends AbstractToken
      */
     public function unserialize($serialized)
     {
-        list(
-            $this->accessToken,
-            $this->rawToken,
-            $this->refreshToken,
-            $this->expiresIn,
-            $this->createdAt,
-            $this->resourceOwnerName,
-            $parent,
-        ) = unserialize($serialized);
+        $data = unserialize($serialized);
+        if (7 === count($data)) {
+            list(
+                $this->accessToken,
+                $this->rawToken,
+                $this->refreshToken,
+                $this->expiresIn,
+                $this->createdAt,
+                $this->resourceOwnerName,
+                $parent,
+            ) = $data;
+        } else {
+            // @deprecated Remove this in 0.5
+            list(
+                $this->accessToken,
+                $this->rawToken,
+                $this->refreshToken,
+                $this->expiresIn,
+                $this->resourceOwnerName,
+                $parent,
+            ) = $data;
+
+            $this->createdAt = time();
+        }
 
         if (!$this->tokenSecret && isset($this->rawToken['oauth_token_secret'])) {
             $this->tokenSecret = $this->rawToken['oauth_token_secret'];
