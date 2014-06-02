@@ -1,6 +1,9 @@
 Changelog
 =========
 
+## 0.3.6 (2014-06-02)
+* Fix: `InstagramResourceOwner` regression while getting user details
+
 ## 0.3.5 (2014-05-30)
 * Fix: `LinkedinResourceOwner` regression while getting user details,
 * Fix: OAuth `revoke` functionality to be available wider,
