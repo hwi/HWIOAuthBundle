@@ -38,12 +38,14 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url' => 'https://api.instagram.com/oauth/authorize',
-            'access_token_url'  => 'https://api.instagram.com/oauth/access_token',
-            'infos_url'         => 'https://api.instagram.com/v1/users/self',
+            'authorization_url'         => 'https://api.instagram.com/oauth/authorize',
+            'access_token_url'          => 'https://api.instagram.com/oauth/access_token',
+            'infos_url'                 => 'https://api.instagram.com/v1/users/self',
 
             // Instagram supports authentication with only one defined URL
-            'auth_with_one_url' => true,
+            'auth_with_one_url'        => true,
+
+            'use_bearer_authorization' => false,
         ));
     }
 }
