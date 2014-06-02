@@ -2,7 +2,8 @@ Changelog
 =========
 
 ## 0.3.6 (2014-06-02)
-* Fix: `InstagramResourceOwner` regression while getting user details
+* Fix: `InstagramResourceOwner` regression while getting user details,
+* Fix: Add smooth migration for session (de)serialization
 
 ## 0.3.5 (2014-05-30)
 * Fix: `LinkedinResourceOwner` regression while getting user details,
