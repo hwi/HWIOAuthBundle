@@ -199,7 +199,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     protected function normalizeUrl($url, array $parameters = array())
     {
-        $normalizedUrl  = $url;
+        $normalizedUrl = $url;
         if (!empty($parameters)) {
             $normalizedUrl .= (false !== strpos($url, '?') ? '&' : '?').http_build_query($parameters, '', '&');
         }
@@ -215,7 +215,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param array  $headers The headers of the request
      * @param string $method  The HTTP method to use
      *
-     * @return HttpMessageInterface The response content
+     * @return HttpResponse The response content
      */
     protected function httpRequest($url, $content = null, $headers = array(), $method = null)
     {

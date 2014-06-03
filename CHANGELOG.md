@@ -1,6 +1,10 @@
 Changelog
 =========
 
+## 0.3.7 (2014-06-xx)
+* Fix: `SessionStorage::save()` could throw php error,
+* Fix: `OAuthToken::isExpired()` always returned `false`
+
 ## 0.3.6 (2014-06-02)
 * Fix: `InstagramResourceOwner` regression while getting user details,
 * Fix: Add smooth migration for session (de)serialization
