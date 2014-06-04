@@ -18,6 +18,7 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
+ * @author Joseph Bielawski <stloyd@gmail.com>
  */
 class OAuthToken extends AbstractToken
 {
@@ -95,6 +96,8 @@ class OAuthToken extends AbstractToken
 
     /**
      * @param array|string $token The OAuth token
+     *
+     * @throws \InvalidArgumentException
      */
     public function setRawToken($token)
     {
@@ -103,6 +106,8 @@ class OAuthToken extends AbstractToken
                 $this->accessToken = $token['access_token'];
             } elseif (isset($token['oauth_token'])) {
                 $this->accessToken = $token['oauth_token'];
+            } else {
+                throw new \InvalidArgumentException('Access token was not found.');
             }
 
             if (isset($token['refresh_token'])) {
@@ -122,7 +127,7 @@ class OAuthToken extends AbstractToken
                 $this->tokenSecret = $token['oauth_token_secret'];
             }
 
-            $this->rawToken = $token;
+            $this->rawToken    = $token;
         } else {
             $this->accessToken = $token;
             $this->rawToken    = array('access_token' => $token);
@@ -171,6 +176,18 @@ class OAuthToken extends AbstractToken
     }
 
     /**
+     * @return integer
+     */
+    public function getExpiresAt()
+    {
+        if (null === $this->expiresIn) {
+            return null;
+        }
+
+        return $this->createdAt + $this->expiresIn;
+    }
+
+    /**
      * @param string $tokenSecret
      */
     public function setTokenSecret($tokenSecret)
@@ -197,7 +214,7 @@ class OAuthToken extends AbstractToken
             return false;
         }
 
-        return ($this->createdAt + ($this->expiresIn - time())) < 30;
+        return ($this->createdAt + $this->expiresIn - time()) < 30;
     }
 
     /**
