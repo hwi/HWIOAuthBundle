@@ -278,7 +278,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param string $url
      * @param array  $parameters
      *
-     * @return mixed
+     * @return HttpResponse
      */
     abstract protected function doGetTokenRequest($url, array $parameters = array());
 
@@ -286,7 +286,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param string $url
      * @param array  $parameters
      *
-     * @return mixed
+     * @return HttpResponse
      */
     abstract protected function doGetUserInformationRequest($url, array $parameters = array());
 
