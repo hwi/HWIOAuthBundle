@@ -19,7 +19,11 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         if (!interface_exists('FOS\UserBundle\Model\UserManagerInterface')) {
-            $this->markTestSkipped('FOSUserBundle is not available');
+            $this->markTestSkipped('FOSUserBundle is not available.');
+        }
+
+        if (!class_exists('Symfony\Component\PropertyAccess\PropertyAccess')) {
+            $this->markTestSkipped('Symfony PropertyAccess component is not available.');
         }
     }
 
@@ -72,7 +76,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Class 'HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser' should have a method 'setGoogleId'.
+     * @expectedExceptionMessage Class 'HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser' must have defined setter method for property: 'googleId'.
      */
     public function testConnectUserWithNoSetterThrowsException()
     {

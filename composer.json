@@ -77,6 +77,7 @@
 
     "require-dev": {
         "doctrine/orm":                 "~2.2",
+        "symfony/property-access":      "~2.3",
         "symfony/validator":            "~2.1",
         "symfony/twig-bundle":          "~2.1"
     },
@@ -84,6 +85,7 @@
     "suggest": {
         "doctrine/doctrine-bundle":     "to use Doctrine user provider",
         "friendsofsymfony/user-bundle": "to connect FOSUB with this bundle",
+        "symfony/property-access":      "to connect FOSUB with this bundle",
         "symfony/twig-bundle":          "to use the Twig hwi_oauth_* functions"
     },
 
