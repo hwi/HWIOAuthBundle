@@ -47,15 +47,11 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetInvalidResponse()
     {
         $this->responseObject->setResponse('not_json');
-        $this->responseObject->getResponse();
     }
 
     public function testGetSetResourceOwner()
     {
-        $resourceOwner = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $resourceOwner = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface');
 
         $this->responseObject->setResourceOwner($resourceOwner);
         $this->assertEquals($resourceOwner, $this->responseObject->getResourceOwner());
