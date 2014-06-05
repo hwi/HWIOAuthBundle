@@ -16,6 +16,7 @@ use FOS\UserBundle\Model\UserManagerInterface;
 use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -87,20 +88,21 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
         $property = $this->getProperty($response);
-        $setter = 'set'.ucfirst($property);
 
-        if (!method_exists($user, $setter)) {
-            throw new \RuntimeException(sprintf("Class '%s' should have a method '%s'.", get_class($user), $setter));
+        $accessor = PropertyAccess::createPropertyAccessor();
+        if (!$accessor->isWritable($user, $property)) {
+            throw new \RuntimeException(sprintf("Class '%s' must have defined setter method for property: '%s'.", get_class($user), $property));
         }
 
         $username = $response->getUsername();
 
         if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
-            $previousUser->$setter(null);
+            $accessor->setValue($previousUser, $property, null);
+
             $this->userManager->updateUser($previousUser);
         }
 
-        $user->$setter($username);
+        $accessor->setValue($user, $property, $username);
 
         $this->userManager->updateUser($user);
     }
