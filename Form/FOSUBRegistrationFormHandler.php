@@ -18,6 +18,7 @@ use FOS\UserBundle\Util\TokenGenerator;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -155,10 +156,11 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      */
     protected function setUserInformation(UserInterface $user, UserResponseInterface $userInformation)
     {
-        $user->setUsername($this->getUniqueUsername($userInformation->getNickname()));
+        $accessor = PropertyAccess::createPropertyAccessor();
+        $accessor->setValue($user, 'username', $this->getUniqueUserName($userInformation->getNickname()));
 
-        if (method_exists($user, 'setEmail')) {
-            $user->setEmail($userInformation->getEmail());
+        if ($accessor->isWritable($user, 'email')) {
+            $accessor->setValue($user, 'email', $userInformation->getEmail());
         }
 
         return $user;
