@@ -12,7 +12,10 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -27,7 +30,7 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
 {
     /**
-     * @var mixed
+     * @var ObjectManager
      */
     protected $em;
     
@@ -37,14 +40,16 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     protected $class;
 
     /**
-     * @var array
-     */
-    protected $properties;
-
-    /**
-     * @var mixed
+     * @var ObjectRepository
      */
     protected $repository;
+
+    /**
+     * @var array
+     */
+    protected $properties = array(
+        'identifier' => 'id',
+    );
 
     /**
      * Constructor.
@@ -56,10 +61,10 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
      */
     public function __construct(ManagerRegistry $registry, $class, array $properties, $managerName = null)
     {
-        $this->em = $registry->getManager($managerName);
+        $this->em         = $registry->getManager($managerName);
         $this->class      = $class;
         $this->repository = $this->em->getRepository($class);
-        $this->properties = $properties;
+        $this->properties = array_merge($this->properties, $properties);
     }
 
     /**
@@ -87,9 +92,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
         }
 
         $username = $response->getUsername();
-        $user = $this->repository->findOneBy(array($this->properties[$resourceOwnerName] => $username));
-
-        if (null === $user) {
+        if (null === $user = $this->repository->findOneBy(array($this->properties[$resourceOwnerName] => $username))) {
             throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
         }
 
@@ -101,13 +104,15 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
      */
     public function refreshUser(UserInterface $user)
     {
-        if (!$this->supportsClass(get_class($user))) {
+        $accessor   = PropertyAccess::createPropertyAccessor();
+        $identifier = $this->properties['identifier'];
+        if (!$this->supportsClass(get_class($user)) || !$accessor->isReadable($user, $identifier)) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
         }
 
-        $user = $this->repository->findOneBy(array('id' => $user->getId()));
-        if (!$user) {
-            throw new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $user->getId()));
+        $userId = $accessor->getValue($user, $identifier);
+        if (null === $user = $this->repository->findOneBy(array($identifier => $userId))) {
+            throw new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $userId));
         }
 
         return $user;
