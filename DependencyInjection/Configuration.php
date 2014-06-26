@@ -363,6 +363,7 @@ class Configuration implements ConfigurationInterface
                         ->booleanNode('verify_peer')->defaultTrue()->end()
                         ->scalarNode('max_redirects')->defaultValue(5)->cannotBeEmpty()->end()
                         ->booleanNode('ignore_errors')->defaultTrue()->end()
+                        ->scalarNode('proxy')->end()
                     ->end()
                 ->end()
             ->end()
