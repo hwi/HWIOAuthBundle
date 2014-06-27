@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
     private static $resourceOwners = array(
         'oauth2' => array(
             'amazon',
+            'auth0',
             'bitly',
             'box',
             'dailymotion',
@@ -188,6 +189,7 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->scalarNode('client_id')->cannotBeEmpty()->end()
                             ->scalarNode('client_secret')->cannotBeEmpty()->end()
+                            ->scalarNode('domain')->end()
                             ->scalarNode('realm')
                                 ->validate()
                                     ->ifTrue(function($v) {
