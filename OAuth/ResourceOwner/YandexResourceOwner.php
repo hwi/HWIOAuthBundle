@@ -27,6 +27,7 @@ class YandexResourceOwner extends GenericOAuth2ResourceOwner
         'identifier' => 'id',
         'nickname'   => 'display_name',
         'realname'   => 'real_name',
+        'email'      => 'default_email',
     );
 
     /**
