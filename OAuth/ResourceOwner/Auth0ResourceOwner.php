@@ -38,7 +38,6 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        \error_log('doGetTokenRequest options: ' . print_r($this->options,true));
 
         $headers = array(
             'content-type' => 'application/x-www-form-urlencoded'
@@ -54,7 +53,6 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     protected function configureOptions(OptionsResolverInterface $resolver)
     {
         parent::configureOptions($resolver);
-        \error_log('Configure options: ' . print_r($this->options,true));
         $resolver->setDefaults(array(
             'authorization_url'   => 'https://%%domain%%/authorize',
             'access_token_url'    => 'https://%%domain%%/oauth/token',
