@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Message\Response;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 
@@ -40,9 +41,9 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     {
 
         $headers = array(
-            'content-type' => 'application/x-www-form-urlencoded'
+            'Content-Type' => 'application/x-www-form-urlencoded'
         );
-        // implode('', $content)
+
         return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers, HttpRequestInterface::METHOD_POST);
     }
 
@@ -54,24 +55,24 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://%%domain%%/authorize',
-            'access_token_url'    => 'https://%%domain%%/oauth/token',
             'domain'              => 'example.auth0.com',
-            'infos_url'           => 'https://%%domain%%/userinfo',
+            'authorization_url'   => 'https://{domain}/authorize',
+            'access_token_url'    => 'https://{domain}/oauth/token',
+            'infos_url'           => 'https://{domain}/userinfo',
         ));
 
-        $domainReplacer = function ($options, $value) {
-            if (!$value) {
-                return null;
-            }
+        $resolver->setRequired(array(
+            'domain',
+        ));
 
-            return str_replace('%%domain%%', $options['domain'], $value);
+        $normalizer = function (Options $options, $value) {
+            return str_replace('{domain}', $options['domain'], $value);
         };
 
         $resolver->setNormalizers(array(
-            'authorization_url' => $domainReplacer,
-            'access_token_url' => $domainReplacer,
-            'infos_url' => $domainReplacer,
+            'authorization_url' => $normalizer,
+            'access_token_url'  => $normalizer,
+            'infos_url'         => $normalizer,
         ));
     }
 }
