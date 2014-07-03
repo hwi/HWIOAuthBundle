@@ -50,6 +50,13 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
+        $options = array_merge(
+            array(
+                'base_url' => 'https://example.oauth0.com'
+            ),
+            $options
+        );
+
         return new Auth0ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }
