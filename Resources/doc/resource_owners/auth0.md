@@ -14,7 +14,7 @@ hwi_oauth:
             type:           auth0
             client_id:      <client_id>
             client_secret:  <client_secret>
-            domain:         <domain>
+            base_url:       https://<domain>
             scope:          <scope>
 ```
 

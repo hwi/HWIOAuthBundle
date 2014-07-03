@@ -8,6 +8,7 @@ The HWIOAuthBundle adds support for authenticating users via OAuth1.0a or OAuth2
 This bundle contains support for 20+ different providers:
 * 37signals,
 * Amazon,
+* Auth0,
 * Bitbucket,
 * Bitly,
 * Box,
