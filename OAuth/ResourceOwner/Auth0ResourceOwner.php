@@ -55,18 +55,17 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults(array(
-            'domain'              => 'example.auth0.com',
-            'authorization_url'   => 'https://{domain}/authorize',
-            'access_token_url'    => 'https://{domain}/oauth/token',
-            'infos_url'           => 'https://{domain}/userinfo',
+            'authorization_url'   => '{base_url}/authorize',
+            'access_token_url'    => '{base_url}/oauth/token',
+            'infos_url'           => '{base_url}/userinfo',
         ));
 
         $resolver->setRequired(array(
-            'domain',
+            'base_url',
         ));
 
         $normalizer = function (Options $options, $value) {
-            return str_replace('{domain}', $options['domain'], $value);
+            return str_replace('{base_url}', $options['base_url'], $value);
         };
 
         $resolver->setNormalizers(array(

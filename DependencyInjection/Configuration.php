@@ -189,7 +189,6 @@ class Configuration implements ConfigurationInterface
                             ->end()
                             ->scalarNode('client_id')->cannotBeEmpty()->end()
                             ->scalarNode('client_secret')->cannotBeEmpty()->end()
-                            ->scalarNode('domain')->end()
                             ->scalarNode('realm')
                                 ->validate()
                                     ->ifTrue(function($v) {
