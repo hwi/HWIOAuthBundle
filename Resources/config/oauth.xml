@@ -17,6 +17,7 @@
         <parameter key="hwi_oauth.resource_owner.oauth2.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner</parameter>
 
         <parameter key="hwi_oauth.resource_owner.amazon.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AmazonResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.auth0.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\Auth0ResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.bitbucket.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitbucketResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.bitly.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitlyResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.box.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BoxResourceOwner</parameter>
