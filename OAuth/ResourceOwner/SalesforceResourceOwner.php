@@ -25,10 +25,10 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier' => 'user_id',
-        'nickname'   => 'nick_name',
-        'realname'   => 'nick_name',
-        'email'      => 'email',
+        'identifier'     => 'user_id',
+        'nickname'       => 'nick_name',
+        'realname'       => 'nick_name',
+        'email'          => 'email',
         'profilepicture' => 'photos.picture',
     );
 
@@ -71,10 +71,10 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
             'access_token_url'  => 'https://login.salesforce.com/services/oauth2/token',
 
             // @see SalesforceResourceOwner::getUserInformation()
-            'infos_url' => null,
+            'infos_url'         => null,
 
             // @see SalesforceResourceOwner::doGetUserInformationRequest()
-            'format' => 'json',
+            'format'            => 'json',
         ));
     }
 

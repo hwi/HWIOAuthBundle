@@ -36,9 +36,7 @@ class YandexResourceOwner extends GenericOAuth2ResourceOwner
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         // Yandex require to pass the OAuth token as 'oauth_token' instead of 'access_token'
-        $url = str_replace('access_token', 'oauth_token', $url);
-
-        return $this->httpRequest($url);
+        return $this->httpRequest(str_replace('access_token', 'oauth_token', $url));
     }
 
     /**

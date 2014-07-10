@@ -48,6 +48,7 @@ class Configuration implements ConfigurationInterface
             'mailru',
             'odnoklassniki',
             'qq',
+            'reddit',
             'salesforce',
             'sensio_connect',
             'sina_weibo',
@@ -59,7 +60,6 @@ class Configuration implements ConfigurationInterface
             'wordpress',
             'yandex',
             '37signals',
-            'reddit'
         ),
         'oauth1' => array(
             'bitbucket',
