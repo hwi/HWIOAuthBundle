@@ -11,23 +11,21 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Buzz\Message\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * BitlyResourceOwner
+ * BufferAppResourceOwner
  *
- * @author Joseph Bielawski <stloyd@gmail.com>
+ * @author João Paulo Cercal <sistemas@cekurte.com>
  */
-class BitlyResourceOwner extends GenericOAuth2ResourceOwner
+class BufferAppResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier'     => 'data.login',
-        'nickname'       => 'data.display_name',
-        'realname'       => 'data.full_name',
-        'profilepicture' => 'data.profile_image',
+        'identifier'     => 'id',
     );
 
     /**
@@ -38,9 +36,9 @@ class BitlyResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url' => 'https://bitly.com/oauth/authorize',
-            'access_token_url'  => 'https://api-ssl.bitly.com/oauth/access_token',
-            'infos_url'         => 'https://api-ssl.bitly.com/v3/user/info?format=json',
+            'authorization_url'   => 'https://bufferapp.com/oauth2/authorize',
+            'access_token_url'    => 'https://api.bufferapp.com/1/oauth2/token.json',
+            'infos_url'           => 'https://api.bufferapp.com/1/user.json',
         ));
     }
 }

@@ -1,18 +1,18 @@
-Step 2x: Setup Dropbox
-======================
-First you will have to register your application on Dropbox. Check out the
-documentation for more information: https://www.dropbox.com/developers/apps.
+Step 2x: Setup GitHub
+=====================
+First you will have to register your application on BufferApp. Check out the
+documentation for more information: https://bufferapp.com/developers/api/.
 
-Next configure a resource owner of type `dropbox` with appropriate
-`client_id`, `client_secret`.
+Next configure a resource owner of type `bufferapp` with appropriate
+`client_id` and `client_secret`. Refer to the BufferApp to more information.
 
 ```yaml
 # app/config/config.yml
 
 hwi_oauth:
     resource_owners:
-        dropbox:
-            type:                dropbox
+        any_name:
+            type:                bufferapp
             client_id:           <client_id>
             client_secret:       <client_secret>
 ```
