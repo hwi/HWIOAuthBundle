@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -25,7 +24,10 @@ class BufferAppResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
+        'identifier'    => 'id',
+        'email'         => 'id',
+        'nickname'      => 'id',
+        'realname'      => 'id',
     );
 
     /**
