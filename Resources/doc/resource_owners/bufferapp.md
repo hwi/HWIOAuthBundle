@@ -1,4 +1,4 @@
-Step 2x: Setup GitHub
+Step 2x: Setup BufferApp
 =====================
 First you will have to register your application on BufferApp. Check out the
 documentation for more information: https://bufferapp.com/developers/api/.
