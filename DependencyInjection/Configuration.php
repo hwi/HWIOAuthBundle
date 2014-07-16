@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
             'auth0',
             'bitly',
             'box',
+            'bufferapp',
             'dailymotion',
             'deviantart',
             'disqus',
