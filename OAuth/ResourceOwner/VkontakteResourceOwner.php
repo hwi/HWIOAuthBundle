@@ -53,7 +53,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         $response->setResponse($content);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
-        
+
         if (isset($accessToken['email'])) {
             $content = $response->getResponse();
             $content['email'] = $accessToken['email'];
