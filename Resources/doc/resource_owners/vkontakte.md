@@ -1,11 +1,11 @@
 Step 2x: Setup Vkontakte
 ========================
 First you will have to register your application on Vkontakte. Check out the
-documentation for more information: http://vk.com/developers.php.
+documentation for more information: https://vk.com/dev.
 
 Next configure a resource owner of type `vkontakte` with appropriate
 `client_id`, `client_secret` and `scope`. Refer to the Vkontakte documentation
-for the available [scopes](http://vk.com/developers.php?oid=-17680044&p=Application_Access_Rights).
+for the available [scopes](https://vk.com/dev/permissions).
 
 ```yaml
 # app/config/config.yml
