@@ -12,6 +12,10 @@ Next configure a resource owner of type `twitter` with appropriate
 # app/config/config.yml
 
 hwi_oauth:
+    # name of the firewall in which this bundle is active, this setting MUST be set
+    firewall_name: secured_area
+    # here you will add one (or more) configurations for resource owners
+    # and other settings you want to adjust in this bundle, just checkout the list below!
     resource_owners:
         any_name:
             type:                twitter
