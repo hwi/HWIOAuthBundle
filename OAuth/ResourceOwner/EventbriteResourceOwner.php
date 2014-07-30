@@ -48,9 +48,11 @@ class EventbriteResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url' => 'https://www.eventbrite.com/oauth/authorize',
-            'access_token_url'  => 'https://www.eventbrite.com/oauth/token',
-            'infos_url'         => 'https://www.eventbrite.com/json/user_get',
+            'authorization_url'        => 'https://www.eventbrite.com/oauth/authorize',
+            'access_token_url'         => 'https://www.eventbrite.com/oauth/token',
+            'infos_url'                => 'https://www.eventbrite.com/json/user_get',
+
+            'use_bearer_authorization' => true,
         ));
     }
 }
