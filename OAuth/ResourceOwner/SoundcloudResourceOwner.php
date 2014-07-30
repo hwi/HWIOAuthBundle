@@ -38,11 +38,12 @@ class SoundcloudResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'access_token_url'  => 'https://api.soundcloud.com/oauth2/token',
-            'authorization_url' => 'https://soundcloud.com/connect',
-            'infos_url'         => 'https://api.soundcloud.com/me.json',
+            'access_token_url'         => 'https://api.soundcloud.com/oauth2/token',
+            'authorization_url'        => 'https://soundcloud.com/connect',
+            'infos_url'                => 'https://api.soundcloud.com/me.json',
 
-            'scope'             => 'non-expiring'
+            'use_bearer_authorization' => true,
+            'scope'                    => 'non-expiring',
         ));
     }
 }
