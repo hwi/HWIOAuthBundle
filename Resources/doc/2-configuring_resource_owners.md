@@ -40,6 +40,7 @@ hwi_oauth:
 - [Bitbucket](resource_owners/bitbucket.md)
 - [Bitly](resource_owners/bitly.md)
 - [DeviantArt](resource_owners/deviantart.md)
+- [Discogs](resource_owners/discogs.md)
 - [Disqus](resource_owners/disqus.md)
 - [Dropbox](resource_owners/dropbox.md)
 - [Eventbrite](resource_owners/eventbrite.md)
