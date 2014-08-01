@@ -146,7 +146,8 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     }
 
     /**
-     * Set user information from form
+     * Set user information from form 
+     * and takes paths into account for mapping
      *
      * @param UserInterface         $user
      * @param UserResponseInterface $userInformation
@@ -155,12 +156,16 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      */
     protected function setUserInformation(UserInterface $user, UserResponseInterface $userInformation)
     {
-        $user->setUsername($this->getUniqueUsername($userInformation->getNickname()));
-
-        if (method_exists($user, 'setEmail')) {
-            $user->setEmail($userInformation->getEmail());
+        foreach($userInformation->getPaths() as $path => $source){
+            $func = 'set'.ucfirst($path);
+            if(method_exists($user, $func)){
+                $value = $userInformation->getValueForPath($path);
+                if($path == 'username'){
+                    $value = $this->getUniqueUsername($value);
+                }
+                $user->$func($value);
+            }
         }
-
         return $user;
     }
 }

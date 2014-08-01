@@ -108,7 +108,7 @@ class PathUserResponse extends AbstractUserResponse
      *
      * @return null|string
      */
-    protected function getValueForPath($path)
+    public function getValueForPath($path)
     {
         $response = $this->response;
         if (!$response) {
