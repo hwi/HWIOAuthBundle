@@ -55,6 +55,34 @@ interface UserResponseInterface extends ResponseInterface
     public function getEmail();
 
     /**
+     * Get the first name.
+     *
+     * @return null|string
+     */
+    public function getFirstName();
+
+    /**
+     * Get the last name.
+     *
+     * @return null|string
+     */
+    public function getLastName();
+
+    /**
+     * Get the gender.
+     *
+     * @return null|string
+     */
+    public function getGender();
+
+    /**
+     * Get the locale.
+     *
+     * @return null|string
+     */
+    public function getLocale();
+
+    /**
      * Get the url to the profile picture.
      *
      * @return null|string

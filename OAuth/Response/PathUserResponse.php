@@ -29,6 +29,10 @@ class PathUserResponse extends AbstractUserResponse
         'realname'       => null,
         'email'          => null,
         'profilepicture' => null,
+        'firstname'      => null,
+        'lastname'       => null,
+        'gender'         => null,
+        'locale'         => null,
     );
 
     /**
@@ -61,6 +65,38 @@ class PathUserResponse extends AbstractUserResponse
     public function getEmail()
     {
         return $this->getValueForPath('email');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFirstName()
+    {
+        return $this->getValueForPath('firstname');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastName()
+    {
+        return $this->getValueForPath('lastname');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGender()
+    {
+        return $this->getValueForPath('gender');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLocale()
+    {
+        return $this->getValueForPath('locale');
     }
 
     /**

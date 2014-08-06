@@ -29,6 +29,10 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         'nickname'   => 'username',
         'realname'   => 'name',
         'email'      => 'email',
+        'firstname'  => 'first_name',
+        'lastname'   => 'last_name',
+        'gender'     => 'gender',
+        'locale'     => 'locale',
     );
 
     /**
