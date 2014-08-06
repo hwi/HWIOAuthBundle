@@ -54,8 +54,7 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
     {
         $resourceOwner = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
 
         $this->responseObject->setResourceOwner($resourceOwner);
         $this->assertEquals($resourceOwner, $this->responseObject->getResourceOwner());
@@ -64,11 +63,15 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
     public function testGetPathsReturnsDefaultDefinedPaths()
     {
         $paths = array(
-            'identifier'     => null,
-            'nickname'       => null,
-            'realname'       => null,
-            'email'          => null,
+            'identifier' => null,
+            'nickname' => null,
+            'realname' => null,
+            'email' => null,
             'profilepicture' => null,
+            'firstname' => null,
+            'lastname' => null,
+            'gender' => null,
+            'locale' => null,
         );
 
         $this->assertEquals($paths, $this->responseObject->getPaths());
@@ -77,12 +80,16 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetPathsAddsNewPathsToAlreadyDefined()
     {
         $paths = array(
-            'identifier'     => null,
-            'nickname'       => null,
-            'realname'       => null,
-            'email'          => null,
+            'identifier' => null,
+            'nickname' => null,
+            'realname' => null,
+            'email' => null,
             'profilepicture' => null,
-            'foo'            => 'bar'
+            'firstname' => null,
+            'lastname' => null,
+            'gender' => null,
+            'locale' => null,
+            'foo' => 'bar'
         );
 
         $responseObject = new PathUserResponse();
@@ -133,6 +140,47 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
         $this->responseObject->setResponse(json_encode(array('foo' => 'bar')));
 
         $this->assertEquals('bar', $this->responseObject->getRealName());
+    }
+
+    public function testGetFirstName()
+    {
+        $paths = array('firstname' => 'foo');
+
+        $this->responseObject->setPaths($paths);
+        $this->responseObject->setResponse(json_encode(array('foo' => 'bar')));
+
+        $this->assertEquals('bar', $this->responseObject->getFirstName());
+        $this->assertNotEquals('foo', $this->responseObject->getFirstName());
+    }
+
+    public function testGetLastName()
+    {
+        $paths = array('lastname' => 'foo');
+        $this->responseObject->setPaths($paths);
+        $this->responseObject->setResponse(json_encode(array('foo' => 'bar')));
+
+        $this->assertEquals('bar', $this->responseObject->getLastName());
+        $this->assertNotEquals('foo', $this->responseObject->getLastName());
+    }
+
+    public function testGetGender()
+    {
+        $paths = array('gender' => 'foo');
+        $this->responseObject->setPaths($paths);
+        $this->responseObject->setResponse(json_encode(array('foo' => 'male')));
+
+        $this->assertEquals('male', $this->responseObject->getGender());
+        $this->assertNotEquals('female', $this->responseObject->getGender());
+    }
+
+    public function testGetLocale()
+    {
+        $paths = array('locale' => 'foo');
+        $this->responseObject->setPaths($paths);
+        $this->responseObject->setResponse(json_encode(array('foo' => 'bar')));
+
+        $this->assertEquals('bar', $this->responseObject->getLocale());
+        $this->assertNotEquals('foo', $this->responseObject->getLocale());
     }
 
     public function testGetIdentifierInvalidPathReturnsNull()

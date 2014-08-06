@@ -48,6 +48,38 @@ abstract class AbstractUserResponse implements UserResponseInterface
     /**
      * {@inheritdoc}
      */
+    public function getFirstName()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastName()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getGender()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLocale()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getProfilePicture()
     {
         return null;

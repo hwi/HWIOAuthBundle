@@ -29,6 +29,10 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
         'nickname'       => 'name',
         'realname'       => 'name',
         'email'          => 'email',
+        'firstname'      => 'given_name',
+        'lastname'       => 'family_name',
+        'gender'         => 'gender',
+        'locale'         => 'locale',
         'profilepicture' => 'picture',
     );
 
