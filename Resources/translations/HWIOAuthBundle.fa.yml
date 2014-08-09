@@ -1,0 +1,14 @@
+header:
+    connecting: در حال برقراری ارتباط
+    success: ارتباط با حساب '%name%' با موفقیت برقرار شد!
+    register: با حساب '%name%' ثبت نام کنید
+    registration_success: ثبت با با موفقیت انجام شد و به حساب '%username%' متصل شد!
+
+connect:
+    confirm:
+        cancel: انصراف
+        submit: متصل کردن حساب
+        text: آیا مطمئن هستید که می‌خواهید حساب %service% با نام '%name%' را به حساب کنونی خود متصل کنید?
+    registration:
+        cancel: انصراف
+        submit: ثبت نام
