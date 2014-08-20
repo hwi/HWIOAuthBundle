@@ -88,8 +88,8 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
 
             // @link https://developer.foursquare.com/overview/versioning
             'version'           => '20121206',
-			
-			'use_bearer_authorization' => false,
+
+            'use_bearer_authorization' => false,
         ));
     }
 }
