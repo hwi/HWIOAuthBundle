@@ -38,6 +38,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 
         $response = $this->getUserResponse();
         $response->setResponse($content->getContent());
+
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
