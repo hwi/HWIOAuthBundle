@@ -12,3 +12,4 @@ connect:
     registration:
         cancel: Anuluj
         submit: Zarejestruj konto
+    error: Wystąpił błąd

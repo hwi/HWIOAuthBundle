@@ -12,3 +12,4 @@ connect:
     registration:
         cancel: Cancel
         submit: Register account
+    error: Something went wrong.

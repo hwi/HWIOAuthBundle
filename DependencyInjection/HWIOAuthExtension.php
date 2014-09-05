@@ -58,6 +58,9 @@ class HWIOAuthExtension extends Extension
         // set target path parameter
         $container->setParameter('hwi_oauth.target_path_parameter', $config['target_path_parameter']);
 
+        // set error path parameter
+        $container->setParameter('hwi_oauth.error_path_parameter', $config['error_path_parameter']);
+
         // set use referer parameter
         $container->setParameter('hwi_oauth.use_referer', $config['use_referer']);
 

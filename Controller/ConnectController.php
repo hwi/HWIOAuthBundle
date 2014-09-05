@@ -183,6 +183,16 @@ class ConnectController extends ContainerAware
             $accessToken = $session->get('_hwi_oauth.connect_confirmation.'.$key);
         }
 
+        if ($accessToken === null) {
+            $this->container->get("session")->getFlashBag()->add("error", $this->container->get("translator")->trans("connect.error", array(), 'HWIOAuthBundle'));
+            $route = $this->container->getParameter('hwi_oauth.error_path_parameter');
+            if ($route) {
+                return new RedirectResponse($this->generate($route));
+            } else {
+                return new RedirectResponse("/");
+            }
+        }
+
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
         // Show confirmation page?
