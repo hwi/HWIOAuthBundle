@@ -25,7 +25,6 @@ class BufferAppResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier'    => 'id',
-        'email'         => 'id',
         'nickname'      => 'id',
         'realname'      => 'id',
     );
