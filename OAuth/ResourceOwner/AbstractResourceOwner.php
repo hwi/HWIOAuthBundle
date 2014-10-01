@@ -226,17 +226,9 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $request  = new HttpRequest($method, $url);
         $response = new HttpResponse();
 
-        $contentLength = 0;
-        if (is_string($content)) {
-            $contentLength = strlen($content);
-        } elseif (is_array($content)) {
-            $contentLength = strlen(implode('', $content));
-        }
-
         $headers = array_merge(
             array(
                 'User-Agent: HWIOAuthBundle (https://github.com/hwi/HWIOAuthBundle)',
-                'Content-Length: ' . $contentLength,
             ),
             $headers
         );
