@@ -3,7 +3,7 @@ Step 2x: Setup Trello
 First you will have to register your application on Trello. Check out the
 documentation for more information: https://trello.com/docs/gettingstarted/authorize.html.
 
-Next configure a resource owner of type `amazon` with appropriate
+Next configure a resource owner of type `trello` with appropriate
 `client_id`, `client_secret` and `scope`.
 
 ```yaml
