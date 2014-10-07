@@ -60,6 +60,7 @@ class Configuration implements ConfigurationInterface
             'wordpress',
             'yandex',
             '37signals',
+        	'eve',
         ),
         'oauth1' => array(
             'bitbucket',
