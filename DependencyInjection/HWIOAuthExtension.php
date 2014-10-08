@@ -36,13 +36,13 @@ class HWIOAuthExtension extends Extension
         $loader->load('oauth.xml');
         $loader->load('templating.xml');
         $loader->load('twig.xml');
-        $loader->load('buzz.xml');
+        $loader->load('http_client.xml');
 
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
-        // setup buzz client settings
-        $httpClient = $container->getDefinition('buzz.client');
+        // setup http client settings
+        $httpClient = $container->getDefinition('hwi_oauth.http_client');
         $httpClient->addMethodCall('setVerifyPeer', array($config['http_client']['verify_peer']));
         $httpClient->addMethodCall('setTimeout', array($config['http_client']['timeout']));
         $httpClient->addMethodCall('setMaxRedirects', array($config['http_client']['max_redirects']));
@@ -50,7 +50,6 @@ class HWIOAuthExtension extends Extension
         if (isset($config['http_client']['proxy']) && $config['http_client']['proxy'] != '') {
             $httpClient->addMethodCall('setProxy', array($config['http_client']['proxy']));
         }
-        $container->setDefinition('hwi_oauth.http_client', $httpClient);
 
         // set current firewall
         $container->setParameter('hwi_oauth.firewall_name', $config['firewall_name']);
