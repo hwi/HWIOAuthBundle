@@ -37,10 +37,10 @@ class EveResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url' => 'https://sisilogin.testeveonline.com/oauth/authorize',
-            'access_token_url'  => 'https://sisilogin.testeveonline.com/oauth/token',
-            'infos_url'         => 'https://sisilogin.testeveonline.com/oauth/verify',
-        	'csrf'				=> true
+            'authorization_url' => 'https://login.eveonline.com/oauth/authorize',
+            'access_token_url'  => 'https://login.eveonline.com/oauth/token',
+            'infos_url'         => 'https://login.eveonline.com/oauth/verify',
+            'csrf'              => true
         ));
     }
 }

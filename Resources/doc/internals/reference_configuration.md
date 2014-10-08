@@ -33,6 +33,11 @@ hwi_oauth:
             client_secret:       <client_secret>
             scope:               ""
 
+        eve:
+            type:                eve
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+
         my_custom_oauth2:
             type:                oauth2
             client_id:           <client_id>

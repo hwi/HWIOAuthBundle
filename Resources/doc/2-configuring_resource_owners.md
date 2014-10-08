@@ -69,6 +69,7 @@ hwi_oauth:
 - [Windows Live](resource_owners/windows_live.md)
 - [Yahoo](resource_owners/yahoo.md)
 - [Yandex](resource_owners/yandex.md)
+- [EVE Online] (resource_owners/eve.md)
 - [Others](resource_owners/others.md)
 
 ### Continue to the next step!

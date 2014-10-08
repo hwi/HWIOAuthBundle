@@ -41,6 +41,7 @@ This bundle contains support for 20+ different providers:
 * Wordpress,
 * Yahoo,
 * Yandex
+* EVE Online
 
 > __Note__: this bundle adds easy way to implement any of OAuth1.0a or OAuth2 provider!
 
