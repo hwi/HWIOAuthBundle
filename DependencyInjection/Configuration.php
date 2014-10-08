@@ -55,6 +55,7 @@ class Configuration implements ConfigurationInterface
             'soundcloud',
             'stack_exchange',
             'twitch',
+            'vend',
             'vkontakte',
             'windows_live',
             'wordpress',
