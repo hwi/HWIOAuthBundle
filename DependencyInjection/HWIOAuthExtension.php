@@ -42,7 +42,7 @@ class HWIOAuthExtension extends Extension
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
         // setup buzz client settings
-        $httpClient = $container->getDefinition('buzz.client');
+        $httpClient = clone $container->getDefinition('buzz.client');
         $httpClient->addMethodCall('setVerifyPeer', array($config['http_client']['verify_peer']));
         $httpClient->addMethodCall('setTimeout', array($config['http_client']['timeout']));
         $httpClient->addMethodCall('setMaxRedirects', array($config['http_client']['max_redirects']));
