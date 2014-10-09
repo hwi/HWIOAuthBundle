@@ -27,7 +27,7 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
         'identifier'     => 'id_str',
         'nickname'       => 'screen_name',
         'realname'       => 'name',
-        'profilepicture' => 'profile_image_url',
+        'profilepicture' => 'profile_image_url_https',
     );
 
     /**
