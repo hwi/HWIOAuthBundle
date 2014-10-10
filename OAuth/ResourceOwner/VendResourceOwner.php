@@ -43,9 +43,11 @@ class VendResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        return $this->httpRequest(sprintf($url, $this->options['retailer']));
+        $this->options['infos_url'] = sprintf($this->options['infos_url'], $this->options['retailer']);
+
+        return parent::getUserInformation($accessToken, $extraParameters);
     }
 
     /**
