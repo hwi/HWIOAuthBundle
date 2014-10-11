@@ -17,12 +17,8 @@ class EveOnlineResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = <<<json
 {
-    "CharacterID": "273042051",
-    "CharacterName": "CCP illurkall",
-    "ExpiresOn": "2014-05-23T15:01:15.182864Z",
-    "Scopes": " ",
-    "TokenType": "Character",
-    "CharacterOwnerHash": "XM4D...FoY="
+    "CharacterID": "1",
+    "CharacterName": "bar"
 }
 json;
 
