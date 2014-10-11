@@ -42,6 +42,7 @@ hwi_oauth:
 - [DeviantArt](resource_owners/deviantart.md)
 - [Disqus](resource_owners/disqus.md)
 - [Dropbox](resource_owners/dropbox.md)
+- [EVE Online] (resource_owners/eve.md)
 - [Eventbrite](resource_owners/eventbrite.md)
 - [Facebook](resource_owners/facebook.md)
 - [Flickr](resource_owners/flickr.md)

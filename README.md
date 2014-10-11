@@ -16,6 +16,7 @@ This bundle contains support for 20+ different providers:
 * DeviantArt,
 * Disqus,
 * Dropbox,
+* EVE Online,
 * Facebook,
 * Flickr,
 * Foursquare,
