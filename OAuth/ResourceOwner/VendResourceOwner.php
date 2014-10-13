@@ -13,10 +13,10 @@ class VendResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier' => 'id',
-        'nickname'   => 'domain_prefix',
-        'realname'   => 'name',
-        'email'      => 'domain_prefix'
+        'identifier' => 'data.id',
+        'nickname'   => 'data.name',
+        'realname'   => 'data.name',
+        'email'      => 'data.domain_prefix'
     );
 
     /**
