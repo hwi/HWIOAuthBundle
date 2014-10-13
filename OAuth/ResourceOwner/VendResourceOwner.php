@@ -20,16 +20,11 @@ class VendResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * @var string Retailer name
+     * @param $domainPrefix
      */
-    protected $retailer;
-
-    /**
-     * @param $retailer
-     */
-    public function setRetailer($retailer)
+    public function setDomainPrefix($domainPrefix)
     {
-        $this->options['retailer'] = $retailer;
+        $this->options['domain_prefix'] = $domainPrefix;
     }
 
     /**
@@ -37,7 +32,7 @@ class VendResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest(sprintf($url, $this->options['retailer']), http_build_query($parameters, '', '&'));
+        return $this->httpRequest(sprintf($url, $this->options['domain_prefix']), http_build_query($parameters, '', '&'));
     }
 
     /**
@@ -45,7 +40,7 @@ class VendResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        $this->options['infos_url'] = sprintf($this->options['infos_url'], $this->options['retailer']);
+        $this->options['infos_url'] = sprintf($this->options['infos_url'], $this->options['domain_prefix']);
 
         return parent::getUserInformation($accessToken, $extraParameters);
     }
