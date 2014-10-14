@@ -13,7 +13,7 @@ for the available scopes.
 hwi_oauth:
     resource_owners:
         any_name:
-            type:                eve
+            type:                eve_online
             client_id:           <client_id>
             client_secret:       <client_secret>
 ```
@@ -25,7 +25,7 @@ Optionally, for authenticating to EVE online test servers, you can override endp
 hwi_oauth:
     resource_owners:
         any_name:
-            type:                eve
+            type:                eve_online
             client_id:           <client_id>
             client_secret:       <client_secret>
             authorization_url:  https://sisilogin.testeveonline.com/oauth/authorize

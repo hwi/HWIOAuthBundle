@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
             'dailymotion',
             'deviantart',
             'disqus',
-            'eve',
+            'eve_online',
             'eventbrite',
             'facebook',
             'foursquare',
