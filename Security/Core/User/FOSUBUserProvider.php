@@ -123,7 +123,7 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
             throw new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $user->getId()));
         }
 
-        return $user;
+        return $reloadedUser;
     }
 
     /**
