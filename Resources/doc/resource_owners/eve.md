@@ -25,11 +25,11 @@ hwi_oauth:
     resource_owners:
         any_name:
             type:          eve
-            client_id:     <client_id>
-            client_secret: <client_secret>
-            authorization_url: https://sisilogin.testeveonline.com/oauth/authorize,
-            access_token_url: https://sisilogin.testeveonline.com/oauth/token,
-            infos_url: https://sisilogin.testeveonline.com/oauth/verify,
+            client_id:     "<client_id>"
+            client_secret: "<client_secret>"
+            authorization_url: "https://sisilogin.testeveonline.com/oauth/authorize"
+            access_token_url: "https://sisilogin.testeveonline.com/oauth/token"
+            infos_url: "https://sisilogin.testeveonline.com/oauth/verify"
 ```
 
 
