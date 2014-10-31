@@ -95,4 +95,11 @@ interface UserResponseInterface extends ResponseInterface
      * @param OAuthToken $token
      */
     public function setOAuthToken(OAuthToken $token);
+    
+    /**
+     * Get the raw token data from the request.
+     *
+     * @return array
+     */
+    public function getRawToken();
 }

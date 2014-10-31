@@ -88,6 +88,14 @@ abstract class AbstractUserResponse implements UserResponseInterface
     /**
      * {@inheritdoc}
      */
+    public function getRawToken()
+    {
+        return $this->oAuthToken->getRawToken();
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
     public function setOAuthToken(OAuthToken $token)
     {
         $this->oAuthToken = $token;
