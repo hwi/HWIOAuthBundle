@@ -42,7 +42,7 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     protected $userResponse = <<<json
 {
-    "id":  "1"
+    "id":  "1",
     "foo": "bar"
 }
 json;
