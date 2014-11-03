@@ -67,6 +67,7 @@ hwi_oauth:
 - [Twitter] (resource_owners/twitter.md)
 - [Vkontakte](resource_owners/vkontakte.md)
 - [Windows Live](resource_owners/windows_live.md)
+- [XING](resource_owners/xing.md)
 - [Yahoo](resource_owners/yahoo.md)
 - [Yandex](resource_owners/yandex.md)
 - [Others](resource_owners/others.md)
