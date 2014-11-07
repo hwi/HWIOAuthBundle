@@ -27,6 +27,7 @@ This bundle contains support for 20+ different providers:
 * LinkedIn,
 * Mail.ru
 * Odnoklassniki,
+* PayPal,
 * QQ,
 * Salesforce,
 * Sensio Connect,
