@@ -20,6 +20,16 @@ hwi_oauth:
             client_secret:       <client_secret>
 ```
 
+You can also access to the sandbox while not in production:
+
+```yaml
+# app/config/config_dev.yml
+
+hwi_oauth:
+    resource_owners:
+        any_name: { options: { sandbox: true } }
+```
+
 When you're done. Continue by configuring the security layer or go back to
 setup more resource owners.
 
