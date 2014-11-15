@@ -1,0 +1,14 @@
+header:
+    connecting: 正在关联
+    success: 成功关联“%name%”帐号！
+    register: 注册“%name%”帐号
+    registration_success: 成功注册并关联“%username%”的帐号！
+
+connect:
+    confirm:
+        cancel: 取消
+        submit: 关联帐号
+        text: 你确定要将%service%上的帐号“%name%'”与当前帐号关联吗？
+    registration:
+        cancel: 取消
+        submit: 注册帐号
