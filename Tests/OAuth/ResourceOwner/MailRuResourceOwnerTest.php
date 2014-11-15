@@ -35,4 +35,4 @@ json;
     {
         return new MailRuResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
-} 
+}

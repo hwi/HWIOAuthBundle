@@ -1,6 +1,14 @@
 Changelog
 =========
 
+## 0.3.7 (2014-11-15)
+* Fix: `SessionStorage::save()` could throw php error,
+* Fix: `OAuthToken::isExpired()` always returned `false`,
+* Fix: `FoursquareResourceOwner`, `TwitchResourceOwner`, `SensioConnectResourceOwner`
+  not working with bearer header,
+* Fix: Don't use deprecated fields in `FacebookResourceOwner`,
+* Fix: `FOSUBUserProvider::refreshUser()` always returning old user,
+
 ## 0.3.6 (2014-06-02)
 * Fix: `InstagramResourceOwner` regression while getting user details,
 * Fix: Add smooth migration for session (de)serialization

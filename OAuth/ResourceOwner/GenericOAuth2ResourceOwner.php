@@ -133,7 +133,6 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'client_secret' => $this->options['client_secret'],
         );
 
-        /* @var $response \Buzz\Message\Response */
         $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), 'DELETE');
 
         return 200 === $response->getStatusCode();
