@@ -31,7 +31,8 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         'identifier' => 'response.0.uid',
         'nickname'   => 'response.0.nickname',
         'profilepicture' => 'response.0.photo_50',
-        'realname'   => array('response.0.last_name', 'response.0.first_name')
+        'realname'   => array('response.0.last_name', 'response.0.first_name'),
+        'email' => 'email'
     );
 
     /**
@@ -53,6 +54,12 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
+        if (isset($accessToken['email'])) {
+            $content = $response->getResponse();
+            $content['email'] = $accessToken['email'];
+            $response->setResponse($content);
+        }
+        
         return $response;
     }
 
