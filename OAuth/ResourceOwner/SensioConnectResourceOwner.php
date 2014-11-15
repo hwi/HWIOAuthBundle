@@ -52,6 +52,8 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
             'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse',
 
             'response_type'       => 'code',
+
+            'use_bearer_authorization' => false,
         ));
     }
 }
