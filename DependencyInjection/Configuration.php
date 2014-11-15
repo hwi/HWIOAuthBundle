@@ -55,6 +55,7 @@ class Configuration implements ConfigurationInterface
             'sina_weibo',
             'soundcloud',
             'stack_exchange',
+            'toshl',
             'twitch',
             'vkontakte',
             'windows_live',

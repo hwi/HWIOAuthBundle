@@ -45,6 +45,7 @@
         <parameter key="hwi_oauth.resource_owner.soundcloud.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SoundcloudResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.stack_exchange.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StackExchangeResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.stereomood.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StereomoodResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.toshl.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ToshlResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.trello.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TrelloResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.twitch.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitchResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.twitter.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner</parameter>
