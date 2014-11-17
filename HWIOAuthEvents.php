@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle;
 
 /**
- * Contains all events thrown in the FOSUserBundle
+ * Contains all events thrown in the HWIOAuthBundle
  * @author Maks Rafalko
  */
 final class HWIOAuthEvents
