@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
+use HWI\Bundle\OAuthBundle\Event\FormEvent;
+use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
@@ -119,10 +121,17 @@ class ConnectController extends ContainerAware
 
         $formHandler = $this->container->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {
+            $event = new FormEvent($form, $request);
+            $this->container->get('event_dispatcher')->dispatch(HWIOAuthEvents::REGISTRATION_SUCCESS, $event);
+
             $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
 
             // Authenticate the user
             $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
+
+            if (null !== $event->getResponse()) {
+                return $event->getResponse();
+            }
 
             return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
