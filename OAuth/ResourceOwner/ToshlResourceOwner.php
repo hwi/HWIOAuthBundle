@@ -11,26 +11,24 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
+use Buzz\Message\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * GitHubResourceOwner
+ * ToshlResourceOwner
  *
- * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
- * @author Alexander <iam.asm89@gmail.com>
+ * @author Davide Bellettini <davide@bellettini.me>
  */
-class GitHubResourceOwner extends GenericOAuth2ResourceOwner
+class ToshlResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritDoc}
      */
     protected $paths = array(
         'identifier'     => 'id',
-        'nickname'       => 'login',
-        'realname'       => 'name',
+        'nickname'       => 'email',
+        'realname'       => array('first_name', 'last_name'),
         'email'          => 'email',
-        'profilepicture' => 'avatar_url',
     );
 
     /**
@@ -38,11 +36,12 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function revokeToken($token)
     {
+        /* @var $response Response */
         $response = $this->httpRequest(
-            sprintf($this->options['revoke_token_url'], $this->options['client_id'], $token),
+            $this->options['revoke_token_url'],
             null,
             array('Authorization: Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])),
-            HttpRequestInterface::METHOD_DELETE
+            'DELETE'
         );
 
         return 204 === $response->getStatusCode();
@@ -56,11 +55,11 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://github.com/login/oauth/authorize',
-            'access_token_url'    => 'https://github.com/login/oauth/access_token',
-            'revoke_token_url'    => 'https://api.github.com/applications/%s/tokens/%s',
-            'infos_url'           => 'https://api.github.com/user',
-
+            'authorization_url'   => 'https://toshl.com/oauth2/authorize',
+            'access_token_url'    => 'https://toshl.com/oauth2/token',
+            'revoke_token_url'    => 'https://toshl.com/oauth2/revoke',
+            'infos_url'           => 'https://api.toshl.com/me',
+            'csrf'                => true,
             'use_commas_in_scope' => true,
         ));
     }

@@ -16,6 +16,7 @@ This bundle contains support for 20+ different providers:
 * DeviantArt,
 * Disqus,
 * Dropbox,
+* EVE Online,
 * Facebook,
 * Flickr,
 * Foursquare,
@@ -27,6 +28,7 @@ This bundle contains support for 20+ different providers:
 * LinkedIn,
 * Mail.ru
 * Odnoklassniki,
+* PayPal,
 * QQ,
 * Salesforce,
 * Sensio Connect,
@@ -34,11 +36,13 @@ This bundle contains support for 20+ different providers:
 * Soundcloud
 * Stack Exchange,
 * Stereomood,
+* Toshl,
 * Twitch,
 * Twitter,
 * VKontakte,
 * Windows Live,
 * Wordpress,
+* XING,
 * Yahoo,
 * Yandex
 

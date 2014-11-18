@@ -19,7 +19,11 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         if (!interface_exists('FOS\UserBundle\Model\UserManagerInterface')) {
-            $this->markTestSkipped('FOSUserBundle is not available');
+            $this->markTestSkipped('FOSUserBundle is not available.');
+        }
+
+        if (!class_exists('Symfony\Component\PropertyAccess\PropertyAccess')) {
+            $this->markTestSkipped('Symfony PropertyAccess component is not available.');
         }
     }
 
@@ -72,7 +76,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Class 'HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser' should have a method 'setGoogleId'.
+     * @expectedExceptionMessage Class 'HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser' must have defined setter method for property: 'googleId'.
      */
     public function testConnectUserWithNoSetterThrowsException()
     {
@@ -109,8 +113,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createResourceOwnerMock($resourceOwnerName = null)
     {
-        $resourceOwnerMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
-            ->getMock();
+        $resourceOwnerMock = $this->getMock('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface');
 
         if (null !== $resourceOwnerName) {
             $resourceOwnerMock
@@ -124,8 +127,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createUserResponseMock($username = null, $resourceOwnerName = null)
     {
-        $responseMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
-            ->getMock();
+        $responseMock = $this->getMock('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface');
 
         if (null !== $resourceOwnerName) {
             $responseMock

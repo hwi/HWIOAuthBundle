@@ -21,11 +21,11 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class SoundcloudResourceOwner extends GenericOAuth2ResourceOwner
 {
-	/**
+    /**
      * {@inheritDoc}
      */
     protected $paths = array(
-    	'identifier' => 'id',
+        'identifier' => 'id',
         'nickname'   => 'username',
         'realname'   => 'full_name',
     );
@@ -39,11 +39,11 @@ class SoundcloudResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'access_token_url'         => 'https://api.soundcloud.com/oauth2/token',
+            'attr_name'                => 'oauth_token',
             'authorization_url'        => 'https://soundcloud.com/connect',
             'infos_url'                => 'https://api.soundcloud.com/me.json',
-
-            'use_bearer_authorization' => true,
             'scope'                    => 'non-expiring',
+            'use_bearer_authorization' => false,
         ));
     }
 }

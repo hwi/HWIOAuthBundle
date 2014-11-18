@@ -25,6 +25,7 @@
         <parameter key="hwi_oauth.resource_owner.deviantart.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DeviantartResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.disqus.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DisqusResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.dropbox.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DropboxResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.eve_online.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\EveOnlineResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.eventbrite.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\EventbriteResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.facebook.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FacebookResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.flickr.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FlickrResourceOwner</parameter>
@@ -36,6 +37,7 @@
         <parameter key="hwi_oauth.resource_owner.jira.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\JiraResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.linkedin.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LinkedinResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.mailru.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\MailRuResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.paypal.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\PaypalResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.qq.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\QQResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.reddit.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\RedditResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.salesforce.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SalesforceResourceOwner</parameter>
@@ -44,12 +46,14 @@
         <parameter key="hwi_oauth.resource_owner.soundcloud.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SoundcloudResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.stack_exchange.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StackExchangeResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.stereomood.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StereomoodResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.toshl.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ToshlResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.trello.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TrelloResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.twitch.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitchResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.twitter.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.vkontakte.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.windows_live.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WindowsLiveResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.wordpress.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WordpressResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.xing.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\XingResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.yahoo.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YahooResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.yandex.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YandexResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.odnoklassniki.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\OdnoklassnikiResourceOwner</parameter>

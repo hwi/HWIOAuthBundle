@@ -1,20 +1,18 @@
-Step 2x: Setup Salesforce
-=======================
-First you will have to register your application on Salesforce. Check out the
-documentation for more information: https://help.salesforce.com/help/doc/en/remoteaccess_oauth_web_server_flow.htm
+Step 2x: Setup XING
+========================
+First you will have to register your application on XING. Check out the
+documentation for more information: https://dev.xing.com/docs.
 
-**Please note that Salesforce requires your callback url to be in HTTPS.**
+Next configure a resource owner of type `xing` with appropriate
+`client_id`, `client_secret`.
 
-Next configure a resource owner of type `salesforce` with appropriate
-`client_id`, and `client_secret`.
-
-``` yaml
+```yaml
 # app/config/config.yml
 
 hwi_oauth:
     resource_owners:
         any_name:
-            type:                salesforce
+            type:                xing
             client_id:           <client_id>
             client_secret:       <client_secret>
 ```

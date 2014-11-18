@@ -1,20 +1,19 @@
-Step 2x: Setup Salesforce
-=======================
-First you will have to register your application on Salesforce. Check out the
-documentation for more information: https://help.salesforce.com/help/doc/en/remoteaccess_oauth_web_server_flow.htm
+Step 2x: Setup Toshl
+=====================
+First you will have to register your application on Toshl. Check out the
+documentation for more information: https://developer.toshl.com/docs.
 
-**Please note that Salesforce requires your callback url to be in HTTPS.**
+Next configure a resource owner of type `toshl` with appropriate
+`client_id`, `client_secret` and `scope`. Refer to the Toshl documentation
+for the available scopes.
 
-Next configure a resource owner of type `salesforce` with appropriate
-`client_id`, and `client_secret`.
-
-``` yaml
+```yaml
 # app/config/config.yml
 
 hwi_oauth:
     resource_owners:
         any_name:
-            type:                salesforce
+            type:                toshl
             client_id:           <client_id>
             client_secret:       <client_secret>
 ```

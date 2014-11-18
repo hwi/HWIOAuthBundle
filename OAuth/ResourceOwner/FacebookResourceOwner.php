@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -26,7 +27,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'username',
+        'nickname'   => 'name',
         'realname'   => 'name',
         'email'      => 'email',
     );
@@ -66,7 +67,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             'client_secret' => $this->options['client_secret'],
         );
 
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), 'POST');
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), HttpRequestInterface::METHOD_POST);
         $response = $this->getResponseContent($response);
 
         return 'true' == $response;

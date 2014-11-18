@@ -38,11 +38,13 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         'infos_url'           => 'http://user.info/?test=1',
         'authorization_url'   => 'http://user.auth/?test=2',
         'access_token_url'    => 'http://user.access/?test=3',
+
+        'attr_name'           => 'access_token',
     );
 
     protected $userResponse = <<<json
 {
-    "id":  "1"
+    "id":  "1",
     "foo": "bar"
 }
 json;

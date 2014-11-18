@@ -82,12 +82,16 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url' => 'https://foursquare.com/oauth2/authorize',
-            'access_token_url'  => 'https://foursquare.com/oauth2/access_token',
-            'infos_url'         => 'https://api.foursquare.com/v2/users/self',
+            'authorization_url'        => 'https://foursquare.com/oauth2/authenticate',
+            'access_token_url'         => 'https://foursquare.com/oauth2/access_token',
+            'infos_url'                => 'https://api.foursquare.com/v2/users/self',
 
             // @link https://developer.foursquare.com/overview/versioning
-            'version'           => '20121206',
+            'version'                  => '20121206',
+
+            'use_bearer_authorization' => false,
+            
+            'use_bearer_authorization' => false,
         ));
     }
 }

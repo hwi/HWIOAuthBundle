@@ -11,28 +11,25 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\MailRuResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\EveOnlineResourceOwner;
 
-class MailRuResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+class EveOnlineResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = <<<json
-[
-    {
-        "user_id": "1",
-        "name": "bar",
-        "email": "baz"
-    }
-]
+{
+    "CharacterID": "1",
+    "CharacterName": "bar"
+}
 json;
 
     protected $paths = array(
-        'identifier' => 'user_id',
-        'nickname'   => 'name',
-        'email'      => 'email',
+        'identifier' => 'CharacterID',
+        'nickname'   => 'CharacterName',
+        'realname'   => 'CharacterName',
     );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new MailRuResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new EveOnlineResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

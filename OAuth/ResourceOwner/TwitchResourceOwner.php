@@ -57,9 +57,10 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url' => 'https://api.twitch.tv/kraken/oauth2/authorize',
-            'access_token_url'  => 'https://api.twitch.tv/kraken/oauth2/token',
-            'infos_url'         => 'https://api.twitch.tv/kraken/user',
+            'authorization_url'        => 'https://api.twitch.tv/kraken/oauth2/authorize',
+            'access_token_url'         => 'https://api.twitch.tv/kraken/oauth2/token',
+            'infos_url'                => 'https://api.twitch.tv/kraken/user',
+            'use_bearer_authorization' => false,
         ));
     }
 }
