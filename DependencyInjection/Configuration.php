@@ -52,6 +52,7 @@ class Configuration implements ConfigurationInterface
             'qq',
             'reddit',
             'salesforce',
+			'salesforce_sandbox',
             'sensio_connect',
             'sina_weibo',
             'soundcloud',
