@@ -33,6 +33,7 @@ This bundle contains support for 40 different providers:
 * Odnoklassniki,
 * PayPal,
 * QQ,
+* RunKeeper,
 * Salesforce,
 * Sensio Connect,
 * Sina Weibo
@@ -40,6 +41,7 @@ This bundle contains support for 40 different providers:
 * Soundcloud
 * Stack Exchange,
 * Stereomood,
+* Strava,
 * Toshl,
 * Twitch,
 * Twitter,
