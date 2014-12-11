@@ -130,7 +130,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
      *
      * @return object
      */
-    private function findUser(array $criteria)
+    protected function findUser(array $criteria)
     {
         if (null === $this->repository) {
             $this->repository = $this->em->getRepository($this->class);
