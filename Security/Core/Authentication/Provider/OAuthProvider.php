@@ -81,7 +81,7 @@ class OAuthProvider implements AuthenticationProviderInterface
             throw $e;
         }
 
-        $token = new OAuthToken($token->getRawToken(), $user->getRoles());
+        $token = $this->createOAuthToken($token->getRawToken(), $user->getRoles());
         $token->setResourceOwnerName($resourceOwner->getName());
         $token->setUser($user);
         $token->setAuthenticated(true);
@@ -89,5 +89,16 @@ class OAuthProvider implements AuthenticationProviderInterface
         $this->userChecker->checkPostAuth($user);
 
         return $token;
+    }
+
+    /**
+     * @param string $accessToken
+     * @param array  $roles
+     *
+     * @return \HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken
+     */
+    protected function createOAuthToken($accessToken, array $roles = array())
+    {
+        return new OAuthToken($accessToken, $roles);
     }
 }
