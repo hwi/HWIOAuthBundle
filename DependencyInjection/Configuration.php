@@ -43,6 +43,7 @@ class Configuration implements ConfigurationInterface
             'foursquare',
             'github',
             'google',
+            'youtube',
             'hubic',
             'instagram',
             'linkedin',
