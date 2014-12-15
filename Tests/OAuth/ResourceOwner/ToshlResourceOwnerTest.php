@@ -70,6 +70,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new ToshlResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new ToshlResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 }

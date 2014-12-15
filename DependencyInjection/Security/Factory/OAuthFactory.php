@@ -105,6 +105,7 @@ class OAuthFactory extends AbstractFactory
             ->addArgument($this->createOAuthAwareUserProvider($container, $id, $config['oauth_user_provider']))
             ->addArgument($this->getResourceOwnerMapReference($id))
             ->addArgument(new Reference('hwi_oauth.user_checker'))
+            ->addArgument(new Reference('hwi_oauth.authentication.token_factory.oauth'))
         ;
 
         return $providerId;
@@ -170,6 +171,7 @@ class OAuthFactory extends AbstractFactory
             ->getDefinition($listenerId)
             ->addMethodCall('setResourceOwnerMap', array($this->getResourceOwnerMapReference($id)))
             ->addMethodCall('setCheckPaths', array($checkPaths))
+            ->addMethodCall('setOAuthTokenFactory', array(new Reference('hwi_oauth.authentication.token_factory.oauth')))
         ;
 
         return $listenerId;

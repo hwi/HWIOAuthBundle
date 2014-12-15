@@ -12,7 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Message\RequestInterface as HttpRequestInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -77,7 +76,7 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
         $response = $this->getUserResponse();
         $response->setResponse($content);
         $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
+        $response->setOAuthToken($this->oAuthTokenFactory->build($accessToken));
 
         return $response;
     }

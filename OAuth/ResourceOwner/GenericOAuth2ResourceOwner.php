@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -40,7 +39,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $response->setResponse($content->getContent());
 
         $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
+        $response->setOAuthToken($this->oAuthTokenFactory->build($accessToken));
 
         return $response;
     }

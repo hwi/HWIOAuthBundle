@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -56,7 +55,7 @@ class MailRuResourceOwner extends GenericOAuth2ResourceOwner
         $response = $this->getUserResponse();
         $response->setResponse($content);
         $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
+        $response->setOAuthToken($this->oAuthTokenFactory->build($accessToken));
 
         return $response;
     }

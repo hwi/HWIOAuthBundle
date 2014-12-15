@@ -30,6 +30,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new EveOnlineResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new EveOnlineResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 }

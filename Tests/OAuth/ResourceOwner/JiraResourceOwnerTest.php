@@ -80,6 +80,6 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
             $options
         );
 
-        return new JiraResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new JiraResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 }

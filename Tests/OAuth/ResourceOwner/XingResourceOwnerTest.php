@@ -58,6 +58,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new XingResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new XingResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 }

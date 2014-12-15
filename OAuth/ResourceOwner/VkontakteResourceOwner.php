@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
 
@@ -52,7 +51,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         $response = $this->getUserResponse();
         $response->setResponse($content);
         $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
+        $response->setOAuthToken($this->oAuthTokenFactory->build($accessToken));
 
         if (isset($accessToken['email'])) {
             $content = $response->getResponse();

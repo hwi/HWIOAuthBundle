@@ -145,6 +145,7 @@ class HWIOAuthExtension extends Extension
             $definition
                 ->replaceArgument(2, $options)
                 ->replaceArgument(3, $name)
+                ->replaceArgument(5, new Reference('hwi_oauth.authentication.token_factory.oauth'))
             ;
         }
     }

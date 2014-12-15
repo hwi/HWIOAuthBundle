@@ -36,6 +36,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new SoundcloudResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new SoundcloudResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 }

@@ -79,6 +79,6 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new FlickrResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new FlickrResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 }

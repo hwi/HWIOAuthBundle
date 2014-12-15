@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -34,7 +33,7 @@ class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
         $response = $this->getUserResponse();
         $response->setResponse($accessToken);
         $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
+        $response->setOAuthToken($this->oAuthTokenFactory->build($accessToken));
 
         return $response;
     }
