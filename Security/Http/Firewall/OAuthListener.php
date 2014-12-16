@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactory;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +38,7 @@ class OAuthListener extends AbstractAuthenticationListener
     private $checkPaths;
 
     /**
-     * @var OAuthTokenFactory
+     * @var OAuthTokenFactoryInterface
      */
     private $oAuthTokenFactory;
 
@@ -59,9 +59,9 @@ class OAuthListener extends AbstractAuthenticationListener
     }
 
     /**
-     * @param OAuthTokenFactory $oAuthTokenFactory
+     * @param OAuthTokenFactoryInterface $oAuthTokenFactory
      */
-    public function setOAuthTokenFactory(OAuthTokenFactory $oAuthTokenFactory)
+    public function setOAuthTokenFactory(OAuthTokenFactoryInterface $oAuthTokenFactory)
     {
         $this->oAuthTokenFactory = $oAuthTokenFactory;
     }

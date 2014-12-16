@@ -321,7 +321,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
-        $this->oAuthTokenFactory = $this->getMock('\HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactory');
+        $this->oAuthTokenFactory = $this->getMock('\HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface');
         $this->oAuthTokenFactory->expects($this->any())
             ->method('build')
             ->will(

@@ -20,7 +20,7 @@ use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactory;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -67,7 +67,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $storage;
 
     /**
-     * @var OAuthTokenFactory
+     * @var OAuthTokenFactoryInterface
      */
     protected $oAuthTokenFactory;
 
@@ -77,7 +77,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param array                       $options           Options for the resource owner
      * @param string                      $name              Name for the resource owner
      * @param RequestDataStorageInterface $storage           Request token storage
-     * @param OAuthTokenFactory           $oAuthTokenFactory OAuth Token factory
+     * @param OAuthTokenFactoryInterface  $oAuthTokenFactory OAuth Token factory
      */
     public function __construct(
         HttpClientInterface $httpClient,
@@ -85,7 +85,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         array $options,
         $name,
         RequestDataStorageInterface $storage,
-        OAuthTokenFactory $oAuthTokenFactory
+        OAuthTokenFactoryInterface $oAuthTokenFactory
     ) {
         $this->httpClient        = $httpClient;
         $this->httpUtils         = $httpUtils;

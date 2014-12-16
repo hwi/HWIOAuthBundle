@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactory;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
@@ -44,7 +44,7 @@ class OAuthProvider implements AuthenticationProviderInterface
     private $userChecker;
 
     /**
-     * @var OAuthTokenFactory
+     * @var OAuthTokenFactoryInterface
      */
     private $oAuthTokenFactory;
 
@@ -52,13 +52,13 @@ class OAuthProvider implements AuthenticationProviderInterface
      * @param OAuthAwareUserProviderInterface $userProvider      User provider
      * @param ResourceOwnerMap                $resourceOwnerMap  Resource owner map
      * @param UserCheckerInterface            $userChecker       User checker
-     * @param OAuthTokenFactory               $oAuthTokenFactory OAuth Token factory
+     * @param OAuthTokenFactoryInterface      $oAuthTokenFactory OAuth Token factory
      */
     public function __construct(
         OAuthAwareUserProviderInterface $userProvider,
         ResourceOwnerMap $resourceOwnerMap,
         UserCheckerInterface $userChecker,
-        OAuthTokenFactory $oAuthTokenFactory
+        OAuthTokenFactoryInterface $oAuthTokenFactory
     ) {
         $this->userProvider      = $userProvider;
         $this->resourceOwnerMap  = $resourceOwnerMap;

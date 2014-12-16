@@ -13,7 +13,6 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\Authentication\Provider;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactory;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 
 class OAuthProviderTest extends \PHPUnit_Framework_TestCase
@@ -212,7 +211,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function getOAuthTokenFactoryMock()
     {
-        return $this->getMock('\HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactory');
+        return $this->getMock('\HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface');
     }
 
     protected function getUserMock()

@@ -350,7 +350,7 @@ class ConnectController extends ContainerAware
     }
 
     /**
-     * @return \HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactory
+     * @return \HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface
      */
     protected function getOAuthTokenFactory()
     {

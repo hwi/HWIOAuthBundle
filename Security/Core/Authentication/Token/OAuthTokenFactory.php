@@ -5,13 +5,10 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token;
 /**
  * Builds an OAuth Token.
  */
-class OAuthTokenFactory
+class OAuthTokenFactory implements OAuthTokenFactoryInterface
 {
     /**
-     * @param string|array $accessToken The OAuth access token
-     * @param array        $roles       Roles for the token
-     *
-     * @return OAuthToken|\Symfony\Component\Security\Core\Authentication\Token\TokenInterface
+     * {@inheritDoc}
      */
     public function build($accessToken, array $roles = array())
     {
