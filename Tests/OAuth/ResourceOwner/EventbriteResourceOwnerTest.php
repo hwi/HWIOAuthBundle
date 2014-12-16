@@ -34,6 +34,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new EventbriteResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new EventbriteResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 }

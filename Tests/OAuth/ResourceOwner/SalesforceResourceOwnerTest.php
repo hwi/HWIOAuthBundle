@@ -57,6 +57,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new SalesforceResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new SalesforceResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 }

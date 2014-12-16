@@ -20,6 +20,7 @@ use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -66,18 +67,31 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $storage;
 
     /**
-     * @param HttpClientInterface         $httpClient Buzz http client
-     * @param HttpUtils                   $httpUtils  Http utils
-     * @param array                       $options    Options for the resource owner
-     * @param string                      $name       Name for the resource owner
-     * @param RequestDataStorageInterface $storage    Request token storage
+     * @var OAuthTokenFactoryInterface
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage)
-    {
-        $this->httpClient = $httpClient;
-        $this->httpUtils  = $httpUtils;
-        $this->name       = $name;
-        $this->storage    = $storage;
+    protected $oAuthTokenFactory;
+
+    /**
+     * @param HttpClientInterface         $httpClient        Buzz http client
+     * @param HttpUtils                   $httpUtils         Http utils
+     * @param array                       $options           Options for the resource owner
+     * @param string                      $name              Name for the resource owner
+     * @param RequestDataStorageInterface $storage           Request token storage
+     * @param OAuthTokenFactoryInterface  $oAuthTokenFactory OAuth Token factory
+     */
+    public function __construct(
+        HttpClientInterface $httpClient,
+        HttpUtils $httpUtils,
+        array $options,
+        $name,
+        RequestDataStorageInterface $storage,
+        OAuthTokenFactoryInterface $oAuthTokenFactory
+    ) {
+        $this->httpClient        = $httpClient;
+        $this->httpUtils         = $httpUtils;
+        $this->name              = $name;
+        $this->storage           = $storage;
+        $this->oAuthTokenFactory = $oAuthTokenFactory;
 
         if (!empty($options['paths'])) {
             $this->addPaths($options['paths']);

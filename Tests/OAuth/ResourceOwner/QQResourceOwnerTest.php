@@ -43,7 +43,7 @@ json;
             $options
         );
 
-        return new QQResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new QQResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 
     /**

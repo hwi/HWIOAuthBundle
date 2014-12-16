@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,7 +38,12 @@ class OAuthListener extends AbstractAuthenticationListener
     private $checkPaths;
 
     /**
-     * @var ResourceOwnerMap $resourceOwnerMap
+     * @var OAuthTokenFactoryInterface
+     */
+    private $oAuthTokenFactory;
+
+    /**
+     * @param ResourceOwnerMap $resourceOwnerMap
      */
     public function setResourceOwnerMap(ResourceOwnerMap $resourceOwnerMap)
     {
@@ -51,6 +56,14 @@ class OAuthListener extends AbstractAuthenticationListener
     public function setCheckPaths(array $checkPaths)
     {
         $this->checkPaths = $checkPaths;
+    }
+
+    /**
+     * @param OAuthTokenFactoryInterface $oAuthTokenFactory
+     */
+    public function setOAuthTokenFactory(OAuthTokenFactoryInterface $oAuthTokenFactory)
+    {
+        $this->oAuthTokenFactory = $oAuthTokenFactory;
     }
 
     /**
@@ -100,7 +113,7 @@ class OAuthListener extends AbstractAuthenticationListener
             $this->httpUtils->createRequest($request, $checkPath)->getUri()
         );
 
-        $token = new OAuthToken($accessToken);
+        $token = $this->oAuthTokenFactory->build($accessToken);
         $token->setResourceOwnerName($resourceOwner->getName());
 
         return $this->authenticationManager->authenticate($token);

@@ -19,7 +19,12 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testSupportsOAuthToken()
     {
-        $oauthProvider = new OAuthProvider($this->getOAuthAwareUserProviderMock(), $this->getResourceOwnerMapMock(), $this->getUserCheckerMock());
+        $oauthProvider = new OAuthProvider(
+            $this->getOAuthAwareUserProviderMock(),
+            $this->getResourceOwnerMapMock(),
+            $this->getUserCheckerMock(),
+            $this->getOAuthTokenFactoryMock()
+        );
         $this->assertTrue($oauthProvider->supports(new OAuthToken('')));
     }
 
@@ -31,6 +36,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
             'expires_in'    => '666',
             'oauth_token_secret' => 'secret'
         );
+        $expectedRoles = array('ROLE_TEST');
 
         $oauthTokenMock = $this->getOAuthTokenMock();
         $oauthTokenMock->expects($this->once())
@@ -58,7 +64,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $userMock = $this->getUserMock();
         $userMock->expects($this->once())
             ->method('getRoles')
-            ->will($this->returnValue(array('ROLE_TEST')));
+            ->will($this->returnValue($expectedRoles));
 
         $userProviderMock = $this->getOAuthAwareUserProviderMock();
         $userProviderMock->expects($this->once())
@@ -70,7 +76,17 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
             ->method('checkPostAuth')
             ->with($userMock);
 
-        $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock);
+        $oAuthTokenFactoryMock = $this->getOAuthTokenFactoryMock();
+        $oAuthTokenFactoryMock->expects($this->once())
+            ->method('build')
+            ->will($this->returnValue(new OAuthToken($expectedToken, $expectedRoles)));
+
+        $oauthProvider = new OAuthProvider(
+            $userProviderMock,
+            $resourceOwnerMapMock,
+            $userCheckerMock,
+            $oAuthTokenFactoryMock
+        );
 
         $token = $oauthProvider->authenticate($oauthTokenMock);
         $this->assertTrue($token->isAuthenticated());
@@ -136,7 +152,14 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
         $userCheckerMock = $this->getUserCheckerMock();
 
-        $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock);
+        $oAuthTokenFactoryMock = $this->getOAuthTokenFactoryMock();
+
+        $oauthProvider = new OAuthProvider(
+            $userProviderMock,
+            $resourceOwnerMapMock,
+            $userCheckerMock,
+            $oAuthTokenFactoryMock
+        );
 
         try {
             $oauthProvider->authenticate($oauthTokenMock);
@@ -184,6 +207,11 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
     protected function getUserCheckerMock()
     {
         return $this->getMock('\Symfony\Component\Security\Core\User\UserCheckerInterface');
+    }
+
+    protected function getOAuthTokenFactoryMock()
+    {
+        return $this->getMock('\HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface');
     }
 
     protected function getUserMock()

@@ -57,6 +57,6 @@ json;
             $options
         );
 
-        return new Auth0ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new Auth0ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 }

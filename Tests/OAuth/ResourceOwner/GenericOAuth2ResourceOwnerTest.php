@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use Buzz\Message\MessageInterface;
 use Buzz\Message\RequestInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
 
 class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
@@ -28,6 +29,7 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     protected $buzzResponseContentType;
     protected $buzzResponseHttpCode = 200;
     protected $storage;
+    protected $oAuthTokenFactory;
     protected $state = 'random';
     protected $csrf = false;
 
@@ -354,6 +356,16 @@ json;
             ->disableOriginalConstructor()->getMock();
 
         $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
+        $this->oAuthTokenFactory = $this->getMock('\HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface');
+        $this->oAuthTokenFactory->expects($this->any())
+            ->method('build')
+            ->will(
+                $this->returnCallback(
+                    function ($accessToken, array $roles = array()) {
+                        return new OAuthToken($accessToken, $roles);
+                    }
+                )
+            );
 
         $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
         $resourceOwner->addPaths(array_merge($this->paths, $paths));
@@ -368,6 +380,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 }

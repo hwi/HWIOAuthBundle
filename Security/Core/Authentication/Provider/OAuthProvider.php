@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
@@ -43,15 +44,26 @@ class OAuthProvider implements AuthenticationProviderInterface
     private $userChecker;
 
     /**
-     * @param OAuthAwareUserProviderInterface $userProvider     User provider
-     * @param ResourceOwnerMap                $resourceOwnerMap Resource owner map
-     * @param UserCheckerInterface            $userChecker      User checker
+     * @var OAuthTokenFactoryInterface
      */
-    public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMap $resourceOwnerMap, UserCheckerInterface $userChecker)
-    {
-        $this->userProvider     = $userProvider;
-        $this->resourceOwnerMap = $resourceOwnerMap;
-        $this->userChecker      = $userChecker;
+    private $oAuthTokenFactory;
+
+    /**
+     * @param OAuthAwareUserProviderInterface $userProvider      User provider
+     * @param ResourceOwnerMap                $resourceOwnerMap  Resource owner map
+     * @param UserCheckerInterface            $userChecker       User checker
+     * @param OAuthTokenFactoryInterface      $oAuthTokenFactory OAuth Token factory
+     */
+    public function __construct(
+        OAuthAwareUserProviderInterface $userProvider,
+        ResourceOwnerMap $resourceOwnerMap,
+        UserCheckerInterface $userChecker,
+        OAuthTokenFactoryInterface $oAuthTokenFactory
+    ) {
+        $this->userProvider      = $userProvider;
+        $this->resourceOwnerMap  = $resourceOwnerMap;
+        $this->userChecker       = $userChecker;
+        $this->oAuthTokenFactory = $oAuthTokenFactory;
     }
 
     /**
@@ -81,7 +93,7 @@ class OAuthProvider implements AuthenticationProviderInterface
             throw $e;
         }
 
-        $token = new OAuthToken($token->getRawToken(), $user->getRoles());
+        $token = $this->oAuthTokenFactory->build($token->getRawToken(), $user->getRoles());
         $token->setResourceOwnerName($resourceOwner->getName());
         $token->setUser($user);
         $token->setAuthenticated(true);

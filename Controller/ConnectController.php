@@ -333,7 +333,7 @@ class ConnectController extends ContainerAware
             return;
         }
 
-        $token = new OAuthToken($accessToken, $user->getRoles());
+        $token = $this->getOAuthTokenFactory()->build($accessToken, $user->getRoles());
         $token->setResourceOwnerName($resourceOwnerName);
         $token->setUser($user);
         $token->setAuthenticated(true);
@@ -347,6 +347,14 @@ class ConnectController extends ContainerAware
                 new InteractiveLoginEvent($request, $token)
             );
         }
+    }
+
+    /**
+     * @return \HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactoryInterface
+     */
+    protected function getOAuthTokenFactory()
+    {
+        return $this->container->get('hwi_oauth.authentication.token_factory.oauth');
     }
 
     /**

@@ -7,6 +7,7 @@
     <parameters>
         <parameter key="hwi_oauth.authentication.listener.oauth.class">HWI\Bundle\OAuthBundle\Security\Http\Firewall\OAuthListener</parameter>
         <parameter key="hwi_oauth.authentication.provider.oauth.class">HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider</parameter>
+        <parameter key="hwi_oauth.authentication.token_factory.oauth.class">HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthTokenFactory</parameter>
         <parameter key="hwi_oauth.authentication.entry_point.oauth.class">HWI\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint</parameter>
         <parameter key="hwi_oauth.user.provider.class">HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider</parameter>
         <parameter key="hwi_oauth.user.provider.entity.class">HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider</parameter>
@@ -81,6 +82,7 @@
             <argument type="service" id="http_kernel" />
             <argument type="service" id="security.http_utils" />
         </service>
+        <service id="hwi_oauth.authentication.token_factory.oauth" class="%hwi_oauth.authentication.token_factory.oauth.class%" />
         <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" public="false" />
         <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" abstract="true" public="false">
             <argument type="service" id="doctrine" />
@@ -130,11 +132,13 @@
         <service id="hwi_oauth.abstract_resource_owner.oauth2" class="%hwi_oauth.resource_owner.oauth2.class%"
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.storage.session" />
+            <argument type="service" id="hwi_oauth.authentication.token_factory.oauth" />
         </service>
 
         <service id="hwi_oauth.abstract_resource_owner.oauth1" class="%hwi_oauth.resource_owner.oauth1.class%"
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.storage.session" />
+            <argument type="service" id="hwi_oauth.authentication.token_factory.oauth" />
         </service>
     </services>
 </container>

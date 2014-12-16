@@ -40,6 +40,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new PaypalResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new PaypalResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage, $this->oAuthTokenFactory);
     }
 }
