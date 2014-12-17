@@ -176,6 +176,22 @@ class OAuthToken extends AbstractToken
     }
 
     /**
+     * @param integer $createdAt The token creation date in seconds
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
      * @return integer
      */
     public function getExpiresAt()
