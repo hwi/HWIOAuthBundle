@@ -79,7 +79,7 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
             // @link https://developers.google.com/accounts/docs/OAuth2Login#authenticationuriparameters
             'display'         => array('page', 'popup', 'touch', 'wap', null),
             'login_hint'      => array('email address', 'sub', null),
-            'prompt'          => array(null, 'consent', 'select_account', null),
+            'prompt'          => array('consent', 'select_account', null),
         ));
     }
 }
