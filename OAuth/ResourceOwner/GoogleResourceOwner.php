@@ -11,6 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Buzz\Browser;
+use Buzz\Client\Curl;
+use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -44,6 +47,16 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
             'hd'                      => $this->options['hd'],
             'prompt'                  => $this->options['prompt']
         ), $extraParameters));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function revokeToken($token)
+    {
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)));
+
+        return 200 == $response->getStatusCode();
     }
 
     /**
