@@ -18,6 +18,9 @@ use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\Exception\BadCredentialsException;
+use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 
 /**
  * OAuthProvider
@@ -67,6 +70,10 @@ class OAuthProvider implements AuthenticationProviderInterface
      */
     public function authenticate(TokenInterface $token)
     {
+        if (!$this->supports($token)) {
+            return;
+        }
+
         /* @var OAuthToken $token */
         $resourceOwner = $this->resourceOwnerMap->getResourceOwnerByName($token->getResourceOwnerName());
 
@@ -81,12 +88,25 @@ class OAuthProvider implements AuthenticationProviderInterface
             throw $e;
         }
 
+        if (!$user instanceof UserInterface) {
+            throw new AuthenticationServiceException('loadUserByOAuthUserResponse() must return a UserInterface.');
+        }
+
+        try {
+            $this->userChecker->checkPreAuth($user);
+            $this->userChecker->checkPostAuth($user);
+        } catch (BadCredentialsException $e) {
+            if ($this->hideUserNotFoundExceptions) {
+                throw new BadCredentialsException('Bad credentials', 0, $e);
+            }
+
+            throw $e;
+        }
+
         $token = new OAuthToken($token->getRawToken(), $user->getRoles());
         $token->setResourceOwnerName($resourceOwner->getName());
         $token->setUser($user);
         $token->setAuthenticated(true);
-
-        $this->userChecker->checkPostAuth($user);
 
         return $token;
     }
