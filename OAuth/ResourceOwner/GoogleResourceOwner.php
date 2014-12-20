@@ -49,6 +49,16 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
+    public function revokeToken($token)
+    {
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)));
+
+        return 200 == $response->getStatusCode();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     protected function configureOptions(OptionsResolverInterface $resolver)
     {
         parent::configureOptions($resolver);
