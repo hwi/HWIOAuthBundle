@@ -73,13 +73,13 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setAllowedValues(array(
             // @link https://developers.google.com/accounts/docs/OAuth2WebServer#offline
-            'access_type'     => array('online', 'offline'),
+            'access_type'     => array('online', 'offline', null),
             // sometimes we need to force for approval prompt (e.g. when we lost refresh token)
-            'approval_prompt' => array('force', 'auto'),
+            'approval_prompt' => array('force', 'auto', null),
             // @link https://developers.google.com/accounts/docs/OAuth2Login#authenticationuriparameters
-            'display'         => array('page', 'popup', 'touch', 'wap'),
-            'login_hint'      => array('email address', 'sub'),
-            'prompt'          => array(null, 'consent', 'select_account'),
+            'display'         => array('page', 'popup', 'touch', 'wap', null),
+            'login_hint'      => array('email address', 'sub', null),
+            'prompt'          => array('consent', 'select_account', null),
         ));
     }
 }
