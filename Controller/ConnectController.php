@@ -183,6 +183,13 @@ class ConnectController extends ContainerAware
             $accessToken = $session->get('_hwi_oauth.connect_confirmation.'.$key);
         }
 
+        // Redirect to the login path if the token is empty (Eg. User cancelled auth)
+        if ($accessToken === null) {
+            $redirect = $this->container->getParameter('hwi_oauth.failed_auth_path');
+
+            return new RedirectResponse($this->generate($redirect));
+        }
+        
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
         // Show confirmation page?
