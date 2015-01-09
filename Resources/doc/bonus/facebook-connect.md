@@ -17,6 +17,8 @@ hwi_oauth:
             client_id:     <client_id>
             client_secret: <client_secret>
             scope:         "email"
+            options:
+                display: popup #dialog is optimized for popup window            
 
 services:
     hwi_oauth.user.provider.entity:
