@@ -75,7 +75,7 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
             // @link https://developers.google.com/accounts/docs/OAuth2WebServer#offline
             'access_type'     => array('online', 'offline'),
             // sometimes we need to force for approval prompt (e.g. when we lost refresh token)
-            'approval_prompt' => array('force', 'auto'),
+            'approval_prompt' => array(null, 'force', 'auto'),
             // @link https://developers.google.com/accounts/docs/OAuth2Login#authenticationuriparameters
             'display'         => array('page', 'popup', 'touch', 'wap'),
             'login_hint'      => array('email address', 'sub'),
