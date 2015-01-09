@@ -93,7 +93,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setAllowedValues(array(
             // @link https://developers.facebook.com/docs/reference/dialogs/#display
-            'display' => array('page', 'popup', 'touch'),
+            'display' => array('page', 'popup', 'touch', null),
         ));
     }
 }
