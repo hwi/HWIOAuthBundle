@@ -82,9 +82,9 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
-            'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
-            'revoke_token_url'    => 'https://graph.facebook.com/me/permissions',
-            'infos_url'           => 'https://graph.facebook.com/me',
+            'access_token_url'    => 'https://graph.facebook.com/v2.2/oauth/access_token',
+            'revoke_token_url'    => 'https://graph.facebook.com/v2.2/me/permissions',
+            'infos_url'           => 'https://graph.facebook.com/v2.2/me',
 
             'use_commas_in_scope' => true,
 
