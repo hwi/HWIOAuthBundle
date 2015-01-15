@@ -159,7 +159,12 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         $accessor = PropertyAccess::createPropertyAccessor();
         $accessor->setValue($user, 'username', $this->getUniqueUserName($userInformation->getNickname()));
 
-        if ($accessor->isWritable($user, 'email')) {
+        // compatibility with Symfony <2.5
+        if (!method_exists($accessor, 'isWritable')) {
+            if (is_callable(array($user, 'setEmail'))) {
+                $user->setEmail($userInformation->getEmail());
+            }
+        } elseif ($accessor->isWritable($user, 'email')) {
             $accessor->setValue($user, 'email', $userInformation->getEmail());
         }
 
