@@ -37,6 +37,7 @@ class HWIOAuthBundle extends Bundle
         $extension = $container->getExtension('security');
         $extension->addSecurityListenerFactory(new OAuthFactory());
 
+        $container->addCompilerPass(new ResourceOwnerServiceCompilerPass());
         $container->addCompilerPass(new SetResourceOwnerServiceNameCompilerPass());
     }
 
