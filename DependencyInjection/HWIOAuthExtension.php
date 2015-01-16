@@ -142,6 +142,12 @@ class HWIOAuthExtension extends Extension
                 throw new \InvalidArgumentException('A resource owner service must have a "hwi_oauth.resource_owner" tag');
             }
 
+            $reflection = new \ReflectionClass($definition->getClass());
+
+            if (!$reflection->implementsInterface('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')) {
+                throw new \InvalidArgumentException('A resource owner service must implement HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface');
+            }
+
             unset($options['service']);
         } else {
             // otherwise, create a new service based on hwi_oauth.abstract_resource_owner.<type> and tag it
