@@ -239,6 +239,21 @@ class Configuration implements ConfigurationInterface
                                     ->thenUnset()
                                 ->end()
                             ->end()
+                            ->scalarNode('class')
+                                ->info('Set the class to use, decorating the type')
+                                ->validate()
+                                    ->ifTrue(function($v) {
+                                        return empty($v);
+                                    })
+                                    ->thenUnset()
+                                ->end()
+                                ->validate()
+                                    ->ifTrue(function($class) {
+                                        return !in_array('HWI\\Bundle\\OAuthBundle\\OAuth\\ResourceOwnerInterface', class_implements($class));
+                                    })
+                                    ->thenInvalid('Invalid class "%s", it should implement "HWI\\Bundle\\OAuthBundle\\OAuth\\ResourceOwnerInterface"')
+                                ->end()
+                            ->end()
                             ->arrayNode('paths')
                                 ->useAttributeAsKey('name')
                                 ->prototype('variable')
@@ -297,6 +312,11 @@ class Configuration implements ConfigurationInterface
                                     return false;
                                 }
 
+                                // skip if this is a decorated 'oauth1' or 'oauth2' type - it should handle its own mess
+                                if (isset($c['class'])) {
+                                    return false;
+                                }
+
                                 $children = array('authorization_url', 'access_token_url', 'request_token_url', 'infos_url');
                                 foreach ($children as $child) {
                                     // This option exists only for OAuth1.0a
@@ -322,6 +342,11 @@ class Configuration implements ConfigurationInterface
 
                                 // Only validate the 'oauth2' and 'oauth1' type
                                 if ('oauth2' !== $c['type'] && 'oauth1' !== $c['type']) {
+                                    return false;
+                                }
+
+                                // skip if this is a decorated 'oauth1' or 'oauth2' type - it should handle its own mess
+                                if (isset($c['class'])) {
                                     return false;
                                 }
 
