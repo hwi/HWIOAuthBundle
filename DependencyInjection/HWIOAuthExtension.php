@@ -133,9 +133,6 @@ class HWIOAuthExtension extends Extension
     {
         // verify if it is service, and if it has the right tag
         if (isset($options['service'])) {
-            // set the appropriate name for aliased services, compiler pass depends on it
-            $container->setAlias('hwi_oauth.resource_owner.'.$name, $options['service']);
-
             $definition = $container->findDefinition($options['service']);
 
             if (!$definition->hasTag('hwi_oauth.resource_owner')) {
