@@ -149,11 +149,6 @@ class HWIOAuthExtension extends Extension
 
             $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.Configuration::getResourceOwnerType($type));
             $definition->setClass("%hwi_oauth.resource_owner.$type.class%");
-
-            $definition
-                ->replaceArgument(2, $options)
-                ->replaceArgument(3, $name)
-            ;
         }
 
         $definition->addTag('hwi_oauth.resource_owner', array('alias' => $name));

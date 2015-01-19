@@ -68,19 +68,13 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * @param HttpClientInterface         $httpClient Buzz http client
      * @param HttpUtils                   $httpUtils  Http utils
-     * @param array                       $options    Options for the resource owner
-     * @param string                      $name       Name for the resource owner
      * @param RequestDataStorageInterface $storage    Request token storage
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage)
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, RequestDataStorageInterface $storage)
     {
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
-        $this->name       = $name;
         $this->storage    = $storage;
-
-        // Resolve merged options
-        $this->setOptions($options);
     }
 
     /**
