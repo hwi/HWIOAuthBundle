@@ -159,7 +159,7 @@ class HWIOAuthExtension extends Extension
         $definition->addTag('hwi_oauth.resource_owner', array('alias' => $name));
 
         $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
-        $container->setParameter("hwi_oauth.resource_owner.$name.parameters", array('options' => $options));
+        $container->setParameter("hwi_oauth.resource_owner.$name.parameters", $options);
     }
 
     /**
