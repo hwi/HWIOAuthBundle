@@ -79,16 +79,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $this->name       = $name;
         $this->storage    = $storage;
 
-        if (!empty($options['paths'])) {
-            $this->addPaths($options['paths']);
-        }
-        unset($options['paths']);
-
-        if (!empty($options['options'])) {
-            $options += $options['options'];
-            unset($options['options']);
-        }
-        unset($options['options']);
 
         // Resolve merged options
         $this->setOptions($options);
@@ -137,6 +127,17 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     public function setOptions(array $options)
     {
+        if (!empty($options['paths'])) {
+            $this->addPaths($options['paths']);
+        }
+        unset($options['paths']);
+
+        if (!empty($options['options'])) {
+            $options += $options['options'];
+            unset($options['options']);
+        }
+        unset($options['options']);
+
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
 
