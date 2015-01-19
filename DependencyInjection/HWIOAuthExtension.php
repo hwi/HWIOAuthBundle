@@ -131,13 +131,9 @@ class HWIOAuthExtension extends Extension
      */
     public function createResourceOwnerService(ContainerBuilder $container, $name, array $options)
     {
-        // verify if it is service, and if it has the right tag
+        // Decorate the given service if one is specified
         if (isset($options['service'])) {
             $definition = $container->findDefinition($options['service']);
-
-            if (!$definition->hasTag('hwi_oauth.resource_owner')) {
-                throw new \InvalidArgumentException('A resource owner service must have a "hwi_oauth.resource_owner" tag');
-            }
 
             $reflection = new \ReflectionClass($definition->getClass());
 
@@ -153,15 +149,16 @@ class HWIOAuthExtension extends Extension
 
             $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.Configuration::getResourceOwnerType($type));
             $definition->setClass("%hwi_oauth.resource_owner.$type.class%");
-            $definition->addTag('hwi_oauth.resource_owner', array('alias' => $name));
 
-            $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
             $definition
                 ->replaceArgument(2, $options)
                 ->replaceArgument(3, $name)
             ;
         }
 
+        $definition->addTag('hwi_oauth.resource_owner', array('alias' => $name));
+
+        $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
         $container->setParameter("hwi_oauth.resource_owner.$name.parameters", array('options' => $options));
     }
 
