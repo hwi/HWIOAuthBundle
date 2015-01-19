@@ -56,8 +56,8 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new XingResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new XingResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

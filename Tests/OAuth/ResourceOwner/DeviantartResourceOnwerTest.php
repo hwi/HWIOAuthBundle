@@ -46,8 +46,8 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new DeviantartResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new DeviantartResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

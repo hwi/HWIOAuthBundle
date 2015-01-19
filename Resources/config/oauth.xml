@@ -123,8 +123,6 @@
         <service id="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.http_client" />
             <argument type="service" id="security.http_utils" />
-            <argument type="collection" /><!-- options -->
-            <argument /><!-- name -->
         </service>
 
         <service id="hwi_oauth.abstract_resource_owner.oauth2" class="%hwi_oauth.resource_owner.oauth2.class%"

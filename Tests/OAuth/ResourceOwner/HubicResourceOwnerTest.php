@@ -31,8 +31,8 @@ class HubicResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         );
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new HubicResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new HubicResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

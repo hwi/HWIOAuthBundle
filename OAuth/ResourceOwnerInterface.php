@@ -84,6 +84,13 @@ interface ResourceOwnerInterface
     public function getOption($name);
 
     /**
+     * Resolve options and set them
+     *
+     * @param array $options Options for the resource owner
+     */
+    public function setOptions(array $options);
+
+    /**
      * Checks whether the class can handle the request.
      *
      * @param Request $request

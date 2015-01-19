@@ -320,14 +320,27 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
         $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
 
-        $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
+        $resourceOwner = $this->setUpResourceOwner($httpUtils);
+        $resourceOwner->setName($name);
+
+        try {
+            $resourceOwner->setOptions(array_merge($this->getOptions(), $this->options, $options));
+        } catch (\Symfony\Component\OptionsResolver\Exception\MissingOptionsException $e) {
+            var_dump(get_class($e), $e->getMessage(), $resourceOwner, array_merge($this->getOptions(), $this->options, $options)); die;
+        }
+
         $resourceOwner->addPaths(array_merge($this->paths, $paths));
 
         return $resourceOwner;
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new GenericOAuth1ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new GenericOAuth1ResourceOwner($this->buzzClient, $httpUtils, $this->storage);
+    }
+
+    protected function getOptions()
+    {
+        return array();
     }
 }

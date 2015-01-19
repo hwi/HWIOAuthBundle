@@ -355,7 +355,9 @@ json;
 
         $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
 
-        $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
+        $resourceOwner = $this->setUpResourceOwner($httpUtils);
+        $resourceOwner->setName($name);
+        $resourceOwner->setOptions(array_merge($this->getOptions(), $this->options, $options));
         $resourceOwner->addPaths(array_merge($this->paths, $paths));
 
         $reflection = new \ReflectionClass(get_class($resourceOwner));
@@ -366,8 +368,13 @@ json;
         return $resourceOwner;
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $this->storage);
+    }
+
+    protected function getOptions()
+    {
+        return array();
     }
 }

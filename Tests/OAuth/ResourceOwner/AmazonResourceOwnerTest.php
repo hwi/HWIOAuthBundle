@@ -35,8 +35,8 @@ json;
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new AmazonResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new AmazonResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

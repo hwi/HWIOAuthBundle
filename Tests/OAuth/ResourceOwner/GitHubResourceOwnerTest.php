@@ -46,8 +46,8 @@ json;
         $this->assertFalse($this->resourceOwner->revokeToken('token'));
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new GitHubResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new GitHubResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

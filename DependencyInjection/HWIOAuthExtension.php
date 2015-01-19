@@ -131,22 +131,32 @@ class HWIOAuthExtension extends Extension
      */
     public function createResourceOwnerService(ContainerBuilder $container, $name, array $options)
     {
-        // alias services
+        // Decorate the given service if one is specified
         if (isset($options['service'])) {
-            // set the appropriate name for aliased services, compiler pass depends on it
-            $container->setAlias('hwi_oauth.resource_owner.'.$name, $options['service']);
+            $definition = $container->findDefinition($options['service']);
+
+            $reflection = new \ReflectionClass($definition->getClass());
+
+            if (!$reflection->implementsInterface('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')) {
+                throw new \InvalidArgumentException('A resource owner service must implement HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface');
+            }
+
+            unset($options['service']);
         } else {
+            // otherwise, create a new service based on hwi_oauth.abstract_resource_owner.<type> and tag it
             $type = $options['type'];
             unset($options['type']);
 
             $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.Configuration::getResourceOwnerType($type));
             $definition->setClass("%hwi_oauth.resource_owner.$type.class%");
-            $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
-            $definition
-                ->replaceArgument(2, $options)
-                ->replaceArgument(3, $name)
-            ;
         }
+
+        $definition->addTag('hwi_oauth.resource_owner', array('alias' => $name));
+        $definition->addMethodCall('setName', array($name));
+        $definition->addMethodCall('setOptions', array($options));
+        $definition->addMethodCall('configure');
+
+        $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
     }
 
     /**

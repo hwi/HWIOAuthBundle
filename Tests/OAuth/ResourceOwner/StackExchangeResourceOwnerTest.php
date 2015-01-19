@@ -33,8 +33,8 @@ json;
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=no_expiry&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new StackExchangeResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new StackExchangeResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

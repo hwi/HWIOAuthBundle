@@ -44,8 +44,8 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new BitbucketResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new BitbucketResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

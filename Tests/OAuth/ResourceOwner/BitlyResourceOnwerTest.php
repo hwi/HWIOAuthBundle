@@ -32,8 +32,8 @@ json;
         'profilepicture' => 'data.profile_image',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new BitlyResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new BitlyResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

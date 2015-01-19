@@ -28,8 +28,8 @@ json;
         'realname'   => 'CharacterName',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new EveOnlineResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new EveOnlineResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

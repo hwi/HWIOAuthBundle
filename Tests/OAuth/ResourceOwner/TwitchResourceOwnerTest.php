@@ -33,8 +33,8 @@ json;
         'profilepicture' => 'logo',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new TwitchResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new TwitchResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

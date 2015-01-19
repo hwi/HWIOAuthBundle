@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\DependencyInjection;
 
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 
@@ -346,6 +347,13 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
+
+        $mock = $this->getMock('HWI\\Bundle\\OAuthBundle\\OAuth\\ResourceOwnerInterface');
+        $definition = new Definition(get_class($mock));
+        $this->containerBuilder->setDefinition('hwi_oauth.abstract_resource_owner.foo', $definition);
+
+        $config['resource_owners']['some_service']['service'] = 'hwi_oauth.abstract_resource_owner.foo';
+
         $loader->load(array($config), $this->containerBuilder);
     }
 

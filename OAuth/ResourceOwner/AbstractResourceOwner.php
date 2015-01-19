@@ -68,35 +68,13 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * @param HttpClientInterface         $httpClient Buzz http client
      * @param HttpUtils                   $httpUtils  Http utils
-     * @param array                       $options    Options for the resource owner
-     * @param string                      $name       Name for the resource owner
      * @param RequestDataStorageInterface $storage    Request token storage
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage)
+    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, RequestDataStorageInterface $storage)
     {
         $this->httpClient = $httpClient;
         $this->httpUtils  = $httpUtils;
-        $this->name       = $name;
         $this->storage    = $storage;
-
-        if (!empty($options['paths'])) {
-            $this->addPaths($options['paths']);
-        }
-        unset($options['paths']);
-
-        if (!empty($options['options'])) {
-            $options += $options['options'];
-            unset($options['options']);
-        }
-        unset($options['options']);
-
-        // Resolve merged options
-        $resolver = new OptionsResolver();
-        $this->configureOptions($resolver);
-        $options = $resolver->resolve($options);
-        $this->options = $options;
-
-        $this->configure();
     }
 
     /**
@@ -133,6 +111,28 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         }
 
         return $this->options[$name];
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setOptions(array $options)
+    {
+        if (!empty($options['paths'])) {
+            $this->addPaths($options['paths']);
+        }
+        unset($options['paths']);
+
+        if (!empty($options['options'])) {
+            $options += $options['options'];
+            unset($options['options']);
+        }
+        unset($options['options']);
+
+        $resolver = new OptionsResolver();
+        $this->configureOptions($resolver);
+
+        $this->options = $resolver->resolve($options);
     }
 
     /**

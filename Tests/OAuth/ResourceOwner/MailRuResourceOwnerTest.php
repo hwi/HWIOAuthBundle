@@ -31,8 +31,8 @@ json;
         'email'      => 'email',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new MailRuResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new MailRuResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

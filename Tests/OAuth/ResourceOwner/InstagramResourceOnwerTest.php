@@ -42,8 +42,8 @@ json;
         $this->assertEquals('foo', $userResponse->getNickname());
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new InstagramResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new InstagramResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

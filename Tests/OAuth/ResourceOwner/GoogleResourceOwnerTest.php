@@ -104,15 +104,13 @@ json;
         $this->assertFalse($this->resourceOwner->revokeToken('token'));
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        $options = array_merge(
-            array(
-                'access_type' => 'offline'
-            ),
-            $options
-        );
+        return new GoogleResourceOwner($this->buzzClient, $httpUtils, $this->storage);
+    }
 
-        return new GoogleResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+    protected function getOptions()
+    {
+        return array('access_type' => 'offline');
     }
 }
