@@ -343,13 +343,13 @@ class Configuration implements ConfigurationInterface
                         ->validate()
                             ->ifTrue(function($c) {
                                 if (isset($c['service'])) {
-                                    // ignore paths & options if none were set
-                                    return 0 !== count($c['paths']) || 0 !== count($c['options']) || 3 < count($c);
+                                    // ignore paths if none were set
+                                    return 0 !== count($c['paths']) || 3 < count($c);
                                 }
 
                                 return false;
                             })
-                            ->thenInvalid("If you're setting a 'service', no other arguments should be set.")
+                            ->thenInvalid("If you're setting a 'service', no other arguments (except options) should be set.")
                         ->end()
                     ->end()
                 ->end()
