@@ -79,11 +79,8 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $this->name       = $name;
         $this->storage    = $storage;
 
-
         // Resolve merged options
         $this->setOptions($options);
-
-        $this->configure();
     }
 
     /**

@@ -31,6 +31,7 @@ class ResourceOwnerServiceCompilerPass implements CompilerPassInterface
 
             $definition->addMethodCall('setName', array($tag[0]['alias']));
             $definition->addMethodCall('setOptions', array($container->getParameter("hwi_oauth.resource_owner.{$tag[0]['alias']}.parameters")));
+            $definition->addMethodCall('configure');
         }
     }
 }
