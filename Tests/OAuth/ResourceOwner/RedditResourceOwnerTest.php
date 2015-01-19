@@ -35,8 +35,8 @@ json;
         'email'      => null,
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new RedditResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new RedditResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

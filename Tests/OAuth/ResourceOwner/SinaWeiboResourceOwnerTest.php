@@ -29,9 +29,9 @@ json;
         'profilepicture' => 'profile_image_url',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new SinaWeiboResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new SinaWeiboResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 
     public function testGetUserInformation()

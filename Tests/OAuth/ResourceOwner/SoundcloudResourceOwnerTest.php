@@ -34,8 +34,8 @@ json;
         'realname'   => 'full_name',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new SoundcloudResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new SoundcloudResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

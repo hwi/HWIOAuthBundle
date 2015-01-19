@@ -33,8 +33,8 @@ json;
         'profilepicture' => 'avatar_URL',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new WordpressResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new WordpressResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

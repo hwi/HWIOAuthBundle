@@ -68,8 +68,8 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new ToshlResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new ToshlResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

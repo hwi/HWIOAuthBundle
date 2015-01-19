@@ -48,15 +48,13 @@ json;
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        $options = array_merge(
-            array(
-                'base_url' => 'https://example.oauth0.com'
-            ),
-            $options
-        );
+        return new Auth0ResourceOwner($this->buzzClient, $httpUtils, $this->storage);
+    }
 
-        return new Auth0ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+    protected function getOptions()
+    {
+        return array('base_url' => 'https://example.oauth0.com');
     }
 }

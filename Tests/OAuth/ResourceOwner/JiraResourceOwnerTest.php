@@ -67,19 +67,20 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         $this->assertEquals('foo', $userResponse->getNickname());
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        $options = array_merge(
-            array(
-                // Used in option resolver to adjust all URLs that could be called
-                'base_url'         => 'http://localhost/',
-
-                // This is to prevent errors with not existing .pem file
-                'signature_method' => 'PLAINTEXT',
-            ),
-            $options
-        );
-
-        return new JiraResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new JiraResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
+
+    protected function getOptions()
+    {
+        return array(
+            // Used in option resolver to adjust all URLs that could be called
+            'base_url'         => 'http://localhost/',
+
+            // This is to prevent errors with not existing .pem file
+            'signature_method' => 'PLAINTEXT',
+        );
+    }
+
 }

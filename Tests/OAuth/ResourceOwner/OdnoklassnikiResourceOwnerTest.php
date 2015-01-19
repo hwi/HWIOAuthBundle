@@ -28,15 +28,13 @@ json;
         'realname'   => 'name',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        $options = array_merge(
-            array(
-                'application_key' => '123456',
-            ),
-            $options
-        );
+        return new OdnoklassnikiResourceOwner($this->buzzClient, $httpUtils, $this->storage);
+    }
 
-        return new OdnoklassnikiResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+    protected function getOptions()
+    {
+        return array('application_key' => '123456');
     }
 }

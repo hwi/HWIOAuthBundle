@@ -29,8 +29,8 @@ json;
         'realname'   => 'real_name',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new YandexResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new YandexResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

@@ -34,8 +34,8 @@ json;
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new LinkedinResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new LinkedinResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

@@ -46,8 +46,8 @@ json;
         $this->createResourceOwner($this->resourceOwnerName, array('display' => 'invalid'));
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new DailymotionResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new DailymotionResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

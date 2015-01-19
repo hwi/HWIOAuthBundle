@@ -42,8 +42,8 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         $this->assertEquals('token', $userResponse->getAccessToken());
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new SensioConnectResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new SensioConnectResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }

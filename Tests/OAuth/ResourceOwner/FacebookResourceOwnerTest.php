@@ -87,8 +87,8 @@ json;
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($httpUtils)
     {
-        return new FacebookResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new FacebookResourceOwner($this->buzzClient, $httpUtils, $this->storage);
     }
 }
