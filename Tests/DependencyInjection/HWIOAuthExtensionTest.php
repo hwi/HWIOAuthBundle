@@ -378,6 +378,8 @@ EOF;
 
     protected function getFullConfig()
     {
+        $decoratedClass = get_class($this->getMock('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface'));
+
         $yaml = <<<EOF
 firewall_name: secured_area
 
@@ -433,6 +435,14 @@ resource_owners:
         paths:
             identifier: id
             nickname:   username
+
+    decorated:
+        type:                oauth
+        class:               {$decoratedClass}
+        client_id:           client_id
+        client_secret:       client_secret
+        options:
+            foo: bar
 
 fosub:
     username_iterations: 30
