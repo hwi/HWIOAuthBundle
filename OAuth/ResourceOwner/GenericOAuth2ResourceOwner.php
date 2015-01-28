@@ -177,7 +177,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url);
+        return $this->httpRequest($url, http_build_query($parameters, '', '&'));
     }
 
     /**
