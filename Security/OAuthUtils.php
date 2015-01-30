@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
@@ -46,19 +46,19 @@ class OAuthUtils
     protected $ownerMap;
 
     /**
-     * @var SecurityContextInterface
+     * @var AuthorizationCheckerInterface
      */
-    protected $securityContext;
+    protected $authorizationChecker;
 
     /**
-     * @param HttpUtils                $httpUtils
-     * @param SecurityContextInterface $securityContext
-     * @param boolean                  $connect
+     * @param HttpUtils                     $httpUtils
+     * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param boolean                       $connect
      */
-    public function __construct(HttpUtils $httpUtils, SecurityContextInterface $securityContext, $connect)
+    public function __construct(HttpUtils $httpUtils, AuthorizationCheckerInterface $authorizationChecker, $connect)
     {
         $this->httpUtils       = $httpUtils;
-        $this->securityContext = $securityContext;
+        $this->authorizationChecker = $authorizationChecker;
         $this->connect         = $connect;
     }
 
@@ -92,7 +92,7 @@ class OAuthUtils
     {
         $resourceOwner = $this->getResourceOwner($name);
         if (null === $redirectUrl) {
-            if (!$this->connect || !$this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            if (!$this->connect || !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                 $redirectUrl = $this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($name));
             } else {
                 $redirectUrl = $this->getServiceAuthUrl($request, $resourceOwner);

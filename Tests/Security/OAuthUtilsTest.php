@@ -23,7 +23,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request  = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface'), true);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface'), true);
         $utils->setResourceOwnerMap($this->getMap($url, $redirect, false, true));
 
         $this->assertEquals(
@@ -182,7 +182,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     private function getSecurity($hasUser)
     {
-        $mock = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
+        $mock = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
         $mock
             ->expects($this->once())
             ->method('isGranted')
