@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * RedditResourceOwner
@@ -41,7 +41,7 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
@@ -49,7 +49,7 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
             'authorization_url'        => 'https://ssl.reddit.com/api/v1/authorize',
             'access_token_url'         => 'https://ssl.reddit.com/api/v1/access_token',
             'infos_url'                => 'https://oauth.reddit.com/api/v1/me.json',
-            
+
             'use_bearer_authorization' => true,
             'use_commas_in_scope'      => true,
             'csrf'                     => true,

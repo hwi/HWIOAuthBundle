@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
-use Symfony\Component\Security\Core\SecurityContext;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
@@ -45,7 +45,7 @@ class ConnectController extends ContainerAware
     public function connectAction(Request $request)
     {
         $connect = $this->container->getParameter('hwi_oauth.connect');
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $error = $this->getErrorForRequest($request);
 
@@ -91,7 +91,7 @@ class ConnectController extends ContainerAware
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED');
         if ($hasUser) {
             throw new AccessDeniedException('Cannot connect already registered account.');
         }
@@ -160,7 +160,7 @@ class ConnectController extends ContainerAware
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED');
         if (!$hasUser) {
             throw new AccessDeniedException('Cannot connect an account.');
         }
@@ -203,7 +203,7 @@ class ConnectController extends ContainerAware
                 show_confirmation_page:
 
                 /** @var $currentToken OAuthToken */
-                $currentToken = $this->container->get('security.context')->getToken();
+                $currentToken = $this->container->get('security.token_storage')->getToken();
                 $currentUser  = $currentToken->getUser();
 
                 $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
@@ -269,11 +269,11 @@ class ConnectController extends ContainerAware
     protected function getErrorForRequest(Request $request)
     {
         $session = $request->getSession();
-        if ($request->attributes->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $request->attributes->get(SecurityContext::AUTHENTICATION_ERROR);
-        } elseif (null !== $session && $session->has(SecurityContext::AUTHENTICATION_ERROR)) {
-            $error = $session->get(SecurityContext::AUTHENTICATION_ERROR);
-            $session->remove(SecurityContext::AUTHENTICATION_ERROR);
+        if ($request->attributes->has(Security::AUTHENTICATION_ERROR)) {
+            $error = $request->attributes->get(Security::AUTHENTICATION_ERROR);
+        } elseif (null !== $session && $session->has(Security::AUTHENTICATION_ERROR)) {
+            $error = $session->get(Security::AUTHENTICATION_ERROR);
+            $session->remove(Security::AUTHENTICATION_ERROR);
         } else {
             $error = '';
         }
@@ -338,7 +338,7 @@ class ConnectController extends ContainerAware
         $token->setUser($user);
         $token->setAuthenticated(true);
 
-        $this->container->get('security.context')->setToken($token);
+        $this->container->get('security.token_storage')->setToken($token);
 
         if ($fakeLogin) {
             // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
