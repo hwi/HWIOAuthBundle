@@ -12,15 +12,15 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * VkontakteResourceOwner
  *
  * @author Adrov Igor <nucleartux@gmail.com>
  * @author Vladislav Vlastovskiy <me@vlastv.ru>
- * @author Alexander Latushkin <alex@skazo4neg.ru> 
+ * @author Alexander Latushkin <alex@skazo4neg.ru>
  */
 class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 {
@@ -59,14 +59,14 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             $content['email'] = $accessToken['email'];
             $response->setResponse($content);
         }
-        
+
         return $response;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
