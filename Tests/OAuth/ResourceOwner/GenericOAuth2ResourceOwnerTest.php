@@ -15,6 +15,7 @@ use Buzz\Message\MessageInterface;
 use Buzz\Message\RequestInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 
 class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,12 +67,17 @@ json;
         $this->resourceOwner     = $this->createResourceOwner($this->resourceOwnerName);
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     */
-    public function testInvalidOptionThrowsException()
+    public function testUndefinedOptionThrowsException()
     {
-        $this->createResourceOwner($this->resourceOwnerName, array('non_existing' => null));
+        try {
+            $this->createResourceOwner($this->resourceOwnerName, array('non_existing' => null));
+        } catch (ExceptionInterface $exception) {
+            if ( class_exists('\Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException')) {
+                $this->assertInstanceOf('\Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException', $exception);
+            } else {
+                $this->assertInstanceOf('\Symfony\Component\OptionsResolver\Exception\InvalidOptionsException', $exception);
+            }
+        }
     }
 
     /**

@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 
 class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,12 +51,17 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $this->resourceOwner     = $this->createResourceOwner($this->resourceOwnerName);
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     */
-    public function testGetInvalidOptionThrowsException()
+    public function testUndefinedOptionThrowsException()
     {
-        $this->createResourceOwner($this->resourceOwnerName, array('non_existing' => null));
+        try {
+            $this->createResourceOwner($this->resourceOwnerName, array('non_existing' => null));
+        } catch (ExceptionInterface $exception) {
+            if ( class_exists('\Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException')) {
+                $this->assertInstanceOf('\Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException', $exception);
+            } else {
+                $this->assertInstanceOf('\Symfony\Component\OptionsResolver\Exception\InvalidOptionsException', $exception);
+            }
+        }
     }
 
     /**

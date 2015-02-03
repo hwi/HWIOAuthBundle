@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -213,9 +214,17 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'use_bearer_authorization' => true,
         ));
 
-        $resolver->setOptional(array(
-            'revoke_token_url',
-        ));
+        $reflection = new ReflectionClass($resolver);
+        if ($reflection->hasMethod('setDefined')) {
+            $resolver->setDefined(array(
+                'revoke_token_url'
+            ));
+        } else {
+            $resolver->setOptional(array(
+                'revoke_token_url',
+            ));
+        }
+
 
         $resolver->setNormalizers(array(
             // Unfortunately some resource owners break the spec by using commas instead

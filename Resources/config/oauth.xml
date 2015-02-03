@@ -108,6 +108,7 @@
             <argument type="service" id="security.http_utils" />
             <argument type="service" id="security.context" />
             <argument>%hwi_oauth.connect%</argument>
+            <argument type="service" id="security.authorization_checker" on-invalid="null" />
         </service>
 
         <!-- Resource owners -->
