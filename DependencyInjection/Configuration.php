@@ -86,6 +86,7 @@ class Configuration implements ConfigurationInterface
             'bitbucket',
             'discogs',
             'dropbox',
+            'evernote',
             'flickr',
             'jira',
             'stereomood',

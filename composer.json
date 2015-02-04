@@ -11,7 +11,6 @@
         "oauth1",
         "oauth2",
         "security",
-
         "amazon",
         "asana",
         "auth0",
@@ -29,6 +28,7 @@
         "dropbox",
         "eventbrite",
         "eve online",
+        "evernote",
         "facebook",
         "fiware",
         "flickr",
@@ -131,7 +131,8 @@
         "friendsofsymfony/user-bundle": "to connect FOSUB with this bundle",
         "php-http/httplug-bundle":      "to provide required HTTP client with ease.",
         "symfony/property-access":      "to use FOSUB integration with this bundle",
-        "symfony/twig-bundle":          "to use the Twig hwi_oauth_* functions"
+        "symfony/twig-bundle":          "to use the Twig hwi_oauth_* functions",
+        "evernote/evernote-cloud-sdk-php": "to use the Evernote resource owner"
     },
 
     "autoload": {
