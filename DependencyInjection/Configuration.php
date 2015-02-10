@@ -32,6 +32,7 @@ class Configuration implements ConfigurationInterface
         'oauth2' => array(
             'amazon',
             'auth0',
+            'azure',
             'bitly',
             'box',
             'dailymotion',
