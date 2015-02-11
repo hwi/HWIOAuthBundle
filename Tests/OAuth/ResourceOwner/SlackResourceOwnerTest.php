@@ -15,10 +15,19 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SlackResourceOwner;
 
 class SlackResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $userResponse = <<<json
+    protected $infoResponse = <<<json
 {
     "user_id": "1",
-    "login": "bar"
+    "user": "bar"
+}
+json;
+
+    protected $userResponse = <<<json
+{
+	"user": {
+		"id": "1",
+		"name": "bar"
+	}
 }
 json;
 
@@ -28,6 +37,8 @@ json;
         'realname'       => 'profile.real_name',
         'email'          => 'profile.email',
     );
+
+	protected $isFirstCall = true;
 
     protected $expectedUrls = array(
         'authorization_url'      => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=identify+read+post&redirect_uri=http%3A%2F%2Fredirect.to%2F&team=',
@@ -41,7 +52,10 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+        $this->buzzClient->expects($this->exactly(2))
+            ->method('send')
+            ->will($this->returnCallback(array($this, 'buzzSendMockSlackUser')));
+        $this->buzzResponseContentType = 'application/json; charset=utf-8';
 
         /**
          * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
@@ -53,5 +67,41 @@ json;
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
+    }
+
+    public function testCustomResponseClass()
+    {
+        $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
+
+        $this->buzzClient->expects($this->exactly(2))
+            ->method('send')
+            ->will($this->returnCallback(array($this, 'buzzSendMockSlackUser')));
+        $this->buzzResponseContentType = 'application/json; charset=utf-8';
+
+        /**
+         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+         */
+        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
+
+        $this->assertInstanceOf($class, $userResponse);
+        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo', $userResponse->getNickname());
+        $this->assertEquals('token', $userResponse->getAccessToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
+    }
+
+    public function buzzSendMockSlackUser($request, $response)
+    {
+		if ($this->isFirstCall) {
+			$this->isFirstCall = false;
+			$response->setContent($this->infoResponse);
+		} else {
+			$this->isFirstCall = true;
+			$response->setContent($this->userResponse);
+		}
+        $response->addHeader('HTTP/1.1 '.$this->buzzResponseHttpCode.' Some text');
+        $response->addHeader('Content-Type: '.$this->buzzResponseContentType);
     }
 }
