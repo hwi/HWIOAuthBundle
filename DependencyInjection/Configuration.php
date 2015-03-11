@@ -38,6 +38,7 @@ class Configuration implements ConfigurationInterface
             'deviantart',
             'disqus',
             'eventbrite',
+            'exactonline',
             'facebook',
             'foursquare',
             'github',
