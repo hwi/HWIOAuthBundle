@@ -1,46 +1,33 @@
 <?php
 
+/*
+ * This file is part of the HWIOAuthBundle package.
+ *
+ * (c) Hardware.Info <opensource@hardware.info>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
 /**
  * @author Martijn Gastkemper <martijngastkemper@gmail.com>
  */
-class ExactOnlineUserResponse extends \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+class ExactOnlineUserResponse extends PathUserResponse
 {
-
-	public function getNickname()
-	{
-		return $this->response[ 'UserName' ];
-	}
-
-	public function getRealName()
-	{
-		return $this->response[ 'FullName' ];
-	}
-
-	public function getUsername()
-	{
-		return $this->response[ 'UserID' ];
-	}
-	
-	public function getEmail()
-	{
-		return $this->response['Email'];
-	}
-	
-	public function getProfilePicture()
-	{
-		return $this->response['PictureUrl'];
-	}
-	
-	public function getDivision() 
-	{
-		return $this->response['CurrentDivision'];
-	}
-
+	/**
+     * {@inheritdoc}
+     */
 	public function setResponse( $response )
 	{
-		$this->response = ( array ) json_decode( $response )->d->results[ 0 ];
+		$json = json_decode($response);
+
+		if (JSON_ERROR_NONE !== json_last_error()) {
+			throw new AuthenticationException('Response is not a valid JSON code.');
+		}
+		
+		$this->response = (array) $json->d->results[ 0 ];
 	}
 
 }

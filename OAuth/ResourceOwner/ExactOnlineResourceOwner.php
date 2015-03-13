@@ -21,6 +21,21 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class ExactOnlineResourceOwner extends GenericOAuth2ResourceOwner
 {
 
+	/**
+	 * {@inheritDoc}
+	 */
+	protected $paths = array(
+		'identifier' => 'UserID',
+		'nickname' => 'UserName',
+		'realname' => 'FullName',
+		'email' => 'Email',
+		'profilepicture' => 'PictureUrl'
+	);
+
+	/**
+	 * Exact Online requires Content-Type application/json
+	 * {@inheritDoc}
+	 */
 	protected function doGetUserInformationRequest( $url, array $parameters = array() )
 	{
 		return $this->httpRequest( $url, null, ['Content-Type: application/json', 'Accept: application/json' ] );
