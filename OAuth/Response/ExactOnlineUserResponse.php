@@ -19,17 +19,12 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class ExactOnlineUserResponse extends PathUserResponse
 {
 	/**
-     * {@inheritdoc}
-     */
+   * {@inheritdoc}
+   */
 	public function setResponse( $response )
 	{
-		$json = json_decode($response);
-
-		if (JSON_ERROR_NONE !== json_last_error()) {
-			throw new AuthenticationException('Response is not a valid JSON code.');
-		}
-		
-		$this->response = (array) current($json->d->results);
+		parent::setResponse($response);
+		$this->response = current($this->response['d']['results']);
   }
 
 }
