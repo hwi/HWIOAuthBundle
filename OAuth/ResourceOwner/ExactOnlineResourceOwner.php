@@ -38,7 +38,7 @@ class ExactOnlineResourceOwner extends GenericOAuth2ResourceOwner
 	 */
 	protected function doGetUserInformationRequest( $url, array $parameters = array() )
 	{
-		return $this->httpRequest( $url, null, ['Content-Type: application/json', 'Accept: application/json' ] );
+		return $this->httpRequest( $url, null, array('Content-Type: application/json', 'Accept: application/json'));
 	}
 
 	/**
