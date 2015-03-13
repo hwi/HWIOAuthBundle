@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+
 /**
  * @author Martijn Gastkemper <martijngastkemper@gmail.com>
  */
@@ -27,7 +29,7 @@ class ExactOnlineUserResponse extends PathUserResponse
 			throw new AuthenticationException('Response is not a valid JSON code.');
 		}
 		
-		$this->response = (array) $json->d->results[ 0 ];
-	}
+		$this->response = (array) current($json->d->results);
+  }
 
 }
