@@ -18,6 +18,7 @@ This bundle contains support for 20+ different providers:
 * Dropbox,
 * EVE Online,
 * Facebook,
+* FI-WARE,
 * Flickr,
 * Foursquare,
 * GitHub,
