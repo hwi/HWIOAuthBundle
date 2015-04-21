@@ -92,7 +92,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
         }
 
         $username = $response->getUsername();
-        if (null === $user = $this->repository->findOneBy(array($this->properties[$resourceOwnerName] => $username))) {
+        if ($username === null || null === $user = $this->repository->findOneBy(array($this->properties[$resourceOwnerName] => $username))) {
             throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
         }
 
