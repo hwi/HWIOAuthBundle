@@ -95,7 +95,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testGetAuthorizationUrlFailedResponseContainOnlyOAuthToken()
     {
@@ -108,7 +108,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testGetAuthorizationUrlFailedResponseContainOAuthProblem()
     {
@@ -121,7 +121,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testGetAuthorizationUrlFailedResponseContainCallbackNotConfirmed()
     {
@@ -134,7 +134,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testGetAuthorizationUrlFailedResponseNotContainOAuthTokenOrSecret()
     {
@@ -198,7 +198,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testGetAccessTokenFailedResponse()
     {
@@ -217,7 +217,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testGetAccessTokenErrorResponse()
     {
@@ -236,7 +236,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testRefreshAccessToken()
     {
@@ -244,7 +244,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testRevokeToken()
     {

@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -102,11 +103,11 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $response = $this->getResponseContent($response);
 
         if (isset($response['oauth_problem'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
+            throw new OAuthAuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']), $redirectUri, $this->getName());
         }
 
         if (!isset($response['oauth_token']) || !isset($response['oauth_token_secret'])) {
-            throw new AuthenticationException('Not a valid request token.');
+            throw new OAuthAuthenticationException('Not a valid request token.', $redirectUri, $this->getName());
         }
 
         return $response;
@@ -160,15 +161,15 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $response = $this->getResponseContent($apiResponse);
 
         if (isset($response['oauth_problem'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
+            throw new OAuthAuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']), $redirectUri, $this->getName());
         }
 
         if (isset($response['oauth_callback_confirmed']) && ($response['oauth_callback_confirmed'] != 'true')) {
-            throw new AuthenticationException('Defined OAuth callback was not confirmed.');
+            throw new OAuthAuthenticationException('Defined OAuth callback was not confirmed.', $redirectUri, $this->getName());
         }
 
         if (!isset($response['oauth_token']) || !isset($response['oauth_token_secret'])) {
-            throw new AuthenticationException('Not a valid request token.');
+            throw new OAuthAuthenticationException('Not a valid request token.', $redirectUri, $this->getName());
         }
 
         $response['timestamp'] = $timestamp;

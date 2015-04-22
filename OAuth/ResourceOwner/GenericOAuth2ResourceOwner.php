@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -80,7 +81,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      *               along with any other parameters returned from the authentication
      *               provider.
      *
-     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     * @throws OAuthAuthenticationException If an OAuth error occurred or no access token is found
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
@@ -95,7 +96,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
 
-        $this->validateResponseContent($response);
+        $this->validateResponseContent($response, $redirectUri);
 
         return $response;
     }
@@ -115,7 +116,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
 
-        $this->validateResponseContent($response);
+        $this->validateResponseContent($response, null);
 
         return $response;
     }
@@ -126,7 +127,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function revokeToken($token)
     {
         if (!isset($this->options['revoke_token_url'])) {
-            throw new AuthenticationException('OAuth error: "Method unsupported."');
+            throw new OAuthAuthenticationException('OAuth error: "Method unsupported."', null, $this->getName());
         }
 
         $parameters = array(
@@ -183,20 +184,20 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * @param mixed $response the 'parsed' content based on the response headers
      *
-     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     * @throws OAuthAuthenticationException If an OAuth error occurred or no access token is found
      */
-    protected function validateResponseContent($response)
+    protected function validateResponseContent($response, $redirectUri)
     {
         if (isset($response['error_description'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error_description']));
+            throw new OAuthAuthenticationException(sprintf('OAuth error: "%s"', $response['error_description']), $redirectUri, $this->getName());
         }
 
         if (isset($response['error'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', isset($response['error']['message']) ? $response['error']['message'] : $response['error']));
+            throw new OAuthAuthenticationException(sprintf('OAuth error: "%s"', isset($response['error']['message']) ? $response['error']['message'] : $response['error']), $redirectUri, $this->getName());
         }
 
         if (!isset($response['access_token'])) {
-            throw new AuthenticationException('Not a valid access token.');
+            throw new OAuthAuthenticationException('Not a valid access token.', $redirectUri, $this->getName());
         }
     }
 

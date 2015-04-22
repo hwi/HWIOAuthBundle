@@ -202,7 +202,7 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testGetAccessTokenFailedResponse()
     {
@@ -213,7 +213,7 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testGetAccessTokenErrorResponse()
     {
@@ -233,7 +233,7 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testRefreshAccessTokenInvalid()
     {
@@ -243,7 +243,7 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testRefreshAccessTokenError()
     {
@@ -253,7 +253,7 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
+     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException
      */
     public function testRevokeToken()
     {
