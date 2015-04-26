@@ -27,6 +27,8 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier' => 'identity.id',
         'nickname'   => 'identity.email_address',
+        'firstname'  => 'identity.first_name',
+        'lastname'   => 'identity.last_name',
         'realname'   => array('identity.last_name', 'identity.first_name'),
         'email'      => 'identity.email_address',
     );

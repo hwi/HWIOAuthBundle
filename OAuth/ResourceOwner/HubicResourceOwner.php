@@ -27,6 +27,8 @@ class HubicResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier' => 'email',
         'nickname'   => 'email',
+        'firstname'  => 'firstname',
+        'lastname'   => 'lastname',
         'realname'   => 'firstname',
         'email'      => 'email',
     );
