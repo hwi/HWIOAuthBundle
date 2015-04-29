@@ -34,6 +34,13 @@ use Symfony\Component\Security\Http\SecurityEvents;
  */
 class ConnectController extends ContainerAware
 {
+
+    protected function hasUser()
+    {
+        $authChecker = $this->container->has('security.token_storage') ? $this->container->get('security.authorization_checker') : $this->container->get('security.context');
+        return $authChecker->isGranted('IS_AUTHENTICATED_REMEMBERED');
+    }
+
     /**
      * Action that handles the login 'form'. If connecting is enabled the
      * user will be redirected to the appropriate login urls or registration forms.
@@ -45,7 +52,8 @@ class ConnectController extends ContainerAware
     public function connectAction(Request $request)
     {
         $connect = $this->container->getParameter('hwi_oauth.connect');
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+
+        $hasUser = $this->hasUser();
 
         $error = $this->getErrorForRequest($request);
 
@@ -91,7 +99,7 @@ class ConnectController extends ContainerAware
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->hasUser();
         if ($hasUser) {
             throw new AccessDeniedException('Cannot connect already registered account.');
         }
@@ -160,7 +168,7 @@ class ConnectController extends ContainerAware
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->hasUser();
         if (!$hasUser) {
             throw new AccessDeniedException('Cannot connect an account.');
         }
@@ -203,7 +211,7 @@ class ConnectController extends ContainerAware
                 show_confirmation_page:
 
                 /** @var $currentToken OAuthToken */
-                $currentToken = $this->container->get('security.context')->getToken();
+                $currentToken = $this->getTokenStorage()->getToken();
                 $currentUser  = $currentToken->getUser();
 
                 $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
@@ -338,7 +346,8 @@ class ConnectController extends ContainerAware
         $token->setUser($user);
         $token->setAuthenticated(true);
 
-        $this->container->get('security.context')->setToken($token);
+        $tokenStorage = $this->getTokenStorage();
+        $tokenStorage->setToken($token);
 
         if ($fakeLogin) {
             // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
@@ -357,5 +366,12 @@ class ConnectController extends ContainerAware
     protected function getTemplatingEngine()
     {
         return $this->container->getParameter('hwi_oauth.templating.engine');
+    }
+
+    protected function getTokenStorage()
+    {
+        $tokenStorage = $this->container->has('security.token_storage')
+            ? $this->container->get('security.token_storage') : $this->container->get('security.context');
+        return $tokenStorage;
     }
 }

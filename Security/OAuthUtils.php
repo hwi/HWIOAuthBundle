@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -51,14 +52,15 @@ class OAuthUtils
     protected $securityContext;
 
     /**
-     * @param HttpUtils                $httpUtils
-     * @param SecurityContextInterface $securityContext
-     * @param boolean                  $connect
+     * @param HttpUtils                     $httpUtils
+     * @param SecurityContextInterface      $securityContext
+     * @param boolean                       $connect
+     * @param AuthorizationCheckerInterface $authChecker
      */
-    public function __construct(HttpUtils $httpUtils, SecurityContextInterface $securityContext, $connect)
+    public function __construct(HttpUtils $httpUtils, SecurityContextInterface $securityContext = null, $connect, AuthorizationCheckerInterface $authChecker = null)
     {
         $this->httpUtils       = $httpUtils;
-        $this->securityContext = $securityContext;
+        $this->securityContext = $authChecker ?: $securityContext;
         $this->connect         = $connect;
     }
 

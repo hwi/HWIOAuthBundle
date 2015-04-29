@@ -17,13 +17,37 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 {
-    public function testGetAuthorizationUrlWithRedirectUrl()
+
+    public function testLegacyGetAuthorizationUrlWithRedirectUrl()
     {
+        $this->iniSet('error_reporting', -1 & ~E_USER_DEPRECATED);
+
         $url      = 'http://localhost:8080/login/check-instagram';
         $request  = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface'), true);
+        $utils->setResourceOwnerMap($this->getMap($url, $redirect, false, true));
+
+        $this->assertEquals(
+            $redirect,
+            $utils->getAuthorizationUrl($request, 'instagram', $url)
+        );
+
+        $this->assertNull($request->attributes->get('service'));
+    }
+
+    public function testGetAuthorizationUrlWithRedirectUrl()
+    {
+        if (!interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
+            $this->markTestSkipped();
+        }
+
+        $url      = 'http://localhost:8080/login/check-instagram';
+        $request  = $this->getRequest($url);
+        $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
+
+        $utils = new OAuthUtils($this->getHttpUtils($url), null, true, $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface'));
         $utils->setResourceOwnerMap($this->getMap($url, $redirect, false, true));
 
         $this->assertEquals(
@@ -40,7 +64,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request  = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getSecurity(true), true);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getSecurity(true), true, $this->getTokenManager(true));
         $utils->setResourceOwnerMap($this->getMap($url, $redirect, true));
 
         $this->assertEquals(
@@ -60,7 +84,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request  = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getSecurity(false), true);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getSecurity(false), true, $this->getTokenManager(false));
         $utils->setResourceOwnerMap($this->getMap($url, $redirect));
 
         $this->assertEquals(
@@ -182,7 +206,29 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     private function getSecurity($hasUser)
     {
+        if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')){
+            return null;
+        }
+
         $mock = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
+
+        $mock
+            ->expects($this->once())
+            ->method('isGranted')
+            ->with('IS_AUTHENTICATED_REMEMBERED')
+            ->will($this->returnValue($hasUser));
+
+        return $mock;
+    }
+
+    private function getTokenManager($hasUser)
+    {
+        if (!interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')){
+            return null;
+        }
+
+        $mock = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+
         $mock
             ->expects($this->once())
             ->method('isGranted')
