@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Controller;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +32,7 @@ use Symfony\Component\Security\Http\SecurityEvents;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class ConnectController extends ContainerAware
+class ConnectController extends Controller
 {
     /**
      * Action that handles the login 'form'. If connecting is enabled the
@@ -45,7 +45,7 @@ class ConnectController extends ContainerAware
     public function connectAction(Request $request)
     {
         $connect = $this->container->getParameter('hwi_oauth.connect');
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->isGranted('IS_AUTHENTICATED_REMEMBERED');
 
         $error = $this->getErrorForRequest($request);
 
@@ -91,7 +91,7 @@ class ConnectController extends ContainerAware
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->isGranted('IS_AUTHENTICATED_REMEMBERED');
         if ($hasUser) {
             throw new AccessDeniedException('Cannot connect already registered account.');
         }
@@ -160,7 +160,7 @@ class ConnectController extends ContainerAware
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->container->get('security.context')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->isGranted('IS_AUTHENTICATED_REMEMBERED');
         if (!$hasUser) {
             throw new AccessDeniedException('Cannot connect an account.');
         }

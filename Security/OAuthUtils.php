@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -47,19 +48,34 @@ class OAuthUtils
 
     /**
      * @var SecurityContextInterface
+     *
+     * @deprecated since 0.4. To be removed in 1.0. Use $authorizationChecker property instead.
      */
     protected $securityContext;
 
     /**
-     * @param HttpUtils                $httpUtils
-     * @param SecurityContextInterface $securityContext
-     * @param boolean                  $connect
+     * SecurityContextInterface for Symfony <2.6
+     * To be removed with all related logic (constructor, configs, extension)
+     *
+     * @var AuthorizationCheckerInterface|SecurityContextInterface
      */
-    public function __construct(HttpUtils $httpUtils, SecurityContextInterface $securityContext, $connect)
+    protected $authorizationChecker;
+
+    /**
+     * @param HttpUtils                                              $httpUtils
+     * @param AuthorizationCheckerInterface|SecurityContextInterface $authorizationChecker
+     * @param boolean                                                $connect
+     */
+    public function __construct(HttpUtils $httpUtils, $authorizationChecker, $connect)
     {
-        $this->httpUtils       = $httpUtils;
-        $this->securityContext = $securityContext;
-        $this->connect         = $connect;
+        if (!$authorizationChecker instanceof AuthorizationCheckerInterface && !$authorizationChecker instanceof SecurityContextInterface) {
+            throw new \InvalidArgumentException('Argument 2 should be an instance of Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface or Symfony\Component\Security\Core\SecurityContextInterface');
+        }
+
+        $this->httpUtils            = $httpUtils;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->securityContext      = $this->authorizationChecker;
+        $this->connect              = $connect;
     }
 
     /**
@@ -92,7 +108,7 @@ class OAuthUtils
     {
         $resourceOwner = $this->getResourceOwner($name);
         if (null === $redirectUrl) {
-            if (!$this->connect || !$this->securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            if (!$this->connect || !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
                 $redirectUrl = $this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($name));
             } else {
                 $redirectUrl = $this->getServiceAuthUrl($request, $resourceOwner);

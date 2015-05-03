@@ -23,7 +23,12 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request  = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface'), true);
+        if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
+            $authorizationChecker = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+        } else {
+            $authorizationChecker = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
+        }
+        $utils = new OAuthUtils($this->getHttpUtils($url), $authorizationChecker, true);
         $utils->setResourceOwnerMap($this->getMap($url, $redirect, false, true));
 
         $this->assertEquals(
@@ -40,7 +45,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request  = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getSecurity(true), true);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(true), true);
         $utils->setResourceOwnerMap($this->getMap($url, $redirect, true));
 
         $this->assertEquals(
@@ -60,7 +65,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request  = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getSecurity(false), true);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(false), true);
         $utils->setResourceOwnerMap($this->getMap($url, $redirect));
 
         $this->assertEquals(
@@ -180,9 +185,13 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         return new HttpUtils($urlGenerator);
     }
 
-    private function getSecurity($hasUser)
+    private function getAutorizationChecker($hasUser)
     {
-        $mock = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
+        if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
+            $mock = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+        } else {
+            $mock= $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
+        }
         $mock
             ->expects($this->once())
             ->method('isGranted')
