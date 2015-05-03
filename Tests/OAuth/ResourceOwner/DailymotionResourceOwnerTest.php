@@ -39,7 +39,7 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
      */
     public function testInvalidDisplayOptionValueThrowsException()
     {
