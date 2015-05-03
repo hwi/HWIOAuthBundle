@@ -45,9 +45,14 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
             'infos_url'         => 'https://api.twitter.com/1.1/account/verify_credentials.json',
         ));
 
-        $resolver->setOptional(array(
-            'x_auth_access_type',
-        ));
+        // Symfony <2.6 BC
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setDefined('x_auth_access_type');
+        } else {
+            $resolver->setOptional(array(
+                'x_auth_access_type',
+            ));
+        }
 
         if (version_compare(Kernel::VERSION, '2.6', '>=')) {
             // @link https://dev.twitter.com/oauth/reference/post/oauth/request_token

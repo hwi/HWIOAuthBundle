@@ -213,9 +213,14 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'use_bearer_authorization' => true,
         ));
 
-        $resolver->setOptional(array(
-            'revoke_token_url',
-        ));
+        // Symfony <2.6 BC
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setDefined('revoke_token_url');
+        } else {
+            $resolver->setOptional(array(
+                'revoke_token_url',
+            ));
+        }
 
         $resolver->setNormalizers(array(
             // Unfortunately some resource owners break the spec by using commas instead
