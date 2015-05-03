@@ -65,7 +65,7 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
      */
     public function testInvalidOptionThrowsException()
     {
@@ -73,7 +73,7 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
      */
     public function testInvalidOptionValueThrowsException()
     {
