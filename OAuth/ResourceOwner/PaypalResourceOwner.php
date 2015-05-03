@@ -45,9 +45,14 @@ class PaypalResourceOwner extends GenericOAuth2ResourceOwner
             'infos_url'         => 'https://api.paypal.com/v1/identity/openidconnect/userinfo/?schema=openid',
         ));
 
-        $resolver->addAllowedTypes(array(
-            'sandbox' => 'bool',
-        ));
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->addAllowedTypes('sandbox', 'bool');
+        } else {
+            $resolver->addAllowedTypes(array(
+                'sandbox' => 'bool',
+            ));
+        }
+
 
         $sandboxTransformation = function (Options $options, $value) {
             if (!$options['sandbox']) {

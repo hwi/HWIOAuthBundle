@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -54,7 +53,7 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
             ));
         }
 
-        if (version_compare(Kernel::VERSION, '2.6', '>=')) {
+        if (method_exists($resolver, 'setDefined')) {
             // @link https://dev.twitter.com/oauth/reference/post/oauth/request_token
             $resolver->setAllowedValues('x_auth_access_type', array('read', 'write'));
         } else {

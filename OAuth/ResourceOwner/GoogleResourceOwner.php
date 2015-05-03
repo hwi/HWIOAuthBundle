@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -72,7 +71,7 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
             'request_visible_actions' => null,
         ));
 
-        if (version_compare(Kernel::VERSION, '2.6', '>=')) {
+        if (method_exists($resolver, 'setDefined')) {
             $resolver
                 // @link https://developers.google.com/accounts/docs/OAuth2WebServer#offline
                 ->setAllowedValues('access_type', array('online', 'offline', null))

@@ -16,7 +16,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -229,7 +228,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'signature_method' => 'HMAC-SHA1',
         ));
 
-        if (version_compare(Kernel::VERSION, '2.6', '>=')) {
+        if (method_exists($resolver, 'setDefined')) {
             $resolver->setAllowedValues('signature_method', array('HMAC-SHA1', 'RSA-SHA1', 'PLAINTEXT'));
         } else {
             $resolver->setAllowedValues(array(
