@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * DailymotionResourceOwner
@@ -54,9 +55,13 @@ class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
             'display'           => null,
         ));
 
-        $resolver->setAllowedValues(array(
+        if (version_compare(Kernel::VERSION, '2.6', '>=')) {
             // @link http://www.dailymotion.com/doc/api/authentication.html#dialog-form-factors
-            'display' => array('page', 'popup', 'mobile', null),
-        ));
+            $resolver->setAllowedValues('display', array('page', 'popup', 'mobile', null));
+        } else {
+            $resolver->setAllowedValues(array(
+                'display' => array('page', 'popup', 'mobile', null),
+            ));
+        }
     }
 }

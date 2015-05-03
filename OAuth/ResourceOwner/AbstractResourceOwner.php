@@ -22,6 +22,7 @@ use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -326,8 +327,12 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
             'auth_with_one_url'   => false,
         ));
 
-        $resolver->setAllowedValues(array(
-            'csrf' => array(true, false),
-        ));
+        if (version_compare(Kernel::VERSION, '2.6', '>=')) {
+            $resolver->setAllowedValues('csrf', array(true, false));
+        } else {
+            $resolver->setAllowedValues(array(
+                'csrf' => array(true, false),
+            ));
+        }
     }
 }

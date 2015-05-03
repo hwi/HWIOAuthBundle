@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * FacebookResourceOwner
@@ -101,9 +102,16 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             'auth_type'           => null,
         ));
 
-        $resolver->setAllowedValues(array(
-            'display' => array('page', 'popup', 'touch', null), // @link https://developers.facebook.com/docs/reference/dialogs/#display
-            'auth_type' => array('rerequest', null), // @link https://developers.facebook.com/docs/reference/javascript/FB.login/
-        ));
+        // Symfony <2.6 BC
+        if (method_exists($resolver, 'setNormalizer')) {
+            $resolver
+                ->setAllowedValues('display', array('page', 'popup', 'touch', null)) // @link https://developers.facebook.com/docs/reference/dialogs/#display
+                ->setAllowedValues('auth_type', array('rerequest', null)) // @link https://developers.facebook.com/docs/reference/javascript/FB.login/
+            ;
+        } else {
+            $resolver->setAllowedValues(array(
+                'display' => array('page', 'popup', 'touch', null),
+            ));
+        }
     }
 }

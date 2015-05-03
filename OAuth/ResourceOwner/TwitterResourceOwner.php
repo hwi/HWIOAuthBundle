@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -43,13 +44,18 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
             'access_token_url'  => 'https://api.twitter.com/oauth/access_token',
             'infos_url'         => 'https://api.twitter.com/1.1/account/verify_credentials.json',
         ));
-        
+
         $resolver->setOptional(array(
             'x_auth_access_type',
         ));
-        $resolver->setAllowedValues(array(
+
+        if (version_compare(Kernel::VERSION, '2.6', '>=')) {
             // @link https://dev.twitter.com/oauth/reference/post/oauth/request_token
-            'x_auth_access_type' => array('read', 'write'),
-        ));
+            $resolver->setAllowedValues('x_auth_access_type', array('read', 'write'));
+        } else {
+            $resolver->setAllowedValues(array(
+                'x_auth_access_type' => array('read', 'write'),
+            ));
+        }
     }
 }
