@@ -222,20 +222,27 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             ));
         }
 
-        $resolver->setNormalizers(array(
-            // Unfortunately some resource owners break the spec by using commas instead
-            // of spaces to separate scopes (Disqus, Facebook, Github, Vkontante)
-            'scope' => function (Options $options, $value) {
-                if (!$value) {
-                    return null;
-                }
+        // Unfortunately some resource owners break the spec by using commas instead
+        // of spaces to separate scopes (Disqus, Facebook, Github, Vkontante)
+        $scopeNormalizer = function (Options $options, $value) {
+            if (!$value) {
+                return null;
+            }
 
-                if (!$options['use_commas_in_scope']) {
-                    return $value;
-                }
+            if (!$options['use_commas_in_scope']) {
+                return $value;
+            }
 
-                return str_replace(',', ' ', $value);
-            },
-        ));
+            return str_replace(',', ' ', $value);
+        };
+
+        // Symfony <2.6 BC
+        if (method_exists($resolver, 'setNormalizer')) {
+            $resolver->setNormalizer('scope', $scopeNormalizer);
+        } else {
+            $resolver->setNormalizers(array(
+                'scope' => $scopeNormalizer,
+            ));
+        }
     }
 }
