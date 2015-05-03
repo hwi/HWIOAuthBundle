@@ -88,7 +88,8 @@
         "doctrine/orm":                 "~2.3",
         "symfony/property-access":      "~2.5",
         "symfony/validator":            "~2.1",
-        "symfony/twig-bundle":          "~2.1"
+        "symfony/twig-bundle":          "~2.1",
+        "symfony/phpunit-bridge":       "~2.7"
     },
 
     "suggest": {
