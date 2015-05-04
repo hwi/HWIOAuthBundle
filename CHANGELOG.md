@@ -2,6 +2,7 @@ Changelog
 =========
 
 ## 0.3.8 (2015-05-04)
+* Fix: Remove BC break for Symfony < 2.5,
 * Fix: Compatibility issues with Symfony 2.6+,
 * Fix: Deprecated graph URLs fir `FacebookResourceOwner`
 
