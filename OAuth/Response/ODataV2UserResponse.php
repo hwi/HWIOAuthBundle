@@ -11,20 +11,18 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * @author Martijn Gastkemper <martijngastkemper@gmail.com>
  */
 class ODataV2UserResponse extends PathUserResponse
 {
-	/**
-   * {@inheritdoc}
-   */
-	public function setResponse( $response )
-	{
-		parent::setResponse($response);
-		$this->response = current($this->response['d']['results']);
-  }
-
+    /**
+     * {@inheritdoc}
+     */
+    public function setResponse($response)
+    {
+        parent::setResponse($response);
+        $this->response = current($this->response['d']['results']);
+    }
 }
