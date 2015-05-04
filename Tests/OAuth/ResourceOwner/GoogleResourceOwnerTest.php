@@ -36,7 +36,7 @@ json;
     );
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
      */
     public function testInvalidAccessTypeOptionValueThrowsException()
     {
@@ -44,7 +44,7 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
      */
     public function testInvalidApprovalPromptOptionValueThrowsException()
     {
