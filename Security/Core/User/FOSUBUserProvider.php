@@ -102,7 +102,15 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
 
         $property = $this->getProperty($response);
 
-        if (!$this->accessor->isWritable($user, $property)) {
+        // compatibility with Symfony <2.5
+        if (!method_exists($this->accessor, 'isWritable')) {
+            $camelizedSetter = 'set'.strtr(ucwords(strtr($property, array('_' => ' '))), array(' ' => ''));
+            $isPropertyWritable = is_callable(array($user, $camelizedSetter));
+        } else {
+            $isPropertyWritable = $this->accessor->isWritable($user, $property);
+        }
+
+        if (!$isPropertyWritable) {
             throw new \RuntimeException(sprintf("Class '%s' must have defined setter method for property: '%s'.", get_class($user), $property));
         }
 
