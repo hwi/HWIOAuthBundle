@@ -59,6 +59,7 @@ class Configuration implements ConfigurationInterface
             'toshl',
             'twitch',
             'vkontakte',
+            'wechat',
             'windows_live',
             'wordpress',
             'yandex',

@@ -51,6 +51,7 @@
         <parameter key="hwi_oauth.resource_owner.twitch.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitchResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.twitter.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.vkontakte.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.wechat.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WechatResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.windows_live.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WindowsLiveResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.wordpress.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WordpressResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.xing.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\XingResourceOwner</parameter>
