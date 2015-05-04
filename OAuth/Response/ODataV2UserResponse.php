@@ -16,7 +16,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 /**
  * @author Martijn Gastkemper <martijngastkemper@gmail.com>
  */
-class ExactOnlineUserResponse extends PathUserResponse
+class ODataV2UserResponse extends PathUserResponse
 {
 	/**
    * {@inheritdoc}
