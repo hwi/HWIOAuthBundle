@@ -73,7 +73,7 @@
         "symfony/framework-bundle":     "~2.3",
         "symfony/security-bundle":      "~2.1",
         "symfony/options-resolver":     "~2.1",
-        "kriswallsmith/buzz":           "~0.7",
+        "kriswallsmith/buzz":           "~0.13",
         "symfony/yaml": "~2.3"
     },
 
