@@ -52,7 +52,7 @@ class ExactOnlineResourceOwner extends GenericOAuth2ResourceOwner
 			'authorization_url' => 'https://start.exactonline.nl/api/oauth2/auth',
 			'access_token_url' => 'https://start.exactonline.nl/api/oauth2/token',
 			'infos_url' => 'https://start.exactonline.nl/api/v1/current/Me',
-			'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\OData2UserResponse',
+			'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\ODataV2UserResponse',
 			'scope' => 'code',
 			'use_bearer_authorization' => false,
 		) );
