@@ -40,6 +40,7 @@ This bundle contains support for 20+ different providers:
 * Twitch,
 * Twitter,
 * VKontakte,
+* Weixin,
 * Windows Live,
 * Wordpress,
 * XING,

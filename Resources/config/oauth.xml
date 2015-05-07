@@ -39,6 +39,7 @@
         <parameter key="hwi_oauth.resource_owner.mailru.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\MailRuResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.paypal.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\PaypalResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.qq.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\QQResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.weixin.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WeixinResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.reddit.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\RedditResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.salesforce.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SalesforceResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.sensio_connect.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SensioConnectResourceOwner</parameter>
