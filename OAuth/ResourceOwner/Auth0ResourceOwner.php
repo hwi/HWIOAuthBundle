@@ -34,17 +34,33 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
         'profilepicture' => 'picture',
     );
 
+    protected function getRequestHeaders($extends = array()) {
+
+        return array_merge($extends, array(
+            'User-Agent' => 'PHP/' . phpversion(),
+            'Auth0-Client' => 'PHP/HWIOAuthBundle',
+        ));
+    }
     /**
      * {@inheritDoc}
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
 
-        $headers = array(
-            'Content-Type' => 'application/x-www-form-urlencoded'
-        );
+        $headers = $this->getRequestHeaders(array('Content-Type' => 'application/x-www-form-urlencoded'));
 
         return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers, HttpRequestInterface::METHOD_POST);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function doGetUserInformationRequest($url, array $parameters = array());
+    {
+
+        $headers = $this->getRequestHeaders();
+
+        return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers);
     }
 
 
