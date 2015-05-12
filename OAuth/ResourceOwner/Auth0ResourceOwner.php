@@ -55,7 +55,7 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array());
+    protected function doGetUserInformationRequest($url, array $parameters = array())
     {
 
         $headers = $this->getRequestHeaders();
