@@ -34,11 +34,24 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
         'profilepicture' => 'picture',
     );
 
+    protected function getAuthClient() {
+        return base64_encode(json_encode(array(
+
+                'name' => 'HWIOAuthBundle', 
+                'version' => 'unknown',
+
+                'environment' => array(
+                    'name' => 'PHP', 
+                    'version' => phpversion()
+                )
+
+            )));
+    }
+
     protected function getRequestHeaders($extends = array()) {
 
         return array_merge($extends, array(
-            'User-Agent' => 'PHP/' . phpversion(),
-            'Auth0-Client' => 'PHP/HWIOAuthBundle',
+            'Auth0-Client' => $this->getAuthClient()
         ));
     }
     /**
@@ -71,7 +84,7 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
         $resolver->setDefaults(array(
-            'authorization_url'   => '{base_url}/authorize',
+            'authorization_url'   => '{base_url}/authorize?auth0Client=' . $this->getAuthClient(),
             'access_token_url'    => '{base_url}/oauth/token',
             'infos_url'           => '{base_url}/userinfo',
         ));
