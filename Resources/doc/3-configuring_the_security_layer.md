@@ -48,16 +48,16 @@ The paths configured at the `resource_owners` section should be defined in your 
 ```yaml
 # app/config/routing.yml
 facebook_login:
-    pattern: /login/check-facebook
+    path: /login/check-facebook
 
 google_login:
-    pattern: /login/check-google
+    path: /login/check-google
 
 custom_login:
-    pattern: /login/check-custom
+    path: /login/check-custom
 
 github_login:
-    pattern: /login/check-github
+    path: /login/check-github
 ```
 
 ## That was it!
