@@ -41,6 +41,8 @@ class EvernoteResourceOwner extends GenericOAuth1ResourceOwner
         'profilepicture' => null
     );
 
+    private $userStore;
+
     /** {@inheritDoc} */
     public function configure()
     {
@@ -56,8 +58,7 @@ class EvernoteResourceOwner extends GenericOAuth1ResourceOwner
     /** {@inheritDoc} */
     public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
-        $client = new EvernoteClient(null, $this->options['sandbox']);
-        $user = $client->getUserStore()->getUser($accessToken['oauth_token']);
+        $user = $this->getUserStore()->getUser($accessToken['oauth_token']);
 
         $response = $this->getUserResponse();
         $response->setResponse((array) $user);
@@ -79,6 +80,16 @@ class EvernoteResourceOwner extends GenericOAuth1ResourceOwner
             'authorization_url' => 'https://%s.evernote.com/OAuth.action',
             'access_token_url' => 'https://%s.evernote.com/oauth'
         ));
+    }
+
+    private function getUserStore()
+    {
+        if (null === $this->userStore) {
+            $client = new EvernoteClient(null, $this->options['sandbox']);
+            $this->userStore = $client->getUserStore();
+        }
+
+        return $this->userStore;
     }
 }
 
