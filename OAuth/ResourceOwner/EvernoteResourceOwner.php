@@ -17,7 +17,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Buzz\Message\RequestInterface;
 use Buzz\Message\MessageInterface;
 
-use Evernote\Client as EvernoteClient;
+use Evernote\AdvancedClient as EvernoteClient;
 
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
@@ -44,7 +44,7 @@ class EvernoteResourceOwner extends GenericOAuth1ResourceOwner
     /** {@inheritDoc} */
     public function configure()
     {
-        if (!class_exists('Evernote\\Client')) {
+        if (!class_exists('Evernote\\AdvancedClient')) {
             throw new \RuntimeException('Install evernote\'s php sdk to use the Evernote resource owner');
         }
 
@@ -56,8 +56,8 @@ class EvernoteResourceOwner extends GenericOAuth1ResourceOwner
     /** {@inheritDoc} */
     public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
-        $client = new EvernoteClient($accessToken['oauth_token'], $this->options['sandbox']);
-        $user = $client->getUser();
+        $client = new EvernoteClient(null, $this->options['sandbox']);
+        $user = $client->getUserStore()->getUser($accessToken['oauth_token']);
 
         $response = $this->getUserResponse();
         $response->setResponse((array) $user);
