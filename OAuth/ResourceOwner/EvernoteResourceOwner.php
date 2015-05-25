@@ -69,6 +69,12 @@ class EvernoteResourceOwner extends GenericOAuth1ResourceOwner
     }
 
     /** {@inheritDoc} */
+    public function revokeToken($token)
+    {
+        $this->getUserStore()->revokeLongSession($token);
+    }
+
+    /** {@inheritDoc} */
     protected function configureOptions(OptionsResolverInterface $resolver)
     {
         parent::configureOptions($resolver);
