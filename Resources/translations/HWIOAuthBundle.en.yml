@@ -1,6 +1,7 @@
 header:
     connecting: Connecting
     success: Successfully connected the account '%name%'!
+    fail: Couldn't connected the account
     register: Register with the account '%name%'
     registration_success: Successfully registered and connected the account '%username%'!
 

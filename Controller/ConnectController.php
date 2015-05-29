@@ -183,6 +183,10 @@ class ConnectController extends ContainerAware
             $accessToken = $session->get('_hwi_oauth.connect_confirmation.'.$key);
         }
 
+        if (!is_array($accessToken)) {
+            return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_fail.html.' . $this->getTemplatingEngine());
+        }
+
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
         // Show confirmation page?
