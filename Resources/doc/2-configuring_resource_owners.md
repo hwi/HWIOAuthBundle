@@ -61,6 +61,7 @@ hwi_oauth:
 - [Salesforce](resource_owners/salesforce.md)
 - [SensioLabs Connect](resource_owners/sensio_connect.md)
 - [Sina Weibo](resource_owners/sina_weibo.md)
+- [Spotify](resource_owners/spotify.md)
 - [Soundcloud](resource_owners/soundcloud.md)
 - [Stack Exchange](resource_owners/stack_exchange.md)
 - [Stereomood](resource_owners/stereomood.md)
