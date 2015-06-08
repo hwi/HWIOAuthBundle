@@ -12,16 +12,32 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\HubicResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
 class HubicResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $userResponse = '{ "email": "1", "firstname": "bar", "activated": true , "creationDate": "2013-12-31T19:09:42+01:00", "language": "fr", "status": "ok", "offer": "25g", "lastname": "Test" }';
+    protected $userResponse = '{ "email": "1", "firstname": "bar", "activated": true , "creationDate": "2013-12-31T19:09:42+01:00", "language": "fr", "status": "ok", "offer": "25g", "lastname": "foo" }';
     protected $paths = array(
         'identifier' => 'email',
         'nickname'   => 'firstname',
+        'firstname'  => 'firstname',
+        'lastname'   => 'lastname',
         'realname'   => 'firstname',
         'email'      => 'email',
     );
+
+    public function testGetUserInformationFirstAndLastName()
+    {
+        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+
+        /**
+         * @var $userResponse AbstractUserResponse
+         */
+        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
+
+        $this->assertEquals('bar', $userResponse->getFirstName());
+        $this->assertEquals('foo', $userResponse->getLastName());
+    }
 
     public function testGetAuthorizationUrl()
     {

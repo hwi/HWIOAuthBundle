@@ -28,6 +28,8 @@ class EventbriteResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier' => 'user.user_id',
         'nickname'   => 'user.first_name',
+        'firstname'  => 'user.first_name',
+        'lastname'   => 'user.last_name',
         'realname'   => array('user.first_name', 'user.last_name'),
         'email'      => 'email',
     );

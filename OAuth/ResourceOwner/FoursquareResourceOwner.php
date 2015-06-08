@@ -26,6 +26,8 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier'     => 'response.user.id',
+        'firstname'      => 'response.user.firstName',
+        'lastname'       => 'response.user.lastName',
         'nickname'       => 'response.user.firstName',
         'realname'       => array('response.user.firstName', 'response.user.lastName'),
         'email'          => 'response.user.contact.email',
@@ -89,8 +91,6 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
             // @link https://developer.foursquare.com/overview/versioning
             'version'                  => '20121206',
 
-            'use_bearer_authorization' => false,
-            
             'use_bearer_authorization' => false,
         ));
     }

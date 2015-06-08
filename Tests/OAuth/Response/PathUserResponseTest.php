@@ -62,6 +62,8 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
         $paths = array(
             'identifier'     => null,
             'nickname'       => null,
+            'firstname'      => null,
+            'lastname'       => null,
             'realname'       => null,
             'email'          => null,
             'profilepicture' => null,
@@ -75,6 +77,8 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
         $paths = array(
             'identifier'     => null,
             'nickname'       => null,
+            'firstname'      => null,
+            'lastname'       => null,
             'realname'       => null,
             'email'          => null,
             'profilepicture' => null,
