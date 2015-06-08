@@ -54,6 +54,7 @@ class Configuration implements ConfigurationInterface
             'salesforce',
             'sensio_connect',
             'sina_weibo',
+            'spotify',
             'soundcloud',
             'stack_exchange',
             'toshl',

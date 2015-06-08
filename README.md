@@ -33,6 +33,7 @@ This bundle contains support for 20+ different providers:
 * Salesforce,
 * Sensio Connect,
 * Sina Weibo
+* Spotify
 * Soundcloud
 * Stack Exchange,
 * Stereomood,
