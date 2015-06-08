@@ -77,7 +77,7 @@
 
     "require-dev": {
         "doctrine/orm":                 "~2.2",
-        "symfony/property-access":      "~2.5",
+        "symfony/property-access":      "~2.3",
         "symfony/validator":            "~2.1",
         "symfony/twig-bundle":          "~2.1"
     },
