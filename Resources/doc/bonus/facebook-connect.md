@@ -35,7 +35,7 @@ hwi_oauth_redirect:
     prefix:   /demo/secured/connect
 
 facebook_login:
-    pattern: /demo/secured/login_facebook
+    path: /demo/secured/login_facebook
 ```
 
 ### Configuration of the Security Layer
