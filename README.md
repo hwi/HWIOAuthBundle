@@ -5,7 +5,7 @@ HWIOAuthBundle
 
 The HWIOAuthBundle adds support for authenticating users via OAuth1.0a or OAuth2 in Symfony2.
 
-This bundle contains support for 20+ different providers:
+This bundle contains support for 40 different providers:
 * 37signals,
 * Amazon,
 * Auth0,
@@ -41,6 +41,7 @@ This bundle contains support for 20+ different providers:
 * Twitch,
 * Twitter,
 * VKontakte,
+* Wechat,
 * Windows Live,
 * Wordpress,
 * XING,
