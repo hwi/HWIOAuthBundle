@@ -121,7 +121,7 @@ The following example bases also on the Facebook ["Login with Javascript SDK"](h
 {% endblock %}
 ```
 
-Make sure `{scope: 'email'}` is added as the second argument to FB.login. Or elsewhere, you would have to prompt the user with the authentification for the basic data, and then ask him again to accept that you need his email.
+Make sure `{scope: 'email'}` is added as the second argument to FB.login. Or elsewhere, you would have to prompt the user with the authentication for the basic data, and then ask him again to accept that you need his email.
 
 ## Watch the results!
 
