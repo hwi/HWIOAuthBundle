@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * BitbucketResourceOwner
@@ -33,9 +33,9 @@ class BitbucketResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function setupOptions(OptionsResolver $resolver)
     {
-        parent::configureOptions($resolver);
+        parent::setupOptions($resolver);
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://bitbucket.org/api/1.0/oauth/authenticate',

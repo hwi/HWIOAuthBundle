@@ -11,10 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\Response;
-use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
+use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Auth0ResourceOwner
@@ -51,9 +50,9 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function setupOptions(OptionsResolver $resolver)
     {
-        parent::configureOptions($resolver);
+        parent::setupOptions($resolver);
         $resolver->setDefaults(array(
             'authorization_url'   => '{base_url}/authorize',
             'access_token_url'    => '{base_url}/oauth/token',

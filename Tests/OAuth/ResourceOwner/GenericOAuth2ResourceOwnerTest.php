@@ -67,7 +67,7 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException
      */
     public function testInvalidOptionThrowsException()
     {

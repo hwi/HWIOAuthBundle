@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
@@ -202,10 +203,20 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 
     /**
      * {@inheritDoc}
+     *
+     * @deprecated since 0.4, to be removed in 1.0.
      */
     protected function configureOptions(OptionsResolverInterface $resolver)
     {
-        parent::configureOptions($resolver);
+        $this->setupOptions($resolver);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function setupOptions(OptionsResolver $resolver)
+    {
+        parent::setupOptions($resolver);
 
         $resolver->setDefaults(array(
             'attr_name'                => 'access_token',

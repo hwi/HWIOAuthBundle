@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Message\MessageInterface as HttpMessageInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class QQResourceOwner extends GenericOAuth2ResourceOwner
@@ -76,9 +76,9 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function setupOptions(OptionsResolver $resolver)
     {
-        parent::configureOptions($resolver);
+        parent::setupOptions($resolver);
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://graph.qq.com/oauth2.0/authorize?format=json',

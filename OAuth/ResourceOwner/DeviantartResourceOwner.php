@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * DeviantartResourceOwner
@@ -32,9 +32,9 @@ class DeviantartResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function setupOptions(OptionsResolver $resolver)
     {
-        parent::configureOptions($resolver);
+        parent::setupOptions($resolver);
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://www.deviantart.com/oauth2/draft15/authorize',
