@@ -1,13 +1,9 @@
 Step 1: Setting up the bundle
 =============================
-### A) Add HWIOAuthBundle to your composer.json
+### A) Add HWIOAuthBundle to your project
 
-```yaml
-{
-    "require": {
-        "hwi/oauth-bundle": "0.3.*@dev"
-    }
-}
+```bash
+composer require hwi/oauth-bundle
 ```
 
 ### B) Enable the bundle
