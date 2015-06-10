@@ -13,10 +13,13 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 use Buzz\Message\RequestInterface;
 use Buzz\Message\MessageInterface;
 
+use EDAM\Error\EDAMErrorCode;
+use Evernote\Exception\ExceptionFactory;
 use Evernote\AdvancedClient as EvernoteClient;
 
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
@@ -58,20 +61,30 @@ class EvernoteResourceOwner extends GenericOAuth1ResourceOwner
     /** {@inheritDoc} */
     public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
-        $user = $this->getUserStore()->getUser($accessToken['oauth_token']);
+        try {
+            $user = $this->getUserStore()->getUser($accessToken['oauth_token']);
 
-        $response = $this->getUserResponse();
-        $response->setResponse((array) $user);
-        $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
+            $response = $this->getUserResponse();
+            $response->setResponse((array) $user);
+            $response->setResourceOwner($this);
+            $response->setOAuthToken(new OAuthToken($accessToken));
 
-        return $response;
+            return $response;
+        } catch (\Exception $e) {
+            $e = ExceptionFactory::create($e);
+            throw new AuthenticationException('OAuth Error', 0, $e);
+        }
     }
 
     /** {@inheritDoc} */
     public function revokeToken($token)
     {
-        $this->getUserStore()->revokeLongSession($token);
+        try {
+            $this->getUserStore()->revokeLongSession($token);
+        } catch (\Exception $e) {
+            $e = ExceptionFactory::create($e);
+            throw new AuthenticationException('OAuth Error', 0, $e);
+        }
     }
 
     /** {@inheritDoc} */
