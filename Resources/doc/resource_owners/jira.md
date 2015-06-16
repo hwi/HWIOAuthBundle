@@ -7,8 +7,7 @@ Jira instance. Check out the [Atlassian documentation](https://confluence.atlass
 Next configure a resource owner of type `jira` with appropriate
 `client_id`, `client_secret` and `base_url`.
 
-The Client Secret should either be the formatted private key  PEM string
-or a path to the PEM file.
+The Client Secret should either be a path to the private key pem file.
 
 ```yaml
 # app/config/config.yml
@@ -19,6 +18,7 @@ hwi_oauth:
             type:                jira
             client_id:           <client_id>
             client_secret:       <client_secret>
+            # Base URL of your Jira installation with no trailing slash (e.g. https://example.com/jira)
             base_url:            <base_url>
 ```
 
