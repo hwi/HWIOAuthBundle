@@ -71,7 +71,7 @@ class SlackResourceOwner extends GenericOAuth2ResourceOwner
             array(
                 'response_type' => 'code',
                 'client_id'     => $this->options['client_id'],
-                'scope'         => $this->options['scope'],
+                'scope'         => str_replace(' ', ',', $this->options['scope']),
                 'state'         => $this->state ? urlencode($this->state) : null,
                 'redirect_uri'  => $redirectUri,
                 'team'          => (isset($this->options['team']) ? $this->options['team'] : '')
