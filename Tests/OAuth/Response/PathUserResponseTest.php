@@ -67,6 +67,7 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
             'realname'       => null,
             'email'          => null,
             'profilepicture' => null,
+            'id'            => null,
         );
 
         $this->assertEquals($paths, $this->responseObject->getPaths());
@@ -82,6 +83,7 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
             'realname'       => null,
             'email'          => null,
             'profilepicture' => null,
+            'id'             => null,
             'foo'            => 'bar'
         );
 
