@@ -44,4 +44,9 @@ class CustomUserResponse extends AbstractUserResponse
     {
         return 'foo';
     }
+    
+    public function getId()
+    {
+        return '123';
+    }
 }
