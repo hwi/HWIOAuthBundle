@@ -1,7 +1,9 @@
-HWIOAuthBundle
+HWIOAuthBundle fork by David Courtey
+
+Editing Instagram method and adding ID to response object
 ==============
 
-[![Build Status](https://secure.travis-ci.org/hwi/HWIOAuthBundle.svg?branch=master)](http://travis-ci.org/hwi/HWIOAuthBundle) [![Latest Stable Version](https://poser.pugx.org/hwi/oauth-bundle/v/stable.svg)](https://packagist.org/packages/hwi/oauth-bundle) [![Total Downloads](https://poser.pugx.org/hwi/oauth-bundle/downloads.svg)](https://packagist.org/packages/hwi/oauth-bundle) [![Latest Unstable Version](https://poser.pugx.org/hwi/oauth-bundle/v/unstable.svg)](https://packagist.org/packages/hwi/oauth-bundle) [![License](https://poser.pugx.org/hwi/oauth-bundle/license.svg)](https://packagist.org/packages/hwi/oauth-bundle)
+[![Build Status](https://travis-ci.org/David-Crty/HWIOAuthBundle.svg?branch=master)](http://travis-ci.org/David-Crty/HWIOAuthBundle) 
 
 The HWIOAuthBundle adds support for authenticating users via OAuth1.0a or OAuth2 in Symfony2.
 
