@@ -18,6 +18,9 @@ env:
   - SYMFONY_VERSION='2.3.*' FOSUSERBUNDLE_VERSION='2.0.*@dev'
   - SYMFONY_VERSION='2.4.*' FOSUSERBUNDLE_VERSION='2.0.*@dev'
 
+before_install:
+  - composer selfupdate
+
 before_script:
     - composer require --no-update symfony/symfony=${SYMFONY_VERSION}
     - composer require --no-update friendsofsymfony/user-bundle=${FOSUSERBUNDLE_VERSION}
