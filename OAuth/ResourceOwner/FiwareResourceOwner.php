@@ -19,6 +19,10 @@ use Buzz\Message\RequestInterface as HttpRequestInterface;
 /**
  * FiwareResourceOwner
  *
+ * Resource owner for the fiware keyrock idm oauth 2.0 service
+ *
+ * more infos at https://github.com/ging/fi-ware-idm/wiki/Using-the-FIWARE-LAB-instance
+ *
  * @author Christian Kaspar <christian@sponsoo.de>
  */
 class FiwareResourceOwner extends GenericOAuth2ResourceOwner
@@ -41,12 +45,11 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
         $parameters = array_merge(array(
             'code'          => $request->query->get('code'),
             'grant_type'    => 'authorization_code',
-            'client_id'     => $this->options['client_id'],
-            'client_secret' => $this->options['client_secret'],
             'redirect_uri'  => $redirectUri,
         ), $extraParameters);
 
         $headers = array(
+            'Authorization: Basic ' . base64_encode($this->options['client_id'] . ':' . $this->options['client_secret']),
             'Content-Type: application/x-www-form-urlencoded',
         );
 

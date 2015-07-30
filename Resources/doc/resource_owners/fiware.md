@@ -1,5 +1,6 @@
 Step 2x: Setup FI-WARE
 =========================
+
 First you will have to register your application on your FI-WARE Identity Management - KeyRock. Check out the
 documentation for more information: 
 - http://catalogue.fiware.org/enablers/identity-management-keyrock
