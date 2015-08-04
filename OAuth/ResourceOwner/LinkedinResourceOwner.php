@@ -47,7 +47,12 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         // LinkedIn uses different variable as they still support OAuth1.0a
-        return parent::doGetUserInformationRequest(str_replace('access_token', 'oauth2_access_token', $url), $parameters);
+        return $this->httpRequest(
+            str_replace('access_token', 'oauth2_access_token', $url),
+            http_build_query($parameters, '', '&'),
+            array(),
+            HttpRequestInterface::METHOD_GET
+        );
     }
 
     /**
