@@ -9,6 +9,7 @@ This bundle contains support for 40 different providers:
 * 37signals,
 * Amazon,
 * Auth0,
+* Azure,
 * Bitbucket,
 * Bitly,
 * Box,
