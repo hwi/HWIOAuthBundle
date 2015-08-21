@@ -34,6 +34,8 @@ json;
     protected $paths = array(
         'identifier'     => 'users.0.id',
         'nickname'       => 'users.0.display_name',
+        'firstname'      => 'users.0.first_name',
+        'lastname'       => 'users.0.last_name',
         'realname'       => array('users.0.first_name', 'users.0.last_name'),
         'profilepicture' => 'users.0.photo_urls.large',
         'email'          => 'users.0.active_email',
@@ -48,6 +50,8 @@ json;
 
         $this->assertEquals('42', $userResponse->getUsername());
         $this->assertEquals('foo bar', $userResponse->getNickname());
+        $this->assertEquals('Foo', $userResponse->getFirstName());
+        $this->assertEquals('Bar', $userResponse->getLastName());
         $this->assertEquals('Foo Bar', $userResponse->getRealName());
         $this->assertEquals('foobar@example.com', $userResponse->getEmail());
         $this->assertEquals('https://x2.xingassets.com/img/n/nobody_m.140x185.jpg', $userResponse->getProfilePicture());

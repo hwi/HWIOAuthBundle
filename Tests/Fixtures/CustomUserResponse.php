@@ -30,6 +30,16 @@ class CustomUserResponse extends AbstractUserResponse
         return 'foo';
     }
 
+    public function getFirstName()
+    {
+        return 'foo';
+    }
+
+    public function getLastName()
+    {
+        return 'BAR';
+    }
+
     public function getRealName()
     {
         return 'foo';

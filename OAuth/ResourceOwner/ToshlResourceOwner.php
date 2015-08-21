@@ -27,6 +27,8 @@ class ToshlResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier'     => 'id',
         'nickname'       => 'email',
+        'firstname'      => 'first_name',
+        'lastname'       => 'last_name',
         'realname'       => array('first_name', 'last_name'),
         'email'          => 'email',
     );

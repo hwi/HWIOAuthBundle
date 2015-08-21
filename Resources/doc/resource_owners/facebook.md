@@ -20,6 +20,12 @@ hwi_oauth:
 
 Optionally you can tune how dialog is displaying by changing [`display`](https://developers.facebook.com/docs/reference/dialogs/#display) option
 
+Use the optional key [`auth_type`] when you want to re-request a declined permission.
+Only supports one value: rerequest.
+Facebook documentation:
+- https://developers.facebook.com/docs/facebook-login/login-flow-for-web/v2.0#re-asking-declined-permissions
+- https://developers.facebook.com/docs/reference/javascript/FB.login/
+
 ```yaml
 # app/config/config.yml
 
@@ -31,6 +37,7 @@ hwi_oauth:
             client_secret:       <client_secret>
             options:
                 display: popup #dialog is optimized for popup window
+                auth_type: rerequest # Re-asking for Declined Permissions
 ```
 
 When you're done. Continue by configuring the security layer or go back to

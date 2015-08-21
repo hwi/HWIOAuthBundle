@@ -28,6 +28,8 @@ json;
     protected $paths = array(
         'identifier'     => 'id',
         'nickname'       => 'email',
+        'firstname'      => 'first_name',
+        'lastname'       => 'last_name',
         'realname'       => array('first_name', 'last_name'),
         'email'          => 'email',
     );
@@ -64,6 +66,8 @@ json;
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('example@website.com', $userResponse->getNickname());
         $this->assertEquals('token', $userResponse->getAccessToken());
+        $this->assertEquals('John', $userResponse->getFirstName());
+        $this->assertEquals('Smith', $userResponse->getLastName());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
