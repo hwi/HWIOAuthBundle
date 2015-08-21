@@ -77,7 +77,7 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
         $response->setResponse($content->getContent());
 
         $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken);
+        $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
     }
