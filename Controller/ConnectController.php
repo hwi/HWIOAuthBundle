@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
+use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
@@ -212,6 +213,15 @@ class ConnectController extends ContainerAware
                     // Update user token with new details
                     $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
                 }
+
+                //Dispatch an event similar with security.authentication.success so a listener can save the access_token, refresh_token and expires_at fields
+                $tempOauthToken = new OAuthToken($accessToken);
+                $tempOauthToken->setUser($currentUser);
+                $tempOauthToken->setResourceOwnerName($service);
+                $this->container->get('event_dispatcher')->dispatch(
+                    HWIOAuthEvents::HWIOAUTH_CONNECTED,
+                    new AuthenticationEvent($tempOauthToken)
+                );
 
                 return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
                     'userInformation' => $userInformation,
