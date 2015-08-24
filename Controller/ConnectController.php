@@ -119,14 +119,29 @@ class ConnectController extends ContainerAware
 
         $formHandler = $this->container->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {
-            $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
+            $dispatcher = $this->container->get('event_dispatcher');
+
+            if (class_exists('FOS\UserBundle\FOSUserEvents')) {
+                $event = new FormEvent($form, $request);
+                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_SUCCESS, $event);
+            }
+
+            $user = $form->getData();
+
+            $this->container->get('hwi_oauth.account.connector')->connect($user, $userInformation);
 
             // Authenticate the user
             $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
 
-            return $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(), array(
+            $response = $this->container->get('templating')->renderResponse('HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
             ));
+
+            if (class_exists('FOS\UserBundle\FOSUserEvents')) {
+                $dispatcher->dispatch(FOSUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($user, $request, $response));
+            }
+
+            return $response;
         }
 
         // reset the error in the session
