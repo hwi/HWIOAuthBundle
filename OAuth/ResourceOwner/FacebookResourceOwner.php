@@ -76,10 +76,9 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             'client_secret' => $this->options['client_secret'],
         );
 
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), HttpRequestInterface::METHOD_POST);
-        $response = $this->getResponseContent($response);
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('access_token' => $token)), $parameters, array(), HttpRequestInterface::METHOD_DELETE);
 
-        return 'true' == $response;
+        return 200 == $response->getStatusCode();
     }
 
     /**
@@ -92,7 +91,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         $resolver->setDefaults(array(
             'authorization_url'   => 'https://www.facebook.com/dialog/oauth',
             'access_token_url'    => 'https://graph.facebook.com/oauth/access_token',
-            'revoke_token_url'    => 'https://graph.facebook.com/me/permissions',
+            'revoke_token_url'    => 'https://graph.facebook.com/me/permissions',//'https://graph.facebook.com/me/permissions',
             'infos_url'           => 'https://graph.facebook.com/me',
 
             'use_commas_in_scope' => true,
