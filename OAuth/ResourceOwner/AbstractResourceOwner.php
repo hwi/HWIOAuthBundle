@@ -12,10 +12,12 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Client\ClientInterface as HttpClientInterface;
+use Buzz\Exception\ClientException;
 use Buzz\Message\MessageInterface as HttpMessageInterface;
 use Buzz\Message\Request as HttpRequest;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Buzz\Message\Response as HttpResponse;
+use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
@@ -244,7 +246,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $request->setHeaders($headers);
         $request->setContent($content);
 
-        $this->httpClient->send($request, $response);
+        try {
+            $this->httpClient->send($request, $response);
+        } catch (ClientException $e) {
+            throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
+        }
 
         return $response;
     }

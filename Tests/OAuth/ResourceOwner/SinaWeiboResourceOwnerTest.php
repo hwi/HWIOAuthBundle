@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
+use Buzz\Exception\RequestException;
+use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SinaWeiboResourceOwner;
 
 class SinaWeiboResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
@@ -48,6 +50,22 @@ json;
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
+    }
+
+    public function testGetUserInformationFailure()
+    {
+        $exception = new RequestException();
+
+        $this->buzzClient->expects($this->once())
+            ->method('send')
+            ->will($this->throwException($exception));
+
+        try {
+            $this->resourceOwner->getUserInformation(array('access_token' => 'token', 'uid' => 'someuser'));
+            $this->fail('An exception should have been raised');
+        } catch (HttpTransportException $e) {
+            $this->assertSame($exception, $e->getPrevious());
+        }
     }
 
     public function testCustomResponseClass()
