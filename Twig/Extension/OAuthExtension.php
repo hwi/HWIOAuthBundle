@@ -39,9 +39,9 @@ class OAuthExtension extends \Twig_Extension
     public function getFunctions()
     {
         return array(
-            'hwi_oauth_authorization_url' => new \Twig_Function_Method($this, 'getAuthorizationUrl'),
-            'hwi_oauth_login_url'         => new \Twig_Function_Method($this, 'getLoginUrl'),
-            'hwi_oauth_resource_owners'   => new \Twig_Function_Method($this, 'getResourceOwners')
+            new \Twig_SimpleFunction('hwi_oauth_authorization_url', array($this, 'getAuthorizationUrl')),
+            new \Twig_SimpleFunction('hwi_oauth_login_url', array($this, 'getLoginUrl')),
+            new \Twig_SimpleFunction('hwi_oauth_resource_owners', array($this, 'getResourceOwners')),
         );
     }
 
