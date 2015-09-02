@@ -109,7 +109,7 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
         $username = $response->getUsername();
 
         if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
-            $this->disconnect($previousUser);
+            $this->disconnect($previousUser, $response);
         }
 
         $this->accessor->setValue($user, $property, $username);
@@ -122,7 +122,7 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
      * 
      * @param UserInterface $user
      */
-    public function disconnect(UserInterface $user)
+    public function disconnect(UserInterface $user, UserResponseInterface $response)
     {
         $property = $this->getProperty($response);
 
