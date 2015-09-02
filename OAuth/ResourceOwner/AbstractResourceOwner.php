@@ -94,7 +94,26 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
         // Resolve merged options
         $resolver = new OptionsResolver();
+
         $this->configureOptions($resolver);
+
+        // See Symfony\Component\Form\ResolvedFormType logic
+        $baseClasses = array(
+            'HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AbstractResourceOwner',
+            'HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner',
+            'HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner',
+        );
+
+        $reflector = new \ReflectionMethod($this, 'configureOptions');
+        $isOldOverwritten = !in_array($reflector->getDeclaringClass()->getName(), $baseClasses, true);
+
+        $reflector = new \ReflectionMethod($this, 'setupOptions');
+        $isNewOverwritten = !in_array($reflector->getDeclaringClass()->getName(), $baseClasses, true);
+
+        if ($isOldOverwritten && !$isNewOverwritten) {
+            trigger_error('Overwriting '.__CLASS__.'::configureOptions() method is deprecated since version 0.4 and will be removed in 1.0. Overwrite '.__CLASS__.'::setupOptions() instead.', E_USER_DEPRECATED);
+        }
+
         $options = $resolver->resolve($options);
         $this->options = $options;
 
@@ -308,8 +327,20 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * Configure the option resolver
      *
      * @param OptionsResolverInterface $resolver
+     *
+     * @deprecated since 0.4, to be removed in 1.0 overwrite setupOptions instead
      */
     protected function configureOptions(OptionsResolverInterface $resolver)
+    {
+        $this->setupOptions($resolver);
+    }
+
+    /**
+     * Configure the option resolver
+     *
+     * @param OptionsResolver $resolver
+     */
+    protected function setupOptions(OptionsResolver $resolver)
     {
         $resolver->setRequired(array(
             'client_id',
