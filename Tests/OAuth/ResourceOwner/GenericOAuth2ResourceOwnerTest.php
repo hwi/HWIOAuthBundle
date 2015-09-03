@@ -17,6 +17,7 @@ use Buzz\Message\RequestInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 {
@@ -69,15 +70,15 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
      */
-    public function testInvalidOptionThrowsException()
+    public function testUndefinedOptionThrowsException()
     {
         $this->createResourceOwner($this->resourceOwnerName, array('non_existing' => null));
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
      */
     public function testInvalidOptionValueThrowsException()
     {
@@ -319,7 +320,7 @@ json;
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($resourceOwner, 'invalid_token', 'csrf_state')
-            ->will($this->throwException(new \InvalidArgumentException('No data available in storage.')));
+            ->will($this->throwException(new InvalidOptionsException('No data available in storage.')));
 
         $resourceOwner->isCsrfTokenValid('invalid_token');
     }

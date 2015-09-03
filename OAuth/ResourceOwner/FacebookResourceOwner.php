@@ -101,9 +101,17 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             'auth_type'           => null,
         ));
 
-        $resolver->setAllowedValues(array(
-            'display' => array('page', 'popup', 'touch', null), // @link https://developers.facebook.com/docs/reference/dialogs/#display
-            'auth_type' => array('rerequest', null), // @link https://developers.facebook.com/docs/reference/javascript/FB.login/
-        ));
+        // Symfony <2.6 BC
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver
+                ->setAllowedValues('display', array('page', 'popup', 'touch', null)) // @link https://developers.facebook.com/docs/reference/dialogs/#display
+                ->setAllowedValues('auth_type', array('rerequest', null)) // @link https://developers.facebook.com/docs/reference/javascript/FB.login/
+            ;
+        } else {
+            $resolver->setAllowedValues(array(
+                'display'   => array('page', 'popup', 'touch', null),
+                'auth_type' => array('rerequest', null),
+            ));
+        }
     }
 }

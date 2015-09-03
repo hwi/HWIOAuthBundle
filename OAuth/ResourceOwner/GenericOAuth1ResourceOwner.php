@@ -228,8 +228,12 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'signature_method' => 'HMAC-SHA1',
         ));
 
-        $resolver->setAllowedValues(array(
-            'signature_method' => array('HMAC-SHA1', 'RSA-SHA1', 'PLAINTEXT'),
-        ));
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setAllowedValues('signature_method', array('HMAC-SHA1', 'RSA-SHA1', 'PLAINTEXT'));
+        } else {
+            $resolver->setAllowedValues(array(
+                'signature_method' => array('HMAC-SHA1', 'RSA-SHA1', 'PLAINTEXT'),
+            ));
+        }
     }
 }

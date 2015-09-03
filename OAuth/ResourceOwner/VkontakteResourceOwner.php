@@ -83,14 +83,21 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'name_case'           => null,
         ));
 
-        $resolver->setNormalizers(array(
-            'fields' => function (Options $options, $value) {
-                if (!$value) {
-                    return null;
-                }
+        $fieldsNormalizer = function (Options $options, $value) {
+            if (!$value) {
+                return null;
+            }
 
-                return is_array($value) ? implode(',', $value) : $value;
-            },
-        ));
+            return is_array($value) ? implode(',', $value) : $value;
+        };
+
+        // Symfony <2.6 BC
+        if (method_exists($resolver, 'setNormalizer')) {
+            $resolver->setNormalizer('fields', $fieldsNormalizer);
+        } else {
+            $resolver->setNormalizers(array(
+                'fields' => $fieldsNormalizer,
+            ));
+        }
     }
 }
