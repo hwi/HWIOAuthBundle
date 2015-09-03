@@ -7,9 +7,15 @@ Changelog
 * Added `UserResponseInterface#getLastName()` method, also a new default path `lastname`
   was added, this path holds the last name of user
 
+## 0.3.9 (2015-08-28)
+* Fix: Remove deprecated Twig features
+* Fix: Undefined variable in `FOSUBUserProvider::refreshUser`
+* Fix: Restore property accessor for Symfony 2.3
+
 ## 0.3.8 (2015-05-04)
+* Fix: Remove BC break for Symfony < 2.5,
 * Fix: Compatibility issues with Symfony 2.6+,
-* Fix: Deprecated graph URLs fir `FacebookResourceOwner`
+* Fix: Deprecated graph URLs for `FacebookResourceOwner`
 
 ## 0.3.7 (2014-11-15)
 * Fix: `SessionStorage::save()` could throw php error,

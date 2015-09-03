@@ -51,7 +51,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
      */
     public function testGetInvalidOptionThrowsException()
     {
@@ -59,7 +59,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidArgumentException
      */
     public function testInvalidOptionValueThrowsException()
     {

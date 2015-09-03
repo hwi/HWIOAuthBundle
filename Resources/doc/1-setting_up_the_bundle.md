@@ -1,6 +1,6 @@
 Step 1: Setting up the bundle
 =============================
-### A) Add HWIOAuthBundle to your composer.json
+### A) Add HWIOAuthBundle to your project
 
 ```yaml
 {
