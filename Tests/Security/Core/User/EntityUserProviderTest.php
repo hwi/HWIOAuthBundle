@@ -116,7 +116,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $emMock
-            ->expects($this->once())
+            ->expects($this->any())
             ->method('getRepository')
             ->will($this->returnValue($this->createRepositoryMock($user)));
 
