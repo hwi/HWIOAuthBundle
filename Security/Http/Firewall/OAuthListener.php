@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener;
 
 /**
- * OAuthListener
+ * OAuthListener.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
@@ -38,7 +38,7 @@ class OAuthListener extends AbstractAuthenticationListener
     private $checkPaths;
 
     /**
-     * @var ResourceOwnerMap $resourceOwnerMap
+     * @var ResourceOwnerMap
      */
     public function setResourceOwnerMap(ResourceOwnerMap $resourceOwnerMap)
     {
@@ -108,7 +108,7 @@ class OAuthListener extends AbstractAuthenticationListener
 
     /**
      * Detects errors returned by resource owners and transform them into
-     * human readable messages
+     * human readable messages.
      *
      * @param Request $request
      *
@@ -148,7 +148,7 @@ class OAuthListener extends AbstractAuthenticationListener
     }
 
     /**
-     * Transforms OAuth error codes into human readable format
+     * Transforms OAuth error codes into human readable format.
      *
      * @param string $errorCode
      *

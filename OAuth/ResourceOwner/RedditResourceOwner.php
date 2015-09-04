@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * RedditResourceOwner
+ * RedditResourceOwner.
  *
  * @author Martin Aarhof <martin.aarhof@gmail.com>
  */
@@ -25,9 +25,9 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'name',
-        'realname'   => null,
-        'email'      => null,
+        'nickname' => 'name',
+        'realname' => null,
+        'email' => null,
     );
 
     /**
@@ -35,7 +35,7 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, null, array('Authorization: Basic ' . base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret']))));
+        return $this->httpRequest($url, null, array('Authorization: Basic '.base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret']))));
     }
 
     /**
@@ -46,16 +46,16 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'        => 'https://ssl.reddit.com/api/v1/authorize',
-            'access_token_url'         => 'https://ssl.reddit.com/api/v1/access_token',
-            'infos_url'                => 'https://oauth.reddit.com/api/v1/me.json',
-            
-            'use_bearer_authorization' => true,
-            'use_commas_in_scope'      => true,
-            'csrf'                     => true,
-            'scope'                    => 'identity',
+            'authorization_url' => 'https://ssl.reddit.com/api/v1/authorize',
+            'access_token_url' => 'https://ssl.reddit.com/api/v1/access_token',
+            'infos_url' => 'https://oauth.reddit.com/api/v1/me.json',
 
-            'duration'                 => 'permanent',
+            'use_bearer_authorization' => true,
+            'use_commas_in_scope' => true,
+            'csrf' => true,
+            'scope' => 'identity',
+
+            'duration' => 'permanent',
         ));
     }
 }

@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * SoundcloudResourceOwner
+ * SoundcloudResourceOwner.
  *
  * @author Anthony AHMED <antho.ahmed@gmail.com>
  */
@@ -25,8 +25,8 @@ class SoundcloudResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'username',
-        'realname'   => 'full_name',
+        'nickname' => 'username',
+        'realname' => 'full_name',
     );
 
     /**
@@ -37,11 +37,11 @@ class SoundcloudResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'access_token_url'         => 'https://api.soundcloud.com/oauth2/token',
-            'attr_name'                => 'oauth_token',
-            'authorization_url'        => 'https://soundcloud.com/connect',
-            'infos_url'                => 'https://api.soundcloud.com/me.json',
-            'scope'                    => 'non-expiring',
+            'access_token_url' => 'https://api.soundcloud.com/oauth2/token',
+            'attr_name' => 'oauth_token',
+            'authorization_url' => 'https://soundcloud.com/connect',
+            'infos_url' => 'https://api.soundcloud.com/me.json',
+            'scope' => 'non-expiring',
             'use_bearer_authorization' => false,
         ));
     }

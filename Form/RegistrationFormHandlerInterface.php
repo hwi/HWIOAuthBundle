@@ -16,7 +16,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * RegistrationFormHandlerInterface
+ * RegistrationFormHandlerInterface.
  *
  * Interface for objects that are able to handle a form.
  *
@@ -31,7 +31,7 @@ interface RegistrationFormHandlerInterface
      * @param Form                  $form            Form to process
      * @param UserResponseInterface $userInformation OAuth response
      *
-     * @return boolean True if the processing was successful
+     * @return bool True if the processing was successful
      */
     public function process(Request $request, Form $form, UserResponseInterface $userInformation);
 }

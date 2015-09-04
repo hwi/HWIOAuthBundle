@@ -22,7 +22,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * FOSUBRegistrationFormHandler
+ * FOSUBRegistrationFormHandler.
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
@@ -49,7 +49,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     protected $tokenGenerator;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $iterations;
 
@@ -59,7 +59,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      * @param UserManagerInterface $userManager    FOSUB user manager
      * @param MailerInterface      $mailer         FOSUB mailer
      * @param TokenGenerator       $tokenGenerator FOSUB token generator
-     * @param integer              $iterations     Amount of attempts that should be made to 'guess' a unique username
+     * @param int                  $iterations     Amount of attempts that should be made to 'guess' a unique username
      */
     public function __construct(UserManagerInterface $userManager, MailerInterface $mailer, TokenGenerator $tokenGenerator = null, $iterations = 5)
     {
@@ -147,7 +147,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     }
 
     /**
-     * Set user information from form
+     * Set user information from form.
      *
      * @param UserInterface         $user
      * @param UserResponseInterface $userInformation

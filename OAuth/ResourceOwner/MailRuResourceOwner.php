@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * MailRuResourceOwner
+ * MailRuResourceOwner.
  *
  * @author Gaponov Igor <jiminy96@gmail.com>
  */
@@ -26,9 +26,9 @@ class MailRuResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'uid',
-        'nickname'   => 'nick',
-        'realname'   => 'nick',
-        'email'      => 'email',
+        'nickname' => 'nick',
+        'realname' => 'nick',
+        'email' => 'email',
     );
 
     /**
@@ -37,9 +37,9 @@ class MailRuResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $params = array(
-            'app_id'      => $this->options['client_id'],
-            'method'      => 'users.getInfo',
-            'secure'      => '1',
+            'app_id' => $this->options['client_id'],
+            'method' => 'users.getInfo',
+            'secure' => '1',
             'session_key' => $accessToken['access_token'],
         );
 
@@ -69,9 +69,9 @@ class MailRuResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://connect.mail.ru/oauth/authorize',
-            'access_token_url'    => 'https://connect.mail.ru/oauth/token',
-            'infos_url'           => 'http://www.appsmail.ru/platform/api',
+            'authorization_url' => 'https://connect.mail.ru/oauth/authorize',
+            'access_token_url' => 'https://connect.mail.ru/oauth/token',
+            'infos_url' => 'http://www.appsmail.ru/platform/api',
         ));
     }
 }

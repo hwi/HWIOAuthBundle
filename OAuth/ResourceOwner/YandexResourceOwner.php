@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * YandexResourceOwner
+ * YandexResourceOwner.
  *
  * @author Anton Kamenschikov <wiistriker [at] gmail.com>
  */
@@ -25,9 +25,9 @@ class YandexResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'display_name',
-        'realname'   => 'real_name',
-        'email'      => 'default_email',
+        'nickname' => 'display_name',
+        'realname' => 'real_name',
+        'email' => 'default_email',
     );
 
     /**
@@ -48,8 +48,8 @@ class YandexResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://oauth.yandex.ru/authorize',
-            'access_token_url'  => 'https://oauth.yandex.ru/token',
-            'infos_url'         => 'https://login.yandex.ru/info?format=json',
+            'access_token_url' => 'https://oauth.yandex.ru/token',
+            'infos_url' => 'https://login.yandex.ru/info?format=json',
         ));
     }
 }
