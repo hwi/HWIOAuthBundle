@@ -121,6 +121,7 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
      * Disconnects a user
      * 
      * @param UserInterface $user
+     * @param UserResponseInterface $response
      */
     public function disconnect(UserInterface $user, UserResponseInterface $response)
     {
