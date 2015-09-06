@@ -102,20 +102,34 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
 
         $property = $this->getProperty($response);
 
-        if (!$this->accessor->isWritable($user, $property)) {
+        // Symfony <2.5 BC
+        if (method_exists($this->accessor, 'isWritable') && !$this->accessor->isWritable($user, $property)
+            || !method_exists($this->accessor, 'isWritable') && !method_exists($user, 'set'.ucfirst($property))) {
             throw new \RuntimeException(sprintf("Class '%s' must have defined setter method for property: '%s'.", get_class($user), $property));
         }
 
         $username = $response->getUsername();
 
         if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
-            $this->accessor->setValue($previousUser, $property, null);
-
-            $this->userManager->updateUser($previousUser);
+            $this->disconnect($previousUser, $response);
         }
 
         $this->accessor->setValue($user, $property, $username);
 
+        $this->userManager->updateUser($user);
+    }
+    
+    /**
+     * Disconnects a user
+     * 
+     * @param UserInterface $user
+     * @param UserResponseInterface $response
+     */
+    public function disconnect(UserInterface $user, UserResponseInterface $response)
+    {
+        $property = $this->getProperty($response);
+
+        $this->accessor->setValue($user, $property, null);
         $this->userManager->updateUser($user);
     }
 

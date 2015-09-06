@@ -54,8 +54,6 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
             'response_type'            => 'code',
 
             'use_bearer_authorization' => false,
-
-            'use_bearer_authorization' => false,
         ));
     }
 }

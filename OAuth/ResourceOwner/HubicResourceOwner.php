@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -27,6 +26,8 @@ class HubicResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier' => 'email',
         'nickname'   => 'email',
+        'firstname'  => 'firstname',
+        'lastname'   => 'lastname',
         'realname'   => 'firstname',
         'email'      => 'email',
     );

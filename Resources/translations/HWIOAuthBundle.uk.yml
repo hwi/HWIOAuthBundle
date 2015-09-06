@@ -1,0 +1,14 @@
+header:
+    connecting: З'єднання
+    success: Успішне з'єднання з акаунтом '%name%'!
+    register: Реєстрація з акаунтом '%name%'
+    registration_success: Успішна реєстраці і з'єднання з акаунтом '%username%'!
+
+connect:
+    confirm:
+        cancel: Відмінити
+        submit: З'єднати
+        text: Ви впевнені що бажаєте з'єднати '%service%' акаунт '%name%' з поточним користувачем?
+    registration:
+        cancel: Відміна
+        submit: Реєстрація

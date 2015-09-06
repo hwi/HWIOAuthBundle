@@ -33,7 +33,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
      * @var ObjectManager
      */
     protected $em;
-    
+
     /**
      * @var string
      */
@@ -63,7 +63,6 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     {
         $this->em         = $registry->getManager($managerName);
         $this->class      = $class;
-        $this->repository = $this->em->getRepository($class);
         $this->properties = array_merge($this->properties, $properties);
     }
 
@@ -72,7 +71,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
      */
     public function loadUserByUsername($username)
     {
-        $user = $this->repository->findOneBy(array('username' => $username));
+        $user = $this->findUser(array('username' => $username));
         if (!$user) {
             throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
         }
@@ -92,7 +91,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
         }
 
         $username = $response->getUsername();
-        if (null === $user = $this->repository->findOneBy(array($this->properties[$resourceOwnerName] => $username))) {
+        if (null === $user = $this->findUser(array($this->properties[$resourceOwnerName] => $username))) {
             throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
         }
 
@@ -111,7 +110,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
         }
 
         $userId = $accessor->getValue($user, $identifier);
-        if (null === $user = $this->repository->findOneBy(array($identifier => $userId))) {
+        if (null === $user = $this->findUser(array($identifier => $userId))) {
             throw new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $userId));
         }
 
@@ -124,5 +123,19 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     public function supportsClass($class)
     {
         return $class === $this->class || is_subclass_of($class, $this->class);
+    }
+
+    /**
+     * @param array $criteria
+     *
+     * @return object
+     */
+    protected function findUser(array $criteria)
+    {
+        if (null === $this->repository) {
+            $this->repository = $this->em->getRepository($this->class);
+        }
+
+        return $this->repository->findOneBy($criteria);
     }
 }

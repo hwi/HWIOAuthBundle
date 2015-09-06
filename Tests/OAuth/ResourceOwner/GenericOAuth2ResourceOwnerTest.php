@@ -11,10 +11,13 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
+use Buzz\Exception\RequestException;
 use Buzz\Message\MessageInterface;
 use Buzz\Message\RequestInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,15 +70,15 @@ json;
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
      */
-    public function testInvalidOptionThrowsException()
+    public function testUndefinedOptionThrowsException()
     {
         $this->createResourceOwner($this->resourceOwnerName, array('non_existing' => null));
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
      */
     public function testInvalidOptionValueThrowsException()
     {
@@ -96,6 +99,22 @@ json;
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
+    }
+
+    public function testGetUserInformationFailure()
+    {
+        $exception = new RequestException();
+
+        $this->buzzClient->expects($this->once())
+            ->method('send')
+            ->will($this->throwException($exception));
+
+        try {
+            $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
+            $this->fail('An exception should have been raised');
+        } catch (HttpTransportException $e) {
+            $this->assertSame($exception, $e->getPrevious());
+        }
     }
 
     public function testGetAuthorizationUrl()
@@ -301,7 +320,7 @@ json;
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($resourceOwner, 'invalid_token', 'csrf_state')
-            ->will($this->throwException(new \InvalidArgumentException('No data available in storage.')));
+            ->will($this->throwException(new InvalidOptionsException('No data available in storage.')));
 
         $resourceOwner->isCsrfTokenValid('invalid_token');
     }

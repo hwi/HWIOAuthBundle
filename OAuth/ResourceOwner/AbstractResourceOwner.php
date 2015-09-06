@@ -12,10 +12,12 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Client\ClientInterface as HttpClientInterface;
+use Buzz\Exception\ClientException;
 use Buzz\Message\MessageInterface as HttpMessageInterface;
 use Buzz\Message\Request as HttpRequest;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Buzz\Message\Response as HttpResponse;
+use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
@@ -210,17 +212,17 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * Performs an HTTP request
      *
-     * @param string $url     The url to fetch
+     * @param string $url           The url to fetch
      * @param string|array $content The content of the request
-     * @param array  $headers The headers of the request
-     * @param string $method  The HTTP method to use
+     * @param array  $headers       The headers of the request
+     * @param string $method        The HTTP method to use
      *
      * @return HttpResponse The response content
      */
     protected function httpRequest($url, $content = null, $headers = array(), $method = null)
     {
         if (null === $method) {
-            $method = null === $content ? HttpRequestInterface::METHOD_GET : HttpRequestInterface::METHOD_POST;
+            $method = null === $content || '' === $content ? HttpRequestInterface::METHOD_GET : HttpRequestInterface::METHOD_POST;
         }
 
         $request  = new HttpRequest($method, $url);
@@ -244,7 +246,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $request->setHeaders($headers);
         $request->setContent($content);
 
-        $this->httpClient->send($request, $response);
+        try {
+            $this->httpClient->send($request, $response);
+        } catch (ClientException $e) {
+            throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
+        }
 
         return $response;
     }
@@ -320,8 +326,12 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
             'auth_with_one_url'   => false,
         ));
 
-        $resolver->setAllowedValues(array(
-            'csrf' => array(true, false),
-        ));
+        if (method_exists($resolver, 'setDefined')) {
+            $resolver->setAllowedValues('csrf', array(true, false));
+        } else {
+            $resolver->setAllowedValues(array(
+                'csrf' => array(true, false),
+            ));
+        }
     }
 }

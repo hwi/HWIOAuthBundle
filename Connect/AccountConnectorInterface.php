@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * Account connector objects are responsible for connecting an oauth response
+ * Account connector objects are responsible for connecting an OAuth response
  * to the appropriate fields of the user object.
  *
  * @author Alexander <iam.asm89@gmail.com>
@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 interface AccountConnectorInterface
 {
     /**
-     * Connects the response the the user object.
+     * Connects the response to the user object.
      *
      * @param UserInterface         $user     The user object
      * @param UserResponseInterface $response The oauth response

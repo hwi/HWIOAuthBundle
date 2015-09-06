@@ -11,10 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\Response;
+use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 
 /**
  * Auth0ResourceOwner
@@ -68,10 +67,19 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
             return str_replace('{base_url}', $options['base_url'], $value);
         };
 
-        $resolver->setNormalizers(array(
-            'authorization_url' => $normalizer,
-            'access_token_url'  => $normalizer,
-            'infos_url'         => $normalizer,
-        ));
+        // Symfony <2.6 BC
+        if (method_exists($resolver, 'setNormalizer')) {
+            $resolver
+                ->setNormalizer('authorization_url', $normalizer)
+                ->setNormalizer('access_token_url', $normalizer)
+                ->setNormalizer('infos_url', $normalizer)
+            ;
+        } else {
+            $resolver->setNormalizers(array(
+                'authorization_url' => $normalizer,
+                'access_token_url'  => $normalizer,
+                'infos_url'         => $normalizer,
+            ));
+        }
     }
 }

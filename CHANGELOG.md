@@ -1,6 +1,22 @@
 Changelog
 =========
 
+## 0.4.0 (2015-??-??)
+* Added `UserResponseInterface#getFirstName()` method, also a new default path `firstname`
+  was added, this path holds the first name of user
+* Added `UserResponseInterface#getLastName()` method, also a new default path `lastname`
+  was added, this path holds the last name of user
+
+## 0.3.9 (2015-08-28)
+* Fix: Remove deprecated Twig features
+* Fix: Undefined variable in `FOSUBUserProvider::refreshUser`
+* Fix: Restore property accessor for Symfony 2.3
+
+## 0.3.8 (2015-05-04)
+* Fix: Remove BC break for Symfony < 2.5,
+* Fix: Compatibility issues with Symfony 2.6+,
+* Fix: Deprecated graph URLs for `FacebookResourceOwner`
+
 ## 0.3.7 (2014-11-15)
 * Fix: `SessionStorage::save()` could throw php error,
 * Fix: `OAuthToken::isExpired()` always returned `false`,
@@ -77,7 +93,7 @@ Changelog
 * [BC break] `AbstractResourceOwner::__construct()` now requires `RequestDataStorageInterface`
   instance as last argument
 * Fix: Yandex resource owner using invalid parameter when requesting user data
-* Fix: To prevent unusual content headers response from resource owners should 
+* Fix: To prevent unusual content headers response from resource owners should
   be first threaten as json and only in case of failure threaten as query text
 * Fix: Instagram resource owner is not able to receive user data more than once
 * Added ability to disable confirmation page when connecting accounts

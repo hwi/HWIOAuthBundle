@@ -41,6 +41,20 @@ interface UserResponseInterface extends ResponseInterface
     public function getNickname();
 
     /**
+     * Get the first name of user.
+     *
+     * @return null|string
+     */
+    public function getFirstName();
+
+    /**
+     * Get the last name of user.
+     *
+     * @return null|string
+     */
+    public function getLastName();
+
+    /**
      * Get the real name of user.
      *
      * @return null|string
@@ -77,7 +91,7 @@ interface UserResponseInterface extends ResponseInterface
 
     /**
      * Get oauth token secret used for the request.
-     * 
+     *
      * @return null|string
      */
     public function getTokenSecret();

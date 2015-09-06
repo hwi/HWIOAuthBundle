@@ -51,15 +51,15 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
      */
-    public function testGetInvalidOptionThrowsException()
+    public function testUndefinedOptionThrowsException()
     {
         $this->createResourceOwner($this->resourceOwnerName, array('non_existing' => null));
     }
 
     /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
+     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
      */
     public function testInvalidOptionValueThrowsException()
     {

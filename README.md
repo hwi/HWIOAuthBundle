@@ -5,10 +5,11 @@ HWIOAuthBundle
 
 The HWIOAuthBundle adds support for authenticating users via OAuth1.0a or OAuth2 in Symfony2.
 
-This bundle contains support for 20+ different providers:
+This bundle contains support for 40 different providers:
 * 37signals,
 * Amazon,
 * Auth0,
+* Azure,
 * Bitbucket,
 * Bitly,
 * Box,
@@ -18,6 +19,7 @@ This bundle contains support for 20+ different providers:
 * Dropbox,
 * EVE Online,
 * Facebook,
+* FI-WARE,
 * Flickr,
 * Foursquare,
 * GitHub,
@@ -32,19 +34,23 @@ This bundle contains support for 20+ different providers:
 * QQ,
 * Salesforce,
 * Sensio Connect,
-* Sina Weibo
-* Soundcloud
+* Sina Weibo,
+* Slack,
+* Spotify,
+* Soundcloud,
 * Stack Exchange,
 * Stereomood,
 * Toshl,
 * Twitch,
 * Twitter,
 * VKontakte,
+* Wechat,
 * Windows Live,
 * Wordpress,
 * XING,
 * Yahoo,
-* Yandex
+* Yandex,
+* Youtube
 
 > __Note__: this bundle adds easy way to implement any of OAuth1.0a or OAuth2 provider!
 
@@ -55,7 +61,7 @@ All the installation instructions are located in the documentation, check it for
 version:
 
 * [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3`
-* [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.1,<2.4`
+* [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.1,<2.7`
 
 Documentation
 -------------
@@ -64,7 +70,7 @@ The bulk of the documentation is stored in the `Resources/doc/index.md`
 file in this bundle. Read the documentation for version:
 
 * [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md) with support for Symfony `>=2.3`
-* [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/index.md) with support for Symfony `>=2.1,<2.4`
+* [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/index.md) with support for Symfony `>=2.1,<2.7`
 
 License
 -------

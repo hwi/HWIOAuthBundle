@@ -70,6 +70,13 @@ class HWIOAuthExtension extends Extension
 
         $oauthUtils = $container->getDefinition('hwi_oauth.security.oauth_utils');
         $oauthUtils->addMethodCall('setResourceOwnerMap', array(new Reference('hwi_oauth.resource_ownermap.'.$config['firewall_name'])));
+        // Symfony <2.6 BC
+        // Go back to basic xml config after
+        if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
+            $oauthUtils->replaceArgument(1, new Reference('security.authorization_checker'));
+        } else {
+            $oauthUtils->replaceArgument(1, new Reference('security.context'));
+        }
 
         if (isset($config['fosub'])) {
             $container

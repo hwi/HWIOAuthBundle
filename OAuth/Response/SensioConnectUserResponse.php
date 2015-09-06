@@ -55,6 +55,22 @@ class SensioConnectUserResponse extends AbstractUserResponse
     /**
      * {@inheritdoc}
      */
+    public function getFirstName()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastName()
+    {
+        return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRealName()
     {
         return $this->getNodeValue('./foaf:name', $this->response);
