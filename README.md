@@ -34,9 +34,10 @@ This bundle contains support for 40 different providers:
 * QQ,
 * Salesforce,
 * Sensio Connect,
-* Sina Weibo
-* Spotify
-* Soundcloud
+* Sina Weibo,
+* Slack,
+* Spotify,
+* Soundcloud,
 * Stack Exchange,
 * Stereomood,
 * Toshl,
