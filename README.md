@@ -13,6 +13,7 @@ This bundle contains support for 40 different providers:
 * Bitbucket,
 * Bitly,
 * Box,
+* BufferApp,
 * Dailymotion,
 * DeviantArt,
 * Disqus,

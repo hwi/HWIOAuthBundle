@@ -35,6 +35,7 @@ class Configuration implements ConfigurationInterface
             'azure',
             'bitly',
             'box',
+            'bufferapp',
             'dailymotion',
             'deviantart',
             'disqus',
