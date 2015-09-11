@@ -53,6 +53,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $httpClient;
 
     /**
+     * @var HttpUtils
+     */
+    protected $httpUtils;
+
+    /**
      * @var string
      */
     protected $name;
