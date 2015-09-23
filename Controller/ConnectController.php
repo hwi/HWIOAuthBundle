@@ -297,15 +297,19 @@ class ConnectController extends Controller
      */
     protected function getResourceOwnerByName($name)
     {
-        // TODO: fix $firewallNames[0]
-        $firewallNames = $this->container->getParameter('hwi_oauth.firewall_names');
-        $ownerMap = $this->container->get('hwi_oauth.resource_ownermap.'.$firewallNames[0]);
+        foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $firewall) {
+            $id = 'hwi_oauth.resource_ownermap.'.$firewall;
+            if (!$this->container->has($id)) {
+                continue;
+            }
 
-        if (null === $resourceOwner = $ownerMap->getResourceOwnerByName($name)) {
-            throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
+            $ownerMap = $this->container->get($id);
+            if ($resourceOwner = $ownerMap->getResourceOwnerByName($name)) {
+                return $resourceOwner;
+            }
         }
 
-        return $resourceOwner;
+        throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
     }
 
     /**
