@@ -6,6 +6,7 @@ Changelog
   was added, this path holds the first name of user
 * Added `UserResponseInterface#getLastName()` method, also a new default path `lastname`
   was added, this path holds the last name of user
+* Added: configuration parameter `firewall_name` renamed to `firewall_names` to support mutiple firewalls.
 
 ## 0.3.9 (2015-08-28)
 * Fix: Remove deprecated Twig features

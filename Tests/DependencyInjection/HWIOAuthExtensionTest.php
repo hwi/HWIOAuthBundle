@@ -32,7 +32,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
-        unset($config['firewall_name']);
+        unset($config['firewall_names']);
 
         $loader->load(array($config), $this->containerBuilder);
     }
@@ -239,7 +239,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
     {
         $this->createEmptyConfiguration();
 
-        $this->assertParameter('secured_area', 'hwi_oauth.firewall_name');
+        $this->assertParameter(array('secured_area'), 'hwi_oauth.firewall_names');
         $this->assertParameter(null, 'hwi_oauth.target_path_parameter');
         $this->assertParameter(false, 'hwi_oauth.use_referer');
         $this->assertParameter(array('any_name', 'some_service'), 'hwi_oauth.resource_owners');
@@ -362,7 +362,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
     protected function getEmptyConfig()
     {
         $yaml = <<<EOF
-firewall_name: secured_area
+firewall_names: [secured_area]
 resource_owners:
     any_name:
         type:                github
@@ -379,7 +379,7 @@ EOF;
     protected function getFullConfig()
     {
         $yaml = <<<EOF
-firewall_name: secured_area
+firewall_names: [secured_area]
 
 resource_owners:
     github:

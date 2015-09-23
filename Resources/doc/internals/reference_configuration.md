@@ -61,8 +61,8 @@ hwi_oauth:
                 identifier: id
                 nickname:   username
 
-    # name of the firewall the oauth bundle is active in
-    firewall_name: secured_area
+    # list of firewall names the oauth bundle is active in
+    firewall_names: [secured_area]
 
     # optional target_path_parameter to provide an explicit return URL
     #target_path_parameter: _destination

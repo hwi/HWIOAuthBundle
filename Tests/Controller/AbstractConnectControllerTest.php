@@ -103,7 +103,7 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->container = new Container();
         $this->container->setParameter('hwi_oauth.templating.engine', 'twig');
         $this->container->setParameter('hwi_oauth.connect', true);
-        $this->container->setParameter('hwi_oauth.firewall_name', 'default');
+        $this->container->setParameter('hwi_oauth.firewall_names', array('default'));
         $this->container->setParameter('hwi_oauth.connect.confirmation', true);
 
         if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {

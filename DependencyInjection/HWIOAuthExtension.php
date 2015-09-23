@@ -52,7 +52,7 @@ class HWIOAuthExtension extends Extension
         }
 
         // set current firewall
-        $container->setParameter('hwi_oauth.firewall_name', $config['firewall_name']);
+        $container->setParameter('hwi_oauth.firewall_names', $config['firewall_names']);
 
         // set target path parameter
         $container->setParameter('hwi_oauth.target_path_parameter', $config['target_path_parameter']);
@@ -69,7 +69,10 @@ class HWIOAuthExtension extends Extension
         $container->setParameter('hwi_oauth.resource_owners', $resourceOwners);
 
         $oauthUtils = $container->getDefinition('hwi_oauth.security.oauth_utils');
-        $oauthUtils->addMethodCall('setResourceOwnerMap', array(new Reference('hwi_oauth.resource_ownermap.'.$config['firewall_name'])));
+        foreach ($config['firewall_names'] as $firewallName) {
+            $oauthUtils->addMethodCall('setResourceOwnerMap', array(new Reference('hwi_oauth.resource_ownermap.'.$firewallName)));
+        }
+
         // Symfony <2.6 BC
         // Go back to basic xml config after
         if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
