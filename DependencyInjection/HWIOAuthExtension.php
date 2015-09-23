@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -52,6 +53,13 @@ class HWIOAuthExtension extends Extension
         }
 
         // set current firewall
+        if (empty($config['firewall_names']) && !isset($config['firewall_name'])) {
+            throw new InvalidConfigurationException('The child node "firewall_name" or "firewall_names" at path "hwi_oauth" must be configured.');
+        } elseif (!empty($config['firewall_names']) && isset($config['firewall_name'])) {
+            $config['firewall_names'] = array_merge(array($config['firewall_name'], $config['firewall_names']));
+        } elseif (empty($config['firewall_names']) && isset($config['firewall_name'])) {
+            $config['firewall_names'] = array($config['firewall_name']);
+        }
         $container->setParameter('hwi_oauth.firewall_names', $config['firewall_names']);
 
         // set target path parameter
