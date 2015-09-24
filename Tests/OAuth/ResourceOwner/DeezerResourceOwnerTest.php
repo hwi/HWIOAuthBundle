@@ -59,9 +59,6 @@ json;
     {
         $this->mockBuzz($this->userResponse);
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
-         */
         $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 
         $this->assertEquals('passkey', $userResponse->getNickname());
