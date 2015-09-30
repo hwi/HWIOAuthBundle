@@ -38,6 +38,7 @@ class Configuration implements ConfigurationInterface
             'bufferapp',
             'dailymotion',
             'deviantart',
+            'deezer',
             'disqus',
             'eve_online',
             'eventbrite',
