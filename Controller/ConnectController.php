@@ -243,16 +243,17 @@ class ConnectController extends Controller
             $session = $request->getSession();
             $session->start();
 
-            $providerKey = $this->container->getParameter('hwi_oauth.firewall_name');
-            $sessionKey = '_security.'.$providerKey.'.target_path';
+            foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
+                $sessionKey = '_security.'.$providerKey.'.target_path';
 
-            $param = $this->container->getParameter('hwi_oauth.target_path_parameter');
-            if (!empty($param) && $targetUrl = $request->get($param, null, true)) {
-                $session->set($sessionKey, $targetUrl);
-            }
+                $param = $this->container->getParameter('hwi_oauth.target_path_parameter');
+                if (!empty($param) && $targetUrl = $request->get($param, null, true)) {
+                    $session->set($sessionKey, $targetUrl);
+                }
 
-            if ($this->container->getParameter('hwi_oauth.use_referer') && !$session->has($sessionKey) && ($targetUrl = $request->headers->get('Referer')) && $targetUrl !== $authorizationUrl) {
-                $session->set($sessionKey, $targetUrl);
+                if ($this->container->getParameter('hwi_oauth.use_referer') && !$session->has($sessionKey) && ($targetUrl = $request->headers->get('Referer')) && $targetUrl !== $authorizationUrl) {
+                    $session->set($sessionKey, $targetUrl);
+                }
             }
         }
 
@@ -296,13 +297,19 @@ class ConnectController extends Controller
      */
     protected function getResourceOwnerByName($name)
     {
-        $ownerMap = $this->container->get('hwi_oauth.resource_ownermap.'.$this->container->getParameter('hwi_oauth.firewall_name'));
+        foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $firewall) {
+            $id = 'hwi_oauth.resource_ownermap.'.$firewall;
+            if (!$this->container->has($id)) {
+                continue;
+            }
 
-        if (null === $resourceOwner = $ownerMap->getResourceOwnerByName($name)) {
-            throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
+            $ownerMap = $this->container->get($id);
+            if ($resourceOwner = $ownerMap->getResourceOwnerByName($name)) {
+                return $resourceOwner;
+            }
         }
 
-        return $resourceOwner;
+        throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
     }
 
     /**

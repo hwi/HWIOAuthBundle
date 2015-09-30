@@ -133,7 +133,11 @@ class Configuration implements ConfigurationInterface
         $rootNode = $builder->root('hwi_oauth');
         $rootNode
             ->children()
-                ->scalarNode('firewall_name')->isRequired()->cannotBeEmpty()->end()
+                // TODO: firewall_names should replace firewall_name in next major version, and should be ->isRequired()->cannotBeEmpty()
+                ->scalarNode('firewall_name')->end()
+                ->arrayNode('firewall_names')
+                    ->prototype('scalar')->end()
+                ->end()
                 ->scalarNode('target_path_parameter')->defaultNull()->end()
                 ->booleanNode('use_referer')->defaultFalse()->end()
                 ->scalarNode('templating_engine')->defaultValue('twig')->end()

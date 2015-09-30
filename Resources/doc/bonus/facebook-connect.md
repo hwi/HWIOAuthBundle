@@ -10,7 +10,7 @@ This guide bases on Symfony 2.1+ and the [AcmeDemoBundle](https://github.com/sym
 # app/config/config.yml
 
 hwi_oauth:
-    firewall_name:         secured_area
+    firewall_names:        [secured_area]
     resource_owners:
         facebook:
             type:          facebook
@@ -18,7 +18,7 @@ hwi_oauth:
             client_secret: <client_secret>
             scope:         "email"
             options:
-                display: popup #dialog is optimized for popup window            
+                display: popup #dialog is optimized for popup window
 
 services:
     hwi_oauth.user.provider.entity:
@@ -61,7 +61,7 @@ firewalls:
 
 ## Adding the Facebook Login Button
 
-The following example bases also on the Facebook ["Login with Javascript SDK"](https://developers.facebook.com/docs/howtos/login/getting-started/) guide. 
+The following example bases also on the Facebook ["Login with Javascript SDK"](https://developers.facebook.com/docs/howtos/login/getting-started/) guide.
 
 ```html+jinja
 # src/Acme/DemoBundle/Resources/views/Secured/hello.html.twig

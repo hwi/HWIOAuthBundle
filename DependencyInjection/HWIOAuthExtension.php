@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -52,7 +53,15 @@ class HWIOAuthExtension extends Extension
         }
 
         // set current firewall
-        $container->setParameter('hwi_oauth.firewall_name', $config['firewall_name']);
+        if (empty($config['firewall_names']) && !isset($config['firewall_name'])) {
+            throw new InvalidConfigurationException('The child node "firewall_name" or "firewall_names" at path "hwi_oauth" must be configured.');
+        } elseif (!empty($config['firewall_names']) && isset($config['firewall_name'])) {
+            $config['firewall_names'] = array_merge(array($config['firewall_name'], $config['firewall_names']));
+        } elseif (empty($config['firewall_names']) && isset($config['firewall_name'])) {
+            @trigger_error('The child node "firewall_name" at path "hwi_oauth" is deprecated since version 0.4.0 and will be removed in version 0.5.0. Use "firewall_names" instead.', E_USER_DEPRECATED);
+            $config['firewall_names'] = array($config['firewall_name']);
+        }
+        $container->setParameter('hwi_oauth.firewall_names', $config['firewall_names']);
 
         // set target path parameter
         $container->setParameter('hwi_oauth.target_path_parameter', $config['target_path_parameter']);
@@ -69,7 +78,10 @@ class HWIOAuthExtension extends Extension
         $container->setParameter('hwi_oauth.resource_owners', $resourceOwners);
 
         $oauthUtils = $container->getDefinition('hwi_oauth.security.oauth_utils');
-        $oauthUtils->addMethodCall('setResourceOwnerMap', array(new Reference('hwi_oauth.resource_ownermap.'.$config['firewall_name'])));
+        foreach ($config['firewall_names'] as $firewallName) {
+            $oauthUtils->addMethodCall('setResourceOwnerMap', array(new Reference('hwi_oauth.resource_ownermap.'.$firewallName)));
+        }
+
         // Symfony <2.6 BC
         // Go back to basic xml config after
         if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
