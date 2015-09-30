@@ -2,11 +2,31 @@ Changelog
 =========
 
 ## 0.4.0 (2015-??-??)
-* Added `UserResponseInterface#getFirstName()` method, also a new default path `firstname`
-  was added, this path holds the first name of user
-* Added `UserResponseInterface#getLastName()` method, also a new default path `lastname`
-  was added, this path holds the last name of user
-* Added: configuration parameter `firewall_name` renamed to `firewall_names` to support mutiple firewalls.
+* [BC break] Added `UserResponseInterface#getFirstName()` method, also a new default path `firstname`
+  was added, this path holds the first name of user,
+* [BC break] Added `UserResponseInterface#getLastName()` method, also a new default path `lastname`
+  was added, this path holds the last name of user,
+* [BC break] Added `UserResponseInterface::getOAuthToken()` & basic implementation in `AbstractUserResponse`,
+* [BC break] `GenericOAuth1ResourceOwner::getRequestToken()` is now public method (was protected),
+* Added: configuration parameter `firewall_name` (will be removed in next major version)
+  renamed to `firewall_names` to support mutiple firewalls,
+* Added Auth0 resource owner
+* Added Azure resource owner
+* Added BufferApp resource owner
+* Added Deezer resource owner
+* Added Discogs resource owner
+* Added EveOnline resource owner
+* Added Fiware resource owner
+* Added Hubic resource owner
+* Added Paypal resource owner
+* Added Reddit resource owner
+* Added Soundcloud resource owner
+* Added Spotify resource owner
+* Added Toshl resource owner
+* Added Wechat resource owner
+* Added Wordpress resource owner
+* Added Xing resource owner
+* Added Youtube resource owner
 
 ## 0.3.9 (2015-08-28)
 * Fix: Remove deprecated Twig features
