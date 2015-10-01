@@ -15,6 +15,10 @@ hwi_oauth:
         ignore_errors: false # Setting allowing you to easier debug request errors, by default: true
         max_redirects: 1 # Number of HTTP redirection request after which library will shutdown request,
                          # by default: 5
+        proxy: "example.com:8080" # String with proxy configuration for cURL connections, ignored by default.
+                                    # "" -> don't set proxy and will use proxy system
+                                    # "example.com:8080" -> set custom proxy
+                                    # ":" -> disable proxy usage, ignoring also proxy system and ENVIRONMENT variables
 ```
 
 [Return to the index.](../index.md)
