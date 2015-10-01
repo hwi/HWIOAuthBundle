@@ -75,6 +75,23 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
             // @see SalesforceResourceOwner::doGetUserInformationRequest()
             'format'            => 'json',
         ));
+
+        $resolver->addAllowedTypes(array(
+            'sandbox' => 'bool',
+        ));
+
+        $sandboxTransformation = function (Options $options, $value) {
+            if (!$options['sandbox']) {
+                return $value;
+            }
+
+            return preg_replace('~\.login\.~', '.test.', $value, 1);
+        };
+
+        $resolver->setNormalizers(array(
+            'authorization_url' => $sandboxTransformation,
+            'access_token_url'  => $sandboxTransformation,
+        ));
     }
 
 }
