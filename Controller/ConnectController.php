@@ -184,7 +184,7 @@ class ConnectController extends ContainerAware
         }
 
         // Redirect to the login path if the token is empty (Eg. User cancelled auth)
-        if ($accessToken === null) {
+        if (null === $accessToken) {
             $redirect = $this->container->getParameter('hwi_oauth.failed_auth_path');
 
             return new RedirectResponse($this->generate($redirect));
