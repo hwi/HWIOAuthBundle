@@ -44,6 +44,7 @@ class HWIOAuthExtension extends Extension
 
         // setup http client settings
         $httpClient = $container->getDefinition('hwi_oauth.http_client');
+        $httpClient->addMethodCall('setVerifyHost', array($config['http_client']['verify_host']));
         $httpClient->addMethodCall('setVerifyPeer', array($config['http_client']['verify_peer']));
         $httpClient->addMethodCall('setTimeout', array($config['http_client']['timeout']));
         $httpClient->addMethodCall('setMaxRedirects', array($config['http_client']['max_redirects']));
