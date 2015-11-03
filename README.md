@@ -30,6 +30,7 @@ This bundle contains support for 40 different providers:
 * JIRA,
 * LinkedIn,
 * Mail.ru
+* Nous Citoyens
 * Odnoklassniki,
 * PayPal,
 * QQ,

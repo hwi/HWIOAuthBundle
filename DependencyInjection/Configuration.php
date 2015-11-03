@@ -52,6 +52,7 @@ class Configuration implements ConfigurationInterface
             'instagram',
             'linkedin',
             'mailru',
+            'nous_citoyens',
             'odnoklassniki',
             'paypal',
             'qq',
