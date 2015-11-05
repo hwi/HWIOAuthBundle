@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
+use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
@@ -95,10 +96,14 @@ class OAuthListener extends AbstractAuthenticationListener
 
         $resourceOwner->isCsrfTokenValid($request->get('state'));
 
-        $accessToken = $resourceOwner->getAccessToken(
-            $request,
-            $this->httpUtils->createRequest($request, $checkPath)->getUri()
-        );
+        try {
+            $accessToken = $resourceOwner->getAccessToken(
+                $request,
+                $this->httpUtils->createRequest($request, $checkPath)->getUri()
+            );
+        } catch (HttpTransportException $e) {
+            throw new AuthenticationException('Cannot retrieve access token.');
+        }
 
         $token = new OAuthToken($accessToken);
         $token->setResourceOwnerName($resourceOwner->getName());

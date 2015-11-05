@@ -1,11 +1,22 @@
-HWIOAuthBundle
+RageOAuthBundle
 ==============
 
 [![Build Status](https://secure.travis-ci.org/ragephp/RageOAuthBundle.svg?branch=master)](http://travis-ci.org/hwi/HWIOAuthBundle)
 
-The HWIOAuthBundle adds support for authenticating users via OAuth1.0a or OAuth2 in Symfony2.
+The RageOAuthBundle adds support for authenticating users via OAuth1.0a or OAuth2 in Symfony2.
 
-> __Note__: this bundle adds easy way to implement any of OAuth1.0a or OAuth2 provider!
+Not invented here
+-------
+
+This is slightly modified version of HWIOAuthBundle. Please, don't use it if you don't fully understand what you're doing.
+We modified this bundle to allow less painful usage of this bundle in our projects.
+
+Differences between RageOAuthBundle and HWIOAuthBundle
+-------
+
+- Removed FOSUserBundle support
+- Removed PHP <5.6 and Symfony <2.7 versions support
+- Improved exception handling in OAuthListener
 
 License
 -------
