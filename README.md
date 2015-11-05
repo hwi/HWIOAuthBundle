@@ -17,6 +17,7 @@ Differences between RageOAuthBundle and HWIOAuthBundle
 - Removed FOSUserBundle support
 - Removed PHP <5.6 and Symfony <2.7 versions support
 - Improved exception handling in OAuthListener
+- Switched to RageOAuthProvider, the modified version OAuthProvider which makes less queries to remote APIs and exception-proof.
 
 License
 -------

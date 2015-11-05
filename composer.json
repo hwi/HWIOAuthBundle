@@ -90,7 +90,8 @@
         "doctrine/orm":                 "~2.3",
         "symfony/validator":            "~2.7",
         "symfony/twig-bundle":          "~2.7",
-        "symfony/phpunit-bridge":       "~2.7"
+        "symfony/phpunit-bridge":       "~2.7",
+        "phpunit/phpunit": "~5.0"
     },
 
     "suggest": {

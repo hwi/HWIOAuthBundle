@@ -6,7 +6,7 @@
 
     <parameters>
         <parameter key="hwi_oauth.authentication.listener.oauth.class">HWI\Bundle\OAuthBundle\Security\Http\Firewall\OAuthListener</parameter>
-        <parameter key="hwi_oauth.authentication.provider.oauth.class">HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider</parameter>
+        <parameter key="hwi_oauth.authentication.provider.oauth.class">HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\RageOAuthProvider</parameter>
         <parameter key="hwi_oauth.authentication.entry_point.oauth.class">HWI\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint</parameter>
         <parameter key="hwi_oauth.user.provider.class">HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider</parameter>
         <parameter key="hwi_oauth.user.provider.entity.class">HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider</parameter>
