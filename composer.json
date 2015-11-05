@@ -87,7 +87,7 @@
     },
 
     "require-dev": {
-        "doctrine/orm":                 "~2.7",
+        "doctrine/orm":                 "~2.3",
         "symfony/validator":            "~2.7",
         "symfony/twig-bundle":          "~2.7",
         "symfony/phpunit-bridge":       "~2.7"
@@ -107,5 +107,5 @@
     "target-dir": "HWI/Bundle/OAuthBundle",
 
     "minimum-stability": "dev",
-    "prefer-stable": true,
+    "prefer-stable": true
 }
