@@ -99,6 +99,6 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
             'expires_in'    => '29',
         );
         $token = new OAuthToken($expectedToken, array('ROLE_TEST'));
-        $this->assertFalse($token->isExpired());
+        $this->assertTrue($token->isExpired());
     }
 }
