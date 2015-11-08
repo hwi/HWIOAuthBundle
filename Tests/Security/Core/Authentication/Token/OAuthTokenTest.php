@@ -81,4 +81,24 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('oauth1_token_secret', $oauth1Token->getTokenSecret());
         $this->assertEquals('twitter', $oauth1Token->getResourceOwnerName());
     }
+
+    public function testIsExpired()
+    {
+        $expectedToken = array(
+            'access_token'  => 'access_token',
+            'refresh_token' => 'refresh_token',
+            'expires_in'    => '666',
+        );
+        $token = new OAuthToken($expectedToken, array('ROLE_TEST'));
+
+        $this->assertFalse($token->isExpired());
+
+        $expectedToken = array(
+            'access_token'  => 'access_token',
+            'refresh_token' => 'refresh_token',
+            'expires_in'    => '29',
+        );
+        $token = new OAuthToken($expectedToken, array('ROLE_TEST'));
+        $this->assertTrue($token->isExpired());
+    }
 }
