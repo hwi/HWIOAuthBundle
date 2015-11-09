@@ -230,7 +230,7 @@ class OAuthToken extends AbstractToken
             return false;
         }
 
-        return ($this->createdAt + $this->expiresIn) - time() < 30;
+        return ($this->createdAt + $this->expiresIn - time()) < 30;
     }
 
     /**
