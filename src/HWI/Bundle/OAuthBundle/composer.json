@@ -1,5 +1,5 @@
 {
-    "name":        "hieuit7/hwi-oauth-bundle",
+    "name":        "hwi/oauth-bundle",
     "type":        "symfony-bundle",
     "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
     "keywords":    [
@@ -104,9 +104,11 @@
 
     "autoload": {
         "psr-0": {
-            "HWI\\": "src/"
+            "HWI\\Bundle\\OAuthBundle\\": ""
         }
     },
+
+    "target-dir": "HWI/Bundle/OAuthBundle",
 
     "minimum-stability": "dev",
     "prefer-stable": true,
