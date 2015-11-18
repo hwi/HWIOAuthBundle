@@ -46,7 +46,7 @@ class SlackResourceOwner extends GenericOAuth2ResourceOwner
             )
         );
 
-        $resolver->setOptional(array('team'));
+        $resolver->setDefined(array('team'));
     }
 
     /**
