@@ -48,7 +48,7 @@ class MailRuResourceOwner extends GenericOAuth2ResourceOwner
         $url = $this->normalizeUrl($this->options['infos_url'], $params);
 
         $content = $this->doGetUserInformationRequest($url)->getContent();
-        $content = json_decode($content);
+        $content = json_decode($content, true);
         if (isset($content[0])) {
             $content = (array) $content[0];
         }
