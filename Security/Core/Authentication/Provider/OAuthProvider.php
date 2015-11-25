@@ -62,7 +62,10 @@ class OAuthProvider implements AuthenticationProviderInterface
      */
     public function supports(TokenInterface $token)
     {
-        return $token instanceof OAuthToken;
+        return
+            $token instanceof OAuthToken
+            && $this->resourceOwnerMap->hasResourceOwnerByName($token->getResourceOwnerName())
+        ;
     }
 
     /**
