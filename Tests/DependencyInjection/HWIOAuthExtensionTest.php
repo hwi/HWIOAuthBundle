@@ -242,6 +242,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertParameter(array('secured_area'), 'hwi_oauth.firewall_names');
         $this->assertParameter(null, 'hwi_oauth.target_path_parameter');
         $this->assertParameter(false, 'hwi_oauth.use_referer');
+        $this->assertParameter('hwi_oauth_connect', 'hwi_oauth.failed_auth_path');
         $this->assertParameter(array('any_name', 'some_service'), 'hwi_oauth.resource_owners');
 
         $this->assertNotHasDefinition('hwi_oauth.user.provider.fosub_bridge');
