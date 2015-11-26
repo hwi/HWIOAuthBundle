@@ -161,6 +161,7 @@ class Configuration implements ConfigurationInterface
                     ->isRequired()
                     ->useAttributeAsKey('name')
                     ->prototype('array')
+                        ->ignoreExtraKeys()
                         ->children()
                             ->scalarNode('base_url')->end()
                             ->scalarNode('access_token_url')
