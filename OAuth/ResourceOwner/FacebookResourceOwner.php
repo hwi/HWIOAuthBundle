@@ -111,6 +111,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
 
             'display'             => null,
             'auth_type'           => null,
+            'appsecret_proof'     => false,
         ));
 
         // Symfony <2.6 BC
