@@ -35,6 +35,18 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    {
+        if (isset($this->options['appsecret_proof']) && $this->options['appsecret_proof']) {
+            $extraParameters['appsecret_proof'] = hash_hmac('sha256', $accessToken['access_token'], $this->options['client_secret']);
+        }
+
+        return parent::getUserInformation($accessToken, $extraParameters);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         $extraOptions = array();
