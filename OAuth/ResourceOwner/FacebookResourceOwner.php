@@ -118,11 +118,13 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             $resolver
                 ->setAllowedValues('display', array('page', 'popup', 'touch', null)) // @link https://developers.facebook.com/docs/reference/dialogs/#display
                 ->setAllowedValues('auth_type', array('rerequest', null)) // @link https://developers.facebook.com/docs/reference/javascript/FB.login/
+                ->setAllowedValues('appsecret_proof', array(true, false)) // @link https://developers.facebook.com/docs/graph-api/securing-requests
             ;
         } else {
             $resolver->setAllowedValues(array(
                 'display'   => array('page', 'popup', 'touch', null),
                 'auth_type' => array('rerequest', null),
+                'appsecret_proof' => array(true, false),
             ));
         }
     }
