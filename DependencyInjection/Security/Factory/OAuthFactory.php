@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * OAuthFactory
+ * OAuthFactory.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
@@ -216,7 +216,7 @@ class OAuthFactory extends AbstractFactory
                     ->end()
                 ->end()
                 ->validate()
-                    ->ifTrue(function($c) {
+                    ->ifTrue(function ($c) {
                         return 1 !== count($c) || !in_array(key($c), array('fosub', 'oauth', 'orm', 'service'));
                     })
                     ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
@@ -235,7 +235,7 @@ class OAuthFactory extends AbstractFactory
                     ->prototype('scalar')
                 ->end()
                 ->validate()
-                    ->ifTrue(function($c) {
+                    ->ifTrue(function ($c) {
                         $checkPaths = array();
                         foreach ($c as $checkPath) {
                             if (in_array($checkPath, $checkPaths)) {

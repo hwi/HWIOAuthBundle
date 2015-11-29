@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * GenericOAuth2ResourceOwner
+ * GenericOAuth2ResourceOwner.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
@@ -60,10 +60,10 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 
         $parameters = array_merge(array(
             'response_type' => 'code',
-            'client_id'     => $this->options['client_id'],
-            'scope'         => $this->options['scope'],
-            'state'         => $this->state ? urlencode($this->state) : null,
-            'redirect_uri'  => $redirectUri,
+            'client_id' => $this->options['client_id'],
+            'scope' => $this->options['scope'],
+            'state' => $this->state ? urlencode($this->state) : null,
+            'redirect_uri' => $redirectUri,
         ), $extraParameters);
 
         return $this->normalizeUrl($this->options['authorization_url'], $parameters);
@@ -85,11 +85,11 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
         $parameters = array_merge(array(
-            'code'          => $request->query->get('code'),
-            'grant_type'    => 'authorization_code',
-            'client_id'     => $this->options['client_id'],
+            'code' => $request->query->get('code'),
+            'grant_type' => 'authorization_code',
+            'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
-            'redirect_uri'  => $redirectUri,
+            'redirect_uri' => $redirectUri,
         ), $extraParameters);
 
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
@@ -105,10 +105,10 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
-        $parameters = array_merge( array(
+        $parameters = array_merge(array(
             'refresh_token' => $refreshToken,
-            'grant_type'    => 'refresh_token',
-            'client_id'     => $this->options['client_id'],
+            'grant_type' => 'refresh_token',
+            'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
         ), $extraParameters);
 
@@ -130,7 +130,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         }
 
         $parameters = array(
-            'client_id'     => $this->options['client_id'],
+            'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
         );
 
@@ -208,8 +208,8 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'attr_name'                => 'access_token',
-            'use_commas_in_scope'      => false,
+            'attr_name' => 'access_token',
+            'use_commas_in_scope' => false,
             'use_bearer_authorization' => true,
         ));
 
@@ -226,7 +226,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         // of spaces to separate scopes (Disqus, Facebook, Github, Vkontante)
         $scopeNormalizer = function (Options $options, $value) {
             if (!$value) {
-                return null;
+                return;
             }
 
             if (!$options['use_commas_in_scope']) {

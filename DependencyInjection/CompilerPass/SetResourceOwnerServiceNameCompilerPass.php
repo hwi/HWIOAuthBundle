@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * Set the appropriate name for aliased services
+ * Set the appropriate name for aliased services.
  *
  * @author Tomas Pecserke <tomas.pecserke@gmail.com>
  */

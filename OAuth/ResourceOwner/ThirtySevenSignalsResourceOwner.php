@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * ThirtySevenSignalsResourceOwner (37signals)
+ * ThirtySevenSignalsResourceOwner (37signals).
  *
  * @author Richard van den Brand <richard@vandenbrand.org>
  */
@@ -26,11 +26,11 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'identity.id',
-        'nickname'   => 'identity.email_address',
-        'firstname'  => 'identity.first_name',
-        'lastname'   => 'identity.last_name',
-        'realname'   => array('identity.last_name', 'identity.first_name'),
-        'email'      => 'identity.email_address',
+        'nickname' => 'identity.email_address',
+        'firstname' => 'identity.first_name',
+        'lastname' => 'identity.last_name',
+        'realname' => array('identity.last_name', 'identity.first_name'),
+        'email' => 'identity.email_address',
     );
 
     /**
@@ -58,8 +58,8 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://launchpad.37signals.com/authorization/new',
-            'access_token_url'  => 'https://launchpad.37signals.com/authorization/token',
-            'infos_url'         => 'https://launchpad.37signals.com/authorization.json',
+            'access_token_url' => 'https://launchpad.37signals.com/authorization/token',
+            'infos_url' => 'https://launchpad.37signals.com/authorization.json',
         ));
     }
 }

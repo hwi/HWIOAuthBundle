@@ -22,9 +22,9 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier'     => 'openid',
-        'nickname'       => 'nickname',
-        'realname'       => 'nickname',
+        'identifier' => 'openid',
+        'nickname' => 'nickname',
+        'realname' => 'nickname',
         'profilepicture' => 'figureurl_qq_1',
     );
 
@@ -50,9 +50,9 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
 
         $url = $this->normalizeUrl($this->options['infos_url'], array(
             'oauth_consumer_key' => $this->options['client_id'],
-            'access_token'       => $accessToken['access_token'],
-            'openid'             => $openid,
-            'format'             => 'json',
+            'access_token' => $accessToken['access_token'],
+            'openid' => $openid,
+            'format' => 'json',
         ));
 
         $response = $this->doGetUserInformationRequest($url);
@@ -82,9 +82,9 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://graph.qq.com/oauth2.0/authorize?format=json',
-            'access_token_url'  => 'https://graph.qq.com/oauth2.0/token',
-            'infos_url'         => 'https://graph.qq.com/user/get_user_info',
-            'me_url'            => 'https://graph.qq.com/oauth2.0/me',
+            'access_token_url' => 'https://graph.qq.com/oauth2.0/token',
+            'infos_url' => 'https://graph.qq.com/user/get_user_info',
+            'me_url' => 'https://graph.qq.com/oauth2.0/me',
         ));
     }
 

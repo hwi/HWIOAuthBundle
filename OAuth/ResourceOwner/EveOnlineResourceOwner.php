@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * EveOnlineResourceOwner
+ * EveOnlineResourceOwner.
  *
  * @author Ivan Stankovic <ivan.stankovic@webstorm.rs>
  */
@@ -25,8 +25,8 @@ class EveOnlineResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'CharacterID',
-        'nickname'   => 'CharacterName',
-        'realname'   => 'CharacterName',
+        'nickname' => 'CharacterName',
+        'realname' => 'CharacterName',
     );
 
     /**
@@ -37,9 +37,9 @@ class EveOnlineResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://login.eveonline.com/oauth/authorize',
-            'access_token_url'    => 'https://login.eveonline.com/oauth/token',
-            'infos_url'           => 'https://login.eveonline.com/oauth/verify',
+            'authorization_url' => 'https://login.eveonline.com/oauth/authorize',
+            'access_token_url' => 'https://login.eveonline.com/oauth/token',
+            'infos_url' => 'https://login.eveonline.com/oauth/verify',
             'use_commas_in_scope' => true,
         ));
     }

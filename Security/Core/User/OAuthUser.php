@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * OAuthUser
+ * OAuthUser.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  */
@@ -46,7 +46,7 @@ class OAuthUser implements UserInterface
      */
     public function getPassword()
     {
-        return null;
+        return;
     }
 
     /**
@@ -54,7 +54,7 @@ class OAuthUser implements UserInterface
      */
     public function getSalt()
     {
-        return null;
+        return;
     }
 
     /**

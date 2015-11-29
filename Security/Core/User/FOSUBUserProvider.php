@@ -59,8 +59,8 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
     public function __construct(UserManagerInterface $userManager, array $properties)
     {
         $this->userManager = $userManager;
-        $this->properties  = array_merge($this->properties, $properties);
-        $this->accessor    = PropertyAccess::createPropertyAccessor();
+        $this->properties = array_merge($this->properties, $properties);
+        $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
     /**

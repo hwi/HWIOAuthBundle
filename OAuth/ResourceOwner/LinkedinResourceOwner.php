@@ -15,7 +15,7 @@ use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * LinkedinResourceOwner
+ * LinkedinResourceOwner.
  *
  * @author Francisco Facioni <fran6co@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
@@ -26,10 +26,10 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'formattedName',
-        'realname'       => 'formattedName',
-        'email'          => 'emailAddress',
+        'identifier' => 'id',
+        'nickname' => 'formattedName',
+        'realname' => 'formattedName',
+        'email' => 'emailAddress',
         'profilepicture' => 'pictureUrl',
     );
 
@@ -58,11 +58,11 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'        => 'https://www.linkedin.com/uas/oauth2/authorization',
-            'access_token_url'         => 'https://www.linkedin.com/uas/oauth2/accessToken',
-            'infos_url'                => 'https://api.linkedin.com/v1/people/~:(id,formatted-name,email-address,picture-url)?format=json',
+            'authorization_url' => 'https://www.linkedin.com/uas/oauth2/authorization',
+            'access_token_url' => 'https://www.linkedin.com/uas/oauth2/accessToken',
+            'infos_url' => 'https://api.linkedin.com/v1/people/~:(id,formatted-name,email-address,picture-url)?format=json',
 
-            'csrf'                     => true,
+            'csrf' => true,
 
             'use_bearer_authorization' => false,
         ));

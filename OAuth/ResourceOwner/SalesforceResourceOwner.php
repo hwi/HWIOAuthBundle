@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * Salesforce Resource Owner
+ * Salesforce Resource Owner.
  *
  * @author Tyler Pugh <tylerism@gmail.com>
  */
@@ -24,10 +24,10 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier'     => 'user_id',
-        'nickname'       => 'nick_name',
-        'realname'       => 'nick_name',
-        'email'          => 'email',
+        'identifier' => 'user_id',
+        'nickname' => 'nick_name',
+        'realname' => 'nick_name',
+        'email' => 'email',
         'profilepicture' => 'photos.picture',
     );
 
@@ -49,7 +49,7 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
     {
         // Salesforce requires format parameter in order for API to return json response
         $url = $this->normalizeUrl($url, array(
-            'format' => $this->options['format']
+            'format' => $this->options['format'],
         ));
 
         // Salesforce require to pass the OAuth token as 'oauth_token' instead of 'access_token'
@@ -67,14 +67,13 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://login.salesforce.com/services/oauth2/authorize',
-            'access_token_url'  => 'https://login.salesforce.com/services/oauth2/token',
+            'access_token_url' => 'https://login.salesforce.com/services/oauth2/token',
 
             // @see SalesforceResourceOwner::getUserInformation()
-            'infos_url'         => null,
+            'infos_url' => null,
 
             // @see SalesforceResourceOwner::doGetUserInformationRequest()
-            'format'            => 'json',
+            'format' => 'json',
         ));
     }
-
 }

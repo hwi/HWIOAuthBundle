@@ -24,7 +24,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\SecurityContext;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -70,7 +69,7 @@ class ConnectController extends Controller
         }
 
         return $this->render('HWIOAuthBundle:Connect:login.html.'.$this->getTemplatingEngine(), array(
-            'error'   => $error,
+            'error' => $error,
         ));
     }
 
@@ -213,13 +212,13 @@ class ConnectController extends Controller
                 $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
             }
 
-            return $this->render('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
+            return $this->render('HWIOAuthBundle:Connect:connect_success.html.'.$this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
                 'service' => $service,
             ));
         }
 
-        return $this->render('HWIOAuthBundle:Connect:connect_confirm.html.' . $this->getTemplatingEngine(), array(
+        return $this->render('HWIOAuthBundle:Connect:connect_confirm.html.'.$this->getTemplatingEngine(), array(
             'key' => $key,
             'service' => $service,
             'form' => $form->createView(),
@@ -317,9 +316,9 @@ class ConnectController extends Controller
      *
      * @deprecated since version 0.4. Will be removed in 1.0.
      *
-     * @param string  $route    Route name
-     * @param array   $params   Route parameters
-     * @param boolean $absolute Absolute url or note.
+     * @param string $route    Route name
+     * @param array  $params   Route parameters
+     * @param bool   $absolute Absolute url or note.
      *
      * @return string
      */

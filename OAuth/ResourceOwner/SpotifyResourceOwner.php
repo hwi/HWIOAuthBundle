@@ -23,10 +23,10 @@ class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'id',
-        'realname'       => 'display_name',
-        'email'          => 'email'
+        'identifier' => 'id',
+        'nickname' => 'id',
+        'realname' => 'display_name',
+        'email' => 'email',
     );
 
     /**
@@ -35,7 +35,7 @@ class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken = null, array $extraParameters = array())
     {
         $url = $this->normalizeUrl($this->options['infos_url'], array(
-            'access_token' => $accessToken['access_token']
+            'access_token' => $accessToken['access_token'],
         ));
 
         $content = $this->doGetUserInformationRequest($url)->getContent();
@@ -57,8 +57,8 @@ class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://accounts.spotify.com/authorize',
-            'access_token_url'  => 'https://accounts.spotify.com/api/token',
-            'infos_url'         => 'https://api.spotify.com/v1/me'
+            'access_token_url' => 'https://accounts.spotify.com/api/token',
+            'infos_url' => 'https://api.spotify.com/v1/me',
         ));
     }
 }

@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- * DailymotionResourceOwner
+ * DailymotionResourceOwner.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
@@ -24,11 +24,11 @@ class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'screenname',
-        'realname'       => 'fullname', // requires 'userinfo' scope
-        'email'          => 'email', // requires 'email' scope
-        'profilepicture' => 'avatar_medium_url'
+        'identifier' => 'id',
+        'nickname' => 'screenname',
+        'realname' => 'fullname', // requires 'userinfo' scope
+        'email' => 'email', // requires 'email' scope
+        'profilepicture' => 'avatar_medium_url',
     );
 
     /**
@@ -48,10 +48,10 @@ class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://api.dailymotion.com/oauth/authorize',
-            'access_token_url'  => 'https://api.dailymotion.com/oauth/token',
-            'infos_url'         => 'https://api.dailymotion.com/me',
+            'access_token_url' => 'https://api.dailymotion.com/oauth/token',
+            'infos_url' => 'https://api.dailymotion.com/me',
 
-            'display'           => null,
+            'display' => null,
         ));
 
         if (method_exists($resolver, 'setDefined')) {
