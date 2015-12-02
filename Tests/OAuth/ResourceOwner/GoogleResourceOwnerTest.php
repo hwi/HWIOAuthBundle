@@ -26,6 +26,8 @@ json;
         'identifier'     => 'id',
         'nickname'       => 'name',
         'realname'       => 'name',
+        'firstname'      => 'given_name',
+        'lastname'       => 'family_name',
         'email'          => 'email',
         'profilepicture' => 'picture',
     );
