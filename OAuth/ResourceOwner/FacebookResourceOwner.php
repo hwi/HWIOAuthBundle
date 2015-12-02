@@ -37,7 +37,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        if (isset($this->options['appsecret_proof']) && $this->options['appsecret_proof']) {
+        if ($this->options['appsecret_proof']) {
             $extraParameters['appsecret_proof'] = hash_hmac('sha256', $accessToken['access_token'], $this->options['client_secret']);
         }
 
@@ -119,7 +119,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             $resolver
                 ->setAllowedValues('display', array('page', 'popup', 'touch', null)) // @link https://developers.facebook.com/docs/reference/dialogs/#display
                 ->setAllowedValues('auth_type', array('rerequest', null)) // @link https://developers.facebook.com/docs/reference/javascript/FB.login/
-                ->setAllowedValues('appsecret_proof', array(true, false)) // @link https://developers.facebook.com/docs/graph-api/securing-requests
+                ->setAllowedTypes('appsecret_proof', 'bool') // @link https://developers.facebook.com/docs/graph-api/securing-requests
             ;
         } else {
             $resolver->setAllowedValues(array(
