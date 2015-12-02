@@ -72,7 +72,7 @@ class HWIOAuthExtension extends Extension
         // setup services for all configured resource owners
         $resourceOwners = array();
         foreach ($config['resource_owners'] as $name => $options) {
-            $resourceOwners[] = $name;
+            $resourceOwners[$name] = $name;
             $this->createResourceOwnerService($container, $name, $options);
         }
         $container->setParameter('hwi_oauth.resource_owners', $resourceOwners);
@@ -122,7 +122,7 @@ class HWIOAuthExtension extends Extension
             }
 
             foreach ($config['connect'] as $key => $serviceId) {
-                if ('confirmation' == $key) {
+                if ('confirmation' === $key) {
                     $container->setParameter('hwi_oauth.connect.confirmation', $config['connect']['confirmation']);
 
                     continue;
