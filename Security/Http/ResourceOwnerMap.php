@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security\Http;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-use Symfony\Component\DependencyInjection\ContainerAware;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -22,8 +22,10 @@ use Symfony\Component\Security\Http\HttpUtils;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class ResourceOwnerMap extends ContainerAware
+class ResourceOwnerMap
 {
+    use ContainerAwareTrait;
+
     /**
      * @var HttpUtils
      */
