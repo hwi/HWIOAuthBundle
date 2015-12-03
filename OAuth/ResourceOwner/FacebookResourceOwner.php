@@ -90,10 +90,9 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             'client_secret' => $this->options['client_secret'],
         );
 
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), HttpRequestInterface::METHOD_POST);
-        $response = $this->getResponseContent($response);
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('access_token' => $token)), $parameters, array(), HttpRequestInterface::METHOD_DELETE);
 
-        return 'true' == $response;
+        return 200 === $response->getStatusCode();
     }
 
     /**
