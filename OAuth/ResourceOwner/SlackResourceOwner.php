@@ -13,8 +13,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
-
 /**
  * SlackResourceOwner
  *
@@ -22,6 +20,9 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
  */
 class SlackResourceOwner extends GenericOAuth2ResourceOwner
 {
+    /**
+     * {@inheritDoc}
+     */
     protected $paths = array(
         'identifier' => 'user_id',
         'nickname' => 'user',
@@ -36,14 +37,13 @@ class SlackResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://slack.com/oauth/authorize',
-            'infos_url' => 'https://slack.com/api/auth.test',
-            'access_token_url' => 'https://slack.com/api/oauth.access',
+            'access_token_url'  => 'https://slack.com/api/oauth.access',
+            'infos_url'         => 'https://slack.com/api/auth.test',
 
-            'scope' => 'identify',
+            'scope'             => 'identify',
 
             'use_bearer_authorization' => false,
-            'attr_name' => 'token'
+            'attr_name'                => 'token',
         ));
     }
 }
-
