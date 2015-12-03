@@ -80,6 +80,21 @@ hwi_oauth:
 - [Yandex](resource_owners/yandex.md)
 - [Others](resource_owners/others.md)
 
+### CSRF protection
+
+Set the _csrf_ option to **true** in the resource owner's configuration in order to protect your users from [CSRF](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)) attacks.
+```yaml
+# app/config/config.yml
+hwi_oauth:
+    resource_owners:
+        any_name:
+            type:                resource_owner_of_choice
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+            options:
+                csrf: true
+```
+
 ### Continue to the next step!
 When you're done. Continue by configuring the security layer.
 
