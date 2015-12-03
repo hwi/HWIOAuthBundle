@@ -53,6 +53,14 @@ class ResourceOwnerMap extends ContainerAware
         $this->resourceOwners         = $resourceOwners;
     }
 
+    public function hasResourceOwnerByName($name)
+    {
+        return
+            isset($this->resourceOwners[$name])
+            && in_array($name, $this->possibleResourceOwners)
+        ;
+    }
+
     /**
      * Gets the appropriate resource owner given the name.
      *
@@ -62,10 +70,7 @@ class ResourceOwnerMap extends ContainerAware
      */
     public function getResourceOwnerByName($name)
     {
-        if (!isset($this->resourceOwners[$name])) {
-            return null;
-        }
-        if (!in_array($name, $this->possibleResourceOwners)) {
+        if (!$this->hasResourceOwnerByName($name)) {
             return null;
         }
 
