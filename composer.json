@@ -1,6 +1,8 @@
 {
     "name":        "hwi/oauth-bundle",
     "type":        "symfony-bundle",
+    "homepage":    "http://github.com/hwi/HWIOAuthBundle",
+    "license":     "MIT",
     "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
     "keywords":    [
         "authentication",
@@ -50,8 +52,6 @@
         "yandex",
         "37signals"
     ],
-    "homepage":    "http://github.com/hwi/HWIOAuthBundle",
-    "license":     "MIT",
 
     "authors": [
         {
@@ -92,7 +92,8 @@
         "symfony/validator":            "~2.3",
         "symfony/twig-bundle":          "~2.3",
         "symfony/phpunit-bridge":       "~2.7",
-        "friendsofsymfony/user-bundle": "~1.3|~2.0"
+        "friendsofsymfony/user-bundle": "~1.3|~2.0",
+        "phpunit/phpunit":              "~4.8"
     },
 
     "suggest": {
@@ -103,12 +104,10 @@
     },
 
     "autoload": {
-        "psr-0": {
+        "psr-4": {
             "HWI\\Bundle\\OAuthBundle\\": ""
         }
     },
-
-    "target-dir": "HWI/Bundle/OAuthBundle",
 
     "minimum-stability": "dev",
     "prefer-stable": true,

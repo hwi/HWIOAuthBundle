@@ -2,7 +2,6 @@ language: php
 
 php:
   - 5.3
-  - 5.4
   - 5.5
   - 5.6
   - 7.0
@@ -24,7 +23,7 @@ matrix:
     - php: 5.6
       env: SYMFONY_VERSION=2.7.*
     - php: 5.6
-      env: SYMFONY_VERSION=2.8.*@dev
+      env: SYMFONY_VERSION=2.8.*
     - php: 5.6
       env: SYMFONY_VERSION="3.0.x-dev as 2.8"
     - php: 5.6
@@ -33,19 +32,19 @@ matrix:
       env: FOSUSERBUNDLE_VERSION=2.0.*@dev
   allow_failures:
     - php: hhvm
-    - env: SYMFONY_VERSION=2.8.*@dev
     - env: SYMFONY_VERSION="3.0.x-dev as 2.8"
 
 cache:
   directories:
     - $HOME/.composer/cache/files
 
+before_install:
+    - echo "" > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/xdebug.ini
+
 before_script:
-  - composer selfupdate
-  - composer global require phpunit/phpunit --no-update
-  - composer global update --prefer-dist --no-interaction
+  - composer self-update
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
   - if [ "$FOSUSERBUNDLE_VERSION" != "" ]; then composer require "friendsofsymfony/user-bundle:${FOSUSERBUNDLE_VERSION}" --no-update; fi;
-  - travis_wait composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
+  - composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
 
 script: phpunit
