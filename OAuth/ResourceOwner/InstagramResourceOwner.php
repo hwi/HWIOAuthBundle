@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Buzz\Message\RequestInterface as HttpRequestInterface;
 
 /**
  * InstagramResourceOwner
@@ -29,6 +30,14 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
         'realname'        => 'data.full_name',
         'profilepicture'  => 'data.profile_picture',
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function doGetUserInformationRequest($url, array $parameters = array())
+    {
+        return $this->httpRequest($this->normalizeUrl($url, $parameters), null, array(), HttpRequestInterface::METHOD_GET);
+    }
 
     /**
      * {@inheritDoc}
