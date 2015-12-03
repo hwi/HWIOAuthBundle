@@ -37,6 +37,18 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    {
+        if ($this->options['appsecret_proof']) {
+            $extraParameters['appsecret_proof'] = hash_hmac('sha256', $accessToken['access_token'], $this->options['client_secret']);
+        }
+
+        return parent::getUserInformation($accessToken, $extraParameters);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         $extraOptions = array();
@@ -101,6 +113,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
 
             'display'             => null,
             'auth_type'           => null,
+            'appsecret_proof'     => false,
         ));
 
         // Symfony <2.6 BC
@@ -108,11 +121,13 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             $resolver
                 ->setAllowedValues('display', array('page', 'popup', 'touch', null)) // @link https://developers.facebook.com/docs/reference/dialogs/#display
                 ->setAllowedValues('auth_type', array('rerequest', null)) // @link https://developers.facebook.com/docs/reference/javascript/FB.login/
+                ->setAllowedTypes('appsecret_proof', 'bool') // @link https://developers.facebook.com/docs/graph-api/securing-requests
             ;
         } else {
             $resolver->setAllowedValues(array(
                 'display'   => array('page', 'popup', 'touch', null),
                 'auth_type' => array('rerequest', null),
+                'appsecret_proof' => array(true, false),
             ));
         }
     }
