@@ -34,6 +34,13 @@ interface UserResponseInterface extends ResponseInterface
     public function getUsername();
 
     /**
+     * Get the id of the current service.
+     *
+     * @return string
+     */
+    public function getId();
+
+    /**
      * Get the username to display.
      *
      * @return string

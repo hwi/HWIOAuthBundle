@@ -31,7 +31,16 @@ class PathUserResponse extends AbstractUserResponse
         'realname'       => null,
         'email'          => null,
         'profilepicture' => null,
+        'id'             => null,
     );
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->getValueForPath('id');
+    }
 
     /**
      * {@inheritdoc}
