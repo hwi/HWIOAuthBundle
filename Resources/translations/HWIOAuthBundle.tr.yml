@@ -1,6 +1,7 @@
 header:
     connecting: "Bağlan"
     success: "Başarı ile '%name%' hesabına bağlanıldı!"
+    fail: "Hesaba bağlanılamadı!"
     register: "'%name%' üyeliğim ile kayıt ol"
     registration_success: "'%username%' başarı ile kayıt oldunuz ve bağlandınız!"
 
