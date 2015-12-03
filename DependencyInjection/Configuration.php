@@ -63,6 +63,7 @@ class Configuration implements ConfigurationInterface
             'soundcloud',
             'stack_exchange',
             'toshl',
+            'trakt',
             'twitch',
             'vkontakte',
             'wechat',
