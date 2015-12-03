@@ -78,10 +78,6 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
             'format'            => 'json',
         ));
 
-        $resolver->addAllowedTypes(array(
-            'sandbox' => 'bool',
-        ));
-
         $sandboxTransformation = function (Options $options, $value) {
             if (!$options['sandbox']) {
                 return $value;
@@ -90,10 +86,23 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
             return preg_replace('~\.login\.~', '.test.', $value, 1);
         };
 
-        $resolver->setNormalizers(array(
-            'authorization_url' => $sandboxTransformation,
-            'access_token_url'  => $sandboxTransformation,
-        ));
-    }
+        // Symfony <2.6 BC
+        if (method_exists($resolver, 'setNormalizer')) {
+            $resolver
+                ->setNormalizer('authorization_url', $sandboxTransformation)
+                ->setNormalizer('access_token_url', $sandboxTransformation)
+            ;
 
+            $resolver->addAllowedTypes('sandbox', 'bool');
+        } else {
+            $resolver->setNormalizers(array(
+                'authorization_url' => $sandboxTransformation,
+                'access_token_url' => $sandboxTransformation,
+            ));
+
+            $resolver->addAllowedTypes(array(
+                'sandbox' => 'bool',
+            ));
+        }
+    }
 }
