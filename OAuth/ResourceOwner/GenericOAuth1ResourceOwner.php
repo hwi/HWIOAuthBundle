@@ -15,7 +15,7 @@ use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -220,7 +220,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 

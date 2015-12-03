@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * TwitterResourceOwner
@@ -46,7 +46,7 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 

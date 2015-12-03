@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Buzz\Message\MessageInterface as HttpMessageInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class WechatResourceOwner extends GenericOAuth2ResourceOwner
@@ -99,7 +99,7 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
