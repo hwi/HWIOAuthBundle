@@ -247,7 +247,7 @@ class ConnectController extends Controller
                 $sessionKey = '_security.'.$providerKey.'.target_path';
 
                 $param = $this->container->getParameter('hwi_oauth.target_path_parameter');
-                if (!empty($param) && $targetUrl = $request->get($param, null, true)) {
+                if (!empty($param) && $targetUrl = $request->get($param, null)) {
                     $session->set($sessionKey, $targetUrl);
                 }
 
