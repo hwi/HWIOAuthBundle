@@ -41,11 +41,11 @@ hwi_oauth:
             authorization_url:   https://path.to/oauth/v2/authorize
             infos_url:           https://path.to/api/user
             scope:               "user_details"
-            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
+            user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
             paths:
                 identifier: id
                 nickname:   username
-                email:      email
+                realname:   fullname
 
         my_custom_oauth1:
             type:                oauth1
