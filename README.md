@@ -15,7 +15,9 @@ This bundle contains support for 40 different providers:
 * Box,
 * BufferApp,
 * Dailymotion,
+* Deezer,
 * DeviantArt,
+* Discogs,
 * Disqus,
 * Dropbox,
 * EVE Online,
@@ -36,13 +38,16 @@ This bundle contains support for 40 different providers:
 * RunKeeper,
 * Salesforce,
 * Sensio Connect,
-* Sina Weibo
-* Spotify
-* Soundcloud
+* Sina Weibo,
+* Slack,
+* Soundcloud,
+* Spotify,
 * Stack Exchange,
 * Stereomood,
 * Strava,
 * Toshl,
+* Trakt,
+* Trello,
 * Twitch,
 * Twitter,
 * VKontakte,
@@ -62,7 +67,7 @@ Installation
 All the installation instructions are located in the documentation, check it for specific
 version:
 
-* [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3`
+* [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/0.4/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3,<3.0`
 * [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.1,<2.7`
 
 Documentation
@@ -71,7 +76,7 @@ Documentation
 The bulk of the documentation is stored in the `Resources/doc/index.md`
 file in this bundle. Read the documentation for version:
 
-* [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md) with support for Symfony `>=2.3`
+* [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/0.4/Resources/doc/index.md) with support for Symfony `>=2.3,<3.0`
 * [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/index.md) with support for Symfony `>=2.1,<2.7`
 
 License

@@ -1,7 +1,7 @@
 Changelog
 =========
 
-## 0.4.0 (2015-??-??)
+## 0.4.0 (2015-12-04)
 * [BC break] Added `UserResponseInterface#getFirstName()` method, also a new default path `firstname`
   was added, this path holds the first name of user,
 * [BC break] Added `UserResponseInterface#getLastName()` method, also a new default path `lastname`
@@ -9,26 +9,37 @@ Changelog
 * [BC break] Added `UserResponseInterface::getOAuthToken()` & basic implementation in `AbstractUserResponse`,
 * [BC break] `GenericOAuth1ResourceOwner::getRequestToken()` is now public method (was protected),
 * Added: configuration parameter `firewall_name` (will be removed in next major version)
-  renamed to `firewall_names` to support mutiple firewalls,
-* Added Auth0 resource owner
-* Added Azure resource owner
-* Added BufferApp resource owner
-* Added Deezer resource owner
-* Added Discogs resource owner
-* Added EveOnline resource owner
-* Added Fiware resource owner
-* Added Hubic resource owner
-* Added Paypal resource owner
-* Added Reddit resource owner
-* Added Runkeeper resource owner
-* Added Soundcloud resource owner
-* Added Spotify resource owner
-* Added Strava resource owner
-* Added Toshl resource owner
-* Added Wechat resource owner
-* Added Wordpress resource owner
-* Added Xing resource owner
-* Added Youtube resource owner
+  renamed to `firewall_names` to support multiple firewalls,
+* Added: configuration parameter: `failed_auth_path` which contains route name, on which user
+  will be redirected after failure when connecting accounts (i.e. user denies connection),
+* Added: `appsecret_proof` functionality support to the Facebook resource owner,
+* Added: `sandbox` functionality support to the Salesforce resource owner,
+* Added Auth0 resource owner,
+* Added Azure resource owner,
+* Added BufferApp resource owner,
+* Added Deezer resource owner,
+* Added Discogs resource owner,
+* Added EveOnline resource owner,
+* Added Fiware resource owner,
+* Added Hubic resource owner,
+* Added Paypal resource owner,
+* Added Reddit resource owner,
+* Added Runkeeper resource owner,
+* Added Slack resource owner,
+* Added Spotify resource owner,
+* Added Soundcloud resource owner,
+* Added Strava resource owner,
+* Added Toshl resource owner,
+* Added Trakt resource owner,
+* Added Wechat resource owner,
+* Added Wordpress resource owner,
+* Added Xing resource owner,
+* Added Youtube resource owner,
+* Fixed: Revoking tokens for Facebook & Google resource owners,
+* Fixed: Instagram allows only GET calls to fetch user details,
+* Fixed: `ResourceOwnerMap` no longer depends on deprecated `ContainerAware` class,
+* Fixed: Wrong usage of `json_decode` in Mail.ru resource owner,
+* Fixed: Transform storage exceptions in OAuth1 resource owners into `AuthenticationException`
 * Fixed: Default scopes & fields for VKontakte resource owner
 
 ## 0.3.9 (2015-08-28)
