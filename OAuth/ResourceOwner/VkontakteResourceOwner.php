@@ -80,6 +80,8 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'access_token_url'    => 'https://oauth.vk.com/access_token',
             'infos_url'           => 'https://api.vk.com/method/users.get',
 
+            'scope'               => 'email',
+
             'use_commas_in_scope' => true,
 
             'fields'              => 'nickname,photo_medium,screen_name,email',
