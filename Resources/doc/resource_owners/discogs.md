@@ -1,6 +1,6 @@
 Step 2x: Setup Discogs
 ========================
-First you will have to register your application on Discogs at http://www.discogs.com/developers/oauth.html#registering-your-application.
+First you will have to register your application on Discogs at https://www.discogs.com/applications/edit (You need to be logged in).
 Make sure you enter the correct callback url (for example: http://yourapp.domain/login/check-discogs).
 
 Next configure a resource owner of type `discogs` with appropriate `client_id`,
