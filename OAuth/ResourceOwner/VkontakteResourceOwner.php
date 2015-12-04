@@ -29,12 +29,12 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'response.0.uid',
-        'nickname'   => 'response.0.nickname',
-        'profilepicture' => 'response.0.photo_50',
+        'nickname'   => 'nickname',
         'firstname'  => 'response.0.first_name',
         'lastname'   => 'response.0.last_name',
         'realname'   => array('response.0.last_name', 'response.0.first_name'),
-        'email' => 'email'
+        'profilepicture' => 'response.0.photo',
+        'email'          => 'email'
     );
 
     /**
@@ -42,12 +42,11 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        $parameters = array(
+        $url = $this->normalizeUrl($this->options['infos_url'], array(
             'access_token' => $accessToken['access_token'],
             'fields'       => $this->options['fields'],
             'name_case'    => $this->options['name_case'],
-        );
-        $url = $this->normalizeUrl($this->options['infos_url'], $parameters);
+        ));
 
         $content = $this->doGetUserInformationRequest($url)->getContent();
 
@@ -56,11 +55,15 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
-        if (isset($accessToken['email'])) {
-            $content = $response->getResponse();
-            $content['email'] = $accessToken['email'];
-            $response->setResponse($content);
+        $content = $response->getResponse();
+        $content['email'] = isset($accessToken['email']) ? $accessToken['email'] : null;
+        if (isset($content['screen_name'])) {
+            $content['nickname'] = $content['screen_name'];
+        } else {
+            $content['nickname'] = isset($content['nickname']) ? $content['nickname'] : null;
         }
+
+        $response->setResponse($content);
 
         return $response;
     }
@@ -77,9 +80,11 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'access_token_url'    => 'https://oauth.vk.com/access_token',
             'infos_url'           => 'https://api.vk.com/method/users.get',
 
+            'scope'               => 'email',
+
             'use_commas_in_scope' => true,
 
-            'fields'              => 'nickname,photo_50',
+            'fields'              => 'nickname,photo_medium,screen_name,email',
             'name_case'           => null,
         ));
 
