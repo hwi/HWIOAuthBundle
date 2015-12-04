@@ -85,6 +85,21 @@ json;
         $this->createResourceOwner($this->resourceOwnerName, array('csrf' => 'invalid'));
     }
 
+    public function testHandleRequest()
+    {
+        $request = new Request(array('test' => 'test'));
+
+        $this->assertFalse($this->resourceOwner->handles($request));
+
+        $request = new Request(array('code' => 'test'));
+
+        $this->assertTrue($this->resourceOwner->handles($request));
+
+        $request = new Request(array('code' => 'test', 'test' => 'test'));
+
+        $this->assertTrue($this->resourceOwner->handles($request));
+    }
+
     public function testGetUserInformation()
     {
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');

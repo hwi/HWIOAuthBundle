@@ -29,6 +29,7 @@ Changelog
 * Added Wordpress resource owner
 * Added Xing resource owner
 * Added Youtube resource owner
+* Fixed: Default scopes & fields for VKontakte resource owner
 
 ## 0.3.9 (2015-08-28)
 * Fix: Remove deprecated Twig features
