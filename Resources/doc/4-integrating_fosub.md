@@ -1,15 +1,14 @@
 Step 4: Integrating with FOSUserBundle
 ======================================
 
-If you use FOSUserBundle and you want to integrate it with HWIOAuthBundle this article will describe most mahor
-FOSUserBundle is the most popular Symfony2 bundle, and when you use HWIOAuthBundle for allow to users to authenticate
-through different networks and services you obviously want to integrate you User class with HWIOauthBundle.
+If you already use FOSUserBundle & you would like to integrate different OAuth 1.0a / OAuth2 services,
+with help of this article you will learn how to achieve this.
 
-Consider that you have been successfully configure any provider (e.g [Adding "Facebook Connect" functionality](bonus/facebook-connect.md))
+We of course consider that you have successfully configured some providers (e.g [Adding "Facebook Connect" functionality](bonus/facebook-connect.md)).
 
 ### 1) Add resource properties for User class
 
-Update your User class, by add properties for storing provider user id and access token. It may looks like:
+Update your User entity class, by adding properties for storing provider user ID & access token. It may looks like:
 
 ```php
 namespace MyBundle\Entity;
@@ -33,12 +32,12 @@ class User extends FOSUBUser
     /**
      * @ORM\Column(name="facebook_id", type="string", length=255, nullable=true)
      */
-    private $facebook_id;
+    private $facebookId;
 
     /**
      * @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true)
      */
-    private $facebook_access_token;
+    private $facebookAccessToken;
 
     /**
      * @return integer
@@ -54,7 +53,7 @@ class User extends FOSUBUser
      */
     public function setFacebookId($facebookId)
     {
-        $this->facebook_id = $facebookId;
+        $this->facebookId = $facebookId;
 
         return $this;
     }
@@ -64,7 +63,7 @@ class User extends FOSUBUser
      */
     public function getFacebookId()
     {
-        return $this->facebook_id;
+        return $this->facebookId;
     }
 
     /**
@@ -73,7 +72,7 @@ class User extends FOSUBUser
      */
     public function setFacebookAccessToken($facebookAccessToken)
     {
-        $this->facebook_access_token = $facebookAccessToken;
+        $this->facebookAccessToken = $facebookAccessToken;
 
         return $this;
     }
@@ -83,18 +82,18 @@ class User extends FOSUBUser
      */
     public function getFacebookAccessToken()
     {
-        return $this->facebook_access_token;
+        return $this->facebookAccessToken;
     }
 ```
-After adding extra properties to User entity, you need to extend base FOSUBUserProvider (if you want to add more advanced behavior, than provided from the box)
-
+After adding extra properties to User entity, you need to extend base FOSUBUserProvider.
 
 ### 2) Extend default FOSUBUserProvider
 
 The bundle provide bridge class for connect FOSUserBundle User class and HWIOAuth out of the box.
 You should extend it if you want to add more advanced behavior.
+For example out of the box it allows to find user by response token, but doesn't allow create it.
 
-In `YourBundle\Security\Core\User` create class, lets call it `MyFOSUBUserProvider`:
+In `MyBundle\Security\Core\User` create class, lets call it `MyFOSUBUserProvider`:
 
 ```php
 
@@ -104,16 +103,8 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider as BaseFOSUBProvider;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class FOSUBUserProvider extends BaseFOSUBProvider
+class MyFOSUBUserProvider extends BaseFOSUBProvider
 {
-    /**
-     * {@inheritDoc}
-     */
-    public function __construct(UserManagerInterface $userManager, array $properties)
-    {
-        parent::__construct();
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -121,17 +112,16 @@ class FOSUBUserProvider extends BaseFOSUBProvider
     {
         $property = $this->getProperty($response);
         $username = $response->getUsername();
-        $service = $response->getResourceOwner()->getName(); //get name of resource owner
 
         //we "disconnect" previously connected users
-        $previousUser = $this->userManager->findUserBy([$property => $username])
-        if (null !== $previousUser) {
+        $existingUser = $this->userManager->findUserBy(array($property => $username))
+        if (null !== $existingUser) {
             // set current user id and token to null for disconect
-            ...
-            $this->userManager->updateUser($previousUser);
+            // ...
+            $this->userManager->updateUser($existingUser);
         }
         //we connect current user, set current user id and token
-        ...
+        // ...
         $this->userManager->updateUser($user);
     }
 
@@ -140,13 +130,18 @@ class FOSUBUserProvider extends BaseFOSUBProvider
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
-        $username = $response->getRealName();
         $userEmail = $response->getEmail();
         $user = $this->userManager->findUserByEmail($userEmail);
-        if (null === $user) {
-            // if null just create new user and set it properties
 
-            return $user
+        // if null just create new user and set it properties
+        if (null === $user) {
+            $username = $response->getRealName();
+            $user = new User();
+            $user->setUsername($username);
+
+            // ... save user to database
+
+            return $user;
         }
         // else update access token of existing user
         $serviceName = $response->getResourceOwner()->getName();
@@ -161,16 +156,13 @@ class FOSUBUserProvider extends BaseFOSUBProvider
 
 ### 3) Configure user provider as service
 
-To `MyBundle\Resources\config\services.xml`, add following code for declare your custom provider as service
+Append the following lines to `app/config/config.yml`:
 
-```xml
-<service id="my.custom.user_provider" class="MyBundle\Security\Core\User\FOSUBUserProvider">
-    <argument type="service" id="fos_user.user_manager"/>
-    <argument type="collection">
-        <argument key="facebook">facebook_id</argument>
-    </argument>
-</service>
-
+```yml
+services:
+    my.custom.user_provider:
+        class:        MyBundle\Security\Core\User\MyFOSUBUserProvider
+        arguments: ['@fos_user.user_manager', { facebook: facebook_id }]
 ```
 
 ### 4) Additional configuration for HWIOAuthBundle
@@ -181,9 +173,8 @@ Add your service for provider as `account_connector` to configuration, and `fosu
 hwi_oauth:
     connect:
         account_connector: my.custom.user_provider
-    firewall_name: main
-    http_client:
-        verify_peer: false
+    firewall_names:
+        - 'hwi_oauth_firewall_name' # name of security firewall configured tow work with HWIOAuthBundle
     fosub:
         username_iterations: 30
         properties:
