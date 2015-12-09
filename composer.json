@@ -88,12 +88,12 @@
     ],
 
     "require": {
-        "php":                          ">=5.3.3",
-        "symfony/framework-bundle":     "~2.3",
-        "symfony/security-bundle":      "~2.3",
-        "symfony/options-resolver":     "~2.3",
-        "symfony/form":                 "~2.3",
-        "symfony/yaml":                 "~2.3",
+        "php":                          ">=5.5.9",
+        "symfony/framework-bundle":     "~2.3|^3.0",
+        "symfony/security-bundle":      "~2.3|^3.0",
+        "symfony/options-resolver":     "~2.3|^3.0",
+        "symfony/form":                 "~2.3|^3.0",
+        "symfony/yaml":                 "~2.3|^3.0",
         "kriswallsmith/buzz":           "~0.13"
     },
 
