@@ -118,6 +118,7 @@ class MyFOSUBUserProvider extends BaseFOSUBProvider
         if (null !== $existingUser) {
             // set current user id and token to null for disconect
             // ...
+
             $this->userManager->updateUser($existingUser);
         }
         //we connect current user, set current user id and token
@@ -164,6 +165,7 @@ services:
         class:        MyBundle\Security\Core\User\MyFOSUBUserProvider
         arguments: ['@fos_user.user_manager', { facebook: facebook_id }]
 ```
+Or if you have extension class for bundle, you can put these lines there.
 
 ### 4) Additional configuration for HWIOAuthBundle
 
