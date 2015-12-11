@@ -110,8 +110,10 @@ class MyFOSUBUserProvider extends BaseFOSUBProvider
      */
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
+        // get property from provider configuration by provider name
+        // , it will return `facebook_id` in that case (see service definition below)
         $property = $this->getProperty($response);
-        $username = $response->getUsername();
+        $username = $response->getUsername(); // get the unique user identifier
 
         //we "disconnect" previously connected users
         $existingUser = $this->userManager->findUserBy(array($property => $username))
@@ -165,7 +167,6 @@ services:
         class:        MyBundle\Security\Core\User\MyFOSUBUserProvider
         arguments: ['@fos_user.user_manager', { facebook: facebook_id }]
 ```
-Or if you have extension class for bundle, you can put these lines there.
 
 ### 4) Additional configuration for HWIOAuthBundle
 
