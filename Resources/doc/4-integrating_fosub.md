@@ -34,9 +34,6 @@ class User extends FOSUBUser
      */
     private $facebookId;
 
-    /**
-     * @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true)
-     */
     private $facebookAccessToken;
 
     /**
@@ -90,8 +87,8 @@ After adding extra properties to User entity, you need to extend base FOSUBUserP
 ### 2) Extend default FOSUBUserProvider
 
 The bundle provide bridge class for connect FOSUserBundle User class and HWIOAuth out of the box.
-You should extend it if you want to add more advanced behavior.
-For example out of the box it allows to find user by response token, but doesn't allow create it.
+You should extend it if you want to add more advanced behavior. For example out of the box it allows to find user by response token
+, but doesn't allow create it.
 
 In `MyBundle\Security\Core\User` create class, lets call it `MyFOSUBUserProvider`:
 
