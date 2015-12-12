@@ -115,7 +115,7 @@ class MyFOSUBUserProvider extends BaseFOSUBProvider
         //we "disconnect" previously connected users
         $existingUser = $this->userManager->findUserBy(array($property => $username))
         if (null !== $existingUser) {
-            // set current user id and token to null for disconect
+            // set current user id and token to null for disconnect
             // ...
 
             $this->userManager->updateUser($existingUser);
