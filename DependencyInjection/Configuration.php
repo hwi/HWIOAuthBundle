@@ -36,6 +36,7 @@ class Configuration implements ConfigurationInterface
             'bitly',
             'box',
             'bufferapp',
+            'clever',
             'dailymotion',
             'deviantart',
             'deezer',

@@ -23,6 +23,7 @@
         <parameter key="hwi_oauth.resource_owner.bitly.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitlyResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.box.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BoxResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.bufferapp.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BufferAppResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.clever.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\CleverResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.dailymotion.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DailymotionResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.deviantart.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DeviantartResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.deezer.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DeezerResourceOwner</parameter>
