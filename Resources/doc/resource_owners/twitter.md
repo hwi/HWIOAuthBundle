@@ -19,6 +19,25 @@ hwi_oauth:
             client_secret:       <consumer-secret>
 ```
 
+When you want to request a user’s email address permission use
+the optional option [`include_email`].
+
+Twitter documentation:
+- https://dev.twitter.com/rest/reference/get/account/verify_credentials
+
+```yaml
+# app/config/config.yml
+
+hwi_oauth:
+    resource_owners:
+        any_name:
+            type:                twitter
+            client_id:           <consumer-key>
+            client_secret:       <consumer-secret>
+            options:
+                include_email: true
+```
+
 When you're done. Continue by configuring the security layer or go back to
 setup more resource owners.
 

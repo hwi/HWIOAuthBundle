@@ -28,10 +28,23 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
         'nickname'       => 'screen_name',
         'realname'       => 'name',
         'profilepicture' => 'profile_image_url_https',
+        'email'          => 'email',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
+     */
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    {
+        if ($this->options['include_email']) {
+            $this->options['infos_url'] = $this->normalizeUrl($this->options['infos_url'], array('include_email' => 'true'));
+        }
+
+        return parent::getUserInformation($accessToken, $extraParameters);
+    }
+
+    /**
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolverInterface $resolver)
     {
@@ -42,6 +55,7 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
             'request_token_url' => 'https://api.twitter.com/oauth/request_token',
             'access_token_url'  => 'https://api.twitter.com/oauth/access_token',
             'infos_url'         => 'https://api.twitter.com/1.1/account/verify_credentials.json',
+            'include_email'     => false,
         ));
 
         // Symfony <2.6 BC
@@ -49,12 +63,15 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
             $resolver->setDefined('x_auth_access_type');
             // @link https://dev.twitter.com/oauth/reference/post/oauth/request_token
             $resolver->setAllowedValues('x_auth_access_type', array('read', 'write'));
+            // @link https://dev.twitter.com/rest/reference/get/account/verify_credentials
+            $resolver->setAllowedTypes('include_email', 'bool');
         } else {
             $resolver->setOptional(array(
                 'x_auth_access_type',
             ));
             $resolver->setAllowedValues(array(
                 'x_auth_access_type' => array('read', 'write'),
+                'include_email' => array(true, false),
             ));
         }
     }
