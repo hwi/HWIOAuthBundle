@@ -41,6 +41,7 @@ hwi_oauth:
 - [Bitbucket](resource_owners/bitbucket.md)
 - [Bitly](resource_owners/bitly.md)
 - [BufferApp](resource_owners/bufferapp.md)
+- [Clever](resource_owners/clever.md)
 - [DeviantArt](resource_owners/deviantart.md)
 - [Discogs](resource_owners/discogs.md)
 - [Disqus](resource_owners/disqus.md)
