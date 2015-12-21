@@ -86,6 +86,7 @@ class Configuration implements ConfigurationInterface
             'twitter',
             'xing',
             'yahoo',
+			'intuit',
         ),
     );
 
