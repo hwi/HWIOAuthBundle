@@ -111,7 +111,6 @@ class HWIOAuthExtension extends Extension
                 $container
                     ->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new DefinitionDecorator('hwi_oauth.registration.form.handler.fosub_bridge.def'))
                     ->addArgument($config['fosub']['username_iterations'])
-                    ->setScope('request')
                 ;
 
                 $container->setAlias('hwi_oauth.registration.form.handler', 'hwi_oauth.registration.form.handler.fosub_bridge');
