@@ -344,6 +344,7 @@ class ConnectController extends Controller
     protected function authenticateUser(Request $request, UserInterface $user, $resourceOwnerName, $accessToken, $fakeLogin = true)
     {
         try {
+            $this->container->get('hwi_oauth.user_checker')->checkPreAuth($user);
             $this->container->get('hwi_oauth.user_checker')->checkPostAuth($user);
         } catch (AccountStatusException $e) {
             // Don't authenticate locked, disabled or expired users
