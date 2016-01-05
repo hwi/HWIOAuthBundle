@@ -129,8 +129,6 @@ class ConnectController extends Controller
             $dispatcher->dispatch(HWIOAuthUserEvents::REGISTRATION_SUCCESS, $event);
 
             $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
-            // Authenticate the user
-            $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
 
             if (null === $response = $event->getResponse()) {
                 $response = $this->render('HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(), array(
@@ -139,6 +137,9 @@ class ConnectController extends Controller
             }
 
             $dispatcher->dispatch(HWIOAuthUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($form->getData(), $request, $response));
+
+            // Authenticate the user
+            $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
 
             return $response;
         }
@@ -235,11 +236,6 @@ class ConnectController extends Controller
 
             $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
 
-            if ($currentToken instanceof OAuthToken) {
-                // Update user token with new details
-                $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
-            }
-
             if (null === $response = $event->getResponse()) {
                 $response = $this->render('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
                     'userInformation' => $userInformation,
@@ -248,6 +244,11 @@ class ConnectController extends Controller
             }
 
             $dispatcher->dispatch(HWIOAuthUserEvents::CONNECT_COMPLETED, new FilterUserResponseEvent($currentUser, $request, $response));
+
+            if ($currentToken instanceof OAuthToken) {
+                // Update user token with new details
+                $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
+            }
 
             return $response;
         }
