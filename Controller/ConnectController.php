@@ -255,7 +255,7 @@ class ConnectController extends Controller
         $event = new GetResponseUserEvent($currentUser, $request);
         $dispatcher->dispatch(HWIOAuthUserEvents::CONNECT_INIT, $event);
 
-        if (null === $event->getResponse()) {
+        if (null !== $event->getResponse()) {
             return $event->getResponse();
         }
 
