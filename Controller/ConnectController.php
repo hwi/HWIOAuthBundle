@@ -11,10 +11,15 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
+use HWI\Bundle\OAuthBundle\Event\FilterUserResponseEvent;
+use HWI\Bundle\OAuthBundle\Event\FormEvent;
+use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
+use HWI\Bundle\OAuthBundle\HWIOAuthUserEvents;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -110,6 +115,7 @@ class ConnectController extends Controller
             ->getUserInformation($error->getRawToken())
         ;
 
+        $dispatcher = $this->getEventDispatcher();
         // enable compatibility with FOSUserBundle 1.3.x and 2.x
         if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
             $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
@@ -119,14 +125,29 @@ class ConnectController extends Controller
 
         $formHandler = $this->container->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {
-            $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
+            $event = new FormEvent($form, $request);
+            $dispatcher->dispatch(HWIOAuthUserEvents::REGISTRATION_SUCCESS, $event);
 
+            $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
             // Authenticate the user
             $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
 
-            return $this->render('HWIOAuthBundle:Connect:registration_success.html.'.$this->getTemplatingEngine(), array(
-                'userInformation' => $userInformation,
-            ));
+            if (null === $response = $event->getResponse()) {
+                $response = $this->render('HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(), array(
+                    'userInformation' => $userInformation,
+                ));
+            }
+
+            $dispatcher->dispatch(HWIOAuthUserEvents::REGISTRATION_COMPLETED, new FilterUserResponseEvent($form->getData(), $request, $response));
+
+            return $response;
+        }
+
+        $event = new GetResponseUserEvent($form->getData(), $request);
+        $dispatcher->dispatch(HWIOAuthUserEvents::REGISTRATION_INIT, $event);
+
+        if (null !== $event->getResponse()) {
+            return $event->getResponse();
         }
 
         // reset the error in the session
@@ -189,6 +210,11 @@ class ConnectController extends Controller
         }
         
         $userInformation = $resourceOwner->getUserInformation($accessToken);
+        /** @var $currentToken OAuthToken */
+        $currentToken = $this->getToken();
+        $currentUser = $currentToken->getUser();
+
+        $dispatcher = $this->getEventDispatcher();
 
         // Show confirmation page?
         if (!$this->container->getParameter('hwi_oauth.connect.confirmation')) {
@@ -204,9 +230,8 @@ class ConnectController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             show_confirmation_page:
 
-            /** @var $currentToken OAuthToken */
-            $currentToken = $this->getToken();
-            $currentUser = $currentToken->getUser();
+            $event = new GetResponseUserEvent($currentUser, $request);
+            $dispatcher->dispatch(HWIOAuthUserEvents::CONNECT_CONFIRMED, $event);
 
             $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
 
@@ -215,10 +240,23 @@ class ConnectController extends Controller
                 $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
             }
 
-            return $this->render('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
-                'userInformation' => $userInformation,
-                'service' => $service,
-            ));
+            if (null === $response = $event->getResponse()) {
+                $response = $this->render('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
+                    'userInformation' => $userInformation,
+                    'service' => $service,
+                ));
+            }
+
+            $dispatcher->dispatch(HWIOAuthUserEvents::CONNECT_COMPLETED, new FilterUserResponseEvent($currentUser, $request, $response));
+
+            return $response;
+        }
+
+        $event = new GetResponseUserEvent($currentUser, $request);
+        $dispatcher->dispatch(HWIOAuthUserEvents::CONNECT_INIT, $event);
+
+        if (null === $event->getResponse()) {
+            return $event->getResponse();
         }
 
         return $this->render('HWIOAuthBundle:Connect:connect_confirm.html.' . $this->getTemplatingEngine(), array(
@@ -359,7 +397,7 @@ class ConnectController extends Controller
 
         if ($fakeLogin) {
             // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
-            $this->container->get('event_dispatcher')->dispatch(
+            $this->getEventDispatcher()->dispatch(
                 SecurityEvents::INTERACTIVE_LOGIN,
                 new InteractiveLoginEvent($request, $token)
             );
@@ -430,5 +468,13 @@ class ConnectController extends Controller
         }
 
         return $this->get('security.context')->setToken($token);
+    }
+
+    /**
+     * @return EventDispatcherInterface
+     */
+    private function getEventDispatcher()
+    {
+        return $this->container->get('event_dispatcher');
     }
 }
