@@ -3,6 +3,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
+use Symfony\Component\HttpFoundation\Response;
 
 class ConnectConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
 {
@@ -117,8 +118,13 @@ class ConnectConnectControllerRegistrationActionTest extends AbstractConnectCont
             ->method('connect')
         ;
 
-        $this->eventDispatcher->expects($this->once())
+        $this->eventDispatcher->expects($this->exactly(3))
             ->method('dispatch')
+        ;
+
+        $this->templating->expects($this->once())
+            ->method('renderResponse')
+            ->willReturn(new Response())
         ;
 
         $this->controller->registrationAction($this->request, $key);

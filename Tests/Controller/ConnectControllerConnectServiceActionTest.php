@@ -3,6 +3,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
+use Symfony\Component\HttpFoundation\Response;
 
 class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
 {
@@ -47,6 +48,11 @@ class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectCo
             ->method('get')
             ->with('_hwi_oauth.connect_confirmation.'.$key)
             ->willReturn(array())
+        ;
+
+        $this->getTokenStorage()->expects($this->once())
+            ->method('getToken')
+            ->willReturn(new CustomOAuthToken())
         ;
 
         $form = $this->getMock('\Symfony\Component\Form\FormInterface');
@@ -99,6 +105,7 @@ class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectCo
         $this->templating->expects($this->once())
             ->method('renderResponse')
             ->with('HWIOAuthBundle:Connect:connect_success.html.twig')
+            ->willReturn(new Response())
         ;
 
         $this->controller->connectServiceAction($this->request, 'facebook');
@@ -128,9 +135,14 @@ class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectCo
             ->willReturn(new CustomOAuthToken())
         ;
 
+        $this->eventDispatcher->expects($this->exactly(2))
+            ->method('dispatch')
+        ;
+
         $this->templating->expects($this->once())
             ->method('renderResponse')
             ->with('HWIOAuthBundle:Connect:connect_success.html.twig')
+            ->willReturn(new Response())
         ;
 
         $this->controller->connectServiceAction($this->request, 'facebook');
@@ -156,6 +168,11 @@ class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectCo
         $this->resourceOwner->expects($this->once())
             ->method('getAccessToken')
             ->willReturn(array())
+        ;
+
+        $this->getTokenStorage()->expects($this->once())
+            ->method('getToken')
+            ->willReturn(new CustomOAuthToken())
         ;
 
         $form = $this->getMock('\Symfony\Component\Form\FormInterface');
