@@ -1,0 +1,14 @@
+header:
+    connecting: Kapcsolódás
+    success: A(z) '%name%' fiók sikeresen csatlakoztatva!
+    register: Regisztrálás a(z) '%name%' fiók névvel
+    registration_success: A(z) '%username%' fiók sikeresen regisztrálva és csatlakoztatva!
+
+connect:
+    confirm:
+        cancel: Mégsem
+        submit: Fiók csatlakoztatása
+        text: Biztos csatlakoztatni szeretné a(z) %service% '%name%' fiókját a jelenlegihez?
+    registration:
+        cancel: Mégsem
+        submit: Fiók regisztrálása
