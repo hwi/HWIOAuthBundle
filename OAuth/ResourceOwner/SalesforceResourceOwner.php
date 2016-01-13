@@ -83,7 +83,7 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
                 return $value;
             }
 
-            return preg_replace('~\.login\.~', '.test.', $value, 1);
+            return preg_replace('~login\.~', 'test.', $value, 1);
         };
 
         // Symfony <2.6 BC
