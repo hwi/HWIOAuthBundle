@@ -22,6 +22,7 @@ class IntuitResourceOwner extends GenericOAuth1ResourceOwner {
     const OAUTH_AUTHORISE_URL = 'https://appcenter.intuit.com/Connect/Begin';
     const OAUTH_REFRESH_URL = 'https://appcenter.intuit.com/api/v1/connection/reconnect';
     const OAUTH_INFOS_URL = 'https://appcenter.intuit.com/api/v1/user/current';
+    const OAUTH_DISCONNECT_URL = 'https://appcenter.intuit.com/api/v1/connection/disconnect';
     const INTUIT_RESPONSE_XML = 'xml';
     const INTUIT_RESPONSE_JSON = 'json';
 
@@ -112,6 +113,23 @@ class IntuitResourceOwner extends GenericOAuth1ResourceOwner {
                 'access_token' => $crawler->filterXPath('OAuthToken')->text(),
                 'oauth_token_secret' => $crawler->filterXPath('OAuthTokenSecret')->text()
             ]);
+        } else { //error
+            $message = $crawler->filterXPath('ErrorMessage')->text();
+            throw new IntuitException($message, (int)$errorCode);
+        }
+    }
+
+    /**
+     * @param $token
+     * @return bool
+     * @throws IntuitException
+     */
+    public function disconnect($token) {
+        $content = $this->fetchRequest($token, self::OAUTH_DISCONNECT_URL, null, [], HttpRequestInterface::METHOD_GET, self::INTUIT_RESPONSE_XML);
+        $crawler = new IntuitResponseCrawler($content);
+        $errorCode = $crawler->filterXPath('ErrorCode')->text();
+        if ($errorCode === '0') { //success
+            return true;
         } else { //error
             $message = $crawler->filterXPath('ErrorMessage')->text();
             throw new IntuitException($message, (int)$errorCode);
