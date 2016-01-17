@@ -29,7 +29,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
             $authorizationChecker = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
         }
         $utils = new OAuthUtils($this->getHttpUtils($url), $authorizationChecker, true);
-        $utils->setResourceOwnerMap($this->getMap($url, $redirect, false, true));
+        $utils->addResourceOwnerMap($this->getMap($url, $redirect, false, true));
 
         $this->assertEquals(
             $redirect,
@@ -46,7 +46,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(true), true);
-        $utils->setResourceOwnerMap($this->getMap($url, $redirect, true));
+        $utils->addResourceOwnerMap($this->getMap($url, $redirect, true));
 
         $this->assertEquals(
             $redirect,
@@ -66,7 +66,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(false), true);
-        $utils->setResourceOwnerMap($this->getMap($url, $redirect));
+        $utils->addResourceOwnerMap($this->getMap($url, $redirect));
 
         $this->assertEquals(
             $redirect,

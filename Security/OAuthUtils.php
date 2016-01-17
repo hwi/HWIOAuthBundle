@@ -44,7 +44,7 @@ class OAuthUtils
     /**
      * @var ResourceOwnerMap
      */
-    protected $ownerMap;
+    protected $ownerMaps = array();
 
     /**
      * @var SecurityContextInterface
@@ -81,9 +81,9 @@ class OAuthUtils
     /**
      * @param ResourceOwnerMap $ownerMap
      */
-    public function setResourceOwnerMap(ResourceOwnerMap $ownerMap)
+    public function addResourceOwnerMap(ResourceOwnerMap $ownerMap)
     {
-        $this->ownerMap = $ownerMap;
+        $this->ownerMaps[] = $ownerMap;
     }
 
     /**
@@ -91,7 +91,11 @@ class OAuthUtils
      */
     public function getResourceOwners()
     {
-        $resourceOwners = $this->ownerMap->getResourceOwners();
+        $resourceOwners = array();
+
+        foreach ($this->ownerMaps as $ownerMap) {
+            $resourceOwners = array_merge($resourceOwners, $ownerMap->getResourceOwners());
+        }
 
         return array_keys($resourceOwners);
     }
@@ -106,10 +110,20 @@ class OAuthUtils
      */
     public function getAuthorizationUrl(Request $request, $name, $redirectUrl = null, array $extraParameters = array())
     {
+        $resourceOwnerCheckPath = null;
+
+        foreach ($this->ownerMaps as $ownerMap) {
+            $potentialResourceOwnerCheckPath = $ownerMap->getResourceOwnerCheckPath($name);
+            if (null !== $potentialResourceOwnerCheckPath) {
+                $resourceOwnerCheckPath = $potentialResourceOwnerCheckPath;
+                break;
+            }
+        }
+
         $resourceOwner = $this->getResourceOwner($name);
         if (null === $redirectUrl) {
             if (!$this->connect || !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $redirectUrl = $this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($name));
+                $redirectUrl = $this->httpUtils->generateUri($request, $resourceOwnerCheckPath);
             } else {
                 $redirectUrl = $this->getServiceAuthUrl($request, $resourceOwner);
             }
@@ -256,7 +270,16 @@ class OAuthUtils
      */
     protected function getResourceOwner($name)
     {
-        $resourceOwner = $this->ownerMap->getResourceOwnerByName($name);
+        $resourceOwner = null;
+
+        foreach ($this->ownerMaps as $ownerMap) {
+            $potentialResourceOwner = $ownerMap->getResourceOwnerByName($name);
+            if ($potentialResourceOwner instanceof ResourceOwnerInterface) {
+                $resourceOwner = $potentialResourceOwner;
+                break;
+            }
+        }
+
         if (!$resourceOwner instanceof ResourceOwnerInterface) {
             throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
         }
