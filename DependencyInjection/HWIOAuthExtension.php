@@ -56,7 +56,7 @@ class HWIOAuthExtension extends Extension
         if (empty($config['firewall_names']) && !isset($config['firewall_name'])) {
             throw new InvalidConfigurationException('The child node "firewall_name" or "firewall_names" at path "hwi_oauth" must be configured.');
         } elseif (!empty($config['firewall_names']) && isset($config['firewall_name'])) {
-            $config['firewall_names'] = array_merge(array($config['firewall_name'], $config['firewall_names']));
+            $config['firewall_names'] = array_merge(array($config['firewall_name']), $config['firewall_names']);
         } elseif (empty($config['firewall_names']) && isset($config['firewall_name'])) {
             @trigger_error('The child node "firewall_name" at path "hwi_oauth" is deprecated since version 0.4.0 and will be removed in version 0.5.0. Use "firewall_names" instead.', E_USER_DEPRECATED);
             $config['firewall_names'] = array($config['firewall_name']);
