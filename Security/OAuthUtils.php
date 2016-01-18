@@ -44,7 +44,7 @@ class OAuthUtils
     /**
      * @var ResourceOwnerMap
      */
-    protected $ownerMaps;
+    protected $ownerMaps = array();
 
     /**
      * @var SecurityContextInterface
@@ -76,7 +76,6 @@ class OAuthUtils
         $this->authorizationChecker = $authorizationChecker;
         $this->securityContext      = $this->authorizationChecker;
         $this->connect              = $connect;
-        $this->ownerMaps            = array();
     }
 
     /**
@@ -115,7 +114,7 @@ class OAuthUtils
 
         foreach ($this->ownerMaps as $ownerMap) {
             $potentialResourceOwnerCheckPath = $ownerMap->getResourceOwnerCheckPath($name);
-            if (!is_null($potentialResourceOwnerCheckPath)) {
+            if (null !== $potentialResourceOwnerCheckPath) {
                 $resourceOwnerCheckPath = $potentialResourceOwnerCheckPath;
                 break;
             }
