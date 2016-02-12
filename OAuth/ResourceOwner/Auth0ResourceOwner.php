@@ -38,14 +38,20 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-
-        $headers = array(
-            'Content-Type' => 'application/x-www-form-urlencoded'
-        );
+        $headers = $this->getRequestHeaders(array('Content-Type' => 'application/x-www-form-urlencoded'));
 
         return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers, HttpRequestInterface::METHOD_POST);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    protected function doGetUserInformationRequest($url, array $parameters = array())
+    {
+        $headers = $this->getRequestHeaders();
+
+        return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers);
+    }
 
     /**
      * {@inheritDoc}
@@ -53,10 +59,18 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     protected function configureOptions(OptionsResolverInterface $resolver)
     {
         parent::configureOptions($resolver);
+
+        $auth0CLient = base64_encode(json_encode(array(
+            'name' => 'HWIOAuthBundle', 
+            'version' => 'unknown',
+            'environment' => array('name' => 'PHP', 'version' => phpversion())
+        )));
+
         $resolver->setDefaults(array(
-            'authorization_url'   => '{base_url}/authorize',
+            'authorization_url'   => '{base_url}/authorize?auth0Client=' . $auth0CLient,
             'access_token_url'    => '{base_url}/oauth/token',
             'infos_url'           => '{base_url}/userinfo',
+            'auth0_client'        => $auth0CLient
         ));
 
         $resolver->setRequired(array(
@@ -81,5 +95,16 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
                 'infos_url'         => $normalizer,
             ));
         }
+    }
+
+    private function getRequestHeaders($extends = array()) 
+    {
+        $headers = array();
+        
+        if (!empty($this->options['auth0_client'])) {
+            $headers = array('Auth0-Client' => $this->options['auth0_client']);
+        }
+
+        return array_merge($extends, $headers);
     }
 }
