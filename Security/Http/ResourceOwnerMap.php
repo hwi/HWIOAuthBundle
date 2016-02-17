@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Http;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -26,6 +26,8 @@ use Symfony\Component\Security\Http\HttpUtils;
  */
 class ResourceOwnerMap implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+
     /**
      * @var HttpUtils
      */
@@ -42,11 +44,6 @@ class ResourceOwnerMap implements ContainerAwareInterface
     protected $possibleResourceOwners;
 
     /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
      * Constructor.
      *
      * @param HttpUtils $httpUtils              HttpUtils
@@ -58,14 +55,6 @@ class ResourceOwnerMap implements ContainerAwareInterface
         $this->httpUtils              = $httpUtils;
         $this->possibleResourceOwners = $possibleResourceOwners;
         $this->resourceOwners         = $resourceOwners;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
     }
 
     /**
