@@ -187,23 +187,19 @@ class ConnectController extends Controller
         if (null === $accessToken) {
             return $this->redirectToRoute($this->container->getParameter('hwi_oauth.failed_auth_path'));
         }
-        
+
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
         // Show confirmation page?
-        if (!$this->container->getParameter('hwi_oauth.connect.confirmation')) {
-            goto show_confirmation_page;
+        if ($this->container->getParameter('hwi_oauth.connect.confirmation')) {
+            // Handle the form
+            /** @var $form FormInterface */
+            $form = $this->createForm('form');
+
+            $form->handleRequest($request);
         }
 
-        // Handle the form
-        /** @var $form FormInterface */
-        $form = $this->createForm('form');
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            show_confirmation_page:
-
+        if (!isset($form) || ($form->isSubmitted() && $form->isValid())) {
             /** @var $currentToken OAuthToken */
             $currentToken = $this->getToken();
             $currentUser = $currentToken->getUser();
