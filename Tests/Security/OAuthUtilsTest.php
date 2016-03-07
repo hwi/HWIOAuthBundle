@@ -195,7 +195,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $mock
             ->expects($this->once())
             ->method('isGranted')
-            ->with('IS_AUTHENTICATED_REMEMBERED')
+            ->with('IS_AUTHENTICATED_FULLY')
             ->will($this->returnValue($hasUser));
 
         return $mock;
