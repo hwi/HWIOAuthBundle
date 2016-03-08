@@ -19,8 +19,6 @@ use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
- * OAuthUtils
- *
  * @author Alexander <iam.asm89@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
  * @author Francisco Facioni <fran6co@gmail.com>
@@ -42,9 +40,9 @@ class OAuthUtils
     protected $httpUtils;
 
     /**
-     * @var ResourceOwnerMap
+     * @var ResourceOwnerMap[]
      */
-    protected $ownerMap;
+    protected $ownerMaps = array();
 
     /**
      * @var SecurityContextInterface
@@ -81,9 +79,9 @@ class OAuthUtils
     /**
      * @param ResourceOwnerMap $ownerMap
      */
-    public function setResourceOwnerMap(ResourceOwnerMap $ownerMap)
+    public function addResourceOwnerMap(ResourceOwnerMap $ownerMap)
     {
-        $this->ownerMap = $ownerMap;
+        $this->ownerMaps[] = $ownerMap;
     }
 
     /**
@@ -91,7 +89,11 @@ class OAuthUtils
      */
     public function getResourceOwners()
     {
-        $resourceOwners = $this->ownerMap->getResourceOwners();
+        $resourceOwners = array();
+
+        foreach ($this->ownerMaps as $ownerMap) {
+            $resourceOwners = array_merge($resourceOwners, $ownerMap->getResourceOwners());
+        }
 
         return array_keys($resourceOwners);
     }
@@ -109,7 +111,7 @@ class OAuthUtils
         $resourceOwner = $this->getResourceOwner($name);
         if (null === $redirectUrl) {
             if (!$this->connect || !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $redirectUrl = $this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($name));
+                $redirectUrl = $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($name));
             } else {
                 $redirectUrl = $this->getServiceAuthUrl($request, $resourceOwner);
             }
@@ -127,13 +129,12 @@ class OAuthUtils
     public function getServiceAuthUrl(Request $request, ResourceOwnerInterface $resourceOwner)
     {
         if ($resourceOwner->getOption('auth_with_one_url')) {
-            $redirectUrl = $this->httpUtils->generateUri($request, $this->ownerMap->getResourceOwnerCheckPath($resourceOwner->getName())).'?authenticated=true';
-        } else {
-            $request->attributes->set('service', $resourceOwner->getName());
-            $redirectUrl = $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service');
+            return $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($resourceOwner->getName())).'?authenticated=true';
         }
 
-        return $redirectUrl;
+        $request->attributes->set('service', $resourceOwner->getName());
+
+        return $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service');
     }
 
     /**
@@ -256,11 +257,35 @@ class OAuthUtils
      */
     protected function getResourceOwner($name)
     {
-        $resourceOwner = $this->ownerMap->getResourceOwnerByName($name);
+        $resourceOwner = null;
+
+        foreach ($this->ownerMaps as $ownerMap) {
+            $resourceOwner = $ownerMap->getResourceOwnerByName($name);
+            if ($resourceOwner instanceof ResourceOwnerInterface) {
+                return $resourceOwner;
+            }
+        }
+
         if (!$resourceOwner instanceof ResourceOwnerInterface) {
             throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
         }
 
         return $resourceOwner;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return null|string
+     */
+    protected function getResourceOwnerCheckPath($name)
+    {
+        foreach ($this->ownerMaps as $ownerMap) {
+            if ($potentialResourceOwnerCheckPath = $ownerMap->getResourceOwnerCheckPath($name)) {
+                return $potentialResourceOwnerCheckPath;
+            }
+        }
+
+        return null;
     }
 }

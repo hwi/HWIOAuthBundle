@@ -82,7 +82,7 @@ class HWIOAuthExtension extends Extension
 
         $oauthUtils = $container->getDefinition('hwi_oauth.security.oauth_utils');
         foreach ($config['firewall_names'] as $firewallName) {
-            $oauthUtils->addMethodCall('setResourceOwnerMap', array(new Reference('hwi_oauth.resource_ownermap.'.$firewallName)));
+            $oauthUtils->addMethodCall('addResourceOwnerMap', array(new Reference('hwi_oauth.resource_ownermap.'.$firewallName)));
         }
 
         // Symfony <2.6 BC
