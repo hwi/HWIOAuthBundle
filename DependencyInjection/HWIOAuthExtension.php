@@ -21,8 +21,6 @@ use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
- * HWIOAuthExtension
- *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
  */
@@ -53,13 +51,8 @@ class HWIOAuthExtension extends Extension
         }
 
         // set current firewall
-        if (empty($config['firewall_names']) && !isset($config['firewall_name'])) {
-            throw new InvalidConfigurationException('The child node "firewall_name" or "firewall_names" at path "hwi_oauth" must be configured.');
-        } elseif (!empty($config['firewall_names']) && isset($config['firewall_name'])) {
-            $config['firewall_names'] = array_merge(array($config['firewall_name']), $config['firewall_names']);
-        } elseif (empty($config['firewall_names']) && isset($config['firewall_name'])) {
-            @trigger_error('The child node "firewall_name" at path "hwi_oauth" is deprecated since version 0.4.0 and will be removed in version 0.5.0. Use "firewall_names" instead.', E_USER_DEPRECATED);
-            $config['firewall_names'] = array($config['firewall_name']);
+        if (empty($config['firewall_names'])) {
+            throw new InvalidConfigurationException('The child node "firewall_names" at path "hwi_oauth" must be configured.');
         }
         $container->setParameter('hwi_oauth.firewall_names', $config['firewall_names']);
 
@@ -111,7 +104,6 @@ class HWIOAuthExtension extends Extension
                 $container
                     ->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new DefinitionDecorator('hwi_oauth.registration.form.handler.fosub_bridge.def'))
                     ->addArgument($config['fosub']['username_iterations'])
-                    ->setScope('request')
                 ;
 
                 $container->setAlias('hwi_oauth.registration.form.handler', 'hwi_oauth.registration.form.handler.fosub_bridge');

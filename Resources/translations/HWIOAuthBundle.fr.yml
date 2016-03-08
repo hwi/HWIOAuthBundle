@@ -1,14 +1,14 @@
 header:
-    connecting: Connexion en cours
-    success: Connexion réussie avec le compte '%name%' !
-    register: S'inscrire avec le compte '%name%'
-    registration_success: Enregistrement et connexion du compte '%username%' réussis !
+    connecting: 'Connexion en cours'
+    success: "Connexion réussie avec le compte '%name%' !"
+    register: "S'inscrire avec le compte '%name%'"
+    registration_success: "Enregistrement et connexion du compte '%username%' réussis !"
 
 connect:
     confirm:
-        cancel: Annuler
-        submit: Connecter le compte
-        text: Êtes-vous sûr de vouloir connecter votre compte %service% avec votre compte '%name%' ?
+        cancel: 'Annuler'
+        submit: 'Connecter le compte'
+        text: "Êtes-vous sûr de vouloir connecter votre compte %service% avec votre compte '%name%' ?"
     registration:
-        cancel: Annuler
-        submit: Enregistrer le compte
+        cancel: 'Annuler'
+        submit: 'Enregistrer le compte'
