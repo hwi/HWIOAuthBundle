@@ -2,7 +2,10 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
+use HWI\Bundle\OAuthBundle\HWIOAuthUserEvents;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 class ConnectConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
 {
@@ -117,8 +120,25 @@ class ConnectConnectControllerRegistrationActionTest extends AbstractConnectCont
             ->method('connect')
         ;
 
-        $this->eventDispatcher->expects($this->once())
+        $this->eventDispatcher->expects($this->at(0))
             ->method('dispatch')
+            ->with(HWIOAuthUserEvents::REGISTRATION_SUCCESS)
+        ;
+
+        $this->eventDispatcher->expects($this->at(1))
+            ->method('dispatch')
+            ->with(HWIOAuthUserEvents::REGISTRATION_COMPLETED)
+        ;
+
+        $this->eventDispatcher->expects($this->at(2))
+            ->method('dispatch')
+            ->with(SecurityEvents::INTERACTIVE_LOGIN)
+        ;
+
+        $this->templating->expects($this->once())
+            ->method('renderResponse')
+            ->with('HWIOAuthBundle:Connect:registration_success.html.twig')
+            ->willReturn(new Response())
         ;
 
         $this->controller->registrationAction($this->request, $key);
