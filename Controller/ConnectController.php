@@ -187,7 +187,7 @@ class ConnectController extends Controller
         if (null === $accessToken) {
             return $this->redirectToRoute($this->container->getParameter('hwi_oauth.failed_auth_path'));
         }
-        
+
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
         // Show confirmation page?
