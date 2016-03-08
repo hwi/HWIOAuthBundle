@@ -25,14 +25,9 @@ matrix:
     - php: 5.6
       env: SYMFONY_VERSION=2.8.*
     - php: 5.6
-      env: SYMFONY_VERSION="3.0.x-dev as 2.8"
-    - php: 5.6
       env: FOSUSERBUNDLE_VERSION=1.3.*
     - php: 5.6
       env: FOSUSERBUNDLE_VERSION=2.0.*@dev
-    - php: hhvm
-  allow_failures:
-    - env: SYMFONY_VERSION="3.0.x-dev as 2.8"
 
 cache:
   directories:
@@ -42,6 +37,7 @@ before_install:
   - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then phpenv config-rm xdebug.ini; fi;
 
 before_script:
+  - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then echo "memory_limit=520M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; fi;
   - composer self-update
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
   - if [ "$FOSUSERBUNDLE_VERSION" != "" ]; then composer require "friendsofsymfony/user-bundle:${FOSUSERBUNDLE_VERSION}" --no-update; fi;
