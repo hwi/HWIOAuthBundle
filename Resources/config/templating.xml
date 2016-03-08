@@ -12,7 +12,6 @@
         <service id="hwi_oauth.templating.helper.oauth" class="%hwi_oauth.templating.helper.oauth.class%">
             <argument type="service" id="hwi_oauth.security.oauth_utils" />
             <tag name="templating.helper" alias="oauth" />
-            <call method="setRequest"><argument type="service" id="request" on-invalid="null" strict="false" /></call>
         </service>
     </services>
 </container>
