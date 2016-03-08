@@ -1,5 +1,8 @@
 Changelog
 =========
+## 0.4.1 (201x-xx-xx)
+* Fixed: Remove usage of deprecated Twig function `form_enctype` & replace with usage of `form_start`/`form_end`
+* Fixed: Mark as not fully compatible with Symfony `~3.0`
 
 ## 0.4.0 (2015-12-04)
 * [BC break] Added `UserResponseInterface#getFirstName()` method, also a new default path `firstname`
