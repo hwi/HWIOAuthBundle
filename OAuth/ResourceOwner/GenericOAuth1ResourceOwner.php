@@ -26,7 +26,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -60,7 +60,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
@@ -70,7 +70,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
@@ -81,7 +81,6 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         } catch (\InvalidArgumentException $e) {
             throw new AuthenticationException('Given token is not valid.');
         }
-
 
         $parameters = array_merge(array(
             'oauth_consumer_key'     => $this->options['client_id'],
@@ -118,7 +117,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function handles(Request $request)
     {
@@ -135,7 +134,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getRequestToken($redirectUri, array $extraParameters = array())
     {
@@ -184,25 +183,25 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
     {
         foreach ($parameters as $key => $value) {
-            $parameters[$key] = $key . '="' . rawurlencode($value) . '"';
+            $parameters[$key] = $key.'="'.rawurlencode($value).'"';
         }
 
         if (!$this->options['realm']) {
-            array_unshift($parameters, 'realm="' . rawurlencode($this->options['realm']) . '"');
+            array_unshift($parameters, 'realm="'.rawurlencode($this->options['realm']).'"');
         }
 
-        $headers[] = 'Authorization: OAuth ' . implode(', ', $parameters);
+        $headers[] = 'Authorization: OAuth '.implode(', ', $parameters);
 
         return parent::httpRequest($url, $content, $headers, $method);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
@@ -210,7 +209,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
@@ -218,7 +217,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

@@ -21,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class HubicResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'email',
@@ -33,7 +33,7 @@ class HubicResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

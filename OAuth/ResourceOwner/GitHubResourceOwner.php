@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class GitHubResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'id',
@@ -34,7 +34,7 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeToken($token)
     {
@@ -49,7 +49,7 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -67,7 +67,7 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {

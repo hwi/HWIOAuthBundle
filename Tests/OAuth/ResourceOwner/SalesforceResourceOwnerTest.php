@@ -39,10 +39,10 @@ json;
     {
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+        /*
+         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token','id'=>"someuser"));
+        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token', 'id' => 'someuser'));
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());

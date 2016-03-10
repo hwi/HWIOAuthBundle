@@ -190,7 +190,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
             $mock = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
         } else {
-            $mock= $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
+            $mock = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
         }
         $mock
             ->expects($this->once())

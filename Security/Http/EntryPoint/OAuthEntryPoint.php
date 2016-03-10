@@ -43,7 +43,7 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     protected $loginPath;
 
     /**
-     * @var Boolean
+     * @var bool
      */
     protected $useForward;
 
@@ -52,7 +52,7 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
      *
      * @param HttpUtils $httpUtils
      * @param string    $loginPath
-     * @param Boolean   $useForward
+     * @param bool      $useForward
      */
     public function __construct(HttpKernelInterface $kernel, HttpUtils $httpUtils, $loginPath, $useForward = false)
     {
@@ -63,7 +63,7 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function start(Request $request, AuthenticationException $authException = null)
     {

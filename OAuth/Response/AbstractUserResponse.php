@@ -42,7 +42,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
      */
     public function getEmail()
     {
-        return null;
+        return;
     }
 
     /**
@@ -50,7 +50,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
      */
     public function getProfilePicture()
     {
-        return null;
+        return;
     }
 
     /**

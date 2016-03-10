@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class EventbriteResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'user.user_id',
@@ -34,7 +34,7 @@ class EventbriteResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
@@ -42,7 +42,7 @@ class EventbriteResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

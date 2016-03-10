@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\MessageInterface as HttpMessageInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,7 +19,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class WechatResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'openid',
@@ -47,7 +46,7 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
@@ -65,7 +64,7 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken = null, array $extraParameters = array())
     {
@@ -97,7 +96,7 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -111,7 +110,7 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function validateResponseContent($response)
     {

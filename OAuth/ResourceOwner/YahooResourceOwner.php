@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class YahooResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'profile.guid',
@@ -33,7 +33,7 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * Override to replace {guid} in the infos_url with the authenticating user's yahoo id
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -45,7 +45,7 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * Override to set the Accept header as otherwise Yahoo defaults to XML
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
@@ -53,7 +53,7 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

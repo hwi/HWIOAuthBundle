@@ -257,7 +257,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     {
         $this->storage->expects($this->once())
             ->method('fetch')
-            ->will($this->throwException(new \InvalidArgumentException));
+            ->will($this->throwException(new \InvalidArgumentException()));
 
         $this->buzzClient->expects($this->never())
             ->method('send');
@@ -318,8 +318,8 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
         $this->mockBuzz();
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+        /*
+         * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
          */
         $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'));
 
@@ -334,7 +334,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     public function buzzSendMock($request, $response)
     {
         $response->setContent($this->buzzResponse);
-        $response->addHeader('Content-Type: ' . $this->buzzResponseContentType);
+        $response->addHeader('Content-Type: '.$this->buzzResponseContentType);
     }
 
     protected function mockBuzz($response = '', $contentType = 'text/plain')

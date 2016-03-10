@@ -22,14 +22,14 @@ class StereomoodResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 json;
     protected $paths = array(
         'identifier' => 'oauth_token',
-        'nickname'   => 'oauth_token'
+        'nickname'   => 'oauth_token',
     );
 
     public function testGetUserInformation()
     {
         $accessToken = array(
             'oauth_token'        => 'token',
-            'oauth_token_secret' => 'secret'
+            'oauth_token_secret' => 'secret',
         );
 
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
@@ -49,7 +49,7 @@ json;
 
         $accessToken = array(
             'oauth_token'        => 'token',
-            'oauth_token_secret' => 'secret'
+            'oauth_token_secret' => 'secret',
         );
 
         $userResponse = $resourceOwner->getUserInformation($accessToken);

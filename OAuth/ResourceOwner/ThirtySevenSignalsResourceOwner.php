@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'identity.id',
@@ -34,7 +34,7 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
@@ -42,7 +42,7 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
@@ -50,7 +50,7 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

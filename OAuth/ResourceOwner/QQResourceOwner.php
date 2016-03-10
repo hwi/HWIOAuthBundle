@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class QQResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'openid',
@@ -29,7 +29,7 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getResponseContent(HttpMessageInterface $rawResponse)
     {
@@ -42,7 +42,7 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken = null, array $extraParameters = array())
     {
@@ -74,7 +74,7 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

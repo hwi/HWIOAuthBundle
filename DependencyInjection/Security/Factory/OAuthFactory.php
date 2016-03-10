@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class OAuthFactory extends AbstractFactory
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addConfiguration(NodeDefinition $node)
     {
@@ -43,7 +43,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getKey()
     {
@@ -51,7 +51,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getPosition()
     {
@@ -92,7 +92,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function createAuthProvider(ContainerBuilder $container, $id, $config, $userProviderId)
     {
@@ -139,7 +139,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function createEntryPoint($container, $id, $config, $defaultEntryPoint)
     {
@@ -155,7 +155,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function createListener($container, $id, $config, $userProvider)
     {
@@ -176,7 +176,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getListenerId()
     {
@@ -216,7 +216,7 @@ class OAuthFactory extends AbstractFactory
                     ->end()
                 ->end()
                 ->validate()
-                    ->ifTrue(function($c) {
+                    ->ifTrue(function ($c) {
                         return 1 !== count($c) || !in_array(key($c), array('fosub', 'oauth', 'orm', 'service'));
                     })
                     ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
@@ -235,7 +235,7 @@ class OAuthFactory extends AbstractFactory
                     ->prototype('scalar')
                 ->end()
                 ->validate()
-                    ->ifTrue(function($c) {
+                    ->ifTrue(function ($c) {
                         $checkPaths = array();
                         foreach ($c as $checkPath) {
                             if (in_array($checkPath, $checkPaths)) {

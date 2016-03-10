@@ -39,8 +39,8 @@ json;
     {
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
 
-        /**
-         * @var $userResponse AbstractUserResponse
+        /*
+         * @var AbstractUserResponse
          */
         $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 

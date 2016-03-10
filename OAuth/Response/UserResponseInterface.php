@@ -27,6 +27,7 @@ interface UserResponseInterface extends ResponseInterface
      *
      * Note that this is not always common known "username" because of implementation
      * in Symfony2 framework. For more details follow link below.
+     *
      * @link https://github.com/symfony/symfony/blob/2.1/src/Symfony/Component/Security/Core/User/UserProviderInterface.php#L20-L28
      *
      * @return string

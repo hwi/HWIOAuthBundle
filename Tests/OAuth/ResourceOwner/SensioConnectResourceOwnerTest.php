@@ -29,8 +29,8 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 
         $this->mockBuzz($this->userResponse);
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse
+        /*
+         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse
          */
         $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
 

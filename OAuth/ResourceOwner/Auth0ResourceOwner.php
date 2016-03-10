@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'user_id',
@@ -34,19 +34,19 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
         $headers = array(
-            'Content-Type' => 'application/x-www-form-urlencoded'
+            'Content-Type' => 'application/x-www-form-urlencoded',
         );
 
         return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers, HttpRequestInterface::METHOD_POST);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

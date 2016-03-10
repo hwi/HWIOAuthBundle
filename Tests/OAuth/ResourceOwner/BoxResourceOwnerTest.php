@@ -29,7 +29,7 @@ json;
         'nickname'       => 'name',
         'realname'       => 'name',
         'email'          => 'login',
-        'profilepicture' => 'avatar_url'
+        'profilepicture' => 'avatar_url',
     );
 
     public function testRevokeToken()

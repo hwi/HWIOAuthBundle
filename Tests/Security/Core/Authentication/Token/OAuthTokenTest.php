@@ -57,8 +57,8 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
 
     public function testSerialization()
     {
-        /**
-         * @var $token OAuthToken
+        /*
+         * @var OAuthToken
          */
         $token = unserialize(serialize($this->token));
 
@@ -70,7 +70,7 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
     {
         $oauth1Token = new OAuthToken(array(
             'oauth_token' => 'oauth1_access_token',
-            'oauth_token_secret' => 'oauth1_token_secret'
+            'oauth_token_secret' => 'oauth1_token_secret',
         ), array('ROLE_TEST'));
 
         $oauth1Token->setResourceOwnerName('twitter');

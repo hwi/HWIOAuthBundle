@@ -50,8 +50,8 @@ json;
 
         $this->mockBuzz();
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+        /*
+         * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
          */
         $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1));
 

@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitlyResourceOwner;
 
-class BitlyResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+class BitlyResourceOnwerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = <<<json
 {

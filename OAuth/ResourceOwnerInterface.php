@@ -59,7 +59,7 @@ interface ResourceOwnerInterface
      *
      * @param string $csrfToken
      *
-     * @return boolean True if CSRF token is valid
+     * @return bool True if CSRF token is valid
      *
      * @throws AuthenticationException When token is not valid
      */
@@ -88,7 +88,7 @@ interface ResourceOwnerInterface
      *
      * @param Request $request
      *
-     * @return boolean
+     * @return bool
      */
     public function handles(Request $request);
 

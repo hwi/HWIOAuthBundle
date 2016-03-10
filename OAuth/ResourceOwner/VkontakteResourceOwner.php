@@ -25,7 +25,7 @@ use Symfony\Component\OptionsResolver\Options;
 class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'response.0.uid',
@@ -34,11 +34,11 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         'lastname'   => 'response.0.last_name',
         'realname'   => array('response.0.last_name', 'response.0.first_name'),
         'profilepicture' => 'response.0.photo',
-        'email'          => 'email'
+        'email'          => 'email',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -69,7 +69,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -90,7 +90,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 
         $fieldsNormalizer = function (Options $options, $value) {
             if (!$value) {
-                return null;
+                return;
             }
 
             return is_array($value) ? implode(',', $value) : $value;

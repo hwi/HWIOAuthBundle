@@ -21,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class RedditResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'id',
@@ -31,15 +31,15 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, null, array('Authorization: Basic ' . base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret']))));
+        return $this->httpRequest($url, null, array('Authorization: Basic '.base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret']))));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -49,7 +49,7 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
             'authorization_url'        => 'https://ssl.reddit.com/api/v1/authorize',
             'access_token_url'         => 'https://ssl.reddit.com/api/v1/access_token',
             'infos_url'                => 'https://oauth.reddit.com/api/v1/me.json',
-            
+
             'use_bearer_authorization' => true,
             'use_commas_in_scope'      => true,
             'csrf'                     => true,

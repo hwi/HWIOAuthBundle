@@ -22,25 +22,25 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class BoxResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'id',
         'nickname'       => 'name',
         'realname'       => 'name',
         'email'          => 'login',
-        'profilepicture' => 'avatar_url'
+        'profilepicture' => 'avatar_url',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeToken($token)
     {
         $parameters = array(
             'client_id'     => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
-            'token'         => $token
+            'token'         => $token,
         );
 
         $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url']), $parameters, array(), HttpRequestInterface::METHOD_POST);
@@ -49,7 +49,7 @@ class BoxResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

@@ -110,11 +110,10 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     public function configure()
     {
-
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -122,7 +121,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function setName($name)
     {
@@ -130,7 +129,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getOption($name)
     {
@@ -173,7 +172,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @param string $token The token (access token or a refresh token) that should be revoked.
      *
-     * @return Boolean Returns True if the revocation was successful, otherwise False.
+     * @return bool Returns True if the revocation was successful, otherwise False.
      *
      * @throws AuthenticationException If an OAuth error occurred
      */
@@ -189,7 +188,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     protected function getUserResponse()
     {
-        $response = new $this->options['user_response_class'];
+        $response = new $this->options['user_response_class']();
         if ($response instanceof PathUserResponse) {
             $response->setPaths($this->paths);
         }
@@ -216,10 +215,10 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * Performs an HTTP request
      *
-     * @param string $url           The url to fetch
+     * @param string       $url     The url to fetch
      * @param string|array $content The content of the request
-     * @param array  $headers       The headers of the request
-     * @param string $method        The HTTP method to use
+     * @param array        $headers The headers of the request
+     * @param string       $method  The HTTP method to use
      *
      * @return HttpResponse The response content
      */
@@ -242,7 +241,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $headers = array_merge(
             array(
                 'User-Agent: HWIOAuthBundle (https://github.com/hwi/HWIOAuthBundle)',
-                'Content-Length: ' . $contentLength,
+                'Content-Length: '.$contentLength,
             ),
             $headers
         );

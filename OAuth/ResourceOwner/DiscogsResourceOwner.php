@@ -7,15 +7,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class DiscogsResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'id',
-        'nickname'       => 'username'
+        'nickname'       => 'username',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -28,4 +28,4 @@ class DiscogsResourceOwner extends GenericOAuth1ResourceOwner
             'infos_url'         => 'http://api.discogs.com/oauth/identity',
         ));
     }
-} 
+}

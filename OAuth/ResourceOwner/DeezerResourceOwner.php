@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -20,7 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class DeezerResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'id',
@@ -30,11 +29,11 @@ class DeezerResourceOwner extends GenericOAuth2ResourceOwner
         'firstname'      => 'firstname',
         'lastname'       => 'lastname',
         'profilepicture' => 'picture',
-        'gender'         => 'gender'
+        'gender'         => 'gender',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -44,8 +43,7 @@ class DeezerResourceOwner extends GenericOAuth2ResourceOwner
             'authorization_url' => 'https://connect.deezer.com/oauth/auth.php',
             'access_token_url'  => 'https://connect.deezer.com/oauth/access_token.php',
             'infos_url'         => 'https://api.deezer.com/user/me',
-            'use_bearer_authorization' => false
+            'use_bearer_authorization' => false,
         ));
     }
 }
-

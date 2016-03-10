@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class FlickrResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'user_nsid',
@@ -31,7 +31,7 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
@@ -47,7 +47,7 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -60,7 +60,7 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

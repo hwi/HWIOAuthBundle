@@ -21,18 +21,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'id',
         'nickname'       => 'screenname',
         'realname'       => 'fullname', // requires 'userinfo' scope
         'email'          => 'email', // requires 'email' scope
-        'profilepicture' => 'avatar_medium_url'
+        'profilepicture' => 'avatar_medium_url',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
@@ -40,7 +40,7 @@ class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

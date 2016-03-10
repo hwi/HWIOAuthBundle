@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'response.user.id',
@@ -35,7 +35,7 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getResponseContent(HttpMessageInterface $rawResponse)
     {
@@ -48,9 +48,9 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
                 $response['error'] = $response['meta']['errorType'];
                 // Try to add some details of error if available
                 if (isset($response['meta']['errorMessage'])) {
-                    $response['error'] .= ' ' . $response['meta']['errorMessage'];
+                    $response['error'] .= ' '.$response['meta']['errorMessage'];
                 } elseif (isset($response['meta']['errorDetail'])) {
-                    $response['error'] .= ' ' . $response['meta']['errorDetail'];
+                    $response['error'] .= ' '.$response['meta']['errorDetail'];
                 }
             }
 
@@ -61,13 +61,13 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         // Foursquare require to pass the 'v' ('version' = date in format 'YYYYMMDD') parameter when requesting API
         $url = $this->normalizeUrl($url, array(
-            'v' => $this->options['version']
+            'v' => $this->options['version'],
         ));
 
         // Foursquare require to pass the OAuth token as 'oauth_token' instead of 'access_token'
@@ -77,7 +77,7 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

@@ -56,7 +56,7 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         ;
 
         $this->assertEquals(
-            $this->options['authorization_url'] . '&oauth_token=token&perms=read&nojsoncallback=1',
+            $this->options['authorization_url'].'&oauth_token=token&perms=read&nojsoncallback=1',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }

@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'user_id',
@@ -33,7 +33,7 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -44,13 +44,13 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         // Salesforce requires format parameter in order for API to return json response
         $url = $this->normalizeUrl($url, array(
-            'format' => $this->options['format']
+            'format' => $this->options['format'],
         ));
 
         // Salesforce require to pass the OAuth token as 'oauth_token' instead of 'access_token'
@@ -60,7 +60,7 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

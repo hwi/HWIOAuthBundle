@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AzureResourceOwner;
 
-class AzureResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+class AzureResourceOwner extends GenericOAuth2ResourceOwnerTest
 {
     protected $csrf = true;
 
@@ -42,20 +42,20 @@ json;
     public function testGetAuthorizationUrl()
     {
         $this->assertEquals(
-            $this->options['authorization_url'] .'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&resource=https%3A%2F%2Fgraph.windows.net',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&resource=https%3A%2F%2Fgraph.windows.net',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 
     public function testGetUserInformation()
     {
-        $token = '.' . base64_encode($this->userResponse);
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+        $token = '.'.base64_encode($this->userResponse);
+        /*
+         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
         $userResponse = $this->resourceOwner->getUserInformation(array(
             'access_token' => 'token',
-            'id_token' =>  $token
+            'id_token' =>  $token,
         ));
 
         $this->assertEquals('1', $userResponse->getUsername());
@@ -64,7 +64,7 @@ json;
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
-    
+
     public function testCustomResponseClass()
     {
         $this->markTestSkipped('Can\' test custom response because of the way the id_token value is set; is always returning null');
@@ -74,14 +74,14 @@ json;
 
         $this->mockBuzz();
 
-        $token = base64_encode($this->userResponse) . '.';
+        $token = base64_encode($this->userResponse).'.';
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+        /*
+         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
         $userResponse = $this->resourceOwner->getUserInformation(array(
             'access_token' => 'token',
-            'id_token' =>  $token
+            'id_token' =>  $token,
         ));
 
         $this->assertInstanceOf($class, $userResponse);
@@ -96,10 +96,11 @@ json;
     {
         $options = array_merge(
             array(
-                'resource' => 'https://graph.windows.net'
+                'resource' => 'https://graph.windows.net',
             ),
             $options
         );
-        return new AzureResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+
+        return new self($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

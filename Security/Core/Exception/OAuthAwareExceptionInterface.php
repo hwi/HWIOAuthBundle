@@ -45,7 +45,7 @@ interface OAuthAwareExceptionInterface
     /**
      * Get the info when token will expire.
      *
-     * @return null|integer
+     * @return null|int
      */
     public function getExpiresIn();
 

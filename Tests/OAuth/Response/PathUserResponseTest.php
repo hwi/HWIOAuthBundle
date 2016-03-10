@@ -82,7 +82,7 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
             'realname'       => null,
             'email'          => null,
             'profilepicture' => null,
-            'foo'            => 'bar'
+            'foo'            => 'bar',
         );
 
         $responseObject = new PathUserResponse();

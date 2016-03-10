@@ -58,7 +58,7 @@ class OAuthProvider implements AuthenticationProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports(TokenInterface $token)
     {
@@ -69,7 +69,7 @@ class OAuthProvider implements AuthenticationProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function authenticate(TokenInterface $token)
     {

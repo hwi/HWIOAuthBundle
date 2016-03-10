@@ -25,7 +25,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class JiraResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'name',
@@ -36,7 +36,7 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -83,7 +83,7 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

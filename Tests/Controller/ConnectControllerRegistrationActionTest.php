@@ -4,7 +4,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 
-class ConnectConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
+class ConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
 {
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
@@ -139,6 +139,5 @@ class ConnectConnectControllerRegistrationActionTest extends AbstractConnectCont
         $this->container->set('hwi_oauth.registration.form.factory', $registrationFormFactory);
         // FOSUser 1.3 BC. To be removed.
         $this->container->set('hwi_oauth.registration.form', $registrationForm);
-
     }
 }

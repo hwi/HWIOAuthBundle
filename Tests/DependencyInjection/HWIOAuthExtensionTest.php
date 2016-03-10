@@ -81,7 +81,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['any_name']['paths'] = array(
-            'path' => ''
+            'path' => '',
         );
 
         $loader->load(array($config), $this->containerBuilder);
@@ -112,7 +112,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = array(
-            $invalidConfig
+            $invalidConfig,
         );
 
         $loader->load(array($config), $this->containerBuilder);
@@ -268,7 +268,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
                     'identifier' => 'some_id',
                     'nickname'   => 'some_nick',
                     'realname'   => 'some_name',
-                )
+                ),
             ),
             'missing_client_secret' => array(
                 'type'              => 'oauth1',
@@ -296,7 +296,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
                 'paths'             => array(
                     'identifier' => 'some_id',
                     'realname'   => 'some_name',
-                )
+                ),
             ),
             'empty_paths' => array(
                 'type'              => 'oauth2',
@@ -305,7 +305,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
                 'authorization_url' => 'http://test.pl/authorization_url',
                 'access_token_url'  => 'http://test.pl/access_token_url',
                 'infos_url'         => 'http://test.pl/infos_url',
-                'paths'             => array()
+                'paths'             => array(),
             ),
             'path_is_null' => array(
                 'type'              => 'oauth2',
@@ -316,7 +316,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
                 'infos_url'         => 'http://test.pl/infos_url',
                 'paths'             => array(
                     'path' => null,
-                )
+                ),
             ),
             'path_is_empty_array' => array(
                 'type'              => 'oauth2',
@@ -327,7 +327,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
                 'infos_url'         => 'http://test.pl/infos_url',
                 'paths'             => array(
                     'path' => array(),
-                )
+                ),
             ),
             'path_is_empty_string' => array(
                 'type'              => 'oauth2',
@@ -338,7 +338,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
                 'infos_url'         => 'http://test.pl/infos_url',
                 'paths'             => array(
                     'path' => '',
-                )
+                ),
             ),
         );
     }
@@ -483,7 +483,7 @@ EOF;
     }
 
     /**
-     * @param mixed $value
+     * @param mixed  $value
      * @param string $key
      */
     private function assertParameter($value, $key)

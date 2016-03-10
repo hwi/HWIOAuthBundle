@@ -23,11 +23,11 @@ class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
 {
     protected $paths = array(
         'identifier' => 'oauth_token',
-        'nickname'   => 'oauth_token'
+        'nickname'   => 'oauth_token',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -40,7 +40,7 @@ class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

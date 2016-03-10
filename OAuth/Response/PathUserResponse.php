@@ -130,12 +130,12 @@ class PathUserResponse extends AbstractUserResponse
     {
         $response = $this->response;
         if (!$response) {
-            return null;
+            return;
         }
 
         $steps = $this->getPath($path);
         if (!$steps) {
-            return null;
+            return;
         }
 
         if (is_array($steps)) {
@@ -168,7 +168,7 @@ class PathUserResponse extends AbstractUserResponse
         $steps = explode('.', $steps);
         foreach ($steps as $step) {
             if (!array_key_exists($step, $value)) {
-                return null;
+                return;
             }
 
             $value = $value[$step];

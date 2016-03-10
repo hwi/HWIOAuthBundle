@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 class SetResourceOwnerServiceNameCompilerPass implements CompilerPassInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {

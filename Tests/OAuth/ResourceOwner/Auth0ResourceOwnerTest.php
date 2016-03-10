@@ -52,7 +52,7 @@ json;
     {
         $options = array_merge(
             array(
-                'base_url' => 'https://example.oauth0.com'
+                'base_url' => 'https://example.oauth0.com',
             ),
             $options
         );

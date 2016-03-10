@@ -38,12 +38,12 @@ class OAuthToken extends AbstractToken
     private $refreshToken;
 
     /**
-     * @var integer
+     * @var int
      */
     private $expiresIn;
 
     /**
-     * @var integer
+     * @var int
      */
     private $createdAt;
 
@@ -71,7 +71,7 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getCredentials()
     {
@@ -159,7 +159,7 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * @param integer $expiresIn The duration in seconds of the access token lifetime
+     * @param int $expiresIn The duration in seconds of the access token lifetime
      */
     public function setExpiresIn($expiresIn)
     {
@@ -168,7 +168,7 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getExpiresIn()
     {
@@ -176,7 +176,7 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * @param integer $createdAt The token creation date in seconds
+     * @param int $createdAt The token creation date in seconds
      */
     public function setCreatedAt($createdAt)
     {
@@ -184,7 +184,7 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getCreatedAt()
     {
@@ -192,12 +192,12 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getExpiresAt()
     {
         if (null === $this->expiresIn) {
-            return null;
+            return;
         }
 
         return $this->createdAt + $this->expiresIn;
@@ -222,7 +222,7 @@ class OAuthToken extends AbstractToken
     /**
      * Returns if the `access_token` is expired.
      *
-     * @return boolean True if the `access_token` is expired.
+     * @return bool True if the `access_token` is expired.
      */
     public function isExpired()
     {
@@ -254,7 +254,7 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function serialize()
     {
@@ -265,12 +265,12 @@ class OAuthToken extends AbstractToken
             $this->expiresIn,
             $this->createdAt,
             $this->resourceOwnerName,
-            parent::serialize()
+            parent::serialize(),
         ));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function unserialize($serialized)
     {

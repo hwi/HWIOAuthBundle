@@ -29,7 +29,7 @@ use Buzz\Message\RequestInterface as HttpRequestInterface;
 class FiwareResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'id',
@@ -39,7 +39,7 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
@@ -50,7 +50,7 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
         ), $extraParameters);
 
         $headers = array(
-            'Authorization: Basic ' . base64_encode($this->options['client_id'] . ':' . $this->options['client_secret']),
+            'Authorization: Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret']),
             'Content-Type: application/x-www-form-urlencoded',
         );
 
@@ -63,7 +63,7 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -83,7 +83,7 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

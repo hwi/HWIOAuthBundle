@@ -23,4 +23,4 @@ json;
     {
         return new DiscogsResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
-} 
+}

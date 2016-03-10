@@ -223,13 +223,13 @@ class ConnectController extends Controller
                 return $this->redirect($targetPath);
             }
 
-            return $this->render('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
+            return $this->render('HWIOAuthBundle:Connect:connect_success.html.'.$this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
                 'service' => $service,
             ));
         }
 
-        return $this->render('HWIOAuthBundle:Connect:connect_confirm.html.' . $this->getTemplatingEngine(), array(
+        return $this->render('HWIOAuthBundle:Connect:connect_confirm.html.'.$this->getTemplatingEngine(), array(
             'key' => $key,
             'service' => $service,
             'form' => $form->createView(),
@@ -327,9 +327,9 @@ class ConnectController extends Controller
      *
      * @deprecated since version 0.4. Will be removed in 1.0.
      *
-     * @param string  $route    Route name
-     * @param array   $params   Route parameters
-     * @param boolean $absolute Absolute url or note.
+     * @param string $route    Route name
+     * @param array  $params   Route parameters
+     * @param bool   $absolute Absolute url or note.
      *
      * @return string
      */
@@ -455,6 +455,6 @@ class ConnectController extends Controller
             }
         }
 
-        return null;
+        return;
     }
 }

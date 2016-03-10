@@ -21,7 +21,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class YoutubeResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier'     => 'items.0.id',
@@ -32,7 +32,7 @@ class YoutubeResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
@@ -41,12 +41,12 @@ class YoutubeResourceOwner extends GenericOAuth2ResourceOwner
             'approval_prompt'         => $this->options['approval_prompt'],
             'request_visible_actions' => $this->options['request_visible_actions'],
             'hd'                      => $this->options['hd'],
-            'prompt'                  => $this->options['prompt']
+            'prompt'                  => $this->options['prompt'],
         ), $extraParameters));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

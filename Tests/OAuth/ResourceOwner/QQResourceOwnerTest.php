@@ -47,14 +47,14 @@ json;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function testGetUserInformation()
     {
         $this->mockBuzz($this->userResponse);
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+        /*
+         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
         $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'), array('openid' => '1'));
 
@@ -66,7 +66,7 @@ json;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function testCustomResponseClass()
     {
@@ -75,8 +75,8 @@ json;
 
         $this->mockBuzz('{"ret": 0}');
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+        /*
+         * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
          */
         $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'), array('openid' => '1'));
 

@@ -2,12 +2,10 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\SecurityContext;
 
-class ConnectConnectControllerConnectActionTest extends AbstractConnectControllerTest
+class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 {
     public function testLoginPage()
     {
@@ -24,7 +22,7 @@ class ConnectConnectControllerConnectActionTest extends AbstractConnectControlle
     public function testRegistrationRedirect()
     {
         $this->request->attributes = new ParameterBag(array(
-            $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException()
+            $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException(),
         ));
 
         $this->getAuthorizationChecker()->expects($this->once())
@@ -45,7 +43,7 @@ class ConnectConnectControllerConnectActionTest extends AbstractConnectControlle
     public function testRequestError()
     {
         $this->request->attributes = new ParameterBag(array(
-            $this->getAuthenticationErrorKey() => new AccessDeniedException('You shall not pass the request.')
+            $this->getAuthenticationErrorKey() => new AccessDeniedException('You shall not pass the request.'),
         ));
 
         $this->templating->expects($this->once())

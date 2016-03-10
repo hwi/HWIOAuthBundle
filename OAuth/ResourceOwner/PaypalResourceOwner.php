@@ -22,7 +22,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class PaypalResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'user_id',
@@ -31,7 +31,7 @@ class PaypalResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -52,7 +52,6 @@ class PaypalResourceOwner extends GenericOAuth2ResourceOwner
                 'sandbox' => 'bool',
             ));
         }
-
 
         $sandboxTransformation = function (Options $options, $value) {
             if (!$options['sandbox']) {

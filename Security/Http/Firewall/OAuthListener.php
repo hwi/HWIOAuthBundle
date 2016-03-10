@@ -38,7 +38,7 @@ class OAuthListener extends AbstractAuthenticationListener
     private $checkPaths;
 
     /**
-     * @var ResourceOwnerMap $resourceOwnerMap
+     * @var ResourceOwnerMap
      */
     public function setResourceOwnerMap(ResourceOwnerMap $resourceOwnerMap)
     {
@@ -54,7 +54,7 @@ class OAuthListener extends AbstractAuthenticationListener
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function requiresAuthentication(Request $request)
     {
@@ -69,7 +69,7 @@ class OAuthListener extends AbstractAuthenticationListener
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function attemptAuthentication(Request $request)
     {

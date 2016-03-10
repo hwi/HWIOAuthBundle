@@ -26,7 +26,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -46,7 +46,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
@@ -101,11 +101,11 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
-        $parameters = array_merge( array(
+        $parameters = array_merge(array(
             'refresh_token' => $refreshToken,
             'grant_type'    => 'refresh_token',
             'client_id'     => $this->options['client_id'],
@@ -121,7 +121,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeToken($token)
     {
@@ -140,7 +140,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function handles(Request $request)
     {
@@ -165,7 +165,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
@@ -173,7 +173,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
@@ -201,7 +201,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -226,7 +226,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         // of spaces to separate scopes (Disqus, Facebook, Github, Vkontante)
         $scopeNormalizer = function (Options $options, $value) {
             if (!$value) {
-                return null;
+                return;
             }
 
             if (!$options['use_commas_in_scope']) {

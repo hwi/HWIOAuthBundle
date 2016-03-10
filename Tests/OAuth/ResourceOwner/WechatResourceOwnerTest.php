@@ -11,8 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WechatResourceOwner;
-
 class WechatResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = <<<JSON

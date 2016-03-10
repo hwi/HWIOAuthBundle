@@ -23,7 +23,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class FacebookResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'id',
@@ -35,7 +35,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -45,9 +45,9 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
 
         return parent::getUserInformation($accessToken, $extraParameters);
     }
-    
+
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
@@ -64,7 +64,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
@@ -81,7 +81,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeToken($token)
     {
@@ -96,7 +96,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

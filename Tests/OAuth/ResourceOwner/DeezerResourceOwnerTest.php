@@ -47,7 +47,7 @@ json;
         'firstname'      => 'firstname',
         'lastname'       => 'lastname',
         'profilepicture' => 'picture',
-        'gender'         => 'gender'
+        'gender'         => 'gender',
     );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)

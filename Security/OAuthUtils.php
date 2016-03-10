@@ -30,7 +30,7 @@ class OAuthUtils
     const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $connect;
 
@@ -62,7 +62,7 @@ class OAuthUtils
     /**
      * @param HttpUtils                                              $httpUtils
      * @param AuthorizationCheckerInterface|SecurityContextInterface $authorizationChecker
-     * @param boolean                                                $connect
+     * @param bool                                                   $connect
      */
     public function __construct(HttpUtils $httpUtils, $authorizationChecker, $connect)
     {
@@ -286,6 +286,6 @@ class OAuthUtils
             }
         }
 
-        return null;
+        return;
     }
 }

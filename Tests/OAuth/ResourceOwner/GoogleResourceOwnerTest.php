@@ -110,7 +110,7 @@ json;
     {
         $options = array_merge(
             array(
-                'access_type' => 'offline'
+                'access_type' => 'offline',
             ),
             $options
         );

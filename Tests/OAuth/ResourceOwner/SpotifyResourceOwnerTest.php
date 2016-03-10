@@ -49,7 +49,7 @@ json;
         'identifier'     => 'id',
         'nickname'       => 'id',
         'realname'       => 'display_name',
-        'email'          => 'email'
+        'email'          => 'email',
     );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
@@ -61,8 +61,8 @@ json;
     {
         $this->mockBuzz($this->userResponse);
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+        /*
+         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
         $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 
@@ -80,10 +80,10 @@ json;
 
         $this->mockBuzz();
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+        /*
+         * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
          */
-        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token')); 
+        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
