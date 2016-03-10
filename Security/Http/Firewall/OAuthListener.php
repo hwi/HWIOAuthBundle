@@ -38,7 +38,7 @@ class OAuthListener extends AbstractAuthenticationListener
     private $checkPaths;
 
     /**
-     * @var ResourceOwnerMap
+     * @param ResourceOwnerMap $resourceOwnerMap
      */
     public function setResourceOwnerMap(ResourceOwnerMap $resourceOwnerMap)
     {
