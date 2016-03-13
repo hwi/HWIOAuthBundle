@@ -53,6 +53,7 @@ hwi_oauth:
 - [Foursquare](resource_owners/foursquare.md)
 - [GitHub](resource_owners/github.md)
 - [Google](resource_owners/google.md)
+- [Gamewisp](resource_owners/gamewisp.md)
 - [Hubic](resource_owners/hubic.md)
 - [Instagram](resource_owners/instagram.md)
 - [Jira](resource_owners/jira.md)
