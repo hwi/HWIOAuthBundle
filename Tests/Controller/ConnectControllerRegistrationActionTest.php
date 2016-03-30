@@ -135,6 +135,8 @@ class ConnectConnectControllerRegistrationActionTest extends AbstractConnectCont
             ->willReturn(new User())
         ;
 
+        $this->container->setParameter('hwi_oauth.fosub_enabled', true);
+
         if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
             $registrationFormFactory = $this->getMock('FOS\UserBundle\Form\Factory\FactoryInterface');
             $registrationFormFactory->expects($this->any())
