@@ -22,8 +22,6 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * FOSUBRegistrationFormHandler
- *
  * @author Alexander <iam.asm89@gmail.com>
  */
 class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
@@ -49,17 +47,15 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     protected $tokenGenerator;
 
     /**
-     * @var integer
+     * @var int
      */
     protected $iterations;
 
     /**
-     * Constructor.
-     *
      * @param UserManagerInterface $userManager    FOSUB user manager
      * @param MailerInterface      $mailer         FOSUB mailer
      * @param TokenGenerator       $tokenGenerator FOSUB token generator
-     * @param integer              $iterations     Amount of attempts that should be made to 'guess' a unique username
+     * @param int                  $iterations     Amount of attempts that should be made to 'guess' a unique username
      */
     public function __construct(UserManagerInterface $userManager, MailerInterface $mailer, TokenGenerator $tokenGenerator = null, $iterations = 5)
     {
@@ -70,7 +66,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function process(Request $request, Form $form, UserResponseInterface $userInformation)
     {
@@ -88,13 +84,12 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
             return $processed;
         }
 
-        $user = $this->userManager->createUser();
-        $user->setEnabled(true);
-
-        $form->setData($this->setUserInformation($user, $userInformation));
-
         if ($request->isMethod('POST')) {
-            $form->bind($request);
+            $user = $this->userManager->createUser();
+            $user->setEnabled(true);
+
+            $form->setData($this->setUserInformation($user, $userInformation));
+            $form->handleRequest($request);
 
             return $form->isValid();
         }
@@ -137,7 +132,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      * @param Request $request Active request
      * @param Form    $form    Form to process
      *
-     * @return mixed
+     * @return RegistrationFormHandler
      */
     protected function reconstructFormHandler(Request $request, Form $form)
     {
