@@ -101,10 +101,8 @@ class HWIOAuthExtension extends Extension
                 // setup fosub bridge services
                 $container->setAlias('hwi_oauth.account.connector', 'hwi_oauth.user.provider.fosub_bridge');
 
-                $container
-                    ->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new DefinitionDecorator('hwi_oauth.registration.form.handler.fosub_bridge.def'))
-                    ->addArgument($config['fosub']['username_iterations'])
-                ;
+                $definition = $container->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new DefinitionDecorator('hwi_oauth.registration.form.handler.fosub_bridge.def'));
+                $definition->addArgument($config['fosub']['username_iterations']);
 
                 $container->setAlias('hwi_oauth.registration.form.handler', 'hwi_oauth.registration.form.handler.fosub_bridge');
 
@@ -112,6 +110,9 @@ class HWIOAuthExtension extends Extension
                 if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
                     $container->setAlias('hwi_oauth.registration.form.factory', 'fos_user.registration.form.factory');
                 } else {
+                    // FOSUser 1.3 BC. To be removed.
+                    $definition->setScope('request');
+
                     $container->setAlias('hwi_oauth.registration.form', 'fos_user.registration.form');
                 }
             }
