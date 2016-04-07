@@ -105,7 +105,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
-        $parameters = array_merge( array(
+        $parameters = array_merge(array(
             'refresh_token' => $refreshToken,
             'grant_type'    => 'refresh_token',
             'client_id'     => $this->options['client_id'],
