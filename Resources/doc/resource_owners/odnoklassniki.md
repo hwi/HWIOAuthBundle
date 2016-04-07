@@ -1,7 +1,7 @@
 Step 2x: Setup Odnoklassniki
 ============================
 First you will have to register your application on Odnoklassniki. Check out the
-documentation for more information: http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=13992188.
+documentation for more information: http://apiok.ru/wiki/pages/viewpage.action?pageId=13992188.
 
 Next configure a resource owner of type `odnoklassniki` with appropriate
 `client_id`, `client_secret`, `scope` (optional) and `application_key`.
@@ -22,7 +22,7 @@ hwi_oauth:
 Scopes are separate by semicolon, you can those scopes: `VALUABLE ACCESS`, `SET STATUS`, `PHOTO CONTENT`.
 It's important! You can use `users.getLoggedInUser` & `users.getCurrentUser` without scope. If your application
 requires some additional data, you must write an email to `oauth@odnoklassniki.ru` and ask for giving you additional
-permissions! More information about [Odnoklassniki OAuth2 authorization](http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=12878032).
+permissions! More information about [Odnoklassniki OAuth2 authorization](https://apiok.ru/wiki/pages/viewpage.action?pageId=42476522).
 
 When you're done. Continue by configuring the security layer or go back to
 setup more resource owners.
