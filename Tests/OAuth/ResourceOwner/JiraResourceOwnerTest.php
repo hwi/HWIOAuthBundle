@@ -88,6 +88,6 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     public function buzzSendUserResponse($request, $response)
     {
         $response->setContent($this->userResponse);
-        $response->addHeader('Content-Type: ' . $this->buzzResponseContentType);
+        $response->addHeader('Content-Type: '.$this->buzzResponseContentType);
     }
 }
