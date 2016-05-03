@@ -77,7 +77,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
         $this->makeRegistrationForm();
 
-        $registrationFormHandler = $this->getMock('\HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface');
+        $registrationFormHandler = $this->getMock('HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface');
         $registrationFormHandler->expects($this->once())
             ->method('process')
             ->withAnyParameters()
@@ -105,7 +105,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
         $this->makeRegistrationForm();
 
-        $registrationFormHandler = $this->getMock('\HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface');
+        $registrationFormHandler = $this->getMock('HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface');
         $registrationFormHandler->expects($this->once())
             ->method('process')
             ->withAnyParameters()
@@ -126,18 +126,28 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
     private function makeRegistrationForm()
     {
-        $registrationForm = $this->getMockBuilder('\Symfony\Component\Form\Form')
-            ->disableOriginalConstructor()->getMock();
+        $registrationForm = $this->getMockBuilder('Symfony\Component\Form\Form')
+            ->disableOriginalConstructor()
+            ->getMock()
+        ;
         $registrationForm->expects($this->any())
             ->method('getData')
-            ->willReturn(new User());
-        $registrationFormFactory = $this->getMock('\FOS\UserBundle\Form\Factory\FactoryInterface');
-        $registrationFormFactory->expects($this->any())
-            ->method('createForm')
-            ->willReturn($registrationForm)
+            ->willReturn(new User())
         ;
-        $this->container->set('hwi_oauth.registration.form.factory', $registrationFormFactory);
-        // FOSUser 1.3 BC. To be removed.
-        $this->container->set('hwi_oauth.registration.form', $registrationForm);
+
+        $this->container->setParameter('hwi_oauth.fosub_enabled', true);
+
+        if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
+            $registrationFormFactory = $this->getMock('FOS\UserBundle\Form\Factory\FactoryInterface');
+            $registrationFormFactory->expects($this->any())
+                ->method('createForm')
+                ->willReturn($registrationForm)
+            ;
+
+            $this->container->set('hwi_oauth.registration.form.factory', $registrationFormFactory);
+        } else {
+            // FOSUser 1.3 BC. To be removed.
+            $this->container->set('hwi_oauth.registration.form', $registrationForm);
+        }
     }
 }

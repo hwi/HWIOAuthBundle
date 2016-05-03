@@ -1,17 +1,16 @@
 language: php
 
 php:
-  - 5.3
-  - 5.5
-  - 5.6
   - 7.0
+  - 5.6
+  - 5.3
   - hhvm
 
 sudo: false
 
 cache:
   directories:
-    - $HOME/.composer/cache
+    - ~/.composer/cache/files
 
 matrix:
   fast_finish: true
@@ -35,12 +34,13 @@ matrix:
 
 before_install:
   - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then phpenv config-rm xdebug.ini; fi;
+  - if [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]]; then echo "memory_limit=4096M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; fi;
 
 before_script:
   - composer self-update
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --dev --no-update; fi;
   - if [ "$FOSUSERBUNDLE_VERSION" != "" ]; then composer require "friendsofsymfony/user-bundle:${FOSUSERBUNDLE_VERSION}" --dev --no-update; fi;
-  - if [ "$COMPOSER_FLAGS" != "" ]; then composer update --dev --prefer-dist --no-interaction $COMPOSER_FLAGS; fi;
-  - composer install --dev --prefer-dist --no-interaction $COMPOSER_FLAGS
+  - if [ "$COMPOSER_FLAGS" != "" ]; then composer update --prefer-dist --no-interaction --no-scripts $COMPOSER_FLAGS; fi;
+  - composer install --prefer-dist --no-interaction --no-scripts
 
 script: vendor/bin/phpunit

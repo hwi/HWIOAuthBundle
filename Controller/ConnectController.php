@@ -111,9 +111,13 @@ class ConnectController extends Controller
             ->getUserInformation($error->getRawToken())
         ;
 
-        // enable compatibility with FOSUserBundle 1.3.x and 2.x
-        if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
-            $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
+        if ($this->container->getParameter('hwi_oauth.fosub_enabled')) {
+            // enable compatibility with FOSUserBundle 1.3.x and 2.x
+            if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
+                $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
+            } else {
+                $form = $this->container->get('hwi_oauth.registration.form');
+            }
         } else {
             $form = $this->container->get('hwi_oauth.registration.form');
         }

@@ -24,8 +24,6 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
     public function testGetUserInformation()
     {
-        $this->markTestSkipped('This tests needs to be fixed.');
-
         $this
             ->buzzClient->expects($this->exactly(2))
             ->method('send')
@@ -46,16 +44,20 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
     public function testCustomResponseClass()
     {
-        $this->markTestSkipped('This tests needs to be fixed.');
-
         $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         $this
-            ->buzzClient->expects($this->exactly(2))
+            ->buzzClient->expects($this->at(0))
+            ->method('send')
+            ->will($this->returnCallback(array($this, 'buzzSendUserResponse')))
+        ;
+        $this
+            ->buzzClient->expects($this->at(1))
             ->method('send')
             ->will($this->returnCallback(array($this, 'buzzSendMock')))
         ;
+
         $this->buzzResponse = '';
         $this->buzzResponseContentType = 'text/plain';
 
@@ -81,5 +83,11 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         );
 
         return new JiraResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+    }
+
+    public function buzzSendUserResponse($request, $response)
+    {
+        $response->setContent($this->userResponse);
+        $response->addHeader('Content-Type: ' . $this->buzzResponseContentType);
     }
 }

@@ -118,15 +118,15 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->templating = $this->getMock('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface');
         $this->container->set('templating', $this->templating);
 
-        $this->router = $this->getMock('\Symfony\Component\Routing\RouterInterface');
+        $this->router = $this->getMock('Symfony\Component\Routing\RouterInterface');
         $this->container->set('router', $this->router);
 
-        $this->resourceOwner = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface');
+        $this->resourceOwner = $this->getMock('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface');
         $this->resourceOwner->expects($this->any())
             ->method('getUserInformation')
             ->willReturn(new CustomUserResponse())
         ;
-        $this->resourceOwnerMap = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
+        $this->resourceOwnerMap = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
             ->disableOriginalConstructor()->getMock()
         ;
         $this->resourceOwnerMap->expects($this->any())
@@ -146,13 +146,13 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->userChecker = $this->getMock('Symfony\Component\Security\Core\User\UserCheckerInterface');
         $this->container->set('hwi_oauth.user_checker', $this->userChecker);
 
-        $this->eventDispatcher = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->eventDispatcher = $this->getMock('Symfony\Component\EventDispatcher\EventDispatcherInterface');
         $this->container->set('event_dispatcher', $this->eventDispatcher);
 
-        $this->formFactory = $this->getMock('\Symfony\Component\Form\FormFactoryInterface');
+        $this->formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
         $this->container->set('form.factory', $this->formFactory);
 
-        $this->session = $this->getMock('\Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $this->session = $this->getMock('Symfony\Component\HttpFoundation\Session\SessionInterface');
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
 
