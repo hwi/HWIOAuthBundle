@@ -174,7 +174,7 @@ hwi_oauth:
     connect:
         account_connector: my.custom.user_provider
     firewall_names:
-        - 'hwi_oauth_firewall_name' # name of security firewall configured tow work with HWIOAuthBundle
+        - 'hwi_oauth_firewall_name' # name of security firewall configured to work with HWIOAuthBundle
     fosub:
         username_iterations: 30
         properties:
