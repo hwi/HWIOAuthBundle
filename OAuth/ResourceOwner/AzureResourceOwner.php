@@ -15,7 +15,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
 /**
- * AzureResourceOwner
+ * AzureResourceOwner.
  *
  * @author Baptiste Clavié <clavie.b@gmail.com>
  */
@@ -25,10 +25,10 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'sub',
-        'nickname'       => 'unique_name',
-        'realname'       => array('given_name', 'family_name'),
-        'email'          => array('upn', 'email'),
+        'identifier' => 'sub',
+        'nickname' => 'unique_name',
+        'realname' => array('given_name', 'family_name'),
+        'email' => array('upn', 'email'),
         'profilepicture' => null,
     );
 
@@ -63,7 +63,7 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         // from http://stackoverflow.com/a/28748285/624544
-        list(, $jwt, ) = explode('.', $accessToken['id_token'], 3);
+        list(, $jwt) = explode('.', $accessToken['id_token'], 3);
 
         // if the token was urlencoded, do some fixes to ensure that it is valid base64 encoded
         $jwt = str_replace('-', '+', $jwt);

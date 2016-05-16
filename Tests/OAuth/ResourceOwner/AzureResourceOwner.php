@@ -28,10 +28,10 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwnerTest
 json;
 
     protected $paths = array(
-        'identifier'     => 'sub',
-        'nickname'       => 'unique_name',
-        'realname'       => array('given_name', 'family_name'),
-        'email'          => array('upn', 'email'),
+        'identifier' => 'sub',
+        'nickname' => 'unique_name',
+        'realname' => array('given_name', 'family_name'),
+        'email' => array('upn', 'email'),
         'profilepicture' => null,
     );
 
@@ -55,7 +55,7 @@ json;
          */
         $userResponse = $this->resourceOwner->getUserInformation(array(
             'access_token' => 'token',
-            'id_token' =>  $token,
+            'id_token' => $token,
         ));
 
         $this->assertEquals('1', $userResponse->getUsername());
@@ -69,7 +69,7 @@ json;
     {
         $this->markTestSkipped('Can\' test custom response because of the way the id_token value is set; is always returning null');
 
-        $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         $this->mockBuzz();
@@ -81,7 +81,7 @@ json;
          */
         $userResponse = $this->resourceOwner->getUserInformation(array(
             'access_token' => 'token',
-            'id_token' =>  $token,
+            'id_token' => $token,
         ));
 
         $this->assertInstanceOf($class, $userResponse);

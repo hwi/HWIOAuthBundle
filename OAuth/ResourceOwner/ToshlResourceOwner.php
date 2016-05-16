@@ -15,7 +15,7 @@ use Buzz\Message\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * ToshlResourceOwner
+ * ToshlResourceOwner.
  *
  * @author Davide Bellettini <davide@bellettini.me>
  */
@@ -25,12 +25,12 @@ class ToshlResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'email',
-        'firstname'      => 'first_name',
-        'lastname'       => 'last_name',
-        'realname'       => array('first_name', 'last_name'),
-        'email'          => 'email',
+        'identifier' => 'id',
+        'nickname' => 'email',
+        'firstname' => 'first_name',
+        'lastname' => 'last_name',
+        'realname' => array('first_name', 'last_name'),
+        'email' => 'email',
     );
 
     /**
@@ -57,11 +57,11 @@ class ToshlResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://toshl.com/oauth2/authorize',
-            'access_token_url'    => 'https://toshl.com/oauth2/token',
-            'revoke_token_url'    => 'https://toshl.com/oauth2/revoke',
-            'infos_url'           => 'https://api.toshl.com/me',
-            'csrf'                => true,
+            'authorization_url' => 'https://toshl.com/oauth2/authorize',
+            'access_token_url' => 'https://toshl.com/oauth2/token',
+            'revoke_token_url' => 'https://toshl.com/oauth2/revoke',
+            'infos_url' => 'https://api.toshl.com/me',
+            'csrf' => true,
             'use_commas_in_scope' => true,
         ));
     }

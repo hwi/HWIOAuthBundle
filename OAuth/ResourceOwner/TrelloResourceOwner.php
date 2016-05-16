@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * TrelloResourceOwner
+ * TrelloResourceOwner.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
@@ -24,10 +24,10 @@ class TrelloResourceOwner extends GenericOAuth1ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => '_id',
-        'nickname'       => 'username',
-        'realname'       => 'fullName',
-        'email'          => 'email',
+        'identifier' => '_id',
+        'nickname' => 'username',
+        'realname' => 'fullName',
+        'email' => 'email',
         'profilepicture' => 'avatarSource',
     );
 
@@ -41,8 +41,8 @@ class TrelloResourceOwner extends GenericOAuth1ResourceOwner
         $resolver->setDefaults(array(
             'authorization_url' => 'https://trello.com/1/OAuthAuthorizeToken',
             'request_token_url' => 'https://trello.com/1/OAuthGetRequestToken',
-            'access_token_url'  => 'https://trello.com/1/OAuthGetAccessToken',
-            'infos_url'         => 'https://api.trello.com/1/members/me?fields=username,fullName,avatarSource,email',
+            'access_token_url' => 'https://trello.com/1/OAuthGetAccessToken',
+            'infos_url' => 'https://api.trello.com/1/members/me?fields=username,fullName,avatarSource,email',
         ));
     }
 }

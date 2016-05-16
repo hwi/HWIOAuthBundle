@@ -16,7 +16,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * RegistrationFormHandlerInterface
+ * RegistrationFormHandlerInterface.
  *
  * Interface for objects that are able to handle a form.
  *

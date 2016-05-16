@@ -25,10 +25,10 @@ json;
 
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'username',
-        'firstname'   => 'first_name',
-        'lastname'   => 'last_name',
-        'realname'   => 'name',
+        'nickname' => 'username',
+        'firstname' => 'first_name',
+        'lastname' => 'last_name',
+        'realname' => 'name',
     );
 
     /**
@@ -104,7 +104,7 @@ json;
         $this->mockBuzz();
 
         $request = new Request(array(
-            'error_code'    => 901,
+            'error_code' => 901,
             'error_message' => 'This app is in sandbox mode.  Edit the app configuration at http://developers.facebook.com/apps to make the app publicly visible.',
         ));
 

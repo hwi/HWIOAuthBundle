@@ -24,8 +24,8 @@ json;
 
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'screenname',
-        'realname'   => 'fullname',
+        'nickname' => 'screenname',
+        'realname' => 'fullname',
     );
 
     public function testDisplayPopup()

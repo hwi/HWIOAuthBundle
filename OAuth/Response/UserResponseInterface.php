@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
 /**
- * UserResponseInterface
+ * UserResponseInterface.
  *
  * @author Alexander <iam.asm89@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>

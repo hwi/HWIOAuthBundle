@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * OAuthUser
+ * OAuthUser.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  */

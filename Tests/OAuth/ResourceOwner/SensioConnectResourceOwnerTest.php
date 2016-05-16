@@ -24,7 +24,7 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 
     public function testGetUserInformation()
     {
-        $class         = '\HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse';
+        $class = '\HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse';
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         $this->mockBuzz($this->userResponse);

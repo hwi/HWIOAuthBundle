@@ -16,7 +16,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * AbstractUserResponse
+ * AbstractUserResponse.
  *
  * @author Alexander <iam.asm89@gmail.com>
  */

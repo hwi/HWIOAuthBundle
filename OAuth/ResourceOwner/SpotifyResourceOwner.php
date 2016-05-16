@@ -23,10 +23,10 @@ class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'id',
-        'realname'       => 'display_name',
-        'email'          => 'email',
+        'identifier' => 'id',
+        'nickname' => 'id',
+        'realname' => 'display_name',
+        'email' => 'email',
     );
 
     /**
@@ -57,8 +57,8 @@ class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://accounts.spotify.com/authorize',
-            'access_token_url'  => 'https://accounts.spotify.com/api/token',
-            'infos_url'         => 'https://api.spotify.com/v1/me',
+            'access_token_url' => 'https://accounts.spotify.com/api/token',
+            'infos_url' => 'https://api.spotify.com/v1/me',
         ));
     }
 }

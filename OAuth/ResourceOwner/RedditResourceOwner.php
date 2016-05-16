@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * RedditResourceOwner
+ * RedditResourceOwner.
  *
  * @author Martin Aarhof <martin.aarhof@gmail.com>
  */
@@ -25,9 +25,9 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'name',
-        'realname'   => null,
-        'email'      => null,
+        'nickname' => 'name',
+        'realname' => null,
+        'email' => null,
     );
 
     /**
@@ -46,16 +46,16 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'        => 'https://ssl.reddit.com/api/v1/authorize',
-            'access_token_url'         => 'https://ssl.reddit.com/api/v1/access_token',
-            'infos_url'                => 'https://oauth.reddit.com/api/v1/me.json',
+            'authorization_url' => 'https://ssl.reddit.com/api/v1/authorize',
+            'access_token_url' => 'https://ssl.reddit.com/api/v1/access_token',
+            'infos_url' => 'https://oauth.reddit.com/api/v1/me.json',
 
             'use_bearer_authorization' => true,
-            'use_commas_in_scope'      => true,
-            'csrf'                     => true,
-            'scope'                    => 'identity',
+            'use_commas_in_scope' => true,
+            'csrf' => true,
+            'scope' => 'identity',
 
-            'duration'                 => 'permanent',
+            'duration' => 'permanent',
         ));
     }
 }

@@ -25,10 +25,10 @@ class BoxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 json;
 
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'name',
-        'realname'       => 'name',
-        'email'          => 'login',
+        'identifier' => 'id',
+        'nickname' => 'name',
+        'realname' => 'name',
+        'email' => 'login',
         'profilepicture' => 'avatar_url',
     );
 

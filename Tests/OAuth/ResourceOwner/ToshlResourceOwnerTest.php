@@ -26,12 +26,12 @@ class ToshlResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 json;
 
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'email',
-        'firstname'      => 'first_name',
-        'lastname'       => 'last_name',
-        'realname'       => array('first_name', 'last_name'),
-        'email'          => 'email',
+        'identifier' => 'id',
+        'nickname' => 'email',
+        'firstname' => 'first_name',
+        'lastname' => 'last_name',
+        'realname' => array('first_name', 'last_name'),
+        'email' => 'email',
     );
 
     protected $expectedUrls = array(

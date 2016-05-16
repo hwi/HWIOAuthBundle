@@ -48,7 +48,7 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     protected $useForward;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param HttpUtils $httpUtils
      * @param string    $loginPath
@@ -57,8 +57,8 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     public function __construct(HttpKernelInterface $kernel, HttpUtils $httpUtils, $loginPath, $useForward = false)
     {
         $this->httpKernel = $kernel;
-        $this->httpUtils  = $httpUtils;
-        $this->loginPath  = $loginPath;
+        $this->httpUtils = $httpUtils;
+        $this->loginPath = $loginPath;
         $this->useForward = (Boolean) $useForward;
     }
 

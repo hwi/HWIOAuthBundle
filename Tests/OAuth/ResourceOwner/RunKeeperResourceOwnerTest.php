@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\RunKeeperResourceOwner;
 
 /**
- * RunKeeperResourceOwnerTest
+ * RunKeeperResourceOwnerTest.
  *
  * @author Artem Genvald <genvaldartem@gmail.com>
  */
@@ -34,7 +34,7 @@ json;
      * {@inheritdoc}
      */
     protected $paths = array(
-        'realname'       => 'name',
+        'realname' => 'name',
         'profilepicture' => 'medium_picture',
     );
 

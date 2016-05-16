@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
- * AbstractResourceOwner
+ * AbstractResourceOwner.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
@@ -81,9 +81,9 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage)
     {
         $this->httpClient = $httpClient;
-        $this->httpUtils  = $httpUtils;
-        $this->name       = $name;
-        $this->storage    = $storage;
+        $this->httpUtils = $httpUtils;
+        $this->name = $name;
+        $this->storage = $storage;
 
         if (!empty($options['paths'])) {
             $this->addPaths($options['paths']);
@@ -106,7 +106,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * Gives a chance for extending providers to customize stuff
+     * Gives a chance for extending providers to customize stuff.
      */
     public function configure()
     {
@@ -213,7 +213,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * Performs an HTTP request
+     * Performs an HTTP request.
      *
      * @param string       $url     The url to fetch
      * @param string|array $content The content of the request
@@ -228,7 +228,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
             $method = null === $content || '' === $content ? HttpRequestInterface::METHOD_GET : HttpRequestInterface::METHOD_POST;
         }
 
-        $request  = new HttpRequest($method, $url);
+        $request = new HttpRequest($method, $url);
         $response = new HttpResponse();
 
         $contentLength = 0;
@@ -308,7 +308,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     abstract protected function doGetUserInformationRequest($url, array $parameters = array());
 
     /**
-     * Configure the option resolver
+     * Configure the option resolver.
      *
      * @param OptionsResolver $resolver
      */
@@ -323,10 +323,10 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         ));
 
         $resolver->setDefaults(array(
-            'scope'               => null,
-            'csrf'                => false,
+            'scope' => null,
+            'csrf' => false,
             'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
-            'auth_with_one_url'   => false,
+            'auth_with_one_url' => false,
         ));
 
         if (method_exists($resolver, 'setDefined')) {

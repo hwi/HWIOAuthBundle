@@ -30,10 +30,10 @@ json;
 
     protected $paths = array(
         'identifier' => 'response.user.id',
-        'firstname'  => 'response.user.firstName',
-        'lastname'   => 'response.user.lastName',
-        'nickname'   => 'response.user.firstName',
-        'realname'   => array('response.user.firstName', 'response.user.lastName'),
+        'firstname' => 'response.user.firstName',
+        'lastname' => 'response.user.lastName',
+        'nickname' => 'response.user.firstName',
+        'realname' => array('response.user.firstName', 'response.user.lastName'),
     );
 
     public function testGetUserInformationFirstAndLastName()

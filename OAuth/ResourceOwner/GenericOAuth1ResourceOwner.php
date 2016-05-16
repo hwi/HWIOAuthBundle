@@ -19,7 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * GenericOAuth1ResourceOwner
+ * GenericOAuth1ResourceOwner.
  *
  * @author Francisco Facioni <fran6co@gmail.com>
  */
@@ -31,12 +31,12 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $parameters = array_merge(array(
-            'oauth_consumer_key'     => $this->options['client_id'],
-            'oauth_timestamp'        => time(),
-            'oauth_nonce'            => $this->generateNonce(),
-            'oauth_version'          => '1.0',
+            'oauth_consumer_key' => $this->options['client_id'],
+            'oauth_timestamp' => time(),
+            'oauth_nonce' => $this->generateNonce(),
+            'oauth_version' => '1.0',
             'oauth_signature_method' => $this->options['signature_method'],
-            'oauth_token'            => $accessToken['oauth_token'],
+            'oauth_token' => $accessToken['oauth_token'],
         ), $extraParameters);
 
         $url = $this->options['infos_url'];
@@ -83,13 +83,13 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         }
 
         $parameters = array_merge(array(
-            'oauth_consumer_key'     => $this->options['client_id'],
-            'oauth_timestamp'        => time(),
-            'oauth_nonce'            => $this->generateNonce(),
-            'oauth_version'          => '1.0',
+            'oauth_consumer_key' => $this->options['client_id'],
+            'oauth_timestamp' => time(),
+            'oauth_nonce' => $this->generateNonce(),
+            'oauth_version' => '1.0',
             'oauth_signature_method' => $this->options['signature_method'],
-            'oauth_token'            => $requestToken['oauth_token'],
-            'oauth_verifier'         => $request->query->get('oauth_verifier'),
+            'oauth_token' => $requestToken['oauth_token'],
+            'oauth_verifier' => $request->query->get('oauth_verifier'),
         ), $extraParameters);
 
         $url = $this->options['access_token_url'];
@@ -141,11 +141,11 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $timestamp = time();
 
         $parameters = array_merge(array(
-            'oauth_consumer_key'     => $this->options['client_id'],
-            'oauth_timestamp'        => $timestamp,
-            'oauth_nonce'            => $this->generateNonce(),
-            'oauth_version'          => '1.0',
-            'oauth_callback'         => $redirectUri,
+            'oauth_consumer_key' => $this->options['client_id'],
+            'oauth_timestamp' => $timestamp,
+            'oauth_nonce' => $this->generateNonce(),
+            'oauth_version' => '1.0',
+            'oauth_callback' => $redirectUri,
             'oauth_signature_method' => $this->options['signature_method'],
         ), $extraParameters);
 
@@ -228,7 +228,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         ));
 
         $resolver->setDefaults(array(
-            'realm'            => null,
+            'realm' => null,
             'signature_method' => 'HMAC-SHA1',
         ));
 

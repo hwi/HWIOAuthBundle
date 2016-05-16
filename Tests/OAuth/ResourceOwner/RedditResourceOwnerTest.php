@@ -30,9 +30,9 @@ json;
 
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'name',
-        'realname'   => null,
-        'email'      => null,
+        'nickname' => 'name',
+        'realname' => null,
+        'email' => null,
     );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)

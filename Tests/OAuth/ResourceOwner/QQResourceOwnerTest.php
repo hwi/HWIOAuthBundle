@@ -70,7 +70,7 @@ json;
      */
     public function testCustomResponseClass()
     {
-        $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner('oauth2', array('user_response_class' => $class));
 
         $this->mockBuzz('{"ret": 0}');
@@ -89,7 +89,7 @@ json;
     }
 
     /**
-     * QQ returns access token in jsonp format
+     * QQ returns access token in jsonp format.
      */
     public function testGetAccessTokenJsonpResponse()
     {
@@ -104,7 +104,7 @@ json;
     }
 
     /**
-     * QQ returns errors in jsonp format
+     * QQ returns errors in jsonp format.
      *
      * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */

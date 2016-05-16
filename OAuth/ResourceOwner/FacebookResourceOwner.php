@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * FacebookResourceOwner
+ * FacebookResourceOwner.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  */
@@ -27,11 +27,11 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'name',
-        'firstname'   => 'first_name',
-        'lastname'   => 'last_name',
-        'realname'   => 'name',
-        'email'      => 'email',
+        'nickname' => 'name',
+        'firstname' => 'first_name',
+        'lastname' => 'last_name',
+        'realname' => 'name',
+        'email' => 'email',
     );
 
     /**
@@ -86,7 +86,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     public function revokeToken($token)
     {
         $parameters = array(
-            'client_id'     => $this->options['client_id'],
+            'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
         );
 
@@ -103,16 +103,16 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://www.facebook.com/v2.0/dialog/oauth',
-            'access_token_url'    => 'https://graph.facebook.com/v2.0/oauth/access_token',
-            'revoke_token_url'    => 'https://graph.facebook.com/v2.0/me/permissions',
-            'infos_url'           => 'https://graph.facebook.com/v2.0/me',
+            'authorization_url' => 'https://www.facebook.com/v2.0/dialog/oauth',
+            'access_token_url' => 'https://graph.facebook.com/v2.0/oauth/access_token',
+            'revoke_token_url' => 'https://graph.facebook.com/v2.0/me/permissions',
+            'infos_url' => 'https://graph.facebook.com/v2.0/me',
 
             'use_commas_in_scope' => true,
 
-            'display'             => null,
-            'auth_type'           => null,
-            'appsecret_proof'     => false,
+            'display' => null,
+            'auth_type' => null,
+            'appsecret_proof' => false,
         ));
 
         // Symfony <2.6 BC
@@ -124,7 +124,7 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             ;
         } else {
             $resolver->setAllowedValues(array(
-                'display'   => array('page', 'popup', 'touch', null),
+                'display' => array('page', 'popup', 'touch', null),
                 'auth_type' => array('rerequest', null),
                 'appsecret_proof' => array(true, false),
             ));

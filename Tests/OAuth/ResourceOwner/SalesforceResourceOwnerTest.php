@@ -30,9 +30,9 @@ json;
 
     protected $paths = array(
         'identifier' => 'user_id',
-        'nickname'   => 'nick_name',
-        'realname'   => 'nick_name',
-        'email'      => 'email',
+        'nickname' => 'nick_name',
+        'realname' => 'nick_name',
+        'email' => 'email',
     );
 
     public function testGetUserInformation()

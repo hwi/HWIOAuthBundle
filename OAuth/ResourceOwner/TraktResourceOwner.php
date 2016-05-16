@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * TraktResourceOwner
+ * TraktResourceOwner.
  *
  * @author Julien DIDIER <julien@didier.io>
  */
@@ -25,9 +25,9 @@ class TraktResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'username',
-        'nickname'       => 'username',
-        'realname'       => 'name',
+        'identifier' => 'username',
+        'nickname' => 'username',
+        'realname' => 'name',
         'profilepicture' => 'images.avatar.full',
     );
 
@@ -61,8 +61,8 @@ class TraktResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://api-v2launch.trakt.tv/oauth/authorize',
-            'access_token_url'  => 'https://api-v2launch.trakt.tv/oauth/token',
-            'infos_url'         => 'https://api-v2launch.trakt.tv/users/me?extended=images',
+            'access_token_url' => 'https://api-v2launch.trakt.tv/oauth/token',
+            'infos_url' => 'https://api-v2launch.trakt.tv/users/me?extended=images',
         ));
     }
 }

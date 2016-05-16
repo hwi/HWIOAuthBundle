@@ -36,9 +36,9 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
     public function testAuthenticatesToken()
     {
         $expectedToken = array(
-            'access_token'  => 'access_token',
+            'access_token' => 'access_token',
             'refresh_token' => 'refresh_token',
-            'expires_in'    => '666',
+            'expires_in' => '666',
             'oauth_token_secret' => 'secret',
         );
 
@@ -105,9 +105,9 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
     public function testOAuthAwareExceptionGetsInfo()
     {
         $expectedToken = array(
-            'access_token'  => 'access_token',
+            'access_token' => 'access_token',
             'refresh_token' => 'refresh_token',
-            'expires_in'    => '666',
+            'expires_in' => '666',
             'oauth_token_secret' => 'secret',
         );
 

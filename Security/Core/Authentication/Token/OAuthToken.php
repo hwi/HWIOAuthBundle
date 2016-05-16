@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**
- * OAuthToken
+ * OAuthToken.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
@@ -127,10 +127,10 @@ class OAuthToken extends AbstractToken
                 $this->tokenSecret = $token['oauth_token_secret'];
             }
 
-            $this->rawToken    = $token;
+            $this->rawToken = $token;
         } else {
             $this->accessToken = $token;
-            $this->rawToken    = array('access_token' => $token);
+            $this->rawToken = array('access_token' => $token);
         }
     }
 
@@ -283,8 +283,7 @@ class OAuthToken extends AbstractToken
                 $this->expiresIn,
                 $this->createdAt,
                 $this->resourceOwnerName,
-                $parent,
-            ) = $data;
+                $parent) = $data;
         } else {
             // @deprecated Remove this in 0.5
             list(
@@ -293,8 +292,7 @@ class OAuthToken extends AbstractToken
                 $this->refreshToken,
                 $this->expiresIn,
                 $this->resourceOwnerName,
-                $parent,
-            ) = $data;
+                $parent) = $data;
 
             $this->createdAt = time();
         }

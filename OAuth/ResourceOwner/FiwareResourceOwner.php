@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 
 /**
- * FiwareResourceOwner
+ * FiwareResourceOwner.
  *
  * Resource owner for the fiware keyrock idm oauth 2.0 service
  *
@@ -32,10 +32,10 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'nickName',
-        'realname'       => 'displayName',
-        'email'          => 'email',
+        'identifier' => 'id',
+        'nickname' => 'nickName',
+        'realname' => 'displayName',
+        'email' => 'email',
     );
 
     /**
@@ -44,9 +44,9 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
         $parameters = array_merge(array(
-            'code'          => $request->query->get('code'),
-            'grant_type'    => 'authorization_code',
-            'redirect_uri'  => $redirectUri,
+            'code' => $request->query->get('code'),
+            'grant_type' => 'authorization_code',
+            'redirect_uri' => $redirectUri,
         ), $extraParameters);
 
         $headers = array(
@@ -90,10 +90,10 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'       => '{base_url}/oauth2/authorize',
-            'access_token_url'        => '{base_url}/oauth2/token',
-            'revoke_token_url'        => '{base_url}/oauth2/revoke',
-            'infos_url'               => '{base_url}/user',
+            'authorization_url' => '{base_url}/oauth2/authorize',
+            'access_token_url' => '{base_url}/oauth2/token',
+            'revoke_token_url' => '{base_url}/oauth2/revoke',
+            'infos_url' => '{base_url}/user',
         ));
 
         $resolver->setRequired(array(
@@ -106,9 +106,9 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setNormalizers(array(
             'authorization_url' => $normalizer,
-            'access_token_url'  => $normalizer,
-            'revoke_token_url'  => $normalizer,
-            'infos_url'         => $normalizer,
+            'access_token_url' => $normalizer,
+            'revoke_token_url' => $normalizer,
+            'infos_url' => $normalizer,
         ));
     }
 }

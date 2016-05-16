@@ -22,14 +22,14 @@ class DeezerResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'name',
-        'realname'       => 'firstname',
-        'email'          => 'email',
-        'firstname'      => 'firstname',
-        'lastname'       => 'lastname',
+        'identifier' => 'id',
+        'nickname' => 'name',
+        'realname' => 'firstname',
+        'email' => 'email',
+        'firstname' => 'firstname',
+        'lastname' => 'lastname',
         'profilepicture' => 'picture',
-        'gender'         => 'gender',
+        'gender' => 'gender',
     );
 
     /**
@@ -41,8 +41,8 @@ class DeezerResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://connect.deezer.com/oauth/auth.php',
-            'access_token_url'  => 'https://connect.deezer.com/oauth/access_token.php',
-            'infos_url'         => 'https://api.deezer.com/user/me',
+            'access_token_url' => 'https://connect.deezer.com/oauth/access_token.php',
+            'infos_url' => 'https://api.deezer.com/user/me',
             'use_bearer_authorization' => false,
         ));
     }

@@ -23,8 +23,8 @@ class DeviantartResourceOnwerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
     protected $paths = array(
-        'identifier'     => 'username',
-        'nickname'       => 'username',
+        'identifier' => 'username',
+        'nickname' => 'username',
         'profilepicture' => 'usericonurl',
     );
 

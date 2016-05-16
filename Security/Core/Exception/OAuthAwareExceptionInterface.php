@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
- * OAuthAwareExceptionInterface
+ * OAuthAwareExceptionInterface.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
@@ -50,7 +50,7 @@ interface OAuthAwareExceptionInterface
     public function getExpiresIn();
 
     /**
-     * Get the oauth secret token 
+     * Get the oauth secret token.
      * 
      * @return null|string
      */

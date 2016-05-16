@@ -23,8 +23,8 @@ json;
 
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'id',
-        'realname'   => 'id',
+        'nickname' => 'id',
+        'realname' => 'id',
     );
 
     public function testGetUserInformation()

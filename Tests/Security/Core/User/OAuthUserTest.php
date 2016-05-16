@@ -56,7 +56,7 @@ class OAuthUserTest extends \PHPUnit_Framework_TestCase
     public function testEquals()
     {
         $otherUser = new OAuthUser('other');
-        $sameUser  = new OAuthUser('asm89');
+        $sameUser = new OAuthUser('asm89');
 
         $this->assertFalse($this->user->equals($otherUser));
         $this->assertTrue($this->user->equals($sameUser));

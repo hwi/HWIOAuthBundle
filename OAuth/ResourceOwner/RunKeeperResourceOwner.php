@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * RunKeeperResourceOwner
+ * RunKeeperResourceOwner.
  *
  * @author Artem Genvald <genvaldartem@gmail.com>
  */
@@ -24,7 +24,7 @@ class RunKeeperResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = array(
-        'realname'       => 'name',
+        'realname' => 'name',
         'profilepicture' => 'medium_picture',
     );
 
@@ -51,8 +51,8 @@ class RunKeeperResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://runkeeper.com/apps/authorize',
-            'access_token_url'  => 'https://runkeeper.com/apps/token',
-            'infos_url'         => 'https://api.runkeeper.com/profile',
+            'access_token_url' => 'https://runkeeper.com/apps/token',
+            'infos_url' => 'https://api.runkeeper.com/profile',
             'user_resource_url' => 'https://api.runkeeper.com/user',
         ));
     }

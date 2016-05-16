@@ -21,11 +21,11 @@ class LinkedinResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "formattedName": "bar"
 }
 json;
-    protected $paths        = array(
-        'identifier'     => 'id',
-        'nickname'       => 'formattedName',
-        'realname'       => 'formattedName',
-        'email'          => 'emailAddress',
+    protected $paths = array(
+        'identifier' => 'id',
+        'nickname' => 'formattedName',
+        'realname' => 'formattedName',
+        'email' => 'emailAddress',
         'profilepicture' => 'pictureUrl',
     );
     protected $csrf = true;
