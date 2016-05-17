@@ -42,6 +42,7 @@
         <parameter key="hwi_oauth.resource_owner.hubic.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\HubicResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.instagram.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\InstagramResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.jira.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\JiraResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.lead_auth.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LeadAuthResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.linkedin.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LinkedinResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.mailru.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\MailRuResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.paypal.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\PaypalResourceOwner</parameter>

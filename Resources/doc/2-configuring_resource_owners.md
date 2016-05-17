@@ -56,6 +56,7 @@ hwi_oauth:
 - [Hubic](resource_owners/hubic.md)
 - [Instagram](resource_owners/instagram.md)
 - [Jira](resource_owners/jira.md)
+- [Lead Auth](resource_owners/lead_auth.md)
 - [Linkedin](resource_owners/linkedin.md)
 - [Mail.ru](resource_owners/mailru.md)
 - [Odnoklassniki](resource_owners/odnoklassniki.md)
