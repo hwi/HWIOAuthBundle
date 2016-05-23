@@ -95,16 +95,8 @@ class OAuthProvider implements AuthenticationProviderInterface
             throw new AuthenticationServiceException('loadUserByOAuthUserResponse() must return a UserInterface.');
         }
 
-        try {
-            $this->userChecker->checkPreAuth($user);
-            $this->userChecker->checkPostAuth($user);
-        } catch (BadCredentialsException $e) {
-            if ($this->hideUserNotFoundExceptions) {
-                throw new BadCredentialsException('Bad credentials', 0, $e);
-            }
-
-            throw $e;
-        }
+        $this->userChecker->checkPreAuth($user);
+        $this->userChecker->checkPostAuth($user);
 
         $token = new OAuthToken($token->getRawToken(), $user->getRoles());
         $token->setResourceOwnerName($resourceOwner->getName());
