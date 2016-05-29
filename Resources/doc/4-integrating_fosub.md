@@ -81,6 +81,7 @@ class User extends FOSUBUser
     {
         return $this->facebookAccessToken;
     }
+}
 ```
 After adding extra properties to User entity, you need to extend base FOSUBUserProvider.
 
@@ -93,7 +94,6 @@ You should extend it if you want to add more advanced behavior. For example out 
 In `MyBundle\Security\Core\User` create class, lets call it `MyFOSUBUserProvider`:
 
 ```php
-
 namespace MyBundle\Security\Core\User;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
@@ -120,7 +120,7 @@ class MyFOSUBUserProvider extends BaseFOSUBProvider
 
             $this->userManager->updateUser($existingUser);
         }
-        //we connect current user, set current user id and token
+        // we connect current user, set current user id and token
         // ...
         $this->userManager->updateUser($user);
     }
@@ -151,7 +151,6 @@ class MyFOSUBUserProvider extends BaseFOSUBProvider
         return $user;
     }
 }
-
 ```
 
 ### 3) Configure user provider as service
