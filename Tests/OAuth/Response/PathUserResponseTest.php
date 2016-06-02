@@ -60,12 +60,12 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
     public function testGetPathsReturnsDefaultDefinedPaths()
     {
         $paths = array(
-            'identifier'     => null,
-            'nickname'       => null,
-            'firstname'      => null,
-            'lastname'       => null,
-            'realname'       => null,
-            'email'          => null,
+            'identifier' => null,
+            'nickname' => null,
+            'firstname' => null,
+            'lastname' => null,
+            'realname' => null,
+            'email' => null,
             'profilepicture' => null,
         );
 
@@ -75,14 +75,14 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
     public function testSetPathsAddsNewPathsToAlreadyDefined()
     {
         $paths = array(
-            'identifier'     => null,
-            'nickname'       => null,
-            'firstname'      => null,
-            'lastname'       => null,
-            'realname'       => null,
-            'email'          => null,
+            'identifier' => null,
+            'nickname' => null,
+            'firstname' => null,
+            'lastname' => null,
+            'realname' => null,
+            'email' => null,
             'profilepicture' => null,
-            'foo'            => 'bar'
+            'foo' => 'bar',
         );
 
         $responseObject = new PathUserResponse();

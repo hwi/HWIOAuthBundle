@@ -14,23 +14,23 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * BufferAppResourceOwner
+ * BufferAppResourceOwner.
  *
  * @author João Paulo Cercal <sistemas@cekurte.com>
  */
 class BufferAppResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'id',
-        'realname'   => 'id',
+        'nickname' => 'id',
+        'realname' => 'id',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -38,8 +38,8 @@ class BufferAppResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://bufferapp.com/oauth2/authorize',
-            'access_token_url'  => 'https://api.bufferapp.com/1/oauth2/token.json',
-            'infos_url'         => 'https://api.bufferapp.com/1/user.json',
+            'access_token_url' => 'https://api.bufferapp.com/1/oauth2/token.json',
+            'infos_url' => 'https://api.bufferapp.com/1/user.json',
         ));
     }
 }

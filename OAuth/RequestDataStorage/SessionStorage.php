@@ -38,7 +38,7 @@ class SessionStorage implements RequestDataStorageInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function fetch(ResourceOwnerInterface $resourceOwner, $key, $type = 'token')
     {
@@ -54,7 +54,7 @@ class SessionStorage implements RequestDataStorageInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function save(ResourceOwnerInterface $resourceOwner, $value, $type = 'token')
     {

@@ -15,25 +15,25 @@ use Buzz\Message\RequestInterface as HttpRequestInterfacee;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * TwitchResourceOwner
+ * TwitchResourceOwner.
  *
  * @author Simon Bräuer <redshark1802>
  */
 class TwitchResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => '_id',
-        'nickname'       => 'display_name',
-        'realname'       => 'name',
-        'email'          => 'email',
+        'identifier' => '_id',
+        'nickname' => 'display_name',
+        'realname' => 'name',
+        'email' => 'email',
         'profilepicture' => 'logo',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
@@ -41,7 +41,7 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
@@ -50,16 +50,16 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'        => 'https://api.twitch.tv/kraken/oauth2/authorize',
-            'access_token_url'         => 'https://api.twitch.tv/kraken/oauth2/token',
-            'infos_url'                => 'https://api.twitch.tv/kraken/user',
+            'authorization_url' => 'https://api.twitch.tv/kraken/oauth2/authorize',
+            'access_token_url' => 'https://api.twitch.tv/kraken/oauth2/token',
+            'infos_url' => 'https://api.twitch.tv/kraken/user',
             'use_bearer_authorization' => false,
         ));
     }

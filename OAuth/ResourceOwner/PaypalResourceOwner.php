@@ -15,34 +15,34 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * PaypalResourceOwner
+ * PaypalResourceOwner.
  *
  * @author Berny Cantos <be@rny.cc>
  */
 class PaypalResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'user_id',
-        'nickname'   => 'email',
-        'email'      => 'email',
+        'nickname' => 'email',
+        'email' => 'email',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'sandbox'           => false,
-            'scope'             => 'openid email',
+            'sandbox' => false,
+            'scope' => 'openid email',
             'authorization_url' => 'https://www.paypal.com/webapps/auth/protocol/openidconnect/v1/authorize',
-            'access_token_url'  => 'https://api.paypal.com/v1/identity/openidconnect/tokenservice',
-            'infos_url'         => 'https://api.paypal.com/v1/identity/openidconnect/userinfo/?schema=openid',
+            'access_token_url' => 'https://api.paypal.com/v1/identity/openidconnect/tokenservice',
+            'infos_url' => 'https://api.paypal.com/v1/identity/openidconnect/userinfo/?schema=openid',
         ));
 
         if (method_exists($resolver, 'setDefined')) {
@@ -52,7 +52,6 @@ class PaypalResourceOwner extends GenericOAuth2ResourceOwner
                 'sandbox' => 'bool',
             ));
         }
-
 
         $sandboxTransformation = function (Options $options, $value) {
             if (!$options['sandbox']) {
@@ -72,8 +71,8 @@ class PaypalResourceOwner extends GenericOAuth2ResourceOwner
         } else {
             $resolver->setNormalizers(array(
                 'authorization_url' => $sandboxTransformation,
-                'access_token_url'  => $sandboxTransformation,
-                'infos_url'         => $sandboxTransformation,
+                'access_token_url' => $sandboxTransformation,
+                'infos_url' => $sandboxTransformation,
             ));
         }
     }

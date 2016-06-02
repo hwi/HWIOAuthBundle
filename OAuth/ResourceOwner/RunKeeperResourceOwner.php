@@ -14,36 +14,36 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * RunKeeperResourceOwner
+ * RunKeeperResourceOwner.
  *
  * @author Artem Genvald <genvaldartem@gmail.com>
  */
 class RunKeeperResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'realname'       => 'name',
-        'profilepicture' => 'medium_picture'
+        'realname' => 'name',
+        'profilepicture' => 'medium_picture',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserResource($accessToken)
     {
         $response = $this->httpRequest(
             $this->normalizeUrl($this->options['user_resource_url']),
             null,
-            array('Authorization: Bearer ' . $accessToken)
+            array('Authorization: Bearer '.$accessToken)
         );
 
         return $this->getResponseContent($response);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -51,9 +51,9 @@ class RunKeeperResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://runkeeper.com/apps/authorize',
-            'access_token_url'  => 'https://runkeeper.com/apps/token',
-            'infos_url'         => 'https://api.runkeeper.com/profile',
-            'user_resource_url' => 'https://api.runkeeper.com/user'
+            'access_token_url' => 'https://runkeeper.com/apps/token',
+            'infos_url' => 'https://api.runkeeper.com/profile',
+            'user_resource_url' => 'https://api.runkeeper.com/user',
         ));
     }
 }

@@ -14,58 +14,58 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * YoutubeResourceOwner
+ * YoutubeResourceOwner.
  *
  * @author Gennady Telegin <gtelegin@gmail.com>
  */
 class YoutubeResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'items.0.id',
-        'nickname'       => 'items.0.snippet.title',
-        'realname'       => 'items.0.snippet.title',
-        'email'          => 'email',
+        'identifier' => 'items.0.id',
+        'nickname' => 'items.0.snippet.title',
+        'realname' => 'items.0.snippet.title',
+        'email' => 'email',
         'profilepicture' => 'items.0.snippet.thumbnails.high.url',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         return parent::getAuthorizationUrl($redirectUri, array_merge(array(
-            'access_type'             => $this->options['access_type'],
-            'approval_prompt'         => $this->options['approval_prompt'],
+            'access_type' => $this->options['access_type'],
+            'approval_prompt' => $this->options['approval_prompt'],
             'request_visible_actions' => $this->options['request_visible_actions'],
-            'hd'                      => $this->options['hd'],
-            'prompt'                  => $this->options['prompt']
+            'hd' => $this->options['hd'],
+            'prompt' => $this->options['prompt'],
         ), $extraParameters));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'       => 'https://accounts.google.com/o/oauth2/auth',
-            'access_token_url'        => 'https://accounts.google.com/o/oauth2/token',
-            'revoke_token_url'        => 'https://accounts.google.com/o/oauth2/revoke',
-            'infos_url'               => 'https://www.googleapis.com/youtube/v3/channels?part=id,snippet&mine=true',
-            'scope'                   => 'https://www.googleapis.com/auth/youtube.readonly',
+            'authorization_url' => 'https://accounts.google.com/o/oauth2/auth',
+            'access_token_url' => 'https://accounts.google.com/o/oauth2/token',
+            'revoke_token_url' => 'https://accounts.google.com/o/oauth2/revoke',
+            'infos_url' => 'https://www.googleapis.com/youtube/v3/channels?part=id,snippet&mine=true',
+            'scope' => 'https://www.googleapis.com/auth/youtube.readonly',
 
-            'access_type'             => null,
-            'approval_prompt'         => null,
-            'display'                 => null,
+            'access_type' => null,
+            'approval_prompt' => null,
+            'display' => null,
             // Identifying a particular hosted domain account to be accessed (for example, 'mycollege.edu')
-            'hd'                      => null,
-            'login_hint'              => null,
-            'prompt'                  => null,
+            'hd' => null,
+            'login_hint' => null,
+            'prompt' => null,
             'request_visible_actions' => null,
         ));
 
@@ -83,11 +83,11 @@ class YoutubeResourceOwner extends GenericOAuth2ResourceOwner
             ;
         } else {
             $resolver->setAllowedValues(array(
-                'access_type'     => array('online', 'offline', null),
+                'access_type' => array('online', 'offline', null),
                 'approval_prompt' => array('force', 'auto', null),
-                'display'         => array('page', 'popup', 'touch', 'wap', null),
-                'login_hint'      => array('email address', 'sub', null),
-                'prompt'          => array(null, 'consent', 'select_account', null),
+                'display' => array('page', 'popup', 'touch', 'wap', null),
+                'login_hint' => array('email address', 'sub', null),
+                'prompt' => array(null, 'consent', 'select_account', null),
             ));
         }
     }

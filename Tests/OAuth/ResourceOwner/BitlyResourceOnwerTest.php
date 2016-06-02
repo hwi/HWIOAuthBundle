@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitlyResourceOwner;
 
-class BitlyResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+class BitlyResourceOnwerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = <<<json
 {
@@ -26,9 +26,9 @@ class BitlyResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
     protected $paths = array(
-        'identifier'     => 'data.login',
-        'nickname'       => 'data.display_name',
-        'realname'       => 'data.full_name',
+        'identifier' => 'data.login',
+        'nickname' => 'data.display_name',
+        'realname' => 'data.full_name',
         'profilepicture' => 'data.profile_image',
     );
 

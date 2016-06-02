@@ -14,24 +14,24 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * StravaResourceOwner
+ * StravaResourceOwner.
  *
  * @author Artem Genvald <genvaldartem@gmail.com>
  */
 class StravaResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'realname'       => array('firstname', 'lastname'),
+        'identifier' => 'id',
+        'realname' => array('firstname', 'lastname'),
         'profilepicture' => 'profile_medium',
-        'email'          => 'email'
+        'email' => 'email',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -39,8 +39,8 @@ class StravaResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://www.strava.com/oauth/authorize',
-            'access_token_url'  => 'https://www.strava.com/oauth/token',
-            'infos_url'         => 'https://www.strava.com/api/v3/athlete'
+            'access_token_url' => 'https://www.strava.com/oauth/token',
+            'infos_url' => 'https://www.strava.com/api/v3/athlete',
         ));
     }
 }

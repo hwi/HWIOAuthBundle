@@ -19,19 +19,19 @@ class HubicResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     protected $userResponse = '{ "email": "1", "firstname": "bar", "activated": true , "creationDate": "2013-12-31T19:09:42+01:00", "language": "fr", "status": "ok", "offer": "25g", "lastname": "foo" }';
     protected $paths = array(
         'identifier' => 'email',
-        'nickname'   => 'firstname',
-        'firstname'  => 'firstname',
-        'lastname'   => 'lastname',
-        'realname'   => 'firstname',
-        'email'      => 'email',
+        'nickname' => 'firstname',
+        'firstname' => 'firstname',
+        'lastname' => 'lastname',
+        'realname' => 'firstname',
+        'email' => 'email',
     );
 
     public function testGetUserInformationFirstAndLastName()
     {
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
 
-        /**
-         * @var $userResponse AbstractUserResponse
+        /*
+         * @var AbstractUserResponse
          */
         $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 

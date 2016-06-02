@@ -59,12 +59,12 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
     public function __construct(UserManagerInterface $userManager, array $properties)
     {
         $this->userManager = $userManager;
-        $this->properties  = array_merge($this->properties, $properties);
-        $this->accessor    = PropertyAccess::createPropertyAccessor();
+        $this->properties = array_merge($this->properties, $properties);
+        $this->accessor = PropertyAccess::createPropertyAccessor();
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function loadUserByUsername($username)
     {
@@ -92,7 +92,7 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
@@ -118,11 +118,11 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
 
         $this->userManager->updateUser($user);
     }
-    
+
     /**
-     * Disconnects a user
+     * Disconnects a user.
      * 
-     * @param UserInterface $user
+     * @param UserInterface         $user
      * @param UserResponseInterface $response
      */
     public function disconnect(UserInterface $user, UserResponseInterface $response)
@@ -134,7 +134,7 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function refreshUser(UserInterface $user)
     {
@@ -157,7 +157,7 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supportsClass($class)
     {

@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 
 /**
- * Code bases on FOSUserBundle tests
+ * Code bases on FOSUserBundle tests.
  */
 class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
 {
@@ -81,7 +81,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['any_name']['paths'] = array(
-            'path' => ''
+            'path' => '',
         );
 
         $loader->load(array($config), $this->containerBuilder);
@@ -95,8 +95,8 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['unknown'] = array(
-            'type'          => 'unknown',
-            'client_id'     => 'client_id',
+            'type' => 'unknown',
+            'client_id' => 'client_id',
             'client_secret' => 'client_secret',
         );
 
@@ -112,7 +112,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = array(
-            $invalidConfig
+            $invalidConfig,
         );
 
         $loader->load(array($config), $this->containerBuilder);
@@ -127,8 +127,8 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $config = $this->getEmptyConfig();
         $config['resource_owners']['some_service']['paths'] = array(
             'identifier' => 'some_id',
-            'nickname'   => 'some_nick',
-            'realname'   => 'some_name',
+            'nickname' => 'some_nick',
+            'realname' => 'some_name',
         );
 
         $loader->load(array($config), $this->containerBuilder);
@@ -152,17 +152,17 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = array(
             'valid' => array(
-                'type'              => 'oauth1',
-                'client_id'         => 'client_id',
-                'client_secret'     => 'client_secret',
+                'type' => 'oauth1',
+                'client_id' => 'client_id',
+                'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
                 'request_token_url' => 'http://test.pl/request_token_url',
-                'access_token_url'  => 'http://test.pl/access_token_url',
-                'infos_url'         => 'http://test.pl/infos_url',
-                'paths'             => array(
+                'access_token_url' => 'http://test.pl/access_token_url',
+                'infos_url' => 'http://test.pl/infos_url',
+                'paths' => array(
                     'identifier' => 'some_id',
-                    'nickname'   => 'some_nick',
-                    'realname'   => 'some_name',
+                    'nickname' => 'some_nick',
+                    'realname' => 'some_name',
                 ),
             ),
         );
@@ -176,16 +176,16 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = array(
             'valid' => array(
-                'type'              => 'oauth2',
-                'client_id'         => 'client_id',
-                'client_secret'     => 'client_secret',
+                'type' => 'oauth2',
+                'client_id' => 'client_id',
+                'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
-                'access_token_url'  => 'http://test.pl/access_token_url',
-                'infos_url'         => 'http://test.pl/infos_url',
-                'paths'             => array(
+                'access_token_url' => 'http://test.pl/access_token_url',
+                'infos_url' => 'http://test.pl/infos_url',
+                'paths' => array(
                     'identifier' => 'some_id',
-                    'nickname'   => 'some_nick',
-                    'realname'   => 'some_name',
+                    'nickname' => 'some_nick',
+                    'realname' => 'some_name',
                 ),
             ),
         );
@@ -199,16 +199,16 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = array(
             'valid' => array(
-                'type'              => 'oauth2',
-                'client_id'         => 'client_id',
-                'client_secret'     => 'client_secret',
+                'type' => 'oauth2',
+                'client_id' => 'client_id',
+                'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
-                'access_token_url'  => 'http://test.pl/access_token_url',
-                'infos_url'         => 'http://test.pl/infos_url',
-                'paths'             => array(
+                'access_token_url' => 'http://test.pl/access_token_url',
+                'infos_url' => 'http://test.pl/infos_url',
+                'paths' => array(
                     'identifier' => 'some_id',
-                    'nickname'   => 'some_nick',
-                    'realname'   => array('first_name', 'last_name'),
+                    'nickname' => 'some_nick',
+                    'realname' => array('first_name', 'last_name'),
                 ),
             ),
         );
@@ -222,12 +222,12 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = array(
             'valid' => array(
-                'type'                => 'oauth2',
-                'client_id'           => 'client_id',
-                'client_secret'       => 'client_secret',
-                'authorization_url'   => 'http://test.pl/authorization_url',
-                'access_token_url'    => 'http://test.pl/access_token_url',
-                'infos_url'           => 'http://test.pl/infos_url',
+                'type' => 'oauth2',
+                'client_id' => 'client_id',
+                'client_secret' => 'client_secret',
+                'authorization_url' => 'http://test.pl/authorization_url',
+                'access_token_url' => 'http://test.pl/access_token_url',
+                'infos_url' => 'http://test.pl/infos_url',
                 'user_response_class' => 'SomeClassName',
             ),
         );
@@ -258,87 +258,87 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             'missing_request_token_url' => array(
-                'type'              => 'oauth1',
-                'client_id'         => 'client_id',
-                'client_secret'     => 'client_secret',
+                'type' => 'oauth1',
+                'client_id' => 'client_id',
+                'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
-                'access_token_url'  => 'http://test.pl/access_token_url',
-                'infos_url'         => 'http://test.pl/infos_url',
-                'paths'             => array(
+                'access_token_url' => 'http://test.pl/access_token_url',
+                'infos_url' => 'http://test.pl/infos_url',
+                'paths' => array(
                     'identifier' => 'some_id',
-                    'nickname'   => 'some_nick',
-                    'realname'   => 'some_name',
-                )
+                    'nickname' => 'some_nick',
+                    'realname' => 'some_name',
+                ),
             ),
             'missing_client_secret' => array(
-                'type'              => 'oauth1',
-                'client_id'         => 'client_id',
+                'type' => 'oauth1',
+                'client_id' => 'client_id',
             ),
             'missing_client_id' => array(
-                'type'              => 'oauth1',
-                'client_secret'     => 'client_secret',
+                'type' => 'oauth1',
+                'client_secret' => 'client_secret',
             ),
             'missing_paths' => array(
-                'type'              => 'oauth2',
-                'client_id'         => 'client_id',
-                'client_secret'     => 'client_secret',
+                'type' => 'oauth2',
+                'client_id' => 'client_id',
+                'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
-                'access_token_url'  => 'http://test.pl/access_token_url',
-                'infos_url'         => 'http://test.pl/infos_url',
+                'access_token_url' => 'http://test.pl/access_token_url',
+                'infos_url' => 'http://test.pl/infos_url',
             ),
             'missing_some_of_paths' => array(
-                'type'              => 'oauth2',
-                'client_id'         => 'client_id',
-                'client_secret'     => 'client_secret',
+                'type' => 'oauth2',
+                'client_id' => 'client_id',
+                'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
-                'access_token_url'  => 'http://test.pl/access_token_url',
-                'infos_url'         => 'http://test.pl/infos_url',
-                'paths'             => array(
+                'access_token_url' => 'http://test.pl/access_token_url',
+                'infos_url' => 'http://test.pl/infos_url',
+                'paths' => array(
                     'identifier' => 'some_id',
-                    'realname'   => 'some_name',
-                )
+                    'realname' => 'some_name',
+                ),
             ),
             'empty_paths' => array(
-                'type'              => 'oauth2',
-                'client_id'         => 'client_id',
-                'client_secret'     => 'client_secret',
+                'type' => 'oauth2',
+                'client_id' => 'client_id',
+                'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
-                'access_token_url'  => 'http://test.pl/access_token_url',
-                'infos_url'         => 'http://test.pl/infos_url',
-                'paths'             => array()
+                'access_token_url' => 'http://test.pl/access_token_url',
+                'infos_url' => 'http://test.pl/infos_url',
+                'paths' => array(),
             ),
             'path_is_null' => array(
-                'type'              => 'oauth2',
-                'client_id'         => 'client_id',
-                'client_secret'     => 'client_secret',
+                'type' => 'oauth2',
+                'client_id' => 'client_id',
+                'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
-                'access_token_url'  => 'http://test.pl/access_token_url',
-                'infos_url'         => 'http://test.pl/infos_url',
-                'paths'             => array(
+                'access_token_url' => 'http://test.pl/access_token_url',
+                'infos_url' => 'http://test.pl/infos_url',
+                'paths' => array(
                     'path' => null,
-                )
+                ),
             ),
             'path_is_empty_array' => array(
-                'type'              => 'oauth2',
-                'client_id'         => 'client_id',
-                'client_secret'     => 'client_secret',
+                'type' => 'oauth2',
+                'client_id' => 'client_id',
+                'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
-                'access_token_url'  => 'http://test.pl/access_token_url',
-                'infos_url'         => 'http://test.pl/infos_url',
-                'paths'             => array(
+                'access_token_url' => 'http://test.pl/access_token_url',
+                'infos_url' => 'http://test.pl/infos_url',
+                'paths' => array(
                     'path' => array(),
-                )
+                ),
             ),
             'path_is_empty_string' => array(
-                'type'              => 'oauth2',
-                'client_id'         => 'client_id',
-                'client_secret'     => 'client_secret',
+                'type' => 'oauth2',
+                'client_id' => 'client_id',
+                'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
-                'access_token_url'  => 'http://test.pl/access_token_url',
-                'infos_url'         => 'http://test.pl/infos_url',
-                'paths'             => array(
+                'access_token_url' => 'http://test.pl/access_token_url',
+                'infos_url' => 'http://test.pl/infos_url',
+                'paths' => array(
                     'path' => '',
-                )
+                ),
             ),
         );
     }
@@ -483,7 +483,7 @@ EOF;
     }
 
     /**
-     * @param mixed $value
+     * @param mixed  $value
      * @param string $key
      */
     private function assertParameter($value, $key)

@@ -25,15 +25,15 @@ class YahooResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 json;
     protected $paths = array(
         'identifier' => 'profile.guid',
-        'nickname'   => 'profile.nickname',
-        'realname'   => 'profile.givenName',
+        'nickname' => 'profile.nickname',
+        'realname' => 'profile.givenName',
     );
 
     public function testGetUserInformation()
     {
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
 
-        $accessToken  = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1);
+        $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1);
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('1', $userResponse->getUsername());
@@ -45,13 +45,13 @@ json;
 
     public function testCustomResponseClass()
     {
-        $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner('oauth1', array('user_response_class' => $class));
 
         $this->mockBuzz();
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+        /*
+         * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
          */
         $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1));
 

@@ -12,29 +12,28 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
 /**
- * AzureResourceOwner
+ * AzureResourceOwner.
  *
  * @author Baptiste Clavié <clavie.b@gmail.com>
  */
 class AzureResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'sub',
-        'nickname'       => 'unique_name',
-        'realname'       => array('given_name', 'family_name'),
-        'email'          => array('upn', 'email'),
+        'identifier' => 'sub',
+        'nickname' => 'unique_name',
+        'realname' => array('given_name', 'family_name'),
+        'email' => array('upn', 'email'),
         'profilepicture' => null,
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function configure()
     {
@@ -43,7 +42,7 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
@@ -51,7 +50,7 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
@@ -59,12 +58,12 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         // from http://stackoverflow.com/a/28748285/624544
-        list(, $jwt, ) = explode('.', $accessToken['id_token'], 3);
+        list(, $jwt) = explode('.', $accessToken['id_token'], 3);
 
         // if the token was urlencoded, do some fixes to ensure that it is valid base64 encoded
         $jwt = str_replace('-', '+', $jwt);
@@ -96,7 +95,7 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -111,7 +110,7 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
 
             'application' => 'common',
             'api_version' => 'v1.0',
-            'csrf' => true
+            'csrf' => true,
         ));
     }
 }

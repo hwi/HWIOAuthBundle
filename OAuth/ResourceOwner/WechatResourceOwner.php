@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\MessageInterface as HttpMessageInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,21 +19,21 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class WechatResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'openid',
-        'nickname'       => 'nickname',
-        'realname'       => 'nickname',
+        'identifier' => 'openid',
+        'nickname' => 'nickname',
+        'realname' => 'nickname',
         'profilepicture' => 'headimgurl',
     );
 
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
         $parameters = array_merge(array(
-            'appid'      => $this->options['client_id'],
-            'secret'     => $this->options['client_secret'],
-            'code'       => $request->query->get('code'),
+            'appid' => $this->options['client_id'],
+            'secret' => $this->options['client_secret'],
+            'code' => $request->query->get('code'),
             'grant_type' => 'authorization_code',
         ), $extraParameters);
 
@@ -47,16 +46,16 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         $parameters = array_merge(array(
-            'appid'         => $this->options['client_id'],
-            'redirect_uri'  => $redirectUri,
+            'appid' => $this->options['client_id'],
+            'redirect_uri' => $redirectUri,
             'response_type' => 'code',
-            'scope'         => $this->options['scope'],
-            'state'         => $this->state ? urlencode($this->state) : null,
+            'scope' => $this->options['scope'],
+            'state' => $this->state ? urlencode($this->state) : null,
         ), $extraParameters);
 
         ksort($parameters); // i don't know why, but the order of the parameters REALLY matters
@@ -65,7 +64,7 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken = null, array $extraParameters = array())
     {
@@ -75,7 +74,7 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
 
             $url = $this->normalizeUrl($this->options['infos_url'], array(
                 'access_token' => $accessToken['access_token'],
-                'openid'       => $openid,
+                'openid' => $openid,
             ));
 
             $response = $this->doGetUserInformationRequest($url);
@@ -97,7 +96,7 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -105,13 +104,13 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://open.weixin.qq.com/connect/oauth2/authorize',
-            'access_token_url'  => 'https://api.weixin.qq.com/sns/oauth2/access_token',
-            'infos_url'         => 'https://api.weixin.qq.com/sns/userinfo',
+            'access_token_url' => 'https://api.weixin.qq.com/sns/oauth2/access_token',
+            'infos_url' => 'https://api.weixin.qq.com/sns/userinfo',
         ));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function validateResponseContent($response)
     {

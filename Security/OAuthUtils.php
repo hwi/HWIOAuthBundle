@@ -25,12 +25,12 @@ use Symfony\Component\Security\Http\HttpUtils;
  */
 class OAuthUtils
 {
-    const SIGNATURE_METHOD_HMAC      = 'HMAC-SHA1';
-    const SIGNATURE_METHOD_RSA       = 'RSA-SHA1';
+    const SIGNATURE_METHOD_HMAC = 'HMAC-SHA1';
+    const SIGNATURE_METHOD_RSA = 'RSA-SHA1';
     const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
 
     /**
-     * @var boolean
+     * @var bool
      */
     protected $connect;
 
@@ -53,7 +53,7 @@ class OAuthUtils
 
     /**
      * SecurityContextInterface for Symfony <2.6
-     * To be removed with all related logic (constructor, configs, extension)
+     * To be removed with all related logic (constructor, configs, extension).
      *
      * @var AuthorizationCheckerInterface|SecurityContextInterface
      */
@@ -62,7 +62,7 @@ class OAuthUtils
     /**
      * @param HttpUtils                                              $httpUtils
      * @param AuthorizationCheckerInterface|SecurityContextInterface $authorizationChecker
-     * @param boolean                                                $connect
+     * @param bool                                                   $connect
      */
     public function __construct(HttpUtils $httpUtils, $authorizationChecker, $connect)
     {
@@ -70,10 +70,10 @@ class OAuthUtils
             throw new \InvalidArgumentException('Argument 2 should be an instance of Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface or Symfony\Component\Security\Core\SecurityContextInterface');
         }
 
-        $this->httpUtils            = $httpUtils;
+        $this->httpUtils = $httpUtils;
         $this->authorizationChecker = $authorizationChecker;
-        $this->securityContext      = $this->authorizationChecker;
-        $this->connect              = $connect;
+        $this->securityContext = $this->authorizationChecker;
+        $this->connect = $connect;
     }
 
     /**
@@ -154,7 +154,7 @@ class OAuthUtils
     }
 
     /**
-     * Sign the request parameters
+     * Sign the request parameters.
      *
      * @param string $method          Request method
      * @param string $url             Request url
@@ -231,7 +231,7 @@ class OAuthUtils
                 }
 
                 $privateKey = openssl_pkey_get_private(file_get_contents($clientSecret), $tokenSecret);
-                $signature  = false;
+                $signature = false;
 
                 openssl_sign($baseString, $signature, $privateKey);
                 openssl_free_key($privateKey);
@@ -286,6 +286,6 @@ class OAuthUtils
             }
         }
 
-        return null;
+        return;
     }
 }

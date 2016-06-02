@@ -16,7 +16,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * AbstractUserResponse
+ * AbstractUserResponse.
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
@@ -42,7 +42,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
      */
     public function getEmail()
     {
-        return null;
+        return;
     }
 
     /**
@@ -50,7 +50,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
      */
     public function getProfilePicture()
     {
-        return null;
+        return;
     }
 
     /**

@@ -15,7 +15,7 @@ use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * GitHubResourceOwner
+ * GitHubResourceOwner.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
@@ -23,18 +23,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class GitHubResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'login',
-        'realname'       => 'name',
-        'email'          => 'email',
+        'identifier' => 'id',
+        'nickname' => 'login',
+        'realname' => 'name',
+        'email' => 'email',
         'profilepicture' => 'avatar_url',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeToken($token)
     {
@@ -49,25 +49,25 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://github.com/login/oauth/authorize',
-            'access_token_url'    => 'https://github.com/login/oauth/access_token',
-            'revoke_token_url'    => 'https://api.github.com/applications/%s/tokens/%s',
-            'infos_url'           => 'https://api.github.com/user',
-            'emails_url'          => 'https://api.github.com/user/emails',
+            'authorization_url' => 'https://github.com/login/oauth/authorize',
+            'access_token_url' => 'https://github.com/login/oauth/access_token',
+            'revoke_token_url' => 'https://api.github.com/applications/%s/tokens/%s',
+            'infos_url' => 'https://api.github.com/user',
+            'emails_url' => 'https://api.github.com/user/emails',
 
             'use_commas_in_scope' => true,
         ));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {

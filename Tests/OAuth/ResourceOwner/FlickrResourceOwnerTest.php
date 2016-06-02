@@ -17,8 +17,8 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected $paths = array(
         'identifier' => 'user_nsid',
-        'nickname'   => 'username',
-        'realname'   => 'fullname',
+        'nickname' => 'username',
+        'realname' => 'fullname',
     );
 
     /**
@@ -56,7 +56,7 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         ;
 
         $this->assertEquals(
-            $this->options['authorization_url'] . '&oauth_token=token&perms=read&nojsoncallback=1',
+            $this->options['authorization_url'].'&oauth_token=token&perms=read&nojsoncallback=1',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -66,7 +66,7 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
      */
     public function testCustomResponseClass()
     {
-        $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         /* @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */

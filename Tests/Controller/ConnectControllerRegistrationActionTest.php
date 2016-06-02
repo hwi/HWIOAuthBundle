@@ -4,7 +4,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 
-class ConnectConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
+class ConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
 {
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException

@@ -25,10 +25,10 @@ class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 json;
 
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'login',
-        'realname'       => 'name',
-        'email'          => 'email',
+        'identifier' => 'id',
+        'nickname' => 'login',
+        'realname' => 'name',
+        'email' => 'email',
         'profilepicture' => 'avatar_url',
     );
 

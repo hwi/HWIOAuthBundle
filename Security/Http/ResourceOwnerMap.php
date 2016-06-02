@@ -54,9 +54,9 @@ class ResourceOwnerMap implements ContainerAwareInterface
      */
     public function __construct(HttpUtils $httpUtils, array $possibleResourceOwners, $resourceOwners)
     {
-        $this->httpUtils              = $httpUtils;
+        $this->httpUtils = $httpUtils;
         $this->possibleResourceOwners = $possibleResourceOwners;
-        $this->resourceOwners         = $resourceOwners;
+        $this->resourceOwners = $resourceOwners;
     }
 
     /**
@@ -89,7 +89,7 @@ class ResourceOwnerMap implements ContainerAwareInterface
     public function getResourceOwnerByName($name)
     {
         if (!$this->hasResourceOwnerByName($name)) {
-            return null;
+            return;
         }
 
         return $this->container->get('hwi_oauth.resource_owner.'.$name);
@@ -110,7 +110,7 @@ class ResourceOwnerMap implements ContainerAwareInterface
             }
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -126,7 +126,7 @@ class ResourceOwnerMap implements ContainerAwareInterface
             return $this->resourceOwners[$name];
         }
 
-        return null;
+        return;
     }
 
     /**

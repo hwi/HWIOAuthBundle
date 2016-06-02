@@ -4,7 +4,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 
-class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
+class ConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
 {
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException

@@ -23,10 +23,10 @@ class TrelloResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 }
 json;
     protected $paths = array(
-        'identifier'     => '_id',
-        'nickname'       => 'username',
-        'realname'       => 'fullName',
-        'email'          => 'email',
+        'identifier' => '_id',
+        'nickname' => 'username',
+        'realname' => 'fullName',
+        'email' => 'email',
         'profilepicture' => 'avatarSource',
     );
 

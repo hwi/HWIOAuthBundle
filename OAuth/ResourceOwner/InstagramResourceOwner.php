@@ -15,24 +15,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 
 /**
- * InstagramResourceOwner
+ * InstagramResourceOwner.
  *
  * @author Jean-Christophe Cuvelier <jcc@atomseeds.com>
  */
 class InstagramResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'      => 'data.id',
-        'nickname'        => 'data.username',
-        'realname'        => 'data.full_name',
-        'profilepicture'  => 'data.profile_picture',
+        'identifier' => 'data.id',
+        'nickname' => 'data.username',
+        'realname' => 'data.full_name',
+        'profilepicture' => 'data.profile_picture',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
@@ -40,19 +40,19 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'         => 'https://api.instagram.com/oauth/authorize',
-            'access_token_url'          => 'https://api.instagram.com/oauth/access_token',
-            'infos_url'                 => 'https://api.instagram.com/v1/users/self',
+            'authorization_url' => 'https://api.instagram.com/oauth/authorize',
+            'access_token_url' => 'https://api.instagram.com/oauth/access_token',
+            'infos_url' => 'https://api.instagram.com/v1/users/self',
 
             // Instagram supports authentication with only one defined URL
-            'auth_with_one_url'        => true,
+            'auth_with_one_url' => true,
 
             'use_bearer_authorization' => false,
         ));

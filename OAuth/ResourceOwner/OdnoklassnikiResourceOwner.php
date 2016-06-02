@@ -15,30 +15,30 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * OdnoklassnikiResourceOwner
+ * OdnoklassnikiResourceOwner.
  *
  * @author Sergey Polischook <spolischook@gmail.com>
  */
 class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'uid',
-        'nickname'   => 'username',
-        'realname'   => 'name',
+        'nickname' => 'username',
+        'realname' => 'name',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $parameters = array(
-            'access_token'    => $accessToken['access_token'],
+            'access_token' => $accessToken['access_token'],
             'application_key' => $this->options['application_key'],
-            'sig'             => md5(sprintf('application_key=%smethod=users.getCurrentUser%s', $this->options['application_key'], md5($accessToken['access_token'].$this->options['client_secret']))),
+            'sig' => md5(sprintf('application_key=%smethod=users.getCurrentUser%s', $this->options['application_key'], md5($accessToken['access_token'].$this->options['client_secret']))),
         );
         $url = $this->normalizeUrl($this->options['infos_url'], $parameters);
 
@@ -53,7 +53,7 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -61,10 +61,10 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'http://www.odnoklassniki.ru/oauth/authorize',
-            'access_token_url'  => 'http://api.odnoklassniki.ru/oauth/token.do',
-            'infos_url'         => 'http://api.odnoklassniki.ru/fb.do?method=users.getCurrentUser',
+            'access_token_url' => 'http://api.odnoklassniki.ru/oauth/token.do',
+            'infos_url' => 'http://api.odnoklassniki.ru/fb.do?method=users.getCurrentUser',
 
-            'application_key'   => null,
+            'application_key' => null,
         ));
     }
 }

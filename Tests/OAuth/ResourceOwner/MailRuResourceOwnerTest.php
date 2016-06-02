@@ -27,8 +27,8 @@ json;
 
     protected $paths = array(
         'identifier' => 'user_id',
-        'nickname'   => 'name',
-        'email'      => 'email',
+        'nickname' => 'name',
+        'email' => 'email',
     );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)

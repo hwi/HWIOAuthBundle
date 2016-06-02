@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth;
 
 /**
- * ResponseInterface
+ * ResponseInterface.
  *
  * @author Alexander <iam.asm89@gmail.com>
  */

@@ -30,9 +30,9 @@ class TraktResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 json;
 
     protected $paths = array(
-        'identifier'     => 'username',
-        'nickname'       => 'username',
-        'realname'       => 'name',
+        'identifier' => 'username',
+        'nickname' => 'username',
+        'realname' => 'name',
         'profilepicture' => 'images.avatar.full',
     );
 
@@ -40,7 +40,7 @@ json;
     {
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
 
-        $accessToken  = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'access_token' => 'token');
+        $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'access_token' => 'token');
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('georges', $userResponse->getUsername());

@@ -14,29 +14,29 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * DisqusResourceOwner
+ * DisqusResourceOwner.
  *
  * @author Alexander Müller <amr@kapthon.com>
  */
 class DisqusResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'response.id',
-        'nickname'   => 'response.username',
-        'realname'   => 'response.name',
+        'nickname' => 'response.username',
+        'realname' => 'response.name',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         /* DISQUS requires api key and secret for user information requests */
         $url = $this->normalizeUrl($url, array(
-            'api_key'    => $this->options['client_id'],
+            'api_key' => $this->options['client_id'],
             'api_secret' => $this->options['client_secret'],
         ));
 
@@ -44,18 +44,18 @@ class DisqusResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://disqus.com/api/oauth/2.0/authorize/',
-            'access_token_url'    => 'https://disqus.com/api/oauth/2.0/access_token/',
-            'infos_url'           => 'https://disqus.com/api/3.0/users/details.json',
+            'authorization_url' => 'https://disqus.com/api/oauth/2.0/authorize/',
+            'access_token_url' => 'https://disqus.com/api/oauth/2.0/access_token/',
+            'infos_url' => 'https://disqus.com/api/3.0/users/details.json',
 
-            'scope'               => 'read',
+            'scope' => 'read',
 
             'use_commas_in_scope' => true,
         ));

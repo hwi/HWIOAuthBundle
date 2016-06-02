@@ -18,7 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 
 /**
- * FiwareResourceOwner
+ * FiwareResourceOwner.
  *
  * Resource owner for the fiware keyrock idm oauth 2.0 service
  *
@@ -29,28 +29,28 @@ use Buzz\Message\RequestInterface as HttpRequestInterface;
 class FiwareResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'nickName',
-        'realname'       => 'displayName',
-        'email'          => 'email',
+        'identifier' => 'id',
+        'nickname' => 'nickName',
+        'realname' => 'displayName',
+        'email' => 'email',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
         $parameters = array_merge(array(
-            'code'          => $request->query->get('code'),
-            'grant_type'    => 'authorization_code',
-            'redirect_uri'  => $redirectUri,
+            'code' => $request->query->get('code'),
+            'grant_type' => 'authorization_code',
+            'redirect_uri' => $redirectUri,
         ), $extraParameters);
 
         $headers = array(
-            'Authorization: Basic ' . base64_encode($this->options['client_id'] . ':' . $this->options['client_secret']),
+            'Authorization: Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret']),
             'Content-Type: application/x-www-form-urlencoded',
         );
 
@@ -63,7 +63,7 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -83,17 +83,17 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'       => '{base_url}/oauth2/authorize',
-            'access_token_url'        => '{base_url}/oauth2/token',
-            'revoke_token_url'        => '{base_url}/oauth2/revoke',
-            'infos_url'               => '{base_url}/user',
+            'authorization_url' => '{base_url}/oauth2/authorize',
+            'access_token_url' => '{base_url}/oauth2/token',
+            'revoke_token_url' => '{base_url}/oauth2/revoke',
+            'infos_url' => '{base_url}/user',
         ));
 
         $resolver->setRequired(array(
@@ -106,9 +106,9 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setNormalizers(array(
             'authorization_url' => $normalizer,
-            'access_token_url'  => $normalizer,
-            'revoke_token_url'  => $normalizer,
-            'infos_url'         => $normalizer,
+            'access_token_url' => $normalizer,
+            'revoke_token_url' => $normalizer,
+            'infos_url' => $normalizer,
         ));
     }
 }

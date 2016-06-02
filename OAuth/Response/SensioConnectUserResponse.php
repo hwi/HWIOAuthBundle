@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * SensioConnectUserResponse
+ * SensioConnectUserResponse.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  * @author SensioLabs <contact@sensiolabs.com>
@@ -41,7 +41,7 @@ class SensioConnectUserResponse extends AbstractUserResponse
     {
         $username = null;
         $accounts = $this->xpath->query('./foaf:account/foaf:OnlineAccount', $this->response);
-        for ($i = 0; $i < $accounts->length; $i++) {
+        for ($i = 0; $i < $accounts->length; ++$i) {
             $account = $accounts->item($i);
             if ('SensioLabs Connect' == $this->getNodeValue('./foaf:name', $account)) {
                 $username = $this->getNodeValue('foaf:accountName', $account);
@@ -57,7 +57,7 @@ class SensioConnectUserResponse extends AbstractUserResponse
      */
     public function getFirstName()
     {
-        return null;
+        return;
     }
 
     /**
@@ -65,7 +65,7 @@ class SensioConnectUserResponse extends AbstractUserResponse
      */
     public function getLastName()
     {
-        return null;
+        return;
     }
 
     /**
@@ -108,7 +108,7 @@ class SensioConnectUserResponse extends AbstractUserResponse
         $this->xpath = new \DOMXpath($dom);
 
         $nodes = $this->xpath->evaluate('/api/root');
-        $user  = $this->xpath->query('./foaf:Person', $nodes->item(0));
+        $user = $this->xpath->query('./foaf:Person', $nodes->item(0));
         if (1 !== $user->length) {
             throw new AuthenticationException('Could not retrieve user info.');
         }
@@ -142,7 +142,7 @@ class SensioConnectUserResponse extends AbstractUserResponse
             return $this->sanitizeValue($nodeValue);
         }
 
-        return null;
+        return;
     }
 
     /**

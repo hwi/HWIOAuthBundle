@@ -26,12 +26,12 @@ class ToshlResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 json;
 
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'email',
-        'firstname'      => 'first_name',
-        'lastname'       => 'last_name',
-        'realname'       => array('first_name', 'last_name'),
-        'email'          => 'email',
+        'identifier' => 'id',
+        'nickname' => 'email',
+        'firstname' => 'first_name',
+        'lastname' => 'last_name',
+        'realname' => array('first_name', 'last_name'),
+        'email' => 'email',
     );
 
     protected $expectedUrls = array(
@@ -58,8 +58,8 @@ json;
     {
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
 
-        /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+        /*
+         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
         $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 

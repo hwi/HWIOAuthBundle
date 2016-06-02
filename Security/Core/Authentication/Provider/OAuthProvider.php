@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 
 /**
- * OAuthProvider
+ * OAuthProvider.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
@@ -52,13 +52,13 @@ class OAuthProvider implements AuthenticationProviderInterface
      */
     public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMap $resourceOwnerMap, UserCheckerInterface $userChecker)
     {
-        $this->userProvider     = $userProvider;
+        $this->userProvider = $userProvider;
         $this->resourceOwnerMap = $resourceOwnerMap;
-        $this->userChecker      = $userChecker;
+        $this->userChecker = $userChecker;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function supports(TokenInterface $token)
     {
@@ -69,7 +69,7 @@ class OAuthProvider implements AuthenticationProviderInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function authenticate(TokenInterface $token)
     {

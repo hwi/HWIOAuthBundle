@@ -29,9 +29,9 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
     public function testGets()
     {
         $expectedToken = array(
-            'access_token'  => 'access_token',
+            'access_token' => 'access_token',
             'refresh_token' => 'refresh_token',
-            'expires_in'    => '666',
+            'expires_in' => '666',
         );
         $token = new OAuthToken($expectedToken, array('ROLE_TEST'));
         $token->setResourceOwnerName('github');
@@ -57,8 +57,8 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
 
     public function testSerialization()
     {
-        /**
-         * @var $token OAuthToken
+        /*
+         * @var OAuthToken
          */
         $token = unserialize(serialize($this->token));
 
@@ -70,7 +70,7 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
     {
         $oauth1Token = new OAuthToken(array(
             'oauth_token' => 'oauth1_access_token',
-            'oauth_token_secret' => 'oauth1_token_secret'
+            'oauth_token_secret' => 'oauth1_token_secret',
         ), array('ROLE_TEST'));
 
         $oauth1Token->setResourceOwnerName('twitter');
@@ -85,18 +85,18 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
     public function testIsExpired()
     {
         $expectedToken = array(
-            'access_token'  => 'access_token',
+            'access_token' => 'access_token',
             'refresh_token' => 'refresh_token',
-            'expires_in'    => '666',
+            'expires_in' => '666',
         );
         $token = new OAuthToken($expectedToken, array('ROLE_TEST'));
 
         $this->assertFalse($token->isExpired());
 
         $expectedToken = array(
-            'access_token'  => 'access_token',
+            'access_token' => 'access_token',
             'refresh_token' => 'refresh_token',
-            'expires_in'    => '29',
+            'expires_in' => '29',
         );
         $token = new OAuthToken($expectedToken, array('ROLE_TEST'));
         $this->assertTrue($token->isExpired());

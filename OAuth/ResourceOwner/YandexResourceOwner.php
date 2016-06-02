@@ -14,24 +14,24 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * YandexResourceOwner
+ * YandexResourceOwner.
  *
  * @author Anton Kamenschikov <wiistriker [at] gmail.com>
  */
 class YandexResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'display_name',
-        'realname'   => 'real_name',
-        'email'      => 'default_email',
+        'nickname' => 'display_name',
+        'realname' => 'real_name',
+        'email' => 'default_email',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
@@ -40,7 +40,7 @@ class YandexResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -48,8 +48,8 @@ class YandexResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://oauth.yandex.ru/authorize',
-            'access_token_url'  => 'https://oauth.yandex.ru/token',
-            'infos_url'         => 'https://login.yandex.ru/info?format=json',
+            'access_token_url' => 'https://oauth.yandex.ru/token',
+            'infos_url' => 'https://login.yandex.ru/info?format=json',
         ));
     }
 }

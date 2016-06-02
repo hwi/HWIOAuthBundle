@@ -16,46 +16,46 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Auth0ResourceOwner
+ * Auth0ResourceOwner.
  *
  * @author Hernan Rajchert <hrajchert@gmail.com>
  */
 class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'user_id',
-        'nickname'       => 'nickname',
-        'realname'       => 'name',
-        'email'          => 'email',
+        'identifier' => 'user_id',
+        'nickname' => 'nickname',
+        'realname' => 'name',
+        'email' => 'email',
         'profilepicture' => 'picture',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
         $headers = array(
-            'Content-Type' => 'application/x-www-form-urlencoded'
+            'Content-Type' => 'application/x-www-form-urlencoded',
         );
 
         return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers, HttpRequestInterface::METHOD_POST);
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => '{base_url}/authorize',
-            'access_token_url'    => '{base_url}/oauth/token',
-            'infos_url'           => '{base_url}/userinfo',
+            'authorization_url' => '{base_url}/authorize',
+            'access_token_url' => '{base_url}/oauth/token',
+            'infos_url' => '{base_url}/userinfo',
         ));
 
         $resolver->setRequired(array(
@@ -76,8 +76,8 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
         } else {
             $resolver->setNormalizers(array(
                 'authorization_url' => $normalizer,
-                'access_token_url'  => $normalizer,
-                'infos_url'         => $normalizer,
+                'access_token_url' => $normalizer,
+                'infos_url' => $normalizer,
             ));
         }
     }
