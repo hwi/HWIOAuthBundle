@@ -2,13 +2,14 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Office365ResourceOwner extends GenericOAuth2ResourceOwner
 {
-
+    /**
+     * @var array
+     */
     protected $paths = array(
         'identifier'    => 'id',
         'email'         => 'mail',
@@ -17,6 +18,9 @@ class Office365ResourceOwner extends GenericOAuth2ResourceOwner
         'lastName'      => 'surname'
     );
 
+    /**
+     * @param OptionsResolver $resolver
+     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
@@ -39,6 +43,4 @@ class Office365ResourceOwner extends GenericOAuth2ResourceOwner
 
         return parent::getAccessToken($request, $redirectUri, $extraParameters);
     }
-
-
 }
