@@ -8,6 +8,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class Office365ResourceOwner extends GenericOAuth2ResourceOwner
 {
+
+    protected $paths = array(
+        'identifier'    => 'id',
+        'email'         => 'mail',
+        'realname'      => 'displayName',
+        'firstName'     => 'givenName',
+        'lastName'      => 'surname'
+    );
+
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
