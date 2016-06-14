@@ -1,16 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: polidog
- * Date: 2016/06/15
- */
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
+
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * YahooJpResourceOwner
+ *
+ * @author Ryota Mochizuki <polidogs@gmail.com>
+ */
 class YahooJpResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
@@ -43,6 +44,9 @@ class YahooJpResourceOwner extends GenericOAuth2ResourceOwner
         return $response;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
         $parameters = array_merge(array(
@@ -100,6 +104,9 @@ class YahooJpResourceOwner extends GenericOAuth2ResourceOwner
         return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);

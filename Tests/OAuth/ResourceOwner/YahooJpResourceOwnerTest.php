@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: polidog
- * Date: 2016/06/15
- */
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
-
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YahooJpResourceOwner;
 
