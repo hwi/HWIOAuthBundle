@@ -30,9 +30,9 @@ class YahooJpResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
 
-        $content = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], array('schema' => 'openid')),[
+        $content = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], array('schema' => 'openid')),array(
             'access_token' => $accessToken['access_token']
-        ]);
+        ));
 
         $response = $this->getUserResponse();
         $response->setResponse($content->getContent());
