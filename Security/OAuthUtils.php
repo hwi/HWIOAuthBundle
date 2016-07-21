@@ -129,7 +129,7 @@ class OAuthUtils
     public function getServiceAuthUrl(Request $request, ResourceOwnerInterface $resourceOwner)
     {
         if ($resourceOwner->getOption('auth_with_one_url')) {
-            return $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($resourceOwner->getName())).'?authenticated=true';
+            return $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($resourceOwner->getName()));
         }
 
         $request->attributes->set('service', $resourceOwner->getName());
