@@ -34,6 +34,9 @@ class User extends FOSUBUser
      */
     private $facebookId;
 
+    /**
+     * @ORM\Column(name="facebook_access_token", type="string", length=255, nullable=true)
+     */     
     private $facebookAccessToken;
 
     /**
