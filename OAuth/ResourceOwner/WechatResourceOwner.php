@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Buzz\Message\MessageInterface as HttpMessageInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class WechatResourceOwner extends GenericOAuth2ResourceOwner
@@ -99,13 +99,33 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    public function refreshAccessToken($refreshToken, array $extraParameters = array())
+    {
+        $parameters = array_merge( array(
+            'refresh_token' => $refreshToken,
+            'grant_type'    => 'refresh_token',
+            'appid'     => $this->options['client_id'],
+        ), $extraParameters);
+
+        $response = $this->doGetTokenRequest($this->options['refresh_token_url'], $parameters);
+        $response = $this->getResponseContent($response);
+
+        $this->validateResponseContent($response);
+
+        return $response;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configureOptions(OptionsResolverInterface $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://open.weixin.qq.com/connect/oauth2/authorize',
             'access_token_url'  => 'https://api.weixin.qq.com/sns/oauth2/access_token',
+            'refresh_token_url' => 'https://api.weixin.qq.com/sns/oauth2/refresh_token',
             'infos_url'         => 'https://api.weixin.qq.com/sns/userinfo',
         ));
     }
