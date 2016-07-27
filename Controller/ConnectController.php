@@ -197,7 +197,7 @@ class ConnectController extends Controller
 
         // Handle the form
         /** @var $form FormInterface */
-        $form = $this->createForm('form');
+        $form = $this->createForm('Symfony\Component\Form\Extension\Core\Type\FormType');
 
         $form->handleRequest($request);
 
