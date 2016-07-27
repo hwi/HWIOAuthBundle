@@ -48,4 +48,3 @@ class DeezerResourceOwner extends GenericOAuth2ResourceOwner
         ));
     }
 }
-

@@ -110,7 +110,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     public function configure()
     {
-
     }
 
     /**

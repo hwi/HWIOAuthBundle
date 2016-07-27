@@ -28,4 +28,4 @@ class DiscogsResourceOwner extends GenericOAuth1ResourceOwner
             'infos_url'         => 'http://api.discogs.com/oauth/identity',
         ));
     }
-} 
+}
