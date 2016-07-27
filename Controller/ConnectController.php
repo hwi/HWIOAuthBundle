@@ -220,7 +220,12 @@ class ConnectController extends Controller
 
             if ($currentToken instanceof OAuthToken) {
                 // Update user token with new details
-                $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
+                $newToken =
+                    is_array($accessToken) &&
+                    (isset($accessToken['access_token']) || isset($accessToken['oauth_token'])) ?
+                        $accessToken : $currentToken->getRawToken();
+
+                $this->authenticateUser($request, $currentUser, $service, $newToken, false);
             }
 
             if ($targetPath = $this->getTargetPath($session)) {
