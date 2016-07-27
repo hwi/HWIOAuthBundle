@@ -30,6 +30,7 @@ This bundle contains support for 40 different providers:
 * Hubic,
 * Instagram,
 * JIRA,
+* Lead Auth,
 * LinkedIn,
 * Mail.ru
 * Odnoklassniki,

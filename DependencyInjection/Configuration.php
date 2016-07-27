@@ -51,6 +51,7 @@ class Configuration implements ConfigurationInterface
             'youtube',
             'hubic',
             'instagram',
+            'lead_auth',
             'linkedin',
             'mailru',
             'odnoklassniki',
