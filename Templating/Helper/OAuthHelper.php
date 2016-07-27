@@ -38,6 +38,7 @@ class OAuthHelper extends Helper
     public function __construct(OAuthUtils $oauthUtils)
     {
         $this->oauthUtils = $oauthUtils;
+        $this->request = new Request();
     }
 
     /**
@@ -48,7 +49,9 @@ class OAuthHelper extends Helper
         if ($request instanceof Request) {
             $this->request = $request;
         } elseif ($request instanceof RequestStack) {
-            $this->request = $request->getMasterRequest();
+            if ($masterRequest = $request->getMasterRequest()) {
+                $this->request = $masterRequest;
+            }
         }
     }
 
