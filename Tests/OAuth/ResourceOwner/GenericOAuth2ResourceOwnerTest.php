@@ -387,7 +387,7 @@ json;
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
             ->disableOriginalConstructor()->getMock();
 
-        $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
+        $this->storage = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface')->getMock();
 
         $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
         $resourceOwner->addPaths(array_merge($this->paths, $paths));

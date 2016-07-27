@@ -49,7 +49,7 @@ class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectCo
             ->willReturn(array())
         ;
 
-        $form = $this->getMock('\Symfony\Component\Form\FormInterface');
+        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')->getMock();
         $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($form)
@@ -82,7 +82,7 @@ class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectCo
             ->willReturn(array())
         ;
 
-        $form = $this->getMock('\Symfony\Component\Form\FormInterface');
+        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')->getMock();
         $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($form)
@@ -158,7 +158,7 @@ class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectCo
             ->willReturn(array())
         ;
 
-        $form = $this->getMock('\Symfony\Component\Form\FormInterface');
+        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')->getMock();
         $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($form)

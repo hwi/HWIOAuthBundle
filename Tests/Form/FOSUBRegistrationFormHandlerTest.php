@@ -20,7 +20,7 @@ class FOSUBRegistrationFormHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $formMock = $this->getForm(false);
 
-        $response = $this->getMock('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface');
+        $response = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')->getMock();
 
         $handler = new FOSUBRegistrationFormHandler($this->getUserManager(false), $this->getMailer());
 
@@ -57,10 +57,10 @@ class FOSUBRegistrationFormHandlerTest extends \PHPUnit_Framework_TestCase
 
     private function getUserManager($createUser = true)
     {
-        $mock = $this->getMock('FOS\UserBundle\Model\UserManagerInterface');
+        $mock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
 
         if ($createUser) {
-            $userMock = $this->getMock('FOS\UserBundle\Model\UserInterface');
+            $userMock = $this->getMockBuilder('FOS\UserBundle\Model\UserInterface')->getMock();
             $userMock
                 ->expects($this->once())
                 ->method('setEnabled')
@@ -79,12 +79,12 @@ class FOSUBRegistrationFormHandlerTest extends \PHPUnit_Framework_TestCase
 
     private function getMailer()
     {
-        return $this->getMock('FOS\UserBundle\Mailer\MailerInterface');
+        return $this->getMockBuilder('FOS\UserBundle\Mailer\MailerInterface')->getMock();
     }
 
     private function getResponse()
     {
-        return $this->getMock('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface');
+        return $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')->getMock();
     }
 
     private function getForm($handle = true)

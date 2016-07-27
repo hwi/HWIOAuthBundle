@@ -77,7 +77,7 @@ class ConnectConnectControllerRegistrationActionTest extends AbstractConnectCont
 
         $this->makeRegistrationForm();
 
-        $registrationFormHandler = $this->getMock('HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface');
+        $registrationFormHandler = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface')->getMock();
         $registrationFormHandler->expects($this->once())
             ->method('process')
             ->withAnyParameters()
@@ -105,7 +105,7 @@ class ConnectConnectControllerRegistrationActionTest extends AbstractConnectCont
 
         $this->makeRegistrationForm();
 
-        $registrationFormHandler = $this->getMock('HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface');
+        $registrationFormHandler = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface')->getMock();
         $registrationFormHandler->expects($this->once())
             ->method('process')
             ->withAnyParameters()
@@ -138,7 +138,7 @@ class ConnectConnectControllerRegistrationActionTest extends AbstractConnectCont
         $this->container->setParameter('hwi_oauth.fosub_enabled', true);
 
         if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
-            $registrationFormFactory = $this->getMock('FOS\UserBundle\Form\Factory\FactoryInterface');
+            $registrationFormFactory = $this->getMockBuilder('FOS\UserBundle\Form\Factory\FactoryInterface')->getMock();
             $registrationFormFactory->expects($this->any())
                 ->method('createForm')
                 ->willReturn($registrationForm)

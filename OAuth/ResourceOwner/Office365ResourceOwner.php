@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the HWIOAuthBundle package.
+ *
+ * (c) Hardware.Info <opensource@hardware.info>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\HttpFoundation\Request;
@@ -19,7 +28,7 @@ class Office365ResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * @param OptionsResolver $resolver
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -27,13 +36,13 @@ class Office365ResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://login.microsoftonline.com/common/oauth2/authorize',
-            'access_token_url' => 'https://login.microsoftonline.com/common/oauth2/token',
+            'access_token_url'  => 'https://login.microsoftonline.com/common/oauth2/token',
             'infos_url'         => 'https://graph.microsoft.com/v1.0/me'
         ));
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {

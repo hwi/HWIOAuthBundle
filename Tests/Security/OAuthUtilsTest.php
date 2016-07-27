@@ -24,9 +24,9 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
         if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
-            $authorizationChecker = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+            $authorizationChecker = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')->getMock();
         } else {
-            $authorizationChecker = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
+            $authorizationChecker = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')->getMock();
         }
         $utils = new OAuthUtils($this->getHttpUtils($url), $authorizationChecker, true);
         $utils->addResourceOwnerMap($this->getMap($url, $redirect, false, true));
@@ -179,7 +179,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     private function getHttpUtils($generatedUrl = '/')
     {
-        $urlGenerator = $this->getMock('Symfony\Component\Routing\Generator\UrlGeneratorInterface');
+        $urlGenerator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')->getMock();
         $urlGenerator
             ->expects($this->any())
             ->method('generate')
@@ -192,9 +192,9 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
     private function getAutorizationChecker($hasUser)
     {
         if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
-            $mock = $this->getMock('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+            $mock = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')->getMock();
         } else {
-            $mock = $this->getMock('Symfony\Component\Security\Core\SecurityContextInterface');
+            $mock = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')->getMock();
         }
 
         $mock

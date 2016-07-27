@@ -51,7 +51,7 @@ class PathUserResponseTest extends \PHPUnit_Framework_TestCase
 
     public function testGetSetResourceOwner()
     {
-        $resourceOwner = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface');
+        $resourceOwner = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')->getMock();
 
         $this->responseObject->setResourceOwner($resourceOwner);
         $this->assertEquals($resourceOwner, $this->responseObject->getResourceOwner());

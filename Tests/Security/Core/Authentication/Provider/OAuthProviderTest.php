@@ -174,7 +174,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function getOAuthAwareUserProviderMock()
     {
-        return $this->getMock('\HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface');
+        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface')->getMock();
     }
 
     protected function getResourceOwnerMapMock()
@@ -191,21 +191,21 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function getResourceOwnerMock()
     {
-        return $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface');
+        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')->getMock();
     }
 
     protected function getUserResponseMock()
     {
-        return $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface');
+        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')->getMock();
     }
 
     protected function getUserCheckerMock()
     {
-        return $this->getMock('\Symfony\Component\Security\Core\User\UserCheckerInterface');
+        return $this->getMockBuilder('\Symfony\Component\Security\Core\User\UserCheckerInterface')->getMock();
     }
 
     protected function getUserMock()
     {
-        return $this->getMock('\Symfony\Component\Security\Core\User\UserInterface');
+        return $this->getMockBuilder('\Symfony\Component\Security\Core\User\UserInterface')->getMock();
     }
 }
