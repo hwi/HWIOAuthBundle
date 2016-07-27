@@ -55,6 +55,7 @@ hwi_oauth:
 - [Google](resource_owners/google.md)
 - [Hubic](resource_owners/hubic.md)
 - [Instagram](resource_owners/instagram.md)
+- [itembase](resource_owners/itembase.md)
 - [Jira](resource_owners/jira.md)
 - [Linkedin](resource_owners/linkedin.md)
 - [Mail.ru](resource_owners/mailru.md)
