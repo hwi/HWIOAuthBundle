@@ -11,9 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * CleverResourceOwner
@@ -23,14 +21,14 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 class CleverResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'data.id',
-        'email' => 'data.email',
-        'firstname' => 'data.name.first',
-        'lastname' => 'data.name.last',
-        'realname' => array(
+        'email'      => 'data.email',
+        'firstname'  => 'data.name.first',
+        'lastname'   => 'data.name.last',
+        'realname'   => array(
             'data.name.first',
             'data.name.middle',
             'data.name.last',
@@ -38,26 +36,26 @@ class CleverResourceOwner extends GenericOAuth2ResourceOwner
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://clever.com/oauth/authorize',
-            'access_token_url'    => 'https://clever.com/oauth/tokens',
-            'infos_url'           => 'https://api.clever.com/me',
+            'authorization_url' => 'https://clever.com/oauth/authorize',
+            'access_token_url'  => 'https://clever.com/oauth/tokens',
+            'infos_url'         => 'https://api.clever.com/me',
         ));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        $authPrehash = $this->options['client_id'] . ':' . $this->options['client_secret'];
-        $authHeader = 'Authorization: Basic ' . base64_encode($authPrehash);
+        $authPreHash = $this->options['client_id'] . ':' . $this->options['client_secret'];
+        $authHeader = 'Authorization: Basic ' . base64_encode($authPreHash);
 
         return $this->httpRequest(
             $url,
