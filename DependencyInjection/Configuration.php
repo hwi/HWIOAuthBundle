@@ -52,6 +52,7 @@ class Configuration implements ConfigurationInterface
             'youtube',
             'hubic',
             'instagram',
+            'jawbone',
             'linkedin',
             'mailru',
             'odnoklassniki',
