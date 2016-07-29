@@ -12,3 +12,4 @@ connect:
     registration:
         cancel: 'Cancel'
         submit: 'Register account'
+        back: 'Back to the originating page'
