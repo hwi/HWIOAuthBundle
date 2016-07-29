@@ -276,7 +276,8 @@ class ConnectController extends Controller
             }
         }
 
-        return $this->redirect($authorizationUrl);
+        $this->redirect($authorizationUrl)->sendHeaders();
+        return new RedirectResponse($authorizationUrl);
     }
 
     /**
