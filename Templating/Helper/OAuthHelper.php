@@ -45,10 +45,10 @@ class OAuthHelper extends Helper
      */
     public function setRequest($request = null)
     {
-        if ($request instanceof Request) {
-            $this->request = $request;
-        } elseif ($request instanceof RequestStack) {
-            $this->request = $request->getMasterRequest();
+        if ($request instanceof RequestStack) {
+            $this->request = $request->getMasterRequest() ?: new Request();
+        } else {
+            $this->request = $request ?: new Request();
         }
     }
 
