@@ -30,6 +30,7 @@ This bundle contains support for 53 different providers:
 * Hubic,
 * Instagram,
 * itembase,
+* Jawbone,
 * JIRA,
 * LinkedIn,
 * Mail.ru
