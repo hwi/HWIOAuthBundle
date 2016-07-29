@@ -38,9 +38,9 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
         ), $extraParameters);
 
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
-        $content = $this->getResponseContent($response);
+        $response = $this->getResponseContent($response);
 
-        $this->validateResponseContent($content);
+        $this->validateResponseContent($response);
 
         return $response;
     }
@@ -68,7 +68,6 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getUserInformation(array $accessToken = null, array $extraParameters = array())
     {
-        $accessToken = $this->getResponseContent($accessToken['access_token']);
         if ('snsapi_userinfo' === $this->options['scope']) {
             $openid = $accessToken['openid'];
 
