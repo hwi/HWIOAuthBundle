@@ -204,9 +204,12 @@ class ConnectController extends Controller
             goto show_confirmation_page;
         }
 
-        // Handle the form
+        // Symfony <3.0 BC
         /** @var $form FormInterface */
-        $form = $this->createForm('form');
+        $form = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+            ? $this->createForm('Symfony\Component\Form\Extension\Core\Type\FormType')
+            : 'form';
+        // Handle the form
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
