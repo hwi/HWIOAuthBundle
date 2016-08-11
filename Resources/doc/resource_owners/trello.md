@@ -4,7 +4,7 @@ First you will have to register your application on Trello. Check out the
 documentation for more information: https://trello.com/docs/gettingstarted/authorize.html.
 
 Next configure a resource owner of type `trello` with appropriate
-`client_id`, `client_secret` and `scope`.
+`client_id`, `client_secret`, `application`, `scopes` and `expiration`.
 
 ```yaml
 # app/config/config.yml
@@ -15,6 +15,11 @@ hwi_oauth:
             type:                trello
             client_id:           <client_id>
             client_secret:       <client_secret>
+
+        options:
+            application: <your application name>
+            scopes: <read,write>
+            expiration: <never>
 ```
 
 When you're done. Continue by configuring the security layer or go back to
