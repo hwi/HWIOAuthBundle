@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * AsanaResourceOwner.
+ * AsanaResourceOwner
  *
  * @author Guillaume Potier <guillaume@wisembly.com>
  */
