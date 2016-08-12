@@ -31,6 +31,7 @@ class Configuration implements ConfigurationInterface
     private static $resourceOwners = array(
         'oauth2' => array(
             'amazon',
+            'asana',
             'auth0',
             'azure',
             'bitbucket2',
