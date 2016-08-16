@@ -3,7 +3,7 @@ Step 2x: Setup Asana
 First you will have to register your application on Asana. Check out the
 documentation for more information: https://app.asana.com/-/account_api.
 
-Next configure a resource owner of type `trello` with appropriate
+Next configure a resource owner of type `asana` with appropriate
 `client_id` and `client_secret`.
 
 ```yaml
