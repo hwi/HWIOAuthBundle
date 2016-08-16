@@ -76,6 +76,7 @@ class Configuration implements ConfigurationInterface
             'wechat',
             'windows_live',
             'wordpress',
+            'wunderlist',
             'yandex',
             '37signals',
             'itembase',
