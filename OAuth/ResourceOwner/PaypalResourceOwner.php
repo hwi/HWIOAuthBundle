@@ -28,6 +28,8 @@ class PaypalResourceOwner extends GenericOAuth2ResourceOwner
         'identifier' => 'user_id',
         'nickname'   => 'email',
         'email'      => 'email',
+        'firstname'  => 'given_name',
+        'lastname'   =>'family_name',
     );
 
     /**
