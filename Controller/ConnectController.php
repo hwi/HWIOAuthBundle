@@ -208,7 +208,7 @@ class ConnectController extends Controller
         /** @var $form FormInterface */
         $form = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
             ? $this->createForm('Symfony\Component\Form\Extension\Core\Type\FormType')
-            : 'form';
+            : $this->createForm('form');
         // Handle the form
         $form->handleRequest($request);
 
