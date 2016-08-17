@@ -1,5 +1,9 @@
 Changelog
 =========
+## 0.4.2 (2016-07-27)
+* Fixed: Change Discogs URL from http to https
+* Fixed: Update Facebook API URLs to not use outdated ones
+
 ## 0.4.1 (2016-03-08)
 * Fixed: Remove usage of deprecated Twig function `form_enctype` & replace with usage of `form_start`/`form_end`,
 * Fixed: Mark as not fully compatible with Symfony `~3.0`,
