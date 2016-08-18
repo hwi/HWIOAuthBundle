@@ -67,6 +67,9 @@ class HWIOAuthExtension extends Extension
         // set failed auth path
         $container->setParameter('hwi_oauth.failed_auth_path', $config['failed_auth_path']);
         
+        // set fully auth remember me
+        $container->setParameter('hwi_oauth.remember_me_fully_reauth', $config['remember_me_fully_reauth']);
+        
         // setup services for all configured resource owners
         $resourceOwners = array();
         foreach ($config['resource_owners'] as $name => $options) {

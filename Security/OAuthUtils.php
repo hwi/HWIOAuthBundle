@@ -108,15 +108,28 @@ class OAuthUtils
      */
     public function getAuthorizationUrl(Request $request, $name, $redirectUrl = null, array $extraParameters = array())
     {
+       
+        $fullyAuthRemeberMe = $extraParameters['remember_me_fully_reauth'];
         $resourceOwner = $this->getResourceOwner($name);
         if (null === $redirectUrl) {
-            if (!$this->connect || !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
-                $redirectUrl = $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($name));
+            if ($fullyAuthRemeberMe == true ) {
+                if (!$this->connect || !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
+                    $redirectUrl = $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($name));
+                } else {
+                    $redirectUrl = $this->getServiceAuthUrl($request, $resourceOwner);
+                }   
             } else {
-                $redirectUrl = $this->getServiceAuthUrl($request, $resourceOwner);
+                if (!$this->connect || !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+                    $redirectUrl = $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($name));
+                } else {
+                    $redirectUrl = $this->getServiceAuthUrl($request, $resourceOwner);
+                }
             }
         }
-
+       
+        if ( $resourceOwner->getForceHttps() == true) {
+            $redirectUrl = preg_replace("/^http:/i", "https:", $redirectUrl);
+        }        
         return $resourceOwner->getAuthorizationUrl($redirectUrl, $extraParameters);
     }
 

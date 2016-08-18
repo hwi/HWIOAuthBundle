@@ -254,7 +254,8 @@ class ConnectController extends Controller
      */
     public function redirectToServiceAction(Request $request, $service)
     {
-        $authorizationUrl = $this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($request, $service);
+        $extraParameters = array('remember_me_fully_reauth'=>$this->container->getParameter('hwi_oauth.remember_me_fully_reauth'));
+        $authorizationUrl = $this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($request, $service, null, $extraParameters);
 
         // Check for a return path and store it before redirect
         if ($request->hasSession()) {
