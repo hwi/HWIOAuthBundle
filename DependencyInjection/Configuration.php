@@ -395,7 +395,7 @@ class Configuration implements ConfigurationInterface
                                     return false;
                                 }
 
-                                return !in_array($c['type'], array('oauth1', 'oauth2'));
+                                return 'oauth2' !== $c['type'] && 'oauth1' !== $c['type'];
                             })
                             ->thenInvalid("If you're setting a 'class', you must provide a 'oauth1' or 'oauth2' type")
                         ->end()
