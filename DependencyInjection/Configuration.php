@@ -250,6 +250,14 @@ class Configuration implements ConfigurationInterface
                                     ->thenUnset()
                                 ->end()
                             ->end()
+                            ->scalarNode('class')
+                                ->validate()
+                                    ->ifTrue(function ($v) {
+                                        return empty($v);
+                                    })
+                                    ->thenUnset()
+                                ->end()
+                            ->end()
                             ->scalarNode('type')
                                 ->validate()
                                     ->ifTrue(function ($type) {
@@ -317,6 +325,11 @@ class Configuration implements ConfigurationInterface
                                     return false;
                                 }
 
+                                // skip if this contains a class
+                                if (isset($c['class'])) {
+                                    return false;
+                                }
+
                                 // Only validate the 'oauth2' and 'oauth1' type
                                 if ('oauth2' !== $c['type'] && 'oauth1' !== $c['type']) {
                                     return false;
@@ -375,6 +388,16 @@ class Configuration implements ConfigurationInterface
                                 return false;
                             })
                             ->thenInvalid("If you're setting a 'service', no other arguments should be set.")
+                        ->end()
+                        ->validate()
+                            ->ifTrue(function ($c) {
+                                if (!isset($c['class'])) {
+                                    return false;
+                                }
+
+                                return !in_array($c['type'], array('oauth1', 'oauth2'));
+                            })
+                            ->thenInvalid("If you're setting a 'class', you must provide a 'oauth1' or 'oauth2' type")
                         ->end()
                     ->end()
                 ->end()
