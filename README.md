@@ -5,15 +5,17 @@ HWIOAuthBundle
 
 The HWIOAuthBundle adds support for authenticating users via OAuth1.0a or OAuth2 in Symfony2.
 
-This bundle contains support for 40 different providers:
+This bundle contains support for 58 different providers:
 * 37signals,
 * Amazon,
+* Asana,
 * Auth0,
 * Azure,
 * Bitbucket,
 * Bitly,
 * Box,
 * BufferApp,
+* Clever,
 * Dailymotion,
 * Deezer,
 * DeviantArt,
@@ -29,10 +31,13 @@ This bundle contains support for 40 different providers:
 * Google,
 * Hubic,
 * Instagram,
+* Itembase,
+* Jawbone,
 * JIRA,
 * LinkedIn,
 * Mail.ru
 * Odnoklassniki,
+* Office365,
 * PayPal,
 * QQ,
 * RunKeeper,
@@ -54,6 +59,7 @@ This bundle contains support for 40 different providers:
 * Wechat,
 * Windows Live,
 * Wordpress,
+* Wunderlist,
 * XING,
 * Yahoo,
 * Yandex,
@@ -67,6 +73,7 @@ Installation
 All the installation instructions are located in the documentation, check it for specific
 version:
 
+* [__0.5__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3,<4.0`
 * [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/0.4/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3,<3.0`
 * [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.1,<2.7`
 
@@ -76,6 +83,7 @@ Documentation
 The bulk of the documentation is stored in the `Resources/doc/index.md`
 file in this bundle. Read the documentation for version:
 
+* [__0.5__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md) with support for Symfony `>=2.3,<4.0`
 * [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/0.4/Resources/doc/index.md) with support for Symfony `>=2.3,<3.0`
 * [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/index.md) with support for Symfony `>=2.1,<2.7`
 

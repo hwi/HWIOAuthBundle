@@ -107,27 +107,27 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->container->setParameter('hwi_oauth.connect.confirmation', true);
 
         if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
-            $this->authorizationChecker = $this->getMock('\Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface');
+            $this->authorizationChecker = $this->getMockBuilder('\Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')->getMock();
             $this->container->set('security.authorization_checker', $this->authorizationChecker);
-            $this->tokenStorage = $this->getMock('\Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface');
+            $this->tokenStorage = $this->getMockBuilder('\Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')->getMock();
             $this->container->set('security.token_storage', $this->tokenStorage);
         } else {
-            $this->securityContext = $this->getMock('\Symfony\Component\Security\Core\SecurityContextInterface');
+            $this->securityContext = $this->getMockBuilder('\Symfony\Component\Security\Core\SecurityContextInterface')->getMock();
             $this->container->set('security.context', $this->securityContext);
         }
 
-        $this->templating = $this->getMock('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface');
+        $this->templating = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface')->getMock();
         $this->container->set('templating', $this->templating);
 
-        $this->router = $this->getMock('\Symfony\Component\Routing\RouterInterface');
+        $this->router = $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock();
         $this->container->set('router', $this->router);
 
-        $this->resourceOwner = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface');
+        $this->resourceOwner = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')->getMock();
         $this->resourceOwner->expects($this->any())
             ->method('getUserInformation')
             ->willReturn(new CustomUserResponse())
         ;
-        $this->resourceOwnerMap = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
+        $this->resourceOwnerMap = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
             ->disableOriginalConstructor()->getMock()
         ;
         $this->resourceOwnerMap->expects($this->any())
@@ -136,7 +136,7 @@ abstract class AbstractConnectControllerTest extends TestCase
             ->willReturn($this->resourceOwner);
         $this->container->set('hwi_oauth.resource_ownermap.default', $this->resourceOwnerMap);
 
-        $this->accountConnector = $this->getMock('HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface');
+        $this->accountConnector = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface')->getMock();
         $this->container->set('hwi_oauth.account.connector', $this->accountConnector);
 
         $this->oAuthUtils = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Security\OAuthUtils')
@@ -144,16 +144,16 @@ abstract class AbstractConnectControllerTest extends TestCase
         ;
         $this->container->set('hwi_oauth.security.oauth_utils', $this->oAuthUtils);
 
-        $this->userChecker = $this->getMock('Symfony\Component\Security\Core\User\UserCheckerInterface');
+        $this->userChecker = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserCheckerInterface')->getMock();
         $this->container->set('hwi_oauth.user_checker', $this->userChecker);
 
-        $this->eventDispatcher = $this->getMock('\Symfony\Component\EventDispatcher\EventDispatcherInterface');
+        $this->eventDispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
         $this->container->set('event_dispatcher', $this->eventDispatcher);
 
-        $this->formFactory = $this->getMock('\Symfony\Component\Form\FormFactoryInterface');
+        $this->formFactory = $this->getMockBuilder('Symfony\Component\Form\FormFactoryInterface')->getMock();
         $this->container->set('form.factory', $this->formFactory);
 
-        $this->session = $this->getMock('\Symfony\Component\HttpFoundation\Session\SessionInterface');
+        $this->session = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session\SessionInterface')->getMock();
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
 
@@ -181,7 +181,7 @@ abstract class AbstractConnectControllerTest extends TestCase
      */
     protected function getAuthorizationChecker()
     {
-        return $this->authorizationChecker ? $this->authorizationChecker : $this->securityContext;
+        return $this->authorizationChecker ?: $this->securityContext;
     }
 
     /**
@@ -191,7 +191,7 @@ abstract class AbstractConnectControllerTest extends TestCase
      */
     protected function getTokenStorage()
     {
-        return $this->tokenStorage ? $this->tokenStorage : $this->securityContext;
+        return $this->tokenStorage ?: $this->securityContext;
     }
 
     /**

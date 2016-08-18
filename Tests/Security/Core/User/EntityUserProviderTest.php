@@ -97,7 +97,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createResourceOwnerMock($resourceOwnerName = null)
     {
-        $resourceOwnerMock = $this->getMock('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface');
+        $resourceOwnerMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')->getMock();
 
         if (null !== $resourceOwnerName) {
             $resourceOwnerMock
@@ -125,7 +125,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createUserResponseMock($username = null, $resourceOwnerName = null)
     {
-        $responseMock = $this->getMock('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface');
+        $responseMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')->getMock();
 
         if (null !== $resourceOwnerName) {
             $responseMock

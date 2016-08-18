@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 
 /**
@@ -85,7 +85,7 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
@@ -104,11 +104,19 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
             return str_replace('{base_url}', $options['base_url'], $value);
         };
 
-        $resolver->setNormalizers(array(
-            'authorization_url' => $normalizer,
-            'access_token_url'  => $normalizer,
-            'revoke_token_url'  => $normalizer,
-            'infos_url'         => $normalizer,
-        ));
+        // Symfony <2.6 BC
+        if (method_exists($resolver, 'setNormalizer')) {
+            $resolver->setNormalizer('authorization_url', $normalizer);
+            $resolver->setNormalizer('access_token_url', $normalizer);
+            $resolver->setNormalizer('revoke_token_url', $normalizer);
+            $resolver->setNormalizer('infos_url', $normalizer);
+        } else {
+            $resolver->setNormalizers(array(
+                'authorization_url' => $normalizer,
+                'access_token_url'  => $normalizer,
+                'revoke_token_url'  => $normalizer,
+                'infos_url'         => $normalizer,
+            ));
+        }
     }
 }

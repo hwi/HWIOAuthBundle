@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Auth0ResourceOwner
@@ -38,7 +38,6 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-
         $headers = array(
             'Content-Type' => 'application/x-www-form-urlencoded'
         );
@@ -46,13 +45,13 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
         return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers, HttpRequestInterface::METHOD_POST);
     }
 
-
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
+
         $resolver->setDefaults(array(
             'authorization_url'   => '{base_url}/authorize',
             'access_token_url'    => '{base_url}/oauth/token',

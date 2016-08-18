@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * GoogleResourceOwner
@@ -39,13 +39,19 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
-        return parent::getAuthorizationUrl($redirectUri, array_merge(array(
+        $url = parent::getAuthorizationUrl($redirectUri, array_merge(array(
             'access_type'             => $this->options['access_type'],
             'approval_prompt'         => $this->options['approval_prompt'],
             'request_visible_actions' => $this->options['request_visible_actions'],
-            'hd'                      => $this->options['hd'],
             'prompt'                  => $this->options['prompt']
         ), $extraParameters));
+
+        // This parameter have specific value (uses "&" as a separator of domains)
+        if (null !== $this->options['hd']) {
+            $url .= '&hd=' . implode('&', array_map('trim', explode(',', $this->options['hd'])));
+        }
+
+        return $url;
     }
 
     /**
@@ -61,7 +67,7 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 

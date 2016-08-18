@@ -13,11 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Templating\Helper;
 
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Templating\Helper\Helper;
 
 /**
- * OAuthHelper
- *
  * @author Alexander <iam.asm89@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
@@ -42,11 +41,15 @@ class OAuthHelper extends Helper
     }
 
     /**
-     * @param null|Request $request
+     * @param null|Request|RequestStack $request
      */
-    public function setRequest(Request $request = null)
+    public function setRequest($request = null)
     {
-        $this->request = $request;
+        if ($request instanceof RequestStack) {
+            $this->request = $request->getMasterRequest() ?: new Request();
+        } else {
+            $this->request = $request ?: new Request();
+        }
     }
 
     /**

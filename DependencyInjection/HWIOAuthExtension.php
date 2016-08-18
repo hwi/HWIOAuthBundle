@@ -16,15 +16,15 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
+use Symfony\Component\DependencyInjection\Exception\RuntimeException;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
- * HWIOAuthExtension
- *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
+ * @author Joseph Bielawski <stloyd@gmail.com>
  */
 class HWIOAuthExtension extends Extension
 {
@@ -53,13 +53,8 @@ class HWIOAuthExtension extends Extension
         }
 
         // set current firewall
-        if (empty($config['firewall_names']) && !isset($config['firewall_name'])) {
-            throw new InvalidConfigurationException('The child node "firewall_name" or "firewall_names" at path "hwi_oauth" must be configured.');
-        } elseif (!empty($config['firewall_names']) && isset($config['firewall_name'])) {
-            $config['firewall_names'] = array_merge(array($config['firewall_name']), $config['firewall_names']);
-        } elseif (empty($config['firewall_names']) && isset($config['firewall_name'])) {
-            @trigger_error('The child node "firewall_name" at path "hwi_oauth" is deprecated since version 0.4.0 and will be removed in version 0.5.0. Use "firewall_names" instead.', E_USER_DEPRECATED);
-            $config['firewall_names'] = array($config['firewall_name']);
+        if (empty($config['firewall_names'])) {
+            throw new InvalidConfigurationException('The child node "firewall_names" at path "hwi_oauth" must be configured.');
         }
         $container->setParameter('hwi_oauth.firewall_names', $config['firewall_names']);
 
@@ -93,51 +88,7 @@ class HWIOAuthExtension extends Extension
             $oauthUtils->replaceArgument(1, new Reference('security.context'));
         }
 
-        if (isset($config['fosub'])) {
-            $container
-                ->setDefinition('hwi_oauth.user.provider.fosub_bridge', new DefinitionDecorator('hwi_oauth.user.provider.fosub_bridge.def'))
-                ->addArgument($config['fosub']['properties'])
-            ;
-        }
-
-        // check of the connect controllers etc should be enabled
-        if (isset($config['connect'])) {
-            $container->setParameter('hwi_oauth.connect', true);
-
-            if (isset($config['fosub'])) {
-                // setup fosub bridge services
-                $container->setAlias('hwi_oauth.account.connector', 'hwi_oauth.user.provider.fosub_bridge');
-
-                $definition = $container->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new DefinitionDecorator('hwi_oauth.registration.form.handler.fosub_bridge.def'));
-                $definition->addArgument($config['fosub']['username_iterations']);
-
-                $container->setAlias('hwi_oauth.registration.form.handler', 'hwi_oauth.registration.form.handler.fosub_bridge');
-
-                // enable compatibility with FOSUserBundle 1.3.x and 2.x
-                if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
-                    $container->setAlias('hwi_oauth.registration.form.factory', 'fos_user.registration.form.factory');
-                } else {
-                    // FOSUser 1.3 BC. To be removed.
-                    $definition->setScope('request');
-
-                    $container->setAlias('hwi_oauth.registration.form', 'fos_user.registration.form');
-                }
-            }
-
-            foreach ($config['connect'] as $key => $serviceId) {
-                if ('confirmation' === $key) {
-                    $container->setParameter('hwi_oauth.connect.confirmation', $config['connect']['confirmation']);
-
-                    continue;
-                }
-
-                $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), $serviceId);
-            }
-
-            // setup custom services
-        } else {
-            $container->setParameter('hwi_oauth.connect', false);
-        }
+        $this->createConnectIntegration($container, $config);
 
         $container->setParameter('hwi_oauth.templating.engine', $config['templating_engine']);
 
@@ -163,11 +114,10 @@ class HWIOAuthExtension extends Extension
 
             $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.Configuration::getResourceOwnerType($type));
             $definition->setClass("%hwi_oauth.resource_owner.$type.class%");
+            $definition->replaceArgument(2, $options);
+            $definition->replaceArgument(3, $name);
+
             $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
-            $definition
-                ->replaceArgument(2, $options)
-                ->replaceArgument(3, $name)
-            ;
         }
     }
 
@@ -177,5 +127,62 @@ class HWIOAuthExtension extends Extension
     public function getAlias()
     {
         return 'hwi_oauth';
+    }
+
+    /**
+     * Check of the connect controllers etc should be enabled.
+     *
+     * @param ContainerBuilder $container
+     * @param array $config
+     */
+    private function createConnectIntegration(ContainerBuilder $container, array $config)
+    {
+        if (isset($config['connect'])) {
+            $container->setParameter('hwi_oauth.connect', true);
+
+            if (isset($config['fosub'])) {
+                $container->setParameter('hwi_oauth.fosub_enabled', true);
+
+                $definition = $container->setDefinition('hwi_oauth.user.provider.fosub_bridge', new DefinitionDecorator('hwi_oauth.user.provider.fosub_bridge.def'));
+                $definition->addArgument($config['fosub']['properties']);
+
+                // setup fosub bridge services
+                $container->setAlias('hwi_oauth.account.connector', 'hwi_oauth.user.provider.fosub_bridge');
+
+                $definition = $container->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new DefinitionDecorator('hwi_oauth.registration.form.handler.fosub_bridge.def'));
+                $definition->addArgument($config['fosub']['username_iterations']);
+
+                $container->setAlias('hwi_oauth.registration.form.handler', 'hwi_oauth.registration.form.handler.fosub_bridge');
+
+                // enable compatibility with FOSUserBundle 1.3.x and 2.x
+                if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
+                    $container->setAlias('hwi_oauth.registration.form.factory', 'fos_user.registration.form.factory');
+                } else {
+                    // FOSUser 1.3 BC. To be removed.
+                    $definition->setScope('request');
+
+                    $container->setAlias('hwi_oauth.registration.form', 'fos_user.registration.form');
+                }
+            } else {
+                $container->setParameter('hwi_oauth.fosub_enabled', false);
+
+                if (!$container->hasDefinition('hwi_oauth.registration.form')) {
+                    throw new RuntimeException('You must create service "hwi_oauth.registration.form" to be able to use "connect" functionality.');
+                }
+            }
+
+            foreach ($config['connect'] as $key => $serviceId) {
+                if ('confirmation' === $key) {
+                    $container->setParameter('hwi_oauth.connect.confirmation', $config['connect']['confirmation']);
+
+                    continue;
+                }
+
+                $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), $serviceId);
+            }
+        } else {
+            $container->setParameter('hwi_oauth.fosub_enabled', false);
+            $container->setParameter('hwi_oauth.connect', false);
+        }
     }
 }

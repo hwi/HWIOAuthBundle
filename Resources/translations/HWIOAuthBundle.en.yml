@@ -1,14 +1,14 @@
 header:
-    connecting: Connecting
-    success: Successfully connected the account '%name%'!
-    register: Register with the account '%name%'
-    registration_success: Successfully registered and connected the account '%username%'!
+    connecting: 'Connecting'
+    success: 'Successfully connected the account "%name%"!'
+    register: 'Register with the account "%name%"'
+    registration_success: 'Successfully registered and connected the account "%username%"!'
 
 connect:
     confirm:
-        cancel: Cancel
-        submit: Connect account
-        text: Are you sure that you want to connect your %service% account '%name%' to your current account?
+        cancel: 'Cancel'
+        submit: 'Connect account'
+        text: 'Are you sure that you want to connect your %service% account "%name%" to your current account?'
     registration:
-        cancel: Cancel
-        submit: Register account
+        cancel: 'Cancel'
+        submit: 'Register account'

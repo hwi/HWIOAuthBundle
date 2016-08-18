@@ -19,6 +19,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -67,7 +68,7 @@ class ConnectController extends Controller
         }
 
         return $this->render('HWIOAuthBundle:Connect:login.html.'.$this->getTemplatingEngine(), array(
-            'error'   => $error,
+            'error' => $error,
         ));
     }
 
@@ -110,9 +111,13 @@ class ConnectController extends Controller
             ->getUserInformation($error->getRawToken())
         ;
 
-        // enable compatibility with FOSUserBundle 1.3.x and 2.x
-        if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
-            $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
+        if ($this->container->getParameter('hwi_oauth.fosub_enabled')) {
+            // enable compatibility with FOSUserBundle 1.3.x and 2.x
+            if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
+                $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
+            } else {
+                $form = $this->container->get('hwi_oauth.registration.form');
+            }
         } else {
             $form = $this->container->get('hwi_oauth.registration.form');
         }
@@ -123,6 +128,10 @@ class ConnectController extends Controller
 
             // Authenticate the user
             $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
+
+            if ($targetPath = $this->getTargetPath($session)) {
+                return $this->redirect($targetPath);
+            }
 
             return $this->render('HWIOAuthBundle:Connect:registration_success.html.'.$this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
@@ -195,10 +204,12 @@ class ConnectController extends Controller
             goto show_confirmation_page;
         }
 
-        // Handle the form
+        // Symfony <3.0 BC
         /** @var $form FormInterface */
-        $form = $this->createForm('Symfony\Component\Form\Extension\Core\Type\FormType');
-
+        $form = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+            ? $this->createForm('Symfony\Component\Form\Extension\Core\Type\FormType')
+            : $this->createForm('form');
+        // Handle the form
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -212,7 +223,16 @@ class ConnectController extends Controller
 
             if ($currentToken instanceof OAuthToken) {
                 // Update user token with new details
-                $this->authenticateUser($request, $currentUser, $service, $currentToken->getRawToken(), false);
+                $newToken =
+                    is_array($accessToken) &&
+                    (isset($accessToken['access_token']) || isset($accessToken['oauth_token'])) ?
+                        $accessToken : $currentToken->getRawToken();
+
+                $this->authenticateUser($request, $currentUser, $service, $newToken, false);
+            }
+
+            if ($targetPath = $this->getTargetPath($session)) {
+                return $this->redirect($targetPath);
             }
 
             return $this->render('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
@@ -259,7 +279,8 @@ class ConnectController extends Controller
             }
         }
 
-        return $this->redirect($authorizationUrl);
+        $this->redirect($authorizationUrl)->sendHeaders();
+        return new RedirectResponse($authorizationUrl);
     }
 
     /**
@@ -344,6 +365,7 @@ class ConnectController extends Controller
     protected function authenticateUser(Request $request, UserInterface $user, $resourceOwnerName, $accessToken, $fakeLogin = true)
     {
         try {
+            $this->container->get('hwi_oauth.user_checker')->checkPreAuth($user);
             $this->container->get('hwi_oauth.user_checker')->checkPostAuth($user);
         } catch (AccountStatusException $e) {
             // Don't authenticate locked, disabled or expired users
@@ -430,5 +452,22 @@ class ConnectController extends Controller
         }
 
         return $this->get('security.context')->setToken($token);
+    }
+
+    /**
+     * @param SessionInterface $session
+     *
+     * @return string|null
+     */
+    private function getTargetPath(SessionInterface $session)
+    {
+        foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
+            $sessionKey = '_security.'.$providerKey.'.target_path';
+            if ($session->has($sessionKey)) {
+                return $session->get($sessionKey);
+            }
+        }
+
+        return null;
     }
 }

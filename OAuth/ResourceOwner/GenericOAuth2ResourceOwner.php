@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -105,7 +105,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
-        $parameters = array_merge( array(
+        $parameters = array_merge(array(
             'refresh_token' => $refreshToken,
             'grant_type'    => 'refresh_token',
             'client_id'     => $this->options['client_id'],
@@ -203,7 +203,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 

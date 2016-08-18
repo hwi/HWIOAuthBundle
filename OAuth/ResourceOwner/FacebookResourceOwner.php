@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * FacebookResourceOwner
@@ -98,15 +98,15 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritDoc}
      */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://www.facebook.com/v2.3/dialog/oauth',
-            'access_token_url'    => 'https://graph.facebook.com/v2.3/oauth/access_token',
-            'revoke_token_url'    => 'https://graph.facebook.com/v2.3/me/permissions',
-            'infos_url'           => 'https://graph.facebook.com/v2.3/me',
+            'authorization_url'   => 'https://www.facebook.com/v2.7/dialog/oauth',
+            'access_token_url'    => 'https://graph.facebook.com/v2.7/oauth/access_token',
+            'revoke_token_url'    => 'https://graph.facebook.com/v2.7/me/permissions',
+            'infos_url'           => 'https://graph.facebook.com/v2.7/me?fields=first_name,last_name,name,email',
             'use_commas_in_scope' => true,
             'display'             => null,
             'auth_type'           => null,

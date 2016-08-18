@@ -88,6 +88,12 @@ json;
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&hd=mycollege.edu',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
+
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('hd' => 'mycollege.edu, mycollege.org'));
+        $this->assertEquals(
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&hd=mycollege.edu&mycollege.org',
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
     }
 
     public function testRevokeToken()
