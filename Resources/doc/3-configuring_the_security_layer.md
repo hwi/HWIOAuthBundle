@@ -65,4 +65,8 @@ github_login:
 That's the basic setup of the bundle. If you are interested in giving users the option to "connect"
 social accounts check out this (todo).
 
+## Going further
+
+If you want to define your own Resource Owner or understand how that works under the hook, please have a look to the [Internals](./internals) documentation.
+
 [Return to the index.](index.md)
