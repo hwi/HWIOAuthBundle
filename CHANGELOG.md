@@ -9,6 +9,7 @@ Changelog
 * Fixed: Update Facebook API to v2.7,
 * Added: Symfony 3 support,
 * Added: Redirect to `target_path` after successful registration/connection,
+* Added: Asana resource owner,
 * Added: BitBucket resource owner,
 * Added: CleverResourceOwner resource owner,
 * Added: Itembase resource owner,
