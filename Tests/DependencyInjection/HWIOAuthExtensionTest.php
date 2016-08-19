@@ -450,7 +450,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
 
         $aliases = $this->containerBuilder->getAliases();
         $this->assertTrue(isset($aliases['hwi_oauth.resource_owner.external_ressource_owner']));
-        $this->assertEquals('my.service', $aliases['hwi_oauth.resource_owner.external_ressource_owner']->__toString());
+        $this->assertEquals('my.service', $aliases['hwi_oauth.resource_owner.external_ressource_owner']);
     }
 
     public function testCreateResourceOwnerServiceWithClass()

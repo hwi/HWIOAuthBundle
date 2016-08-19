@@ -67,6 +67,6 @@ social accounts check out this (todo).
 
 ## Going further
 
-If you want to define your own Resource Owner or understand how that works under the hook, please have a look to the [Internals](./internals) documentation.
+If you would like to define own Resource Owner (that are i.e. pretty simple or require third-party code - SDK's), or understand details of how it works under the hood, you should check [Internals](./internals) documentation.
 
 [Return to the index.](index.md)

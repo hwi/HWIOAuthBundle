@@ -320,13 +320,8 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->validate()
                             ->ifTrue(function ($c) {
-                                // skip if this contains a service
-                                if (isset($c['service'])) {
-                                    return false;
-                                }
-
-                                // skip if this contains a class
-                                if (isset($c['class'])) {
+                                // Skip if this contains a service or a class
+                                if (isset($c['service']) || isset($c['class'])) {
                                     return false;
                                 }
 
