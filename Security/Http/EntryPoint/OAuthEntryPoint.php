@@ -69,7 +69,8 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     {
         if ($this->useForward) {
             $subRequest = $this->httpUtils->createRequest($request, $this->loginPath);
-
+            $subRequest->query->add($request->query->getIterator()->getArrayCopy());
+            
             $response = $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             if (200 === $response->getStatusCode()) {
                 $response->headers->set('X-Status-Code', 401);
