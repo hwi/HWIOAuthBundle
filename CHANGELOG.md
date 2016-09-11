@@ -1,5 +1,11 @@
 Changelog
 =========
+## 0.4.3 (2016-09-11)
+* Fixed: Request parameters are not copied into new Request on forward
+* Fixed: Fixed scope deprecating message
+* Fixed: Resolved deprecated message in ConnectController
+* Fixed: Removed usage of deprecated code in tests
+
 ## 0.4.2 (2016-07-27)
 * Fixed: Change Discogs URL from http to https
 * Fixed: Update Facebook API URLs to not use outdated ones
