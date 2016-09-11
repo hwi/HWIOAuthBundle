@@ -174,38 +174,50 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function getOAuthAwareUserProviderMock()
     {
-        return $this->getMock('\HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface');
+        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function getResourceOwnerMapMock()
     {
         return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function getOAuthTokenMock()
     {
         return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken')
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function getResourceOwnerMock()
     {
-        return $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface');
+        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function getUserResponseMock()
     {
-        return $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface');
+        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function getUserCheckerMock()
     {
-        return $this->getMock('\Symfony\Component\Security\Core\User\UserCheckerInterface');
+        return $this->getMockBuilder('\Symfony\Component\Security\Core\User\UserCheckerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     protected function getUserMock()
     {
-        return $this->getMock('\Symfony\Component\Security\Core\User\UserInterface');
+        return $this->getMockBuilder('\Symfony\Component\Security\Core\User\UserInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 }

@@ -349,11 +349,15 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
     protected function createResourceOwner($name, array $options = array(), array $paths = array())
     {
         $this->buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->storage = $this->getMock('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface');
+        $this->storage = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
         $resourceOwner->addPaths(array_merge($this->paths, $paths));
