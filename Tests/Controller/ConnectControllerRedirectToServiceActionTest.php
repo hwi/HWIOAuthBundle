@@ -2,8 +2,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
-
-class ConnectConnectControllerRedirectToServiceActionTest extends AbstractConnectControllerTest
+class ConnectControllerRedirectToServiceActionTest extends AbstractConnectControllerTest
 {
     protected function setUp()
     {
