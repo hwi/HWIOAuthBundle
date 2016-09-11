@@ -24,9 +24,13 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
         if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
-            $authorizationChecker = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')->getMock();
+            $authorizationChecker = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
+                ->disableOriginalConstructor()
+                ->getMock();
         } else {
-            $authorizationChecker = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')->getMock();
+            $authorizationChecker = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')
+                ->disableOriginalConstructor()
+                ->getMock();
         }
         $utils = new OAuthUtils($this->getHttpUtils($url), $authorizationChecker, true);
         $utils->addResourceOwnerMap($this->getMap($url, $redirect, false, true));
@@ -133,31 +137,27 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
     private function getMap($url, $redirect, $hasUser = false, $hasOneRedirectUrl = false)
     {
         $resource = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
-            ->getMock()
-        ;
+            ->getMock();
         $resource
             ->expects($this->once())
             ->method('getAuthorizationUrl')
             ->with($url, array())
-            ->will($this->returnValue($redirect))
-        ;
+            ->will($this->returnValue($redirect));
+
         $resource
             ->expects($this->any())
             ->method('getOption')
             ->with('auth_with_one_url')
-            ->will($this->returnValue($hasOneRedirectUrl))
-        ;
+            ->will($this->returnValue($hasOneRedirectUrl));
 
         $mapMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
             ->disableOriginalConstructor()
-            ->getMock()
-        ;
+            ->getMock();
         $mapMock
             ->expects($this->once())
             ->method('getResourceOwnerByName')
             ->with('instagram')
-            ->will($this->returnValue($resource))
-        ;
+            ->will($this->returnValue($resource));
 
         if (!$hasUser && !$hasOneRedirectUrl) {
             $mapMock
@@ -179,7 +179,9 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     private function getHttpUtils($generatedUrl = '/')
     {
-        $urlGenerator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')->getMock();
+        $urlGenerator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $urlGenerator
             ->expects($this->any())
             ->method('generate')
@@ -192,17 +194,19 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
     private function getAutorizationChecker($hasUser)
     {
         if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
-            $mock = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')->getMock();
+            $mock = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
+                ->disableOriginalConstructor()
+                ->getMock();
         } else {
-            $mock = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')->getMock();
+            $mock= $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')
+                ->disableOriginalConstructor()
+                ->getMock();
         }
 
-        $mock
-            ->expects($this->once())
+        $mock->expects($this->once())
             ->method('isGranted')
             ->with('IS_AUTHENTICATED_REMEMBERED')
-            ->will($this->returnValue($hasUser))
-        ;
+            ->will($this->returnValue($hasUser));
 
         return $mock;
     }

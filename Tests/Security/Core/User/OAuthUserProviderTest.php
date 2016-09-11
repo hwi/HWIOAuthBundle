@@ -63,7 +63,9 @@ class OAuthUserProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testLoadUserByOAuthUserResponse()
     {
-        $responseMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')->getMock();
+        $responseMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $responseMock
             ->expects($this->once())

@@ -4,7 +4,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 
-class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
+class ConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
 {
     /**
      * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
@@ -49,7 +49,9 @@ class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectCo
             ->willReturn(array())
         ;
 
-        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')->getMock();
+        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($form)
@@ -82,7 +84,9 @@ class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectCo
             ->willReturn(array())
         ;
 
-        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')->getMock();
+        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($form)
@@ -158,7 +162,9 @@ class ConnectConnectControllerConnectServiceActionTest extends AbstractConnectCo
             ->willReturn(array())
         ;
 
-        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')->getMock();
+        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($form)

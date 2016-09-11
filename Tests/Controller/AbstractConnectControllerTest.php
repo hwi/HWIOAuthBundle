@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 
@@ -107,53 +106,76 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->container->setParameter('hwi_oauth.connect.confirmation', true);
 
         if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
-            $this->authorizationChecker = $this->getMockBuilder('\Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')->getMock();
+            $this->authorizationChecker = $this->getMockBuilder('\Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
+                ->disableOriginalConstructor()
+                ->getMock();
             $this->container->set('security.authorization_checker', $this->authorizationChecker);
-            $this->tokenStorage = $this->getMockBuilder('\Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')->getMock();
+
+            $this->tokenStorage = $this->getMockBuilder('\Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')
+                ->disableOriginalConstructor()
+                ->getMock();
             $this->container->set('security.token_storage', $this->tokenStorage);
         } else {
-            $this->securityContext = $this->getMockBuilder('\Symfony\Component\Security\Core\SecurityContextInterface')->getMock();
+            $this->securityContext = $this->getMockBuilder('\Symfony\Component\Security\Core\SecurityContextInterface')
+                ->disableOriginalConstructor()
+                ->getMock();
             $this->container->set('security.context', $this->securityContext);
         }
 
-        $this->templating = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface')->getMock();
+        $this->templating = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->container->set('templating', $this->templating);
 
-        $this->router = $this->getMockBuilder('Symfony\Component\Routing\RouterInterface')->getMock();
+        $this->router = $this->getMockBuilder('\Symfony\Component\Routing\RouterInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->container->set('router', $this->router);
 
-        $this->resourceOwner = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')->getMock();
+        $this->resourceOwner = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resourceOwner->expects($this->any())
             ->method('getUserInformation')
             ->willReturn(new CustomUserResponse())
         ;
-        $this->resourceOwnerMap = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
-            ->disableOriginalConstructor()->getMock()
-        ;
+        $this->resourceOwnerMap = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resourceOwnerMap->expects($this->any())
             ->method('getResourceOwnerByName')
             ->withAnyParameters()
             ->willReturn($this->resourceOwner);
         $this->container->set('hwi_oauth.resource_ownermap.default', $this->resourceOwnerMap);
 
-        $this->accountConnector = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface')->getMock();
+        $this->accountConnector = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->container->set('hwi_oauth.account.connector', $this->accountConnector);
 
         $this->oAuthUtils = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Security\OAuthUtils')
-            ->disableOriginalConstructor()->getMock()
-        ;
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->container->set('hwi_oauth.security.oauth_utils', $this->oAuthUtils);
 
-        $this->userChecker = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserCheckerInterface')->getMock();
+        $this->userChecker = $this->getMockBuilder('Symfony\Component\Security\Core\User\UserCheckerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->container->set('hwi_oauth.user_checker', $this->userChecker);
 
-        $this->eventDispatcher = $this->getMockBuilder('Symfony\Component\EventDispatcher\EventDispatcherInterface')->getMock();
+        $this->eventDispatcher = $this->getMockBuilder('\Symfony\Component\EventDispatcher\EventDispatcherInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->container->set('event_dispatcher', $this->eventDispatcher);
 
-        $this->formFactory = $this->getMockBuilder('Symfony\Component\Form\FormFactoryInterface')->getMock();
+        $this->formFactory = $this->getMockBuilder('\Symfony\Component\Form\FormFactoryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->container->set('form.factory', $this->formFactory);
 
-        $this->session = $this->getMockBuilder('Symfony\Component\HttpFoundation\Session\SessionInterface')->getMock();
+        $this->session = $this->getMockBuilder('\Symfony\Component\HttpFoundation\Session\SessionInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
 

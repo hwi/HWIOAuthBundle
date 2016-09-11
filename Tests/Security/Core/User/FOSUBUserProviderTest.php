@@ -113,7 +113,9 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createResourceOwnerMock($resourceOwnerName = null)
     {
-        $resourceOwnerMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')->getMock();
+        $resourceOwnerMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         if (null !== $resourceOwnerName) {
             $resourceOwnerMock
@@ -127,7 +129,9 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createUserResponseMock($username = null, $resourceOwnerName = null)
     {
-        $responseMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')->getMock();
+        $responseMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         if (null !== $resourceOwnerName) {
             $responseMock

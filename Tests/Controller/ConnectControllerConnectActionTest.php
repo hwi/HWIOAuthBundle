@@ -2,12 +2,11 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\SecurityContext;
 
-class ConnectConnectControllerConnectActionTest extends AbstractConnectControllerTest
+class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 {
     public function testLoginPage()
     {

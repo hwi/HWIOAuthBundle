@@ -1,6 +1,6 @@
 Changelog
 =========
-## 0.5.0 (xxxx-xx-xx)
+## 0.5.0 (2016-xx-xx)
 * Fixed: Better `FOSUserBundle` integration,
 * Fixed: Serialization issue in `WechatResourceOwner`,
 * Fixed: Incorrect refresh token in `WechatResourceOwner`,
@@ -17,6 +17,12 @@ Changelog
 * Added: Office365 resource owner,
 * Added: Wunderlist resource owner,
 * Added: Hungarian translation
+
+## 0.4.3 (2016-09-11)
+* Fixed: Request parameters are not copied into new Request on forward
+* Fixed: Fixed scope deprecating message
+* Fixed: Resolved deprecated message in ConnectController
+* Fixed: Removed usage of deprecated code in tests
 
 ## 0.4.2 (2016-07-27)
 * Fixed: Change Discogs URL from http to https
