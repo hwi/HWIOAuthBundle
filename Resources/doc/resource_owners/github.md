@@ -4,8 +4,8 @@ First you will have to register your application on GitHub. Check out the
 documentation for more information: http://developer.github.com/v3/oauth/.
 
 Next configure a resource owner of type `github` with appropriate
-`client_id`, `client_secret` and `scope`. Refer to the GitHub documentation
-for the available scopes.
+`client_id`, `client_secret` & `scope`. For the available scopes you should
+check official Github documentation: https://developer.github.com/v3/oauth/#scopes
 
 ```yaml
 # app/config/config.yml
@@ -16,6 +16,7 @@ hwi_oauth:
             type:                github
             client_id:           <client_id>
             client_secret:       <client_secret>
+            scopes:              'user:email,public_repo'
 ```
 
 When you're done. Continue by configuring the security layer or go back to
