@@ -1,6 +1,7 @@
 Changelog
 =========
-## 0.5.0 (2016-xx-xx)
+## 0.5.0 (2016-09-11)
+* Fixed: `OAuthHelper` should fallback to new `Request` in case of receiving `null`,
 * Fixed: Better `FOSUserBundle` integration,
 * Fixed: Serialization issue in `WechatResourceOwner`,
 * Fixed: Incorrect refresh token in `WechatResourceOwner`,
