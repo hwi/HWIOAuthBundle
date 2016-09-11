@@ -136,15 +136,19 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $registrationForm->expects($this->any())
             ->method('getData')
             ->willReturn(new User());
-        $registrationFormFactory = $this->getMockBuilder('\FOS\UserBundle\Form\Factory\FactoryInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $registrationFormFactory->expects($this->any())
-            ->method('createForm')
-            ->willReturn($registrationForm);
 
-        $this->container->set('hwi_oauth.registration.form.factory', $registrationFormFactory);
-        // FOSUser 1.3 BC. To be removed.
-        $this->container->set('hwi_oauth.registration.form', $registrationForm);
+        if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
+            $registrationFormFactory = $this->getMockBuilder('FOS\UserBundle\Form\Factory\FactoryInterface')
+                ->disableOriginalConstructor()
+                ->getMock();
+            $registrationFormFactory->expects($this->any())
+                ->method('createForm')
+                ->willReturn($registrationForm);
+
+            $this->container->set('hwi_oauth.registration.form.factory', $registrationFormFactory);
+         } else {
+            // FOSUser 1.3 BC. To be removed.
+            $this->container->set('hwi_oauth.registration.form', $registrationForm);
+        }
     }
 }
