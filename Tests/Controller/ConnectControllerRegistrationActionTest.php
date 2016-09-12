@@ -6,6 +6,9 @@ use FOS\UserBundle\Form\Factory\FactoryInterface;
 use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use Symfony\Component\Form\Form;
+use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 class ConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
 {
@@ -69,6 +72,12 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         ;
         $this->container->set('hwi_oauth.registration.form.handler', $registrationFormHandler);
 
+        $this->eventDispatcher->expects($this->once())->method('dispatch');
+        $this->eventDispatcher->expects($this->at(0))
+            ->method('dispatch')
+            ->with(HWIOAuthEvents::REGISTRATION_INITIALIZE)
+        ;
+
         $this->templating->expects($this->once())
             ->method('renderResponse')
             ->with('HWIOAuthBundle:Connect:registration.html.twig')
@@ -103,11 +112,30 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
             ->method('connect')
         ;
 
-        $this->eventDispatcher->expects($this->once())
+        $this->eventDispatcher->expects($this->exactly(3))->method('dispatch');
+        $this->eventDispatcher->expects($this->at(0))
             ->method('dispatch')
+            ->with(HWIOAuthEvents::REGISTRATION_SUCCESS)
         ;
 
-        $this->controller->registrationAction($this->request, $key);
+        $this->eventDispatcher->expects($this->at(1))
+            ->method('dispatch')
+            ->with(SecurityEvents::INTERACTIVE_LOGIN)
+        ;
+
+        $this->eventDispatcher->expects($this->at(2))
+            ->method('dispatch')
+            ->with(HWIOAuthEvents::REGISTRATION_COMPLETED)
+        ;
+
+        $response = new Response();
+        $this->templating->expects($this->once())
+            ->method('renderResponse')
+            ->with('HWIOAuthBundle:Connect:registration_success.html.twig')
+            ->willReturn($response)
+        ;
+
+        $this->assertSame($response, $this->controller->registrationAction($this->request, $key));
     }
 
     private function makeRegistrationForm()
