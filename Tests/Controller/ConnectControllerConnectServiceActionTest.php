@@ -2,7 +2,9 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
+use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
+use Symfony\Component\HttpFoundation\Response;
 
 class ConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
 {
@@ -49,12 +51,23 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(array())
         ;
 
+        $this->getTokenStorage()->expects($this->once())
+            ->method('getToken')
+            ->willReturn(new CustomOAuthToken())
+        ;
+
         $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')
             ->disableOriginalConstructor()
             ->getMock();
         $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($form)
+        ;
+
+        $this->eventDispatcher->expects($this->once())->method('dispatch');
+        $this->eventDispatcher->expects($this->at(0))
+            ->method('dispatch')
+            ->with(HWIOAuthEvents::CONNECT_INITIALIZE)
         ;
 
         $this->templating->expects($this->once())
@@ -100,12 +113,24 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(new CustomOAuthToken())
         ;
 
+        $this->eventDispatcher->expects($this->exactly(2))->method('dispatch');
+        $this->eventDispatcher->expects($this->at(0))
+            ->method('dispatch')
+            ->with(HWIOAuthEvents::CONNECT_CONFIRMED)
+        ;
+        $this->eventDispatcher->expects($this->at(1))
+            ->method('dispatch')
+            ->with(HWIOAuthEvents::CONNECT_COMPLETED)
+        ;
+
+        $response = new Response();
         $this->templating->expects($this->once())
             ->method('renderResponse')
             ->with('HWIOAuthBundle:Connect:connect_success.html.twig')
+            ->willReturn($response)
         ;
 
-        $this->controller->connectServiceAction($this->request, 'facebook');
+        $this->assertSame($response, $this->controller->connectServiceAction($this->request, 'facebook'));
     }
 
     public function testConnectNoConfirmation()
@@ -132,12 +157,24 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(new CustomOAuthToken())
         ;
 
+        $this->eventDispatcher->expects($this->exactly(2))->method('dispatch');
+        $this->eventDispatcher->expects($this->at(0))
+            ->method('dispatch')
+            ->with(HWIOAuthEvents::CONNECT_CONFIRMED)
+        ;
+        $this->eventDispatcher->expects($this->at(1))
+            ->method('dispatch')
+            ->with(HWIOAuthEvents::CONNECT_COMPLETED)
+        ;
+
+        $response = new Response();
         $this->templating->expects($this->once())
             ->method('renderResponse')
             ->with('HWIOAuthBundle:Connect:connect_success.html.twig')
+            ->willReturn($response)
         ;
 
-        $this->controller->connectServiceAction($this->request, 'facebook');
+        $this->assertSame($response, $this->controller->connectServiceAction($this->request, 'facebook'));
     }
 
     public function testResourceOwnerHandle()
@@ -160,6 +197,11 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $this->resourceOwner->expects($this->once())
             ->method('getAccessToken')
             ->willReturn(array())
+        ;
+
+        $this->getTokenStorage()->expects($this->once())
+            ->method('getToken')
+            ->willReturn(new CustomOAuthToken())
         ;
 
         $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')
