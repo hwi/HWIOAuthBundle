@@ -31,6 +31,7 @@ class AzureV2ResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier'    => 'id',
         'email'         => 'mail',
+        'nickname'      => 'mail',
         'realname'      => 'displayName',
         'firstName'     => 'givenName',
         'lastName'      => 'surname'
