@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 use Buzz\Message\RequestInterface;
@@ -88,7 +88,7 @@ class EvernoteResourceOwner extends GenericOAuth1ResourceOwner
     }
 
     /** {@inheritDoc} */
-    protected function configureOptions(OptionsResolverInterface $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
