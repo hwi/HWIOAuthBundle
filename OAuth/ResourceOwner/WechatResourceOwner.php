@@ -50,6 +50,14 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
+        if ($this->options['csrf']) {
+            if (null === $this->state) {
+                $this->state = $this->generateNonce();
+            }
+
+            $this->storage->save($this, $this->state, 'csrf_state');
+        }
+
         $parameters = array_merge(array(
             'appid'         => $this->options['client_id'],
             'redirect_uri'  => $redirectUri,
