@@ -103,7 +103,7 @@ class ConnectController extends Controller
 
         if (!$error instanceof AccountNotLinkedException || time() - $key > 300) {
             // todo: fix this
-            throw new \Exception('Cannot register an account.');
+            throw new \Exception('Cannot register an account.', 0, $error instanceof \Exception ? $error : null);
         }
 
         $userInformation = $this
