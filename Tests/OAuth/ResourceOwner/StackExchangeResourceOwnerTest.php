@@ -17,15 +17,21 @@ class StackExchangeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = <<<json
 {
-    "user_id": "1",
-    "display_name": "bar"
+   "items" : [
+      {
+         "display_name" : "bar",
+         "profile_image" : "https://foo.com/bar.png",
+         "user_id" : 1
+      }
+   ]
 }
 json;
 
     protected $paths = array(
-        'identifier'  => 'user_id',
-        'nickname'    => 'display_name',
-        'realname'    => 'display_name'
+        'identifier'     => 'items.0.user_id',
+        'nickname'       => 'items.0.display_name',
+        'realname'       => 'items.0.display_name',
+        'profilepicture' => 'items.0.profile_image',
     );
 
     protected $expectedUrls = array(
@@ -35,6 +41,6 @@ json;
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
-        return new StackExchangeResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new StackExchangeResourceOwner($this->buzzClient, $httpUtils, array_merge($options, array('key' => 'baz')), $name, $this->storage);
     }
 }
