@@ -112,6 +112,18 @@ class OAuthUtils
             }
         }
 
+        // grab extra parameters from session
+
+        if ($request->hasSession()) {
+            // initialize the session for preventing SessionUnavailableException
+            $session = $request->getSession();
+            $session->start();
+            $sessionKey = "_security.$name.parameters";
+            $extraSessionParameters = $session->get($sessionKey, []);
+            $extraParameters = array_merge($extraParameters, $extraSessionParameters);
+            $session->remove($sessionKey);
+        }
+
         return $resourceOwner->getAuthorizationUrl($redirectUrl, $extraParameters);
     }
 
