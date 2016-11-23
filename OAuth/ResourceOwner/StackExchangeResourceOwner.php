@@ -11,7 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
  * StackExchangeResourceOwner
@@ -24,11 +26,38 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritDoc}
      */
     protected $paths = array(
-        'identifier'     => 'user_id',
-        'nickname'       => 'display_name',
-        'realname'       => 'display_name',
-        'profilepicture' => 'profile_image',
+        'identifier'     => 'items.0.user_id',
+        'nickname'       => 'items.0.display_name',
+        'realname'       => 'items.0.display_name',
+        'profilepicture' => 'items.0.profile_image',
     );
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    {
+        if (!extension_loaded('zlib')) {
+            throw new AuthenticationException('OAuth error: Stack Exchange resource owner requires zlib installed. See https://api.stackexchange.com/docs/compression for details.');
+        }
+
+        $parameters = array_merge(
+           array($this->options['attr_name'] => $accessToken['access_token']),
+           array('site' => $this->options['site'], 'key' => $this->options['key']),
+           $extraParameters
+        );
+
+        $compressed = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], $parameters));
+        $content    = file_get_contents('compress.zlib://data:;base64,'.base64_encode($compressed->getContent()));
+
+        $response   = $this->getUserResponse();
+        $response->setResponse($content);
+
+        $response->setResourceOwner($this);
+        $response->setOAuthToken(new OAuthToken($accessToken));
+
+        return $response;
+    }
 
     /**
      * {@inheritDoc}
@@ -37,12 +66,18 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
-            'authorization_url' => 'https://stackexchange.com/oauth',
-            'access_token_url'  => 'https://stackexchange.com/oauth/access_token',
-            'infos_url'         => 'https://api.stackexchange.com/2.0/me',
+        $resolver->setRequired(array(
+            'key',
+        ));
 
-            'scope'             => 'no_expiry',
+        $resolver->setDefaults(array(
+            'authorization_url'        => 'https://stackexchange.com/oauth',
+            'access_token_url'         => 'https://stackexchange.com/oauth/access_token',
+            'infos_url'                => 'https://api.stackexchange.com/2.0/me',
+
+            'scope'                    => 'no_expiry',
+            'site'                     => 'stackoverflow',
+            'use_bearer_authorization' => false,
         ));
     }
 }
