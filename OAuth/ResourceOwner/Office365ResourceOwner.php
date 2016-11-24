@@ -23,8 +23,8 @@ class Office365ResourceOwner extends GenericOAuth2ResourceOwner
         'identifier'    => 'id',
         'email'         => 'mail',
         'realname'      => 'displayName',
-        'firstName'     => 'givenName',
-        'lastName'      => 'surname'
+        'firstname'     => 'givenName',
+        'lastname'      => 'surname'
     );
 
     /**
