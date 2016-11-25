@@ -46,9 +46,9 @@ class Office365ResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
-        $extraParameters = array(
+        $extraParameters = array_merge(array(
             'resource' => 'https://graph.microsoft.com'
-        );
+        ), $extraParameters);
 
         return parent::getAccessToken($request, $redirectUri, $extraParameters);
     }
