@@ -218,6 +218,7 @@ class ConnectController extends Controller
             return $this->render('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
                 'service' => $service,
+                'targetUrl' => $this->getTargetUrlFromSession($request),
             ));
         }
 
@@ -430,5 +431,27 @@ class ConnectController extends Controller
         }
 
         return $this->get('security.context')->setToken($token);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return string|null
+     */
+    protected function getTargetUrlFromSession(Request $request)
+    {
+        if (!$request->hasSession()) {
+            return;
+        }
+
+        foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
+            $sessionKey = '_security.'.$providerKey.'.target_path';
+
+            if ($request->getSession()->has($sessionKey)) {
+                return $request->getSession()->get($sessionKey);
+            }
+        }
+
+        return;
     }
 }

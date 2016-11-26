@@ -12,3 +12,4 @@ connect:
     registration:
         cancel: Annuleren
         submit: Registeer account
+        back: Terug naar de oorspronkelijke pagina
