@@ -16,6 +16,8 @@ hwi_oauth:
             type:                windows_live
             client_id:           <client_id>
             client_secret:       <client_secret>
+            scope:               wl.signin   
+
 ```
 
 When you're done. Continue by configuring the security layer or go back to
