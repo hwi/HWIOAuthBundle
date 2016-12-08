@@ -1,5 +1,9 @@
 Changelog
 =========
+## 0.5.1 (2016-10-03)
+* Fixed error that could occur with message "302 Header already sent",
+* Exclude tests from Composer autoloader
+
 ## 0.5.0 (2016-09-11)
 * Fixed: `OAuthHelper` should fallback to new `Request` in case of receiving `null`,
 * Fixed: Better `FOSUserBundle` integration,
