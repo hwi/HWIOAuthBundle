@@ -76,9 +76,9 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url' => 'http://www.odnoklassniki.ru/oauth/authorize',
-            'access_token_url'  => 'http://api.odnoklassniki.ru/oauth/token.do',
-            'infos_url'         => 'http://api.odnoklassniki.ru/fb.do?method=users.getCurrentUser',
+            'authorization_url' => 'https://connect.ok.ru/oauth/authorize',
+            'access_token_url'  => 'https://api.ok.ru/oauth/token.do',
+            'infos_url'         => 'https://api.ok.ru/fb.do?method=users.getCurrentUser',
 
             'application_key'   => null,
             'fields'            => null,
