@@ -139,7 +139,6 @@ class ConnectController extends Controller
         }
 
         // reset the error in the session
-        $key = time();
         $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
         return $this->render('HWIOAuthBundle:Connect:registration.html.'.$this->getTemplatingEngine(), array(
