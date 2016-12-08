@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -38,8 +39,23 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
         $parameters = array(
             'access_token'    => $accessToken['access_token'],
             'application_key' => $this->options['application_key'],
-            'sig'             => md5(sprintf('application_key=%smethod=users.getCurrentUser%s', $this->options['application_key'], md5($accessToken['access_token'].$this->options['client_secret']))),
         );
+
+        if ($this->options['fields']) {
+            $parameters['fields'] = $this->options['fields'];
+            $parameters['sig'] = md5(sprintf(
+                'application_key=%sfields=%smethod=users.getCurrentUser%s',
+                $this->options['application_key'],
+                $this->options['fields'],
+                md5($accessToken['access_token'].$this->options['client_secret'])
+            ));
+        } else {
+            $parameters['sig'] = md5(sprintf(
+                'application_key=%smethod=users.getCurrentUser%s',
+                $this->options['application_key'],
+                md5($accessToken['access_token'].$this->options['client_secret'])
+            ));
+        }
         $url = $this->normalizeUrl($this->options['infos_url'], $parameters);
 
         $content = $this->doGetUserInformationRequest($url)->getContent();
@@ -65,6 +81,23 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
             'infos_url'         => 'http://api.odnoklassniki.ru/fb.do?method=users.getCurrentUser',
 
             'application_key'   => null,
+            'fields'            => null,
         ));
+
+        $fieldsNormalizer = function (Options $options, $value) {
+            if (!$value) {
+                return null;
+            }
+            return is_array($value) ? implode(',', $value) : $value;
+        };
+
+        // Symfony <2.6 BC
+        if (method_exists($resolver, 'setNormalizer')) {
+            $resolver->setNormalizer('fields', $fieldsNormalizer);
+        } else {
+            $resolver->setNormalizers(array(
+                'fields' => $fieldsNormalizer,
+            ));
+        }
     }
 }
