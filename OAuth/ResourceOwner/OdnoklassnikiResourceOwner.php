@@ -28,6 +28,9 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
         'identifier' => 'uid',
         'nickname'   => 'username',
         'realname'   => 'name',
+        'email'      => 'email',
+        'firstname'  => 'first_name',
+        'lastname'   => 'last_name',
     );
 
     /**
