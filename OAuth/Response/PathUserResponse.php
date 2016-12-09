@@ -29,6 +29,8 @@ class PathUserResponse extends AbstractUserResponse
         'firstname'      => null,
         'lastname'       => null,
         'realname'       => null,
+        'first_name'     => null,
+        'last_name'      => null,
         'email'          => null,
         'profilepicture' => null,
     );
@@ -71,6 +73,22 @@ class PathUserResponse extends AbstractUserResponse
     public function getRealName()
     {
         return $this->getValueForPath('realname');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFirstName()
+    {
+        return $this->getValueForPath('first_name');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLastName()
+    {
+        return $this->getValueForPath('last_name');
     }
 
     /**
