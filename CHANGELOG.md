@@ -1,5 +1,14 @@
 Changelog
 =========
+## 0.5.2 (2016-12-12)
+* Fixed: Prevent uncaught exception when redirecting to invalid route
+* Fixed: Add more details too exception when account was not linked
+* Fixed: Odnoklassinki resource owner
+* Fixed: Office365 resource owner
+* Fixed: StackExchange resource owner
+* Fixed: WeChat resource owner
+* Fixed: WindowsLive resource owner
+
 ## 0.5.1 (2016-10-03)
 * Fixed error that could occur with message "302 Header already sent",
 * Exclude tests from Composer autoloader
