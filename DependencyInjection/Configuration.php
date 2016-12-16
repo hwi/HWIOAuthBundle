@@ -49,6 +49,7 @@ class Configuration implements ConfigurationInterface
             'fiware',
             'foursquare',
             'github',
+            'gitlab',
             'google',
             'youtube',
             'hubic',
