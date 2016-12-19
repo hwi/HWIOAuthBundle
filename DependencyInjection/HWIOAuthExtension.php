@@ -117,6 +117,10 @@ class HWIOAuthExtension extends Extension
 
         // handle external resource owners with given class
         if (isset($options['class'])) {
+            if (!is_subclass_of($options['class'], 'HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')) {
+                throw new InvalidConfigurationException(sprintf('Class "%s" must implement interface "HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface".', $options['class']));
+            }
+
             $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.$type);
             $definition->setClass($options['class']);
             unset($options['class']);

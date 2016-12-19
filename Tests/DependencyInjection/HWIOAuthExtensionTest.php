@@ -15,6 +15,21 @@ use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 
+use Symfony\Component\HttpFoundation\Request;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+
+class MyCustomProvider implements ResourceOwnerInterface
+{
+    public function getUserInformation(array $accessToken, array $extraParameters = array()) {}
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = array()){}
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array()){}
+    public function isCsrfTokenValid($csrfToken){}
+    public function getName(){}
+    public function getOption($name){}
+    public function handles(Request $request){}
+    public function setName($name){}
+}
+
 /**
  * Code bases on FOSUserBundle tests
  */
@@ -229,7 +244,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $config['resource_owners'] = array(
             'valid' => array(
                 'type'              => 'oauth1',
-                'class'             => 'My\Class',
+                'class'             => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider',
                 'client_id'         => 'client_id',
                 'client_secret'     => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
@@ -254,7 +269,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $config['resource_owners'] = array(
             'valid' => array(
                 'type'              => 'oauth2',
-                'class'             => 'My\Class',
+                'class'             => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider',
                 'client_id'         => 'client_id',
                 'client_secret'     => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
@@ -453,12 +468,27 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('my.service', $aliases['hwi_oauth.resource_owner.external_ressource_owner']);
     }
 
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Class "HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyWrongCustomProvider" must implement interface "HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface".
+     */
+    public function testCreateResourceOwnerServiceWithWrongClass()
+    {
+        $extension = new HWIOAuthExtension();
+        $extension->createResourceOwnerService($this->containerBuilder, 'external_ressource_owner', array(
+            'type'              => 'oauth2',
+            'class'             => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyWrongCustomProvider',
+            'client_id'         => '42',
+            'client_secret'     => 'foo',
+        ));
+    }
+
     public function testCreateResourceOwnerServiceWithClass()
     {
         $extension = new HWIOAuthExtension();
         $extension->createResourceOwnerService($this->containerBuilder, 'external_ressource_owner', array(
             'type'              => 'oauth2',
-            'class'             => 'My\Class',
+            'class'             => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider',
             'client_id'         => '42',
             'client_secret'     => 'foo',
         ));
@@ -467,7 +497,7 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue(isset($definitions['hwi_oauth.resource_owner.external_ressource_owner']));
         $this->assertEquals('hwi_oauth.abstract_resource_owner.oauth2', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getParent());
-        $this->assertEquals('My\Class', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getClass());
+        $this->assertEquals('HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getClass());
 
         $argument2 = $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getArgument(2);
         $this->assertEquals('42', $argument2['client_id']);
