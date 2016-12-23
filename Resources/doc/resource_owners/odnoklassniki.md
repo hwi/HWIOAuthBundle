@@ -19,7 +19,7 @@ hwi_oauth:
                 application_key: <application_key>
 ```
 
-Scopes are separate by semicolon, you can those scopes: `VALUABLE ACCESS`, `SET STATUS`, `PHOTO CONTENT`.
+Scopes are separate by semicolon, you can those scope: `VALUABLE ACCESS`, `SET STATUS`, `PHOTO CONTENT`.
 It's important! You can use `users.getLoggedInUser` & `users.getCurrentUser` without scope. If your application
 requires some additional data, you must write an email to `oauth@odnoklassniki.ru` and ask for giving you additional
 permissions! More information about [Odnoklassniki OAuth2 authorization](https://apiok.ru/wiki/pages/viewpage.action?pageId=42476522).

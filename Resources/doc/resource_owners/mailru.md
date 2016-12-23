@@ -17,7 +17,7 @@ hwi_oauth:
             client_secret:       <client_secret>
 ```
 
-Scopes are separate by semicolon, you can those scopes: `photos`, `guestbook`, `stream`, `messages`, `events`.
+Scopes are separate by semicolon, you can those scope: `photos`, `guestbook`, `stream`, `messages`, `events`.
 
 When you're done. Continue by configuring the security layer or go back to
 setup more resource owners.
