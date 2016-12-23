@@ -16,7 +16,7 @@ hwi_oauth:
             type:                github
             client_id:           <client_id>
             client_secret:       <client_secret>
-            scopes:              'user:email,public_repo'
+            scope:               'user:email,public_repo'
 ```
 
 When you're done. Continue by configuring the security layer or go back to
