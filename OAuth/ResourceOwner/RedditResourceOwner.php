@@ -35,7 +35,12 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, null, array('Authorization: Basic ' . base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret']))));
+        $headers = array(
+            'Content-Type' => 'application/x-www-form-urlencoded',
+            'Authorization' => 'Basic ' . base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret']))
+        );
+
+        return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers, HttpRequestInterface::METHOD_POST);
     }
 
     /**
