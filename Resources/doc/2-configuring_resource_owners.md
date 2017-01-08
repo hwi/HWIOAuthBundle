@@ -54,6 +54,7 @@ hwi_oauth:
 - [Flickr](resource_owners/flickr.md)
 - [Foursquare](resource_owners/foursquare.md)
 - [GitHub](resource_owners/github.md)
+- [GitLab](resource_owners/gitlab.md)
 - [Google](resource_owners/google.md)
 - [Hubic](resource_owners/hubic.md)
 - [Instagram](resource_owners/instagram.md)
