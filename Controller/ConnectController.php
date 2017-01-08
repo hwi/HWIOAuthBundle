@@ -101,8 +101,7 @@ class ConnectController extends Controller
         $error = $session->get('_hwi_oauth.registration_error.'.$key);
         $session->remove('_hwi_oauth.registration_error.'.$key);
 
-        if (!$error instanceof AccountNotLinkedException || time() - $key > 300) {
-            // todo: fix this
+        if (!$error instanceof AccountNotLinkedException) {
             throw new \Exception('Cannot register an account.', 0, $error instanceof \Exception ? $error : null);
         }
 
@@ -139,7 +138,6 @@ class ConnectController extends Controller
         }
 
         // reset the error in the session
-        $key = time();
         $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
         return $this->render('HWIOAuthBundle:Connect:registration.html.'.$this->getTemplatingEngine(), array(
