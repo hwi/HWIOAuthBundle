@@ -11,43 +11,42 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * JawboneResourceOwner
+ * JawboneResourceOwner.
  *
  * @author Dmitry Matora <dmitry.matora@gmail.com>
  */
 class JawboneResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'xid'               => 'data.id',
-        'firstname'         => 'data.first',
-        'lastname'          => 'data.last',
-        'profilepicture'    => 'data.image',
+        'xid' => 'data.id',
+        'firstname' => 'data.first',
+        'lastname' => 'data.last',
+        'profilepicture' => 'data.image',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://jawbone.com/auth/oauth2/auth',
-            'access_token_url'    => 'https://jawbone.com/auth/oauth2/token',
-            'infos_url'           => 'https://jawbone.com/nudge/api/v.1.0/users/@me',
+            'authorization_url' => 'https://jawbone.com/auth/oauth2/auth',
+            'access_token_url' => 'https://jawbone.com/auth/oauth2/token',
+            'infos_url' => 'https://jawbone.com/nudge/api/v.1.0/users/@me',
             'use_commas_in_scope' => true,
         ));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeToken($accessToken)
     {
@@ -57,11 +56,11 @@ class JawboneResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getInformation($accessToken, $type, array $extraParameters = array())
     {
-        $url = $this->normalizeUrl($this->options['infos_url'] . '/' . $type, $extraParameters);
+        $url = $this->normalizeUrl($this->options['infos_url'].'/'.$type, $extraParameters);
 
         $headers = array(
             'Authorization: Bearer '.$accessToken['access_token'],

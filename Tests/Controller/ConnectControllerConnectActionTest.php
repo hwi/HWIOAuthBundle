@@ -23,7 +23,7 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
     public function testRegistrationRedirect()
     {
         $this->request->attributes = new ParameterBag(array(
-            $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException()
+            $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException(),
         ));
 
         $this->getTokenStorage()->expects($this->once())
@@ -49,7 +49,7 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
     public function testRegistrationRedirectWithoutTokenStorage()
     {
         $this->request->attributes = new ParameterBag(array(
-            $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException()
+            $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException(),
         ));
 
         $this->getTokenStorage()->expects($this->once())
@@ -73,7 +73,7 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
     public function testRequestError()
     {
         $this->request->attributes = new ParameterBag(array(
-            $this->getAuthenticationErrorKey() => new AccessDeniedException('You shall not pass the request.')
+            $this->getAuthenticationErrorKey() => new AccessDeniedException('You shall not pass the request.'),
         ));
 
         $this->templating->expects($this->once())

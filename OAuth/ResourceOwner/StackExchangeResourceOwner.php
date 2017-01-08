@@ -16,24 +16,24 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * StackExchangeResourceOwner
+ * StackExchangeResourceOwner.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
 class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'items.0.user_id',
-        'nickname'       => 'items.0.display_name',
-        'realname'       => 'items.0.display_name',
+        'identifier' => 'items.0.user_id',
+        'nickname' => 'items.0.display_name',
+        'realname' => 'items.0.display_name',
         'profilepicture' => 'items.0.profile_image',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -48,9 +48,9 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
         );
 
         $compressed = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], $parameters));
-        $content    = file_get_contents('compress.zlib://data:;base64,'.base64_encode($compressed->getContent()));
+        $content = file_get_contents('compress.zlib://data:;base64,'.base64_encode($compressed->getContent()));
 
-        $response   = $this->getUserResponse();
+        $response = $this->getUserResponse();
         $response->setResponse($content);
 
         $response->setResourceOwner($this);
@@ -60,7 +60,7 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -71,12 +71,12 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
         ));
 
         $resolver->setDefaults(array(
-            'authorization_url'        => 'https://stackexchange.com/oauth',
-            'access_token_url'         => 'https://stackexchange.com/oauth/access_token',
-            'infos_url'                => 'https://api.stackexchange.com/2.0/me',
+            'authorization_url' => 'https://stackexchange.com/oauth',
+            'access_token_url' => 'https://stackexchange.com/oauth/access_token',
+            'infos_url' => 'https://api.stackexchange.com/2.0/me',
 
-            'scope'                    => 'no_expiry',
-            'site'                     => 'stackoverflow',
+            'scope' => 'no_expiry',
+            'site' => 'stackoverflow',
             'use_bearer_authorization' => false,
         ));
     }

@@ -14,23 +14,23 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * DeviantartResourceOwner
+ * DeviantartResourceOwner.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
 class DeviantartResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'username',
-        'nickname'       => 'username',
+        'identifier' => 'username',
+        'nickname' => 'username',
         'profilepicture' => 'usericonurl',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -38,8 +38,8 @@ class DeviantartResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://www.deviantart.com/oauth2/draft15/authorize',
-            'access_token_url'  => 'https://www.deviantart.com/oauth2/draft15/token',
-            'infos_url'         => 'https://www.deviantart.com/api/draft15/user/whoami',
+            'access_token_url' => 'https://www.deviantart.com/oauth2/draft15/token',
+            'infos_url' => 'https://www.deviantart.com/api/draft15/user/whoami',
         ));
     }
 }

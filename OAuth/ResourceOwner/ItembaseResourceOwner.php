@@ -14,13 +14,13 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * ItembaseResourceOwner
+ * ItembaseResourceOwner.
  *
  * @author Thomas Bretzke <tb@itembase.biz>
  */
 class ItembaseResourceOwner extends GenericOAuth2ResourceOwner
 {
-    const ITEMBASE_AUTH_URL  = 'https://accounts.itembase.com/oauth/v2/auth';
+    const ITEMBASE_AUTH_URL = 'https://accounts.itembase.com/oauth/v2/auth';
     const ITEMBASE_TOKEN_URL = 'https://accounts.itembase.com/oauth/v2/token';
     const ITEMBASE_INFOS_URL = 'https://users.itembase.com/v1/me';
 
@@ -28,11 +28,11 @@ class ItembaseResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'    => 'uuid',
-        'nickname'      => 'username',
-        'firstname'     => 'first_name',
-        'lastname'      => 'last_name',
-        'email'         => 'email',
+        'identifier' => 'uuid',
+        'nickname' => 'username',
+        'firstname' => 'first_name',
+        'lastname' => 'last_name',
+        'email' => 'email',
     );
 
     /**
@@ -44,8 +44,8 @@ class ItembaseResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => self::ITEMBASE_AUTH_URL,
-            'access_token_url'  => self::ITEMBASE_TOKEN_URL,
-            'infos_url'         => self::ITEMBASE_INFOS_URL,
+            'access_token_url' => self::ITEMBASE_TOKEN_URL,
+            'infos_url' => self::ITEMBASE_INFOS_URL,
         ));
     }
 }

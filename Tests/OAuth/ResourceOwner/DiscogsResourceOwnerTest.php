@@ -16,11 +16,11 @@ class DiscogsResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 json;
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'username',
+        'nickname' => 'username',
     );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {
         return new DiscogsResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
-} 
+}

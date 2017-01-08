@@ -16,7 +16,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
 
 /**
- * VkontakteResourceOwner
+ * VkontakteResourceOwner.
  *
  * @author Adrov Igor <nucleartux@gmail.com>
  * @author Vladislav Vlastovskiy <me@vlastv.ru>
@@ -25,27 +25,27 @@ use Symfony\Component\OptionsResolver\Options;
 class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'response.0.uid',
-        'nickname'   => 'nickname',
-        'firstname'  => 'response.0.first_name',
-        'lastname'   => 'response.0.last_name',
-        'realname'   => array('response.0.last_name', 'response.0.first_name'),
+        'nickname' => 'nickname',
+        'firstname' => 'response.0.first_name',
+        'lastname' => 'response.0.last_name',
+        'realname' => array('response.0.last_name', 'response.0.first_name'),
         'profilepicture' => 'response.0.photo',
-        'email'          => 'email'
+        'email' => 'email',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $url = $this->normalizeUrl($this->options['infos_url'], array(
             'access_token' => $accessToken['access_token'],
-            'fields'       => $this->options['fields'],
-            'name_case'    => $this->options['name_case'],
+            'fields' => $this->options['fields'],
+            'name_case' => $this->options['name_case'],
         ));
 
         $content = $this->doGetUserInformationRequest($url)->getContent();
@@ -69,23 +69,23 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'   => 'https://oauth.vk.com/authorize',
-            'access_token_url'    => 'https://oauth.vk.com/access_token',
-            'infos_url'           => 'https://api.vk.com/method/users.get',
+            'authorization_url' => 'https://oauth.vk.com/authorize',
+            'access_token_url' => 'https://oauth.vk.com/access_token',
+            'infos_url' => 'https://api.vk.com/method/users.get',
 
-            'scope'               => 'email',
+            'scope' => 'email',
 
             'use_commas_in_scope' => true,
 
-            'fields'              => 'nickname,photo_medium,screen_name,email',
-            'name_case'           => null,
+            'fields' => 'nickname,photo_medium,screen_name,email',
+            'name_case' => null,
         ));
 
         $fieldsNormalizer = function (Options $options, $value) {

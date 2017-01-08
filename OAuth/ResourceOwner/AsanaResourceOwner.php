@@ -11,29 +11,27 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * AsanaResourceOwner
+ * AsanaResourceOwner.
  *
  * @author Guillaume Potier <guillaume@wisembly.com>
  */
 class AsanaResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'data.id',
-        'nickname'       => 'data.name',
-        'realname'       => 'data.name',
-        'email'          => 'data.email',
+        'identifier' => 'data.id',
+        'nickname' => 'data.name',
+        'realname' => 'data.name',
+        'email' => 'data.email',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -41,8 +39,8 @@ class AsanaResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://app.asana.com/-/oauth_authorize',
-            'access_token_url'  => 'https://app.asana.com/-/oauth_token',
-            'infos_url'         => 'https://app.asana.com/api/1.0/users/me',
+            'access_token_url' => 'https://app.asana.com/-/oauth_token',
+            'infos_url' => 'https://app.asana.com/api/1.0/users/me',
         ));
     }
 }

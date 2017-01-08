@@ -23,8 +23,8 @@ json;
 
     protected $paths = array(
         'identifier' => 'id',
-        'nickname'   => 'id',
-        'realname'   => 'id',
+        'nickname' => 'id',
+        'realname' => 'id',
     );
 
     public function testGetUserInformation()
@@ -32,7 +32,7 @@ json;
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
 
         /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
         $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 

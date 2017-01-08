@@ -19,8 +19,8 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetAuthorizationUrlWithRedirectUrl()
     {
-        $url      = 'http://localhost:8080/login/check-instagram';
-        $request  = $this->getRequest($url);
+        $url = 'http://localhost:8080/login/check-instagram';
+        $request = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
         if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
@@ -45,8 +45,8 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAuthorizationUrlWithConnectAndUserToken()
     {
-        $url      = 'http://localhost:8080/login/check-instagram';
-        $request  = $this->getRequest($url);
+        $url = 'http://localhost:8080/login/check-instagram';
+        $request = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(true), true);
@@ -65,8 +65,8 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAuthorizationUrlWithoutUserToken()
     {
-        $url      = 'http://localhost:8080/login/check-instagram';
-        $request  = $this->getRequest($url);
+        $url = 'http://localhost:8080/login/check-instagram';
+        $request = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(false), true);
@@ -87,12 +87,12 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
     {
         // Parameters from http://oauth.net/core/1.0a/#anchor46
         $parameters = array(
-            'oauth_consumer_key'     => 'dpf43f3p2l4k3l03',
-            'oauth_token'            => 'nnch734d00sl2jdk',
+            'oauth_consumer_key' => 'dpf43f3p2l4k3l03',
+            'oauth_token' => 'nnch734d00sl2jdk',
             'oauth_signature_method' => 'HMAC-SHA1',
-            'oauth_timestamp'        => '1191242096',
-            'oauth_nonce'            => 'kllo9940pd9333jh',
-            'oauth_version'          => '1.0',
+            'oauth_timestamp' => '1191242096',
+            'oauth_nonce' => 'kllo9940pd9333jh',
+            'oauth_version' => '1.0',
         );
 
         $this->assertEquals(
@@ -198,7 +198,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
                 ->disableOriginalConstructor()
                 ->getMock();
         } else {
-            $mock= $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')
+            $mock = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')
                 ->disableOriginalConstructor()
                 ->getMock();
         }

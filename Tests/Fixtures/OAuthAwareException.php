@@ -16,7 +16,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
- * OAuthAwareException
+ * OAuthAwareException.
  *
  * @author Alexander <iam.asm89@gmail.com>
  */

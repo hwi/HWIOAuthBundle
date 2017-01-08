@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Twig\Extension;
 use HWI\Bundle\OAuthBundle\Templating\Helper\OAuthHelper;
 
 /**
- * OAuthExtension
+ * OAuthExtension.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  */

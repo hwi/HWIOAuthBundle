@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * OAuthUser
+ * OAuthUser.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  */
@@ -34,7 +34,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getRoles()
     {
@@ -42,7 +42,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getPassword()
     {
@@ -50,7 +50,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getSalt()
     {
@@ -58,7 +58,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUsername()
     {
@@ -66,7 +66,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function eraseCredentials()
     {
@@ -74,7 +74,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function equals(UserInterface $user)
     {

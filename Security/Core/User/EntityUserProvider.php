@@ -54,15 +54,15 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     /**
      * Constructor.
      *
-     * @param ManagerRegistry $registry    Manager registry.
-     * @param string          $class       User entity class to load.
+     * @param ManagerRegistry $registry    manager registry
+     * @param string          $class       user entity class to load
      * @param array           $properties  Mapping of resource owners to properties
      * @param string          $managerName Optional name of the entity manager to use
      */
     public function __construct(ManagerRegistry $registry, $class, array $properties, $managerName = null)
     {
-        $this->em         = $registry->getManager($managerName);
-        $this->class      = $class;
+        $this->em = $registry->getManager($managerName);
+        $this->class = $class;
         $this->properties = array_merge($this->properties, $properties);
     }
 
@@ -103,7 +103,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
      */
     public function refreshUser(UserInterface $user)
     {
-        $accessor   = PropertyAccess::createPropertyAccessor();
+        $accessor = PropertyAccess::createPropertyAccessor();
         $identifier = $this->properties['identifier'];
         if (!$this->supportsClass(get_class($user)) || !$accessor->isReadable($user, $identifier)) {
             throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));

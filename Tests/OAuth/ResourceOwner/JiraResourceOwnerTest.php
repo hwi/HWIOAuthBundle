@@ -16,10 +16,10 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\JiraResourceOwner;
 class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected $userResponse = '{"name": "asm89", "displayName": "Alexander"}';
-    protected $paths        = array(
+    protected $paths = array(
         'identifier' => 'name',
-        'nickname'   => 'name',
-        'realname'   => 'displayName',
+        'nickname' => 'name',
+        'realname' => 'displayName',
     );
 
     public function testGetUserInformation()
@@ -32,7 +32,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         $this->buzzResponse = $this->userResponse;
         $this->buzzResponseContentType = 'application/json; charset=utf-8';
 
-        $accessToken  = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret');
+        $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret');
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('asm89', $userResponse->getUsername());
@@ -44,7 +44,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
     public function testCustomResponseClass()
     {
-        $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         $this
@@ -74,7 +74,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         $options = array_merge(
             array(
                 // Used in option resolver to adjust all URLs that could be called
-                'base_url'         => 'http://localhost/',
+                'base_url' => 'http://localhost/',
 
                 // This is to prevent errors with not existing .pem file
                 'signature_method' => 'PLAINTEXT',
@@ -88,6 +88,6 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     public function buzzSendUserResponse($request, $response)
     {
         $response->setContent($this->userResponse);
-        $response->addHeader('Content-Type: ' . $this->buzzResponseContentType);
+        $response->addHeader('Content-Type: '.$this->buzzResponseContentType);
     }
 }

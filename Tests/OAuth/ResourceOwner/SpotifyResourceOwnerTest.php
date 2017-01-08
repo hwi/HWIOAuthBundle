@@ -46,10 +46,10 @@ class SpotifyResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'id',
-        'realname'       => 'display_name',
-        'email'          => 'email'
+        'identifier' => 'id',
+        'nickname' => 'id',
+        'realname' => 'display_name',
+        'email' => 'email',
     );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
@@ -62,7 +62,7 @@ json;
         $this->mockBuzz($this->userResponse);
 
         /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
         $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 
@@ -75,15 +75,15 @@ json;
 
     public function testCustomResponseClass()
     {
-        $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner('oauth2', array('user_response_class' => $class));
 
         $this->mockBuzz();
 
         /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+         * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
          */
-        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token')); 
+        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());

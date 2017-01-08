@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * YahooResourceOwner
+ * YahooResourceOwner.
  *
  * @author Tom <tomilett@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
@@ -22,18 +22,18 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class YahooResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'profile.guid',
-        'nickname'   => 'profile.nickname',
-        'realname'   => 'profile.givenName',
+        'nickname' => 'profile.nickname',
+        'realname' => 'profile.givenName',
     );
 
     /**
-     * Override to replace {guid} in the infos_url with the authenticating user's yahoo id
+     * Override to replace {guid} in the infos_url with the authenticating user's yahoo id.
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -43,9 +43,9 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
     }
 
     /**
-     * Override to set the Accept header as otherwise Yahoo defaults to XML
+     * Override to set the Accept header as otherwise Yahoo defaults to XML.
      *
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
@@ -53,7 +53,7 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -62,10 +62,10 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
         $resolver->setDefaults(array(
             'authorization_url' => 'https://api.login.yahoo.com/oauth/v2/request_auth',
             'request_token_url' => 'https://api.login.yahoo.com/oauth/v2/get_request_token',
-            'access_token_url'  => 'https://api.login.yahoo.com/oauth/v2/get_token',
-            'infos_url'         => 'https://social.yahooapis.com/v1/user/{guid}/profile',
+            'access_token_url' => 'https://api.login.yahoo.com/oauth/v2/get_token',
+            'infos_url' => 'https://social.yahooapis.com/v1/user/{guid}/profile',
 
-            'realm'             => 'yahooapis.com',
+            'realm' => 'yahooapis.com',
         ));
     }
 }

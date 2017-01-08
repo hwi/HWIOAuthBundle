@@ -14,9 +14,8 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ItembaseResourceOwner;
 
 /**
- * Class ItembaseResourceOwnerTest
+ * Class ItembaseResourceOwnerTest.
  *
- * @package HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner
  * @author Thomas Bretzke <tb@itembase.biz>
  */
 class ItembaseResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
@@ -32,11 +31,11 @@ class ItembaseResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 json;
 
     protected $paths = array(
-        'identifier'    => 'uuid',
-        'nickname'      => 'username',
-        'firstname'     => 'first_name',
-        'lastname'      => 'last_name',
-        'email'         => 'email',
+        'identifier' => 'uuid',
+        'nickname' => 'username',
+        'firstname' => 'first_name',
+        'lastname' => 'last_name',
+        'email' => 'email',
     );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)

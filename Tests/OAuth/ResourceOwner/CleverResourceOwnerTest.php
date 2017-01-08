@@ -12,10 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\CleverResourceOwner;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
- * CleverResourceOwnerTest
+ * CleverResourceOwnerTest.
  *
  * @author Matt Farmer <work@mattfarmer.net>
  */
@@ -24,7 +23,7 @@ class CleverResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     public function setUp()
     {
         $this->resourceOwnerName = 'CleverResourceOwner';
-        $this->resourceOwner     = $this->createResourceOwner($this->resourceOwnerName);
+        $this->resourceOwner = $this->createResourceOwner($this->resourceOwnerName);
     }
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)

@@ -15,25 +15,25 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Salesforce Resource Owner
+ * Salesforce Resource Owner.
  *
  * @author Tyler Pugh <tylerism@gmail.com>
  */
 class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'user_id',
-        'nickname'       => 'nick_name',
-        'realname'       => 'nick_name',
-        'email'          => 'email',
+        'identifier' => 'user_id',
+        'nickname' => 'nick_name',
+        'realname' => 'nick_name',
+        'email' => 'email',
         'profilepicture' => 'photos.picture',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -44,13 +44,13 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         // Salesforce requires format parameter in order for API to return json response
         $url = $this->normalizeUrl($url, array(
-            'format' => $this->options['format']
+            'format' => $this->options['format'],
         ));
 
         // Salesforce require to pass the OAuth token as 'oauth_token' instead of 'access_token'
@@ -60,22 +60,22 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'sandbox'           => false,
+            'sandbox' => false,
             'authorization_url' => 'https://login.salesforce.com/services/oauth2/authorize',
-            'access_token_url'  => 'https://login.salesforce.com/services/oauth2/token',
+            'access_token_url' => 'https://login.salesforce.com/services/oauth2/token',
 
             // @see SalesforceResourceOwner::getUserInformation()
-            'infos_url'         => null,
+            'infos_url' => null,
 
             // @see SalesforceResourceOwner::doGetUserInformationRequest()
-            'format'            => 'json',
+            'format' => 'json',
         ));
 
         $sandboxTransformation = function (Options $options, $value) {

@@ -24,11 +24,11 @@ json;
 
     protected $paths = array(
         'identifier' => 'uid',
-        'nickname'   => 'username',
-        'realname'   => 'name',
-        'email'      => 'email',
-        'firstname'  => 'first_name',
-        'lastname'   => 'last_name',
+        'nickname' => 'username',
+        'realname' => 'name',
+        'email' => 'email',
+        'firstname' => 'first_name',
+        'lastname' => 'last_name',
     );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)

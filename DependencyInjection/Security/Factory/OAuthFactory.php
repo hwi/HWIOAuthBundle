@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * OAuthFactory
+ * OAuthFactory.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
@@ -27,7 +27,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class OAuthFactory extends AbstractFactory
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function addConfiguration(NodeDefinition $node)
     {
@@ -43,7 +43,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getKey()
     {
@@ -51,7 +51,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getPosition()
     {
@@ -92,7 +92,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function createAuthProvider(ContainerBuilder $container, $id, $config, $userProviderId)
     {
@@ -139,7 +139,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function createEntryPoint($container, $id, $config, $defaultEntryPoint)
     {
@@ -155,7 +155,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function createListener($container, $id, $config, $userProvider)
     {
@@ -176,7 +176,7 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function getListenerId()
     {

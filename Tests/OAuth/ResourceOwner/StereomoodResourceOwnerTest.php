@@ -22,14 +22,14 @@ class StereomoodResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 json;
     protected $paths = array(
         'identifier' => 'oauth_token',
-        'nickname'   => 'oauth_token'
+        'nickname' => 'oauth_token',
     );
 
     public function testGetUserInformation()
     {
         $accessToken = array(
-            'oauth_token'        => 'token',
-            'oauth_token_secret' => 'secret'
+            'oauth_token' => 'token',
+            'oauth_token_secret' => 'secret',
         );
 
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
@@ -44,12 +44,12 @@ json;
 
     public function testCustomResponseClass()
     {
-        $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner('oauth1', array('user_response_class' => $class));
 
         $accessToken = array(
-            'oauth_token'        => 'token',
-            'oauth_token_secret' => 'secret'
+            'oauth_token' => 'token',
+            'oauth_token_secret' => 'secret',
         );
 
         $userResponse = $resourceOwner->getUserInformation($accessToken);

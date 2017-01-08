@@ -49,14 +49,14 @@ class ResourceOwnerMap implements ContainerAwareInterface
      * Constructor.
      *
      * @param HttpUtils $httpUtils              HttpUtils
-     * @param array     $possibleResourceOwners Array with possible resource owners names.
-     * @param array     $resourceOwners         Array with configured resource owners.
+     * @param array     $possibleResourceOwners array with possible resource owners names
+     * @param array     $resourceOwners         array with configured resource owners
      */
     public function __construct(HttpUtils $httpUtils, array $possibleResourceOwners, $resourceOwners)
     {
-        $this->httpUtils              = $httpUtils;
+        $this->httpUtils = $httpUtils;
         $this->possibleResourceOwners = $possibleResourceOwners;
-        $this->resourceOwners         = $resourceOwners;
+        $this->resourceOwners = $resourceOwners;
     }
 
     /**

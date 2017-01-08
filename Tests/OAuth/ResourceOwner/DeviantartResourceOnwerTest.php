@@ -23,8 +23,8 @@ class DeviantartResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
     protected $paths = array(
-        'identifier'     => 'username',
-        'nickname'       => 'username',
+        'identifier' => 'username',
+        'nickname' => 'username',
         'profilepicture' => 'usericonurl',
     );
 
@@ -33,7 +33,7 @@ json;
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
 
         /**
-         * @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
         $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 

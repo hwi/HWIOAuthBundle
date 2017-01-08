@@ -24,13 +24,13 @@ class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
     protected $paths = array(
-        'identifier'      => 'data.id',
-        'nickname'        => 'data.username',
+        'identifier' => 'data.id',
+        'nickname' => 'data.username',
     );
 
     public function testCustomResponseClass()
     {
-        $class         = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         /* @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */

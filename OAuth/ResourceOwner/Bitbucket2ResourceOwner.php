@@ -14,26 +14,25 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Bitbucket2ResourceOwner
+ * Bitbucket2ResourceOwner.
  *
  * @author David Sanchez <david38sanchez@gmail.com>
  */
 class Bitbucket2ResourceOwner extends GenericOAuth2ResourceOwner
 {
-
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'uuid',
-        'nickname'       => 'username',
-        'email'          => 'email',
-        'realname'       => 'display_name',
+        'identifier' => 'uuid',
+        'nickname' => 'username',
+        'email' => 'email',
+        'realname' => 'display_name',
         'profilepicture' => 'links.avatar.href',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -41,14 +40,14 @@ class Bitbucket2ResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://bitbucket.org/site/oauth2/authorize',
-            'access_token_url'  => 'https://bitbucket.org/site/oauth2/access_token',
-            'infos_url'         => 'https://api.bitbucket.org/2.0/user',
-            'emails_url'        => 'https://api.bitbucket.org/2.0/user/emails'
+            'access_token_url' => 'https://bitbucket.org/site/oauth2/access_token',
+            'infos_url' => 'https://api.bitbucket.org/2.0/user',
+            'emails_url' => 'https://api.bitbucket.org/2.0/user/emails',
         ));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {

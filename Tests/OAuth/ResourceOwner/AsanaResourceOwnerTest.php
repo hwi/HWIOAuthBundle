@@ -26,7 +26,7 @@ class AsanaResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 json;
 
     protected $paths = array(
-        'identifier'      => 'data.id',
+        'identifier' => 'data.id',
     );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)

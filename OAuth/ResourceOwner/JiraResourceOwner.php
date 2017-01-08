@@ -18,35 +18,35 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * JiraResourceOwner
+ * JiraResourceOwner.
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
  */
 class JiraResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'name',
-        'nickname'       => 'name',
-        'realname'       => 'displayName',
-        'email'          => 'emailAddress',
+        'identifier' => 'name',
+        'nickname' => 'name',
+        'realname' => 'displayName',
+        'email' => 'emailAddress',
         'profilepicture' => 'avatarUrls.48x48',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $parameters = array_merge(array(
-            'oauth_consumer_key'     => $this->options['client_id'],
-            'oauth_timestamp'        => time(),
-            'oauth_nonce'            => $this->generateNonce(),
-            'oauth_version'          => '1.0',
+            'oauth_consumer_key' => $this->options['client_id'],
+            'oauth_timestamp' => time(),
+            'oauth_nonce' => $this->generateNonce(),
+            'oauth_version' => '1.0',
             'oauth_signature_method' => $this->options['signature_method'],
-            'oauth_token'            => $accessToken['oauth_token'],
+            'oauth_token' => $accessToken['oauth_token'],
         ), $extraParameters);
 
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
@@ -59,10 +59,10 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
         );
 
         $content = $this->getResponseContent($this->doGetUserInformationRequest($this->options['infos_session_url'], $parameters));
-        $url     = $this->normalizeUrl($this->options['infos_url'], array('username' => $content['name']));
+        $url = $this->normalizeUrl($this->options['infos_url'], array('username' => $content['name']));
 
         // Regenerate nonce & signature as URL was changed
-        $parameters['oauth_nonce']     = $this->generateNonce();
+        $parameters['oauth_nonce'] = $this->generateNonce();
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
             HttpRequestInterface::METHOD_GET,
             $url,
@@ -83,7 +83,7 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -92,13 +92,13 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
         $resolver->setDefaults(array(
             'authorization_url' => '{base_url}/plugins/servlet/oauth/authorize',
             'request_token_url' => '{base_url}/plugins/servlet/oauth/request-token',
-            'access_token_url'  => '{base_url}/plugins/servlet/oauth/access-token',
+            'access_token_url' => '{base_url}/plugins/servlet/oauth/access-token',
 
             // JIRA API requires to first know the username to be able to ask for user details
             'infos_session_url' => '{base_url}/rest/auth/1/session',
-            'infos_url'         => '{base_url}/rest/api/2/user',
+            'infos_url' => '{base_url}/rest/api/2/user',
 
-            'signature_method'  => 'RSA-SHA1',
+            'signature_method' => 'RSA-SHA1',
         ));
 
         $resolver->setRequired(array(
@@ -122,9 +122,9 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
             $resolver->setNormalizers(array(
                 'authorization_url' => $normalizer,
                 'request_token_url' => $normalizer,
-                'access_token_url'  => $normalizer,
+                'access_token_url' => $normalizer,
                 'infos_session_url' => $normalizer,
-                'infos_url'         => $normalizer,
+                'infos_url' => $normalizer,
             ));
         }
     }

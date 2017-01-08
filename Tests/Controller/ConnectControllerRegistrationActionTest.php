@@ -148,7 +148,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
                 ->willReturn($registrationForm);
 
             $this->container->set('hwi_oauth.registration.form.factory', $registrationFormFactory);
-         } else {
+        } else {
             // FOSUser 1.3 BC. To be removed.
             $this->container->set('hwi_oauth.registration.form', $registrationForm);
         }

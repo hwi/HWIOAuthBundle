@@ -113,7 +113,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      *
      * @param string $name
      *
-     * @return string Name, or empty string if it failed after all the iterations.
+     * @return string name, or empty string if it failed after all the iterations
      */
     protected function getUniqueUserName($name)
     {
@@ -143,7 +143,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     }
 
     /**
-     * Set user information from form
+     * Set user information from form.
      *
      * @param UserInterface         $user
      * @param UserResponseInterface $userInformation

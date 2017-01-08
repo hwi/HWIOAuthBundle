@@ -26,8 +26,8 @@ json;
 
     protected $paths = array(
         'identifier' => 'response.user_id',
-        'nickname'   => 'response.user_name',
-        'realname'   => 'response.user_name',
+        'nickname' => 'response.user_name',
+        'realname' => 'response.user_name',
     );
 
     protected $expectedUrls = array(

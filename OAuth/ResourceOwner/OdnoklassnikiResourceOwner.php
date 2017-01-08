@@ -16,31 +16,31 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * OdnoklassnikiResourceOwner
+ * OdnoklassnikiResourceOwner.
  *
  * @author Sergey Polischook <spolischook@gmail.com>
  */
 class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
         'identifier' => 'uid',
-        'nickname'   => 'username',
-        'realname'   => 'name',
-        'email'      => 'email',
-        'firstname'  => 'first_name',
-        'lastname'   => 'last_name',
+        'nickname' => 'username',
+        'realname' => 'name',
+        'email' => 'email',
+        'firstname' => 'first_name',
+        'lastname' => 'last_name',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $parameters = array(
-            'access_token'    => $accessToken['access_token'],
+            'access_token' => $accessToken['access_token'],
             'application_key' => $this->options['application_key'],
         );
 
@@ -72,7 +72,7 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
@@ -80,17 +80,18 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(array(
             'authorization_url' => 'https://connect.ok.ru/oauth/authorize',
-            'access_token_url'  => 'https://api.ok.ru/oauth/token.do',
-            'infos_url'         => 'https://api.ok.ru/fb.do?method=users.getCurrentUser',
+            'access_token_url' => 'https://api.ok.ru/oauth/token.do',
+            'infos_url' => 'https://api.ok.ru/fb.do?method=users.getCurrentUser',
 
-            'application_key'   => null,
-            'fields'            => null,
+            'application_key' => null,
+            'fields' => null,
         ));
 
         $fieldsNormalizer = function (Options $options, $value) {
             if (!$value) {
                 return null;
             }
+
             return is_array($value) ? implode(',', $value) : $value;
         };
 

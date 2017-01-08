@@ -29,7 +29,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 class HWIOAuthExtension extends Extension
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -133,7 +133,7 @@ class HWIOAuthExtension extends Extension
      * Check of the connect controllers etc should be enabled.
      *
      * @param ContainerBuilder $container
-     * @param array $config
+     * @param array            $config
      */
     private function createConnectIntegration(ContainerBuilder $container, array $config)
     {

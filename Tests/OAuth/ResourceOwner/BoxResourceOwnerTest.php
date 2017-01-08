@@ -25,11 +25,11 @@ class BoxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 json;
 
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'name',
-        'realname'       => 'name',
-        'email'          => 'login',
-        'profilepicture' => 'avatar_url'
+        'identifier' => 'id',
+        'nickname' => 'name',
+        'realname' => 'name',
+        'email' => 'login',
+        'profilepicture' => 'avatar_url',
     );
 
     public function testRevokeToken()

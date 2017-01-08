@@ -76,8 +76,8 @@ class ConnectController extends Controller
      * Shows a registration form if there is no user logged in and connecting
      * is enabled.
      *
-     * @param Request $request A request.
-     * @param string  $key     Key used for retrieving the right information for the registration form.
+     * @param Request $request a request
+     * @param string  $key     key used for retrieving the right information for the registration form
      *
      * @return Response
      *
@@ -152,8 +152,8 @@ class ConnectController extends Controller
     /**
      * Connects a user to a given account if the user is logged in and connect is enabled.
      *
-     * @param Request $request The active request.
-     * @param string  $service Name of the resource owner to connect to.
+     * @param Request $request the active request
+     * @param string  $service name of the resource owner to connect to
      *
      * @throws \Exception
      *
@@ -235,13 +235,13 @@ class ConnectController extends Controller
                 return $this->redirect($targetPath);
             }
 
-            return $this->render('HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(), array(
+            return $this->render('HWIOAuthBundle:Connect:connect_success.html.'.$this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
                 'service' => $service,
             ));
         }
 
-        return $this->render('HWIOAuthBundle:Connect:connect_confirm.html.' . $this->getTemplatingEngine(), array(
+        return $this->render('HWIOAuthBundle:Connect:connect_confirm.html.'.$this->getTemplatingEngine(), array(
             'key' => $key,
             'service' => $service,
             'form' => $form->createView(),
@@ -319,7 +319,7 @@ class ConnectController extends Controller
      *
      * @return ResourceOwnerInterface
      *
-     * @throws \RuntimeException if there is no resource owner with the given name.
+     * @throws \RuntimeException if there is no resource owner with the given name
      */
     protected function getResourceOwnerByName($name)
     {
@@ -343,9 +343,9 @@ class ConnectController extends Controller
      *
      * @deprecated since version 0.4. Will be removed in 1.0.
      *
-     * @param string  $route    Route name
-     * @param array   $params   Route parameters
-     * @param boolean $absolute Absolute url or note.
+     * @param string $route    Route name
+     * @param array  $params   Route parameters
+     * @param bool   $absolute absolute url or note
      *
      * @return string
      */

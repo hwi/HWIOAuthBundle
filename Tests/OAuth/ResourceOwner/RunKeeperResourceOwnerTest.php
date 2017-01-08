@@ -14,14 +14,14 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\RunKeeperResourceOwner;
 
 /**
- * RunKeeperResourceOwnerTest
+ * RunKeeperResourceOwnerTest.
  *
  * @author Artem Genvald <genvaldartem@gmail.com>
  */
 class RunKeeperResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $userResponse = <<<json
 {
@@ -31,11 +31,11 @@ class RunKeeperResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 json;
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'realname'       => 'name',
-        'profilepicture' => 'medium_picture'
+        'realname' => 'name',
+        'profilepicture' => 'medium_picture',
     );
 
     public function testGetUserInformation()
@@ -52,7 +52,7 @@ json;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function setUpResourceOwner($name, $httpUtils, array $options)
     {

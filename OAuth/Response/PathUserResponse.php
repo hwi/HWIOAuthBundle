@@ -24,12 +24,12 @@ class PathUserResponse extends AbstractUserResponse
      * @var array
      */
     protected $paths = array(
-        'identifier'     => null,
-        'nickname'       => null,
-        'firstname'      => null,
-        'lastname'       => null,
-        'realname'       => null,
-        'email'          => null,
+        'identifier' => null,
+        'nickname' => null,
+        'firstname' => null,
+        'lastname' => null,
+        'realname' => null,
+        'email' => null,
         'profilepicture' => null,
     );
 

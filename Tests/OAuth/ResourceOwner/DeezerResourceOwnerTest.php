@@ -40,14 +40,14 @@ class DeezerResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'name',
-        'realname'       => 'firstname',
-        'email'          => 'email',
-        'firstname'      => 'firstname',
-        'lastname'       => 'lastname',
+        'identifier' => 'id',
+        'nickname' => 'name',
+        'realname' => 'firstname',
+        'email' => 'email',
+        'firstname' => 'firstname',
+        'lastname' => 'lastname',
         'profilepicture' => 'picture',
-        'gender'         => 'gender'
+        'gender' => 'gender',
     );
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)

@@ -16,7 +16,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * Configuration for the extension
+ * Configuration for the extension.
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
@@ -121,7 +121,7 @@ class Configuration implements ConfigurationInterface
      *
      * @param string $resourceOwner
      *
-     * @return Boolean
+     * @return bool
      */
     public static function isResourceOwnerSupported($resourceOwner)
     {

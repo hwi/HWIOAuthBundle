@@ -36,10 +36,10 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
     public function testAuthenticatesToken()
     {
         $expectedToken = array(
-            'access_token'  => 'access_token',
+            'access_token' => 'access_token',
             'refresh_token' => 'refresh_token',
-            'expires_in'    => '666',
-            'oauth_token_secret' => 'secret'
+            'expires_in' => '666',
+            'oauth_token_secret' => 'secret',
         );
 
         $oauthTokenMock = $this->getOAuthTokenMock();
@@ -105,10 +105,10 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
     public function testOAuthAwareExceptionGetsInfo()
     {
         $expectedToken = array(
-            'access_token'  => 'access_token',
+            'access_token' => 'access_token',
             'refresh_token' => 'refresh_token',
-            'expires_in'    => '666',
-            'oauth_token_secret' => 'secret'
+            'expires_in' => '666',
+            'oauth_token_secret' => 'secret',
         );
 
         $oauthTokenMock = $this->getOAuthTokenMock();
@@ -150,7 +150,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $userProviderMock = $this->getOAuthAwareUserProviderMock();
         $userProviderMock->expects($this->once())
             ->method('loadUserByOAuthUserResponse')
-             ->will($this->throwException(new OAuthAwareException));
+             ->will($this->throwException(new OAuthAwareException()));
 
         $userCheckerMock = $this->getUserCheckerMock();
 
@@ -159,9 +159,9 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         try {
             $oauthProvider->authenticate($oauthTokenMock);
 
-            $this->assertTrue(false, "Exception was not thrown.");
+            $this->assertTrue(false, 'Exception was not thrown.');
         } catch (OAuthAwareException $e) {
-            $this->assertTrue(true, "Exception was thrown.");
+            $this->assertTrue(true, 'Exception was thrown.');
             $this->assertInstanceOf('HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface', $e);
             $this->assertEquals('github', $e->getResourceOwnerName());
             $this->assertEquals($expectedToken['access_token'], $e->getAccessToken());

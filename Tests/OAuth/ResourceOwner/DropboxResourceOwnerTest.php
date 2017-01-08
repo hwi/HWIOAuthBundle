@@ -18,9 +18,9 @@ class DropboxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     protected $userResponse = '{"uid": "1", "email": "bar"}';
     protected $paths = array(
         'identifier' => 'uid',
-        'nickname'   => 'email',
-        'realname'   => 'display_name',
-        'email'      => 'email',
+        'nickname' => 'email',
+        'realname' => 'display_name',
+        'email' => 'email',
     );
 
     public function testGetAuthorizationUrl()

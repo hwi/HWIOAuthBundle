@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * GoogleResourceOwner
+ * GoogleResourceOwner.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
@@ -22,40 +22,40 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 class GoogleResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'name',
-        'realname'       => 'name',
-        'firstname'      => 'given_name',
-        'lastname'       => 'family_name',
-        'email'          => 'email',
+        'identifier' => 'id',
+        'nickname' => 'name',
+        'realname' => 'name',
+        'firstname' => 'given_name',
+        'lastname' => 'family_name',
+        'email' => 'email',
         'profilepicture' => 'picture',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         $url = parent::getAuthorizationUrl($redirectUri, array_merge(array(
-            'access_type'             => $this->options['access_type'],
-            'approval_prompt'         => $this->options['approval_prompt'],
+            'access_type' => $this->options['access_type'],
+            'approval_prompt' => $this->options['approval_prompt'],
             'request_visible_actions' => $this->options['request_visible_actions'],
-            'prompt'                  => $this->options['prompt']
+            'prompt' => $this->options['prompt'],
         ), $extraParameters));
 
         // This parameter have specific value (uses "&" as a separator of domains)
         if (null !== $this->options['hd']) {
-            $url .= '&hd=' . implode('&', array_map('trim', explode(',', $this->options['hd'])));
+            $url .= '&hd='.implode('&', array_map('trim', explode(',', $this->options['hd'])));
         }
 
         return $url;
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeToken($token)
     {
@@ -65,27 +65,27 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'       => 'https://accounts.google.com/o/oauth2/auth',
-            'access_token_url'        => 'https://accounts.google.com/o/oauth2/token',
-            'revoke_token_url'        => 'https://accounts.google.com/o/oauth2/revoke',
-            'infos_url'               => 'https://www.googleapis.com/oauth2/v1/userinfo',
+            'authorization_url' => 'https://accounts.google.com/o/oauth2/auth',
+            'access_token_url' => 'https://accounts.google.com/o/oauth2/token',
+            'revoke_token_url' => 'https://accounts.google.com/o/oauth2/revoke',
+            'infos_url' => 'https://www.googleapis.com/oauth2/v1/userinfo',
 
-            'scope'                   => 'https://www.googleapis.com/auth/userinfo.profile',
+            'scope' => 'https://www.googleapis.com/auth/userinfo.profile',
 
-            'access_type'             => null,
-            'approval_prompt'         => null,
-            'display'                 => null,
+            'access_type' => null,
+            'approval_prompt' => null,
+            'display' => null,
             // Identifying a particular hosted domain account to be accessed (for example, 'mycollege.edu')
-            'hd'                      => null,
-            'login_hint'              => null,
-            'prompt'                  => null,
+            'hd' => null,
+            'login_hint' => null,
+            'prompt' => null,
             'request_visible_actions' => null,
         ));
 
@@ -102,11 +102,11 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
             ;
         } else {
             $resolver->setAllowedValues(array(
-                'access_type'     => array('online', 'offline', null),
+                'access_type' => array('online', 'offline', null),
                 'approval_prompt' => array('force', 'auto', null),
-                'display'         => array('page', 'popup', 'touch', 'wap', null),
-                'login_hint'      => array('email address', 'sub', null),
-                'prompt'          => array('consent', 'select_account', null),
+                'display' => array('page', 'popup', 'touch', 'wap', null),
+                'login_hint' => array('email address', 'sub', null),
+                'prompt' => array('consent', 'select_account', null),
             ));
         }
     }
