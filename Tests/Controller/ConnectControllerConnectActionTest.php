@@ -2,9 +2,9 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Security\Core\SecurityContext;
 
 class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 {
@@ -27,8 +27,8 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
         ));
 
         $this->getTokenStorage()->expects($this->once())
-            ->method('getUser')
-            ->willReturn(true)
+            ->method('getToken')
+            ->willReturn(new CustomOAuthToken())
         ;
 
         $this->getAuthorizationChecker()->expects($this->once())
@@ -53,8 +53,8 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
         ));
 
         $this->getTokenStorage()->expects($this->once())
-            ->method('getUser')
-            ->willReturn(false)
+            ->method('getToken')
+            ->willReturn(null)
         ;
 
         $this->getAuthorizationChecker()->expects($this->never())
