@@ -26,10 +26,39 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
             $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException()
         ));
 
+        $this->getTokenStorage()->expects($this->once())
+            ->method('getUser')
+            ->willReturn(true)
+        ;
+
         $this->getAuthorizationChecker()->expects($this->once())
             ->method('isGranted')
             ->with('IS_AUTHENTICATED_REMEMBERED')
             ->willReturn(false)
+        ;
+
+        $this->router->expects($this->once())
+            ->method('generate')
+            ->with('hwi_oauth_connect_registration')
+            ->willReturn('/')
+        ;
+
+        $this->controller->connectAction($this->request);
+    }
+
+    public function testRegistrationRedirectWithoutTokenStorage()
+    {
+        $this->request->attributes = new ParameterBag(array(
+            $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException()
+        ));
+
+        $this->getTokenStorage()->expects($this->once())
+            ->method('getUser')
+            ->willReturn(false)
+        ;
+
+        $this->getAuthorizationChecker()->expects($this->never())
+            ->method('isGranted')
         ;
 
         $this->router->expects($this->once())
