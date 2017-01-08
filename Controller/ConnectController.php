@@ -57,7 +57,7 @@ class ConnectController extends Controller
         ) {
             $key = time();
             $session = $request->getSession();
-            $session->set('_hwi_oauth.registration_error.'.$key, $error);
+            $session->set('_hwi_oauth.registration_error', $error);
 
             return $this->redirectToRoute('hwi_oauth_connect_registration', array('key' => $key));
         }
@@ -98,8 +98,8 @@ class ConnectController extends Controller
         }
 
         $session = $request->getSession();
-        $error = $session->get('_hwi_oauth.registration_error.'.$key);
-        $session->remove('_hwi_oauth.registration_error.'.$key);
+        $error = $session->get('_hwi_oauth.registration_error');
+        $session->remove('_hwi_oauth.registration_error');
 
         if (!$error instanceof AccountNotLinkedException || time() - $key > 300) {
             // todo: fix this
@@ -140,7 +140,7 @@ class ConnectController extends Controller
 
         // reset the error in the session
         $key = time();
-        $session->set('_hwi_oauth.registration_error.'.$key, $error);
+        $session->set('_hwi_oauth.registration_error', $error);
 
         return $this->render('HWIOAuthBundle:Connect:registration.html.'.$this->getTemplatingEngine(), array(
             'key' => $key,
