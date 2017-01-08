@@ -1,12 +1,19 @@
 Changelog
 =========
+## 0.5.3 (2017-01-08)
+* Fixed: Bitbucket2 resource owner,
+* Fixed: GitHub resource owner documentation,
+* Fixed: Don't require any form for the connect feature,
+* Fixed: Uncaught exception with custom error page,
+* Fixed: `php-cs-fixer` updated to latest version & run on base code
+
 ## 0.5.2 (2016-12-12)
-* Fixed: Prevent uncaught exception when redirecting to invalid route
-* Fixed: Add more details too exception when account was not linked
-* Fixed: Odnoklassinki resource owner
-* Fixed: Office365 resource owner
-* Fixed: StackExchange resource owner
-* Fixed: WeChat resource owner
+* Fixed: Prevent uncaught exception when redirecting to invalid route,
+* Fixed: Add more details too exception when account was not linked,
+* Fixed: Odnoklassinki resource owner,
+* Fixed: Office365 resource owner,
+* Fixed: StackExchange resource owner,
+* Fixed: WeChat resource owner,
 * Fixed: WindowsLive resource owner
 
 ## 0.5.1 (2016-10-03)
@@ -33,13 +40,13 @@ Changelog
 * Added: Hungarian translation
 
 ## 0.4.3 (2016-09-11)
-* Fixed: Request parameters are not copied into new Request on forward
-* Fixed: Fixed scope deprecating message
-* Fixed: Resolved deprecated message in ConnectController
+* Fixed: Request parameters are not copied into new Request on forward,
+* Fixed: Fixed scope deprecating message,
+* Fixed: Resolved deprecated message in ConnectController,
 * Fixed: Removed usage of deprecated code in tests
 
 ## 0.4.2 (2016-07-27)
-* Fixed: Change Discogs URL from http to https
+* Fixed: Change Discogs URL from http to https,
 * Fixed: Update Facebook API URLs to not use outdated ones
 
 ## 0.4.1 (2016-03-08)
