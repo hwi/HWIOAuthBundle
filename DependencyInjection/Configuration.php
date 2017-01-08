@@ -250,6 +250,14 @@ class Configuration implements ConfigurationInterface
                                     ->thenUnset()
                                 ->end()
                             ->end()
+                            ->scalarNode('class')
+                                ->validate()
+                                    ->ifTrue(function ($v) {
+                                        return empty($v);
+                                    })
+                                    ->thenUnset()
+                                ->end()
+                            ->end()
                             ->scalarNode('type')
                                 ->validate()
                                     ->ifTrue(function ($type) {
@@ -312,8 +320,8 @@ class Configuration implements ConfigurationInterface
                         ->end()
                         ->validate()
                             ->ifTrue(function ($c) {
-                                // skip if this contains a service
-                                if (isset($c['service'])) {
+                                // Skip if this contains a service or a class
+                                if (isset($c['service']) || isset($c['class'])) {
                                     return false;
                                 }
 
@@ -375,6 +383,16 @@ class Configuration implements ConfigurationInterface
                                 return false;
                             })
                             ->thenInvalid("If you're setting a 'service', no other arguments should be set.")
+                        ->end()
+                        ->validate()
+                            ->ifTrue(function ($c) {
+                                if (!isset($c['class'])) {
+                                    return false;
+                                }
+
+                                return 'oauth2' !== $c['type'] && 'oauth1' !== $c['type'];
+                            })
+                            ->thenInvalid("If you're setting a 'class', you must provide a 'oauth1' or 'oauth2' type")
                         ->end()
                     ->end()
                 ->end()

@@ -15,6 +15,21 @@ use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 
+use Symfony\Component\HttpFoundation\Request;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+
+class MyCustomProvider implements ResourceOwnerInterface
+{
+    public function getUserInformation(array $accessToken, array $extraParameters = array()) {}
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = array()){}
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array()){}
+    public function isCsrfTokenValid($csrfToken){}
+    public function getName(){}
+    public function getOption($name){}
+    public function handles(Request $request){}
+    public function setName($name){}
+}
+
 /**
  * Code bases on FOSUserBundle tests.
  */
@@ -146,6 +161,35 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "hwi_oauth.resource_owners.new_resourceowner": You should set at least the 'type', 'client_id' and the 'client_secret' of a resource owner.
+     */
+    public function testConfigurationThrowsExceptionWhenServiceHasClass()
+    {
+        $loader = new HWIOAuthExtension();
+        $config = $this->getEmptyConfig();
+        $config['resource_owners']['new_resourceowner']['class'] = 'My\Class';
+
+        $loader->load(array($config), $this->containerBuilder);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Invalid configuration for path "hwi_oauth.resource_owners.new_resourceowner": If you're setting a 'class', you must provide a 'oauth1' or 'oauth2' type
+     */
+    public function testConfigurationThrowsExceptionWhenServiceHasClassAndWrongType()
+    {
+        $loader = new HWIOAuthExtension();
+        $config = $this->getEmptyConfig();
+        $config['resource_owners']['new_resourceowner']['class'] = 'My\Class';
+        $config['resource_owners']['new_resourceowner']['type'] = 'github';
+        $config['resource_owners']['new_resourceowner']['client_id'] = 42;
+        $config['resource_owners']['new_resourceowner']['client_secret'] = 'foo';
+
+        $loader->load(array($config), $this->containerBuilder);
+    }
+
     public function testConfigurationPassValidOAuth1()
     {
         $loader = new HWIOAuthExtension();
@@ -193,6 +237,54 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
+    public function testConfigurationPassValidOAuth1WithClass()
+    {
+        $loader = new HWIOAuthExtension();
+        $config = $this->getEmptyConfig();
+        $config['resource_owners'] = array(
+            'valid' => array(
+                'type'              => 'oauth1',
+                'class'             => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider',
+                'client_id'         => 'client_id',
+                'client_secret'     => 'client_secret',
+                'authorization_url' => 'http://test.pl/authorization_url',
+                'request_token_url' => 'http://test.pl/request_token_url',
+                'access_token_url'  => 'http://test.pl/access_token_url',
+                'infos_url'         => 'http://test.pl/infos_url',
+                'paths'             => array(
+                    'identifier' => 'some_id',
+                    'nickname'   => 'some_nick',
+                    'realname'   => 'some_name',
+                ),
+            ),
+        );
+
+        $loader->load(array($config), $this->containerBuilder);
+    }
+
+    public function testConfigurationPassValidOAuth2WithPathsAndClass()
+    {
+        $loader = new HWIOAuthExtension();
+        $config = $this->getEmptyConfig();
+        $config['resource_owners'] = array(
+            'valid' => array(
+                'type'              => 'oauth2',
+                'class'             => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider',
+                'client_id'         => 'client_id',
+                'client_secret'     => 'client_secret',
+                'authorization_url' => 'http://test.pl/authorization_url',
+                'access_token_url'  => 'http://test.pl/access_token_url',
+                'infos_url'         => 'http://test.pl/infos_url',
+                'paths'             => array(
+                    'identifier' => 'some_id',
+                    'nickname'   => 'some_nick',
+                    'realname'   => 'some_name',
+                ),
+            ),
+        );
+
+        $loader->load(array($config), $this->containerBuilder);
+    }
     public function testConfigurationPassValidOAuth2WithDeepPaths()
     {
         $loader = new HWIOAuthExtension();
@@ -343,6 +435,76 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testCreateResourceOwnerService()
+    {
+        $extension = new HWIOAuthExtension();
+        $extension->createResourceOwnerService($this->containerBuilder, 'my_github', array(
+            'type'              => 'github',
+            'client_id'         => '42',
+            'client_secret'     => 'foo',
+        ));
+
+        $definitions = $this->containerBuilder->getDefinitions();
+
+        $this->assertTrue(isset($definitions['hwi_oauth.resource_owner.my_github']));
+        $this->assertEquals('hwi_oauth.abstract_resource_owner.oauth2', $definitions['hwi_oauth.resource_owner.my_github']->getParent());
+        $this->assertEquals('%hwi_oauth.resource_owner.github.class%', $definitions['hwi_oauth.resource_owner.my_github']->getClass());
+
+        $argument2 = $definitions['hwi_oauth.resource_owner.my_github']->getArgument(2);
+        $this->assertEquals('42', $argument2['client_id']);
+        $this->assertEquals('foo', $argument2['client_secret']);
+        $this->assertEquals('my_github', $definitions['hwi_oauth.resource_owner.my_github']->getArgument(3));
+    }
+
+    public function testCreateResourceOwnerServiceWithService()
+    {
+        $extension = new HWIOAuthExtension();
+        $extension->createResourceOwnerService($this->containerBuilder, 'external_ressource_owner', array(
+            'service'              => 'my.service',
+        ));
+
+        $aliases = $this->containerBuilder->getAliases();
+        $this->assertTrue(isset($aliases['hwi_oauth.resource_owner.external_ressource_owner']));
+        $this->assertEquals('my.service', $aliases['hwi_oauth.resource_owner.external_ressource_owner']);
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     * @expectedExceptionMessage Class "HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyWrongCustomProvider" must implement interface "HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface".
+     */
+    public function testCreateResourceOwnerServiceWithWrongClass()
+    {
+        $extension = new HWIOAuthExtension();
+        $extension->createResourceOwnerService($this->containerBuilder, 'external_ressource_owner', array(
+            'type'              => 'oauth2',
+            'class'             => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyWrongCustomProvider',
+            'client_id'         => '42',
+            'client_secret'     => 'foo',
+        ));
+    }
+
+    public function testCreateResourceOwnerServiceWithClass()
+    {
+        $extension = new HWIOAuthExtension();
+        $extension->createResourceOwnerService($this->containerBuilder, 'external_ressource_owner', array(
+            'type'              => 'oauth2',
+            'class'             => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider',
+            'client_id'         => '42',
+            'client_secret'     => 'foo',
+        ));
+
+        $definitions = $this->containerBuilder->getDefinitions();
+
+        $this->assertTrue(isset($definitions['hwi_oauth.resource_owner.external_ressource_owner']));
+        $this->assertEquals('hwi_oauth.abstract_resource_owner.oauth2', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getParent());
+        $this->assertEquals('HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getClass());
+
+        $argument2 = $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getArgument(2);
+        $this->assertEquals('42', $argument2['client_id']);
+        $this->assertEquals('foo', $argument2['client_secret']);
+        $this->assertEquals('external_ressource_owner', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getArgument(3));
+    }
+
     protected function createEmptyConfiguration()
     {
         $loader = new HWIOAuthExtension();
@@ -409,6 +571,7 @@ resource_owners:
 
     my_custom_oauth2:
         type:                oauth2
+        class:               \My\External\Custom\ResourceOwner\Class
         client_id:           client_id
         client_secret:       client_secret
         access_token_url:    https://path.to/oauth/v2/token

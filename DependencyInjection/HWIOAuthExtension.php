@@ -108,17 +108,31 @@ class HWIOAuthExtension extends Extension
         if (isset($options['service'])) {
             // set the appropriate name for aliased services, compiler pass depends on it
             $container->setAlias('hwi_oauth.resource_owner.'.$name, $options['service']);
-        } else {
-            $type = $options['type'];
-            unset($options['type']);
 
+            return;
+        }
+
+        $type = $options['type'];
+        unset($options['type']);
+
+        // handle external resource owners with given class
+        if (isset($options['class'])) {
+            if (!is_subclass_of($options['class'], 'HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')) {
+                throw new InvalidConfigurationException(sprintf('Class "%s" must implement interface "HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface".', $options['class']));
+            }
+
+            $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.$type);
+            $definition->setClass($options['class']);
+            unset($options['class']);
+        } else {
             $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.Configuration::getResourceOwnerType($type));
             $definition->setClass("%hwi_oauth.resource_owner.$type.class%");
-            $definition->replaceArgument(2, $options);
-            $definition->replaceArgument(3, $name);
-
-            $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
         }
+
+        $definition->replaceArgument(2, $options);
+        $definition->replaceArgument(3, $name);
+
+        $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
     }
 
     /**
