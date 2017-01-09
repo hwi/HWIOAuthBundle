@@ -104,19 +104,11 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
             return str_replace('{base_url}', $options['base_url'], $value);
         };
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setNormalizer')) {
-            $resolver->setNormalizer('authorization_url', $normalizer);
-            $resolver->setNormalizer('access_token_url', $normalizer);
-            $resolver->setNormalizer('revoke_token_url', $normalizer);
-            $resolver->setNormalizer('infos_url', $normalizer);
-        } else {
-            $resolver->setNormalizers(array(
-                'authorization_url' => $normalizer,
-                'access_token_url' => $normalizer,
-                'revoke_token_url' => $normalizer,
-                'infos_url' => $normalizer,
-            ));
-        }
+        $resolver
+            ->setNormalizer('authorization_url', $normalizer)
+            ->setNormalizer('access_token_url', $normalizer)
+            ->setNormalizer('revoke_token_url', $normalizer)
+            ->setNormalizer('infos_url', $normalizer)
+        ;
     }
 }

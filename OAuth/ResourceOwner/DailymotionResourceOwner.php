@@ -54,13 +54,7 @@ class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
             'display' => null,
         ));
 
-        if (method_exists($resolver, 'setDefined')) {
-            // @link http://www.dailymotion.com/doc/api/authentication.html#dialog-form-factors
-            $resolver->setAllowedValues('display', array('page', 'popup', 'mobile', null));
-        } else {
-            $resolver->setAllowedValues(array(
-                'display' => array('page', 'popup', 'mobile', null),
-            ));
-        }
+        // @link http://www.dailymotion.com/doc/api/authentication.html#dialog-form-factors
+        $resolver->setAllowedValues('display', array('page', 'popup', 'mobile', null));
     }
 }

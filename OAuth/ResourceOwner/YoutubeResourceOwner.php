@@ -69,26 +69,15 @@ class YoutubeResourceOwner extends GenericOAuth2ResourceOwner
             'request_visible_actions' => null,
         ));
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver
-                // @link https://developers.google.com/accounts/docs/OAuth2WebServer#offline
-                ->setAllowedValues('access_type', array('online', 'offline', null))
-                // sometimes we need to force for approval prompt (e.g. when we lost refresh token)
-                ->setAllowedValues('approval_prompt', array('force', 'auto', null))
-                // @link https://developers.google.com/accounts/docs/OAuth2Login#authenticationuriparameters
-                ->setAllowedValues('display', array('page', 'popup', 'touch', 'wap', null))
-                ->setAllowedValues('login_hint', array('email address', 'sub', null))
-                ->setAllowedValues('prompt', array(null, 'consent', 'select_account', null))
-            ;
-        } else {
-            $resolver->setAllowedValues(array(
-                'access_type' => array('online', 'offline', null),
-                'approval_prompt' => array('force', 'auto', null),
-                'display' => array('page', 'popup', 'touch', 'wap', null),
-                'login_hint' => array('email address', 'sub', null),
-                'prompt' => array(null, 'consent', 'select_account', null),
-            ));
-        }
+        $resolver
+            // @link https://developers.google.com/accounts/docs/OAuth2WebServer#offline
+            ->setAllowedValues('access_type', array('online', 'offline', null))
+            // sometimes we need to force for approval prompt (e.g. when we lost refresh token)
+            ->setAllowedValues('approval_prompt', array('force', 'auto', null))
+            // @link https://developers.google.com/accounts/docs/OAuth2Login#authenticationuriparameters
+            ->setAllowedValues('display', array('page', 'popup', 'touch', 'wap', null))
+            ->setAllowedValues('login_hint', array('email address', 'sub', null))
+            ->setAllowedValues('prompt', array(null, 'consent', 'select_account', null))
+        ;
     }
 }

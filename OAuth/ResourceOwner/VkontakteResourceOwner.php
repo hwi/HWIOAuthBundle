@@ -96,13 +96,6 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             return is_array($value) ? implode(',', $value) : $value;
         };
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setNormalizer')) {
-            $resolver->setNormalizer('fields', $fieldsNormalizer);
-        } else {
-            $resolver->setNormalizers(array(
-                'fields' => $fieldsNormalizer,
-            ));
-        }
+        $resolver->setNormalizer('fields', $fieldsNormalizer);
     }
 }

@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,7 +26,6 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
@@ -205,7 +205,7 @@ class ConnectController extends Controller
         // Symfony <3.0 BC
         /** @var $form FormInterface */
         $form = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? $this->createForm('Symfony\Component\Form\Extension\Core\Type\FormType')
+            ? $this->createForm(FormType::class)
             : $this->createForm('form');
         // Handle the form
         $form->handleRequest($request);
@@ -214,7 +214,7 @@ class ConnectController extends Controller
             show_confirmation_page:
 
             /** @var $currentToken OAuthToken */
-            $currentToken = $this->getToken();
+            $currentToken = $this->get('security.token_storage')->getToken();
             $currentUser = $currentToken->getUser();
 
             $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
@@ -293,9 +293,7 @@ class ConnectController extends Controller
      */
     protected function getErrorForRequest(Request $request)
     {
-        // Symfony <2.6 BC. To be removed.
-        $authenticationErrorKey = class_exists('Symfony\Component\Security\Core\Security')
-            ? Security::AUTHENTICATION_ERROR : SecurityContextInterface::AUTHENTICATION_ERROR;
+        $authenticationErrorKey = Security::AUTHENTICATION_ERROR;
 
         $session = $request->getSession();
         if ($request->attributes->has($authenticationErrorKey)) {
@@ -378,7 +376,7 @@ class ConnectController extends Controller
         $token->setUser($user);
         $token->setAuthenticated(true);
 
-        $this->setToken($token);
+        $this->get('security.token_storage')->setToken($token);
 
         if ($fakeLogin) {
             // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
@@ -397,62 +395,6 @@ class ConnectController extends Controller
     protected function getTemplatingEngine()
     {
         return $this->container->getParameter('hwi_oauth.templating.engine');
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Symfony <2.6 BC. To be removed.
-     */
-    protected function isGranted($attributes, $object = null)
-    {
-        if (method_exists('Symfony\Bundle\FrameworkBundle\Controller\Controller', 'isGranted')) {
-            return parent::isGranted($attributes, $object);
-        }
-
-        return $this->get('security.context')->isGranted($attributes, $object);
-    }
-
-    /**
-     * {@inheritdoc}
-     *
-     * Symfony <2.6 BC. To be removed.
-     */
-    protected function redirectToRoute($route, array $parameters = array(), $status = 302)
-    {
-        if (method_exists('Symfony\Bundle\FrameworkBundle\Controller\Controller', 'redirectToRoute')) {
-            return parent::redirectToRoute($route, $parameters, $status);
-        }
-
-        return $this->redirect($this->generateUrl($route, $parameters), $status);
-    }
-
-    /**
-     * @return null|TokenInterface
-     *
-     * Symfony <2.6 BC. Remove it and use only security.token_storage service instead.
-     */
-    protected function getToken()
-    {
-        if ($this->has('security.token_storage')) {
-            return $this->get('security.token_storage')->getToken();
-        }
-
-        return $this->get('security.context')->getToken();
-    }
-
-    /**
-     * @param TokenInterface $token
-     *
-     * Symfony <2.6 BC. Remove it and use only security.token_storage service instead.
-     */
-    protected function setToken(TokenInterface $token)
-    {
-        if ($this->has('security.token_storage')) {
-            return $this->get('security.token_storage')->setToken($token);
-        }
-
-        return $this->get('security.context')->setToken($token);
     }
 
     /**

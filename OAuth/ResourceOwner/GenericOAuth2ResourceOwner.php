@@ -214,14 +214,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'use_bearer_authorization' => true,
         ));
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver->setDefined('revoke_token_url');
-        } else {
-            $resolver->setOptional(array(
-                'revoke_token_url',
-            ));
-        }
+        $resolver->setDefined('revoke_token_url');
 
         // Unfortunately some resource owners break the spec by using commas instead
         // of spaces to separate scopes (Disqus, Facebook, Github, Vkontante)
@@ -237,13 +230,6 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             return str_replace(',', ' ', $value);
         };
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setNormalizer')) {
-            $resolver->setNormalizer('scope', $scopeNormalizer);
-        } else {
-            $resolver->setNormalizers(array(
-                'scope' => $scopeNormalizer,
-            ));
-        }
+        $resolver->setNormalizer('scope', $scopeNormalizer);
     }
 }

@@ -11,7 +11,6 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Core\SecurityContextInterface;
 
 abstract class AbstractConnectControllerTest extends TestCase
 {
@@ -29,11 +28,6 @@ abstract class AbstractConnectControllerTest extends TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $tokenStorage;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $securityContext;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -105,22 +99,15 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->container->setParameter('hwi_oauth.firewall_names', array('default'));
         $this->container->setParameter('hwi_oauth.connect.confirmation', true);
 
-        if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
-            $this->authorizationChecker = $this->getMockBuilder('\Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
-                ->disableOriginalConstructor()
-                ->getMock();
-            $this->container->set('security.authorization_checker', $this->authorizationChecker);
+        $this->authorizationChecker = $this->getMockBuilder('\Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->container->set('security.authorization_checker', $this->authorizationChecker);
 
-            $this->tokenStorage = $this->getMockBuilder('\Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')
-                ->disableOriginalConstructor()
-                ->getMock();
-            $this->container->set('security.token_storage', $this->tokenStorage);
-        } else {
-            $this->securityContext = $this->getMockBuilder('\Symfony\Component\Security\Core\SecurityContextInterface')
-                ->disableOriginalConstructor()
-                ->getMock();
-            $this->container->set('security.context', $this->securityContext);
-        }
+        $this->tokenStorage = $this->getMockBuilder('\Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->container->set('security.token_storage', $this->tokenStorage);
 
         $this->templating = $this->getMockBuilder('Symfony\Bundle\FrameworkBundle\Templating\EngineInterface')
             ->disableOriginalConstructor()
@@ -197,33 +184,26 @@ abstract class AbstractConnectControllerTest extends TestCase
     }
 
     /**
-     * Symfony <2.6 BC. To be removed.
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getAuthorizationChecker()
     {
-        return $this->authorizationChecker ?: $this->securityContext;
+        return $this->authorizationChecker;
     }
 
     /**
-     * Symfony <2.6 BC. To be removed.
-     *
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
     protected function getTokenStorage()
     {
-        return $this->tokenStorage ?: $this->securityContext;
+        return $this->tokenStorage;
     }
 
     /**
-     * Symfony <2.6 BC. To be removed.
-     *
      * @return string
      */
     protected function getAuthenticationErrorKey()
     {
-        return class_exists('Symfony\Component\Security\Core\Security')
-            ? Security::AUTHENTICATION_ERROR : SecurityContextInterface::AUTHENTICATION_ERROR;
+        return Security::AUTHENTICATION_ERROR;
     }
 }
