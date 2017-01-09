@@ -48,23 +48,6 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $this->controller->registrationAction($this->request, $key);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cannot register an account.
-     */
-    public function testCannotRegisterBadKey()
-    {
-        $key = time() - 500;
-
-        $this->session->expects($this->once())
-            ->method('get')
-            ->with('_hwi_oauth.registration_error.'.$key)
-            ->willReturn($this->createAccountNotLinkedException())
-        ;
-
-        $this->controller->registrationAction($this->request, $key);
-    }
-
     public function testFailedProcess()
     {
         $key = time();
