@@ -22,6 +22,7 @@ use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAuthenticationException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -160,11 +161,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *               along with any other parameters returned from the authentication
      *               provider
      *
-     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     * @throws OAuthAuthenticationException If an OAuth error occurred or no access token is found
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
-        throw new AuthenticationException('OAuth error: "Method unsupported."');
+        throw new OAuthAuthenticationException('OAuth error: "Method unsupported."', null, $this->getName());
     }
 
     /**
@@ -174,11 +175,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return bool returns True if the revocation was successful, otherwise False
      *
-     * @throws AuthenticationException If an OAuth error occurred
+     * @throws OAuthAuthenticationException If an OAuth error occurred
      */
     public function revokeToken($token)
     {
-        throw new AuthenticationException('OAuth error: "Method unsupported."');
+        throw new OAuthAuthenticationException('OAuth error: "Method unsupported."', null, $this->getName());
     }
 
     /**
