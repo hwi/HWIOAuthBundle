@@ -89,7 +89,7 @@ class ConnectController extends Controller
     {
         $connect = $this->container->getParameter('hwi_oauth.connect');
         if (!$connect) {
-            throw new NotFoundHttpException();
+            throw $this->createNotFoundException();
         }
 
         $hasUser = $this->isGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -164,7 +164,7 @@ class ConnectController extends Controller
     {
         $connect = $this->container->getParameter('hwi_oauth.connect');
         if (!$connect) {
-            throw new NotFoundHttpException();
+            throw $this->createNotFoundException();
         }
 
         $hasUser = $this->isGranted('IS_AUTHENTICATED_REMEMBERED');
@@ -258,7 +258,7 @@ class ConnectController extends Controller
         try {
             $authorizationUrl = $this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($request, $service);
         } catch (\RuntimeException $e) {
-            throw new NotFoundHttpException($e->getMessage(), $e);
+            throw $this->createNotFoundException($e->getMessage(), $e);
         }
 
         // Check for a return path and store it before redirect
@@ -317,7 +317,7 @@ class ConnectController extends Controller
      *
      * @return ResourceOwnerInterface
      *
-     * @throws \RuntimeException if there is no resource owner with the given name
+     * @throws NotFoundHttpException if there is no resource owner with the given name
      */
     protected function getResourceOwnerByName($name)
     {
@@ -333,7 +333,7 @@ class ConnectController extends Controller
             }
         }
 
-        throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
+        throw $this->createNotFoundException(sprintf("No resource owner with name '%s'.", $name));
     }
 
     /**
