@@ -59,6 +59,27 @@ class FigoResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function refreshAccessToken($refreshToken, array $extraParameters = array())
+    {
+        $parameters = array_merge(array(
+            'refresh_token' => $refreshToken,
+            'grant_type' => 'refresh_token',
+        ), $extraParameters);
+
+        $basicAuthHash = base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret']));
+        $headers = ['Authorization: Basic '.$basicAuthHash];
+
+        $response = $this->doFigoGetTokenRequest($this->options['access_token_url'], $parameters, $headers);
+        $response = $this->getResponseContent($response);
+
+        $this->validateResponseContent($response);
+
+        return $response;
+    }
+
+    /**
      * @param string $url
      * @param array  $parameters
      * @param array  $headers
