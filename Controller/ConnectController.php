@@ -22,7 +22,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Security;
@@ -315,7 +314,7 @@ class ConnectController extends Controller
      *
      * @return ResourceOwnerInterface
      *
-     * @throws \RuntimeException if there is no resource owner with the given name
+     * @throws NotFoundHttpException if there is no resource owner with the given name
      */
     protected function getResourceOwnerByName($name)
     {
@@ -331,7 +330,7 @@ class ConnectController extends Controller
             }
         }
 
-        throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
+        throw new NotFoundHttpException(sprintf("No resource owner with name '%s'.", $name));
     }
 
     /**

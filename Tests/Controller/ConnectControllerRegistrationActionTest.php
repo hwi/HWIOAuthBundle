@@ -2,7 +2,10 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
+use FOS\UserBundle\Form\Factory\FactoryInterface;
+use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
+use Symfony\Component\Form\Form;
 
 class ConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
 {
@@ -22,11 +25,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
      */
     public function testAlreadyConnected()
     {
-        $this->getAuthorizationChecker()->expects($this->once())
-            ->method('isGranted')
-            ->with('IS_AUTHENTICATED_REMEMBERED')
-            ->willReturn(true)
-        ;
+        $this->mockAuthorizationCheck();
 
         $this->controller->registrationAction($this->request, time());
     }
@@ -60,7 +59,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
         $this->makeRegistrationForm();
 
-        $registrationFormHandler = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface')
+        $registrationFormHandler = $this->getMockBuilder(RegistrationFormHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $registrationFormHandler->expects($this->once())
@@ -90,7 +89,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
         $this->makeRegistrationForm();
 
-        $registrationFormHandler = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface')
+        $registrationFormHandler = $this->getMockBuilder(RegistrationFormHandlerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $registrationFormHandler->expects($this->once())
@@ -113,7 +112,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
     private function makeRegistrationForm()
     {
-        $registrationForm = $this->getMockBuilder('\Symfony\Component\Form\Form')
+        $registrationForm = $this->getMockBuilder(Form::class)
             ->disableOriginalConstructor()
             ->getMock();
         $registrationForm->expects($this->any())
@@ -123,7 +122,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $this->container->setParameter('hwi_oauth.fosub_enabled', true);
 
         if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
-            $registrationFormFactory = $this->getMockBuilder('FOS\UserBundle\Form\Factory\FactoryInterface')
+            $registrationFormFactory = $this->getMockBuilder(FactoryInterface::class)
                 ->disableOriginalConstructor()
                 ->getMock();
             $registrationFormFactory->expects($this->any())
