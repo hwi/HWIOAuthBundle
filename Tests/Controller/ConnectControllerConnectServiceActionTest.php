@@ -3,6 +3,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
+use Symfony\Component\Form\FormInterface;
 
 class ConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
 {
@@ -22,13 +23,21 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
      */
     public function testAlreadyConnected()
     {
-        $this->getAuthorizationChecker()->expects($this->once())
-            ->method('isGranted')
-            ->with('IS_AUTHENTICATED_REMEMBERED')
-            ->willReturn(false)
-        ;
+        $this->mockAuthorizationCheck(false);
 
         $this->controller->connectServiceAction($this->request, 'facebook');
+    }
+
+    /**
+     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     */
+    public function testUnknownResourceOwner()
+    {
+        $this->container->setParameter('hwi_oauth.firewall_names', []);
+
+        $this->mockAuthorizationCheck();
+
+        $this->controller->connectServiceAction($this->request, 'unknown');
     }
 
     public function testConnectConfirm()
@@ -37,11 +46,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
 
         $this->request->query->set('key', $key);
 
-        $this->getAuthorizationChecker()->expects($this->once())
-            ->method('isGranted')
-            ->with('IS_AUTHENTICATED_REMEMBERED')
-            ->willReturn(true)
-        ;
+        $this->mockAuthorizationCheck();
 
         $this->session->expects($this->once())
             ->method('get')
@@ -49,7 +54,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(array())
         ;
 
-        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')
+        $form = $this->getMockBuilder(FormInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->formFactory->expects($this->once())
@@ -72,11 +77,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $this->request->query->set('key', $key);
         $this->request->setMethod('POST');
 
-        $this->getAuthorizationChecker()->expects($this->once())
-            ->method('isGranted')
-            ->with('IS_AUTHENTICATED_REMEMBERED')
-            ->willReturn(true)
-        ;
+        $this->mockAuthorizationCheck();
 
         $this->session->expects($this->once())
             ->method('get')
@@ -84,7 +85,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(array())
         ;
 
-        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')
+        $form = $this->getMockBuilder(FormInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->formFactory->expects($this->once())
@@ -95,7 +96,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $form->expects($this->once())->method('isSubmitted')->willReturn(true);
         $form->expects($this->once())->method('isValid')->willReturn(true);
 
-        $this->getTokenStorage()->expects($this->once())
+        $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn(new CustomOAuthToken())
         ;
@@ -115,11 +116,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $this->request->query->set('key', $key);
         $this->container->setParameter('hwi_oauth.connect.confirmation', false);
 
-        $this->getAuthorizationChecker()->expects($this->once())
-            ->method('isGranted')
-            ->with('IS_AUTHENTICATED_REMEMBERED')
-            ->willReturn(true)
-        ;
+        $this->mockAuthorizationCheck();
 
         $this->session->expects($this->once())
             ->method('get')
@@ -127,7 +124,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(array())
         ;
 
-        $this->getTokenStorage()->expects($this->once())
+        $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn(new CustomOAuthToken())
         ;
@@ -146,11 +143,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
 
         $this->request->query->set('key', $key);
 
-        $this->getAuthorizationChecker()->expects($this->once())
-            ->method('isGranted')
-            ->with('IS_AUTHENTICATED_REMEMBERED')
-            ->willReturn(true)
-        ;
+        $this->mockAuthorizationCheck();
 
         $this->resourceOwner->expects($this->once())
             ->method('handles')
@@ -162,7 +155,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(array())
         ;
 
-        $form = $this->getMockBuilder('\Symfony\Component\Form\FormInterface')
+        $form = $this->getMockBuilder(FormInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->formFactory->expects($this->once())
