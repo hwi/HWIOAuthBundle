@@ -21,6 +21,8 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 {
+    private $grantRule = 'IS_AUTHENTICATED_REMEMBERED';
+
     public function testGetAuthorizationUrlWithRedirectUrl()
     {
         $url = 'http://localhost:8080/login/check-instagram';
@@ -31,7 +33,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $authorizationChecker, true);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $authorizationChecker, true, $this->grantRule);
         $utils->addResourceOwnerMap($this->getMap($url, $redirect, false, true));
 
         $this->assertEquals(
@@ -48,7 +50,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(true), true);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(true, $this->grantRule), true, $this->grantRule);
         $utils->addResourceOwnerMap($this->getMap($url, $redirect, true));
 
         $this->assertEquals(
@@ -68,7 +70,29 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(false), true);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(false, $this->grantRule), true, $this->grantRule);
+        $utils->addResourceOwnerMap($this->getMap($url, $redirect));
+
+        $this->assertEquals(
+            $redirect,
+            $utils->getAuthorizationUrl($request, 'instagram')
+        );
+
+        $this->assertNull($request->attributes->get('service'));
+    }
+
+    public function testGetAuthorizationUrlWithAuthenticatedFullyRule()
+    {
+        $url = 'http://localhost:8080/login/check-instagram';
+        $request = $this->getRequest($url);
+        $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
+
+        $utils = new OAuthUtils(
+            $this->getHttpUtils($url),
+            $this->getAutorizationChecker(false, 'IS_AUTHENTICATED_FULLY'),
+            true,
+            'IS_AUTHENTICATED_FULLY'
+        );
         $utils->addResourceOwnerMap($this->getMap($url, $redirect));
 
         $this->assertEquals(
@@ -193,15 +217,14 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         return new HttpUtils($urlGenerator);
     }
 
-    private function getAutorizationChecker($hasUser)
+    private function getAutorizationChecker($hasUser, $grantRule)
     {
-
         $mock = $this->getMockBuilder(AuthorizationCheckerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
         $mock->expects($this->once())
             ->method('isGranted')
-            ->with('IS_AUTHENTICATED_REMEMBERED')
+            ->with($grantRule)
             ->will($this->returnValue($hasUser));
 
         return $mock;

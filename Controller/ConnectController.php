@@ -45,7 +45,7 @@ class ConnectController extends Controller
     public function connectAction(Request $request)
     {
         $connect = $this->container->getParameter('hwi_oauth.connect');
-        $hasUser = $this->getUser() ? $this->isGranted('IS_AUTHENTICATED_REMEMBERED') : false;
+        $hasUser = $this->getUser() ? $this->isGranted($this->container->getParameter('hwi_oauth.grant_rule')) : false;
 
         $error = $this->getErrorForRequest($request);
 
@@ -91,7 +91,7 @@ class ConnectController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->isGranted($this->container->getParameter('hwi_oauth.grant_rule'));
         if ($hasUser) {
             throw new AccessDeniedException('Cannot connect already registered account.');
         }
@@ -166,7 +166,7 @@ class ConnectController extends Controller
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->isGranted('IS_AUTHENTICATED_REMEMBERED');
+        $hasUser = $this->isGranted($this->container->getParameter('hwi_oauth.grant_rule'));
         if (!$hasUser) {
             throw new AccessDeniedException('Cannot connect an account.');
         }
