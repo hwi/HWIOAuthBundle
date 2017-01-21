@@ -262,6 +262,22 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
+    public function testConfigurationPassValidOAuth2WithClassOnly()
+    {
+        $loader = new HWIOAuthExtension();
+        $config = $this->getEmptyConfig();
+        $config['resource_owners'] = array(
+            'valid' => array(
+                'type'              => 'oauth2',
+                'class'             => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider',
+                'client_id'         => 'client_id',
+                'client_secret'     => 'client_secret',
+            ),
+        );
+
+        $loader->load(array($config), $this->containerBuilder);
+    }
+
     public function testConfigurationPassValidOAuth2WithPathsAndClass()
     {
         $loader = new HWIOAuthExtension();
