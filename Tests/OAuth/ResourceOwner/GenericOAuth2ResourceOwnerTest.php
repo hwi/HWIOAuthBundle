@@ -11,13 +11,17 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
+use Buzz\Client\ClientInterface;
 use Buzz\Exception\RequestException;
 use Buzz\Message\MessageInterface;
 use Buzz\Message\RequestInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
+use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 {
@@ -342,7 +346,7 @@ json;
 
     public function testCustomResponseClass()
     {
-        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         $this->mockBuzz();
@@ -382,14 +386,14 @@ json;
 
     protected function createResourceOwner($name, array $options = array(), array $paths = array())
     {
-        $this->buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
+        $this->buzzClient = $this->getMockBuilder(ClientInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
+        $httpUtils = $this->getMockBuilder(HttpUtils::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storage = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface')
+        $this->storage = $this->getMockBuilder(RequestDataStorageInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
