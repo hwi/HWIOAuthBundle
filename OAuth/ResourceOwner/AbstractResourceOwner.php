@@ -22,6 +22,7 @@ use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -39,12 +40,12 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @var array
      */
-    protected $paths = array();
+    protected $paths = [];
 
     /**
      * @var HttpClientInterface
@@ -151,6 +152,21 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
+     * Retrieve an access token for a given code.
+     *
+     * @param Request $request         The request object from where the code is going to extracted
+     * @param mixed   $redirectUri     The uri to redirect the client back to
+     * @param array   $extraParameters An array of parameters to add to the url
+     *
+     * @return array array containing the access token and it's 'expires_in' value,
+     *               along with any other parameters returned from the authentication
+     *               provider
+     *
+     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     */
+    public abstract function getAccessToken(Request $request, $redirectUri, array $extraParameters = []);
+
+    /**
      * Refresh an access token using a refresh token.
      *
      * @param string $refreshToken    Refresh token
@@ -162,7 +178,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @throws AuthenticationException If an OAuth error occurred or no access token is found
      */
-    public function refreshAccessToken($refreshToken, array $extraParameters = array())
+    public function refreshAccessToken($refreshToken, array $extraParameters = [])
     {
         throw new AuthenticationException('OAuth error: "Method unsupported."');
     }
@@ -202,7 +218,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return string
      */
-    protected function normalizeUrl($url, array $parameters = array())
+    protected function normalizeUrl($url, array $parameters = [])
     {
         $normalizedUrl = $url;
         if (!empty($parameters)) {
@@ -222,7 +238,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return HttpResponse The response content
      */
-    protected function httpRequest($url, $content = null, $headers = array(), $method = null)
+    protected function httpRequest($url, $content = null, $headers = [], $method = null)
     {
         if (null === $method) {
             $method = null === $content || '' === $content ? HttpRequestInterface::METHOD_GET : HttpRequestInterface::METHOD_POST;
@@ -266,7 +282,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         // First check that content in response exists, due too bug: https://bugs.php.net/bug.php?id=54484
         $content = $rawResponse->getContent();
         if (!$content) {
-            return array();
+            return [];
         }
 
         $response = json_decode($content, true);
@@ -293,7 +309,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return HttpResponse
      */
-    abstract protected function doGetTokenRequest($url, array $parameters = array());
+    abstract protected function doGetTokenRequest($url, array $parameters = []);
 
     /**
      * @param string $url
@@ -301,7 +317,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return HttpResponse
      */
-    abstract protected function doGetUserInformationRequest($url, array $parameters = array());
+    abstract protected function doGetUserInformationRequest($url, array $parameters = []);
 
     /**
      * Configure the option resolver.
@@ -310,21 +326,21 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired(array(
+        $resolver->setRequired([
             'client_id',
             'client_secret',
             'authorization_url',
             'access_token_url',
             'infos_url',
-        ));
+        ]);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'scope' => null,
             'csrf' => false,
-            'user_response_class' => 'HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse',
+            'user_response_class' => PathUserResponse::class,
             'auth_with_one_url' => false,
-        ));
+        ]);
 
-        $resolver->setAllowedValues('csrf', array(true, false));
+        $resolver->setAllowedValues('csrf', [true, false]);
     }
 }

@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -28,16 +29,16 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
-        $parameters = array_merge(array(
+        $parameters = array_merge([
             'oauth_consumer_key' => $this->options['client_id'],
             'oauth_timestamp' => time(),
             'oauth_nonce' => $this->generateNonce(),
             'oauth_version' => '1.0',
             'oauth_signature_method' => $this->options['signature_method'],
             'oauth_token' => $accessToken['oauth_token'],
-        ), $extraParameters);
+        ], $extraParameters);
 
         $url = $this->options['infos_url'];
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
@@ -62,7 +63,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
         $token = $this->getRequestToken($redirectUri, $extraParameters);
 
@@ -72,8 +73,10 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
     {
+        OAuthErrorHandler::handleOAuthError($request);
+
         try {
             if (null === $requestToken = $this->storage->fetch($this, $request->query->get('oauth_token'))) {
                 throw new \RuntimeException('No request token found in the storage.');
@@ -109,7 +112,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
         }
 
-        if (!isset($response['oauth_token']) || !isset($response['oauth_token_secret'])) {
+        if (!isset($response['oauth_token'], $response['oauth_token_secret'])) {
             throw new AuthenticationException('Not a valid request token.');
         }
 
@@ -136,18 +139,18 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getRequestToken($redirectUri, array $extraParameters = array())
+    public function getRequestToken($redirectUri, array $extraParameters = [])
     {
         $timestamp = time();
 
-        $parameters = array_merge(array(
+        $parameters = array_merge([
             'oauth_consumer_key' => $this->options['client_id'],
             'oauth_timestamp' => $timestamp,
             'oauth_nonce' => $this->generateNonce(),
             'oauth_version' => '1.0',
             'oauth_callback' => $redirectUri,
             'oauth_signature_method' => $this->options['signature_method'],
-        ), $extraParameters);
+        ], $extraParameters);
 
         $url = $this->options['request_token_url'];
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
@@ -159,7 +162,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $this->options['signature_method']
         );
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, array(), HttpRequestInterface::METHOD_POST);
+        $apiResponse = $this->httpRequest($url, null, $parameters, [], HttpRequestInterface::METHOD_POST);
 
         $response = $this->getResponseContent($apiResponse);
 
@@ -167,11 +170,11 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
         }
 
-        if (isset($response['oauth_callback_confirmed']) && ($response['oauth_callback_confirmed'] != 'true')) {
+        if (isset($response['oauth_callback_confirmed']) && $response['oauth_callback_confirmed'] !== 'true') {
             throw new AuthenticationException('Defined OAuth callback was not confirmed.');
         }
 
-        if (!isset($response['oauth_token']) || !isset($response['oauth_token_secret'])) {
+        if (!isset($response['oauth_token'], $response['oauth_token_secret'])) {
             throw new AuthenticationException('Not a valid request token.');
         }
 
@@ -185,7 +188,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
+    protected function httpRequest($url, $content = null, $parameters = [], $headers = [], $method = null)
     {
         foreach ($parameters as $key => $value) {
             $parameters[$key] = $key.'="'.rawurlencode($value).'"';
@@ -203,15 +206,15 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($url, null, $parameters, array(), HttpRequestInterface::METHOD_POST);
+        return $this->httpRequest($url, null, $parameters, [], HttpRequestInterface::METHOD_POST);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    protected function doGetUserInformationRequest($url, array $parameters = [])
     {
         return $this->httpRequest($url, null, $parameters);
     }
@@ -223,15 +226,15 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setRequired(array(
+        $resolver->setRequired([
             'request_token_url',
-        ));
+        ]);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'realm' => null,
             'signature_method' => 'HMAC-SHA1',
-        ));
+        ]);
 
-        $resolver->setAllowedValues('signature_method', array('HMAC-SHA1', 'RSA-SHA1', 'PLAINTEXT'));
+        $resolver->setAllowedValues('signature_method', ['HMAC-SHA1', 'RSA-SHA1', 'PLAINTEXT']);
     }
 }

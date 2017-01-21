@@ -13,14 +13,13 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * GenericOAuth2ResourceOwner.
- *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
  */
@@ -32,9 +31,9 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         if ($this->options['use_bearer_authorization']) {
-            $content = $this->httpRequest($this->normalizeUrl($this->options['infos_url'], $extraParameters), null, array('Authorization: Bearer '.$accessToken['access_token']));
+            $content = $this->httpRequest($this->normalizeUrl($this->options['infos_url'], $extraParameters), null, ['Authorization: Bearer '.$accessToken['access_token']]);
         } else {
-            $content = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], array_merge(array($this->options['attr_name'] => $accessToken['access_token']), $extraParameters)));
+            $content = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], array_merge([$this->options['attr_name'] => $accessToken['access_token']], $extraParameters)));
         }
 
         $response = $this->getUserResponse();
@@ -59,39 +58,31 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             $this->storage->save($this, $this->state, 'csrf_state');
         }
 
-        $parameters = array_merge(array(
+        $parameters = array_merge([
             'response_type' => 'code',
             'client_id' => $this->options['client_id'],
             'scope' => $this->options['scope'],
             'state' => $this->state ? urlencode($this->state) : null,
             'redirect_uri' => $redirectUri,
-        ), $extraParameters);
+        ], $extraParameters);
 
         return $this->normalizeUrl($this->options['authorization_url'], $parameters);
     }
 
     /**
-     * Retrieve an access token for a given code.
-     *
-     * @param Request $request         The request object from where the code is going to extracted
-     * @param mixed   $redirectUri     The uri to redirect the client back to
-     * @param array   $extraParameters An array of parameters to add to the url
-     *
-     * @return array array containing the access token and it's 'expires_in' value,
-     *               along with any other parameters returned from the authentication
-     *               provider
-     *
-     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     * {@inheritdoc}
      */
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
-        $parameters = array_merge(array(
+        OAuthErrorHandler::handleOAuthError($request);
+
+        $parameters = array_merge([
             'code' => $request->query->get('code'),
             'grant_type' => 'authorization_code',
             'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
             'redirect_uri' => $redirectUri,
-        ), $extraParameters);
+        ], $extraParameters);
 
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
@@ -106,12 +97,12 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
-        $parameters = array_merge(array(
+        $parameters = array_merge([
             'refresh_token' => $refreshToken,
             'grant_type' => 'refresh_token',
             'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
-        ), $extraParameters);
+        ], $extraParameters);
 
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
@@ -130,12 +121,12 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             throw new AuthenticationException('OAuth error: "Method unsupported."');
         }
 
-        $parameters = array(
+        $parameters = [
             'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
-        );
+        ];
 
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), HttpRequestInterface::METHOD_DELETE);
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], ['token' => $token]), $parameters, [], HttpRequestInterface::METHOD_DELETE);
 
         return 200 === $response->getStatusCode();
     }
@@ -208,11 +199,11 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'attr_name' => 'access_token',
             'use_commas_in_scope' => false,
             'use_bearer_authorization' => true,
-        ));
+        ]);
 
         $resolver->setDefined('revoke_token_url');
 
