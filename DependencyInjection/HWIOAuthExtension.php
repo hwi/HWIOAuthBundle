@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
@@ -67,6 +68,9 @@ class HWIOAuthExtension extends Extension
         // set failed auth path
         $container->setParameter('hwi_oauth.failed_auth_path', $config['failed_auth_path']);
 
+        // set grant rule
+        $container->setParameter('hwi_oauth.grant_rule', $config['grant_rule']);
+
         // setup services for all configured resource owners
         $resourceOwners = array();
         foreach ($config['resource_owners'] as $name => $options) {
@@ -109,7 +113,7 @@ class HWIOAuthExtension extends Extension
 
         // handle external resource owners with given class
         if (isset($options['class'])) {
-            if (!is_subclass_of($options['class'], 'HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')) {
+            if (!is_subclass_of($options['class'], ResourceOwnerInterface::class)) {
                 throw new InvalidConfigurationException(sprintf('Class "%s" must implement interface "HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface".', $options['class']));
             }
 

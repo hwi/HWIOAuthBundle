@@ -34,6 +34,11 @@ class OAuthUtils
     protected $connect;
 
     /**
+     * @var string
+     */
+    protected $grantRule;
+
+    /**
      * @var HttpUtils
      */
     protected $httpUtils;
@@ -52,12 +57,18 @@ class OAuthUtils
      * @param HttpUtils                     $httpUtils
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param bool                          $connect
+     * @param string                        $grantRule
      */
-    public function __construct(HttpUtils $httpUtils, AuthorizationCheckerInterface $authorizationChecker, $connect)
-    {
+    public function __construct(
+        HttpUtils $httpUtils,
+        AuthorizationCheckerInterface $authorizationChecker,
+        $connect,
+        $grantRule
+    ) {
         $this->httpUtils = $httpUtils;
         $this->authorizationChecker = $authorizationChecker;
         $this->connect = $connect;
+        $this->grantRule = $grantRule;
     }
 
     /**
@@ -94,7 +105,7 @@ class OAuthUtils
     {
         $resourceOwner = $this->getResourceOwner($name);
         if (null === $redirectUrl) {
-            if (!$this->connect || !$this->authorizationChecker->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            if (!$this->connect || !$this->authorizationChecker->isGranted($this->grantRule)) {
                 $redirectUrl = $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($name));
             } else {
                 $redirectUrl = $this->getServiceAuthUrl($request, $resourceOwner);
