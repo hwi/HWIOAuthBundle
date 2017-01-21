@@ -350,7 +350,7 @@ class Configuration implements ConfigurationInterface
                         ->validate()
                             ->ifTrue(function ($c) {
                                 // skip if this contains a service
-                                if (isset($c['service'])) {
+                                if (isset($c['service']) || isset($c['class'])) {
                                     return false;
                                 }
 
