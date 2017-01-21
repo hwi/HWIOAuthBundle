@@ -11,8 +11,12 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Security;
 
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
@@ -23,7 +27,7 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $authorizationChecker = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
+        $authorizationChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -131,8 +135,9 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     private function getMap($url, $redirect, $hasUser = false, $hasOneRedirectUrl = false)
     {
-        $resource = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
+        $resource = $this->getMockBuilder(ResourceOwnerInterface::class)
             ->getMock();
+
         $resource
             ->expects($this->once())
             ->method('getAuthorizationUrl')
@@ -145,9 +150,10 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
             ->with('auth_with_one_url')
             ->will($this->returnValue($hasOneRedirectUrl));
 
-        $mapMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
+        $mapMock = $this->getMockBuilder(ResourceOwnerMap::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $mapMock
             ->expects($this->once())
             ->method('getResourceOwnerByName')
@@ -174,9 +180,10 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     private function getHttpUtils($generatedUrl = '/')
     {
-        $urlGenerator = $this->getMockBuilder('Symfony\Component\Routing\Generator\UrlGeneratorInterface')
+        $urlGenerator = $this->getMockBuilder(UrlGeneratorInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
+
         $urlGenerator
             ->expects($this->any())
             ->method('generate')
@@ -188,10 +195,10 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     private function getAutorizationChecker($hasUser)
     {
-        $mock = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
+
+        $mock = $this->getMockBuilder(AuthorizationCheckerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-
         $mock->expects($this->once())
             ->method('isGranted')
             ->with('IS_AUTHENTICATED_REMEMBERED')

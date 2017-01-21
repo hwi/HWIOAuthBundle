@@ -107,7 +107,11 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
             $this->disconnect($previousUser, $response);
         }
 
-        $this->accessor->setValue($user, $property, $username);
+        if ($this->accessor->isWritable($user, $property)) {
+            $this->accessor->setValue($user, $property, $username);
+        } else {
+            throw new \RuntimeException(sprintf('Could not determine access type for property "%s".', $property));
+        }
 
         $this->userManager->updateUser($user);
     }

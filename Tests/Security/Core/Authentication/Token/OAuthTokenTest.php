@@ -18,7 +18,7 @@ class OAuthTokenTest extends \PHPUnit_Framework_TestCase
     /**
      * @var OAuthToken
      */
-    protected $token;
+    private $token;
 
     public function setUp()
     {

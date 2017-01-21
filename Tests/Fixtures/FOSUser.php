@@ -14,8 +14,6 @@ namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 use FOS\UserBundle\Model\User as BaseUser;
 
 /**
- * User class.
- *
  * @author Alexander <iam.asm89@gmail.com>
  */
 class FOSUser extends BaseUser
@@ -29,7 +27,7 @@ class FOSUser extends BaseUser
 
     public function getRoles()
     {
-        return array();
+        return [];
     }
 
     public function getPassword()
