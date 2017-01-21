@@ -17,6 +17,8 @@ hwi_oauth:
             client_secret:       <client_secret>
 ```
 
+For easy integration for making signed calls with your oauth token to the Foursquare REST API try the [JcrollFoursquareApiBundle](https://github.com/jcroll/foursquare-api-bundle).
+
 When you're done. Continue by configuring the security layer or go back to
 setup more resource owners.
 
