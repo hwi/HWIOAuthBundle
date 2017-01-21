@@ -109,23 +109,12 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
             return str_replace('{base_url}', $options['base_url'], $value);
         };
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setNormalizer')) {
-            $resolver
-                ->setNormalizer('authorization_url', $normalizer)
-                ->setNormalizer('request_token_url', $normalizer)
-                ->setNormalizer('access_token_url', $normalizer)
-                ->setNormalizer('infos_session_url', $normalizer)
-                ->setNormalizer('infos_url', $normalizer)
-            ;
-        } else {
-            $resolver->setNormalizers(array(
-                'authorization_url' => $normalizer,
-                'request_token_url' => $normalizer,
-                'access_token_url' => $normalizer,
-                'infos_session_url' => $normalizer,
-                'infos_url' => $normalizer,
-            ));
-        }
+        $resolver
+            ->setNormalizer('authorization_url', $normalizer)
+            ->setNormalizer('request_token_url', $normalizer)
+            ->setNormalizer('access_token_url', $normalizer)
+            ->setNormalizer('infos_session_url', $normalizer)
+            ->setNormalizer('infos_url', $normalizer)
+        ;
     }
 }

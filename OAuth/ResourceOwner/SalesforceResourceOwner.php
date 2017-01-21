@@ -86,23 +86,11 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
             return preg_replace('~login\.~', 'test.', $value, 1);
         };
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setNormalizer')) {
-            $resolver
-                ->setNormalizer('authorization_url', $sandboxTransformation)
-                ->setNormalizer('access_token_url', $sandboxTransformation)
-            ;
+        $resolver
+            ->setNormalizer('authorization_url', $sandboxTransformation)
+            ->setNormalizer('access_token_url', $sandboxTransformation)
+        ;
 
-            $resolver->addAllowedTypes('sandbox', 'bool');
-        } else {
-            $resolver->setNormalizers(array(
-                'authorization_url' => $sandboxTransformation,
-                'access_token_url' => $sandboxTransformation,
-            ));
-
-            $resolver->addAllowedTypes(array(
-                'sandbox' => 'bool',
-            ));
-        }
+        $resolver->addAllowedTypes('sandbox', 'bool');
     }
 }

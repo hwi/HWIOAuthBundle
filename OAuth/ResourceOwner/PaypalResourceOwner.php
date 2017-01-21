@@ -45,13 +45,7 @@ class PaypalResourceOwner extends GenericOAuth2ResourceOwner
             'infos_url' => 'https://api.paypal.com/v1/identity/openidconnect/userinfo/?schema=openid',
         ));
 
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver->addAllowedTypes('sandbox', 'bool');
-        } else {
-            $resolver->addAllowedTypes(array(
-                'sandbox' => 'bool',
-            ));
-        }
+        $resolver->addAllowedTypes('sandbox', 'bool');
 
         $sandboxTransformation = function (Options $options, $value) {
             if (!$options['sandbox']) {
@@ -61,19 +55,10 @@ class PaypalResourceOwner extends GenericOAuth2ResourceOwner
             return preg_replace('~\.paypal\.~', '.sandbox.paypal.', $value, 1);
         };
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setNormalizer')) {
-            $resolver
-                ->setNormalizer('authorization_url', $sandboxTransformation)
-                ->setNormalizer('access_token_url', $sandboxTransformation)
-                ->setNormalizer('infos_url', $sandboxTransformation)
-            ;
-        } else {
-            $resolver->setNormalizers(array(
-                'authorization_url' => $sandboxTransformation,
-                'access_token_url' => $sandboxTransformation,
-                'infos_url' => $sandboxTransformation,
-            ));
-        }
+        $resolver
+            ->setNormalizer('authorization_url', $sandboxTransformation)
+            ->setNormalizer('access_token_url', $sandboxTransformation)
+            ->setNormalizer('infos_url', $sandboxTransformation)
+        ;
     }
 }

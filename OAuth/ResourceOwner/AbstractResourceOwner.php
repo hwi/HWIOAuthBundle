@@ -325,12 +325,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
             'auth_with_one_url' => false,
         ));
 
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver->setAllowedValues('csrf', array(true, false));
-        } else {
-            $resolver->setAllowedValues(array(
-                'csrf' => array(true, false),
-            ));
-        }
+        $resolver->setAllowedValues('csrf', array(true, false));
     }
 }

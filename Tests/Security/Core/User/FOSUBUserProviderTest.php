@@ -76,7 +76,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Class 'HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser' must have defined setter method for property: 'googleId'.
+     * @expectedExceptionMessage Could not determine access type for property "googleId".
      */
     public function testConnectUserWithNoSetterThrowsException()
     {

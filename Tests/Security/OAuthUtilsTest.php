@@ -23,15 +23,10 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
         $request = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
-            $authorizationChecker = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
-                ->disableOriginalConstructor()
-                ->getMock();
-        } else {
-            $authorizationChecker = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')
-                ->disableOriginalConstructor()
-                ->getMock();
-        }
+        $authorizationChecker = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $utils = new OAuthUtils($this->getHttpUtils($url), $authorizationChecker, true);
         $utils->addResourceOwnerMap($this->getMap($url, $redirect, false, true));
 
@@ -193,15 +188,9 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     private function getAutorizationChecker($hasUser)
     {
-        if (interface_exists('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')) {
-            $mock = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
-                ->disableOriginalConstructor()
-                ->getMock();
-        } else {
-            $mock = $this->getMockBuilder('Symfony\Component\Security\Core\SecurityContextInterface')
-                ->disableOriginalConstructor()
-                ->getMock();
-        }
+        $mock = $this->getMockBuilder('Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $mock->expects($this->once())
             ->method('isGranted')
