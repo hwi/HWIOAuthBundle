@@ -64,8 +64,9 @@ hwi_oauth:
 Again the details can be accessed in i.e. `loadUserByOAuthUserResponse(UserResponseInterface $response)`:
 
 ```php
+// This method will return all data that was sent from resource owner
 /* @var $response \HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface */
-$data = $response->getResponse(); /* this method will return all data that was sent from resource owner */
+$data = $response->getData();
 
 var_dump(
    $data['recommendations-received']

@@ -85,7 +85,7 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
         }
 
         $response = $this->getUserResponse();
-        $response->setResponse(base64_decode($jwt));
+        $response->setData(base64_decode($jwt));
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

@@ -51,8 +51,7 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
         $content = file_get_contents('compress.zlib://data:;base64,'.base64_encode($compressed->getContent()));
 
         $response = $this->getUserResponse();
-        $response->setResponse($content);
-
+        $response->setData($content);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

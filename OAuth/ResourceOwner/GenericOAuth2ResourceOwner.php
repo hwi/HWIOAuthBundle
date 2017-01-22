@@ -31,14 +31,22 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         if ($this->options['use_bearer_authorization']) {
-            $content = $this->httpRequest($this->normalizeUrl($this->options['infos_url'], $extraParameters), null, ['Authorization: Bearer '.$accessToken['access_token']]);
+            $content = $this->httpRequest(
+                $this->normalizeUrl($this->options['infos_url'], $extraParameters),
+                null,
+                ['Authorization: Bearer '.$accessToken['access_token']]
+            );
         } else {
-            $content = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], array_merge([$this->options['attr_name'] => $accessToken['access_token']], $extraParameters)));
+            $content = $this->doGetUserInformationRequest(
+                $this->normalizeUrl(
+                    $this->options['infos_url'],
+                    array_merge([$this->options['attr_name'] => $accessToken['access_token']], $extraParameters)
+                )
+            );
         }
 
         $response = $this->getUserResponse();
-        $response->setResponse($content->getContent());
-
+        $response->setData($content->getContent());
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

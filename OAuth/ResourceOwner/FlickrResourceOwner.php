@@ -37,13 +37,11 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
     {
         $token = $this->getRequestToken($redirectUri, $extraParameters);
 
-        $params = array(
+        return $this->normalizeUrl($this->options['authorization_url'], array(
             'oauth_token' => $token['oauth_token'],
             'perms' => $this->options['perms'],
             'nojsoncallback' => 1,
-        );
-
-        return $this->normalizeUrl($this->options['authorization_url'], $params);
+        ));
     }
 
     /**
@@ -52,7 +50,7 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $response = $this->getUserResponse();
-        $response->setResponse($accessToken);
+        $response->setData($accessToken);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
