@@ -37,21 +37,16 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        if (!extension_loaded('zlib')) {
-            throw new AuthenticationException('OAuth error: Stack Exchange resource owner requires zlib installed. See https://api.stackexchange.com/docs/compression for details.');
-        }
-
         $parameters = array_merge(
            array($this->options['attr_name'] => $accessToken['access_token']),
            array('site' => $this->options['site'], 'key' => $this->options['key']),
            $extraParameters
         );
 
-        $compressed = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], $parameters));
-        $content = file_get_contents('compress.zlib://data:;base64,'.base64_encode($compressed->getContent()));
+        $content = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], $parameters));
 
         $response = $this->getUserResponse();
-        $response->setData($content);
+        $response->setData($content->getContent());
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
