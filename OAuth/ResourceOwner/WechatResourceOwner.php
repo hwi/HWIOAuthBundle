@@ -95,7 +95,7 @@ class WechatResourceOwner extends GenericOAuth2ResourceOwner
         $this->validateResponseContent($content);
 
         $response = $this->getUserResponse();
-        $response->setResponse($content);
+        $response->setData($content);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

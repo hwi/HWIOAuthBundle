@@ -11,26 +11,28 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth;
 
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+
 /**
- * ResponseInterface.
- *
  * @author Alexander <iam.asm89@gmail.com>
  */
 interface ResponseInterface
 {
     /**
-     * Get the api response.
+     * Get the api response data.
      *
      * @return array
      */
-    public function getResponse();
+    public function getData();
 
     /**
      * Set the raw api response.
      *
-     * @param string|array $response
+     * @param string|array $data
+     *
+     * @throws AuthenticationException
      */
-    public function setResponse($response);
+    public function setData($data);
 
     /**
      * Get the resource owner responsible for the response.

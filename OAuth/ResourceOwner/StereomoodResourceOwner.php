@@ -32,7 +32,7 @@ class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $response = $this->getUserResponse();
-        $response->setResponse($accessToken);
+        $response->setData($accessToken);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

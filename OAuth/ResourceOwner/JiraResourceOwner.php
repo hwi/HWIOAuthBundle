@@ -75,7 +75,7 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
         $content = $this->doGetUserInformationRequest($url, $parameters)->getContent();
 
         $response = $this->getUserResponse();
-        $response->setResponse($content);
+        $response->setData($content);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

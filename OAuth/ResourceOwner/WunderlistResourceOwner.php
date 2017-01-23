@@ -15,8 +15,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * LinkedinResourceOwner.
- *
  * @author Guillaume Potier <guillaume@wisembly.com>
  */
 class WunderlistResourceOwner extends GenericOAuth2ResourceOwner
@@ -50,8 +48,7 @@ class WunderlistResourceOwner extends GenericOAuth2ResourceOwner
         $content = $this->doGetUserInformationRequest($this->options['infos_url'], array('access_token' => $accessToken['access_token']));
 
         $response = $this->getUserResponse();
-        $response->setResponse($content->getContent());
-
+        $response->setData($content->getContent());
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

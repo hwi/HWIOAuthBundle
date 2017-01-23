@@ -66,7 +66,7 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
         }
 
         $response = $this->getUserResponse();
-        $response->setResponse($content);
+        $response->setData($content);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
