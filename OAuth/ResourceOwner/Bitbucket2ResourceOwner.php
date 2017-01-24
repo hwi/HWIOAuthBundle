@@ -52,7 +52,7 @@ class Bitbucket2ResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $response = parent::getUserInformation($accessToken, $extraParameters);
-        $responseData = $response->getResponse();
+        $responseData = $response->getData();
 
         // fetch the email addresses linked to the account
         if (empty($responseData['email'])) {
@@ -63,7 +63,8 @@ class Bitbucket2ResourceOwner extends GenericOAuth2ResourceOwner
                     $responseData['email'] = $email['email'];
                 }
             }
-            $response->setResponse($responseData);
+
+            $response->setData($responseData);
         }
 
         return $response;

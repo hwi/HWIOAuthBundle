@@ -43,6 +43,17 @@ security:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 ```
 
+
+Configure `FOSUBUserProvider` service:
+```yaml
+# app/config/services.yml
+my.oauth_aware.user_provider.service:
+    class: HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider
+    arguments:
+        - '@fos_user.user_manager'
+        - ['pass properties as array']
+```
+
 The paths configured at the `resource_owners` section should be defined in your routing.
 
 ```yaml

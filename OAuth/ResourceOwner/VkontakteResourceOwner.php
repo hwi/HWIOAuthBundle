@@ -51,11 +51,11 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         $content = $this->doGetUserInformationRequest($url)->getContent();
 
         $response = $this->getUserResponse();
-        $response->setResponse($content);
+        $response->setData($content); // This will translate string response into array
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
-        $content = $response->getResponse();
+        $content = $response->getData();
         $content['email'] = isset($accessToken['email']) ? $accessToken['email'] : null;
         if (isset($content['screen_name'])) {
             $content['nickname'] = $content['screen_name'];
@@ -63,7 +63,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             $content['nickname'] = isset($content['nickname']) ? $content['nickname'] : null;
         }
 
-        $response->setResponse($content);
+        $response->setData($content);
 
         return $response;
     }
@@ -96,13 +96,6 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             return is_array($value) ? implode(',', $value) : $value;
         };
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setNormalizer')) {
-            $resolver->setNormalizer('fields', $fieldsNormalizer);
-        } else {
-            $resolver->setNormalizers(array(
-                'fields' => $fieldsNormalizer,
-            ));
-        }
+        $resolver->setNormalizer('fields', $fieldsNormalizer);
     }
 }

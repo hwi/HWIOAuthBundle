@@ -11,12 +11,17 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 
+use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\Common\Persistence\ObjectRepository;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 
 class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
+    public function setUp()
     {
         if (!class_exists('Doctrine\ORM\EntityManager')) {
             $this->markTestSkipped('The Doctrine ORM is not available');
@@ -60,15 +65,18 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createEntityUserProvider($user = null)
     {
-        $class = 'HWI\Bundle\OAuthBundle\Tests\Fixtures\User';
-        $properties = array('github' => 'githubId');
-
-        return new EntityUserProvider($this->createManagerRegistryMock($user), $class, $properties);
+        return new EntityUserProvider(
+            $this->createManagerRegistryMock($user),
+            User::class,
+            [
+                'github' => 'githubId',
+            ]
+        );
     }
 
     public function createManagerRegistryMock($user = null)
     {
-        $registryMock = $this->getMockBuilder('Doctrine\Common\Persistence\ManagerRegistry')
+        $registryMock = $this->getMockBuilder(ManagerRegistry::class)
             ->getMock();
 
         $registryMock
@@ -81,7 +89,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
 
     public function createRepositoryMock($user = null)
     {
-        $mock = $this->getMockBuilder('Doctrine\ORM\EntityRepository')
+        $mock = $this->getMockBuilder(ObjectRepository::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -97,7 +105,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createResourceOwnerMock($resourceOwnerName = null)
     {
-        $resourceOwnerMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
+        $resourceOwnerMock = $this->getMockBuilder(ResourceOwnerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -113,7 +121,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createEntityManagerMock($user = null)
     {
-        $emMock = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+        $emMock = $this->getMockBuilder(ObjectManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -127,7 +135,7 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createUserResponseMock($username = null, $resourceOwnerName = null)
     {
-        $responseMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
+        $responseMock = $this->getMockBuilder(UserResponseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

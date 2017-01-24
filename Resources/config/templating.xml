@@ -11,6 +11,7 @@
     <services>
         <service id="hwi_oauth.templating.helper.oauth" class="%hwi_oauth.templating.helper.oauth.class%">
             <argument type="service" id="hwi_oauth.security.oauth_utils" />
+            <argument type="service" id="request_stack" />
             <tag name="templating.helper" alias="oauth" />
         </service>
     </services>

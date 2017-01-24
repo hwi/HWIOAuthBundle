@@ -58,21 +58,10 @@ class TwitterResourceOwner extends GenericOAuth1ResourceOwner
             'include_email' => false,
         ));
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setDefined')) {
-            $resolver->setDefined('x_auth_access_type');
-            // @link https://dev.twitter.com/oauth/reference/post/oauth/request_token
-            $resolver->setAllowedValues('x_auth_access_type', array('read', 'write'));
-            // @link https://dev.twitter.com/rest/reference/get/account/verify_credentials
-            $resolver->setAllowedTypes('include_email', 'bool');
-        } else {
-            $resolver->setOptional(array(
-                'x_auth_access_type',
-            ));
-            $resolver->setAllowedValues(array(
-                'x_auth_access_type' => array('read', 'write'),
-                'include_email' => array(true, false),
-            ));
-        }
+        $resolver->setDefined('x_auth_access_type');
+        // @link https://dev.twitter.com/oauth/reference/post/oauth/request_token
+        $resolver->setAllowedValues('x_auth_access_type', array('read', 'write'));
+        // @link https://dev.twitter.com/rest/reference/get/account/verify_credentials
+        $resolver->setAllowedTypes('include_email', 'bool');
     }
 }

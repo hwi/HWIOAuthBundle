@@ -2,6 +2,9 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+
 class ConnectControllerRedirectToServiceActionTest extends AbstractConnectControllerTest
 {
     protected function setUp()
@@ -21,7 +24,7 @@ class ConnectControllerRedirectToServiceActionTest extends AbstractConnectContro
     {
         $response = $this->controller->redirectToServiceAction($this->request, 'facebook');
 
-        $this->assertInstanceOf('\Symfony\Component\HttpFoundation\RedirectResponse', $response);
+        $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals('http://domain.com/oauth/v2/auth', $response->getTargetUrl());
     }
 
@@ -59,7 +62,7 @@ class ConnectControllerRedirectToServiceActionTest extends AbstractConnectContro
         $this->oAuthUtils->expects($this->once())
             ->method('getAuthorizationUrl')
             ->with(
-                $this->isInstanceOf('Symfony\Component\HttpFoundation\Request'),
+                $this->isInstanceOf(Request::class),
                 'unknown'
             )
             ->will($this->throwException(new \RuntimeException()))

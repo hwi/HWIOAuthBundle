@@ -107,11 +107,12 @@ class Configuration implements ConfigurationInterface
      */
     public static function getResourceOwnerType($resourceOwner)
     {
+        $resourceOwner = strtolower($resourceOwner);
         if ('oauth1' === $resourceOwner || 'oauth2' === $resourceOwner) {
             return $resourceOwner;
         }
 
-        if (in_array($resourceOwner, static::$resourceOwners['oauth1'])) {
+        if (in_array($resourceOwner, static::$resourceOwners['oauth1'], true)) {
             return 'oauth1';
         }
 
@@ -127,11 +128,16 @@ class Configuration implements ConfigurationInterface
      */
     public static function isResourceOwnerSupported($resourceOwner)
     {
+        $resourceOwner = strtolower($resourceOwner);
         if ('oauth1' === $resourceOwner || 'oauth2' === $resourceOwner) {
             return true;
         }
 
-        return in_array($resourceOwner, static::$resourceOwners['oauth1']) || in_array($resourceOwner, static::$resourceOwners['oauth2']);
+        if (in_array($resourceOwner, static::$resourceOwners['oauth1'], true)) {
+            return true;
+        }
+
+        return in_array($resourceOwner, static::$resourceOwners['oauth2'], true);
     }
 
     /**
@@ -155,6 +161,15 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('use_referer')->defaultFalse()->end()
                 ->scalarNode('templating_engine')->defaultValue('twig')->end()
                 ->scalarNode('failed_auth_path')->defaultValue('hwi_oauth_connect')->end()
+                ->scalarNode('grant_rule')
+                    ->defaultValue('IS_AUTHENTICATED_REMEMBERED')
+                    ->validate()
+                        ->ifTrue(function ($role) {
+                            return 'IS_AUTHENTICATED_REMEMBERED' !== $role || 'IS_AUTHENTICATED_FULLY' !== $role;
+                        })
+                        ->thenInvalid('Unknown grant role set "%s".')
+                    ->end()
+                ->end()
             ->end()
         ;
 
@@ -351,7 +366,7 @@ class Configuration implements ConfigurationInterface
                         ->validate()
                             ->ifTrue(function ($c) {
                                 // skip if this contains a service
-                                if (isset($c['service'])) {
+                                if (isset($c['service']) || isset($c['class'])) {
                                     return false;
                                 }
 

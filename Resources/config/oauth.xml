@@ -127,8 +127,9 @@
 
         <service id="hwi_oauth.security.oauth_utils" class="%hwi_oauth.security.oauth_utils.class%">
             <argument type="service" id="security.http_utils" />
-            <argument /> <!-- security.authorization_checker or security.context for Symfony <2.6 -->
+            <argument type="service" id="security.authorization_checker" />
             <argument>%hwi_oauth.connect%</argument>
+            <argument>%hwi_oauth.grant_rule%</argument>
         </service>
 
         <!-- Resource owners -->

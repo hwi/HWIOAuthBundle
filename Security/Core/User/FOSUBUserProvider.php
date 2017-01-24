@@ -101,20 +101,17 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
         }
 
         $property = $this->getProperty($response);
-
-        // Symfony <2.5 BC
-        if (method_exists($this->accessor, 'isWritable') && !$this->accessor->isWritable($user, $property)
-            || !method_exists($this->accessor, 'isWritable') && !method_exists($user, 'set'.ucfirst($property))) {
-            throw new \RuntimeException(sprintf("Class '%s' must have defined setter method for property: '%s'.", get_class($user), $property));
-        }
-
         $username = $response->getUsername();
 
         if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
             $this->disconnect($previousUser, $response);
         }
 
-        $this->accessor->setValue($user, $property, $username);
+        if ($this->accessor->isWritable($user, $property)) {
+            $this->accessor->setValue($user, $property, $username);
+        } else {
+            throw new \RuntimeException(sprintf('Could not determine access type for property "%s".', $property));
+        }
 
         $this->userManager->updateUser($user);
     }

@@ -11,9 +11,16 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\Authentication\Provider;
 
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -88,7 +95,8 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
         $token = $oauthProvider->authenticate($oauthTokenMock);
         $this->assertTrue($token->isAuthenticated());
-        $this->assertInstanceof('HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken', $token);
+        $this->assertInstanceof(OAuthToken::class, $token);
+
         $this->assertEquals($expectedToken, $token->getRawToken());
         $this->assertEquals($expectedToken['access_token'], $token->getAccessToken());
         $this->assertEquals($expectedToken['refresh_token'], $token->getRefreshToken());
@@ -162,7 +170,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue(false, 'Exception was not thrown.');
         } catch (OAuthAwareException $e) {
             $this->assertTrue(true, 'Exception was thrown.');
-            $this->assertInstanceOf('HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface', $e);
+            $this->assertInstanceOf(OAuthAwareExceptionInterface::class, $e);
             $this->assertEquals('github', $e->getResourceOwnerName());
             $this->assertEquals($expectedToken['access_token'], $e->getAccessToken());
             $this->assertEquals($expectedToken['refresh_token'], $e->getRefreshToken());
@@ -174,49 +182,49 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function getOAuthAwareUserProviderMock()
     {
-        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface')
+        return $this->getMockBuilder(OAuthAwareUserProviderInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     protected function getResourceOwnerMapMock()
     {
-        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap')
+        return $this->getMockBuilder(ResourceOwnerMap::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     protected function getOAuthTokenMock()
     {
-        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken')
+        return $this->getMockBuilder(OAuthToken::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     protected function getResourceOwnerMock()
     {
-        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
+        return $this->getMockBuilder(ResourceOwnerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     protected function getUserResponseMock()
     {
-        return $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
+        return $this->getMockBuilder(UserResponseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     protected function getUserCheckerMock()
     {
-        return $this->getMockBuilder('\Symfony\Component\Security\Core\User\UserCheckerInterface')
+        return $this->getMockBuilder(UserCheckerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
 
     protected function getUserMock()
     {
-        return $this->getMockBuilder('\Symfony\Component\Security\Core\User\UserInterface')
+        return $this->getMockBuilder(UserInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }

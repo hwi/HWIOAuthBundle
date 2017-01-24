@@ -11,7 +11,12 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Form;
 
+use FOS\UserBundle\Mailer\MailerInterface;
+use FOS\UserBundle\Model\UserInterface;
+use FOS\UserBundle\Model\UserManagerInterface;
 use HWI\Bundle\OAuthBundle\Form\FOSUBRegistrationFormHandler;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
 class FOSUBRegistrationFormHandlerTest extends \PHPUnit_Framework_TestCase
@@ -20,7 +25,8 @@ class FOSUBRegistrationFormHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $formMock = $this->getForm(false);
 
-        $response = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')->getMock();
+        $response = $this->getMockBuilder(UserResponseInterface::class)
+            ->getMock();
 
         $handler = new FOSUBRegistrationFormHandler($this->getUserManager(), $this->getMailer());
 
@@ -57,8 +63,11 @@ class FOSUBRegistrationFormHandlerTest extends \PHPUnit_Framework_TestCase
 
     private function getUserManager()
     {
-        $mock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')->getMock();
-        $userMock = $this->getMockBuilder('FOS\UserBundle\Model\UserInterface')->getMock();
+        $mock = $this->getMockBuilder(UserManagerInterface::class)
+            ->getMock();
+
+        $userMock = $this->getMockBuilder(UserInterface::class)
+            ->getMock();
         $userMock
             ->expects($this->once())
             ->method('setEnabled')
@@ -76,17 +85,19 @@ class FOSUBRegistrationFormHandlerTest extends \PHPUnit_Framework_TestCase
 
     private function getMailer()
     {
-        return $this->getMockBuilder('FOS\UserBundle\Mailer\MailerInterface')->getMock();
+        return $this->getMockBuilder(MailerInterface::class)
+            ->getMock();
     }
 
     private function getResponse()
     {
-        return $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')->getMock();
+        return $this->getMockBuilder(UserResponseInterface::class)
+            ->getMock();
     }
 
     private function getForm($handle = true)
     {
-        $formMock = $this->getMockBuilder('Symfony\Component\Form\Form')
+        $formMock = $this->getMockBuilder(Form::class)
             ->disableOriginalConstructor()
             ->getMock()
         ;

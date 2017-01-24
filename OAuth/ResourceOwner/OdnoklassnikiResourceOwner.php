@@ -64,7 +64,7 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
         $content = $this->doGetUserInformationRequest($url)->getContent();
 
         $response = $this->getUserResponse();
-        $response->setResponse($content);
+        $response->setData($content);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
@@ -95,13 +95,6 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
             return is_array($value) ? implode(',', $value) : $value;
         };
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setNormalizer')) {
-            $resolver->setNormalizer('fields', $fieldsNormalizer);
-        } else {
-            $resolver->setNormalizers(array(
-                'fields' => $fieldsNormalizer,
-            ));
-        }
+        $resolver->setNormalizer('fields', $fieldsNormalizer);
     }
 }

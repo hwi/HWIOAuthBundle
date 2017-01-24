@@ -112,7 +112,7 @@ class PathUserResponse extends AbstractUserResponse
     /**
      * @param string $name
      *
-     * @return mixed
+     * @return array|null
      */
     public function getPath($name)
     {
@@ -128,8 +128,8 @@ class PathUserResponse extends AbstractUserResponse
      */
     protected function getValueForPath($path)
     {
-        $response = $this->response;
-        if (!$response) {
+        $data = $this->data;
+        if (!$data) {
             return null;
         }
 
@@ -140,33 +140,30 @@ class PathUserResponse extends AbstractUserResponse
 
         if (is_array($steps)) {
             if (1 === count($steps)) {
-                return $this->getValue(current($steps), $response);
+                return $this->getValue(current($steps), $data);
             }
 
-            $value = array();
+            $value = [];
             foreach ($steps as $step) {
-                $value[] = $this->getValue($step, $response);
+                $value[] = $this->getValue($step, $data);
             }
 
-            $value = trim(implode(' ', $value));
-
-            return $value ?: null;
+            return trim(implode(' ', $value)) ?: null;
         }
 
-        return $this->getValue($steps, $response);
+        return $this->getValue($steps, $data);
     }
 
     /**
      * @param string $steps
-     * @param array  $response
+     * @param array  $data
      *
      * @return null|string
      */
-    private function getValue($steps, array $response)
+    private function getValue($steps, array $data)
     {
-        $value = $response;
-        $steps = explode('.', $steps);
-        foreach ($steps as $step) {
+        $value = $data;
+        foreach (explode('.', $steps) as $step) {
             if (!array_key_exists($step, $value)) {
                 return null;
             }

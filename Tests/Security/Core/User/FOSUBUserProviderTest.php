@@ -11,12 +11,15 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 
+use FOS\UserBundle\Model\UserManagerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser;
 
 class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
+    public function setUp()
     {
         if (!interface_exists('FOS\UserBundle\Model\UserManagerInterface')) {
             $this->markTestSkipped('FOSUserBundle is not available.');
@@ -76,7 +79,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage Class 'HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser' must have defined setter method for property: 'googleId'.
+     * @expectedExceptionMessage Could not determine access type for property "googleId".
      */
     public function testConnectUserWithNoSetterThrowsException()
     {
@@ -90,9 +93,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createFOSUBUserProvider($user = null, $updateUser = null)
     {
-        $properties = array('github' => 'githubId', 'google' => 'googleId');
-
-        $userManagerMock = $this->getMockBuilder('FOS\UserBundle\Model\UserManagerInterface')
+        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)
             ->getMock();
 
         if (null !== $user) {
@@ -108,12 +109,12 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
                 ->with($updateUser);
         }
 
-        return new FOSUBUserProvider($userManagerMock, $properties);
+        return new FOSUBUserProvider($userManagerMock, ['github' => 'githubId', 'google' => 'googleId']);
     }
 
     protected function createResourceOwnerMock($resourceOwnerName = null)
     {
-        $resourceOwnerMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface')
+        $resourceOwnerMock = $this->getMockBuilder(ResourceOwnerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -129,7 +130,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function createUserResponseMock($username = null, $resourceOwnerName = null)
     {
-        $responseMock = $this->getMockBuilder('HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface')
+        $responseMock = $this->getMockBuilder(UserResponseInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 

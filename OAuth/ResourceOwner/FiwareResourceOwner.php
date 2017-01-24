@@ -68,14 +68,25 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         if ($this->options['use_bearer_authorization']) {
-            $content = $this->httpRequest($this->normalizeUrl($this->options['infos_url'], array('access_token' => $accessToken['access_token'])), null, array('Authorization: Bearer'));
+            $content = $this->httpRequest(
+                $this->normalizeUrl(
+                    $this->options['infos_url'],
+                    array('access_token' => $accessToken['access_token'])
+                ),
+                null,
+                array('Authorization: Bearer')
+            );
         } else {
-            $content = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], array($this->options['attr_name'] => $accessToken['access_token'])));
+            $content = $this->doGetUserInformationRequest(
+                $this->normalizeUrl(
+                    $this->options['infos_url'],
+                    array($this->options['attr_name'] => $accessToken['access_token'])
+                )
+            );
         }
 
         $response = $this->getUserResponse();
-        $response->setResponse($content->getContent());
-
+        $response->setData($content->getContent());
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
@@ -104,19 +115,11 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
             return str_replace('{base_url}', $options['base_url'], $value);
         };
 
-        // Symfony <2.6 BC
-        if (method_exists($resolver, 'setNormalizer')) {
-            $resolver->setNormalizer('authorization_url', $normalizer);
-            $resolver->setNormalizer('access_token_url', $normalizer);
-            $resolver->setNormalizer('revoke_token_url', $normalizer);
-            $resolver->setNormalizer('infos_url', $normalizer);
-        } else {
-            $resolver->setNormalizers(array(
-                'authorization_url' => $normalizer,
-                'access_token_url' => $normalizer,
-                'revoke_token_url' => $normalizer,
-                'infos_url' => $normalizer,
-            ));
-        }
+        $resolver
+            ->setNormalizer('authorization_url', $normalizer)
+            ->setNormalizer('access_token_url', $normalizer)
+            ->setNormalizer('revoke_token_url', $normalizer)
+            ->setNormalizer('infos_url', $normalizer)
+        ;
     }
 }

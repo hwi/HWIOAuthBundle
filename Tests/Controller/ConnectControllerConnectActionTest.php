@@ -26,16 +26,12 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
             $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException(),
         ));
 
-        $this->getTokenStorage()->expects($this->once())
+        $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn(new CustomOAuthToken())
         ;
 
-        $this->getAuthorizationChecker()->expects($this->once())
-            ->method('isGranted')
-            ->with('IS_AUTHENTICATED_REMEMBERED')
-            ->willReturn(false)
-        ;
+        $this->mockAuthorizationCheck(false);
 
         $this->router->expects($this->once())
             ->method('generate')
@@ -52,12 +48,12 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
             $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException(),
         ));
 
-        $this->getTokenStorage()->expects($this->once())
+        $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn(null)
         ;
 
-        $this->getAuthorizationChecker()->expects($this->never())
+        $this->authorizationChecker->expects($this->never())
             ->method('isGranted')
         ;
 

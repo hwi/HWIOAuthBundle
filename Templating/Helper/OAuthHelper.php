@@ -12,7 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\Templating\Helper;
 
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Templating\Helper\Helper;
 
@@ -23,33 +22,23 @@ use Symfony\Component\Templating\Helper\Helper;
 class OAuthHelper extends Helper
 {
     /**
-     * @var Request
-     */
-    private $request;
-
-    /**
      * @var OAuthUtils
      */
     private $oauthUtils;
 
     /**
-     * @param OAuthUtils $oauthUtils
+     * @var RequestStack
      */
-    public function __construct(OAuthUtils $oauthUtils)
-    {
-        $this->oauthUtils = $oauthUtils;
-    }
+    private $requestStack;
 
     /**
-     * @param null|Request|RequestStack $request
+     * @param OAuthUtils   $oauthUtils
+     * @param RequestStack $requestStack
      */
-    public function setRequest($request = null)
+    public function __construct(OAuthUtils $oauthUtils, RequestStack $requestStack)
     {
-        if ($request instanceof RequestStack) {
-            $this->request = $request->getMasterRequest() ?: new Request();
-        } else {
-            $this->request = $request ?: new Request();
-        }
+        $this->oauthUtils = $oauthUtils;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -69,7 +58,7 @@ class OAuthHelper extends Helper
      */
     public function getLoginUrl($name)
     {
-        return $this->oauthUtils->getLoginUrl($this->request, $name);
+        return $this->oauthUtils->getLoginUrl($this->requestStack->getMasterRequest(), $name);
     }
 
     /**
@@ -81,7 +70,7 @@ class OAuthHelper extends Helper
      */
     public function getAuthorizationUrl($name, $redirectUrl = null, array $extraParameters = array())
     {
-        return $this->oauthUtils->getAuthorizationUrl($this->request, $name, $redirectUrl, $extraParameters);
+        return $this->oauthUtils->getAuthorizationUrl($this->requestStack->getMasterRequest(), $name, $redirectUrl, $extraParameters);
     }
 
     /**
