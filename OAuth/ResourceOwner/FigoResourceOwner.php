@@ -80,6 +80,57 @@ class FigoResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
+     * @param string $name
+     * @param string $email
+     * @param string $password
+     *
+     * @return array
+     */
+    public function createFigoUser($name, $email, $password)
+    {
+        $parameters = array(
+            'name' => $name,
+            'email' => $email,
+            'password' => $password,
+        );
+
+        $basicAuthHash = base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret']));
+        $headers = ['Authorization: Basic '.$basicAuthHash];
+
+        $response = $this->doFigoGetTokenRequest($this->options['create_user_url'], $parameters, $headers);
+        $response = $this->getResponseContent($response);
+
+        $this->validateResponseContent($response);
+
+        return $response;
+    }
+
+    /**
+     * @param string $password
+     * @param string $userName
+     *
+     * @return array
+     */
+    public function loginFigoUser($password, $userName)
+    {
+        $parameters = array(
+            'password' => $password,
+            'username' => $userName,
+            'grant_type' => 'password',
+        );
+
+        $basicAuthHash = base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret']));
+        $headers = ['Authorization: Basic '.$basicAuthHash];
+
+        $response = $this->doFigoGetTokenRequest($this->options['create_user_url'], $parameters, $headers);
+        $response = $this->getResponseContent($response);
+
+        $this->validateResponseContent($response);
+
+        return $response;
+    }
+
+    /**
      * @param string $url
      * @param array  $parameters
      * @param array  $headers
