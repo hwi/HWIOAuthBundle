@@ -45,7 +45,7 @@ class GitLabResourceOwner extends GenericOAuth2ResourceOwner
             'revoke_token_url' => 'https://gitlab.com/oauth/revoke',
             'infos_url' => 'https://gitlab.com/api/v3/user',
 
-            'scope' => 'api',
+            'scope' => 'read_user',
             'use_commas_in_scope' => false,
             'use_bearer_authorization' => true,
         ));
