@@ -23,7 +23,7 @@ use Symfony\Component\Security\Http\HttpUtils;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class ResourceOwnerMap implements ContainerAwareInterface
+class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInterface
 {
     /**
      * @var HttpUtils
