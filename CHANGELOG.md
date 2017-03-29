@@ -1,5 +1,8 @@
 Changelog
 =========
+## 0.6.0 (2017-xx-xx)
+* Fixed: Update Facebook API to v2.8,
+
 ## 0.5.3 (2017-01-08)
 * Fixed: Bitbucket2 resource owner,
 * Fixed: GitHub resource owner documentation,
