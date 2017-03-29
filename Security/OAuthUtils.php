@@ -72,7 +72,7 @@ class OAuthUtils
     }
 
     /**
-     * @param ResourceOwnerMap $ownerMap
+     * @param ResourceOwnerMapInterface $ownerMap
      */
     public function addResourceOwnerMap(ResourceOwnerMapInterface $ownerMap)
     {

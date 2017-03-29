@@ -46,7 +46,7 @@ class OAuthProvider implements AuthenticationProviderInterface
 
     /**
      * @param OAuthAwareUserProviderInterface $userProvider     User provider
-     * @param ResourceOwnerMap                $resourceOwnerMap Resource owner map
+     * @param ResourceOwnerMapInterface       $resourceOwnerMap Resource owner map
      * @param UserCheckerInterface            $userChecker      User checker
      */
     public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMapInterface $resourceOwnerMap, UserCheckerInterface $userChecker)
