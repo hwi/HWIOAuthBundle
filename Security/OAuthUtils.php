@@ -44,7 +44,7 @@ class OAuthUtils
     protected $httpUtils;
 
     /**
-     * @var ResourceOwnerMap[]
+     * @var ResourceOwnerMapInterface[]
      */
     protected $ownerMaps = array();
 

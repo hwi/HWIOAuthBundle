@@ -68,11 +68,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     }
 
     /**
-     * Check that resource owner with given name exists.
-     *
-     * @param string $name
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasResourceOwnerByName($name)
     {
@@ -80,11 +76,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     }
 
     /**
-     * Gets the appropriate resource owner given the name.
-     *
-     * @param string $name
-     *
-     * @return null|ResourceOwnerInterface
+     * {@inheritdoc}
      */
     public function getResourceOwnerByName($name)
     {
@@ -96,11 +88,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     }
 
     /**
-     * Gets the appropriate resource owner for a request.
-     *
-     * @param Request $request
-     *
-     * @return null|array
+     * {@inheritdoc}
      */
     public function getResourceOwnerByRequest(Request $request)
     {
@@ -114,11 +102,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     }
 
     /**
-     * Gets the check path for given resource name.
-     *
-     * @param string $name
-     *
-     * @return null|string
+     * {@inheritdoc}
      */
     public function getResourceOwnerCheckPath($name)
     {
@@ -130,9 +114,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     }
 
     /**
-     * Get all the resource owners.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getResourceOwners()
     {
