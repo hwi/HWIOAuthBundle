@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Http;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * @author Sérgio Rafael Siqueira <sergio@inbep.com.br>
+ * @author Alexander <iam.asm89@gmail.com>
  */
 interface ResourceOwnerMapInterface
 {
@@ -57,7 +57,7 @@ interface ResourceOwnerMapInterface
     /**
      * Get all the resource owners.
      *
-     * @return array
+     * @return ResourceOwnerInterface[]
      */
     public function getResourceOwners();
 }
