@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -44,7 +44,7 @@ class OAuthUtils
     protected $httpUtils;
 
     /**
-     * @var ResourceOwnerMap[]
+     * @var ResourceOwnerMapInterface[]
      */
     protected $ownerMaps = array();
 
@@ -72,9 +72,9 @@ class OAuthUtils
     }
 
     /**
-     * @param ResourceOwnerMap $ownerMap
+     * @param ResourceOwnerMapInterface $ownerMap
      */
-    public function addResourceOwnerMap(ResourceOwnerMap $ownerMap)
+    public function addResourceOwnerMap(ResourceOwnerMapInterface $ownerMap)
     {
         $this->ownerMaps[] = $ownerMap;
     }

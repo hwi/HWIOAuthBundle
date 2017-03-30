@@ -23,7 +23,7 @@ use Symfony\Component\Security\Http\HttpUtils;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class ResourceOwnerMap implements ContainerAwareInterface
+class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInterface
 {
     /**
      * @var HttpUtils
@@ -68,11 +68,7 @@ class ResourceOwnerMap implements ContainerAwareInterface
     }
 
     /**
-     * Check that resource owner with given name exists.
-     *
-     * @param string $name
-     *
-     * @return bool
+     * {@inheritdoc}
      */
     public function hasResourceOwnerByName($name)
     {
@@ -80,11 +76,7 @@ class ResourceOwnerMap implements ContainerAwareInterface
     }
 
     /**
-     * Gets the appropriate resource owner given the name.
-     *
-     * @param string $name
-     *
-     * @return null|ResourceOwnerInterface
+     * {@inheritdoc}
      */
     public function getResourceOwnerByName($name)
     {
@@ -96,11 +88,7 @@ class ResourceOwnerMap implements ContainerAwareInterface
     }
 
     /**
-     * Gets the appropriate resource owner for a request.
-     *
-     * @param Request $request
-     *
-     * @return null|array
+     * {@inheritdoc}
      */
     public function getResourceOwnerByRequest(Request $request)
     {
@@ -114,11 +102,7 @@ class ResourceOwnerMap implements ContainerAwareInterface
     }
 
     /**
-     * Gets the check path for given resource name.
-     *
-     * @param string $name
-     *
-     * @return null|string
+     * {@inheritdoc}
      */
     public function getResourceOwnerCheckPath($name)
     {
@@ -130,9 +114,7 @@ class ResourceOwnerMap implements ContainerAwareInterface
     }
 
     /**
-     * Get all the resource owners.
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getResourceOwners()
     {

@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
-use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
@@ -30,7 +30,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 class OAuthProvider implements AuthenticationProviderInterface
 {
     /**
-     * @var ResourceOwnerMap
+     * @var ResourceOwnerMapInterface
      */
     private $resourceOwnerMap;
 
@@ -46,10 +46,10 @@ class OAuthProvider implements AuthenticationProviderInterface
 
     /**
      * @param OAuthAwareUserProviderInterface $userProvider     User provider
-     * @param ResourceOwnerMap                $resourceOwnerMap Resource owner map
+     * @param ResourceOwnerMapInterface       $resourceOwnerMap Resource owner map
      * @param UserCheckerInterface            $userChecker      User checker
      */
-    public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMap $resourceOwnerMap, UserCheckerInterface $userChecker)
+    public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMapInterface $resourceOwnerMap, UserCheckerInterface $userChecker)
     {
         $this->userProvider = $userProvider;
         $this->resourceOwnerMap = $resourceOwnerMap;
