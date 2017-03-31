@@ -34,6 +34,19 @@ use Symfony\Component\Security\Http\SecurityEvents;
  */
 class ConnectController extends Controller
 {
+    const TEMPLATE_LOGIN = 'login';
+    const TEMPLATE_CONNECT_CONFIRM = 'connect_confirm';
+    const TEMPLATE_CONNECT_SUCCESS = 'connect_success';
+    const TEMPLATE_REGISTRATION = 'registration';
+    const TEMPLATE_REGISTRATION_SUCCESS = 'registration_success';
+    const TEMPLATE =[
+        self::TEMPLATE_LOGIN=>'HWIOAuthBundle:Connect:login.html.',
+        self::TEMPLATE_CONNECT_CONFIRM => 'HWIOAuthBundle:Connect:connect_confirm.html.',
+        self::TEMPLATE_CONNECT_SUCCESS =>'HWIOAuthBundle:Connect:connect_success.html.',
+        self::TEMPLATE_REGISTRATION => 'HWIOAuthBundle:Connect:registration.html.',
+        self::TEMPLATE_REGISTRATION_SUCCESS => 'HWIOAuthBundle:Connect:registration_success.html.'
+    ];
+
     /**
      * Action that handles the login 'form'. If connecting is enabled the
      * user will be redirected to the appropriate login urls or registration forms.
@@ -66,7 +79,7 @@ class ConnectController extends Controller
             $error = $error->getMessage();
         }
 
-        return $this->render('HWIOAuthBundle:Connect:login.html.'.$this->getTemplatingEngine(), array(
+        return $this->render(self::getTemplating(self::TEMPLATE_LOGIN).$this->getTemplatingEngine(), array(
             'error' => $error,
         ));
     }
@@ -131,7 +144,7 @@ class ConnectController extends Controller
                 return $this->redirect($targetPath);
             }
 
-            return $this->render('HWIOAuthBundle:Connect:registration_success.html.'.$this->getTemplatingEngine(), array(
+            return $this->render(self::getTemplating(self::TEMPLATE_REGISTRATION_SUCCESS).$this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
             ));
         }
@@ -139,7 +152,7 @@ class ConnectController extends Controller
         // reset the error in the session
         $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
-        return $this->render('HWIOAuthBundle:Connect:registration.html.'.$this->getTemplatingEngine(), array(
+        return $this->render(self::getTemplating(self::TEMPLATE_REGISTRATION).$this->getTemplatingEngine(), array(
             'key' => $key,
             'form' => $form->createView(),
             'userInformation' => $userInformation,
@@ -232,13 +245,13 @@ class ConnectController extends Controller
                 return $this->redirect($targetPath);
             }
 
-            return $this->render('HWIOAuthBundle:Connect:connect_success.html.'.$this->getTemplatingEngine(), array(
+            return $this->render(self::getTemplating(self::TEMPLATE_CONNECT_SUCCESS).$this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
                 'service' => $service,
             ));
         }
 
-        return $this->render('HWIOAuthBundle:Connect:connect_confirm.html.'.$this->getTemplatingEngine(), array(
+        return $this->render(self::getTemplating(self::TEMPLATE_CONNECT_CONFIRM).$this->getTemplatingEngine(), array(
             'key' => $key,
             'service' => $service,
             'form' => $form->createView(),
@@ -411,5 +424,17 @@ class ConnectController extends Controller
         }
 
         return null;
+    }
+
+    /**
+     * @param $name
+     *
+     * @return string
+     */
+    protected function getTemplating($name)
+    {
+        $template = $this->container->getParameter('hwi_oauth.templating.'.$name);
+        return $template?$template:self::TEMPLATE[$name];
+
     }
 }
