@@ -19,7 +19,6 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -128,7 +127,7 @@ class ConnectController extends Controller
         $formHandler = $this->container->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {
             $event = new FormEvent($form, $request);
-            $this->dispatch(HWIOAuthEvents::REGISTRATION_SUCCESS, $event);
+            $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::REGISTRATION_SUCCESS, $event);
 
             $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
 
@@ -140,14 +139,14 @@ class ConnectController extends Controller
                 $response = $targetPath
                     ? $this->redirect($targetPath)
                     : $this->render(
-                        'HWIOAuthBundle:Connect:registration_success.html.' . $this->getTemplatingEngine(),
+                        'HWIOAuthBundle:Connect:registration_success.html.'.$this->getTemplatingEngine(),
                         array('userInformation' => $userInformation)
                     )
                 ;
             }
 
             $event = new FilterUserResponseEvent($form->getData(), $request, $response);
-            $this->dispatch(HWIOAuthEvents::REGISTRATION_COMPLETED, $event);
+            $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::REGISTRATION_COMPLETED, $event);
 
             return $response;
         }
@@ -156,7 +155,7 @@ class ConnectController extends Controller
         $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
         $event = new GetResponseUserEvent($form->getData(), $request);
-        $this->dispatch(HWIOAuthEvents::REGISTRATION_INITIALIZE, $event);
+        $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::REGISTRATION_INITIALIZE, $event);
 
         if ($response = $event->getResponse()) {
             return $response;
@@ -239,7 +238,7 @@ class ConnectController extends Controller
             show_confirmation_page:
 
             $event = new GetResponseUserEvent($currentUser, $request);
-            $this->dispatch(HWIOAuthEvents::CONNECT_CONFIRMED, $event);
+            $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::CONNECT_CONFIRMED, $event);
 
             $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
 
@@ -258,7 +257,7 @@ class ConnectController extends Controller
                 $response = $targetPath
                     ? $this->redirect($targetPath)
                     : $this->render(
-                        'HWIOAuthBundle:Connect:connect_success.html.' . $this->getTemplatingEngine(),
+                        'HWIOAuthBundle:Connect:connect_success.html.'.$this->getTemplatingEngine(),
                         array(
                             'userInformation' => $userInformation,
                             'service' => $service,
@@ -268,13 +267,13 @@ class ConnectController extends Controller
             }
 
             $event = new FilterUserResponseEvent($currentUser, $request, $response);
-            $this->dispatch(HWIOAuthEvents::CONNECT_COMPLETED, $event);
+            $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::CONNECT_COMPLETED, $event);
 
             return $response;
         }
 
         $event = new GetResponseUserEvent($currentUser, $request);
-        $this->dispatch(HWIOAuthEvents::CONNECT_INITIALIZE, $event);
+        $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::CONNECT_INITIALIZE, $event);
 
         if ($response = $event->getResponse()) {
             return $response;
@@ -436,16 +435,6 @@ class ConnectController extends Controller
     protected function getTemplatingEngine()
     {
         return $this->container->getParameter('hwi_oauth.templating.engine');
-    }
-
-    /**
-     * @param string $eventName
-     * @param Event|null $event
-     * @return Event
-     */
-    private function dispatch($eventName, Event $event = null)
-    {
-        return $this->container->get('event_dispatcher')->dispatch($eventName, $event);
     }
 
     /**
