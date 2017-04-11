@@ -134,15 +134,14 @@ class ConnectController extends Controller
             // Authenticate the user
             $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
 
-            if (!$response = $event->getResponse()) {
-                $targetPath = $this->getTargetPath($session);
-                $response = $targetPath
-                    ? $this->redirect($targetPath)
-                    : $this->render(
-                        'HWIOAuthBundle:Connect:registration_success.html.'.$this->getTemplatingEngine(),
-                        array('userInformation' => $userInformation)
-                    )
-                ;
+            if (null === $response = $event->getResponse()) {
+                if ($targetPath = $this->getTargetPath($session)) {
+                    $response = $this->redirect($targetPath);
+                } else {
+                    $response = $this->render('HWIOAuthBundle:Connect:registration_success.html.'.$this->getTemplatingEngine(), array(
+                        'userInformation' => $userInformation,
+                    ));
+                }
             }
 
             $event = new FilterUserResponseEvent($form->getData(), $request, $response);
@@ -252,18 +251,15 @@ class ConnectController extends Controller
                 $this->authenticateUser($request, $currentUser, $service, $newToken, false);
             }
 
-            if (!$response = $event->getResponse()) {
-                $targetPath = $this->getTargetPath($session);
-                $response = $targetPath
-                    ? $this->redirect($targetPath)
-                    : $this->render(
-                        'HWIOAuthBundle:Connect:connect_success.html.'.$this->getTemplatingEngine(),
-                        array(
-                            'userInformation' => $userInformation,
-                            'service' => $service,
-                        )
-                    )
-                ;
+            if (null === $response = $event->getResponse()) {
+                if ($targetPath = $this->getTargetPath($session)) {
+                    $response = $this->redirect($targetPath);
+                } else {
+                    $response = $this->render('HWIOAuthBundle:Connect:connect_success.html.'.$this->getTemplatingEngine(), array(
+                        'userInformation' => $userInformation,
+                        'service' => $service,
+                    ));
+                }
             }
 
             $event = new FilterUserResponseEvent($currentUser, $request, $response);
