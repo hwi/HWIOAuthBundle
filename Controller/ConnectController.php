@@ -218,7 +218,7 @@ class ConnectController extends Controller
 
         $userInformation = $resourceOwner->getUserInformation($accessToken);
         /** @var $currentToken OAuthToken */
-        $currentToken = $this->getToken();
+        $currentToken = $this->get('security.token_storage')->getToken();
         $currentUser = $currentToken->getUser();
 
         // Show confirmation page?

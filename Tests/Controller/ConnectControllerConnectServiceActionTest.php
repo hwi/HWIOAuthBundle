@@ -56,7 +56,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(array())
         ;
 
-        $this->getTokenStorage()->expects($this->once())
+        $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn(new CustomOAuthToken())
         ;
@@ -192,7 +192,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(array())
         ;
 
-        $this->getTokenStorage()->expects($this->once())
+        $this->tokenStorage->expects($this->once())
             ->method('getToken')
             ->willReturn(new CustomOAuthToken())
         ;
