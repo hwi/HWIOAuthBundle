@@ -34,6 +34,7 @@ class Configuration implements ConfigurationInterface
             'asana',
             'auth0',
             'azure',
+            'battlenet',
             'bitbucket2',
             'bitly',
             'box',

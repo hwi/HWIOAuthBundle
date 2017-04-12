@@ -39,6 +39,7 @@ hwi_oauth:
 - [Amazon](resource_owners/amazon.md)
 - [Auth0](resource_owners/auth0.md)
 - [Azure](resource_owners/azure.md)
+- [Battlenet](resource_owners/battlenet.md)
 - [Bitbucket](resource_owners/bitbucket.md)
 - [Bitly](resource_owners/bitly.md)
 - [BufferApp](resource_owners/bufferapp.md)

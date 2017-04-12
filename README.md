@@ -11,6 +11,7 @@ This bundle contains support for 58 different providers:
 * Asana,
 * Auth0,
 * Azure,
+* Battlenet,
 * Bitbucket,
 * Bitly,
 * Box,
