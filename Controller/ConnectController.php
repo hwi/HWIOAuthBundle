@@ -235,6 +235,7 @@ class ConnectController extends Controller
             return $this->render('HWIOAuthBundle:Connect:connect_success.html.'.$this->getTemplatingEngine(), array(
                 'userInformation' => $userInformation,
                 'service' => $service,
+                'targetUrl' => $this->getTargetPath($session),
             ));
         }
 
