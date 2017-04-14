@@ -69,18 +69,15 @@ json;
 
     public function testCustomResponseClass()
     {
-        $this->markTestSkipped('Can\' test custom response because of the way the id_token value is set; is always returning null');
-
         $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
-        $this->mockBuzz();
-
-        $token = base64_encode($this->userResponse).'.';
+        $token = '.'.base64_encode($this->userResponse);
 
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(array(
+        $userResponse = $resourceOwner->getUserInformation(array(
             'access_token' => 'token',
             'id_token' => $token,
         ));
