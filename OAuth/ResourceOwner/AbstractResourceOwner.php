@@ -164,7 +164,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @throws AuthenticationException If an OAuth error occurred or no access token is found
      */
-    public abstract function getAccessToken(Request $request, $redirectUri, array $extraParameters = []);
+    abstract public function getAccessToken(Request $request, $redirectUri, array $extraParameters = []);
 
     /**
      * Refresh an access token using a refresh token.
@@ -248,7 +248,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $response = new HttpResponse();
 
         if (is_string($content)) {
-            $headers =  array_merge(array('Content-Length' => strlen($content)), $headers);
+            $headers = array_merge(array('Content-Length' => strlen($content)), $headers);
         }
 
         $headers = array_merge(

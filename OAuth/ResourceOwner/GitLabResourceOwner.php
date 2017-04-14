@@ -15,50 +15,50 @@ use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * GitLabResourceOwner
+ * GitLabResourceOwner.
  *
  * @author Indra Gunawan <hello@indra.my.id>
  */
 class GitLabResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier'     => 'id',
-        'nickname'       => 'username',
-        'realname'       => 'name',
-        'email'          => 'email',
+        'identifier' => 'id',
+        'nickname' => 'username',
+        'realname' => 'name',
+        'email' => 'email',
         'profilepicture' => 'avatar_url',
     );
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url'         => 'https://gitlab.com/oauth/authorize',
-            'access_token_url'          => 'https://gitlab.com/oauth/token',
-            'revoke_token_url'          => 'https://gitlab.com/oauth/revoke',
-            'infos_url'                 => 'https://gitlab.com/api/v3/user',
+            'authorization_url' => 'https://gitlab.com/oauth/authorize',
+            'access_token_url' => 'https://gitlab.com/oauth/token',
+            'revoke_token_url' => 'https://gitlab.com/oauth/revoke',
+            'infos_url' => 'https://gitlab.com/api/v3/user',
 
-            'scope'                     => 'api',
-            'use_commas_in_scope'       => false,
-            'use_bearer_authorization'  => true
+            'scope' => 'api',
+            'use_commas_in_scope' => false,
+            'use_bearer_authorization' => true,
         ));
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function revokeToken($token)
     {
         $parameters = array(
-            'token'         => $token,
-            'client_id'     => $this->options['client_id'],
+            'token' => $token,
+            'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
         );
 

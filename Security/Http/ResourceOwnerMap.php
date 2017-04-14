@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Http;
 
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;

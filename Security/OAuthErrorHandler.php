@@ -21,7 +21,7 @@ final class OAuthErrorHandler
      *
      * @var array
      */
-    static private $translatedOAuthErrors = [
+    private static $translatedOAuthErrors = [
         'access_denied' => 'You have refused access for this site.',
         'authorization_expired' => 'Authorization expired.',
         'bad_verification_code' => 'Bad verification code.',
