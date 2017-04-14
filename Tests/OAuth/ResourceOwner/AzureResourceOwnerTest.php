@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
+use Buzz\Exception\RequestException;
+use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AzureResourceOwner;
 
 class AzureResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
@@ -67,18 +69,15 @@ json;
 
     public function testCustomResponseClass()
     {
-        $this->markTestSkipped('Can\' test custom response because of the way the id_token value is set; is always returning null');
-
         $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
-        $this->mockBuzz();
-
-        $token = base64_encode($this->userResponse).'.';
+        $token = '.'.base64_encode($this->userResponse);
 
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(array(
+        $userResponse = $resourceOwner->getUserInformation(array(
             'access_token' => 'token',
             'id_token' => $token,
         ));
@@ -89,6 +88,24 @@ json;
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
+    }
+
+    public function testGetUserInformationFailure()
+    {
+        $exception = new RequestException();
+
+        $this->buzzClient->expects($this->once())
+            ->method('send')
+            ->will($this->throwException($exception));
+
+        $token = '.'.base64_encode($this->userResponse);
+
+        try {
+            $this->resourceOwner->getUserInformation(array('access_token' => 'token', 'id_token' => $token));
+            $this->fail('An exception should have been raised');
+        } catch (HttpTransportException $e) {
+            $this->assertSame($exception, $e->getPrevious());
+        }
     }
 
     protected function setUpResourceOwner($name, $httpUtils, array $options)
