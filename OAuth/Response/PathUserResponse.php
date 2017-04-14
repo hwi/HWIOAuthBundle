@@ -143,7 +143,7 @@ class PathUserResponse extends AbstractUserResponse
                 return $this->getValue(current($steps), $data);
             }
 
-            $value = [];
+            $value = array();
             foreach ($steps as $step) {
                 $value[] = $this->getValue($step, $data);
             }

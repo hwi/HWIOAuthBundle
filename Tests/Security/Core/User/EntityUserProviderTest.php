@@ -68,9 +68,9 @@ class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
         return new EntityUserProvider(
             $this->createManagerRegistryMock($user),
             User::class,
-            [
+            array(
                 'github' => 'githubId',
-            ]
+            )
         );
     }
 

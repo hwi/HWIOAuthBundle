@@ -27,7 +27,7 @@ class FOSUser extends BaseUser
 
     public function getRoles()
     {
-        return [];
+        return array();
     }
 
     public function getPassword()

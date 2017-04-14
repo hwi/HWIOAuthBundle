@@ -35,7 +35,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
      */
     public function testUnknownResourceOwner()
     {
-        $this->container->setParameter('hwi_oauth.firewall_names', []);
+        $this->container->setParameter('hwi_oauth.firewall_names', array());
 
         $this->mockAuthorizationCheck();
 

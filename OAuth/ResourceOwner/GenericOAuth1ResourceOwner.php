@@ -29,16 +29,16 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = [])
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
-        $parameters = array_merge([
+        $parameters = array_merge(array(
             'oauth_consumer_key' => $this->options['client_id'],
             'oauth_timestamp' => time(),
             'oauth_nonce' => $this->generateNonce(),
             'oauth_version' => '1.0',
             'oauth_signature_method' => $this->options['signature_method'],
             'oauth_token' => $accessToken['oauth_token'],
-        ], $extraParameters);
+        ), $extraParameters);
 
         $url = $this->options['infos_url'];
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
@@ -63,7 +63,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         $token = $this->getRequestToken($redirectUri, $extraParameters);
 
@@ -73,7 +73,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
     {
         OAuthErrorHandler::handleOAuthError($request);
 
@@ -139,18 +139,18 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getRequestToken($redirectUri, array $extraParameters = [])
+    public function getRequestToken($redirectUri, array $extraParameters = array())
     {
         $timestamp = time();
 
-        $parameters = array_merge([
+        $parameters = array_merge(array(
             'oauth_consumer_key' => $this->options['client_id'],
             'oauth_timestamp' => $timestamp,
             'oauth_nonce' => $this->generateNonce(),
             'oauth_version' => '1.0',
             'oauth_callback' => $redirectUri,
             'oauth_signature_method' => $this->options['signature_method'],
-        ], $extraParameters);
+        ), $extraParameters);
 
         $url = $this->options['request_token_url'];
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
@@ -162,7 +162,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $this->options['signature_method']
         );
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, [], HttpRequestInterface::METHOD_POST);
+        $apiResponse = $this->httpRequest($url, null, $parameters, array(), HttpRequestInterface::METHOD_POST);
 
         $response = $this->getResponseContent($apiResponse);
 
@@ -188,7 +188,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function httpRequest($url, $content = null, $parameters = [], $headers = [], $method = null)
+    protected function httpRequest($url, $content = null, $parameters = array(), $headers = array(), $method = null)
     {
         foreach ($parameters as $key => $value) {
             $parameters[$key] = $key.'="'.rawurlencode($value).'"';
@@ -206,15 +206,15 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = [])
+    protected function doGetTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, null, $parameters, [], HttpRequestInterface::METHOD_POST);
+        return $this->httpRequest($url, null, $parameters, array(), HttpRequestInterface::METHOD_POST);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = [])
+    protected function doGetUserInformationRequest($url, array $parameters = array())
     {
         return $this->httpRequest($url, null, $parameters);
     }
@@ -226,15 +226,15 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setRequired([
+        $resolver->setRequired(array(
             'request_token_url',
-        ]);
+        ));
 
-        $resolver->setDefaults([
+        $resolver->setDefaults(array(
             'realm' => null,
             'signature_method' => 'HMAC-SHA1',
-        ]);
+        ));
 
-        $resolver->setAllowedValues('signature_method', ['HMAC-SHA1', 'RSA-SHA1', 'PLAINTEXT']);
+        $resolver->setAllowedValues('signature_method', array('HMAC-SHA1', 'RSA-SHA1', 'PLAINTEXT'));
     }
 }

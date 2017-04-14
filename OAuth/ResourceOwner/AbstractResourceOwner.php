@@ -40,12 +40,12 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * @var array
      */
-    protected $options = [];
+    protected $options = array();
 
     /**
      * @var array
      */
-    protected $paths = [];
+    protected $paths = array();
 
     /**
      * @var HttpClientInterface
@@ -164,7 +164,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @throws AuthenticationException If an OAuth error occurred or no access token is found
      */
-    public abstract function getAccessToken(Request $request, $redirectUri, array $extraParameters = []);
+    abstract public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array());
 
     /**
      * Refresh an access token using a refresh token.
@@ -178,7 +178,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @throws AuthenticationException If an OAuth error occurred or no access token is found
      */
-    public function refreshAccessToken($refreshToken, array $extraParameters = [])
+    public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
         throw new AuthenticationException('OAuth error: "Method unsupported."');
     }
@@ -218,7 +218,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return string
      */
-    protected function normalizeUrl($url, array $parameters = [])
+    protected function normalizeUrl($url, array $parameters = array())
     {
         $normalizedUrl = $url;
         if (!empty($parameters)) {
@@ -238,7 +238,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return HttpResponse The response content
      */
-    protected function httpRequest($url, $content = null, $headers = [], $method = null)
+    protected function httpRequest($url, $content = null, $headers = array(), $method = null)
     {
         if (null === $method) {
             $method = null === $content || '' === $content ? HttpRequestInterface::METHOD_GET : HttpRequestInterface::METHOD_POST;
@@ -248,7 +248,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $response = new HttpResponse();
 
         if (is_string($content)) {
-            $headers =  array_merge(array('Content-Length' => strlen($content)), $headers);
+            $headers = array_merge(array('Content-Length' => strlen($content)), $headers);
         }
 
         $headers = array_merge(
@@ -282,7 +282,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         // First check that content in response exists, due too bug: https://bugs.php.net/bug.php?id=54484
         $content = $rawResponse->getContent();
         if (!$content) {
-            return [];
+            return array();
         }
 
         $response = json_decode($content, true);
@@ -309,7 +309,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return HttpResponse
      */
-    abstract protected function doGetTokenRequest($url, array $parameters = []);
+    abstract protected function doGetTokenRequest($url, array $parameters = array());
 
     /**
      * @param string $url
@@ -317,7 +317,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @return HttpResponse
      */
-    abstract protected function doGetUserInformationRequest($url, array $parameters = []);
+    abstract protected function doGetUserInformationRequest($url, array $parameters = array());
 
     /**
      * Configure the option resolver.
@@ -326,21 +326,21 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     protected function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setRequired([
+        $resolver->setRequired(array(
             'client_id',
             'client_secret',
             'authorization_url',
             'access_token_url',
             'infos_url',
-        ]);
+        ));
 
-        $resolver->setDefaults([
+        $resolver->setDefaults(array(
             'scope' => null,
             'csrf' => false,
             'user_response_class' => PathUserResponse::class,
             'auth_with_one_url' => false,
-        ]);
+        ));
 
-        $resolver->setAllowedValues('csrf', [true, false]);
+        $resolver->setAllowedValues('csrf', array(true, false));
     }
 }

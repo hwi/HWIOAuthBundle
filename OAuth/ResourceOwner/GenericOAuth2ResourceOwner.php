@@ -34,13 +34,13 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             $content = $this->httpRequest(
                 $this->normalizeUrl($this->options['infos_url'], $extraParameters),
                 null,
-                ['Authorization: Bearer '.$accessToken['access_token']]
+                array('Authorization: Bearer '.$accessToken['access_token'])
             );
         } else {
             $content = $this->doGetUserInformationRequest(
                 $this->normalizeUrl(
                     $this->options['infos_url'],
-                    array_merge([$this->options['attr_name'] => $accessToken['access_token']], $extraParameters)
+                    array_merge(array($this->options['attr_name'] => $accessToken['access_token']), $extraParameters)
                 )
             );
         }
@@ -66,13 +66,13 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             $this->storage->save($this, $this->state, 'csrf_state');
         }
 
-        $parameters = array_merge([
+        $parameters = array_merge(array(
             'response_type' => 'code',
             'client_id' => $this->options['client_id'],
             'scope' => $this->options['scope'],
             'state' => $this->state ? urlencode($this->state) : null,
             'redirect_uri' => $redirectUri,
-        ], $extraParameters);
+        ), $extraParameters);
 
         return $this->normalizeUrl($this->options['authorization_url'], $parameters);
     }
@@ -84,13 +84,13 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     {
         OAuthErrorHandler::handleOAuthError($request);
 
-        $parameters = array_merge([
+        $parameters = array_merge(array(
             'code' => $request->query->get('code'),
             'grant_type' => 'authorization_code',
             'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
             'redirect_uri' => $redirectUri,
-        ], $extraParameters);
+        ), $extraParameters);
 
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
@@ -105,12 +105,12 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
-        $parameters = array_merge([
+        $parameters = array_merge(array(
             'refresh_token' => $refreshToken,
             'grant_type' => 'refresh_token',
             'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
-        ], $extraParameters);
+        ), $extraParameters);
 
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
@@ -129,12 +129,12 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             throw new AuthenticationException('OAuth error: "Method unsupported."');
         }
 
-        $parameters = [
+        $parameters = array(
             'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
-        ];
+        );
 
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], ['token' => $token]), $parameters, [], HttpRequestInterface::METHOD_DELETE);
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), HttpRequestInterface::METHOD_DELETE);
 
         return 200 === $response->getStatusCode();
     }
@@ -207,11 +207,11 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults([
+        $resolver->setDefaults(array(
             'attr_name' => 'access_token',
             'use_commas_in_scope' => false,
             'use_bearer_authorization' => true,
-        ]);
+        ));
 
         $resolver->setDefined('revoke_token_url');
 
