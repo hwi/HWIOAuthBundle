@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DeviantartResourceOwner;
 
-class DeviantartResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+class DeviantartResourceOnwerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $userResponse = <<<json
 {

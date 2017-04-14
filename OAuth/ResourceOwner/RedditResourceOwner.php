@@ -37,10 +37,10 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
         return $this->httpRequest(
             $url,
             $parameters,
-            [
+            array(
                 'Content-Type: application/x-www-form-urlencoded',
                 'Authorization: Basic '.base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret'])),
-            ],
+            ),
             HttpRequestInterface::METHOD_POST
         );
     }
@@ -52,7 +52,7 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults([
+        $resolver->setDefaults(array(
             'authorization_url' => 'https://ssl.reddit.com/api/v1/authorize',
             'access_token_url' => 'https://ssl.reddit.com/api/v1/access_token',
             'infos_url' => 'https://oauth.reddit.com/api/v1/me.json',
@@ -63,6 +63,6 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
             'scope' => 'identity',
 
             'duration' => 'permanent',
-        ]);
+        ));
     }
 }

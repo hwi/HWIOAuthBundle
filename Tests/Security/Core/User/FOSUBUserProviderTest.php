@@ -109,7 +109,7 @@ class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
                 ->with($updateUser);
         }
 
-        return new FOSUBUserProvider($userManagerMock, ['github' => 'githubId', 'google' => 'googleId']);
+        return new FOSUBUserProvider($userManagerMock, array('github' => 'githubId', 'google' => 'googleId'));
     }
 
     protected function createResourceOwnerMock($resourceOwnerName = null)

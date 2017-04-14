@@ -117,7 +117,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
         } else {
             // First check that response exists, due too bug: https://bugs.php.net/bug.php?id=54484
             if (!$data) {
-                $this->data = [];
+                $this->data = array();
             } else {
                 $this->data = json_decode($data, true);
 

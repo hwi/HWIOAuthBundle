@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AzureResourceOwner;
 
-class AzureResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+class AzureResourceOwner extends GenericOAuth2ResourceOwnerTest
 {
     protected $csrf = true;
 
@@ -100,6 +100,6 @@ json;
             $options
         );
 
-        return new AzureResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        return new self($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

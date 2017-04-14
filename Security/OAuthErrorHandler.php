@@ -21,7 +21,7 @@ final class OAuthErrorHandler
      *
      * @var array
      */
-    static private $translatedOAuthErrors = [
+    private static $translatedOAuthErrors = array(
         'access_denied' => 'You have refused access for this site.',
         'authorization_expired' => 'Authorization expired.',
         'bad_verification_code' => 'Bad verification code.',
@@ -31,7 +31,7 @@ final class OAuthErrorHandler
         'redirect_uri_mismatch' => 'Redirect URI mismatches configured one.',
         'unauthorized_client' => 'Unauthorized client.',
         'unknown_format' => 'Unknown format.',
-    ];
+    );
 
     /**
      * @param Request $request
