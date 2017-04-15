@@ -44,7 +44,16 @@ class OAuthExtension extends \Twig_Extension
             new \Twig_SimpleFunction('hwi_oauth_resource_owners', array($this, 'getResourceOwners')),
         );
     }
-
+    
+    /**
+     * 
+     * @return array
+     */
+    public function getFilters() {
+        return array(
+                new \Twig_SimpleFilter('foursquareProfilePicture', array($this,'foursquareProfilePictureFilter')),
+        );
+    }
     /**
      * @return array
      */
@@ -74,6 +83,20 @@ class OAuthExtension extends \Twig_Extension
     {
         return $this->helper->getAuthorizationUrl($name, $redirectUrl, $extraParameters);
     }
+    
+  /**
+    * foursquareProfilePicture convert profilePicture of foursquare from array to string 
+    * you must concatenate prifix+size+suffix according To FourSquare api documtrntation https://developer.foursquare.com/docs/responses/photo 
+    * 
+    * @param array $profilePicture
+    * @return string
+    */ 
+   public function foursquareProfilePictureFilter($profilePicture){
+       
+       $profilePicture = $profilePicture['prefix']."original".$profilePicture['suffix'];
+       
+       return $profilePicture;
+   }
 
     /**
      * Returns the name of the extension.
