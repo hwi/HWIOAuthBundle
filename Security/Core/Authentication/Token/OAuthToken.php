@@ -25,37 +25,37 @@ class OAuthToken extends AbstractToken
     /**
      * @var string
      */
-    private $accessToken;
+    protected $accessToken;
 
     /**
      * @var array
      */
-    private $rawToken;
+    protected $rawToken;
 
     /**
      * @var string
      */
-    private $refreshToken;
+    protected $refreshToken;
 
     /**
      * @var int
      */
-    private $expiresIn;
+    protected $expiresIn;
 
     /**
      * @var int
      */
-    private $createdAt;
+    protected $createdAt;
 
     /**
      * @var string
      */
-    private $tokenSecret;
+    protected $tokenSecret;
 
     /**
      * @var string
      */
-    private $resourceOwnerName;
+    protected $resourceOwnerName;
 
     /**
      * @param string|array $accessToken The OAuth access token
