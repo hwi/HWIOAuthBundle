@@ -424,6 +424,7 @@ class Configuration implements ConfigurationInterface
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('timeout')->defaultValue(5)->cannotBeEmpty()->end()
+                        ->booleanNode('verify_host')->defaultTrue()->end()
                         ->booleanNode('verify_peer')->defaultTrue()->end()
                         ->scalarNode('max_redirects')->defaultValue(5)->cannotBeEmpty()->end()
                         ->booleanNode('ignore_errors')->defaultTrue()->end()
