@@ -12,7 +12,7 @@ To make this bundle work you need to add the following to your app/config/config
 
 hwi_oauth:
     # list of names of the firewalls in which this bundle is active, this setting MUST be set
-    firewall_names: [secured_area]
+    firewall_name: [secured_area]
 
     # an optional setting to configure a query string parameter which can be used to redirect
     # the user after authentication, e.g. /connect/facebook?_destination=/my/destination will
