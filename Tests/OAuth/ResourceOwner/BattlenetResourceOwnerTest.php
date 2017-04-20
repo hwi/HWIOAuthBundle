@@ -27,8 +27,6 @@ json;
         'battleTag' => 'battletag',
     );
 
-
-
     public function testGetUserInformation()
     {
         $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');

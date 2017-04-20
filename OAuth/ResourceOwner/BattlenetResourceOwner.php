@@ -44,7 +44,6 @@ class BattlenetResourceOwner extends GenericOAuth2ResourceOwner
         ));
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -67,5 +66,4 @@ class BattlenetResourceOwner extends GenericOAuth2ResourceOwner
 
         return $response;
     }
-
 }
