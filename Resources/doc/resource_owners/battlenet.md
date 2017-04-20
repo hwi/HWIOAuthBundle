@@ -19,7 +19,6 @@ hwi_oauth:
             scope:               "wow.profile"
 ```
 
-
 When you're done. Continue by configuring the security layer or go back to
 setup more resource owners.
 
