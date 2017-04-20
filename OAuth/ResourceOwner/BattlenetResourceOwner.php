@@ -52,7 +52,7 @@ class BattlenetResourceOwner extends GenericOAuth2ResourceOwner
         if ($this->options['use_bearer_authorization']) {
             $content = array(
                 $this->httpRequest($this->normalizeUrl($this->options['infos_url'], $extraParameters), null, array('Authorization: Bearer '.$accessToken['access_token']))->getContent(),
-                $accessToken
+                $accessToken,
             );
         } else {
             $content = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], array_merge(array($this->options['attr_name'] => $accessToken['access_token']), $extraParameters)));
