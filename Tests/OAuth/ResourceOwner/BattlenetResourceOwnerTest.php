@@ -21,10 +21,9 @@ class BattlenetResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "battletag": "user#1234"
 }
 json;
-
     protected $paths = array(
         'identifier' => 'id',
-        'battleTag' => 'battletag'
+        'battleTag' => 'battletag',
     );
 
     public function testGetUserInformation()
@@ -36,9 +35,6 @@ json;
          */
         $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 
-        /**
-         * Rewrite getUserInformation Test as there is no username nor Nickname
-         */
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());

@@ -26,7 +26,7 @@ class BattlenetResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'id',
-        'battleTag' => 'battletag'
+        'battleTag' => 'battletag',
     );
 
     /**
@@ -40,7 +40,7 @@ class BattlenetResourceOwner extends GenericOAuth2ResourceOwner
             'authorization_url' => 'https://eu.battle.net/oauth/authorize',
             'access_token_url' => 'https://eu.battle.net/oauth/token',
             'infos_url' => 'https://eu.api.battle.net/account/user',
-            'characters_url' => 'https://eu.api.battle.net/wow/user/characters'
+            'characters_url' => 'https://eu.api.battle.net/wow/user/characters',
         ));
     }
 
@@ -60,7 +60,6 @@ class BattlenetResourceOwner extends GenericOAuth2ResourceOwner
 
         $response = $this->getUserResponse();
         $response->setData($content);
-
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
