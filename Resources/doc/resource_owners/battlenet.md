@@ -4,7 +4,7 @@ First you will have to register your application on [Battlenet](https://dev.batt
 documentation for more information https://dev.battle.net/io-docs.
 
 Next configure a resource owner of type `battlenet` with appropriate
-`client_id`, `client_secret` and `scope`. Refer to the EVE: Developers documentation
+`client_id`, `client_secret` and `scope`. Refer to the [Battlenet](https://dev.battle.net/io-docs) API documentation
 for the available scopes.
 
 ```yaml
@@ -18,8 +18,6 @@ hwi_oauth:
             client_secret:       <client_secret>
             scope:               "wow.profile"
 ```
-
-Optionally, for authenticating to EVE online test servers, you can override endpoint settings:
 
 
 When you're done. Continue by configuring the security layer or go back to

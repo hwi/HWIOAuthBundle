@@ -11,17 +11,13 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * GenericOAuth2ResourceOwner.
+ * BattlenetResourceOwner.
  *
- * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
- * @author Alexander <iam.asm89@gmail.com>
+ * @author Jeremy Pouillot <pouillotjeremy@gmail.com>
  */
 class BattlenetResourceOwner extends GenericOAuth2ResourceOwner
 {
@@ -64,7 +60,7 @@ class BattlenetResourceOwner extends GenericOAuth2ResourceOwner
         }
 
         $response = $this->getUserResponse();
-        $response->setResponse($content);
+        $response->setData($content);
 
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
