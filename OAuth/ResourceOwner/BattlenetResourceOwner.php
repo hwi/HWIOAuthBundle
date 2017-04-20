@@ -26,7 +26,7 @@ class BattlenetResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'id',
-        'battleTag' => 'battletag',
+        'battleTag' => 'battletag'
     );
 
     /**
