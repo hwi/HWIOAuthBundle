@@ -15,7 +15,6 @@ use Buzz\Client\ClientInterface as HttpClientInterface;
 use Buzz\Exception\ClientException;
 use Buzz\Message\MessageInterface as HttpMessageInterface;
 use Buzz\Message\Request as HttpRequest;
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Buzz\Message\Response as HttpResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
@@ -241,7 +240,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected function httpRequest($url, $content = null, $headers = [], $method = null)
     {
         if (null === $method) {
-            $method = null === $content || '' === $content ? HttpRequestInterface::METHOD_GET : HttpRequestInterface::METHOD_POST;
+            $method = null === $content || '' === $content ? Request::METHOD_GET : Request::METHOD_POST;
         }
 
         $request = new HttpRequest($method, $url);

@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
@@ -42,7 +41,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $url = $this->options['infos_url'];
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
-            HttpRequestInterface::METHOD_GET,
+            Request::METHOD_GET,
             $url,
             $parameters,
             $this->options['client_secret'],
@@ -97,7 +96,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $url = $this->options['access_token_url'];
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
-            HttpRequestInterface::METHOD_POST,
+            Request::METHOD_POST,
             $url,
             $parameters,
             $this->options['client_secret'],
@@ -154,7 +153,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $url = $this->options['request_token_url'];
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
-            HttpRequestInterface::METHOD_POST,
+            Request::METHOD_POST,
             $url,
             $parameters,
             $this->options['client_secret'],
@@ -162,7 +161,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $this->options['signature_method']
         );
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, [], HttpRequestInterface::METHOD_POST);
+        $apiResponse = $this->httpRequest($url, null, $parameters, [], Request::METHOD_POST);
 
         $response = $this->getResponseContent($apiResponse);
 
@@ -208,7 +207,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($url, null, $parameters, [], HttpRequestInterface::METHOD_POST);
+        return $this->httpRequest($url, null, $parameters, [], Request::METHOD_POST);
     }
 
     /**
