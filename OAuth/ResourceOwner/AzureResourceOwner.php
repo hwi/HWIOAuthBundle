@@ -58,6 +58,8 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \InvalidArgumentException
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
@@ -73,8 +75,6 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
                 break;
 
             case 2:
-                $jwt .= '=';
-
             case 3:
                 $jwt .= '=';
                 break;

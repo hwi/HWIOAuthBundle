@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -38,7 +37,7 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($this->normalizeUrl($url, $parameters), null, array(), HttpRequestInterface::METHOD_POST);
+        return $this->httpRequest($this->normalizeUrl($url, $parameters), null, array(), 'POST');
     }
 
     /**

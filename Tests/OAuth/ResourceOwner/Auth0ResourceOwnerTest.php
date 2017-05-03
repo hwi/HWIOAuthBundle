@@ -12,9 +12,11 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\Auth0ResourceOwner;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class Auth0ResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = Auth0ResourceOwner::class;
     protected $userResponse = <<<json
 {
   "email": "baz",
@@ -48,15 +50,17 @@ json;
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($name, HttpUtils $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'base_url' => 'https://example.oauth0.com',
-            ),
-            $options
+        return parent::setUpResourceOwner(
+            $name,
+            $httpUtils,
+            array_merge(
+                array(
+                    'base_url' => 'https://example.oauth0.com',
+                ),
+                $options
+            )
         );
-
-        return new Auth0ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

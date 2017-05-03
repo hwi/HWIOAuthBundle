@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner;
 
 class TwitterResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
+    protected $resourceOwnerClass = TwitterResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id_str": "1",
@@ -39,7 +40,7 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
         $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'user_id' => '1', 'screen_name' => 'bar');
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
@@ -50,10 +51,5 @@ json;
         $this->assertEquals($accessToken['oauth_token_secret'], $userResponse->getTokenSecret());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new TwitterResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

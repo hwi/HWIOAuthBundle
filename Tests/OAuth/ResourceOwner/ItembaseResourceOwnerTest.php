@@ -20,6 +20,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ItembaseResourceOwner;
  */
 class ItembaseResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = ItembaseResourceOwner::class;
     protected $userResponse = <<<json
 {
     "uuid": "1",
@@ -37,9 +38,4 @@ json;
         'lastname' => 'last_name',
         'email' => 'email',
     );
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new ItembaseResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
-    }
 }

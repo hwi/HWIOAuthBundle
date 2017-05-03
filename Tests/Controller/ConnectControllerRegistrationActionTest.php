@@ -13,9 +13,9 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use FOS\UserBundle\Form\Factory\FactoryInterface;
 use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
+use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use Symfony\Component\Form\Form;
-use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\SecurityEvents;
 
@@ -56,6 +56,11 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
             ->willReturn(new \Exception())
         ;
 
+        $this->session->expects($this->once())
+            ->method('remove')
+            ->with('_hwi_oauth.registration_error.'.$key)
+        ;
+
         $this->controller->registrationAction($this->request, $key);
     }
 
@@ -67,6 +72,11 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
             ->method('get')
             ->with('_hwi_oauth.registration_error.'.$key)
             ->willReturn($this->createAccountNotLinkedException())
+        ;
+
+        $this->session->expects($this->once())
+            ->method('remove')
+            ->with('_hwi_oauth.registration_error.'.$key)
         ;
 
         $this->makeRegistrationForm();

@@ -105,6 +105,9 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider provideValidData
+     *
+     * @param string $signature
+     * @param string $url
      */
     public function testSignatureIsGeneratedCorrectly($signature, $url)
     {
@@ -127,6 +130,8 @@ class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideInvalidData
      * @expectedException \RuntimeException
+     *
+     * @param array $parameters
      */
     public function testThrowsExceptionIfRequiredParameterIsMissing($parameters)
     {

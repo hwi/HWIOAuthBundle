@@ -36,10 +36,10 @@ class SinaWeiboResourceOwner extends GenericOAuth2ResourceOwner
             'uid' => $accessToken['uid'],
         ));
 
-        $content = $this->doGetUserInformationRequest($url)->getContent();
+        $content = $this->doGetUserInformationRequest($url)->getBody();
 
         $response = $this->getUserResponse();
-        $response->setData($content);
+        $response->setData((string) $content);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\OptionsResolver\Options;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * VkontakteResourceOwner.
@@ -48,10 +49,11 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'name_case' => $this->options['name_case'],
         ));
 
-        $content = $this->doGetUserInformationRequest($url)->getContent();
+        $content = $this->doGetUserInformationRequest($url);
 
         $response = $this->getUserResponse();
-        $response->setData($content); // This will translate string response into array
+        // This will translate string response into array
+        $response->setData($content instanceof ResponseInterface ? (string) $content->getBody() : $content);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

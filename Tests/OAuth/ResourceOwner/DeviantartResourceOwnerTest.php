@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DeviantartResourceOwner;
 
 class DeviantartResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = DeviantartResourceOwner::class;
     protected $userResponse = <<<json
 {
     "username": "kouiskas",
@@ -30,7 +31,7 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
@@ -44,10 +45,5 @@ json;
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new DeviantartResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

@@ -12,9 +12,11 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YahooResourceOwner;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
 class YahooResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
+    protected $resourceOwnerClass = YahooResourceOwner::class;
     protected $userResponse = <<<json
 {
     "profile": {
@@ -31,7 +33,7 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
         $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1);
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
@@ -45,23 +47,18 @@ json;
 
     public function testCustomResponseClass()
     {
-        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner('oauth1', array('user_response_class' => $class));
 
-        $this->mockBuzz();
+        $this->mockHttpClient();
 
         /**
-         * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+         * @var CustomUserResponse
          */
         $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1));
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
         $this->assertEquals('foo', $userResponse->getNickname());
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new YahooResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

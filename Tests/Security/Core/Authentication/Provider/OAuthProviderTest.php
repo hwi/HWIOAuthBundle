@@ -95,7 +95,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
         $token = $oauthProvider->authenticate($oauthTokenMock);
         $this->assertTrue($token->isAuthenticated());
-        $this->assertInstanceof(OAuthToken::class, $token);
+        $this->assertInstanceOf(OAuthToken::class, $token);
 
         $this->assertEquals($expectedToken, $token->getRawToken());
         $this->assertEquals($expectedToken['access_token'], $token->getAccessToken());

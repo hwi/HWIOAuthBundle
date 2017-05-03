@@ -11,11 +11,11 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
@@ -29,7 +29,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = [])
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $parameters = array_merge([
             'oauth_consumer_key' => $this->options['client_id'],
@@ -42,7 +42,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $url = $this->options['infos_url'];
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
-            HttpRequestInterface::METHOD_GET,
+            'GET',
             $url,
             $parameters,
             $this->options['client_secret'],
@@ -50,10 +50,10 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $this->options['signature_method']
         );
 
-        $content = $this->doGetUserInformationRequest($url, $parameters)->getContent();
+        $content = $this->doGetUserInformationRequest($url, $parameters);
 
         $response = $this->getUserResponse();
-        $response->setData($content);
+        $response->setData($content instanceof ResponseInterface ? (string) $content->getBody() : $content);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
@@ -63,7 +63,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         $token = $this->getRequestToken($redirectUri, $extraParameters);
 
@@ -73,7 +73,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
+    public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = array())
     {
         OAuthErrorHandler::handleOAuthError($request);
 
@@ -97,7 +97,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $url = $this->options['access_token_url'];
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
-            HttpRequestInterface::METHOD_POST,
+            'POST',
             $url,
             $parameters,
             $this->options['client_secret'],
@@ -122,7 +122,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function handles(Request $request)
+    public function handles(HttpRequest $request)
     {
         return $request->query->has('oauth_token');
     }
@@ -139,7 +139,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getRequestToken($redirectUri, array $extraParameters = [])
+    public function getRequestToken($redirectUri, array $extraParameters = array())
     {
         $timestamp = time();
 
@@ -154,7 +154,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         $url = $this->options['request_token_url'];
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
-            HttpRequestInterface::METHOD_POST,
+            'POST',
             $url,
             $parameters,
             $this->options['client_secret'],
@@ -162,7 +162,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $this->options['signature_method']
         );
 
-        $apiResponse = $this->httpRequest($url, null, $parameters, [], HttpRequestInterface::METHOD_POST);
+        $apiResponse = $this->httpRequest($url, null, array(), 'POST', $parameters);
 
         $response = $this->getResponseContent($apiResponse);
 
@@ -188,7 +188,23 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function httpRequest($url, $content = null, $parameters = [], $headers = [], $method = null)
+    protected function doGetTokenRequest($url, array $parameters = array())
+    {
+        return $this->httpRequest($url, null, array(), 'POST', $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doGetUserInformationRequest($url, array $parameters = array())
+    {
+        return $this->httpRequest($url, null, array(), null, $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function httpRequest($url, $content = null, array $headers = array(), $method = null, array $parameters = array())
     {
         foreach ($parameters as $key => $value) {
             $parameters[$key] = $key.'="'.rawurlencode($value).'"';
@@ -198,25 +214,9 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             array_unshift($parameters, 'realm="'.rawurlencode($this->options['realm']).'"');
         }
 
-        $headers[] = 'Authorization: OAuth '.implode(', ', $parameters);
+        $headers['Authorization'] = 'OAuth '.implode(', ', $parameters);
 
         return parent::httpRequest($url, $content, $headers, $method);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function doGetTokenRequest($url, array $parameters = [])
-    {
-        return $this->httpRequest($url, null, $parameters, [], HttpRequestInterface::METHOD_POST);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function doGetUserInformationRequest($url, array $parameters = [])
-    {
-        return $this->httpRequest($url, null, $parameters);
     }
 
     /**

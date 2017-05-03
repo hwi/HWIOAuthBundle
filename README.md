@@ -56,7 +56,6 @@ This bundle contains support for 58 different providers:
 * Twitch,
 * Twitter,
 * VKontakte,
-* Wechat,
 * Windows Live,
 * Wordpress,
 * Wunderlist,

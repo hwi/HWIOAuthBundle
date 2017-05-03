@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -26,7 +26,7 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($this->options['access_token_url'], $parameters, array(), HttpRequestInterface::METHOD_POST);
+        return $this->httpRequest($this->options['access_token_url'], $parameters, array(), 'POST');
     }
 
     /**
@@ -34,7 +34,7 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, null, array('Accept: application/vnd.com.sensiolabs.connect+xml'));
+        return $this->httpRequest($url, null, array('Accept' => 'application/vnd.com.sensiolabs.connect+xml'));
     }
 
     /**
@@ -49,7 +49,7 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
             'access_token_url' => 'https://connect.sensiolabs.com/oauth/access_token',
             'infos_url' => 'https://connect.sensiolabs.com/api',
 
-            'user_response_class' => '\HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse',
+            'user_response_class' => SensioConnectUserResponse::class,
 
             'response_type' => 'code',
 

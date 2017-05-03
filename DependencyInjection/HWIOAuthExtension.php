@@ -11,11 +11,17 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
+use GuzzleHttp\Client as GuzzleClient;
+use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
+use Http\Client\Common\Plugin\RedirectPlugin;
+use Http\Client\Common\PluginClient;
+use Http\Discovery\MessageFactoryDiscovery;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
@@ -30,6 +36,13 @@ class HWIOAuthExtension extends Extension
 {
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
+     * @throws \RuntimeException
+     * @throws InvalidConfigurationException
+     * @throws \Http\Discovery\Exception\NotFoundException
+     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -43,15 +56,40 @@ class HWIOAuthExtension extends Extension
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
         // setup http client settings
-        $httpClient = $container->getDefinition('hwi_oauth.http_client');
-        $httpClient->addMethodCall('setVerifyPeer', array($config['http_client']['verify_peer']));
-        $httpClient->addMethodCall('setTimeout', array($config['http_client']['timeout']));
-        $httpClient->addMethodCall('setMaxRedirects', array($config['http_client']['max_redirects']));
-        $httpClient->addMethodCall('setIgnoreErrors', array($config['http_client']['ignore_errors']));
-        $httpClient->addMethodCall('setOption', array(CURLOPT_ENCODING, ''));
-        if (isset($config['http_client']['proxy']) && $config['http_client']['proxy'] != '') {
-            $httpClient->addMethodCall('setProxy', array($config['http_client']['proxy']));
+        $guzzleConfig = array(
+            'allow_redirects' => array(
+                'max' => $config['http_client']['verify_peer'],
+            ),
+            'curl' => array(
+                CURLOPT_ENCODING => '',
+            ),
+            'http_errors' => $config['http_client']['ignore_errors'],
+            'verify' => $config['http_client']['verify_peer'],
+            'timeout' => $config['http_client']['timeout'],
+        );
+        if (isset($config['http_client']['proxy']) && '' !== $config['http_client']['proxy']) {
+            $guzzleConfig['proxy'] = array($config['http_client']['proxy']);
         }
+
+        $httpClientDefinition = new Definition();
+        $httpClientDefinition->setArguments(
+            array(
+                new PluginClient(
+                    new GuzzleAdapter(
+                        new GuzzleClient($guzzleConfig)
+                    ),
+                    array(
+                        new RedirectPlugin(),
+                    ),
+                    array(
+                        'max_restarts' => $config['http_client']['max_redirects'],
+                    )
+                ),
+                MessageFactoryDiscovery::find(),
+            )
+        );
+
+        $container->setDefinition('hwi_oauth.http_client', $httpClientDefinition);
 
         // set current firewall
         if (empty($config['firewall_names'])) {
@@ -97,6 +135,10 @@ class HWIOAuthExtension extends Extension
      * @param ContainerBuilder $container The container builder
      * @param string           $name      The name of the service
      * @param array            $options   Additional options of the service
+     *
+     * @throws InvalidConfigurationException
+     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     public function createResourceOwnerService(ContainerBuilder $container, $name, array $options)
     {
@@ -144,6 +186,9 @@ class HWIOAuthExtension extends Extension
      *
      * @param ContainerBuilder $container
      * @param array            $config
+     *
+     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
      */
     private function createConnectIntegration(ContainerBuilder $container, array $config)
     {

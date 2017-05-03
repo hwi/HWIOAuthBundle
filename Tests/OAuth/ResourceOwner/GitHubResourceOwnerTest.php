@@ -15,8 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner;
 
 class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    private $buzzCalls = 1;
-
+    protected $resourceOwnerClass = GitHubResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -32,51 +31,39 @@ json;
         'profilepicture' => 'avatar_url',
     );
 
+    protected $httpClientCalls = 1;
+
     public function testRevokeToken()
     {
-        $this->buzzResponseHttpCode = 204;
-        $this->mockBuzz(null, 'application/json');
+        $this->httpResponseHttpCode = 204;
+        $this->mockHttpClient(null, 'application/json');
 
         $this->assertTrue($this->resourceOwner->revokeToken('token'));
     }
 
     public function testRevokeTokenFails()
     {
-        $this->buzzResponseHttpCode = 404;
-        $this->mockBuzz('{"id": "666"}', 'application/json');
+        $this->httpResponseHttpCode = 404;
+        $this->mockHttpClient('{"id": "666"}', 'application/json');
 
         $this->assertFalse($this->resourceOwner->revokeToken('token'));
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new GitHubResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
-    }
-
     public function testCustomResponseClass()
     {
-        $this->buzzCalls = 2;
+        $this->httpClientCalls = 2;
 
         parent::testCustomResponseClass();
 
-        $this->buzzCalls = 1;
+        $this->httpClientCalls = 1;
     }
 
     public function testGetUserInformation()
     {
-        $this->buzzCalls = 2;
+        $this->httpClientCalls = 2;
 
         parent::testGetUserInformation();
 
-        $this->buzzCalls = 1;
-    }
-
-    protected function mockBuzz($response = '', $contentType = 'text/plain')
-    {
-        $this->buzzClient->expects($this->exactly($this->buzzCalls))
-            ->method('send')
-            ->will($this->returnCallback(array($this, 'buzzSendMock')));
-        $this->buzzResponse = $response;
-        $this->buzzResponseContentType = $contentType;
+        $this->httpClientCalls = 1;
     }
 }

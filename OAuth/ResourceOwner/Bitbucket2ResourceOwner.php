@@ -34,21 +34,6 @@ class Bitbucket2ResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function configureOptions(OptionsResolver $resolver)
-    {
-        parent::configureOptions($resolver);
-
-        $resolver->setDefaults(array(
-            'authorization_url' => 'https://bitbucket.org/site/oauth2/authorize',
-            'access_token_url' => 'https://bitbucket.org/site/oauth2/access_token',
-            'infos_url' => 'https://api.bitbucket.org/2.0/user',
-            'emails_url' => 'https://api.bitbucket.org/2.0/user/emails',
-        ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $response = parent::getUserInformation($accessToken, $extraParameters);
@@ -68,5 +53,20 @@ class Bitbucket2ResourceOwner extends GenericOAuth2ResourceOwner
         }
 
         return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://bitbucket.org/site/oauth2/authorize',
+            'access_token_url' => 'https://bitbucket.org/site/oauth2/access_token',
+            'infos_url' => 'https://api.bitbucket.org/2.0/user',
+            'emails_url' => 'https://api.bitbucket.org/2.0/user/emails',
+        ));
     }
 }

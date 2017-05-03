@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitchResourceOwner;
 
 class TwitchResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = TwitchResourceOwner::class;
     protected $userResponse = <<<json
 {
     "_id": "1",
@@ -32,9 +33,4 @@ json;
         'email' => 'email',
         'profilepicture' => 'logo',
     );
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new TwitchResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
-    }
 }

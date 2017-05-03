@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WordpressResourceOwner;
 
 class WordpressResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = WordpressResourceOwner::class;
     protected $userResponse = <<<json
 {
     "ID": "1",
@@ -32,9 +33,4 @@ json;
         'email' => 'email',
         'profilepicture' => 'avatar_URL',
     );
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new WordpressResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
-    }
 }

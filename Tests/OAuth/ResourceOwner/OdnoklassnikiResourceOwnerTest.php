@@ -12,9 +12,11 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\OdnoklassnikiResourceOwner;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class OdnoklassnikiResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = OdnoklassnikiResourceOwner::class;
     protected $userResponse = <<<json
 {
     "uid": "1",
@@ -31,15 +33,17 @@ json;
         'lastname' => 'last_name',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($name, HttpUtils $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'application_key' => '123456',
-            ),
-            $options
+        return parent::setUpResourceOwner(
+            $name,
+            $httpUtils,
+            array_merge(
+                array(
+                    'application_key' => '123456',
+                ),
+                $options
+            )
         );
-
-        return new OdnoklassnikiResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

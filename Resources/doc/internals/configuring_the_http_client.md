@@ -1,6 +1,6 @@
 Internals: Configuring the HTTP Client
 ======================================
-As you already noticed, HWIOAuthBundle depends on [Buzz](https://github.com/kriswallsmith/Buzz)
+As you already noticed, HWIOAuthBundle depends on [Httplug](http://httplug.io)
 a lightweight library for issuing HTTP requests. This library is used by every of the resource
 owners, it's pre-configured by default, but you can adjust some settings of this library to
 reflect requirements of your environment.

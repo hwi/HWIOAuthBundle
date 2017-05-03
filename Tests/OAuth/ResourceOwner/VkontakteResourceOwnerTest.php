@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner;
 
 class VkontakteResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = VkontakteResourceOwner::class;
     protected $userResponse = <<<json
 {
     "response": {
@@ -34,9 +35,4 @@ json;
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=email&redirect_uri=http%3A%2F%2Fredirect.to%2F',
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=email&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
     );
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new VkontakteResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
-    }
 }

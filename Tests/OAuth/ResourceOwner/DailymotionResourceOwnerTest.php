@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DailymotionResourceOwner;
 
 class DailymotionResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = DailymotionResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -44,10 +45,5 @@ json;
     public function testInvalidDisplayOptionValueThrowsException()
     {
         $this->createResourceOwner($this->resourceOwnerName, array('display' => 'invalid'));
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new DailymotionResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

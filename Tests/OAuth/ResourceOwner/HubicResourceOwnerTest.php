@@ -16,6 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
 class HubicResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = HubicResourceOwner::class;
     protected $userResponse = '{ "email": "1", "firstname": "bar", "activated": true , "creationDate": "2013-12-31T19:09:42+01:00", "language": "fr", "status": "ok", "offer": "25g", "lastname": "foo" }';
     protected $paths = array(
         'identifier' => 'email',
@@ -28,7 +29,7 @@ class HubicResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 
     public function testGetUserInformationFirstAndLastName()
     {
-        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
         /**
          * @var AbstractUserResponse
@@ -45,10 +46,5 @@ class HubicResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
             $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new HubicResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

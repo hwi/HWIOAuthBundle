@@ -11,12 +11,13 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Buzz\Exception\RequestException;
+use Http\Client\Exception\TransferException;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SalesforceResourceOwner;
 
 class SalesforceResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = SalesforceResourceOwner::class;
     protected $userResponse = <<<json
 {
     "user_id": "1",
@@ -37,7 +38,7 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
@@ -54,9 +55,9 @@ json;
 
     public function testGetUserInformationFailure()
     {
-        $exception = new RequestException();
+        $exception = new TransferException();
 
-        $this->buzzClient->expects($this->once())
+        $this->httpClient->expects($this->once())
             ->method('send')
             ->will($this->throwException($exception));
 
@@ -70,11 +71,6 @@ json;
 
     public function testCustomResponseClass()
     {
-        /* not necessary for salesforce */
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new SalesforceResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
+        $this->markTestSkipped('SalesForce do not need this test.');
     }
 }

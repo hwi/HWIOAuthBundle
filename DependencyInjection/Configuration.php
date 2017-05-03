@@ -75,7 +75,6 @@ class Configuration implements ConfigurationInterface
             'trakt',
             'twitch',
             'vkontakte',
-            'wechat',
             'windows_live',
             'wordpress',
             'wunderlist',

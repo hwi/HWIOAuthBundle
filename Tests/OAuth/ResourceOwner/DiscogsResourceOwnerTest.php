@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DiscogsResourceOwner;
 
 class DiscogsResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
+    protected $resourceOwnerClass = DiscogsResourceOwner::class;
     protected $userResponse = <<<json
 {
   "id": 1,
@@ -27,9 +28,4 @@ json;
         'identifier' => 'id',
         'nickname' => 'username',
     );
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new DiscogsResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
-    }
 }

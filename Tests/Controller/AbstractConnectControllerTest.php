@@ -17,8 +17,8 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\Container;
@@ -199,8 +199,7 @@ abstract class AbstractConnectControllerTest extends TestCase
     {
         $accountNotLinked = new AccountNotLinkedException();
         $accountNotLinked->setResourceOwnerName('facebook');
-        $token = new CustomOAuthToken();
-        $accountNotLinked->setToken($token);
+        $accountNotLinked->setToken(new CustomOAuthToken());
 
         return $accountNotLinked;
     }
