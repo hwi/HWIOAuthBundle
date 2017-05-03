@@ -11,8 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\Response;
 use Fig\Http\Message\RequestMethodInterface;
+use Fig\Http\Message\StatusCodeInterface;
+use GuzzleHttp\Psr7\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -47,7 +48,7 @@ class ToshlResourceOwner extends GenericOAuth2ResourceOwner
             RequestMethodInterface::METHOD_DELETE
         );
 
-        return 204 === $response->getStatusCode();
+        return StatusCodeInterface::STATUS_NO_CONTENT === $response->getStatusCode();
     }
 
     /**

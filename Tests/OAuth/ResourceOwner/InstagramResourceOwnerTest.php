@@ -33,6 +33,8 @@ json;
         $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
+        $this->mockBuzz();
+
         /* @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */
         $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
 

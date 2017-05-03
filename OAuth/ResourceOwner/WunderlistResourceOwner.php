@@ -48,7 +48,7 @@ class WunderlistResourceOwner extends GenericOAuth2ResourceOwner
         $content = $this->doGetUserInformationRequest($this->options['infos_url'], array('access_token' => $accessToken['access_token']));
 
         $response = $this->getUserResponse();
-        $response->setData($content->getContent());
+        $response->setData($content->getBody()->getContents());
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

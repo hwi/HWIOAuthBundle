@@ -32,6 +32,8 @@ json;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('include_email' => true));
         $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'user_id' => '1', 'screen_name' => 'bar');
 
+        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+
         $resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('http://user.info/?test=1&include_email=true', $resourceOwner->getOption('infos_url'));

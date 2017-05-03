@@ -44,7 +44,7 @@ class TraktResourceOwner extends GenericOAuth2ResourceOwner
         ));
 
         $response = $this->getUserResponse();
-        $response->setData($content->getContent());
+        $response->setData($content->getBody()->getContents());
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

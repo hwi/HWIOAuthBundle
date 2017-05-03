@@ -50,7 +50,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $this->options['signature_method']
         );
 
-        $content = $this->doGetUserInformationRequest($url, $parameters)->getContent();
+        $content = $this->doGetUserInformationRequest($url, $parameters)->getBody()->getContents();
 
         $response = $this->getUserResponse();
         $response->setData($content);

@@ -45,7 +45,7 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
         $content = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'], $parameters));
 
         $response = $this->getUserResponse();
-        $response->setData($content->getContent());
+        $response->setData($content->getBody()->getContents());
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
+use Fig\Http\Message\StatusCodeInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YoutubeResourceOwner;
 
 class YoutubeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
@@ -90,7 +91,6 @@ json;
 
     public function testRevokeToken()
     {
-        $this->buzzResponseHttpCode = 200;
         $this->mockBuzz('{"access_token": "bar"}', 'application/json');
 
         $this->assertTrue($this->resourceOwner->revokeToken('token'));
@@ -98,8 +98,7 @@ json;
 
     public function testRevokeTokenFails()
     {
-        $this->buzzResponseHttpCode = 401;
-        $this->mockBuzz('{"access_token": "bar"}', 'application/json');
+        $this->mockBuzz('{"access_token": "bar"}', 'application/json', StatusCodeInterface::STATUS_UNAUTHORIZED);
 
         $this->assertFalse($this->resourceOwner->revokeToken('token'));
     }

@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
+use Fig\Http\Message\StatusCodeInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ToshlResourceOwner;
 
 class ToshlResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
@@ -40,16 +41,14 @@ json;
 
     public function testRevokeToken()
     {
-        $this->buzzResponseHttpCode = 204;
-        $this->mockBuzz(null, 'application/json');
+        $this->mockBuzz(null, 'application/json',StatusCodeInterface::STATUS_NO_CONTENT);
 
         $this->assertTrue($this->resourceOwner->revokeToken('token'));
     }
 
     public function testRevokeTokenFails()
     {
-        $this->buzzResponseHttpCode = 404;
-        $this->mockBuzz('{"id": "666"}', 'application/json');
+        $this->mockBuzz('{"id": "666"}', 'application/json', StatusCodeInterface::STATUS_NOT_FOUND);
 
         $this->assertFalse($this->resourceOwner->revokeToken('token'));
     }

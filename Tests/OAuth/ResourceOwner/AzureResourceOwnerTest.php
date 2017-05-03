@@ -11,7 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Buzz\Exception\RequestException;
+use Fig\Http\Message\RequestMethodInterface;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AzureResourceOwner;
 
@@ -52,6 +54,9 @@ json;
     public function testGetUserInformation()
     {
         $token = '.'.base64_encode($this->userResponse);
+
+        $this->mockBuzz();
+
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
@@ -71,6 +76,8 @@ json;
     {
         $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
+
+        $this->mockBuzz();
 
         $token = '.'.base64_encode($this->userResponse);
 
@@ -92,19 +99,17 @@ json;
 
     public function testGetUserInformationFailure()
     {
-        $exception = new RequestException();
+        $exception = new RequestException("Test Exception", new Request(RequestMethodInterface::METHOD_GET, '/'));
 
-        $this->buzzClient->expects($this->once())
-            ->method('send')
-            ->will($this->throwException($exception));
+        $this->guzzleMockHandler->append($exception);
 
         $token = '.'.base64_encode($this->userResponse);
 
         try {
             $this->resourceOwner->getUserInformation(array('access_token' => 'token', 'id_token' => $token));
             $this->fail('An exception should have been raised');
-        } catch (HttpTransportException $e) {
-            $this->assertSame($exception, $e->getPrevious());
+        } catch (RequestException $e) {
+            $this->assertSame($exception, $e);
         }
     }
 

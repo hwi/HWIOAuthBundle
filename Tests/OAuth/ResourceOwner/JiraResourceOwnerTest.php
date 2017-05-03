@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\JiraResourceOwner;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
 class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
@@ -24,13 +25,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
     public function testGetUserInformation()
     {
-        $this
-            ->buzzClient->expects($this->exactly(2))
-            ->method('send')
-            ->will($this->returnCallback(array($this, 'buzzSendMock')))
-        ;
-        $this->buzzResponse = $this->userResponse;
-        $this->buzzResponseContentType = 'application/json; charset=utf-8';
+        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
 
         $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret');
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
@@ -44,22 +39,10 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
     public function testCustomResponseClass()
     {
-        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
-        $this
-            ->buzzClient->expects($this->at(0))
-            ->method('send')
-            ->will($this->returnCallback(array($this, 'buzzSendUserResponse')))
-        ;
-        $this
-            ->buzzClient->expects($this->at(1))
-            ->method('send')
-            ->will($this->returnCallback(array($this, 'buzzSendMock')))
-        ;
-
-        $this->buzzResponse = '';
-        $this->buzzResponseContentType = 'text/plain';
+        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
 
         /** @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */
         $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'));
@@ -85,9 +68,5 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         return new JiraResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 
-    public function buzzSendUserResponse($request, $response)
-    {
-        $response->setContent($this->userResponse);
-        $response->addHeader('Content-Type: '.$this->buzzResponseContentType);
-    }
+
 }
