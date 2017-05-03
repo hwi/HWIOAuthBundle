@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
+use Fig\Http\Message\RequestMethodInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use Symfony\Component\HttpFoundation\Request;
@@ -134,7 +134,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'client_secret' => $this->options['client_secret'],
         ];
 
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], ['token' => $token]), $parameters, [], HttpRequestInterface::METHOD_DELETE);
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], ['token' => $token]), $parameters, [], RequestMethodInterface::METHOD_DELETE);
 
         return 200 === $response->getStatusCode();
     }

@@ -34,7 +34,6 @@ or [`GenericOAuth1ResourceOwner`](https://github.com/hwi/HWIOAuthBundle/blob/mas
 
 ```php
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;

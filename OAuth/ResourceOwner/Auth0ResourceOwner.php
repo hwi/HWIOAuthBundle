@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
+use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -42,7 +42,7 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
             'Content-Type' => 'application/x-www-form-urlencoded',
         );
 
-        return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers, HttpRequestInterface::METHOD_POST);
+        return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers, RequestMethodInterface::METHOD_POST);
     }
 
     /**

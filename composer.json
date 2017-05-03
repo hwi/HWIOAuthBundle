@@ -100,7 +100,8 @@
         "symfony/form":                 "^2.7|^3.0",
         "symfony/yaml":                 "^2.7|^3.0",
         "symfony/templating":           "^2.7|^3.0",
-        "kriswallsmith/buzz":           "~0.13"
+        "kriswallsmith/buzz":           "~0.13",
+        "fig/http-message-util":        "^1.1"
     },
 
     "conflict": {

@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
+use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -43,7 +43,7 @@ class BoxResourceOwner extends GenericOAuth2ResourceOwner
             'token' => $token,
         );
 
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url']), $parameters, array(), HttpRequestInterface::METHOD_POST);
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url']), $parameters, array(), RequestMethodInterface::METHOD_POST);
 
         return 200 === $response->getStatusCode();
     }

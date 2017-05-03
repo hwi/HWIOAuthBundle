@@ -11,8 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Buzz\Message\Response;
+use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -44,7 +44,7 @@ class ToshlResourceOwner extends GenericOAuth2ResourceOwner
             $this->options['revoke_token_url'],
             null,
             array('Authorization: Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])),
-            HttpRequestInterface::METHOD_DELETE
+            RequestMethodInterface::METHOD_DELETE
         );
 
         return 204 === $response->getStatusCode();

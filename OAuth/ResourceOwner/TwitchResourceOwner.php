@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterfacee;
+use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -37,7 +37,7 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, http_build_query($parameters, '', '&'), array(), HttpRequestInterfacee::METHOD_POST);
+        return $this->httpRequest($url, http_build_query($parameters, '', '&'), array(), RequestMethodInterface::METHOD_POST);
     }
 
     /**
