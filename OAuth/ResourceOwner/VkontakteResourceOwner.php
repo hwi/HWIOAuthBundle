@@ -48,7 +48,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'name_case' => $this->options['name_case'],
         ));
 
-        $content = $this->doGetUserInformationRequest($url)->getContent();
+        $content = $this->doGetUserInformationRequest($url)->getBody()->getContents();
 
         $response = $this->getUserResponse();
         $response->setData($content); // This will translate string response into array

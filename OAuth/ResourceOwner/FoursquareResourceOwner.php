@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\MessageInterface as HttpMessageInterface;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -37,9 +37,9 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function getResponseContent(HttpMessageInterface $rawResponse)
+    protected function getResponseContent(ResponseInterface $rawResponse)
     {
-        $response = parent::getResponseContent($rawResponse);
+        $response = json_decode($rawResponse->getBody()->getContents(), true );
 
         // Foursquare use quite custom response structure in case of error
         if (isset($response['meta']['errorType'])) {

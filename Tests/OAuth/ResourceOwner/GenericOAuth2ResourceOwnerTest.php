@@ -11,14 +11,20 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Buzz\Client\ClientInterface;
-use Buzz\Exception\RequestException;
-use Buzz\Message\MessageInterface;
-use Buzz\Message\RequestInterface;
+use Fig\Http\Message\RequestMethodInterface;
+use Fig\Http\Message\StatusCodeInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use GuzzleHttp\Psr7\Response;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -30,10 +36,9 @@ class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceOwner;
     protected $resourceOwnerName;
+
     protected $buzzClient;
-    protected $buzzResponse;
-    protected $buzzResponseContentType;
-    protected $buzzResponseHttpCode = 200;
+
     protected $storage;
     protected $state = 'random';
     protected $csrf = false;
@@ -66,6 +71,11 @@ json;
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
     );
+
+    /**
+     * @var MockHandler
+     */
+    protected $guzzleMockHandler;
 
     public function setUp()
     {
@@ -120,19 +130,19 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
+    /**
+     * #
+     */
     public function testGetUserInformationFailure()
     {
-        $exception = new RequestException();
-
-        $this->buzzClient->expects($this->once())
-            ->method('send')
-            ->will($this->throwException($exception));
+        $exception = new RequestException("Test Exception", new GuzzleRequest(RequestMethodInterface::METHOD_GET, '/'));
+        $this->guzzleMockHandler->append($exception);
 
         try {
             $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
             $this->fail('An exception should have been raised');
-        } catch (HttpTransportException $e) {
-            $this->assertSame($exception, $e->getPrevious());
+        } catch (RequestException $e) {
+            $this->assertSame($exception, $e);
         }
     }
 
@@ -179,6 +189,9 @@ json;
         );
     }
 
+    /**
+     * @
+     */
     public function testGetAccessToken()
     {
         $this->mockBuzz('access_token=code');
@@ -364,31 +377,24 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    /**
-     * @param RequestInterface $request
-     * @param MessageInterface $response
-     */
-    public function buzzSendMock($request, $response)
+    protected function mockBuzz($response = '', $contentType = 'text/plain', $httpCode = StatusCodeInterface::STATUS_OK)
     {
-        $response->setContent($this->buzzResponse);
-        $response->addHeader('HTTP/1.1 '.$this->buzzResponseHttpCode.' Some text');
-        $response->addHeader('Content-Type: '.$this->buzzResponseContentType);
-    }
+        $headers = array (
+            'Content-Type: '. $contentType
+        );
 
-    protected function mockBuzz($response = '', $contentType = 'text/plain')
-    {
-        $this->buzzClient->expects($this->once())
-            ->method('send')
-            ->will($this->returnCallback(array($this, 'buzzSendMock')));
-        $this->buzzResponse = $response;
-        $this->buzzResponseContentType = $contentType;
+        $responseGuzzle = new Response($httpCode, $headers, $response);
+        $this->guzzleMockHandler->append($responseGuzzle);
+
     }
 
     protected function createResourceOwner($name, array $options = array(), array $paths = array())
     {
-        $this->buzzClient = $this->getMockBuilder(ClientInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+
+        $this->guzzleMockHandler = new MockHandler();
+        $handler = HandlerStack::create($this->guzzleMockHandler);
+        $this->buzzClient = new Client(['handler' => $handler]);
+
         $httpUtils = $this->getMockBuilder(HttpUtils::class)
             ->disableOriginalConstructor()
             ->getMock();

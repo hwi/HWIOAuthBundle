@@ -61,7 +61,7 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
         }
         $url = $this->normalizeUrl($this->options['infos_url'], $parameters);
 
-        $content = $this->doGetUserInformationRequest($url)->getContent();
+        $content = $this->doGetUserInformationRequest($url)->getBody()->getContents();
 
         $response = $this->getUserResponse();
         $response->setData($content);

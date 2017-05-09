@@ -11,11 +11,11 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
+use Fig\Http\Message\StatusCodeInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitLabResourceOwner;
 
 class GitLabResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    private $buzzCalls = 1;
 
     protected $expectedUrls = array(
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read_user&redirect_uri=http%3A%2F%2Fredirect.to%2F',
@@ -24,7 +24,6 @@ class GitLabResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 
     public function testRevokeToken()
     {
-        $this->buzzResponseHttpCode = 200;
         $this->mockBuzz(null, 'application/json');
 
         $this->assertTrue($this->resourceOwner->revokeToken('token'));
@@ -35,12 +34,5 @@ class GitLabResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         return new GitLabResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 
-    protected function mockBuzz($response = '', $contentType = 'text/plain')
-    {
-        $this->buzzClient->expects($this->exactly($this->buzzCalls))
-            ->method('send')
-            ->will($this->returnCallback(array($this, 'buzzSendMock')));
-        $this->buzzResponse = $response;
-        $this->buzzResponseContentType = $contentType;
-    }
+
 }

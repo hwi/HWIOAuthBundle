@@ -11,9 +11,11 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
+use Fig\Http\Message\RequestMethodInterface;
+use Fig\Http\Message\StatusCodeInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
+use Psr\Http\Message\MessageInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -46,7 +48,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         }
 
         $response = $this->getUserResponse();
-        $response->setData($content->getContent());
+        $response->setData($content->getBody()->getContents());
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
@@ -134,9 +136,9 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'client_secret' => $this->options['client_secret'],
         ];
 
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], ['token' => $token]), $parameters, [], HttpRequestInterface::METHOD_DELETE);
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], ['token' => $token]), $parameters, [], RequestMethodInterface::METHOD_DELETE);
 
-        return 200 === $response->getStatusCode();
+        return StatusCodeInterface::STATUS_OK === $response->getStatusCode();
     }
 
     /**

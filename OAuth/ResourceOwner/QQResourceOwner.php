@@ -11,8 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\MessageInterface as HttpMessageInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
@@ -31,9 +31,9 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getResponseContent(HttpMessageInterface $rawResponse)
+    public function getResponseContent(ResponseInterface $rawResponse)
     {
-        $content = $rawResponse->getContent();
+        $content = $rawResponse->getBody()->getContents();
         if (preg_match('/^callback\((.+)\);$/', $content, $matches)) {
             $rawResponse->setContent(trim($matches[1]));
         }

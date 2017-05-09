@@ -38,7 +38,7 @@ class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
             'access_token' => $accessToken['access_token'],
         ));
 
-        $content = $this->doGetUserInformationRequest($url)->getContent();
+        $content = $this->doGetUserInformationRequest($url)->getBody()->getContents();
 
         $response = $this->getUserResponse();
         $response->setData($content);

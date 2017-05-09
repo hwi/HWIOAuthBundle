@@ -11,12 +11,12 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Client\ClientInterface as HttpClientInterface;
-use Buzz\Exception\ClientException;
-use Buzz\Message\MessageInterface as HttpMessageInterface;
-use Buzz\Message\Request as HttpRequest;
-use Buzz\Message\RequestInterface as HttpRequestInterface;
-use Buzz\Message\Response as HttpResponse;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Psr7\Request as GuzzleRequest;
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Fig\Http\Message\RequestMethodInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
@@ -48,7 +48,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $paths = [];
 
     /**
-     * @var HttpClientInterface
+     * @var ClientInterface
      */
     protected $httpClient;
 
@@ -73,13 +73,13 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $storage;
 
     /**
-     * @param HttpClientInterface         $httpClient Buzz http client
+     * @param ClientInterface             $httpClient Guzzle http client
      * @param HttpUtils                   $httpUtils  Http utils
      * @param array                       $options    Options for the resource owner
      * @param string                      $name       Name for the resource owner
      * @param RequestDataStorageInterface $storage    Request token storage
      */
-    public function __construct(HttpClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage)
+    public function __construct(ClientInterface $httpClient, HttpUtils $httpUtils, array $options, $name, RequestDataStorageInterface $storage)
     {
         $this->httpClient = $httpClient;
         $this->httpUtils = $httpUtils;
@@ -236,16 +236,13 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param array        $headers The headers of the request
      * @param string       $method  The HTTP method to use
      *
-     * @return HttpResponse The response content
+     * @return Response The response content
      */
     protected function httpRequest($url, $content = null, $headers = [], $method = null)
     {
         if (null === $method) {
-            $method = null === $content || '' === $content ? HttpRequestInterface::METHOD_GET : HttpRequestInterface::METHOD_POST;
+            $method = null === $content || '' === $content ? RequestMethodInterface::METHOD_GET : RequestMethodInterface::METHOD_POST;
         }
-
-        $request = new HttpRequest($method, $url);
-        $response = new HttpResponse();
 
         if (is_string($content)) {
             $headers = array_merge(array('Content-Length' => strlen($content)), $headers);
@@ -258,11 +255,10 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
             $headers
         );
 
-        $request->setHeaders($headers);
-        $request->setContent($content);
+        $request = new GuzzleRequest($method, $url, $headers, $content);
 
         try {
-            $this->httpClient->send($request, $response);
+            $response = $this->httpClient->send($request);
         } catch (ClientException $e) {
             throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
         }
@@ -273,14 +269,14 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * Get the 'parsed' content based on the response headers.
      *
-     * @param HttpMessageInterface $rawResponse
+     * @param ResponseInterface $rawResponse
      *
      * @return array
      */
-    protected function getResponseContent(HttpMessageInterface $rawResponse)
+    protected function getResponseContent(ResponseInterface $rawResponse)
     {
         // First check that content in response exists, due too bug: https://bugs.php.net/bug.php?id=54484
-        $content = $rawResponse->getContent();
+        $content = $rawResponse->getBody()->getContents();
         if (!$content) {
             return [];
         }
@@ -307,7 +303,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param string $url
      * @param array  $parameters
      *
-     * @return HttpResponse
+     * @return Response
      */
     abstract protected function doGetTokenRequest($url, array $parameters = []);
 
@@ -315,7 +311,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param string $url
      * @param array  $parameters
      *
-     * @return HttpResponse
+     * @return Response
      */
     abstract protected function doGetUserInformationRequest($url, array $parameters = []);
 

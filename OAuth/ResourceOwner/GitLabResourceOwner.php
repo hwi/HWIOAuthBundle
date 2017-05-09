@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
+use Fig\Http\Message\RequestMethodInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -66,7 +66,7 @@ class GitLabResourceOwner extends GenericOAuth2ResourceOwner
             $this->options['revoke_token_url'],
             $parameters,
             array(),
-            HttpRequestInterface::METHOD_POST
+            RequestMethodInterface::METHOD_POST
         );
 
         return 200 === $response->getStatusCode();

@@ -11,7 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Buzz\Exception\RequestException;
+use Fig\Http\Message\RequestMethodInterface;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Psr7\Request;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SalesforceResourceOwner;
 
@@ -54,17 +56,15 @@ json;
 
     public function testGetUserInformationFailure()
     {
-        $exception = new RequestException();
+        $exception = new RequestException("Test Exception", new Request(RequestMethodInterface::METHOD_GET, '/'));
 
-        $this->buzzClient->expects($this->once())
-            ->method('send')
-            ->will($this->throwException($exception));
+        $this->guzzleMockHandler->append($exception);
 
         try {
             $this->resourceOwner->getUserInformation(array('access_token' => 'token', 'id' => 'someuser'));
             $this->fail('An exception should have been raised');
-        } catch (HttpTransportException $e) {
-            $this->assertSame($exception, $e->getPrevious());
+        } catch (RequestException $e) {
+            $this->assertSame($exception, $e);
         }
     }
 
