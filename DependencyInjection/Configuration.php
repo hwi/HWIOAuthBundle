@@ -64,6 +64,7 @@ class Configuration implements ConfigurationInterface
             'reddit',
             'runkeeper',
             'salesforce',
+            'salesforce_sandbox',
             'sensio_connect',
             'sina_weibo',
             'slack',
