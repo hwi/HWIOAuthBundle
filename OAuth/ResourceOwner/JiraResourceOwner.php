@@ -11,9 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -50,7 +50,7 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
         ), $extraParameters);
 
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
-            HttpRequestInterface::METHOD_GET,
+            Request::METHOD_GET,
             $this->options['infos_session_url'],
             $parameters,
             $this->options['client_secret'],
@@ -64,7 +64,7 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
         // Regenerate nonce & signature as URL was changed
         $parameters['oauth_nonce'] = $this->generateNonce();
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
-            HttpRequestInterface::METHOD_GET,
+            Request::METHOD_GET,
             $url,
             $parameters,
             $this->options['client_secret'],

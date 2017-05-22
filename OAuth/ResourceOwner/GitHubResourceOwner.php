@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -70,7 +70,7 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
             sprintf($this->options['revoke_token_url'], $this->options['client_id'], $token),
             null,
             array('Authorization: Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])),
-            HttpRequestInterface::METHOD_DELETE
+            Request::METHOD_DELETE
         );
 
         return 204 === $response->getStatusCode();

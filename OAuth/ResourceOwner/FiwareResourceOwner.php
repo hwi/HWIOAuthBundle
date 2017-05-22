@@ -15,7 +15,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 
 /**
  * FiwareResourceOwner.
@@ -54,7 +53,7 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
             'Content-Type: application/x-www-form-urlencoded',
         );
 
-        $response = $this->httpRequest($this->options['access_token_url'], http_build_query($parameters, '', '&'), $headers, HttpRequestInterface::METHOD_POST);
+        $response = $this->httpRequest($this->options['access_token_url'], http_build_query($parameters, '', '&'), $headers, Request::METHOD_POST);
         $responseContent = $this->getResponseContent($response);
 
         $this->validateResponseContent($responseContent);
