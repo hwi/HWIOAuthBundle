@@ -56,6 +56,7 @@ hwi_oauth:
 - [GitHub](resource_owners/github.md)
 - [GitLab](resource_owners/gitlab.md)
 - [Google](resource_owners/google.md)
+- [Gamewisp](resource_owners/gamewisp.md)
 - [Hubic](resource_owners/hubic.md)
 - [Instagram](resource_owners/instagram.md)
 - [itembase](resource_owners/itembase.md)

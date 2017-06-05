@@ -48,6 +48,7 @@ class Configuration implements ConfigurationInterface
             'facebook',
             'fiware',
             'foursquare',
+            'gamewisp',
             'github',
             'gitlab',
             'google',
