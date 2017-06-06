@@ -29,6 +29,7 @@
         "dropbox",
         "eventbrite",
         "eve online",
+        "evernote",
         "facebook",
         "fiware",
         "flickr",
@@ -120,10 +121,11 @@
     },
 
     "suggest": {
-        "doctrine/doctrine-bundle":     "to use Doctrine user provider",
-        "friendsofsymfony/user-bundle": "to connect FOSUB with this bundle",
-        "symfony/property-access":      "to use FOSUB integration with this bundle",
-        "symfony/twig-bundle":          "to use the Twig hwi_oauth_* functions"
+        "doctrine/doctrine-bundle":        "to use Doctrine user provider",
+        "friendsofsymfony/user-bundle":    "to connect FOSUB with this bundle",
+        "symfony/property-access":         "to use FOSUB integration with this bundle",
+        "symfony/twig-bundle":             "to use the Twig hwi_oauth_* functions",
+        "evernote/evernote-cloud-sdk-php": "to use the Evernote resource owner"
     },
 
     "autoload": {
