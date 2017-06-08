@@ -82,6 +82,7 @@ class Configuration implements ConfigurationInterface
             'yandex',
             '37signals',
             'itembase',
+            'figo',
         ),
         'oauth1' => array(
             'bitbucket',
