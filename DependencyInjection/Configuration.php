@@ -45,6 +45,7 @@ class Configuration implements ConfigurationInterface
             'disqus',
             'eve_online',
             'eventbrite',
+            'exactonline',
             'facebook',
             'fiware',
             'foursquare',
