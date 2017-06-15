@@ -65,6 +65,9 @@ class HWIOAuthExtension extends Extension
         // set use referer parameter
         $container->setParameter('hwi_oauth.use_referer', $config['use_referer']);
 
+        // set failed use referer parameter
+        $container->setParameter('hwi_oauth.failed_use_referer', $config['failed_use_referer']);
+
         // set failed auth path
         $container->setParameter('hwi_oauth.failed_auth_path', $config['failed_auth_path']);
 

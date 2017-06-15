@@ -158,6 +158,7 @@ class Configuration implements ConfigurationInterface
                 ->end()
                 ->scalarNode('target_path_parameter')->defaultNull()->end()
                 ->booleanNode('use_referer')->defaultFalse()->end()
+                ->booleanNode('failed_use_referer')->defaultFalse()->end()
                 ->scalarNode('templating_engine')->defaultValue('twig')->end()
                 ->scalarNode('failed_auth_path')->defaultValue('hwi_oauth_connect')->end()
                 ->scalarNode('grant_rule')
