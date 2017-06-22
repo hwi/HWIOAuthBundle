@@ -257,8 +257,6 @@ class OAuthUtils
      */
     protected function getResourceOwner($name)
     {
-        $resourceOwner = null;
-
         foreach ($this->ownerMaps as $ownerMap) {
             $resourceOwner = $ownerMap->getResourceOwnerByName($name);
             if ($resourceOwner instanceof ResourceOwnerInterface) {
@@ -266,11 +264,7 @@ class OAuthUtils
             }
         }
 
-        if (!$resourceOwner instanceof ResourceOwnerInterface) {
-            throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
-        }
-
-        return $resourceOwner;
+        throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
     }
 
     /**
