@@ -125,7 +125,7 @@ Make sure `{scope: 'email'}` is added as the second argument to FB.login. Or els
 
 ## Watch the results!
 
-Open the browser and go at `/demo/secured/hello/World` too see the login button, and test it!
+Open the browser and go to `/demo/secured/hello/World` to view and test the login button!
 
 - [Step 2: Configuring resource owners (Facebook, GitHub, Google, Windows Live and others](../2-configuring_resource_owners.md)
 - [Step 3: Configuring the security layer](../3-configuring_the_security_layer.md)
