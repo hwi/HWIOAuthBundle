@@ -12,9 +12,12 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SensioConnectResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse;
 
 class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = SensioConnectResourceOwner::class;
+
     public function setUp()
     {
         parent::setUp();
@@ -24,13 +27,13 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 
     public function testGetUserInformation()
     {
-        $class = '\HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse';
+        $class = SensioConnectUserResponse::class;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
-        $this->mockBuzz($this->userResponse);
+        $this->mockHttpClient($this->userResponse);
 
         /**
-         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse
+         * @var SensioConnectUserResponse
          */
         $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
 
@@ -40,10 +43,5 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         $this->assertEquals('Fake Guy', $userResponse->getRealName());
         $this->assertEquals('fake@email.com', $userResponse->getEmail());
         $this->assertEquals('token', $userResponse->getAccessToken());
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new SensioConnectResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

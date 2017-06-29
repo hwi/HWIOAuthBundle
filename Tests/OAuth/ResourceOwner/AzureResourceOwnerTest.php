@@ -11,12 +11,15 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Buzz\Exception\RequestException;
+use Http\Client\Exception\TransferException;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AzureResourceOwner;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class AzureResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = AzureResourceOwner::class;
     protected $csrf = true;
 
     protected $userResponse = <<<json
@@ -69,7 +72,7 @@ json;
 
     public function testCustomResponseClass()
     {
-        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
         $token = '.'.base64_encode($this->userResponse);
@@ -92,9 +95,9 @@ json;
 
     public function testGetUserInformationFailure()
     {
-        $exception = new RequestException();
+        $exception = new TransferException();
 
-        $this->buzzClient->expects($this->once())
+        $this->httpClient->expects($this->once())
             ->method('send')
             ->will($this->throwException($exception));
 
@@ -108,15 +111,17 @@ json;
         }
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($name, HttpUtils $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'resource' => 'https://graph.windows.net',
-            ),
-            $options
+        return parent::setUpResourceOwner(
+            $name,
+            $httpUtils,
+            array_merge(
+                array(
+                    'resource' => 'https://graph.windows.net',
+                ),
+                $options
+            )
         );
-
-        return new AzureResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

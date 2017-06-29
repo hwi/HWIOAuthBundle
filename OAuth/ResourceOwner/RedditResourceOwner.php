@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -41,7 +40,7 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
                 'Content-Type: application/x-www-form-urlencoded',
                 'Authorization: Basic '.base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret'])),
             ],
-            HttpRequestInterface::METHOD_POST
+            'POST'
         );
     }
 

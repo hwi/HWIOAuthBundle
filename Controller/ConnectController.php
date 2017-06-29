@@ -381,7 +381,7 @@ class ConnectController extends Controller
      *
      * @return string
      */
-    protected function generate($route, $params = array(), $absolute = false)
+    protected function generate($route, array $params = array(), $absolute = false)
     {
         @trigger_error('The '.__METHOD__.' method is deprecated since version 0.4 and will be removed in 1.0. Use Symfony\Bundle\FrameworkBundle\Controller\Controller::generateUrl instead.', E_USER_DEPRECATED);
 

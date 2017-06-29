@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ToshlResourceOwner;
 
 class ToshlResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = ToshlResourceOwner::class;
     protected $csrf = true;
     protected $userResponse = <<<json
 {
@@ -40,23 +41,23 @@ json;
 
     public function testRevokeToken()
     {
-        $this->buzzResponseHttpCode = 204;
-        $this->mockBuzz(null, 'application/json');
+        $this->httpResponseHttpCode = 204;
+        $this->mockHttpClient(null, 'application/json');
 
         $this->assertTrue($this->resourceOwner->revokeToken('token'));
     }
 
     public function testRevokeTokenFails()
     {
-        $this->buzzResponseHttpCode = 404;
-        $this->mockBuzz('{"id": "666"}', 'application/json');
+        $this->httpResponseHttpCode = 404;
+        $this->mockHttpClient('{"id": "666"}', 'application/json');
 
         $this->assertFalse($this->resourceOwner->revokeToken('token'));
     }
 
     public function testGetUserInformation()
     {
-        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
@@ -70,10 +71,5 @@ json;
         $this->assertEquals('Smith', $userResponse->getLastName());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new ToshlResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

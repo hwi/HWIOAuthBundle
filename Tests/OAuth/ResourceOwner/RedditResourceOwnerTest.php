@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\RedditResourceOwner;
 
 class RedditResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = RedditResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -34,9 +35,4 @@ json;
         'realname' => null,
         'email' => null,
     );
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new RedditResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
-    }
 }

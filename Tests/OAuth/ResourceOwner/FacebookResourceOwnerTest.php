@@ -16,6 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class FacebookResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = FacebookResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -36,7 +37,7 @@ json;
      */
     public function testGetAccessTokenFailedResponse()
     {
-        $this->mockBuzz('{"error": {"message": "invalid"}}', 'application/json; charset=utf-8');
+        $this->mockHttpClient('{"error": {"message": "invalid"}}', 'application/json; charset=utf-8');
         $request = new Request(array('code' => 'code'));
 
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
@@ -82,16 +83,16 @@ json;
 
     public function testRevokeToken()
     {
-        $this->buzzResponseHttpCode = 200;
-        $this->mockBuzz('{"access_token": "bar"}', 'application/json');
+        $this->httpResponseHttpCode = 200;
+        $this->mockHttpClient('{"access_token": "bar"}', 'application/json');
 
         $this->assertTrue($this->resourceOwner->revokeToken('token'));
     }
 
     public function testRevokeTokenFails()
     {
-        $this->buzzResponseHttpCode = 401;
-        $this->mockBuzz('{"access_token": "bar"}', 'application/json');
+        $this->httpResponseHttpCode = 401;
+        $this->mockHttpClient('{"access_token": "bar"}', 'application/json');
 
         $this->assertFalse($this->resourceOwner->revokeToken('token'));
     }
@@ -101,7 +102,7 @@ json;
      */
     public function testGetAccessTokenErrorResponse()
     {
-        $this->mockBuzz();
+        $this->mockHttpClient();
 
         $request = new Request(array(
             'error_code' => 901,
@@ -109,10 +110,5 @@ json;
         ));
 
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new FacebookResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

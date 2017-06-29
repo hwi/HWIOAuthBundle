@@ -217,7 +217,7 @@ class OAuthFactory extends AbstractFactory
                 ->end()
                 ->validate()
                     ->ifTrue(function ($c) {
-                        return 1 !== count($c) || !in_array(key($c), array('fosub', 'oauth', 'orm', 'service'));
+                        return 1 !== count($c) || !in_array(key($c), array('fosub', 'oauth', 'orm', 'service'), true);
                     })
                     ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
                 ->end()
@@ -238,7 +238,7 @@ class OAuthFactory extends AbstractFactory
                     ->ifTrue(function ($c) {
                         $checkPaths = array();
                         foreach ($c as $checkPath) {
-                            if (in_array($checkPath, $checkPaths)) {
+                            if (in_array($checkPath, $checkPaths, true)) {
                                 return true;
                             }
 

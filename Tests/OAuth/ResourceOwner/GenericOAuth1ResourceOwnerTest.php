@@ -11,19 +11,23 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
+use Http\Client\Common\HttpMethodsClient;
+use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
+class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
 {
-    /**
-     * @var GenericOAuth1ResourceOwner
-     */
+    protected $resourceOwnerClass = GenericOAuth1ResourceOwner::class;
+    /** @var GenericOAuth1ResourceOwner */
     protected $resourceOwner;
     protected $resourceOwnerName;
-    protected $buzzClient;
-    protected $buzzResponse;
-    protected $buzzResponseContentType;
+    /** @var \PHPUnit_Framework_MockObject_MockObject|HttpMethodsClient */
+    protected $httpClient;
+    protected $httpResponse;
+    protected $httpResponseContentType;
+    /** @var \PHPUnit_Framework_MockObject_MockObject|RequestDataStorageInterface */
     protected $storage;
 
     protected $options = array(
@@ -83,7 +87,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUserInformation()
     {
-        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
         $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret');
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
@@ -97,7 +101,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAuthorizationUrlContainOAuthTokenAndSecret()
     {
-        $this->mockBuzz('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json; charset=utf-8');
+        $this->mockHttpClient('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json; charset=utf-8');
 
         $this->storage->expects($this->once())
             ->method('save')
@@ -114,7 +118,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAuthorizationUrlFailedResponseContainOnlyOAuthToken()
     {
-        $this->mockBuzz('{"oauth_token": "token"}', 'application/json; charset=utf-8');
+        $this->mockHttpClient('{"oauth_token": "token"}', 'application/json; charset=utf-8');
 
         $this->storage->expects($this->never())
             ->method('save');
@@ -127,7 +131,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAuthorizationUrlFailedResponseContainOAuthProblem()
     {
-        $this->mockBuzz('oauth_problem=message');
+        $this->mockHttpClient('oauth_problem=message');
 
         $this->storage->expects($this->never())
             ->method('save');
@@ -140,7 +144,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAuthorizationUrlFailedResponseContainCallbackNotConfirmed()
     {
-        $this->mockBuzz('oauth_callback_confirmed=false');
+        $this->mockHttpClient('oauth_callback_confirmed=false');
 
         $this->storage->expects($this->never())
             ->method('save');
@@ -153,7 +157,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAuthorizationUrlFailedResponseNotContainOAuthTokenOrSecret()
     {
-        $this->mockBuzz('invalid');
+        $this->mockHttpClient('invalid');
 
         $this->storage->expects($this->never())
             ->method('save');
@@ -163,7 +167,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAccessToken()
     {
-        $this->mockBuzz('oauth_token=token&oauth_token_secret=secret');
+        $this->mockHttpClient('oauth_token=token&oauth_token_secret=secret');
 
         $request = new Request(array('oauth_verifier' => 'code', 'oauth_token' => 'token'));
 
@@ -180,7 +184,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAccessTokenJsonResponse()
     {
-        $this->mockBuzz('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json');
+        $this->mockHttpClient('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json');
 
         $request = new Request(array('oauth_verifier' => 'code', 'oauth_token' => 'token'));
 
@@ -197,7 +201,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAccessTokenJsonCharsetResponse()
     {
-        $this->mockBuzz('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json; charset=utf-8');
+        $this->mockHttpClient('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json; charset=utf-8');
 
         $request = new Request(array('oauth_verifier' => 'code', 'oauth_token' => 'token'));
 
@@ -217,7 +221,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAccessTokenFailedResponse()
     {
-        $this->mockBuzz('invalid');
+        $this->mockHttpClient('invalid');
 
         $this->storage->expects($this->once())
             ->method('fetch')
@@ -236,7 +240,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAccessTokenErrorResponse()
     {
-        $this->mockBuzz('error=foo');
+        $this->mockHttpClient('error=foo');
 
         $this->storage->expects($this->once())
             ->method('fetch')
@@ -259,7 +263,7 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
             ->method('fetch')
             ->will($this->throwException(new \InvalidArgumentException()));
 
-        $this->buzzClient->expects($this->never())
+        $this->httpClient->expects($this->never())
             ->method('send');
 
         $this->storage->expects($this->never())
@@ -313,14 +317,12 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
 
     public function testCustomResponseClass()
     {
-        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
-        $this->mockBuzz();
+        $this->mockHttpClient();
 
-        /**
-         * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
-         */
+        /** @var $userResponse CustomUserResponse */
         $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'));
 
         $this->assertInstanceOf($class, $userResponse);
@@ -329,44 +331,5 @@ class GenericOAuth1ResourceOwnerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
-    }
-
-    public function buzzSendMock($request, $response)
-    {
-        $response->setContent($this->buzzResponse);
-        $response->addHeader('Content-Type: '.$this->buzzResponseContentType);
-    }
-
-    protected function mockBuzz($response = '', $contentType = 'text/plain')
-    {
-        $this->buzzClient->expects($this->once())
-            ->method('send')
-            ->will($this->returnCallback(array($this, 'buzzSendMock')));
-        $this->buzzResponse = $response;
-        $this->buzzResponseContentType = $contentType;
-    }
-
-    protected function createResourceOwner($name, array $options = array(), array $paths = array())
-    {
-        $this->buzzClient = $this->getMockBuilder('\Buzz\Client\ClientInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $httpUtils = $this->getMockBuilder('\Symfony\Component\Security\Http\HttpUtils')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->storage = $this->getMockBuilder('\HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
-        $resourceOwner->addPaths(array_merge($this->paths, $paths));
-
-        return $resourceOwner;
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new GenericOAuth1ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

@@ -12,10 +12,10 @@
 namespace HWI\Bundle\OAuthBundle\Tests\DependencyInjection;
 
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Yaml\Parser;
-use Symfony\Component\HttpFoundation\Request;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Yaml\Parser;
 
 class MyCustomProvider implements ResourceOwnerInterface
 {
@@ -48,6 +48,10 @@ class MyCustomProvider implements ResourceOwnerInterface
     }
 
     public function setName($name)
+    {
+    }
+
+    public function addPaths(array $paths)
     {
     }
 }
@@ -143,6 +147,8 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideInvalidData
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     *
+     * @param array $invalidConfig
      */
     public function testConfigurationThrowsExceptionResourceOwnerRequiresSomeOptions($invalidConfig)
     {

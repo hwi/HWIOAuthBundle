@@ -11,10 +11,10 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Buzz\Message\RequestInterface as HttpRequestInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
-use Symfony\Component\HttpFoundation\Request;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -34,19 +34,19 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             $content = $this->httpRequest(
                 $this->normalizeUrl($this->options['infos_url'], $extraParameters),
                 null,
-                ['Authorization: Bearer '.$accessToken['access_token']]
+                array('Authorization' => 'Bearer '.$accessToken['access_token'])
             );
         } else {
             $content = $this->doGetUserInformationRequest(
                 $this->normalizeUrl(
                     $this->options['infos_url'],
-                    array_merge([$this->options['attr_name'] => $accessToken['access_token']], $extraParameters)
+                    array_merge(array($this->options['attr_name'] => $accessToken['access_token']), $extraParameters)
                 )
             );
         }
 
         $response = $this->getUserResponse();
-        $response->setData($content->getContent());
+        $response->setData($content instanceof ResponseInterface ? (string) $content->getBody() : $content);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 
@@ -66,13 +66,13 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             $this->storage->save($this, $this->state, 'csrf_state');
         }
 
-        $parameters = array_merge([
+        $parameters = array_merge(array(
             'response_type' => 'code',
             'client_id' => $this->options['client_id'],
             'scope' => $this->options['scope'],
             'state' => $this->state ? urlencode($this->state) : null,
             'redirect_uri' => $redirectUri,
-        ], $extraParameters);
+        ), $extraParameters);
 
         return $this->normalizeUrl($this->options['authorization_url'], $parameters);
     }
@@ -80,17 +80,17 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
+    public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = array())
     {
         OAuthErrorHandler::handleOAuthError($request);
 
-        $parameters = array_merge([
+        $parameters = array_merge(array(
             'code' => $request->query->get('code'),
             'grant_type' => 'authorization_code',
             'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
             'redirect_uri' => $redirectUri,
-        ], $extraParameters);
+        ), $extraParameters);
 
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
@@ -105,12 +105,12 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
-        $parameters = array_merge([
+        $parameters = array_merge(array(
             'refresh_token' => $refreshToken,
             'grant_type' => 'refresh_token',
             'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
-        ], $extraParameters);
+        ), $extraParameters);
 
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
@@ -134,7 +134,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'client_secret' => $this->options['client_secret'],
         ];
 
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], ['token' => $token]), $parameters, [], HttpRequestInterface::METHOD_DELETE);
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)), $parameters, array(), 'DELETE');
 
         return 200 === $response->getStatusCode();
     }
@@ -142,7 +142,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function handles(Request $request)
+    public function handles(HttpRequest $request)
     {
         return $request->query->has('code');
     }

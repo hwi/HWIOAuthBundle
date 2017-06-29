@@ -12,9 +12,11 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StackExchangeResourceOwner;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class StackExchangeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = StackExchangeResourceOwner::class;
     protected $userResponse = <<<json
 {
    "items" : [
@@ -39,8 +41,12 @@ json;
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=no_expiry&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($name, HttpUtils $httpUtils, array $options)
     {
-        return new StackExchangeResourceOwner($this->buzzClient, $httpUtils, array_merge($options, array('key' => 'baz')), $name, $this->storage);
+        return parent::setUpResourceOwner(
+            $name,
+            $httpUtils,
+            array_merge($options, array('key' => 'baz'))
+        );
     }
 }

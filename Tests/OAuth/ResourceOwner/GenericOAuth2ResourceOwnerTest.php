@@ -11,32 +11,23 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Buzz\Client\ClientInterface;
-use Buzz\Exception\RequestException;
-use Buzz\Message\MessageInterface;
-use Buzz\Message\RequestInterface;
+use Http\Client\Exception\TransferException;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
-use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
-use Symfony\Component\Security\Http\HttpUtils;
 
-class GenericOAuth2ResourceOwnerTest extends \PHPUnit_Framework_TestCase
+class GenericOAuth2ResourceOwnerTest extends ResourceOwnerTestCase
 {
+    protected $resourceOwnerClass = GenericOAuth2ResourceOwner::class;
     /**
      * @var GenericOAuth2ResourceOwner
      */
     protected $resourceOwner;
     protected $resourceOwnerName;
-    protected $buzzClient;
-    protected $buzzResponse;
-    protected $buzzResponseContentType;
-    protected $buzzResponseHttpCode = 200;
-    protected $storage;
-    protected $state = 'random';
-    protected $csrf = false;
+
+    protected $tokenData = array('access_token' => 'token');
 
     protected $options = array(
         'client_id' => 'clientid',
@@ -106,12 +97,10 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
-        /**
-         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
-         */
-        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
+        /** @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse */
+        $userResponse = $this->resourceOwner->getUserInformation($this->tokenData);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
@@ -122,14 +111,14 @@ json;
 
     public function testGetUserInformationFailure()
     {
-        $exception = new RequestException();
+        $exception = new TransferException();
 
-        $this->buzzClient->expects($this->once())
+        $this->httpClient->expects($this->once())
             ->method('send')
             ->will($this->throwException($exception));
 
         try {
-            $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
+            $this->resourceOwner->getUserInformation($this->tokenData);
             $this->fail('An exception should have been raised');
         } catch (HttpTransportException $e) {
             $this->assertSame($exception, $e->getPrevious());
@@ -181,7 +170,7 @@ json;
 
     public function testGetAccessToken()
     {
-        $this->mockBuzz('access_token=code');
+        $this->mockHttpClient('access_token=code');
 
         $request = new Request(array('code' => 'somecode'));
 
@@ -193,7 +182,7 @@ json;
 
     public function testGetAccessTokenJsonResponse()
     {
-        $this->mockBuzz('{"access_token": "code"}', 'application/json');
+        $this->mockHttpClient('{"access_token": "code"}', 'application/json');
 
         $request = new Request(array('code' => 'somecode'));
 
@@ -205,7 +194,7 @@ json;
 
     public function testGetAccessTokenJsonCharsetResponse()
     {
-        $this->mockBuzz('{"access_token": "code"}', 'application/json; charset=utf-8');
+        $this->mockHttpClient('{"access_token": "code"}', 'application/json; charset=utf-8');
 
         $request = new Request(array('code' => 'somecode'));
 
@@ -217,7 +206,7 @@ json;
 
     public function testGetAccessTokenTextJavascriptResponse()
     {
-        $this->mockBuzz('{"access_token": "code"}', 'text/javascript');
+        $this->mockHttpClient('{"access_token": "code"}', 'text/javascript');
 
         $request = new Request(array('code' => 'somecode'));
 
@@ -229,7 +218,7 @@ json;
 
     public function testGetAccessTokenTextJavascriptCharsetResponse()
     {
-        $this->mockBuzz('{"access_token": "code"}', 'text/javascript; charset=utf-8');
+        $this->mockHttpClient('{"access_token": "code"}', 'text/javascript; charset=utf-8');
 
         $request = new Request(array('code' => 'somecode'));
 
@@ -244,7 +233,7 @@ json;
      */
     public function testGetAccessTokenFailedResponse()
     {
-        $this->mockBuzz('invalid');
+        $this->mockHttpClient('invalid');
         $request = new Request(array('code' => 'code'));
 
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
@@ -255,7 +244,7 @@ json;
      */
     public function testGetAccessTokenErrorResponse()
     {
-        $this->mockBuzz('error=foo');
+        $this->mockHttpClient('error=foo');
         $request = new Request(array('code' => 'code'));
 
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
@@ -263,7 +252,7 @@ json;
 
     public function testRefreshAccessToken()
     {
-        $this->mockBuzz('{"access_token": "bar", "expires_in": 3600}', 'application/json');
+        $this->mockHttpClient('{"access_token": "bar", "expires_in": 3600}', 'application/json');
         $accessToken = $this->resourceOwner->refreshAccessToken('foo');
 
         $this->assertEquals('bar', $accessToken['access_token']);
@@ -275,7 +264,7 @@ json;
      */
     public function testRefreshAccessTokenInvalid()
     {
-        $this->mockBuzz('invalid');
+        $this->mockHttpClient('invalid');
 
         $this->resourceOwner->refreshAccessToken('foo');
     }
@@ -285,7 +274,7 @@ json;
      */
     public function testRefreshAccessTokenError()
     {
-        $this->mockBuzz('{"error": "invalid"}', 'application/json');
+        $this->mockHttpClient('{"error": "invalid"}', 'application/json');
 
         $this->resourceOwner->refreshAccessToken('foo');
     }
@@ -349,12 +338,10 @@ json;
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
-        $this->mockBuzz();
+        $this->mockHttpClient();
 
-        /**
-         * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
-         */
-        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
+        /** @var CustomUserResponse */
+        $userResponse = $resourceOwner->getUserInformation($this->tokenData);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
@@ -364,41 +351,9 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    /**
-     * @param RequestInterface $request
-     * @param MessageInterface $response
-     */
-    public function buzzSendMock($request, $response)
-    {
-        $response->setContent($this->buzzResponse);
-        $response->addHeader('HTTP/1.1 '.$this->buzzResponseHttpCode.' Some text');
-        $response->addHeader('Content-Type: '.$this->buzzResponseContentType);
-    }
-
-    protected function mockBuzz($response = '', $contentType = 'text/plain')
-    {
-        $this->buzzClient->expects($this->once())
-            ->method('send')
-            ->will($this->returnCallback(array($this, 'buzzSendMock')));
-        $this->buzzResponse = $response;
-        $this->buzzResponseContentType = $contentType;
-    }
-
     protected function createResourceOwner($name, array $options = array(), array $paths = array())
     {
-        $this->buzzClient = $this->getMockBuilder(ClientInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $httpUtils = $this->getMockBuilder(HttpUtils::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->storage = $this->getMockBuilder(RequestDataStorageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
-        $resourceOwner->addPaths(array_merge($this->paths, $paths));
+        $resourceOwner = parent::createResourceOwner($name, $options, $paths);
 
         $reflection = new \ReflectionClass(get_class($resourceOwner));
         $stateProperty = $reflection->getProperty('state');
@@ -406,10 +361,5 @@ json;
         $stateProperty->setValue($resourceOwner, $this->state);
 
         return $resourceOwner;
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new GenericOAuth2ResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Http;
 
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

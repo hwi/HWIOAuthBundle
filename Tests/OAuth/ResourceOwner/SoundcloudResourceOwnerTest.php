@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SoundcloudResourceOwner;
 
 class SoundcloudResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = SoundcloudResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -33,9 +34,4 @@ json;
         'nickname' => 'username',
         'realname' => 'full_name',
     );
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new SoundcloudResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
-    }
 }

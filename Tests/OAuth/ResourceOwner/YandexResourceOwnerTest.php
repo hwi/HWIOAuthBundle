@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YandexResourceOwner;
 
 class YandexResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = YandexResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -28,9 +29,4 @@ json;
         'nickname' => 'display_name',
         'realname' => 'real_name',
     );
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new YandexResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
-    }
 }

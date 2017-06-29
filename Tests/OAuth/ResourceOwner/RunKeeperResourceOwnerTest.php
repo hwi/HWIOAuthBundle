@@ -20,6 +20,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\RunKeeperResourceOwner;
  */
 class RunKeeperResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = RunKeeperResourceOwner::class;
     /**
      * {@inheritdoc}
      */
@@ -40,7 +41,7 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockBuzz($this->userResponse, 'application/json; charset=utf-8');
+        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
         $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
 
@@ -49,13 +50,5 @@ json;
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new RunKeeperResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

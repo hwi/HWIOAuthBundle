@@ -34,7 +34,7 @@ class DisqusResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
-        /* DISQUS requires api key and secret for user information requests */
+        // Disqus requires api key and secret for user information requests
         $url = $this->normalizeUrl($url, array(
             'api_key' => $this->options['client_id'],
             'api_secret' => $this->options['client_secret'],

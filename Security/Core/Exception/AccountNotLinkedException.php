@@ -11,8 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class AccountNotLinkedException extends UsernameNotFoundException implements OAuthAwareExceptionInterface
@@ -21,17 +19,13 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      * @var string
      */
     protected $resourceOwnerName;
-    /**
-     * @var OAuthToken
-     */
-    protected $token;
 
     /**
      * {@inheritdoc}
      */
     public function getAccessToken()
     {
-        return $this->token->getAccessToken();
+        return $this->getToken()->getAccessToken();
     }
 
     /**
@@ -39,7 +33,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function getRawToken()
     {
-        return $this->token->getRawToken();
+        return $this->getToken()->getRawToken();
     }
 
     /**
@@ -47,7 +41,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function getRefreshToken()
     {
-        return $this->token->getRefreshToken();
+        return $this->getToken()->getRefreshToken();
     }
 
     /**
@@ -55,7 +49,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function getExpiresIn()
     {
-        return $this->token->getExpiresIn();
+        return $this->getToken()->getExpiresIn();
     }
 
     /**
@@ -63,7 +57,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function getTokenSecret()
     {
-        return $this->token->getTokenSecret();
+        return $this->getToken()->getTokenSecret();
     }
 
     /**
@@ -85,19 +79,11 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
     /**
      * {@inheritdoc}
      */
-    public function setToken(TokenInterface $token)
-    {
-        $this->token = $token;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function serialize()
     {
         return serialize(array(
             $this->resourceOwnerName,
-            $this->token,
+            $this->getToken(),
             parent::serialize(),
         ));
     }
@@ -109,9 +95,12 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
     {
         list(
             $this->resourceOwnerName,
-            $this->token,
+            $token,
             $parentData
         ) = unserialize($str);
+
+        $this->setToken($token);
+
         parent::unserialize($parentData);
     }
 }

@@ -12,9 +12,11 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FlickrResourceOwner;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
 class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
+    protected $resourceOwnerClass = FlickrResourceOwner::class;
     protected $paths = array(
         'identifier' => 'user_nsid',
         'nickname' => 'username',
@@ -48,7 +50,7 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
      */
     public function testGetAuthorizationUrlContainOAuthTokenAndSecret()
     {
-        $this->mockBuzz('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json; charset=utf-8');
+        $this->mockHttpClient('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json; charset=utf-8');
 
         $this->storage->expects($this->once())
             ->method('save')
@@ -66,19 +68,14 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
      */
     public function testCustomResponseClass()
     {
-        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
 
-        /* @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */
+        /* @var $userResponse CustomUserResponse */
         $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'));
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
         $this->assertEquals('foo', $userResponse->getNickname());
-    }
-
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        return new FlickrResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

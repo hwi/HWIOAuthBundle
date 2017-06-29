@@ -1,8 +1,10 @@
 Changelog
 =========
-## 0.6.0 (2017-xx-xx)
+## 0.6.0 (2017-07-xx)
+* BC BREAK: Fully replaced Buzz library with usage of HTTPlug & Guzzle 6,
+* Added: `HWIOAuthEvents`,
+* Added: `ResourceOwnerInterface::addPaths()` method for easier managing paths in resource owners,
 * Fixed: Update Facebook API to v2.8,
-* Added: HWIOAuthEvents,
 
 ## 0.5.3 (2017-01-08)
 * Fixed: Bitbucket2 resource owner,

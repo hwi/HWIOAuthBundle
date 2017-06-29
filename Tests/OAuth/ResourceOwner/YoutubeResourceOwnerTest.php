@@ -12,9 +12,11 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YoutubeResourceOwner;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class YoutubeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = YoutubeResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -90,29 +92,31 @@ json;
 
     public function testRevokeToken()
     {
-        $this->buzzResponseHttpCode = 200;
-        $this->mockBuzz('{"access_token": "bar"}', 'application/json');
+        $this->httpResponseHttpCode = 200;
+        $this->mockHttpClient('{"access_token": "bar"}', 'application/json');
 
         $this->assertTrue($this->resourceOwner->revokeToken('token'));
     }
 
     public function testRevokeTokenFails()
     {
-        $this->buzzResponseHttpCode = 401;
-        $this->mockBuzz('{"access_token": "bar"}', 'application/json');
+        $this->httpResponseHttpCode = 401;
+        $this->mockHttpClient('{"access_token": "bar"}', 'application/json');
 
         $this->assertFalse($this->resourceOwner->revokeToken('token'));
     }
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
+    protected function setUpResourceOwner($name, HttpUtils $httpUtils, array $options)
     {
-        $options = array_merge(
-            array(
-                'access_type' => 'offline',
-            ),
-            $options
+        return parent::setUpResourceOwner(
+            $name,
+            $httpUtils,
+            array_merge(
+                array(
+                    'access_type' => 'offline',
+                ),
+                $options
+            )
         );
-
-        return new YoutubeResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
     }
 }

@@ -12,10 +12,13 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\QQResourceOwner;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class QQResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
+    protected $resourceOwnerClass = QQResourceOwner::class;
     protected $userResponse = <<<json
 {
     "ret": 0,
@@ -31,27 +34,12 @@ json;
         'profilepicture' => 'figureurl_qq_1',
     );
 
-    protected function setUpResourceOwner($name, $httpUtils, array $options)
-    {
-        $options = array_merge(
-            array(
-                'authorization_url' => 'https://graph.qq.com/oauth2.0/authorize?format=json',
-                'access_token_url' => 'https://graph.qq.com/oauth2.0/token',
-                'infos_url' => 'https://graph.qq.com/user/get_user_info',
-                'me_url' => 'https://graph.qq.com/oauth2.0/me',
-            ),
-            $options
-        );
-
-        return new QQResourceOwner($this->buzzClient, $httpUtils, $options, $name, $this->storage);
-    }
-
     /**
      * {@inheritdoc}
      */
     public function testGetUserInformation()
     {
-        $this->mockBuzz($this->userResponse);
+        $this->mockHttpClient($this->userResponse);
 
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
@@ -70,14 +58,12 @@ json;
      */
     public function testCustomResponseClass()
     {
-        $class = '\HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse';
+        $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner('oauth2', array('user_response_class' => $class));
 
-        $this->mockBuzz('{"ret": 0}');
+        $this->mockHttpClient('{"ret": 0}');
 
-        /**
-         * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
-         */
+        /** @var $userResponse CustomUserResponse */
         $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'), array('openid' => '1'));
 
         $this->assertInstanceOf($class, $userResponse);
@@ -93,7 +79,7 @@ json;
      */
     public function testGetAccessTokenJsonpResponse()
     {
-        $this->mockBuzz('callback({"access_token": "code"});');
+        $this->mockHttpClient('callback({"access_token": "code"});');
 
         $request = new Request(array('code' => 'somecode'));
 
@@ -110,10 +96,27 @@ json;
      */
     public function testGetAccessTokenErrorResponse()
     {
-        $this->mockBuzz('callback({"error": 1, "msg": "error"})');
+        $this->mockHttpClient('callback({"error": 1, "msg": "error"})');
 
         $request = new Request(array('code' => 'code'));
 
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+    }
+
+    protected function setUpResourceOwner($name, HttpUtils $httpUtils, array $options)
+    {
+        return parent::setUpResourceOwner(
+            $name,
+            $httpUtils,
+            array_merge(
+                array(
+                    'authorization_url' => 'https://graph.qq.com/oauth2.0/authorize?format=json',
+                    'access_token_url' => 'https://graph.qq.com/oauth2.0/token',
+                    'infos_url' => 'https://graph.qq.com/user/get_user_info',
+                    'me_url' => 'https://graph.qq.com/oauth2.0/me',
+                ),
+                $options
+            )
+        );
     }
 }

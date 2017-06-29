@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -46,13 +46,13 @@ interface ResourceOwnerInterface
     /**
      * Retrieve an access token for a given code.
      *
-     * @param Request $request         The request object where is going to extract the code from
-     * @param string  $redirectUri     The uri to redirect the client back to
-     * @param array   $extraParameters An array of parameters to add to the url
+     * @param HttpRequest $request         The request object where is going to extract the code from
+     * @param string      $redirectUri     The uri to redirect the client back to
+     * @param array       $extraParameters An array of parameters to add to the url
      *
      * @return array The access token
      */
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array());
+    public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = array());
 
     /**
      * Check whatever CSRF token from request is valid or not.
@@ -86,11 +86,11 @@ interface ResourceOwnerInterface
     /**
      * Checks whether the class can handle the request.
      *
-     * @param Request $request
+     * @param HttpRequest $request
      *
      * @return bool
      */
-    public function handles(Request $request);
+    public function handles(HttpRequest $request);
 
     /**
      * Sets a name for the resource owner.
@@ -98,4 +98,11 @@ interface ResourceOwnerInterface
      * @param string $name
      */
     public function setName($name);
+
+    /**
+     * Add extra paths to the configuration.
+     *
+     * @param array $paths
+     */
+    public function addPaths(array $paths);
 }
