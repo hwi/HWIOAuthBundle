@@ -23,6 +23,14 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
     /**
      * {@inheritdoc}
      */
+    public function getMessageKey()
+    {
+        return 'Account could not be linked correctly.';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getAccessToken()
     {
         return $this->getToken()->getAccessToken();

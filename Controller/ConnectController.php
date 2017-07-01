@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -44,6 +45,8 @@ class ConnectController extends Controller
      *
      * @param Request $request
      *
+     * @throws \LogicException
+     *
      * @return Response
      */
     public function connectAction(Request $request)
@@ -54,10 +57,7 @@ class ConnectController extends Controller
         $error = $this->getErrorForRequest($request);
 
         // if connecting is enabled and there is no user, redirect to the registration form
-        if ($connect
-            && !$hasUser
-            && $error instanceof AccountNotLinkedException
-        ) {
+        if ($connect && !$hasUser && $error instanceof AccountNotLinkedException) {
             $key = time();
             $session = $request->getSession();
             $session->set('_hwi_oauth.registration_error.'.$key, $error);
@@ -66,8 +66,11 @@ class ConnectController extends Controller
         }
 
         if ($error) {
-            // TODO: this is a potential security risk (see http://trac.symfony-project.org/ticket/9523)
-            $error = $error->getMessage();
+            if ($error instanceof AuthenticationException) {
+                $error = $error->getMessageKey();
+            } else {
+                $error = $error->getMessage();
+            }
         }
 
         return $this->render('HWIOAuthBundle:Connect:login.html.'.$this->getTemplatingEngine(), array(
@@ -86,7 +89,7 @@ class ConnectController extends Controller
      *
      * @throws NotFoundHttpException if `connect` functionality was not enabled
      * @throws AccessDeniedException if any user is authenticated
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function registrationAction(Request $request, $key)
     {
@@ -105,7 +108,7 @@ class ConnectController extends Controller
         $session->remove('_hwi_oauth.registration_error.'.$key);
 
         if (!$error instanceof AccountNotLinkedException) {
-            throw new \Exception('Cannot register an account.', 0, $error instanceof \Exception ? $error : null);
+            throw new \RuntimeException('Cannot register an account.', 0, $error instanceof \Exception ? $error : null);
         }
 
         $userInformation = $this
@@ -113,6 +116,7 @@ class ConnectController extends Controller
             ->getUserInformation($error->getRawToken())
         ;
 
+        /* @var $form FormInterface */
         if ($this->container->getParameter('hwi_oauth.fosub_enabled')) {
             // enable compatibility with FOSUserBundle 1.3.x and 2.x
             if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
@@ -132,7 +136,7 @@ class ConnectController extends Controller
             $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
 
             // Authenticate the user
-            $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getRawToken());
+            $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getAccessToken());
 
             if (null === $response = $event->getResponse()) {
                 if ($targetPath = $this->getTargetPath($session)) {
@@ -212,8 +216,7 @@ class ConnectController extends Controller
 
         // Redirect to the login path if the token is empty (Eg. User cancelled auth)
         if (null === $accessToken) {
-            if ($this->container->getParameter('hwi_oauth.failed_use_referer') &&
-                $targetPath = $this->getTargetPath($session, 'failed_target_path')) {
+            if ($this->container->getParameter('hwi_oauth.failed_use_referer') && $targetPath = $this->getTargetPath($session, 'failed_target_path')) {
                 return $this->redirect($targetPath);
             }
 
@@ -291,6 +294,8 @@ class ConnectController extends Controller
     /**
      * @param Request $request
      * @param string  $service
+     *
+     * @throws NotFoundHttpException
      *
      * @return RedirectResponse
      */
