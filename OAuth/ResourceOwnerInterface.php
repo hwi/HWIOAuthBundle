@@ -29,6 +29,8 @@ interface ResourceOwnerInterface
      * @param array $accessToken     The access token
      * @param array $extraParameters An array of parameters to add to the url
      *
+     * @throws \HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException
+     *
      * @return UserResponseInterface the wrapped response interface
      */
     public function getUserInformation(array $accessToken, array $extraParameters = array());
@@ -49,6 +51,8 @@ interface ResourceOwnerInterface
      * @param HttpRequest $request         The request object where is going to extract the code from
      * @param string      $redirectUri     The uri to redirect the client back to
      * @param array       $extraParameters An array of parameters to add to the url
+     *
+     * @throws \HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException
      *
      * @return array The access token
      */
