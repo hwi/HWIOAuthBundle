@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token;
 
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 
 /**
  * OAuthToken.
@@ -70,6 +71,24 @@ class OAuthToken extends AbstractToken
         parent::setAuthenticated(count($roles) > 0);
     }
 
+    /**
+     * @param string|RoleInterface $role Role for the token
+     */
+    public function addRole($role)
+    {
+        if (!in_array($role, $this->roles))
+        {
+            if (is_string($role)) {
+                $role = new Role($role);
+            } elseif (!$role instanceof RoleInterface) {
+                throw new \InvalidArgumentException(sprintf(
+                    '$role must be string, or RoleInterface instances, but got %s.', gettype($role)));
+            }
+            $this->roles[] = $role;
+        }
+        return $this;
+    }
+    
     /**
      * {@inheritdoc}
      */
