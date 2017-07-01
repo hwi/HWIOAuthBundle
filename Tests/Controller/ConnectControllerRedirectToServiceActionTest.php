@@ -22,6 +22,7 @@ class ConnectControllerRedirectToServiceActionTest extends AbstractConnectContro
 
         $this->container->setParameter('hwi_oauth.target_path_parameter', null);
         $this->container->setParameter('hwi_oauth.use_referer', false);
+        $this->container->setParameter('hwi_oauth.failed_use_referer', false);
 
         $this->oAuthUtils->expects($this->any())
             ->method('getAuthorizationUrl')
@@ -58,6 +59,19 @@ class ConnectControllerRedirectToServiceActionTest extends AbstractConnectContro
         $this->session->expects($this->once())
             ->method('set')
             ->with('_security.default.target_path', 'https://google.com')
+        ;
+
+        $this->controller->redirectToServiceAction($this->request, 'facebook');
+    }
+
+    public function testFailedUseReferer()
+    {
+        $this->container->setParameter('hwi_oauth.failed_use_referer', true);
+        $this->request->headers->set('Referer', 'https://google.com');
+
+        $this->session->expects($this->once())
+            ->method('set')
+            ->with('_security.default.failed_target_path', 'https://google.com')
         ;
 
         $this->controller->redirectToServiceAction($this->request, 'facebook');

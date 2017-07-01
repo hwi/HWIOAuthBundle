@@ -212,6 +212,11 @@ class ConnectController extends Controller
 
         // Redirect to the login path if the token is empty (Eg. User cancelled auth)
         if (null === $accessToken) {
+            if ($this->container->getParameter('hwi_oauth.failed_use_referer') &&
+                $targetPath = $this->getTargetPath($session, 'failed_target_path')) {
+                return $this->redirect($targetPath);
+            }
+
             return $this->redirectToRoute($this->container->getParameter('hwi_oauth.failed_auth_path'));
         }
 
@@ -305,10 +310,15 @@ class ConnectController extends Controller
 
             foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
                 $sessionKey = '_security.'.$providerKey.'.target_path';
+                $sessionKeyFailure = '_security.'.$providerKey.'.failed_target_path';
 
                 $param = $this->container->getParameter('hwi_oauth.target_path_parameter');
                 if (!empty($param) && $targetUrl = $request->get($param)) {
                     $session->set($sessionKey, $targetUrl);
+                }
+
+                if ($this->container->getParameter('hwi_oauth.failed_use_referer') && !$session->has($sessionKeyFailure) && ($targetUrl = $request->headers->get('Referer')) && $targetUrl !== $authorizationUrl) {
+                    $session->set($sessionKeyFailure, $targetUrl);
                 }
 
                 if ($this->container->getParameter('hwi_oauth.use_referer') && !$session->has($sessionKey) && ($targetUrl = $request->headers->get('Referer')) && $targetUrl !== $authorizationUrl) {
