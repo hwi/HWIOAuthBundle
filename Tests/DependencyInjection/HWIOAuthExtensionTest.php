@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\DependencyInjection;
 
+use Http\Client\Common\HttpMethodsClient;
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -65,6 +66,16 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
      * @var ContainerBuilder
      */
     protected $containerBuilder;
+
+    public function testHttpClientExists()
+    {
+        $this->createEmptyConfiguration();
+
+        $this->assertHasDefinition(
+            'hwi_oauth.http_client',
+            HttpMethodsClient::class
+        );
+    }
 
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
@@ -617,7 +628,6 @@ resource_owners:
 
     my_custom_oauth2:
         type:                oauth2
-        class:               \My\External\Custom\ResourceOwner\Class
         client_id:           client_id
         client_secret:       client_secret
         access_token_url:    https://path.to/oauth/v2/token
@@ -628,6 +638,7 @@ resource_owners:
         paths:
             identifier: id
             nickname:   username
+            realname:   username
             email:      email
 
     my_custom_oauth1:
@@ -643,6 +654,7 @@ resource_owners:
         paths:
             identifier: id
             nickname:   username
+            realname:   username
 
 fosub:
     username_iterations: 30
@@ -673,6 +685,8 @@ EOF;
 
     protected function setUp()
     {
+        parent::setUp();
+
         $this->containerBuilder = new ContainerBuilder();
     }
 
@@ -698,6 +712,19 @@ EOF;
     private function assertParameter($value, $key)
     {
         $this->assertEquals($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
+    }
+
+    /**
+     * @param string $id
+     * @param string $className
+     */
+    private function assertHasDefinition($id, $className = null)
+    {
+        $this->assertTrue(($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id)));
+
+        if (null !== $className) {
+            $this->assertSame($this->containerBuilder->findDefinition($id)->getClass(), $className);
+        }
     }
 
     /**
