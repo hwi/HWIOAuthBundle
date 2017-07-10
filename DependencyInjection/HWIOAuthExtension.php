@@ -15,7 +15,7 @@ use GuzzleHttp\Client as GuzzleClient;
 use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
 use Http\Client\Common\Plugin\RedirectPlugin;
 use Http\Client\Common\PluginClient;
-use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\MessageFactory\GuzzleMessageFactory;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
@@ -40,56 +40,23 @@ class HWIOAuthExtension extends Extension
      * @throws \Exception
      * @throws \RuntimeException
      * @throws InvalidConfigurationException
-     * @throws \Http\Discovery\Exception\NotFoundException
      * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
      * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\DependencyInjection\Exception\OutOfBoundsException
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
+        $loader->load('http_client.xml');
         $loader->load('oauth.xml');
         $loader->load('templating.xml');
         $loader->load('twig.xml');
-        $loader->load('http_client.xml');
 
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);
 
-        // setup http client settings
-        $guzzleConfig = array(
-            'allow_redirects' => array(
-                'max' => $config['http_client']['verify_peer'],
-            ),
-            'curl' => array(
-                CURLOPT_ENCODING => '',
-            ),
-            'http_errors' => $config['http_client']['ignore_errors'],
-            'verify' => $config['http_client']['verify_peer'],
-            'timeout' => $config['http_client']['timeout'],
-        );
-        if (isset($config['http_client']['proxy']) && '' !== $config['http_client']['proxy']) {
-            $guzzleConfig['proxy'] = array($config['http_client']['proxy']);
-        }
-
-        $httpClientDefinition = new Definition();
-        $httpClientDefinition->setArguments(
-            array(
-                new PluginClient(
-                    new GuzzleAdapter(
-                        new GuzzleClient($guzzleConfig)
-                    ),
-                    array(
-                        new RedirectPlugin(),
-                    ),
-                    array(
-                        'max_restarts' => $config['http_client']['max_redirects'],
-                    )
-                ),
-                MessageFactoryDiscovery::find(),
-            )
-        );
-
-        $container->setDefinition('hwi_oauth.http_client', $httpClientDefinition);
+        $this->createHttplugClient($container, $config);
 
         // set current firewall
         if (empty($config['firewall_names'])) {
@@ -238,5 +205,58 @@ class HWIOAuthExtension extends Extension
             $container->setParameter('hwi_oauth.fosub_enabled', false);
             $container->setParameter('hwi_oauth.connect', false);
         }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param array            $config
+     *
+     * @throws \Symfony\Component\DependencyInjection\Exception\OutOfBoundsException
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     */
+    protected function createHttplugClient(ContainerBuilder $container, array $config)
+    {
+        // setup http client settings
+        $guzzleConfig = array(
+            'allow_redirects' => array(
+                'max' => $config['http_client']['verify_peer'],
+            ),
+            'curl' => array(
+                CURLOPT_ENCODING => '',
+            ),
+            'http_errors' => $config['http_client']['ignore_errors'],
+            'verify' => $config['http_client']['verify_peer'],
+            'timeout' => $config['http_client']['timeout'],
+        );
+
+        if (isset($config['http_client']['proxy']) && '' !== $config['http_client']['proxy']) {
+            $guzzleConfig['proxy'] = array($config['http_client']['proxy']);
+        }
+
+        $httpClientDefinition = $container->findDefinition('hwi_oauth.http_client');
+        $httpClientDefinition->replaceArgument(
+            0,
+            new Definition(
+                PluginClient::class,
+                [
+                    new Definition(
+                        GuzzleAdapter::class,
+                        [
+                            new Definition(GuzzleClient::class, $guzzleConfig),
+                        ]
+                    ),
+                    [
+                        new Definition(RedirectPlugin::class),
+                    ],
+                    [
+                        'max_restarts' => $config['http_client']['max_redirects'],
+                    ],
+                ]
+            )
+        );
+        $httpClientDefinition->replaceArgument(
+            1,
+            new Definition(GuzzleMessageFactory::class)
+        );
     }
 }
