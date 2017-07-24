@@ -242,7 +242,7 @@ class HWIOAuthExtension extends Extension
                     new Definition(
                         GuzzleAdapter::class,
                         [
-                            new Definition(GuzzleClient::class, $guzzleConfig),
+                            new Definition(GuzzleClient::class, array($guzzleConfig)),
                         ]
                     ),
                     [
