@@ -219,7 +219,7 @@ class HWIOAuthExtension extends Extension
         // setup http client settings
         $guzzleConfig = array(
             'allow_redirects' => array(
-                'max' => $config['http_client']['verify_peer'],
+                'max' => $config['http_client']['max_redirects'],
             ),
             'curl' => array(
                 CURLOPT_ENCODING => '',
