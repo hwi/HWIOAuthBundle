@@ -180,7 +180,6 @@ class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                     ->end()
-                ->end()
                 ->scalarNode('target_path_parameter')->defaultNull()->end()
                 ->booleanNode('use_referer')->defaultFalse()->end()
                 ->booleanNode('failed_use_referer')->defaultFalse()->end()
