@@ -64,6 +64,13 @@ hwi_oauth:
     # list of firewall names the oauth bundle is active in
     firewall_names: [secured_area]
 
+    #templates:
+    #   login:                 MyBundle:OAuth:login.html.twig
+    #    registration:          MyBundle:OAuth:registration.html.twig
+    #    registration_success:  MyBundle:OAuth:registration_success.html.twig
+    #    connect_confirm:       MyBundle:OAuth:connect_confirm.html.twig
+    #    connect_success:       MyBundle:OAuth:connect_success.html.twig
+    
     # optional target_path_parameter to provide an explicit return URL
     #target_path_parameter: _destination
 
