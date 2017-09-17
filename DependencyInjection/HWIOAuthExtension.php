@@ -63,6 +63,13 @@ class HWIOAuthExtension extends Extension
             throw new InvalidConfigurationException('The child node "firewall_names" at path "hwi_oauth" must be configured.');
         }
         $container->setParameter('hwi_oauth.firewall_names', $config['firewall_names']);
+        
+        //set templates
+        $container->setParameter('hwi_oauth.templates.login', $config['templates']['login']);
+        $container->setParameter('hwi_oauth.templates.registration', $config['templates']['registration']);
+        $container->setParameter('hwi_oauth.templates.registration_success', $config['templates']['registration_success']);
+        $container->setParameter('hwi_oauth.templates.connect_confirm', $config['templates']['connect_confirm']);
+        $container->setParameter('hwi_oauth.templates.connect_success', $config['templates']['connect_success']);
 
         // set target path parameter
         $container->setParameter('hwi_oauth.target_path_parameter', $config['target_path_parameter']);
