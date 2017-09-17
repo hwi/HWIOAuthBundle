@@ -73,7 +73,7 @@ class ConnectController extends Controller
             }
         }
 
-        return $this->render('HWIOAuthBundle:Connect:login.html.'.$this->getTemplatingEngine(), array(
+        return $this->render($this->container->getParameter('hwi_oauth.templates.login'), array(
             'error' => $error,
         ));
     }
@@ -142,7 +142,7 @@ class ConnectController extends Controller
                 if ($targetPath = $this->getTargetPath($session)) {
                     $response = $this->redirect($targetPath);
                 } else {
-                    $response = $this->render('HWIOAuthBundle:Connect:registration_success.html.'.$this->getTemplatingEngine(), array(
+                    $response = $this->render($this->container->getParameter('hwi_oauth.templates.registration_success'), array(
                         'userInformation' => $userInformation,
                     ));
                 }
@@ -164,7 +164,7 @@ class ConnectController extends Controller
             return $response;
         }
 
-        return $this->render('HWIOAuthBundle:Connect:registration.html.'.$this->getTemplatingEngine(), array(
+        return $this->render($this->container->getParameter('hwi_oauth.templates.registration'), array(
             'key' => $key,
             'form' => $form->createView(),
             'userInformation' => $userInformation,
@@ -263,7 +263,7 @@ class ConnectController extends Controller
                 if ($targetPath = $this->getTargetPath($session)) {
                     $response = $this->redirect($targetPath);
                 } else {
-                    $response = $this->render('HWIOAuthBundle:Connect:connect_success.html.'.$this->getTemplatingEngine(), array(
+                    $response = $this->render($this->container->getParameter('hwi_oauth.templates.connect_success'), array(
                         'userInformation' => $userInformation,
                         'service' => $service,
                     ));
@@ -283,7 +283,7 @@ class ConnectController extends Controller
             return $response;
         }
 
-        return $this->render('HWIOAuthBundle:Connect:connect_confirm.html.'.$this->getTemplatingEngine(), array(
+        return $this->render($this->container->getParameter('hwi_oauth.templates.connect_confirm'), array(
             'key' => $key,
             'service' => $service,
             'form' => $form->createView(),
