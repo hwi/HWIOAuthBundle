@@ -231,4 +231,14 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 
         $resolver->setNormalizer('scope', $scopeNormalizer);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function httpRequest($url, $content = null, array $headers = [], $method = null)
+    {
+        $headers += array('Content-Type' => 'application/x-www-form-urlencoded');
+
+        return parent::httpRequest($url, $content, $headers, $method);
+    }
 }
