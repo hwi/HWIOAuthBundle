@@ -225,7 +225,7 @@ class OAuthUtils
                     throw new \RuntimeException('RSA-SHA1 signature method requires the OpenSSL extension.');
                 }
 
-                if (strpos($clientSecret, '-----BEGIN') === 0) {
+                if (0 === strpos($clientSecret, '-----BEGIN')) {
                     $privateKey = openssl_pkey_get_private($clientSecret, $tokenSecret);
                 } else {
                     $privateKey = openssl_pkey_get_private(file_get_contents($clientSecret), $tokenSecret);

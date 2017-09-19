@@ -27,7 +27,7 @@ class SetResourceOwnerServiceNameCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container)
     {
         foreach (array_keys($container->getAliases()) as $alias) {
-            if (strpos($alias, 'hwi_oauth.resource_owner.') !== 0) {
+            if (0 !== strpos($alias, 'hwi_oauth.resource_owner.')) {
                 continue;
             }
 

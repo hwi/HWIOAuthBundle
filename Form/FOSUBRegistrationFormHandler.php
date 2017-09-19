@@ -122,9 +122,9 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
 
         do {
             $user = $this->userManager->findUserByUsername($testName);
-        } while ($user !== null && $i < $this->iterations && $testName = $name.++$i);
+        } while (null !== $user && $i < $this->iterations && $testName = $name.++$i);
 
-        return $user !== null ? '' : $testName;
+        return null !== $user ? '' : $testName;
     }
 
     /**

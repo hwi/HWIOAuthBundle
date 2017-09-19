@@ -170,7 +170,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
         }
 
-        if (isset($response['oauth_callback_confirmed']) && $response['oauth_callback_confirmed'] !== 'true') {
+        if (isset($response['oauth_callback_confirmed']) && 'true' !== $response['oauth_callback_confirmed']) {
             throw new AuthenticationException('Defined OAuth callback was not confirmed.');
         }
 
