@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\DependencyInjection;
 
 use Http\Client\Common\HttpMethodsClient;
+use Http\HttplugBundle\HttplugBundle;
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -688,6 +689,10 @@ EOF;
         parent::setUp();
 
         $this->containerBuilder = new ContainerBuilder();
+
+        $this->containerBuilder->setParameter('kernel.bundles', [
+            'HttplugBundle' => new HttplugBundle(),
+        ]);
     }
 
     protected function tearDown()

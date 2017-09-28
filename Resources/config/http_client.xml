@@ -6,8 +6,8 @@
 
     <services>
         <service id="hwi_oauth.http_client" class="Http\Client\Common\HttpMethodsClient">
-            <argument /> <!-- HttpClient for Httplug, managed by extension -->
-            <argument /> <!-- MessageFactory for Httplug, managed by extension -->
+            <argument type="service" id="hwi_oauth.http.client"/>
+            <argument type="service" id="hwi_oauth.http.message_factory"/>
         </service>
     </services>
 </container>
