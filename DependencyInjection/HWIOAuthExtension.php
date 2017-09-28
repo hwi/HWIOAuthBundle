@@ -11,17 +11,11 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
-use GuzzleHttp\Client as GuzzleClient;
-use Http\Adapter\Guzzle6\Client as GuzzleAdapter;
-use Http\Client\Common\Plugin\RedirectPlugin;
-use Http\Client\Common\PluginClient;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
@@ -210,53 +204,25 @@ class HWIOAuthExtension extends Extension
     /**
      * @param ContainerBuilder $container
      * @param array            $config
-     *
-     * @throws \Symfony\Component\DependencyInjection\Exception\OutOfBoundsException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      */
     protected function createHttplugClient(ContainerBuilder $container, array $config)
     {
-        // setup http client settings
-        $guzzleConfig = array(
-            'allow_redirects' => array(
-                'max' => $config['http_client']['max_redirects'],
-            ),
-            'curl' => array(
-                CURLOPT_ENCODING => '',
-            ),
-            'http_errors' => $config['http_client']['ignore_errors'],
-            'verify' => $config['http_client']['verify_peer'],
-            'timeout' => $config['http_client']['timeout'],
-        );
+        $httpClientId = $config['http']['client'];
+        $httpMessageFactoryId = $config['http']['message_factory'];
+        $bundles = $container->getParameter('kernel.bundles');
 
-        if (isset($config['http_client']['proxy']) && '' !== $config['http_client']['proxy']) {
-            $guzzleConfig['proxy'] = array($config['http_client']['proxy']);
+        if ('httplug.client.default' === $httpClientId && !isset($bundles['HttplugBundle'])) {
+            throw new InvalidConfigurationException(
+                'You must setup php-http/httplug-bundle to use the default http client service.'
+            );
+        }
+        if ('httplug.message_factory.default' === $httpMessageFactoryId && !isset($bundles['HttplugBundle'])) {
+            throw new InvalidConfigurationException(
+                'You must setup php-http/httplug-bundle to use the default http message factory service.'
+            );
         }
 
-        $httpClientDefinition = $container->findDefinition('hwi_oauth.http_client');
-        $httpClientDefinition->replaceArgument(
-            0,
-            new Definition(
-                PluginClient::class,
-                [
-                    new Definition(
-                        GuzzleAdapter::class,
-                        [
-                            new Definition(GuzzleClient::class, array($guzzleConfig)),
-                        ]
-                    ),
-                    [
-                        new Definition(RedirectPlugin::class),
-                    ],
-                    [
-                        'max_restarts' => $config['http_client']['max_redirects'],
-                    ],
-                ]
-            )
-        );
-        $httpClientDefinition->replaceArgument(
-            1,
-            new Definition(GuzzleMessageFactory::class)
-        );
+        $container->setAlias('hwi_oauth.http.client', $config['http']['client']);
+        $container->setAlias('hwi_oauth.http.message_factory', $config['http']['message_factory']);
     }
 }

@@ -2,6 +2,9 @@ Changelog
 =========
 ## 0.6.0 (2017-07-xx)
 * BC BREAK: Fully replaced Buzz library with usage of HTTPlug & Guzzle 6,
+* BC BREAK: `hwi.http_client` config options are remove. HTTP configuration must rely on the HTTPlug client,
+* Added: `php-http/httplug-bundle` support, to auto-provide needed HTTPlug services and get full Symfony integration,
+* Added: `hwi.http.client` and `hwi.http.message_factory` config keys to provide your own HTTPlug services,
 * Added: `HWIOAuthEvents`,
 * Added: `ResourceOwnerInterface::addPaths()` method for easier managing paths in resource owners,
 * Fixed: Update Facebook API to v2.8,
