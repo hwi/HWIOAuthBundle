@@ -73,6 +73,7 @@ hwi_oauth:
 - [Soundcloud](resource_owners/soundcloud.md)
 - [Stack Exchange](resource_owners/stack_exchange.md)
 - [Stereomood](resource_owners/stereomood.md)
+- [Strava](resource_owners/strava.md)
 - [Toshl](resource_owners/toshl.md)
 - [Trello](resource_owners/trello.md)
 - [Twitch](resource_owners/twitch.md)
