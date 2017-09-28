@@ -6,6 +6,16 @@ Step 1: Setting up the bundle
 composer require hwi/oauth-bundle
 ```
 
+This bundle uses the [HTTPlug library](http://docs.php-http.org/en/latest/#httplug).
+
+If it is not already done, you must also require on of the
+[HTTPlug client's adapters](http://docs.php-http.org/en/latest/clients.html#clients-adapters).
+For example:
+
+```bash
+composer require php-http/guzzle6-adapter
+```
+
 ### B) Enable the bundle
 
 Enable the bundle in the kernel:
