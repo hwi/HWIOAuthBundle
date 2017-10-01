@@ -65,6 +65,16 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     {
         $this->container = $container;
     }
+    
+    /**
+     * Gets service container
+     * 
+     * @return container
+     */
+    public function getContainer()
+    {
+        return $this->container;
+    }
 
     /**
      * {@inheritdoc}
