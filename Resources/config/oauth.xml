@@ -74,6 +74,7 @@
         <parameter key="hwi_oauth.resource_owner.xing.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\XingResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.yahoo.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YahooResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.yandex.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YandexResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.zenmoney.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ZenmoneyResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.odnoklassniki.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\OdnoklassnikiResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.37signals.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ThirtySevenSignalsResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.itembase.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ItembaseResourceOwner</parameter>

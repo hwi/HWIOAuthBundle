@@ -62,7 +62,8 @@ This bundle contains support for 58 different providers:
 * XING,
 * Yahoo,
 * Yandex,
-* Youtube
+* Youtube,
+* Zenmoney
 
 > __Note__: this bundle adds easy way to implement any of OAuth1.0a or OAuth2 provider!
 
