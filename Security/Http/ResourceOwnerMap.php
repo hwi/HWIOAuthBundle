@@ -68,7 +68,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     
     /**
      * Gets service container
-     * 
+     *
      * @return container
      */
     public function getContainer()
