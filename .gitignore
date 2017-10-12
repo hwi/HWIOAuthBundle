@@ -3,3 +3,11 @@ composer.lock
 phpunit.xml
 vendor
 .php_cs.cache
+
+\.idea/HWIOAuthBundle\.iml
+
+\.idea/modules\.xml
+
+\.idea/vcs\.xml
+
+\.idea/workspace\.xml
