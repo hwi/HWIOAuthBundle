@@ -73,7 +73,7 @@ class OAuthProvider implements AuthenticationProviderInterface
         return
             $token instanceof OAuthToken
             && $this->resourceOwnerMap->hasResourceOwnerByName($token->getResourceOwnerName())
-            ;
+        ;
     }
 
     /**
