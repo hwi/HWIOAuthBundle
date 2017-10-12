@@ -52,10 +52,10 @@ class OAuthProvider implements AuthenticationProviderInterface
     private $tokenStorage;
 
     /**
-     * @param OAuthAwareUserProviderInterface $userProvider User provider
-     * @param ResourceOwnerMapInterface $resourceOwnerMap Resource owner map
-     * @param UserCheckerInterface $userChecker User checker
-     * @param TokenStorageInterface $tokenStorage
+     * @param OAuthAwareUserProviderInterface $userProvider     User provider
+     * @param ResourceOwnerMapInterface       $resourceOwnerMap Resource owner map
+     * @param UserCheckerInterface            $userChecker      User checker
+     * @param TokenStorageInterface           $tokenStorage
      */
     public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMapInterface $resourceOwnerMap, UserCheckerInterface $userChecker, TokenStorageInterface $tokenStorage)
     {
@@ -116,8 +116,9 @@ class OAuthProvider implements AuthenticationProviderInterface
     }
 
     /**
-     * @param TokenInterface $expiredToken
+     * @param TokenInterface         $expiredToken
      * @param ResourceOwnerInterface $resourceOwner
+     *
      * @return OAuthToken|TokenInterface
      */
     protected function refreshToken(TokenInterface $expiredToken, ResourceOwnerInterface $resourceOwner)

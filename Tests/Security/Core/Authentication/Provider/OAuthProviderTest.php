@@ -19,6 +19,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -32,7 +33,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('owner'))
             ->will($this->returnValue(true));
 
-        $oauthProvider = new OAuthProvider($this->getOAuthAwareUserProviderMock(), $resourceOwnerMapMock, $this->getUserCheckerMock());
+        $oauthProvider = new OAuthProvider($this->getOAuthAwareUserProviderMock(), $resourceOwnerMapMock, $this->getUserCheckerMock(), $this->getTokenStorageMock());
 
         $token = new OAuthToken('');
         $token->setResourceOwnerName('owner');
@@ -91,7 +92,9 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
             ->method('checkPostAuth')
             ->with($userMock);
 
-        $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock);
+        $tokenStorageMock = $this->getTokenStorageMock();
+
+        $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock, $tokenStorageMock);
 
         $token = $oauthProvider->authenticate($oauthTokenMock);
         $this->assertTrue($token->isAuthenticated());
@@ -162,7 +165,9 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
         $userCheckerMock = $this->getUserCheckerMock();
 
-        $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock);
+        $tokenStorageMock = $this->getTokenStorageMock();
+
+        $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock, $tokenStorageMock);
 
         try {
             $oauthProvider->authenticate($oauthTokenMock);
@@ -225,6 +230,13 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
     protected function getUserMock()
     {
         return $this->getMockBuilder(UserInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+    }
+
+    protected function getTokenStorageMock()
+    {
+        return $this->getMockBuilder(TokenStorage::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
