@@ -124,8 +124,7 @@ class OAuthProvider implements AuthenticationProviderInterface
      */
     protected function refreshToken(TokenInterface $expiredToken, ResourceOwnerInterface $resourceOwner)
     {
-        $accessToken = $resourceOwner->refreshAccessToken($expiredToken->getRefreshToken());
-        $token = new OAuthToken($accessToken);
+        $token = new OAuthToken($resourceOwner->refreshAccessToken($expiredToken->getRefreshToken()));
         $token->setRefreshToken($expiredToken->getRefreshToken());
         $this->tokenStorage->setToken($token);
 

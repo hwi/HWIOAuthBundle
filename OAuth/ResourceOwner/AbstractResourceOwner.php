@@ -250,7 +250,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
         $headers += array('User-Agent' => 'HWIOAuthBundle (https://github.com/hwi/HWIOAuthBundle)');
         if (is_string($content)) {
-            $headers += array('Content-Length' => strlen($content), 'Content-Type' => 'application/x-www-form-urlencoded');
+            $headers += array('Content-Length' => strlen($content));
         } elseif (is_array($content)) {
             $content = http_build_query($content, '', '&');
         }

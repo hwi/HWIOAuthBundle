@@ -19,7 +19,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorage;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -57,6 +57,9 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $oauthTokenMock->expects($this->exactly(2))
             ->method('getRawToken')
             ->will($this->returnValue($expectedToken));
+        $oauthTokenMock->expects($this->once())
+            ->method('getRefreshToken')
+            ->willReturn($expectedToken['refresh_token']);
 
         $resourceOwnerMock = $this->getResourceOwnerMock();
         $resourceOwnerMock->expects($this->once())
@@ -236,7 +239,7 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
     protected function getTokenStorageMock()
     {
-        return $this->getMockBuilder(TokenStorage::class)
+        return $this->getMockBuilder(TokenStorageInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
     }
