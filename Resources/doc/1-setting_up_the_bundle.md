@@ -29,9 +29,8 @@ public function registerBundles()
 }
 ```
 
-Configure at least one httplug client from `HttplugBundle`. The default one will be use if not specified.
-
-See the [vendor documentation](http://docs.php-http.org/en/latest/integrations/symfony-bundle.html#installation) for mor information.
+If you don't use `HttplugBundle`, you will have to
+[configure your own client service](internals/configuring_the_http_client.md).
 
 ### C) Import the routing
 
