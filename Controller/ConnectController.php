@@ -237,7 +237,7 @@ class ConnectController extends Controller
             ? $this->createForm(FormType::class)
             : $this->createForm('form');
         // Handle the form
-        $form->handleRequest($request);
+        $form->submit($request->request->all());
 
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->getConfirmationResponse($request, $accessToken, $service);
