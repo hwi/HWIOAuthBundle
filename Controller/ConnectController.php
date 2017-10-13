@@ -74,7 +74,7 @@ class ConnectController extends Controller
             }
         }
 
-        return $this->render('HWIOAuthBundle:Connect:login.html.'.$this->getTemplatingEngine(), array(
+        return $this->render('@HWIOAuth/Connect/login.html.twig', array(
             'error' => $error,
         ));
     }
@@ -143,7 +143,7 @@ class ConnectController extends Controller
                 if ($targetPath = $this->getTargetPath($session)) {
                     $response = $this->redirect($targetPath);
                 } else {
-                    $response = $this->render('HWIOAuthBundle:Connect:registration_success.html.'.$this->getTemplatingEngine(), array(
+                    $response = $this->render('@HWIOAuth/Connect/registration_success.html.twig', array(
                         'userInformation' => $userInformation,
                     ));
                 }
@@ -165,7 +165,7 @@ class ConnectController extends Controller
             return $response;
         }
 
-        return $this->render('HWIOAuthBundle:Connect:registration.html.'.$this->getTemplatingEngine(), array(
+        return $this->render('@HWIOAuth/Connect/registration.html.twig', array(
             'key' => $key,
             'form' => $form->createView(),
             'userInformation' => $userInformation,
@@ -250,7 +250,7 @@ class ConnectController extends Controller
             return $response;
         }
 
-        return $this->render('HWIOAuthBundle:Connect:connect_confirm.html.'.$this->getTemplatingEngine(), array(
+        return $this->render('@HWIOAuth/Connect/connect_confirm.html.twig', array(
             'key' => $key,
             'service' => $service,
             'form' => $form->createView(),
@@ -406,16 +406,6 @@ class ConnectController extends Controller
     }
 
     /**
-     * Returns templating engine name.
-     *
-     * @return string
-     */
-    protected function getTemplatingEngine()
-    {
-        return $this->container->getParameter('hwi_oauth.templating.engine');
-    }
-
-    /**
      * @param SessionInterface $session
      *
      * @return string|null
@@ -472,7 +462,7 @@ class ConnectController extends Controller
             if ($targetPath = $this->getTargetPath($request->getSession())) {
                 $response = $this->redirect($targetPath);
             } else {
-                $response = $this->render('HWIOAuthBundle:Connect:connect_success.html.'.$this->getTemplatingEngine(), array(
+                $response = $this->render('@HWIOAuth/Connect/connect_success.html.twig', array(
                     'userInformation' => $userInformation,
                     'service' => $service,
                 ));

@@ -19,7 +19,6 @@ use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -32,6 +31,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Templating\EngineInterface;
 
 abstract class AbstractConnectControllerTest extends TestCase
 {
@@ -53,7 +53,7 @@ abstract class AbstractConnectControllerTest extends TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|EngineInterface
      */
-    protected $templating;
+    protected $twig;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|RouterInterface
@@ -115,7 +115,6 @@ abstract class AbstractConnectControllerTest extends TestCase
         parent::setUp();
 
         $this->container = new Container();
-        $this->container->setParameter('hwi_oauth.templating.engine', 'twig');
         $this->container->setParameter('hwi_oauth.connect', true);
         $this->container->setParameter('hwi_oauth.firewall_names', array('default'));
         $this->container->setParameter('hwi_oauth.connect.confirmation', true);
@@ -131,10 +130,10 @@ abstract class AbstractConnectControllerTest extends TestCase
             ->getMock();
         $this->container->set('security.token_storage', $this->tokenStorage);
 
-        $this->templating = $this->getMockBuilder(EngineInterface::class)
+        $this->twig = $this->getMockBuilder(EngineInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->container->set('templating', $this->templating);
+        $this->container->set('twig', $this->twig);
 
         $this->router = $this->getMockBuilder(RouterInterface::class)
             ->disableOriginalConstructor()

@@ -14,7 +14,6 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Response;
 
 class ConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
 {
@@ -84,9 +83,9 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->with(HWIOAuthEvents::CONNECT_INITIALIZE)
         ;
 
-        $this->templating->expects($this->once())
-            ->method('renderResponse')
-            ->with('HWIOAuthBundle:Connect:connect_confirm.html.twig')
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@HWIOAuth/Connect/connect_confirm.html.twig')
         ;
 
         $this->controller->connectServiceAction($this->request, 'facebook');
@@ -133,14 +132,12 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->with(HWIOAuthEvents::CONNECT_COMPLETED)
         ;
 
-        $response = new Response();
-        $this->templating->expects($this->once())
-            ->method('renderResponse')
-            ->with('HWIOAuthBundle:Connect:connect_success.html.twig')
-            ->willReturn($response)
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@HWIOAuth/Connect/connect_success.html.twig')
         ;
 
-        $this->assertSame($response, $this->controller->connectServiceAction($this->request, 'facebook'));
+        $this->controller->connectServiceAction($this->request, 'facebook');
     }
 
     public function testConnectNoConfirmation()
@@ -173,14 +170,12 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->with(HWIOAuthEvents::CONNECT_COMPLETED)
         ;
 
-        $response = new Response();
-        $this->templating->expects($this->once())
-            ->method('renderResponse')
-            ->with('HWIOAuthBundle:Connect:connect_success.html.twig')
-            ->willReturn($response)
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@HWIOAuth/Connect/connect_success.html.twig')
         ;
 
-        $this->assertSame($response, $this->controller->connectServiceAction($this->request, 'facebook'));
+        $this->controller->connectServiceAction($this->request, 'facebook');
     }
 
     public function testResourceOwnerHandle()
@@ -214,9 +209,9 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn($form)
         ;
 
-        $this->templating->expects($this->once())
-            ->method('renderResponse')
-            ->with('HWIOAuthBundle:Connect:connect_confirm.html.twig')
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@HWIOAuth/Connect/connect_confirm.html.twig')
         ;
 
         $this->controller->connectServiceAction($this->request, 'facebook');

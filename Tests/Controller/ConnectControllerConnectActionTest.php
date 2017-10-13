@@ -21,9 +21,9 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
     {
         $this->container->setParameter('hwi_oauth.connect', true);
 
-        $this->templating->expects($this->once())
-            ->method('renderResponse')
-            ->with('HWIOAuthBundle:Connect:login.html.twig')
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@HWIOAuth/Connect/login.html.twig')
         ;
 
         $this->controller->connectAction($this->request);
@@ -81,9 +81,9 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
             $this->getAuthenticationErrorKey() => new AccessDeniedException('You shall not pass the request.'),
         ));
 
-        $this->templating->expects($this->once())
-            ->method('renderResponse')
-            ->with('HWIOAuthBundle:Connect:login.html.twig', array('error' => 'You shall not pass the request.'))
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@HWIOAuth/Connect/login.html.twig', array('error' => 'You shall not pass the request.'))
         ;
 
         $this->controller->connectAction($this->request);
@@ -103,9 +103,9 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
             ->willReturn(new AccessDeniedException('You shall not pass the session.'))
         ;
 
-        $this->templating->expects($this->once())
-            ->method('renderResponse')
-            ->with('HWIOAuthBundle:Connect:login.html.twig', array('error' => 'You shall not pass the session.'))
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@HWIOAuth/Connect/login.html.twig', array('error' => 'You shall not pass the session.'))
         ;
 
         $this->controller->connectAction($this->request);
