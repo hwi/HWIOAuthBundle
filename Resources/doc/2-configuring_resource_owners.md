@@ -60,6 +60,7 @@ hwi_oauth:
 - [Instagram](resource_owners/instagram.md)
 - [itembase](resource_owners/itembase.md)
 - [Jira](resource_owners/jira.md)
+- [Jawbone](resource_owners/jawbone.md)
 - [Linkedin](resource_owners/linkedin.md)
 - [Mail.ru](resource_owners/mailru.md)
 - [Odnoklassniki](resource_owners/odnoklassniki.md)
@@ -84,6 +85,7 @@ hwi_oauth:
 - [XING](resource_owners/xing.md)
 - [Yahoo](resource_owners/yahoo.md)
 - [Yandex](resource_owners/yandex.md)
+- [Zenmoney](resource_owners/zenmoney.md)
 - [Others](resource_owners/others.md)
 
 ### CSRF protection
