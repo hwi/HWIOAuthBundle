@@ -1,4 +1,4 @@
-{% extends 'HWIOAuthBundle::layout.html.twig' %}
+{% extends '@HWIOAuth/layout.html.twig' %}
 
 {% block hwi_oauth_content %}
     <h3>{{ 'header.success' | trans({'%name%': userInformation.realName}, 'HWIOAuthBundle') }}</h3>

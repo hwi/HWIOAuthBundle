@@ -16,7 +16,6 @@ use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use Symfony\Component\Form\Form;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\SecurityEvents;
 
 class ConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
@@ -97,9 +96,9 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
             ->with(HWIOAuthEvents::REGISTRATION_INITIALIZE)
         ;
 
-        $this->templating->expects($this->once())
-            ->method('renderResponse')
-            ->with('HWIOAuthBundle:Connect:registration.html.twig')
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@HWIOAuth/Connect/registration.html.twig')
         ;
 
         $this->controller->registrationAction($this->request, $key);
@@ -147,14 +146,12 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
             ->with(HWIOAuthEvents::REGISTRATION_COMPLETED)
         ;
 
-        $response = new Response();
-        $this->templating->expects($this->once())
-            ->method('renderResponse')
-            ->with('HWIOAuthBundle:Connect:registration_success.html.twig')
-            ->willReturn($response)
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@HWIOAuth/Connect/registration_success.html.twig')
         ;
 
-        $this->assertSame($response, $this->controller->registrationAction($this->request, $key));
+        $this->controller->registrationAction($this->request, $key);
     }
 
     private function makeRegistrationForm()

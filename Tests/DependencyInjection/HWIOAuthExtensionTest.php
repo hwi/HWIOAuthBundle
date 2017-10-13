@@ -399,8 +399,6 @@ class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertParameter(false, 'hwi_oauth.connect');
 
-        $this->assertParameter('twig', 'hwi_oauth.templating.engine');
-
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
