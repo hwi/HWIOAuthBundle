@@ -50,7 +50,6 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
 
         $headers = array(
             'Authorization: Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret']),
-            'Content-Type: application/x-www-form-urlencoded',
         );
 
         $response = $this->httpRequest($this->options['access_token_url'], http_build_query($parameters, '', '&'), $headers, 'POST');

@@ -40,7 +40,7 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
         return $this->httpRequest(
             $url,
             http_build_query($parameters, '', '&'),
-            $this->getRequestHeaders(array('Content-Type' => 'application/x-www-form-urlencoded')),
+            $this->getRequestHeaders(),
             'POST'
         );
     }

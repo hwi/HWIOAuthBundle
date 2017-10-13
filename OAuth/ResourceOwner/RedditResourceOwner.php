@@ -37,7 +37,6 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
             $url,
             $parameters,
             [
-                'Content-Type: application/x-www-form-urlencoded',
                 'Authorization: Basic '.base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret'])),
             ],
             'POST'
