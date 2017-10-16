@@ -246,14 +246,14 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testTokenRefreshesWhenExpired()
     {
-        $expectedToken = array(
+        $expiredToken = array(
             'access_token' => 'access_token',
             'refresh_token' => 'refresh_token',
             'expires_in' => '666',
             'oauth_token_secret' => 'secret',
         );
 
-        $newToken = array(
+        $refreshedToken = array(
             'access_token' => 'access_token_new',
             'refresh_token' => 'refresh_token',
             'expires_in' => '666_new',
@@ -269,16 +269,16 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue('github'));
         $oauthTokenMock->expects($this->exactly(2))
             ->method('getRefreshToken')
-            ->willReturn($expectedToken['refresh_token']);
+            ->willReturn($expiredToken['refresh_token']);
 
         $resourceOwnerMock = $this->getResourceOwnerMock();
         $resourceOwnerMock->expects($this->once())
             ->method('refreshAccessToken')
-            ->with($expectedToken['refresh_token'])
-            ->willReturn($newToken);
+            ->with($expiredToken['refresh_token'])
+            ->willReturn($refreshedToken);
         $resourceOwnerMock->expects($this->once())
             ->method('getUserInformation')
-            ->with($newToken)
+            ->with($refreshedToken)
             ->will($this->returnValue($this->getUserResponseMock()));
         $resourceOwnerMock->expects($this->once())
             ->method('getName')
@@ -317,11 +317,11 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($token->isAuthenticated());
         $this->assertInstanceOf(OAuthToken::class, $token);
 
-        $this->assertEquals($newToken, $token->getRawToken());
-        $this->assertEquals($newToken['access_token'], $token->getAccessToken());
-        $this->assertEquals($newToken['refresh_token'], $token->getRefreshToken());
-        $this->assertEquals($newToken['expires_in'], $token->getExpiresIn());
-        $this->assertEquals($newToken['oauth_token_secret'], $token->getTokenSecret());
+        $this->assertEquals($refreshedToken, $token->getRawToken());
+        $this->assertEquals($refreshedToken['access_token'], $token->getAccessToken());
+        $this->assertEquals($refreshedToken['refresh_token'], $token->getRefreshToken());
+        $this->assertEquals($refreshedToken['expires_in'], $token->getExpiresIn());
+        $this->assertEquals($refreshedToken['oauth_token_secret'], $token->getTokenSecret());
         $this->assertEquals($userMock, $token->getUser());
         $this->assertEquals('github', $token->getResourceOwnerName());
 
