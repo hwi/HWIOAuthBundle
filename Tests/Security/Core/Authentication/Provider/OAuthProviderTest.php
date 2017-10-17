@@ -243,4 +243,90 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
     }
+
+    public function testTokenRefreshesWhenExpired()
+    {
+        $expiredToken = array(
+            'access_token' => 'access_token',
+            'refresh_token' => 'refresh_token',
+            'expires_in' => '666',
+            'oauth_token_secret' => 'secret',
+        );
+
+        $refreshedToken = array(
+            'access_token' => 'access_token_new',
+            'refresh_token' => 'refresh_token',
+            'expires_in' => '666_new',
+            'oauth_token_secret' => 'secret_new',
+        );
+
+        $oauthTokenMock = $this->getOAuthTokenMock();
+        $oauthTokenMock->expects($this->once())
+            ->method('isExpired')
+            ->willReturn(true);
+        $oauthTokenMock->expects($this->exactly(2))
+            ->method('getResourceOwnerName')
+            ->will($this->returnValue('github'));
+        $oauthTokenMock->expects($this->exactly(2))
+            ->method('getRefreshToken')
+            ->willReturn($expiredToken['refresh_token']);
+
+        $resourceOwnerMock = $this->getResourceOwnerMock();
+        $resourceOwnerMock->expects($this->once())
+            ->method('refreshAccessToken')
+            ->with($expiredToken['refresh_token'])
+            ->willReturn($refreshedToken);
+        $resourceOwnerMock->expects($this->once())
+            ->method('getUserInformation')
+            ->with($refreshedToken)
+            ->will($this->returnValue($this->getUserResponseMock()));
+        $resourceOwnerMock->expects($this->once())
+            ->method('getName')
+            ->will($this->returnValue('github'));
+
+        $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
+        $resourceOwnerMapMock->expects($this->once())
+            ->method('getResourceOwnerByName')
+            ->with($this->equalTo('github'))
+            ->will($this->returnValue($resourceOwnerMock));
+        $resourceOwnerMapMock->expects($this->once())
+            ->method('hasResourceOwnerByName')
+            ->with($this->equalTo('github'))
+            ->will($this->returnValue(true));
+
+        $userMock = $this->getUserMock();
+        $userMock->expects($this->once())
+            ->method('getRoles')
+            ->will($this->returnValue(array('ROLE_TEST')));
+
+        $userProviderMock = $this->getOAuthAwareUserProviderMock();
+        $userProviderMock->expects($this->once())
+            ->method('loadUserByOAuthUserResponse')
+            ->will($this->returnValue($userMock));
+
+        $userCheckerMock = $this->getUserCheckerMock();
+        $userCheckerMock->expects($this->once())
+            ->method('checkPostAuth')
+            ->with($userMock);
+
+        $tokenStorageMock = $this->getTokenStorageMock();
+
+        $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock, $tokenStorageMock);
+
+        $token = $oauthProvider->authenticate($oauthTokenMock);
+        $this->assertTrue($token->isAuthenticated());
+        $this->assertInstanceOf(OAuthToken::class, $token);
+
+        $this->assertEquals($refreshedToken, $token->getRawToken());
+        $this->assertEquals($refreshedToken['access_token'], $token->getAccessToken());
+        $this->assertEquals($refreshedToken['refresh_token'], $token->getRefreshToken());
+        $this->assertEquals($refreshedToken['expires_in'], $token->getExpiresIn());
+        $this->assertEquals($refreshedToken['oauth_token_secret'], $token->getTokenSecret());
+        $this->assertEquals($userMock, $token->getUser());
+        $this->assertEquals('github', $token->getResourceOwnerName());
+
+        $roles = $token->getRoles();
+        $this->assertCount(1, $roles);
+        $this->assertEquals('ROLE_TEST', $roles[0]->getRole());
+    }
 }

@@ -56,6 +56,10 @@ class MyCustomProvider implements ResourceOwnerInterface
     public function addPaths(array $paths)
     {
     }
+
+    public function refreshAccessToken($refreshToken, array $extraParameters = array())
+    {
+    }
 }
 
 /**
