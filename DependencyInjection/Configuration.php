@@ -149,6 +149,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode = $builder->root('hwi_oauth');
         $rootNode
+            ->fixXmlConfig('firewall_name')
             ->children()
                 ->arrayNode('firewall_names')
                     ->isRequired()
