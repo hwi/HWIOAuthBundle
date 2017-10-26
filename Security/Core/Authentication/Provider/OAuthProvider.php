@@ -85,6 +85,11 @@ class OAuthProvider implements AuthenticationProviderInterface
             return;
         }
 
+        // fix connect to external social very time
+        if ($token->isAuthenticated()) {
+            return $token;
+        }
+
         /* @var OAuthToken $token */
         $resourceOwner = $this->resourceOwnerMap->getResourceOwnerByName($token->getResourceOwnerName());
 
