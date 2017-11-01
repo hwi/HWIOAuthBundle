@@ -109,4 +109,10 @@ interface ResourceOwnerInterface
      * @param array $paths
      */
     public function addPaths(array $paths);
+
+    /**
+     * @param string $refreshToken    Refresh token
+     * @param array  $extraParameters An array of parameters to add to the url
+     */
+    public function refreshAccessToken($refreshToken, array $extraParameters = []);
 }
