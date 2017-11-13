@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -24,9 +25,9 @@ class DropboxResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier' => 'uid',
+        'identifier' => 'account_id',
         'nickname' => 'email',
-        'realname' => 'display_name',
+        'realname' => 'email',
         'email' => 'email',
     );
 
@@ -38,9 +39,30 @@ class DropboxResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url' => 'https://www.dropbox.com/1/oauth2/authorize',
-            'access_token_url' => 'https://api.dropbox.com/1/oauth2/token',
-            'infos_url' => 'https://api.dropbox.com/1/account/info',
+            'authorization_url' => 'https://www.dropbox.com/oauth2/authorize',
+            'access_token_url' => 'https://api.dropbox.com/oauth2/token',
+            'infos_url' => 'https://api.dropboxapi.com/2/users/get_current_account',
         ));
+    }
+
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    {
+        if ($this->options['use_bearer_authorization']) {
+            $content = $this->httpRequest($this->normalizeUrl($this->options['infos_url'], $extraParameters), 'null',
+                array(
+                    'Content-type: application/json; charset=UTF-8',
+                    'Authorization: Bearer ' . $accessToken['access_token']
+                ), 'POST');
+        } else {
+            $content = $this->doGetUserInformationRequest($this->normalizeUrl($this->options['infos_url'],
+                array_merge(array($this->options['attr_name'] => $accessToken['access_token']), $extraParameters)));
+        }
+
+        $response = $this->getUserResponse();
+        $response->setResponse($content->getContent());
+
+        $response->setResourceOwner($this);
+        $response->setOAuthToken(new OAuthToken($accessToken));
+        return $response;
     }
 }
