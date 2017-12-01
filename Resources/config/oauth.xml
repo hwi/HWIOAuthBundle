@@ -123,7 +123,7 @@
             <argument type="service" id="session" />
         </service>
 
-        <service id="hwi_oauth.security.oauth_utils" class="%hwi_oauth.security.oauth_utils.class%">
+        <service id="hwi_oauth.security.oauth_utils" class="%hwi_oauth.security.oauth_utils.class%" public="true">
             <argument type="service" id="security.http_utils" />
             <argument type="service" id="security.authorization_checker" />
             <argument>%hwi_oauth.connect%</argument>
