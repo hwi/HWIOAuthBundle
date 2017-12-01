@@ -37,7 +37,7 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
             $url,
             http_build_query($parameters, '', '&'),
             [
-                'Authorization: Basic '.base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret'])),
+                'Authorization' => 'Basic '.base64_encode(sprintf('%s:%s', $this->options['client_id'], $this->options['client_secret'])),
             ],
             'POST'
         );
