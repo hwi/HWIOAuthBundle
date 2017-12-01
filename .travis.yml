@@ -26,7 +26,7 @@ matrix:
     - php: 7.0
       env: SYMFONY_VERSION=2.8.*
     - php: 7.0
-      env: SYMFONY_VERSION=3.0.*
+      env: SYMFONY_VERSION=3.3.*
     - php: 7.0
       env: FOSUSERBUNDLE_VERSION=2.0.*
     - php: 7.1
