@@ -153,7 +153,7 @@ class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('firewall_names')
                     ->isRequired()
-                    ->cannotBeEmpty()
+                    ->requiresAtLeastOneElement()
                     ->prototype('scalar')->end()
                 ->end()
                 ->scalarNode('target_path_parameter')->defaultNull()->end()
