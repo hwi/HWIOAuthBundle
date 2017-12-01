@@ -16,6 +16,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
@@ -105,6 +106,8 @@ class HWIOAuthExtension extends Extension
      */
     public function createResourceOwnerService(ContainerBuilder $container, $name, array $options)
     {
+        $definitionClassname = $this->getDefinitionClassname();
+
         // alias services
         if (isset($options['service'])) {
             // set the appropriate name for aliased services, compiler pass depends on it
@@ -122,11 +125,11 @@ class HWIOAuthExtension extends Extension
                 throw new InvalidConfigurationException(sprintf('Class "%s" must implement interface "HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface".', $options['class']));
             }
 
-            $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.$type);
+            $definition = new $definitionClassname('hwi_oauth.abstract_resource_owner.'.$type);
             $definition->setClass($options['class']);
             unset($options['class']);
         } else {
-            $definition = new DefinitionDecorator('hwi_oauth.abstract_resource_owner.'.Configuration::getResourceOwnerType($type));
+            $definition = new $definitionClassname('hwi_oauth.abstract_resource_owner.'.Configuration::getResourceOwnerType($type));
             $definition->setClass("%hwi_oauth.resource_owner.$type.class%");
         }
 
@@ -155,19 +158,21 @@ class HWIOAuthExtension extends Extension
      */
     private function createConnectIntegration(ContainerBuilder $container, array $config)
     {
+        $definitionClassname = $this->getDefinitionClassname();
+
         if (isset($config['connect'])) {
             $container->setParameter('hwi_oauth.connect', true);
 
             if (isset($config['fosub'])) {
                 $container->setParameter('hwi_oauth.fosub_enabled', true);
 
-                $definition = $container->setDefinition('hwi_oauth.user.provider.fosub_bridge', new DefinitionDecorator('hwi_oauth.user.provider.fosub_bridge.def'));
+                $definition = $container->setDefinition('hwi_oauth.user.provider.fosub_bridge', new $definitionClassname('hwi_oauth.user.provider.fosub_bridge.def'));
                 $definition->addArgument($config['fosub']['properties']);
 
                 // setup fosub bridge services
                 $container->setAlias('hwi_oauth.account.connector', new Alias('hwi_oauth.user.provider.fosub_bridge', true));
 
-                $definition = $container->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new DefinitionDecorator('hwi_oauth.registration.form.handler.fosub_bridge.def'));
+                $definition = $container->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new $definitionClassname('hwi_oauth.registration.form.handler.fosub_bridge.def'));
                 $definition->addArgument($config['fosub']['username_iterations']);
 
                 $container->setAlias('hwi_oauth.registration.form.handler', new Alias('hwi_oauth.registration.form.handler.fosub_bridge', true));
@@ -223,5 +228,13 @@ class HWIOAuthExtension extends Extension
 
         $container->setAlias('hwi_oauth.http.client', new Alias($config['http']['client'], true));
         $container->setAlias('hwi_oauth.http.message_factory', new Alias($config['http']['message_factory'], true));
+    }
+
+    /**
+     * @return string
+     */
+    private function getDefinitionClassname()
+    {
+        return class_exists(ChildDefinition::class) ? ChildDefinition::class : DefinitionDecorator::class;
     }
 }

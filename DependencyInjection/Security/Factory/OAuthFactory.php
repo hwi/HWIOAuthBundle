@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\DefinitionDecorator;
 use Symfony\Component\DependencyInjection\Parameter;
@@ -67,6 +68,8 @@ class OAuthFactory extends AbstractFactory
      */
     protected function createResourceOwnerMap(ContainerBuilder $container, $id, array $config)
     {
+        $definitionClassname = $this->getDefinitionClassname();
+
         $resourceOwnersMap = array();
         foreach ($config['resource_owners'] as $name => $checkPath) {
             $resourceOwnersMap[$name] = $checkPath;
@@ -74,7 +77,7 @@ class OAuthFactory extends AbstractFactory
         $container->setParameter('hwi_oauth.resource_ownermap.configured.'.$id, $resourceOwnersMap);
 
         $container
-            ->setDefinition($this->getResourceOwnerMapReference($id), new DefinitionDecorator('hwi_oauth.abstract_resource_ownermap'))
+            ->setDefinition($this->getResourceOwnerMapReference($id), new $definitionClassname('hwi_oauth.abstract_resource_ownermap'))
             ->replaceArgument(2, new Parameter('hwi_oauth.resource_ownermap.configured.'.$id))
         ;
     }
@@ -96,12 +99,13 @@ class OAuthFactory extends AbstractFactory
      */
     protected function createAuthProvider(ContainerBuilder $container, $id, $config, $userProviderId)
     {
+        $definitionClassname = $this->getDefinitionClassname();
         $providerId = 'hwi_oauth.authentication.provider.oauth.'.$id;
 
         $this->createResourceOwnerMap($container, $id, $config);
 
         $container
-            ->setDefinition($providerId, new DefinitionDecorator('hwi_oauth.authentication.provider.oauth'))
+            ->setDefinition($providerId, new $definitionClassname('hwi_oauth.authentication.provider.oauth'))
             ->addArgument($this->createOAuthAwareUserProvider($container, $id, $config['oauth_user_provider']))
             ->addArgument($this->getResourceOwnerMapReference($id))
             ->addArgument(new Reference('hwi_oauth.user_checker'))
@@ -113,18 +117,19 @@ class OAuthFactory extends AbstractFactory
 
     protected function createOAuthAwareUserProvider(ContainerBuilder $container, $id, $config)
     {
+        $definitionClassname = $this->getDefinitionClassname();
         $serviceId = 'hwi_oauth.user.provider.entity.'.$id;
 
         // todo: move this to factories?
         switch (key($config)) {
             case 'oauth':
                 $container
-                    ->setDefinition($serviceId, new DefinitionDecorator('hwi_oauth.user.provider'))
+                    ->setDefinition($serviceId, new $definitionClassname('hwi_oauth.user.provider'))
                 ;
                 break;
             case 'orm':
                 $container
-                    ->setDefinition($serviceId, new DefinitionDecorator('hwi_oauth.user.provider.entity'))
+                    ->setDefinition($serviceId, new $definitionClassname('hwi_oauth.user.provider.entity'))
                     ->addArgument($config['orm']['class'])
                     ->addArgument($config['orm']['properties'])
                     ->addArgument($config['orm']['manager_name'])
@@ -147,7 +152,7 @@ class OAuthFactory extends AbstractFactory
         $entryPointId = 'hwi_oauth.authentication.entry_point.oauth.'.$id;
 
         $container
-            ->setDefinition($entryPointId, new DefinitionDecorator('hwi_oauth.authentication.entry_point.oauth'))
+            ->setDefinition($entryPointId, new $definitionClassname('hwi_oauth.authentication.entry_point.oauth'))
             ->addArgument($config['login_path'])
             ->addArgument($config['use_forward'])
         ;
@@ -252,5 +257,13 @@ class OAuthFactory extends AbstractFactory
                 ->end()
             ->end()
         ;
+    }
+
+    /**
+     * @return string
+     */
+    private function getDefinitionClassname()
+    {
+        return class_exists(ChildDefinition::class) ? ChildDefinition::class : DefinitionDecorator::class;
     }
 }
