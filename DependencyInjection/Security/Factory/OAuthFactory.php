@@ -150,6 +150,7 @@ class OAuthFactory extends AbstractFactory
     protected function createEntryPoint($container, $id, $config, $defaultEntryPoint)
     {
         $entryPointId = 'hwi_oauth.authentication.entry_point.oauth.'.$id;
+        $definitionClassname = $this->getDefinitionClassname();
 
         $container
             ->setDefinition($entryPointId, new $definitionClassname('hwi_oauth.authentication.entry_point.oauth'))
