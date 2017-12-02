@@ -49,7 +49,7 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
         ), $extraParameters);
 
         $headers = array(
-            'Authorization: Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret']),
+            'Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret']),
         );
 
         $response = $this->httpRequest($this->options['access_token_url'], http_build_query($parameters, '', '&'), $headers, 'POST');
@@ -72,7 +72,7 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
                     array('access_token' => $accessToken['access_token'])
                 ),
                 null,
-                array('Authorization: Bearer')
+                array('Authorization' => 'Bearer')
             );
         } else {
             $content = $this->doGetUserInformationRequest(

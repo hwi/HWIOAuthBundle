@@ -36,7 +36,7 @@ class RunKeeperResourceOwner extends GenericOAuth2ResourceOwner
         $response = $this->httpRequest(
             $this->normalizeUrl($this->options['user_resource_url']),
             null,
-            array('Authorization: Bearer '.$accessToken)
+            array('Authorization' => 'Bearer '.$accessToken)
         );
 
         return $this->getResponseContent($response);
