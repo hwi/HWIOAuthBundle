@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -38,11 +39,11 @@ class OAuthListener extends AbstractAuthenticationListener
     private $checkPaths;
 
     /**
-     * @param ResourceOwnerMapInterface $resourceOwnerMap
+     * @param string $resourceOwnerMap
      */
-    public function setResourceOwnerMap(ResourceOwnerMapInterface $resourceOwnerMap)
+    public function setResourceOwnerMap($resourceOwnerMap)
     {
-        $this->resourceOwnerMap = $resourceOwnerMap;
+        $this->resourceOwnerMap = new Reference($resourceOwnerMap);
     }
 
     /**

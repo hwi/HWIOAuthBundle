@@ -87,11 +87,11 @@ class OAuthFactory extends AbstractFactory
      *
      * @param string $id
      *
-     * @return Reference
+     * @return string
      */
     protected function getResourceOwnerMapReference($id)
     {
-        return new Reference('hwi_oauth.resource_ownermap.'.$id);
+        return 'hwi_oauth.resource_ownermap.'.$id;
     }
 
     /**
