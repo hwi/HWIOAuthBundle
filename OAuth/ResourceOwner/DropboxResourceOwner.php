@@ -48,10 +48,11 @@ class DropboxResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * Dropbox API v2 requires a POST request to simply get user info
+     * Dropbox API v2 requires a POST request to simply get user info!
      *
      * @param array $accessToken
      * @param array $extraParameters
+     *
      * @return UserResponseInterface
      */
     public function getUserInformation(array $accessToken,
@@ -63,7 +64,7 @@ class DropboxResourceOwner extends GenericOAuth2ResourceOwner
                     $extraParameters),
                 'null',
                 array(
-                    'Authorization' => 'Bearer ' . $accessToken['access_token'],
+                    'Authorization' => 'Bearer'. ' ' . $accessToken['access_token'],
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json; charset=utf-8',
                 ), 'POST');
