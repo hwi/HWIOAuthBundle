@@ -135,7 +135,7 @@ class HWIOAuthExtension extends Extension
 
         $definition->replaceArgument(2, $options);
         $definition->replaceArgument(3, $name);
-        $definition->setPrivate(false);
+        $definition->setPublic(true);
 
         $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
     }
