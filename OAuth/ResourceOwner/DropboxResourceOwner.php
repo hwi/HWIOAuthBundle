@@ -64,7 +64,7 @@ class DropboxResourceOwner extends GenericOAuth2ResourceOwner
                     $extraParameters),
                 'null',
                 array(
-                    'Authorization' => 'Bearer'. ' ' . $accessToken['access_token'],
+                    'Authorization' => 'Bearer'.' '.$accessToken['access_token'],
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json; charset=utf-8',
                 ), 'POST');
