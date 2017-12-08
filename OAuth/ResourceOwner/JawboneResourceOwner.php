@@ -48,8 +48,8 @@ class JawboneResourceOwner extends GenericOAuth2ResourceOwner
         $url = $this->normalizeUrl($this->options['infos_url'].'/'.$type, $extraParameters);
 
         $headers = array(
-            'Authorization: Bearer '.$accessToken['access_token'],
-            'Accept: application/json',
+            'Authorization' => 'Bearer '.$accessToken['access_token'],
+            'Accept' => 'application/json',
         );
 
         return $this->httpRequest($url, null, $headers);

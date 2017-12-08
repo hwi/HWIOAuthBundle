@@ -43,7 +43,7 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
         if (empty($responseData['email'])) {
             // fetch the email addresses linked to the account
             $content = $this->httpRequest(
-                $this->normalizeUrl($this->options['emails_url']), null, array('Authorization: Bearer '.$accessToken['access_token'])
+                $this->normalizeUrl($this->options['emails_url']), null, array('Authorization' => 'Bearer '.$accessToken['access_token'])
             );
 
             foreach ($this->getResponseContent($content) as $email) {
@@ -68,7 +68,7 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
         $response = $this->httpRequest(
             sprintf($this->options['revoke_token_url'], $this->options['client_id'], $token),
             null,
-            array('Authorization: Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])),
+            array('Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])),
             'DELETE'
         );
 

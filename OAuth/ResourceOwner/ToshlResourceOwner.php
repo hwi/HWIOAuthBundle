@@ -41,7 +41,7 @@ class ToshlResourceOwner extends GenericOAuth2ResourceOwner
         $response = $this->httpRequest(
             $this->options['revoke_token_url'],
             null,
-            array('Authorization: Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])),
+            array('Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])),
             'DELETE'
         );
 

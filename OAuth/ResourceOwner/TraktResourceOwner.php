@@ -37,8 +37,8 @@ class TraktResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $content = $this->httpRequest($this->normalizeUrl($this->options['infos_url']), null, array(
-            'Authorization: Bearer '.$accessToken['access_token'],
-            'Content-Type: application/json',
+            'Authorization' => 'Bearer '.$accessToken['access_token'],
+            'Content-Type' => 'application/json',
             'trakt-api-key' => $this->options['client_id'],
             'trakt-api-version' => 2,
         ));
