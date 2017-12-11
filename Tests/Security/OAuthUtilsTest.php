@@ -14,12 +14,13 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class OAuthUtilsTest extends \PHPUnit_Framework_TestCase
+class OAuthUtilsTest extends TestCase
 {
     private $grantRule = 'IS_AUTHENTICATED_REMEMBERED';
 

@@ -16,8 +16,9 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser;
+use PHPUnit\Framework\TestCase;
 
-class FOSUBUserProviderTest extends \PHPUnit_Framework_TestCase
+class FOSUBUserProviderTest extends TestCase
 {
     public function setUp()
     {

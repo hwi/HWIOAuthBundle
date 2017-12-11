@@ -16,10 +16,11 @@ use FOS\UserBundle\Model\UserInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use HWI\Bundle\OAuthBundle\Form\FOSUBRegistrationFormHandler;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
-class FOSUBRegistrationFormHandlerTest extends \PHPUnit_Framework_TestCase
+class FOSUBRegistrationFormHandlerTest extends TestCase
 {
     public function testProcessReturnsFalseForNotPostRequest()
     {

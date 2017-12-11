@@ -13,8 +13,9 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\Response;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
+use PHPUnit\Framework\TestCase;
 
-class PathUserResponseTest extends \PHPUnit_Framework_TestCase
+class PathUserResponseTest extends TestCase
 {
     /**
      * @var PathUserResponse

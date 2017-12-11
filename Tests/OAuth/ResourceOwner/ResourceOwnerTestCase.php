@@ -15,9 +15,10 @@ use Http\Client\Common\HttpMethodsClient;
 use Http\Discovery\MessageFactoryDiscovery;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Http\HttpUtils;
 
-abstract class ResourceOwnerTestCase extends \PHPUnit_Framework_TestCase
+abstract class ResourceOwnerTestCase extends TestCase
 {
     /** @var \PHPUnit_Framework_MockObject_MockObject|HttpMethodsClient */
     protected $httpClient;
