@@ -57,9 +57,6 @@ class OAuthProviderTest extends \PHPUnit_Framework_TestCase
         $oauthTokenMock->expects($this->exactly(2))
             ->method('getRawToken')
             ->will($this->returnValue($expectedToken));
-        $oauthTokenMock->expects($this->once())
-            ->method('getRefreshToken')
-            ->willReturn($expectedToken['refresh_token']);
 
         $resourceOwnerMock = $this->getResourceOwnerMock();
         $resourceOwnerMock->expects($this->once())
