@@ -15,6 +15,7 @@ use Http\Client\Common\HttpMethodsClient;
 use Http\HttplugBundle\HttplugBundle;
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Parser;
@@ -65,7 +66,7 @@ class MyCustomProvider implements ResourceOwnerInterface
 /**
  * Code bases on FOSUserBundle tests.
  */
-class HWIOAuthExtensionTest extends \PHPUnit_Framework_TestCase
+class HWIOAuthExtensionTest extends TestCase
 {
     /**
      * @var ContainerBuilder

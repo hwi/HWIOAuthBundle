@@ -14,9 +14,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\User;
 
-class OAuthUserProviderTest extends \PHPUnit_Framework_TestCase
+class OAuthUserProviderTest extends TestCase
 {
     /**
      * @var OAuthUserProvider

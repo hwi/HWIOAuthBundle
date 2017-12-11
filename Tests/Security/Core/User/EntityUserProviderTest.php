@@ -18,8 +18,9 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
+use PHPUnit\Framework\TestCase;
 
-class EntityUserProviderTest extends \PHPUnit_Framework_TestCase
+class EntityUserProviderTest extends TestCase
 {
     public function setUp()
     {
