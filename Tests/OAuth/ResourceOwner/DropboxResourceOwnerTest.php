@@ -16,11 +16,11 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DropboxResourceOwner;
 class DropboxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $resourceOwnerClass = DropboxResourceOwner::class;
-    protected $userResponse = '{"uid": "1", "email": "bar"}';
+    protected $userResponse = '{"account_id": "1", "email": "bar"}';
     protected $paths = array(
-        'identifier' => 'uid',
+        'identifier' => 'account_id',
         'nickname' => 'email',
-        'realname' => 'display_name',
+        'realname' => 'email',
         'email' => 'email',
     );
 
