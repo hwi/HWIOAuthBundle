@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\Authentication\Token;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use PHPUnit\Framework\TestCase;
 
 class OAuthTokenTest extends TestCase
@@ -101,5 +102,12 @@ class OAuthTokenTest extends TestCase
         );
         $token = new OAuthToken($expectedToken, array('ROLE_TEST'));
         $this->assertTrue($token->isExpired());
+    }
+
+    public function testSerializeTokenInException()
+    {
+        $exception = new AccountNotLinkedException($this->token);
+        $str = serialize($exception);
+        unserialize($str);
     }
 }
