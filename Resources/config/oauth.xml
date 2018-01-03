@@ -140,7 +140,7 @@
             </call>
         </service>
 
-        <service id="hwi_oauth.abstract_resource_owner.generic" abstract="true">
+        <service id="hwi_oauth.abstract_resource_owner.generic" abstract="true" public="true">
             <argument type="service" id="hwi_oauth.http_client" />
             <argument type="service" id="security.http_utils" />
             <argument type="collection" /><!-- options -->
