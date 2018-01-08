@@ -41,7 +41,7 @@ class Bitbucket2ResourceOwner extends GenericOAuth2ResourceOwner
 
         // fetch the email addresses linked to the account
         if (empty($responseData['email'])) {
-            $content = $this->httpRequest($this->normalizeUrl($this->options['emails_url']), null, array('Authorization: Bearer '.$accessToken['access_token']));
+            $content = $this->httpRequest($this->normalizeUrl($this->options['emails_url']), null, array('Authorization' => 'Bearer '.$accessToken['access_token']));
             foreach ($this->getResponseContent($content)['values'] as $email) {
                 // we only need the primary email address
                 if (true === $email['is_primary']) {
