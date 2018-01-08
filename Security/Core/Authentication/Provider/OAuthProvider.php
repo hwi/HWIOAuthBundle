@@ -19,9 +19,10 @@ use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 
 /**
  * OAuthProvider.
@@ -93,12 +94,20 @@ class OAuthProvider implements AuthenticationProviderInterface
         /* @var OAuthToken $token */
         $resourceOwner = $this->resourceOwnerMap->getResourceOwnerByName($token->getResourceOwnerName());
 
-        $oldToken = $token->isExpired() ? $this->refreshToken($token, $resourceOwner) : $token;
-        $userResponse = $resourceOwner->getUserInformation($oldToken->getRawToken());
+        try {
+            $oldToken = $token->isExpired() ? $this->refreshToken($token, $resourceOwner) : $token;
+        } catch (AuthenticationException $e) {
+            $this->tokenStorage->setToken(null);
+
+            throw $e;
+        }
 
         try {
+            $userResponse = $resourceOwner->getUserInformation($oldToken->getRawToken());
             $user = $this->userProvider->loadUserByOAuthUserResponse($userResponse);
         } catch (OAuthAwareExceptionInterface $e) {
+            $this->tokenStorage->setToken(null);
+
             $e->setToken($oldToken);
             $e->setResourceOwnerName($oldToken->getResourceOwnerName());
 
@@ -106,6 +115,7 @@ class OAuthProvider implements AuthenticationProviderInterface
         }
 
         if (!$user instanceof UserInterface) {
+            $this->tokenStorage->setToken(null);
             throw new AuthenticationServiceException('loadUserByOAuthUserResponse() must return a UserInterface.');
         }
 
