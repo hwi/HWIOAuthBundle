@@ -72,7 +72,8 @@ Installation
 All the installation instructions are located in the documentation, check it for specific
 version:
 
-* [__0.5__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3,<4.0`
+* [__0.6__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3,<4.0`
+* [__0.5__](https://github.com/hwi/HWIOAuthBundle/blob/0.5.3/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3,<4.0`
 * [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/0.4/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3,<3.0`
 * [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.1,<2.7`
 
@@ -82,7 +83,8 @@ Documentation
 The bulk of the documentation is stored in the `Resources/doc/index.md`
 file in this bundle. Read the documentation for version:
 
-* [__0.5__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md) with support for Symfony `>=2.3,<4.0`
+* [__0.6__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md) with support for Symfony `>=2.3,<4.0`
+* [__0.5__](https://github.com/hwi/HWIOAuthBundle/blob/0.5.3/Resources/doc/index.md) with support for Symfony `>=2.3,<4.0`
 * [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/0.4/Resources/doc/index.md) with support for Symfony `>=2.3,<3.0`
 * [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/index.md) with support for Symfony `>=2.1,<2.7`
 
