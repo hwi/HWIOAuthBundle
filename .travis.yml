@@ -3,6 +3,7 @@ language: php
 sudo: false
 
 php:
+  - 7.2
   - 7.1
   - 7.0
   - 5.6
@@ -33,6 +34,8 @@ matrix:
       env: STABILITY=beta
     - php: 7.1
       env: TARGET=csfixer_dry_run
+    - php: 7.2
+      env: STABILITY=beta
   allow_failures:
     - php: nightly
 
