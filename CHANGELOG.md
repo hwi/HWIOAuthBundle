@@ -1,5 +1,11 @@
 Changelog
 =========
+## 0.6.1 (2018-01-23)
+* BC BREAK: Replaced `PHPUnit_Framework_TestCase` with `PHPUnit\Framework\TestCase` in tests,
+* Added: Implemented `getUserInformation()` for Dropbox v2,
+* Fixed: Headers passed to `httpRequest()` method in various resource owners,
+* Fixed: Marked some services as `public` to make code compatible with Symfony 4
+
 ## 0.6.0 (2017-12-01)
 * BC BREAK: Fully replaced Buzz library with usage of HTTPlug & Guzzle 6,
 * BC BREAK: `hwi.http_client` config options are remove. HTTP configuration must rely on the HTTPlug client,
