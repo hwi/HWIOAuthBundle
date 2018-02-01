@@ -224,8 +224,6 @@ class ConnectController extends Controller
             return $this->redirectToRoute($this->container->getParameter('hwi_oauth.failed_auth_path'));
         }
 
-        $userInformation = $resourceOwner->getUserInformation($accessToken);
-
         // Show confirmation page?
         if (!$this->container->getParameter('hwi_oauth.connect.confirmation')) {
             return $this->getConfirmationResponse($request, $accessToken, $service);
@@ -254,7 +252,7 @@ class ConnectController extends Controller
             'key' => $key,
             'service' => $service,
             'form' => $form->createView(),
-            'userInformation' => $userInformation,
+            'userInformation' => $resourceOwner->getUserInformation($accessToken),
         ));
     }
 
