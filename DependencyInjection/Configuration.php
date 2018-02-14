@@ -164,7 +164,7 @@ class Configuration implements ConfigurationInterface
                     ->defaultValue('IS_AUTHENTICATED_REMEMBERED')
                     ->validate()
                         ->ifTrue(function ($role) {
-                            return 'IS_AUTHENTICATED_REMEMBERED' !== $role || 'IS_AUTHENTICATED_FULLY' !== $role;
+                            return !('IS_AUTHENTICATED_REMEMBERED' === $role || 'IS_AUTHENTICATED_FULLY' === $role);
                         })
                         ->thenInvalid('Unknown grant role set "%s".')
                     ->end()
