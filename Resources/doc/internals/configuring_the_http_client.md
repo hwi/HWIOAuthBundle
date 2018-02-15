@@ -84,7 +84,7 @@ And voilà! You now have your custom Guzzle 6 service with the same configuratio
 
 If you don't want to use HttplugBundle, you can still configure Guzzle quite easily.
 
-First, you have to declare your Guzzle 6 adapter as a service, with your custom configuration:
+First, you have to declare your Guzzle 6 adapter and message factory as services, with your custom configuration:
 
 ```yaml
 # app/config/services.yml
@@ -101,6 +101,8 @@ services:
               max_redirects: 1
               ignore_errors: false
               proxy: "example.com:8080"
+    guzzle_client.message_factory:
+        class: Http\Message\MessageFactory\GuzzleMessageFactory
 ```
 
 Then configure the bundle to use the service created above:
@@ -111,6 +113,7 @@ Then configure the bundle to use the service created above:
 hwi_oauth:
     http:
         client: guzzle_client.hwi_special
+        message_factory: guzzle_client.message_factory
 ```
 
 That's it. Now your custom Httplug Guzzle adapter service is used.
