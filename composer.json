@@ -1,7 +1,7 @@
 {
-    "name":        "hwi/oauth-bundle",
+    "name":        "den01101/oauth-bundle",
     "type":        "symfony-bundle",
-    "homepage":    "http://github.com/hwi/HWIOAuthBundle",
+    "homepage":    "https://github.com/den01101/HWIOAuthBundle",
     "license":     "MIT",
     "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
     "keywords":    [
