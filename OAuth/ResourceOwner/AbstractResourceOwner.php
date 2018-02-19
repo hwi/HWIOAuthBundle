@@ -97,7 +97,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $this->storage = $storage;
         $this->optionsModifier = $optionsModifier;
 
-        $options = $this->optionsModifier->modifyOptions($this);
+        $options = $this->optionsModifier->modifyOptions($options, $this);
 
         if (!empty($options['paths'])) {
             $this->addPaths($options['paths']);
