@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Http\Client\Common\HttpMethodsClient;
 use Http\Client\Exception;
+use HWI\Bundle\OAuthBundle\OAuth\AbstractOptionsModifier;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
@@ -70,10 +71,16 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $storage;
 
     /**
+     * @var AbstractOptionsModifier
+     */
+    protected $optionsModifier;
+
+    /**
      * @param HttpMethodsClient           $httpClient Httplug client
      * @param HttpUtils                   $httpUtils  Http utils
      * @param array                       $options    Options for the resource owner
      * @param string                      $name       Name for the resource owner
+     * @param AbstractOptionsModifier     $optionsModifier Options modifier
      * @param RequestDataStorageInterface $storage    Request token storage
      */
     public function __construct(
@@ -81,12 +88,16 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         HttpUtils $httpUtils,
         array $options,
         $name,
+        AbstractOptionsModifier $optionsModifier,
         RequestDataStorageInterface $storage
     ) {
         $this->httpClient = $httpClient;
         $this->httpUtils = $httpUtils;
         $this->name = $name;
         $this->storage = $storage;
+        $this->optionsModifier = $optionsModifier;
+
+        $options = $this->optionsModifier->modifyOptions($this);
 
         if (!empty($options['paths'])) {
             $this->addPaths($options['paths']);

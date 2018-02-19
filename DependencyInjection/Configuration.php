@@ -160,6 +160,7 @@ class Configuration implements ConfigurationInterface
                 ->booleanNode('use_referer')->defaultFalse()->end()
                 ->booleanNode('failed_use_referer')->defaultFalse()->end()
                 ->scalarNode('failed_auth_path')->defaultValue('hwi_oauth_connect')->end()
+                ->scalarNode('options_modifier')->defaultValue('hwi_oauth.config.options_modifier')->end()
                 ->scalarNode('grant_rule')
                     ->defaultValue('IS_AUTHENTICATED_REMEMBERED')
                     ->validate()

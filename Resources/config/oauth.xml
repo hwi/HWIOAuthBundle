@@ -81,6 +81,8 @@
         <parameter key="hwi_oauth.resource_ownermap.class">HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap</parameter>
         <parameter key="hwi_oauth.security.oauth_utils.class">HWI\Bundle\OAuthBundle\Security\OAuthUtils</parameter>
 
+        <parameter key="hwi_oauth.config.options_modifier.class">HWI\Bundle\OAuthBundle\OAuth\OAuthOptionsModifier</parameter>
+
         <parameter key="hwi_oauth.storage.session.class">HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage\SessionStorage</parameter>
     </parameters>
 
@@ -145,6 +147,7 @@
             <argument type="service" id="security.http_utils" />
             <argument type="collection" /><!-- options -->
             <argument /><!-- name -->
+            <argument /><!-- options modifier-->
         </service>
 
         <service id="hwi_oauth.abstract_resource_owner.oauth2" class="%hwi_oauth.resource_owner.oauth2.class%"
@@ -156,5 +159,8 @@
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.storage.session" />
         </service>
+
+        <service id="hwi_oauth.config.options_modifier" class="%hwi_oauth.config.options_modifier.class%"></service>
+
     </services>
 </container>
