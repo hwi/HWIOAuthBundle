@@ -49,6 +49,8 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
     {
         $key = time();
 
+        $this->mockAuthorizationCheck(false);
+
         $this->session->expects($this->once())
             ->method('get')
             ->with('_hwi_oauth.registration_error.'.$key)
@@ -66,6 +68,8 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
     public function testFailedProcess()
     {
         $key = time();
+
+        $this->mockAuthorizationCheck(false);
 
         $this->session->expects($this->once())
             ->method('get')
@@ -107,6 +111,8 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
     public function test()
     {
         $key = time();
+
+        $this->mockAuthorizationCheck(false);
 
         $this->session->expects($this->once())
             ->method('get')
