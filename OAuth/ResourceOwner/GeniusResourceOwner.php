@@ -44,7 +44,6 @@ class GeniusResourceOwner extends GenericOAuth2ResourceOwner
             'access_token_url' => 'https://api.genius.com/oauth/token',
             'infos_url' => 'https://api.genius.com/account',
             'use_bearer_authorization' => true,
-            'csrf' => true,
             'use_commas_in_scope' => true,
             'scope' => 'me',
         ));

@@ -70,10 +70,9 @@ json;
         'profilepicture' => 'response.user.avatar.medium.url',
     );
     
-    protected $csrf = true;
+    protected $expectedUrls = array(
+        'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=me&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+        'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=me&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+    );
     
-    protected function createResourceOwner($name, array $options = array(), array $paths = array())
-    {
-        return parent::createResourceOwner($name, $options + array('scope' => 'me'), $paths);
-    }
 }
