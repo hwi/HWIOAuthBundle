@@ -53,9 +53,9 @@ class GeniusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
                     }
                 }
             },
-            "email":"foo@domain.com",
-            "login":"foo",
-            "name":"foo",
+            "email":"bar@domain.com",
+            "login":"bar",
+            "name":"bar",
             "id":1
         }
     }
@@ -69,4 +69,11 @@ json;
         'email' => 'response.user.email',
         'profilepicture' => 'response.user.avatar.medium.url',
     );
+    
+    protected $csrf = true;
+    
+    protected function createResourceOwner($name, array $options = array(), array $paths = array())
+    {
+        return parent::createResourceOwner($name, $options + array('scope' => 'me'), $paths);
+    }
 }
