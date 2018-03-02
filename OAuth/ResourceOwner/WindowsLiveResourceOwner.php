@@ -12,6 +12,8 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * WindowsLiveResourceOwner.
@@ -45,4 +47,33 @@ class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
             'scope' => 'wl.signin',
         ));
     }
+
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    {
+        if ($this->options['use_bearer_authorization']) {
+            $content = $this->httpRequest(
+                $this->normalizeUrl($this->options['infos_url'], $extraParameters),
+                null,
+                array(
+                    'Authorization' => 'Bearer '.$accessToken['access_token'],
+                    'Content-Type' => null,
+                )
+            );
+        } else {
+            $content = $this->doGetUserInformationRequest(
+                $this->normalizeUrl(
+                    $this->options['infos_url'],
+                    array_merge(array($this->options['attr_name'] => $accessToken['access_token']), $extraParameters)
+                )
+            );
+        }
+
+        $response = $this->getUserResponse();
+        $response->setData($content instanceof ResponseInterface ? (string) $content->getBody() : $content);
+        $response->setResourceOwner($this);
+        $response->setOAuthToken(new OAuthToken($accessToken));
+
+        return $response;
+    }
+
 }
