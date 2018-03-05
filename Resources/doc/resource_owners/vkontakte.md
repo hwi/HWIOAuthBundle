@@ -5,7 +5,7 @@ documentation for more information: https://vk.com/dev.
 
 Next configure a resource owner of type `vkontakte` with appropriate
 `client_id`, `client_secret` and `scope`. Refer to the Vkontakte documentation
-for the available [scopes](https://vk.com/dev/permissions).
+for the available [scopes](https://vk.com/dev/permissions) and [API versions](https://vk.com/dev/versions).
 
 ```yaml
 # app/config/config.yml
