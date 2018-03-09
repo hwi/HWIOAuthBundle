@@ -169,7 +169,21 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, http_build_query($parameters, '', '&'));
+
+        if (!$this->options['use_basic_authorization']) {
+            return $this->httpRequest($url, http_build_query($parameters, '', '&'));
+        }
+
+        $authPreHash = $this->options['client_id'].':'.$this->options['client_secret'];
+        $authHeader = array(
+            'Authorization' => 'Basic '.base64_encode($authPreHash)
+        );
+
+        return $this->httpRequest(
+            $url,
+            http_build_query($parameters, '', '&'),
+            $authHeader
+        );
     }
 
     /**
@@ -211,6 +225,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'attr_name' => 'access_token',
             'use_commas_in_scope' => false,
             'use_bearer_authorization' => true,
+            'use_basic_authorization' => false,
         ]);
 
         $resolver->setDefined('revoke_token_url');
