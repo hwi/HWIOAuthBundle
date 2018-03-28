@@ -47,6 +47,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'access_token' => $accessToken['access_token'],
             'fields' => $this->options['fields'],
             'name_case' => $this->options['name_case'],
+            'v' => $this->options['v'],
         ));
 
         $content = $this->doGetUserInformationRequest($url);
@@ -88,6 +89,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 
             'fields' => 'nickname,photo_medium,screen_name,email',
             'name_case' => null,
+            'v' => '3.0',
         ));
 
         $fieldsNormalizer = function (Options $options, $value) {
