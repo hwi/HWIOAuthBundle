@@ -1,5 +1,14 @@
 Changelog
 =========
+## 0.6.2 (2018-03-28)
+* Fixed: VK requires API version now,
+* Fixed: Updated Slack resource owner to use new Slack API methods,
+* Fixed: Changing authorization and access token to v2 for LinkedIn,
+* Fixed: Fix double call of `getUserInformation()` in `ConnectController`,
+* Fixed: Fix serialization of `AccountNotLinkedException`,
+* Fixed: Check for grant_rule value `IS_AUTHENTICATED_FULLY` in DI configuration,
+* Fixed: Don't execute `OAuthProvider::refreshAccessToken()` when there is no refresh token
+
 ## 0.6.1 (2018-01-23)
 * BC BREAK: Replaced `PHPUnit_Framework_TestCase` with `PHPUnit\Framework\TestCase` in tests,
 * Added: Implemented `getUserInformation()` for Dropbox v2,
