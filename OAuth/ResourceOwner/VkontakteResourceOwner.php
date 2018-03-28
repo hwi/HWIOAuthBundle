@@ -29,7 +29,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = array(
-        'identifier' => 'response.0.uid',
+        'identifier' => 'response.0.id',
         'nickname' => 'nickname',
         'firstname' => 'response.0.first_name',
         'lastname' => 'response.0.last_name',
@@ -47,6 +47,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'access_token' => $accessToken['access_token'],
             'fields' => $this->options['fields'],
             'name_case' => $this->options['name_case'],
+            'v' => $this->options['api_version'],
         ));
 
         $content = $this->doGetUserInformationRequest($url);
@@ -81,6 +82,8 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'authorization_url' => 'https://oauth.vk.com/authorize',
             'access_token_url' => 'https://oauth.vk.com/access_token',
             'infos_url' => 'https://api.vk.com/method/users.get',
+
+            'api_version' => '5.73',
 
             'scope' => 'email',
 
