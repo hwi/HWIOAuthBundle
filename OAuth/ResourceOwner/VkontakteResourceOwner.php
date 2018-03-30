@@ -34,7 +34,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         'firstname' => 'response.0.first_name',
         'lastname' => 'response.0.last_name',
         'realname' => array('response.0.last_name', 'response.0.first_name'),
-        'profilepicture' => 'response.0.photo',
+        'profilepicture' => 'response.0.photo_medium',
         'email' => 'email',
     );
 
