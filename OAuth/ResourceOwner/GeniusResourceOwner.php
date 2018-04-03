@@ -14,9 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * GeniusResourceOWner.
- *
- * @author Krystian Marcisz <simivar>
+ * @author Krystian Marcisz <simivar@gmail.com>
  */
 class GeniusResourceOwner extends GenericOAuth2ResourceOwner
 {
