@@ -25,6 +25,8 @@ json;
     protected $paths = array(
         'identifier' => 'id',
         'nickname' => 'formattedName',
+        'firstname' => 'firstName',
+        'lastname' => 'lastName',
         'realname' => 'formattedName',
         'email' => 'emailAddress',
         'profilepicture' => 'pictureUrl',
