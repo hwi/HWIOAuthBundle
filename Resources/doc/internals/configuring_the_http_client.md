@@ -68,7 +68,7 @@ httplug:
             factory: 'httplug.factory.guzzle6'
             config: # You pass here the Guzzle configuration, exactly like before.
                 timeout: 10
-                verify_peer: false
+                verify: false
                 max_redirects: 1
                 ignore_errors: false
                 proxy: "example.com:8080"
