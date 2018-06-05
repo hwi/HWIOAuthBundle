@@ -30,6 +30,8 @@ json;
         'firstname' => 'first_name',
         'lastname' => 'last_name',
         'realname' => 'name',
+        'email' => 'email',
+        'profilepicture' => 'picture.data.url',
     );
 
     /**
