@@ -28,8 +28,7 @@ class GeniusResourceOwner extends GenericOAuth2ResourceOwner
         'email' => 'response.user.email',
         'profilepicture' => 'response.user.avatar.medium.url',
     );
-    
-    
+
     /**
      * {@inheritdoc}
      */

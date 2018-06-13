@@ -16,6 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GeniusResourceOwner;
 class GeniusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $resourceOwnerClass = GeniusResourceOwner::class;
+
     protected $userResponse = <<<json
 {
     "meta":{
@@ -69,10 +70,9 @@ json;
         'email' => 'response.user.email',
         'profilepicture' => 'response.user.avatar.medium.url',
     );
-    
+
     protected $expectedUrls = array(
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=me&redirect_uri=http%3A%2F%2Fredirect.to%2F',
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=me&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
     );
-    
 }
