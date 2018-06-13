@@ -31,10 +31,6 @@ matrix:
     - php: 7.0
       env: FOSUSERBUNDLE_VERSION=2.0.*
     - php: 7.1
-      env: STABILITY=beta
-    - php: 7.2
-      env: STABILITY=beta
-    - php: 7.1
       env: TARGET=csfixer_dry_run
   allow_failures:
     - php: nightly
@@ -44,7 +40,6 @@ before_install:
   - echo "memory_limit=4G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
 
 before_script:
-  - if [ "$STABILITY" = "beta" ]; then perl -pi -e 's/^}$/,"minimum-stability":"beta"}/' composer.json; fi;
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --dev --no-update; fi;
   - if [ "$FOSUSERBUNDLE_VERSION" != "" ]; then composer require "friendsofsymfony/user-bundle:${FOSUSERBUNDLE_VERSION}" --dev --no-update; fi;
   - if [ "$COMPOSER_FLAGS" != "" ]; then travis_wait composer update --prefer-dist --no-interaction --no-scripts $COMPOSER_FLAGS; fi;
