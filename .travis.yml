@@ -41,7 +41,7 @@ matrix:
 
 before_install:
   - phpenv config-rm xdebug.ini || echo "xdebug not available";
-  - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
+  - echo "memory_limit=4G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
 
 before_script:
   - if [ "$STABILITY" = "beta" ]; then perl -pi -e 's/^}$/,"minimum-stability":"beta"}/' composer.json; fi;
