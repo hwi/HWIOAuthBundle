@@ -12,7 +12,7 @@ Next configure a resource owner of type `bitbucket` with appropriate
 hwi_oauth:
     resource_owners:
         any_name:
-            type:                bitbucket
+            type:                bitbucket2 # use 'bitbucket' if you are using OAuth1 application!
             client_id:           <client_id>
             client_secret:       <client_secret>
 ```
