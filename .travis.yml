@@ -41,13 +41,13 @@ matrix:
 
 before_install:
   - phpenv config-rm xdebug.ini || echo "xdebug not available";
-  - echo "memory_limit=2G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
+  - echo "memory_limit=4G" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
 
 before_script:
   - if [ "$STABILITY" = "beta" ]; then perl -pi -e 's/^}$/,"minimum-stability":"beta"}/' composer.json; fi;
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --dev --no-update; fi;
   - if [ "$FOSUSERBUNDLE_VERSION" != "" ]; then composer require "friendsofsymfony/user-bundle:${FOSUSERBUNDLE_VERSION}" --dev --no-update; fi;
-  - if [ "$COMPOSER_FLAGS" != "" ]; then composer update --prefer-dist --no-interaction --no-scripts $COMPOSER_FLAGS; fi;
+  - if [ "$COMPOSER_FLAGS" != "" ]; then travis_wait composer update --prefer-dist --no-interaction --no-scripts $COMPOSER_FLAGS; fi;
   - composer install --prefer-dist --no-interaction --no-scripts
 
 script:
