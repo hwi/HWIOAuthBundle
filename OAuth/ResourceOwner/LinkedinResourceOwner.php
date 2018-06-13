@@ -27,6 +27,8 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = array(
         'identifier' => 'id',
         'nickname' => 'formattedName',
+        'firstname' => 'firstName',
+        'lastname' => 'lastName',
         'realname' => 'formattedName',
         'email' => 'emailAddress',
         'profilepicture' => 'pictureUrl',
@@ -59,7 +61,7 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
         $resolver->setDefaults(array(
             'authorization_url' => 'https://www.linkedin.com/oauth/v2/authorization',
             'access_token_url' => 'https://www.linkedin.com/oauth/v2/accessToken',
-            'infos_url' => 'https://api.linkedin.com/v1/people/~:(id,formatted-name,email-address,picture-url)?format=json',
+            'infos_url' => 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,formatted-name,email-address,picture-url)?format=json',
 
             'csrf' => true,
 
