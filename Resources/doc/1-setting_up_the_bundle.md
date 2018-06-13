@@ -41,13 +41,32 @@ Import the `redirect.xml` and `login.xml` routing files in your own routing file
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
     prefix:   /connect
-    
+
 hwi_oauth_connect:
     resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
     prefix:   /connect
 
 hwi_oauth_login:
     resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /login
+```
+
+**Note:**
+
+Due to some deprecation, Symfony 4.1 users should import the following routing files instead:
+
+```yaml
+# app/config/routing.yml
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect_41.xml"
+    prefix:   /connect
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect_41.xml"
+    prefix:   /connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login_41.xml"
     prefix:   /login
 ```
 
