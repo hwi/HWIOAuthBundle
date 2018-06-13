@@ -78,6 +78,7 @@ class OAuthFactory extends AbstractFactory
 
         $container
             ->setDefinition($this->getResourceOwnerMapReference($id), new $definitionClassname('hwi_oauth.abstract_resource_ownermap'))
+            ->setPublic(true)
             ->replaceArgument(2, new Parameter('hwi_oauth.resource_ownermap.configured.'.$id))
             ->setPublic(true)
         ;
