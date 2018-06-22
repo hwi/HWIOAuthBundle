@@ -11,6 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
+/**
+ * @author Guillaume Rodriguez <guiguidu31300@gmail.com>
+ */
 class FacebookUserResponse extends PathUserResponse
 {
     /**
