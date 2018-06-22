@@ -13,7 +13,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
 class FacebookUserResponse extends PathUserResponse
 {
-
     /**
      * {@inheritdoc}
      */
