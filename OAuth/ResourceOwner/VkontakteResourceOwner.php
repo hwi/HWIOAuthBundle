@@ -30,7 +30,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected $paths = array(
         'identifier' => 'response.0.id',
-        'nickname' => 'nickname',
+        'nickname' => 'response.0.nickname',
         'firstname' => 'response.0.first_name',
         'lastname' => 'response.0.last_name',
         'realname' => array('response.0.last_name', 'response.0.first_name'),
@@ -60,13 +60,13 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 
         $content = $response->getData();
         $content['email'] = isset($accessToken['email']) ? $accessToken['email'] : null;
-        if (isset($content['screen_name'])) {
-            $content['nickname'] = $content['screen_name'];
-        } else {
-            $content['nickname'] = isset($content['nickname']) ? $content['nickname'] : null;
-        }
 
         $response->setData($content);
+
+        if (!$response->getNickname() && isset($content['response'][0]['screen_name'])) {
+            $content['response'][0]['nickname'] =  $content['response'][0]['screen_name'];
+            $response->setData($content);
+        }
 
         return $response;
     }
