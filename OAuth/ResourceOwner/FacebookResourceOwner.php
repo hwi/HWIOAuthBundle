@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\OAuth\Response\FacebookUserResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -45,14 +44,6 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
         }
 
         return parent::getUserInformation($accessToken, $extraParameters);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getProfilePicture()
-    {
-        return 'https://graph.facebook.com/'.$this->getValueForPath('identifier').'/picture?width=600';
     }
 
     /**
@@ -115,12 +106,11 @@ class FacebookResourceOwner extends GenericOAuth2ResourceOwner
             'authorization_url' => 'https://www.facebook.com/v2.8/dialog/oauth',
             'access_token_url' => 'https://graph.facebook.com/v2.8/oauth/access_token',
             'revoke_token_url' => 'https://graph.facebook.com/v2.8/me/permissions',
-            'infos_url' => 'https://graph.facebook.com/v2.8/me?fields=id,first_name,last_name,name,email',
+            'infos_url' => 'https://graph.facebook.com/v2.8/me?fields=id,first_name,last_name,name,email,picture.type(large)',
             'use_commas_in_scope' => true,
             'display' => null,
             'auth_type' => null,
             'appsecret_proof' => false,
-            'user_response_class' => FacebookUserResponse::class,
         ));
 
         $resolver
