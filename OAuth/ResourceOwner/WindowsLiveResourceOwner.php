@@ -48,6 +48,9 @@ class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
         ));
     }
 
+    /**
+     * @inheritdoc
+     */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         if ($this->options['use_bearer_authorization']) {
@@ -72,8 +75,6 @@ class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
         $response->setData($content instanceof ResponseInterface ? (string) $content->getBody() : $content);
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
-
         return $response;
     }
-
 }
