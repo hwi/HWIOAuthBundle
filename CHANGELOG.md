@@ -7,7 +7,8 @@ Changelog
 * Fixed: upgraded GitLab end point to v4,
 * Fixed: resource owner map parameters must be public,
 * Added: Symfony 4.1 routing files,
-* Added: LinkedIn first- and last names
+* Added: LinkedIn first- and last names,
+* Added: Facebook profile picture
 
 ## 0.6.2 (2018-03-28)
 * Fixed: VK requires API version now,
