@@ -74,8 +74,8 @@ version:
 
 * [__0.6__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.8`
 * [__0.5__](https://github.com/hwi/HWIOAuthBundle/blob/0.5.3/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3,<4.0`
-* [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/0.4/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3,<3.0`
-* [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.1,<2.7`
+* [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/0.4.3/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.3,<3.0`
+* [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3.9/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `>=2.1,<2.7`
 
 Documentation
 -------------
@@ -85,8 +85,8 @@ file in this bundle. Read the documentation for version:
 
 * [__0.6__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md) with support for Symfony `>=2.8`
 * [__0.5__](https://github.com/hwi/HWIOAuthBundle/blob/0.5.3/Resources/doc/index.md) with support for Symfony `>=2.3,<4.0`
-* [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/0.4/Resources/doc/index.md) with support for Symfony `>=2.3,<3.0`
-* [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3/Resources/doc/index.md) with support for Symfony `>=2.1,<2.7`
+* [__0.4__](https://github.com/hwi/HWIOAuthBundle/blob/0.4.3/Resources/doc/index.md) with support for Symfony `>=2.3,<3.0`
+* [__0.3__](https://github.com/hwi/HWIOAuthBundle/blob/0.3.9/Resources/doc/index.md) with support for Symfony `>=2.1,<2.7`
 
 License
 -------
