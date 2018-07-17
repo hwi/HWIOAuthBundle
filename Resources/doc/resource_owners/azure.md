@@ -18,7 +18,6 @@ hwi_oauth:
             type:          azure
             client_id:     <client_id>
             client_secret: <client_secret>
-            infos_url:     https://graph.microsoft.com/v1.0/me
 
             options:
                 resource:    https://graph.windows.net
