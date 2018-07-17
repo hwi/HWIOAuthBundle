@@ -99,7 +99,7 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
         $resolver->setRequired(array('resource'));
 
         $resolver->setDefaults(array(
-            'infos_url' => '',
+            'infos_url' => 'https://graph.microsoft.com/v1.0/me',
             'authorization_url' => 'https://login.windows.net/%s/oauth2/authorize',
             'access_token_url' => 'https://login.windows.net/%s/oauth2/token',
 
