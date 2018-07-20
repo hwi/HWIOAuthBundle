@@ -237,7 +237,9 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     protected function httpRequest($url, $content = null, array $headers = [], $method = null)
     {
-        $headers += array('Content-Type' => 'application/x-www-form-urlencoded');
+        if(!array_key_exists('Content-Type', $headers)) {
+            $headers += array('Content-Type' => 'application/x-www-form-urlencoded');
+        }
 
         return parent::httpRequest($url, $content, $headers, $method);
     }
