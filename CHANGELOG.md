@@ -6,6 +6,7 @@ Changelog
 * Fixed: Content-Length header must be a string,
 * Fixed: upgraded GitLab end point to v4,
 * Fixed: resource owner map parameters must be public,
+* Fixed: Azure resource owner `infos_url` should not be empty,
 * Added: Symfony 4.1 routing files,
 * Added: LinkedIn first- and last names,
 * Added: Facebook profile picture
