@@ -33,6 +33,15 @@ class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
+    protected function httpRequest($url, $content = null, array $headers = [], $method = null)
+    {
+        // Skip the Content-Type header in GenericOAuth2ResourceOwner::httpRequest
+        return AbstractResourceOwner::httpRequest($url, $content, $headers, $method);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
