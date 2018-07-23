@@ -274,9 +274,7 @@ class ConnectController extends Controller
 
         // Check for a return path and store it before redirect
         if ($request->hasSession()) {
-            // initialize the session for preventing SessionUnavailableException
             $session = $request->getSession();
-            $session->start();
 
             foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
                 $sessionKey = '_security.'.$providerKey.'.target_path';
