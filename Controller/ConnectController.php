@@ -61,6 +61,10 @@ class ConnectController extends Controller
         if ($connect && !$hasUser && $error instanceof AccountNotLinkedException) {
             $key = time();
             $session = $request->getSession();
+            if (!$session->isStarted()) {
+                $session->start();
+            }
+
             $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
             return $this->redirectToRoute('hwi_oauth_connect_registration', array('key' => $key));
@@ -105,6 +109,10 @@ class ConnectController extends Controller
         }
 
         $session = $request->getSession();
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+
         $error = $session->get('_hwi_oauth.registration_error.'.$key);
         $session->remove('_hwi_oauth.registration_error.'.$key);
 
@@ -201,6 +209,10 @@ class ConnectController extends Controller
         $resourceOwner = $this->getResourceOwnerByName($service);
 
         $session = $request->getSession();
+        if (!$session->isStarted()) {
+            $session->start();
+        }
+
         $key = $request->query->get('key', time());
 
         if ($resourceOwner->handles($request)) {
@@ -272,11 +284,14 @@ class ConnectController extends Controller
             throw new NotFoundHttpException($e->getMessage(), $e);
         }
 
+        $session = $request->getSession();
+
         // Check for a return path and store it before redirect
-        if ($request->hasSession()) {
+        if (null !== $session) {
             // initialize the session for preventing SessionUnavailableException
-            $session = $request->getSession();
-            $session->start();
+            if (!$session->isStarted()) {
+                $session->start();
+            }
 
             foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
                 $sessionKey = '_security.'.$providerKey.'.target_path';
@@ -311,17 +326,19 @@ class ConnectController extends Controller
     {
         $authenticationErrorKey = Security::AUTHENTICATION_ERROR;
 
-        $session = $request->getSession();
         if ($request->attributes->has($authenticationErrorKey)) {
-            $error = $request->attributes->get($authenticationErrorKey);
-        } elseif (null !== $session && $session->has($authenticationErrorKey)) {
-            $error = $session->get($authenticationErrorKey);
-            $session->remove($authenticationErrorKey);
-        } else {
-            $error = '';
+            return $request->attributes->get($authenticationErrorKey);
         }
 
-        return $error;
+        $session = $request->getSession();
+        if (null !== $session && $session->has($authenticationErrorKey)) {
+            $error = $session->get($authenticationErrorKey);
+            $session->remove($authenticationErrorKey);
+
+            return $error;
+        }
+
+        return '';
     }
 
     /**
