@@ -7,6 +7,7 @@ Changelog
 * Fixed: upgraded GitLab end point to v4,
 * Fixed: resource owner map parameters must be public,
 * Fixed: Azure resource owner `infos_url` should not be empty,
+* Fixed: do not start sessions twice,
 * Added: Symfony 4.1 routing files,
 * Added: LinkedIn first- and last names,
 * Added: Facebook profile picture
