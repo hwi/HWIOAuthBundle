@@ -1,15 +1,15 @@
 Changelog
 =========
-## 0.6.3 (2018-xx-xx)
-* Fixed: Vkontakte profile picture path,
-* Fixed: Vkontakte nickname path,
-* Fixed: Content-Length header must be a string,
-* Fixed: upgraded GitLab end point to v4,
-* Fixed: resource owner map parameters must be public,
+## 0.6.3 (2018-07-31)
+* Fixed: Vkontakte profile picture & nickname path,
+* Fixed: `Content-Length` header must be a string,
+* Fixed: Upgraded GitLab end point to v4,
+* Fixed: Resource owner map parameters must be public,
 * Fixed: Azure resource owner `infos_url` should not be empty,
-* Fixed: do not start sessions twice,
-* Added: Symfony 4.1 routing files,
-* Added: LinkedIn first- and last names,
+* Fixed: Don't start sessions twice & don't start sessions if already started,
+* Fixed: Updated BitBucket docs,
+* Added: Further compatibility changes for Symfony 4.1,
+* Added: LinkedIn `first-` & `last-` names,
 * Added: Facebook profile picture
 
 ## 0.6.2 (2018-03-28)
