@@ -1,7 +1,7 @@
 Step 2x: Setup Twitter
 ======================
 First you will have to [register](https://dev.twitter.com/apps) your application on Twitter. Check out the
-documentation for more information: https://dev.twitter.com/docs/auth/oauth.
+documentation for more information: https://developer.twitter.com/en/docs/basics/authentication/overview/oauth.
 
 You must set up a callback url and check "Allow this application to be used to Sign in with Twitter".
 
@@ -23,7 +23,7 @@ When you want to request a user’s email address permission use
 the optional option [`include_email`].
 
 Twitter documentation:
-- https://dev.twitter.com/rest/reference/get/account/verify_credentials
+- https://developer.twitter.com/en/docs/accounts-and-users/manage-account-settings/api-reference/get-account-verify_credentials
 
 ```yaml
 # app/config/config.yml
