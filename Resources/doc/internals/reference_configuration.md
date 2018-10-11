@@ -2,7 +2,7 @@ Internals: Reference configuration
 ==================================
 
 ```yaml
-# app/config.yml
+# app/config/config.yml
 
 hwi_oauth:
     # configuration of oauth resource owners to use
