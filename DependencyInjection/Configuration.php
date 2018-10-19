@@ -110,7 +110,7 @@ class Configuration implements ConfigurationInterface
             return $resourceOwner;
         }
 
-        if (in_array($resourceOwner, static::$resourceOwners['oauth1'], true)) {
+        if (\in_array($resourceOwner, static::$resourceOwners['oauth1'], true)) {
             return 'oauth1';
         }
 
@@ -131,11 +131,11 @@ class Configuration implements ConfigurationInterface
             return true;
         }
 
-        if (in_array($resourceOwner, static::$resourceOwners['oauth1'], true)) {
+        if (\in_array($resourceOwner, static::$resourceOwners['oauth1'], true)) {
             return true;
         }
 
-        return in_array($resourceOwner, static::$resourceOwners['oauth2'], true);
+        return \in_array($resourceOwner, static::$resourceOwners['oauth2'], true);
     }
 
     /**
@@ -145,9 +145,15 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $builder = new TreeBuilder();
+        $builder = new TreeBuilder('hwi_oauth');
 
-        $rootNode = $builder->root('hwi_oauth');
+        if (\method_exists($builder, 'getRootNode')) {
+            $rootNode = $builder->getRootNode();
+        } else {
+            // BC layer for symfony/config 4.1 and older
+            $rootNode = $builder->root('hwi_oauth');
+        }
+
         $rootNode
             ->fixXmlConfig('firewall_name')
             ->children()
