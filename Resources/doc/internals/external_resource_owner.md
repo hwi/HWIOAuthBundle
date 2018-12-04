@@ -10,7 +10,7 @@ Furthermore, these Resource Owners implements many useful methods like `refreshA
 `revokeAccessToken` that might be handy in your projects!
 
 You can even directly rely on our generic Resource Owners in your config, adding 4 more parameters,
-`access_token_url`, `authorization_url`, `infos_url`, `authorization_url` for OAuth1 and
+`access_token_url`, `authorization_url`, `infos_url` for OAuth1 and
 additionally `scope` for `OAuth2`. A little bit of configuration overhead, but in a few more
 minutes, you are up and running with these.
 
