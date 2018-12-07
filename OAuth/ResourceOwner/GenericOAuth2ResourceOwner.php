@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Helper\Nonce;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
@@ -60,7 +61,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     {
         if ($this->options['csrf']) {
             if (null === $this->state) {
-                $this->state = $this->generateNonce();
+                $this->state = Nonce::generate();
             }
 
             $this->storage->save($this, $this->state, 'csrf_state');

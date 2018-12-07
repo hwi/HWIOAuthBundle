@@ -291,16 +291,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * Generate a non-guessable nonce value.
-     *
-     * @return string
-     */
-    protected function generateNonce()
-    {
-        return md5(microtime(true).uniqid('', true));
-    }
-
-    /**
      * @param string $url
      * @param array  $parameters
      *
