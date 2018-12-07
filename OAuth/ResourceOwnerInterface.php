@@ -115,4 +115,9 @@ interface ResourceOwnerInterface
      * @param array  $extraParameters An array of parameters to add to the url
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = []);
+
+    /**
+     * @return StateInterface
+     */
+    public function getState();
 }

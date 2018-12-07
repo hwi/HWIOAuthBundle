@@ -61,6 +61,10 @@ class MyCustomProvider implements ResourceOwnerInterface
     public function refreshAccessToken($refreshToken, array $extraParameters = array())
     {
     }
+
+    public function getState()
+    {
+    }
 }
 
 /**

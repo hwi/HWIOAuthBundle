@@ -18,6 +18,8 @@ use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\OAuth\State\State;
+use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -60,7 +62,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $name;
 
     /**
-     * @var string
+     * @var StateInterface
      */
     protected $state;
 
@@ -104,7 +106,18 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $this->configureOptions($resolver);
         $this->options = $resolver->resolve($options);
 
+        $this->state = $this->configureStateParameters();
+
         $this->configure();
+    }
+
+    private function configureStateParameters()
+    {
+        if (empty($this->options['state'])) {
+            return new State(null);
+        }
+
+        return new State($this->options['state']);
     }
 
     /**
@@ -148,6 +161,22 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     public function addPaths(array $paths)
     {
         $this->paths = array_merge($this->paths, $paths);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addStateParameter($key, $value)
+    {
+        $this->state->add($key, $value);
     }
 
     /**
