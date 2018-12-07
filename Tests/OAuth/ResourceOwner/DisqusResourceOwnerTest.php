@@ -32,8 +32,5 @@ json;
         'realname' => 'response.name',
     ];
 
-    protected $expectedUrls = [
-        'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-        'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    ];
+    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read';
 }

@@ -90,6 +90,11 @@ hwi_oauth:
 ### CSRF protection
 
 Set the _csrf_ option to **true** in the resource owner's configuration in order to protect your users from [CSRF](https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)) attacks.
+This will be round-tripped to your application in the `state` parameter. 
+
+Other types of state can be configured under the `state` key, either as a single string or key/value pairs. State can
+also be passed directly in the `state` query parameter of your request, provided they don't override the configured keys
+and are json and base64 encoded, as can be seen in `OAuth/State/State`.
 ```yaml
 # app/config/config.yml
 hwi_oauth:
@@ -100,6 +105,9 @@ hwi_oauth:
             client_secret:       <client_secret>
             options:
                 csrf: true
+                state: 
+                  some: parameter
+                  some-other: parameter
 ```
 
 ### Continue to the next step!

@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LinkedinResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
 class LinkedinResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
@@ -50,9 +51,7 @@ json;
     ];
     protected $csrf = true;
 
-    protected $expectedUrls = [
-        'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=r_liteprofile+r_emailaddress&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    ];
+    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=r_liteprofile+r_emailaddress';
 
     protected $httpClientCalls = 1;
 
@@ -71,7 +70,7 @@ json;
 
         $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
-        /** @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse */
+        /** @var $userResponse AbstractUserResponse */
         $userResponse = $this->resourceOwner->getUserInformation($this->tokenData);
 
         $this->assertEquals('1', $userResponse->getUsername());

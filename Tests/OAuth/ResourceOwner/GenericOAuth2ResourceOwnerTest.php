@@ -14,8 +14,14 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use Http\Client\Exception\TransferException;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
+use HWI\Bundle\OAuthBundle\OAuth\State\State;
+use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
+use HWI\Bundle\OAuthBundle\Security\Helper\NonceGenerator;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 class GenericOAuth2ResourceOwnerTest extends ResourceOwnerTestCase
@@ -53,10 +59,8 @@ json;
         'realname' => 'foo_disp',
     ];
 
-    protected $expectedUrls = [
-        'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-        'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    ];
+    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid';
+    protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F';
 
     protected function setUp()
     {
@@ -66,14 +70,14 @@ json;
 
     public function testUndefinedOptionThrowsException()
     {
-        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+        $this->expectException(ExceptionInterface::class);
 
         $this->createResourceOwner($this->resourceOwnerName, ['non_existing' => null]);
     }
 
     public function testInvalidOptionValueThrowsException()
     {
-        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+        $this->expectException(ExceptionInterface::class);
 
         $this->createResourceOwner($this->resourceOwnerName, ['csrf' => 'invalid']);
     }
@@ -97,7 +101,7 @@ json;
     {
         $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
-        /** @var $userResponse \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse */
+        /** @var $userResponse AbstractUserResponse */
         $userResponse = $this->resourceOwner->getUserInformation($this->tokenData);
 
         $this->assertEquals('1', $userResponse->getUsername());
@@ -126,22 +130,28 @@ json;
     public function testGetAuthorizationUrl()
     {
         if (!$this->csrf) {
-            $this->state = null;
+            $state = new State(null);
+        } else {
+            $state = new State(['csrf_token' => NonceGenerator::generate()]);
         }
 
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName);
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, [], [], $state);
 
         if (!$this->csrf) {
             $this->storage->expects($this->never())
                 ->method('save');
+
+            $expectedUrl = $this->authorizationUrlBasePart.$this->redirectUrlPart;
         } else {
             $this->storage->expects($this->once())
                 ->method('save')
-                ->with($resourceOwner, $this->state, 'csrf_state');
+                ->with($resourceOwner, $state->getCsrfToken(), 'csrf_state');
+
+            $expectedUrl = $this->getExpectedAuthorizationUrlWithState($state->getCsrfToken());
         }
 
         $this->assertEquals(
-            $this->expectedUrls['authorization_url'],
+            $expectedUrl,
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
 
@@ -154,14 +164,16 @@ json;
             $this->markTestSkipped('CSRF is enabled for this Resource Owner.');
         }
 
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['csrf' => true]);
+        $nonce = NonceGenerator::generate();
+        $state = new State(['csrf_token' => $nonce]);
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['csrf' => true], [], $state);
 
         $this->storage->expects($this->once())
             ->method('save')
-            ->with($resourceOwner, $this->state, 'csrf_state');
+            ->with($resourceOwner, $nonce, 'csrf_state');
 
         $this->assertEquals(
-            $this->expectedUrls['authorization_url_csrf'],
+            $this->getExpectedAuthorizationUrlWithState($nonce),
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -343,14 +355,34 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    protected function createResourceOwner($name, array $options = [], array $paths = [])
+    protected function getExpectedAuthorizationUrlWithState($stateParameter)
+    {
+        return $this->authorizationUrlBasePart.'&state='.$stateParameter.$this->redirectUrlPart;
+    }
+
+    /**
+     * @param string         $name
+     * @param array          $options
+     * @param array          $paths
+     * @param StateInterface $state   Optional
+     *
+     * @throws \ReflectionException
+     *
+     * @return ResourceOwnerInterface
+     */
+    protected function createResourceOwner($name, array $options = [], array $paths = [], $state = null)
     {
         $resourceOwner = parent::createResourceOwner($name, $options, $paths);
 
         $reflection = new \ReflectionClass(\get_class($resourceOwner));
         $stateProperty = $reflection->getProperty('state');
         $stateProperty->setAccessible(true);
-        $stateProperty->setValue($resourceOwner, $this->state);
+
+        $stateProperty->setValue($resourceOwner, $state);
+
+        if (null === $state) {
+            $stateProperty->setValue($resourceOwner, new State($this->state));
+        }
 
         return $resourceOwner;
     }

@@ -18,6 +18,8 @@ use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\OAuth\State\State;
+use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -60,7 +62,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $name;
 
     /**
-     * @var string
+     * @var StateInterface
      */
     protected $state;
 
@@ -80,7 +82,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         HttpMethodsClient $httpClient,
         HttpUtils $httpUtils,
         array $options,
-        $name,
+        string $name,
         RequestDataStorageInterface $storage
     ) {
         $this->httpClient = $httpClient;
@@ -103,6 +105,8 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $resolver = new OptionsResolver();
         $this->configureOptions($resolver);
         $this->options = $resolver->resolve($options);
+
+        $this->state = new State($this->options['state'] ?: null);
 
         $this->configure();
     }
@@ -148,6 +152,22 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     public function addPaths(array $paths)
     {
         $this->paths = array_merge($this->paths, $paths);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getState(): StateInterface
+    {
+        return $this->state;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function addStateParameter(string $key, string $value): void
+    {
+        $this->state->add($key, $value);
     }
 
     /**
@@ -293,16 +313,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     }
 
     /**
-     * Generate a non-guessable nonce value.
-     *
-     * @return string
-     */
-    protected function generateNonce()
-    {
-        return md5(microtime(true).uniqid('', true));
-    }
-
-    /**
      * @param string $url
      * @param array  $parameters
      *
@@ -342,6 +352,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
         $resolver->setDefaults([
             'scope' => null,
+            'state' => null,
             'csrf' => false,
             'user_response_class' => PathUserResponse::class,
             'auth_with_one_url' => false,

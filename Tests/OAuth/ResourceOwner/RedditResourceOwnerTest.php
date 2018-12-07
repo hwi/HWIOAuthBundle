@@ -25,9 +25,7 @@ json;
 
     protected $csrf = true;
 
-    protected $expectedUrls = [
-        'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=identity&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    ];
+    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=identity';
 
     protected $paths = [
         'identifier' => 'id',

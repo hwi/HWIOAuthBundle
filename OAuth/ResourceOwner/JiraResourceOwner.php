@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Helper\NonceGenerator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\OptionsResolver\Options;
@@ -43,7 +44,7 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
         $parameters = array_merge([
             'oauth_consumer_key' => $this->options['client_id'],
             'oauth_timestamp' => time(),
-            'oauth_nonce' => $this->generateNonce(),
+            'oauth_nonce' => NonceGenerator::generate(),
             'oauth_version' => '1.0',
             'oauth_signature_method' => $this->options['signature_method'],
             'oauth_token' => $accessToken['oauth_token'],
@@ -62,7 +63,7 @@ class JiraResourceOwner extends GenericOAuth1ResourceOwner
         $url = $this->normalizeUrl($this->options['infos_url'], ['username' => $content['name']]);
 
         // Regenerate nonce & signature as URL was changed
-        $parameters['oauth_nonce'] = $this->generateNonce();
+        $parameters['oauth_nonce'] = NonceGenerator::generate();
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
             'GET',
             $url,

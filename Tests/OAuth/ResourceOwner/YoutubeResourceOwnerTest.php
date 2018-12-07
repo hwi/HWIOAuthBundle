@@ -32,10 +32,8 @@ json;
         'profilepicture' => 'picture',
     ];
 
-    protected $expectedUrls = [
-        'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-        'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline',
-    ];
+    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly';
+    protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline';
 
     public function testInvalidAccessTypeOptionValueThrowsException()
     {
@@ -61,7 +59,8 @@ json;
 
     public function testRequestVisibleActions()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['request_visible_actions' => 'http://schemas.google.com/AddActivity']);
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['request_visible_actions' => 'http://schemas.google.com/AddActivity']
+        );
 
         $this->assertEquals(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&request_visible_actions=http%3A%2F%2Fschemas.google.com%2FAddActivity',

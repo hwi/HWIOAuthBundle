@@ -94,6 +94,7 @@
 
     "require": {
         "php":                            "^7.1",
+        "ext-json":                       "*",
         "symfony/framework-bundle":       "^3.4|^4.2",
         "symfony/security-bundle":        "^3.4|^4.2",
         "symfony/options-resolver":       "^3.4|^4.2",
@@ -122,7 +123,7 @@
         "php-http/guzzle6-adapter":     "^2.0",
         "phpunit/phpunit":              "^6.5|^7.5",
         "friendsofphp/php-cs-fixer":    "^2.0",
-        "symfony/monolog-bundle": "^3.4"
+        "symfony/monolog-bundle":       "^3.4"
     },
 
     "conflict": {

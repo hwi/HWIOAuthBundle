@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\Security;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use PHPUnit\Framework\TestCase;
@@ -50,7 +51,7 @@ class OAuthUtilsTest extends TestCase
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(true, $this->grantRule), true, $this->grantRule);
-        $utils->addResourceOwnerMap($this->getMap($url, $redirect, true));
+        $utils->addResourceOwnerMap($this->getMap($url, $redirect, true, false));
 
         $this->assertEquals(
             $redirect,
@@ -60,6 +61,30 @@ class OAuthUtilsTest extends TestCase
         $this->assertEquals(
             'instagram',
             $request->attributes->get('service')
+        );
+    }
+
+    public function testGetAuthorizationUrlWithStateQueryParameters()
+    {
+        $parameters = ['foo' => 'bar', 'foobar' => 'foobaz'];
+        $state = new State($parameters);
+
+        $url = 'http://localhost:8080/login/check-instagram';
+        $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
+
+        $request = $this->getRequest($url.'?state='.$state->encode());
+        $resource = $this->getMockBuilder(ResourceOwnerInterface::class)->getMock();
+
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(false, $this->grantRule), true, $this->grantRule);
+        $utils->addResourceOwnerMap($this->getMap($url, $redirect, false, false, $resource));
+
+        $resource->expects($this->exactly(2))
+            ->method('addStateParameter')
+            ->withConsecutive(['foo', 'bar'], ['foobar', 'foobaz']);
+
+        $this->assertEquals(
+            $redirect,
+            $utils->getAuthorizationUrl($request, 'instagram')
         );
     }
 
@@ -162,9 +187,9 @@ class OAuthUtilsTest extends TestCase
         return Request::create($url, 'get', [], [], [], ['SERVER_PORT' => 8080]);
     }
 
-    private function getMap($url, $redirect, $hasUser = false, $hasOneRedirectUrl = false)
+    private function getMap($url, $redirect, $hasUser = false, $hasOneRedirectUrl = false, $resource = null)
     {
-        $resource = $this->createMock(ResourceOwnerInterface::class);
+        $resource = null !== $resource ? $resource : $this->createMock(ResourceOwnerInterface::class);
 
         $resource
             ->expects($this->once())

@@ -27,10 +27,8 @@ class KeycloakResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
       'attr_name' => 'access_token',
     ];
 
-    protected $expectedUrls = [
-      'authorization_url' => 'http://keycloak.auth/auth/realms/example/protocol/openid-connect/auth?response_type=code&client_id=clientid&scope=name%2Cemail&redirect_uri=http%3A%2F%2Fredirect.to%2F&approval_prompt=auto',
-      'authorization_url_csrf' => 'http://keycloak.auth/auth/realms/example/protocol/openid-connect/auth?response_type=code&client_id=clientid&scope=name%2Cemail&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&approval_prompt=auto',
-    ];
+    protected $authorizationUrlBasePart = 'http://keycloak.auth/auth/realms/example/protocol/openid-connect/auth?response_type=code&client_id=clientid&scope=name%2Cemail';
+    protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&approval_prompt=auto';
 
     protected $resourceOwnerClass = KeycloakResourceOwner::class;
 }

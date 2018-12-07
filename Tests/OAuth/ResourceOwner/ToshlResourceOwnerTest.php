@@ -35,10 +35,6 @@ json;
         'email' => 'email',
     ];
 
-    protected $expectedUrls = [
-        'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    ];
-
     public function testRevokeToken()
     {
         $this->httpResponseHttpCode = 204;
