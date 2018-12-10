@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -91,7 +92,8 @@ class OAuthListener extends AbstractAuthenticationListener
             return new RedirectResponse(sprintf('%s?code=%s&authenticated=true', $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service'), $request->query->get('code')));
         }
 
-        $resourceOwner->isCsrfTokenValid($request->get('state'));
+        $csrfToken = $this->extractCsrfTokenFromState($request->get('state'));
+        $resourceOwner->isCsrfTokenValid($csrfToken);
 
         $accessToken = $resourceOwner->getAccessToken(
             $request,
@@ -102,5 +104,12 @@ class OAuthListener extends AbstractAuthenticationListener
         $token->setResourceOwnerName($resourceOwner->getName());
 
         return $this->authenticationManager->authenticate($token);
+    }
+
+    private function extractCsrfTokenFromState($stateParameter)
+    {
+        $state = new State($stateParameter);
+
+        return $state->getCsrfToken() ? $state->getCsrfToken() : $stateParameter;
     }
 }

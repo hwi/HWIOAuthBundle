@@ -14,6 +14,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use Http\Client\Exception\TransferException;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\State\State;
+use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
+use HWI\Bundle\OAuthBundle\Security\Helper\Nonce;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
@@ -53,10 +57,13 @@ json;
         'realname' => 'foo_disp',
     );
 
-    protected $expectedUrls = array(
-        'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-        'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    );
+    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid';
+    protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F';
+
+    protected function getExpectedAuthorizationUrlWithState($stateParameter)
+    {
+        return $this->authorizationUrlBasePart . '&state=' . $stateParameter . $this->redirectUrlPart;
+    }
 
     public function setUp()
     {
@@ -128,22 +135,28 @@ json;
     public function testGetAuthorizationUrl()
     {
         if (!$this->csrf) {
-            $this->state = null;
+            $state = new State(null);
+        } else {
+            $state = new State(['csrf_token' => Nonce::generate()]);
         }
 
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName);
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array(), array(), $state);
 
         if (!$this->csrf) {
             $this->storage->expects($this->never())
                 ->method('save');
+
+            $expectedUrl = $this->authorizationUrlBasePart . $this->redirectUrlPart;
         } else {
             $this->storage->expects($this->once())
                 ->method('save')
-                ->with($resourceOwner, $this->state, 'csrf_state');
+                ->with($resourceOwner, $state->getCsrfToken(), 'csrf_state');
+
+            $expectedUrl = $this->getExpectedAuthorizationUrlWithState($state->getCsrfToken());
         }
 
         $this->assertEquals(
-            $this->expectedUrls['authorization_url'],
+            $expectedUrl,
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
 
@@ -156,14 +169,16 @@ json;
             $this->markTestSkipped('CSRF is enabled for this Resource Owner.');
         }
 
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('csrf' => true));
+        $nonce = Nonce::generate();
+        $state = new State(['csrf_token' => $nonce]);
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('csrf' => true), array(), $state);
 
         $this->storage->expects($this->once())
             ->method('save')
-            ->with($resourceOwner, $this->state, 'csrf_state');
+            ->with($resourceOwner, $nonce, 'csrf_state');
 
         $this->assertEquals(
-            $this->expectedUrls['authorization_url_csrf'],
+            $this->getExpectedAuthorizationUrlWithState($nonce),
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -351,14 +366,29 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    protected function createResourceOwner($name, array $options = array(), array $paths = array())
+    /**
+     * @param string $name
+     * @param array $options
+     * @param array $paths
+     * @param StateInterface $state Optional
+     *
+     * @throws \ReflectionException
+     *
+     * @return ResourceOwnerInterface
+     */
+    protected function createResourceOwner($name, array $options = array(), array $paths = array(), $state = null)
     {
         $resourceOwner = parent::createResourceOwner($name, $options, $paths);
 
         $reflection = new \ReflectionClass(get_class($resourceOwner));
         $stateProperty = $reflection->getProperty('state');
         $stateProperty->setAccessible(true);
-        $stateProperty->setValue($resourceOwner, $this->state);
+
+        $stateProperty->setValue($resourceOwner, $state);
+
+        if (null === $state) {
+            $stateProperty->setValue($resourceOwner, new State($this->state));
+        }
 
         return $resourceOwner;
     }

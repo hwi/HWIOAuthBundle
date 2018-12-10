@@ -12,7 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use HWI\Bundle\OAuthBundle\Security\Helper\Nonce;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
@@ -60,22 +59,29 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
     {
         if ($this->options['csrf']) {
-            if (null === $this->state) {
-                $this->state = Nonce::generate();
-            }
-
-            $this->storage->save($this, $this->state, 'csrf_state');
+            $this->handleCsrfToken();
         }
+
+        $stateParameter = $this->state->encode();
 
         $parameters = array_merge(array(
             'response_type' => 'code',
             'client_id' => $this->options['client_id'],
             'scope' => $this->options['scope'],
-            'state' => $this->state ? urlencode($this->state) : null,
+            'state' => !empty($stateParameter) ? $stateParameter : null,
             'redirect_uri' => $redirectUri,
         ), $extraParameters);
 
         return $this->normalizeUrl($this->options['authorization_url'], $parameters);
+    }
+
+    private function handleCsrfToken()
+    {
+        if (null === $this->state->getCsrfToken()) {
+            $this->state->setCsrfToken();
+        }
+
+        $this->storage->save($this, $this->state->getCsrfToken(), 'csrf_state');
     }
 
     /**
