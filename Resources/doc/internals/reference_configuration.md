@@ -14,6 +14,9 @@ hwi_oauth:
             scope:               "user:email"
             options:
                 csrf:            true
+                state:
+                  some:          parameter
+                  some-other:     parameter
 
         google:
             type:                google
