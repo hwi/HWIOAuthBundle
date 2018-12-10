@@ -57,7 +57,7 @@ class OAuthUserProviderTest extends TestCase
 
     public function testSupportsClass()
     {
-        $class = get_class(new OAuthUser('asm89'));
+        $class = \get_class(new OAuthUser('asm89'));
 
         $this->assertTrue($this->provider->supportsClass($class));
         $this->assertFalse($this->provider->supportsClass('\Some\Other\Class'));

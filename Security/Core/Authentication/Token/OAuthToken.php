@@ -67,7 +67,7 @@ class OAuthToken extends AbstractToken
 
         $this->setRawToken($accessToken);
 
-        parent::setAuthenticated(count($roles) > 0);
+        parent::setAuthenticated(\count($roles) > 0);
     }
 
     /**
@@ -101,7 +101,7 @@ class OAuthToken extends AbstractToken
      */
     public function setRawToken($token)
     {
-        if (is_array($token)) {
+        if (\is_array($token)) {
             if (isset($token['access_token'])) {
                 $this->accessToken = $token['access_token'];
             } elseif (isset($token['oauth_token'])) {

@@ -70,7 +70,7 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
         $jwt = str_replace(array('-', '_'), array('+', '/'), $jwt);
 
         // complete token if needed
-        switch (strlen($jwt) % 4) {
+        switch (\strlen($jwt) % 4) {
             case 0:
                 break;
 

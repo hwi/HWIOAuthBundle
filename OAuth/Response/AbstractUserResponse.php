@@ -112,7 +112,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
      */
     public function setData($data)
     {
-        if (is_array($data)) {
+        if (\is_array($data)) {
             $this->data = $data;
         } else {
             // First check that response exists, due too bug: https://bugs.php.net/bug.php?id=54484

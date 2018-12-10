@@ -105,8 +105,8 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     {
         $accessor = PropertyAccess::createPropertyAccessor();
         $identifier = $this->properties['identifier'];
-        if (!$accessor->isReadable($user, $identifier) || !$this->supportsClass(get_class($user))) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+        if (!$accessor->isReadable($user, $identifier) || !$this->supportsClass(\get_class($user))) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
         }
 
         $userId = $accessor->getValue($user, $identifier);

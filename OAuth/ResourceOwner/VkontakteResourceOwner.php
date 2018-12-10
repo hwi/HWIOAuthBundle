@@ -98,7 +98,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
                 return null;
             }
 
-            return is_array($value) ? implode(',', $value) : $value;
+            return \is_array($value) ? implode(',', $value) : $value;
         };
 
         $resolver->setNormalizer('fields', $fieldsNormalizer);

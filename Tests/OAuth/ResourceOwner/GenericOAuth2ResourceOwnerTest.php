@@ -62,7 +62,7 @@ json;
 
     protected function getExpectedAuthorizationUrlWithState($stateParameter)
     {
-        return $this->authorizationUrlBasePart . '&state=' . $stateParameter . $this->redirectUrlPart;
+        return $this->authorizationUrlBasePart.'&state='.$stateParameter.$this->redirectUrlPart;
     }
 
     public function setUp()
@@ -146,7 +146,7 @@ json;
             $this->storage->expects($this->never())
                 ->method('save');
 
-            $expectedUrl = $this->authorizationUrlBasePart . $this->redirectUrlPart;
+            $expectedUrl = $this->authorizationUrlBasePart.$this->redirectUrlPart;
         } else {
             $this->storage->expects($this->once())
                 ->method('save')
@@ -367,10 +367,10 @@ json;
     }
 
     /**
-     * @param string $name
-     * @param array $options
-     * @param array $paths
-     * @param StateInterface $state Optional
+     * @param string         $name
+     * @param array          $options
+     * @param array          $paths
+     * @param StateInterface $state   Optional
      *
      * @throws \ReflectionException
      *
@@ -380,7 +380,7 @@ json;
     {
         $resourceOwner = parent::createResourceOwner($name, $options, $paths);
 
-        $reflection = new \ReflectionClass(get_class($resourceOwner));
+        $reflection = new \ReflectionClass(\get_class($resourceOwner));
         $stateProperty = $reflection->getProperty('state');
         $stateProperty->setAccessible(true);
 

@@ -96,7 +96,7 @@ abstract class ResourceOwnerTestCase extends TestCase
             throw new \RuntimeException('Missing resource owner class declaration!');
         }
 
-        if (!in_array(ResourceOwnerInterface::class, class_implements($this->resourceOwnerClass), true)) {
+        if (!\in_array(ResourceOwnerInterface::class, class_implements($this->resourceOwnerClass), true)) {
             throw new \RuntimeException('Class is not implementing "ResourceOwnerInterface"!');
         }
 

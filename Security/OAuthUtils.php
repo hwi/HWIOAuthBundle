@@ -117,6 +117,7 @@ class OAuthUtils
         if ($request->query->get('state')) {
             $this->addQueryParameterToState($request->query->get('state'), $resourceOwner);
         }
+
         return $resourceOwner->getAuthorizationUrl($redirectUrl, $extraParameters);
     }
 
@@ -242,7 +243,7 @@ class OAuthUtils
                 break;
 
             case self::SIGNATURE_METHOD_RSA:
-                if (!function_exists('openssl_pkey_get_private')) {
+                if (!\function_exists('openssl_pkey_get_private')) {
                     throw new \RuntimeException('RSA-SHA1 signature method requires the OpenSSL extension.');
                 }
 

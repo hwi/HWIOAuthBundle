@@ -74,7 +74,7 @@ class OAuthUtilsTest extends TestCase
         $url = 'http://localhost:8080/login/check-instagram';
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $request = $this->getRequest($url . '?state=' . $state->encode());
+        $request = $this->getRequest($url.'?state='.$state->encode());
         $resource = $this->getMockBuilder(ResourceOwnerInterface::class)->getMock();
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(false, $this->grantRule), true, $this->grantRule);
