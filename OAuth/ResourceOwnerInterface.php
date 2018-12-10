@@ -120,4 +120,10 @@ interface ResourceOwnerInterface
      * @return StateInterface
      */
     public function getState();
+
+    /**
+     * @param string $key
+     * @param string $value
+     */
+    public function addStateParameter($key, $value);
 }
