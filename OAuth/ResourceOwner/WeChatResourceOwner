@@ -1,0 +1,123 @@
+<?php
+/*
+ * This file is part of the HWIOAuthBundle package.
+ *
+ * (c) Hardware.Info <opensource@hardware.info>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
+
+
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
+use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+
+class WeChatResourceOwner extends GenericOAuth2ResourceOwner
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected $paths = array(
+        'identifier' => 'openid',
+        'nickname' => 'nickname',
+        'realname' => 'nickname',
+        'profilepicture' => 'headimgurl',
+    );
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    {
+        $parameters = array_merge(array(
+            'appid' => $this->options['client_id'],
+            'redirect_uri' => $redirectUri,
+            'response_type' => 'code',
+            'scope' => $this->options['scope'],
+            'state' => $this->state ? urlencode($this->state) : null,
+        ), $extraParameters);
+
+        return $this->normalizeUrl($this->options['authorization_url'], $parameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = array())
+    {
+        OAuthErrorHandler::handleOAuthError($request);
+
+        $parameters = array_merge([
+            'code' => $request->query->get('code'),
+            'grant_type' => 'authorization_code',
+            'appid' => $this->options['client_id'],
+            'secret' => $this->options['client_secret'],
+        ], $extraParameters);
+
+        $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
+        $response = $this->getResponseContent($response);
+
+        $this->validateResponseContent($response);
+
+        return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function refreshAccessToken($refreshToken, array $extraParameters = array())
+    {
+        $parameters = array_merge(array(
+            'refresh_token' => $refreshToken,
+            'grant_type' => 'refresh_token',
+            'appid' => $this->options['client_id'],
+            'secret' => $this->options['client_secret'],
+        ), $extraParameters);
+
+        $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
+        $response = $this->getResponseContent($response);
+
+        $this->validateResponseContent($response);
+
+        return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    {
+        $response = $this->getUserResponse();
+        $data = ['openid' => $accessToken['openid']];
+
+        if ('snsapi_userinfo' === $accessToken['scope']) {
+            $res = $this->doGetUserInformationRequest($this->options['infos_url'], [
+                'access_token' => $accessToken['access_token'],
+                'openid' => $accessToken['openid'],
+            ]);
+            $data = $this->getResponseContent($res);
+        }
+
+        $response->setData($data);
+        $response->setResourceOwner($this);
+        $response->setOAuthToken(new OAuthToken($accessToken));
+        return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://open.weixin.qq.com/connect/oauth2/authorize',
+            'access_token_url' => 'https://api.weixin.qq.com/sns/oauth2/access_token',
+            'infos_url' => 'https://api.weixin.qq.com/sns/userinfo',
+        ));
+    }
+}
