@@ -1,6 +1,6 @@
-Step 2x: Setup SensioLabs Connect
-=================================
-First you will have to register your application on [SensioLabs Connect](https://connect.sensiolabs.com/account/app/new).
+Step 2x: Setup Symfony (formerly SensioLabs) Connect
+====================================================
+First you will have to register your application on [Symfony Connect](https://connect.symfony.com/account/app/new).
 
 Next configure a resource owner of type `sensio_connect` with appropriate
 `client_id`, `client_secret` and `scope`. All those information will be
