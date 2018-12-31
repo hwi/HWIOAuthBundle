@@ -11,8 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -32,20 +32,6 @@ class DropboxResourceOwner extends GenericOAuth2ResourceOwner
         'realname' => 'email',
         'email' => 'email',
     );
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function configureOptions(OptionsResolver $resolver)
-    {
-        parent::configureOptions($resolver);
-
-        $resolver->setDefaults(array(
-            'authorization_url' => 'https://www.dropbox.com/oauth2/authorize',
-            'access_token_url' => 'https://api.dropbox.com/oauth2/token',
-            'infos_url' => 'https://api.dropboxapi.com/2/users/get_current_account',
-        ));
-    }
 
     /**
      * Dropbox API v2 requires a POST request to simply get user info!
@@ -84,5 +70,19 @@ class DropboxResourceOwner extends GenericOAuth2ResourceOwner
         $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function configureOptions(OptionsResolver $resolver)
+    {
+        parent::configureOptions($resolver);
+
+        $resolver->setDefaults(array(
+            'authorization_url' => 'https://www.dropbox.com/oauth2/authorize',
+            'access_token_url' => 'https://api.dropbox.com/oauth2/token',
+            'infos_url' => 'https://api.dropboxapi.com/2/users/get_current_account',
+        ));
     }
 }

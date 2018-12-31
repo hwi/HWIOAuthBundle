@@ -59,7 +59,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
         $response->setOAuthToken(new OAuthToken($accessToken));
 
         $content = $response->getData();
-        $content['email'] = isset($accessToken['email']) ? $accessToken['email'] : null;
+        $content['email'] = $accessToken['email'] ?? null;
 
         $response->setData($content);
 
@@ -98,7 +98,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
                 return null;
             }
 
-            return is_array($value) ? implode(',', $value) : $value;
+            return \is_array($value) ? implode(',', $value) : $value;
         };
 
         $resolver->setNormalizer('fields', $fieldsNormalizer);

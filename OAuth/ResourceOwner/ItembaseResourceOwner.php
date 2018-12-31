@@ -20,9 +20,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ItembaseResourceOwner extends GenericOAuth2ResourceOwner
 {
-    const ITEMBASE_AUTH_URL = 'https://accounts.itembase.com/oauth/v2/auth';
-    const ITEMBASE_TOKEN_URL = 'https://accounts.itembase.com/oauth/v2/token';
-    const ITEMBASE_INFOS_URL = 'https://users.itembase.com/v1/me';
+    public const ITEMBASE_AUTH_URL = 'https://accounts.itembase.com/oauth/v2/auth';
+    public const ITEMBASE_TOKEN_URL = 'https://accounts.itembase.com/oauth/v2/token';
+    public const ITEMBASE_INFOS_URL = 'https://users.itembase.com/v1/me';
 
     /**
      * {@inheritdoc}

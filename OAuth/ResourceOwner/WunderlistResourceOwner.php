@@ -33,17 +33,6 @@ class WunderlistResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
-    {
-        return $this->httpRequest($url, null, array(
-            'X-Client-ID' => $this->options['client_id'],
-            'X-Access-Token' => $parameters['access_token'],
-        ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getUserInformation(array $accessToken, array $extraParameters = array())
     {
         $content = $this->doGetUserInformationRequest($this->options['infos_url'], array('access_token' => $accessToken['access_token']));
@@ -54,6 +43,17 @@ class WunderlistResourceOwner extends GenericOAuth2ResourceOwner
         $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doGetUserInformationRequest($url, array $parameters = array())
+    {
+        return $this->httpRequest($url, null, array(
+            'X-Client-ID' => $this->options['client_id'],
+            'X-Access-Token' => $parameters['access_token'],
+        ));
     }
 
     /**

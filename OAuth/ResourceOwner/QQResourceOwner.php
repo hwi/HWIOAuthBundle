@@ -54,7 +54,7 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function getUserInformation(array $accessToken = null, array $extraParameters = array())
     {
-        $openid = isset($extraParameters['openid']) ? $extraParameters['openid'] : $this->requestUserIdentifier($accessToken);
+        $openid = $extraParameters['openid'] ?? $this->requestUserIdentifier($accessToken);
 
         $url = $this->normalizeUrl($this->options['infos_url'], array(
             'oauth_consumer_key' => $this->options['client_id'],

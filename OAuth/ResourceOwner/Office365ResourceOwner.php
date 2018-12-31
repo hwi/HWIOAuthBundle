@@ -30,6 +30,18 @@ class Office365ResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
+    {
+        $extraParameters = array_merge(array(
+            'resource' => 'https://graph.microsoft.com',
+        ), $extraParameters);
+
+        return parent::getAccessToken($request, $redirectUri, $extraParameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
@@ -39,17 +51,5 @@ class Office365ResourceOwner extends GenericOAuth2ResourceOwner
             'access_token_url' => 'https://login.microsoftonline.com/common/oauth2/token',
             'infos_url' => 'https://graph.microsoft.com/v1.0/me',
         ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
-    {
-        $extraParameters = array_merge(array(
-            'resource' => 'https://graph.microsoft.com',
-        ), $extraParameters);
-
-        return parent::getAccessToken($request, $redirectUri, $extraParameters);
     }
 }

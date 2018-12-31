@@ -24,9 +24,9 @@ use Symfony\Component\Security\Http\HttpUtils;
  */
 class OAuthUtils
 {
-    const SIGNATURE_METHOD_HMAC = 'HMAC-SHA1';
-    const SIGNATURE_METHOD_RSA = 'RSA-SHA1';
-    const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
+    public const SIGNATURE_METHOD_HMAC = 'HMAC-SHA1';
+    public const SIGNATURE_METHOD_RSA = 'RSA-SHA1';
+    public const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
 
     /**
      * @var bool
@@ -186,14 +186,14 @@ class OAuthUtils
 
         // Remove default ports
         // Ref: Spec: 9.1.2
-        $explicitPort = isset($url['port']) ? $url['port'] : null;
+        $explicitPort = $url['port'] ?? null;
         if (('https' === $url['scheme'] && 443 === $explicitPort) || ('http' === $url['scheme'] && 80 === $explicitPort)) {
             $explicitPort = null;
         }
 
         // Remove query params from URL
         // Ref: Spec: 9.1.2
-        $url = sprintf('%s://%s%s%s', $url['scheme'], $url['host'], ($explicitPort ? ':'.$explicitPort : ''), isset($url['path']) ? $url['path'] : '');
+        $url = sprintf('%s://%s%s%s', $url['scheme'], $url['host'], ($explicitPort ? ':'.$explicitPort : ''), $url['path'] ?? '');
 
         // Parameters are sorted by name, using lexicographical byte value ordering.
         // Ref: Spec: 9.1.1 (1)
@@ -221,7 +221,7 @@ class OAuthUtils
                 break;
 
             case self::SIGNATURE_METHOD_RSA:
-                if (!function_exists('openssl_pkey_get_private')) {
+                if (!\function_exists('openssl_pkey_get_private')) {
                     throw new \RuntimeException('RSA-SHA1 signature method requires the OpenSSL extension.');
                 }
 

@@ -97,7 +97,7 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', get_class($user)));
+            throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', \get_class($user)));
         }
 
         $property = $this->getProperty($response);
@@ -142,7 +142,7 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
 
         $identifier = $this->properties['identifier'];
         if (!$user instanceof User || !$this->accessor->isReadable($user, $identifier)) {
-            throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', get_class($user)));
+            throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', \get_class($user)));
         }
 
         $userId = $this->accessor->getValue($user, $identifier);

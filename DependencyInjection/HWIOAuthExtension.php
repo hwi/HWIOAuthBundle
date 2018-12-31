@@ -149,6 +149,31 @@ class HWIOAuthExtension extends Extension
     }
 
     /**
+     * @param ContainerBuilder $container
+     * @param array            $config
+     */
+    protected function createHttplugClient(ContainerBuilder $container, array $config)
+    {
+        $httpClientId = $config['http']['client'];
+        $httpMessageFactoryId = $config['http']['message_factory'];
+        $bundles = $container->getParameter('kernel.bundles');
+
+        if ('httplug.client.default' === $httpClientId && !isset($bundles['HttplugBundle'])) {
+            throw new InvalidConfigurationException(
+                'You must setup php-http/httplug-bundle to use the default http client service.'
+            );
+        }
+        if ('httplug.message_factory.default' === $httpMessageFactoryId && !isset($bundles['HttplugBundle'])) {
+            throw new InvalidConfigurationException(
+                'You must setup php-http/httplug-bundle to use the default http message factory service.'
+            );
+        }
+
+        $container->setAlias('hwi_oauth.http.client', new Alias($config['http']['client'], true));
+        $container->setAlias('hwi_oauth.http.message_factory', new Alias($config['http']['message_factory'], true));
+    }
+
+    /**
      * Check of the connect controllers etc should be enabled.
      *
      * @param ContainerBuilder $container
@@ -204,31 +229,6 @@ class HWIOAuthExtension extends Extension
             $container->setParameter('hwi_oauth.fosub_enabled', false);
             $container->setParameter('hwi_oauth.connect', false);
         }
-    }
-
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
-    protected function createHttplugClient(ContainerBuilder $container, array $config)
-    {
-        $httpClientId = $config['http']['client'];
-        $httpMessageFactoryId = $config['http']['message_factory'];
-        $bundles = $container->getParameter('kernel.bundles');
-
-        if ('httplug.client.default' === $httpClientId && !isset($bundles['HttplugBundle'])) {
-            throw new InvalidConfigurationException(
-                'You must setup php-http/httplug-bundle to use the default http client service.'
-            );
-        }
-        if ('httplug.message_factory.default' === $httpMessageFactoryId && !isset($bundles['HttplugBundle'])) {
-            throw new InvalidConfigurationException(
-                'You must setup php-http/httplug-bundle to use the default http message factory service.'
-            );
-        }
-
-        $container->setAlias('hwi_oauth.http.client', new Alias($config['http']['client'], true));
-        $container->setAlias('hwi_oauth.http.message_factory', new Alias($config['http']['message_factory'], true));
     }
 
     /**

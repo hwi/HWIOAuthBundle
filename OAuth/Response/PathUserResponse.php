@@ -138,8 +138,8 @@ class PathUserResponse extends AbstractUserResponse
             return null;
         }
 
-        if (is_array($steps)) {
-            if (1 === count($steps)) {
+        if (\is_array($steps)) {
+            if (1 === \count($steps)) {
                 return $this->getValue(current($steps), $data);
             }
 

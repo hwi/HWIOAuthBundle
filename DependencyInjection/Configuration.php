@@ -283,7 +283,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('type')
                                 ->validate()
                                     ->ifTrue(function ($type) {
-                                        return !Configuration::isResourceOwnerSupported($type);
+                                        return !self::isResourceOwnerSupported($type);
                                     })
                                     ->thenInvalid('Unknown resource owner type "%s".')
                                 ->end()
@@ -303,11 +303,11 @@ class Configuration implements ConfigurationInterface
                                                 return true;
                                             }
 
-                                            if (is_array($v)) {
-                                                return 0 === count($v);
+                                            if (\is_array($v)) {
+                                                return 0 === \count($v);
                                             }
 
-                                            if (is_string($v)) {
+                                            if (\is_string($v)) {
                                                 return empty($v);
                                             }
 
@@ -381,7 +381,7 @@ class Configuration implements ConfigurationInterface
                                 }
 
                                 // one of this two options must be set
-                                if (0 === count($c['paths'])) {
+                                if (0 === \count($c['paths'])) {
                                     return !isset($c['user_response_class']);
                                 }
 
@@ -399,7 +399,7 @@ class Configuration implements ConfigurationInterface
                             ->ifTrue(function ($c) {
                                 if (isset($c['service'])) {
                                     // ignore paths & options if none were set
-                                    return 0 !== count($c['paths']) || 0 !== count($c['options']) || 3 < count($c);
+                                    return 0 !== \count($c['paths']) || 0 !== \count($c['options']) || 3 < \count($c);
                                 }
 
                                 return false;
