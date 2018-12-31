@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\Form;
 
-use FOS\UserBundle\Form\Handler\RegistrationFormHandler;
 use FOS\UserBundle\Mailer\MailerInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use FOS\UserBundle\Util\TokenGenerator;
@@ -35,11 +34,6 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      * @var MailerInterface
      */
     protected $mailer;
-
-    /**
-     * @var RegistrationFormHandler
-     */
-    protected $registrationFormHandler;
 
     /**
      * @var TokenGenerator
@@ -70,20 +64,6 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      */
     public function process(Request $request, Form $form, UserResponseInterface $userInformation)
     {
-        if (null !== $this->registrationFormHandler) {
-            $formHandler = $this->reconstructFormHandler($request, $form);
-
-            // make FOSUB process the form already
-            $processed = $formHandler->process();
-
-            // if the form is not posted we'll try to set some properties
-            if (!$request->isMethod('POST')) {
-                $form->setData($this->setUserInformation($form->getData(), $userInformation));
-            }
-
-            return $processed;
-        }
-
         $user = $this->userManager->createUser();
         $user->setEnabled(true);
 
@@ -96,16 +76,6 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         }
 
         return false;
-    }
-
-    /**
-     * Set registration form handler.
-     *
-     * @param null|RegistrationFormHandler $registrationFormHandler FOSUB registration form handler
-     */
-    public function setFormHandler(RegistrationFormHandler $registrationFormHandler = null)
-    {
-        $this->registrationFormHandler = $registrationFormHandler;
     }
 
     /**
@@ -125,21 +95,6 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
         } while (null !== $user && $i < $this->iterations && $testName = $name.++$i);
 
         return null !== $user ? '' : $testName;
-    }
-
-    /**
-     * Reconstructs the form handler in order to inject the right form.
-     *
-     * @param Request $request Active request
-     * @param Form    $form    Form to process
-     *
-     * @return RegistrationFormHandler
-     */
-    protected function reconstructFormHandler(Request $request, Form $form)
-    {
-        $handlerClass = \get_class($this->registrationFormHandler);
-
-        return new $handlerClass($form, $request, $this->userManager, $this->mailer, $this->tokenGenerator);
     }
 
     /**
