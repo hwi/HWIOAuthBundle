@@ -58,25 +58,23 @@ json;
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
     );
 
-    public function setUp()
+    protected function setUp()
     {
         $this->resourceOwnerName = str_replace(array('generic', 'resourceownertest'), '', strtolower(__CLASS__));
         $this->resourceOwner = $this->createResourceOwner($this->resourceOwnerName);
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
-     */
     public function testUndefinedOptionThrowsException()
     {
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+
         $this->createResourceOwner($this->resourceOwnerName, array('non_existing' => null));
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
-     */
     public function testInvalidOptionValueThrowsException()
     {
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+
         $this->createResourceOwner($this->resourceOwnerName, array('csrf' => 'invalid'));
     }
 
@@ -115,7 +113,7 @@ json;
 
         $this->httpClient->expects($this->once())
             ->method('send')
-            ->will($this->throwException($exception));
+            ->willThrowException($exception);
 
         try {
             $this->resourceOwner->getUserInformation($this->tokenData);
@@ -228,22 +226,20 @@ json;
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAccessTokenFailedResponse()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('invalid');
         $request = new Request(array('code' => 'code'));
 
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAccessTokenErrorResponse()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('error=foo');
         $request = new Request(array('code' => 'code'));
 
@@ -259,31 +255,28 @@ json;
         $this->assertEquals(3600, $accessToken['expires_in']);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testRefreshAccessTokenInvalid()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('invalid');
 
         $this->resourceOwner->refreshAccessToken('foo');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testRefreshAccessTokenError()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('{"error": "invalid"}', 'application/json');
 
         $this->resourceOwner->refreshAccessToken('foo');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testRevokeToken()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->resourceOwner->revokeToken('token');
     }
 
@@ -313,22 +306,21 @@ json;
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($resourceOwner, 'valid_token', 'csrf_state')
-            ->will($this->returnValue('valid_token'));
+            ->willReturn(('valid_token'));
 
         $this->assertTrue($resourceOwner->isCsrfTokenValid('valid_token'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testCsrfTokenInvalid()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('csrf' => true));
 
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($resourceOwner, 'invalid_token', 'csrf_state')
-            ->will($this->throwException(new InvalidOptionsException('No data available in storage.')));
+            ->willThrowException(new InvalidOptionsException('No data available in storage.'));
 
         $resourceOwner->isCsrfTokenValid('invalid_token');
     }
@@ -355,7 +347,7 @@ json;
     {
         $resourceOwner = parent::createResourceOwner($name, $options, $paths);
 
-        $reflection = new \ReflectionClass(get_class($resourceOwner));
+        $reflection = new \ReflectionClass(\get_class($resourceOwner));
         $stateProperty = $reflection->getProperty('state');
         $stateProperty->setAccessible(true);
         $stateProperty->setValue($resourceOwner, $this->state);

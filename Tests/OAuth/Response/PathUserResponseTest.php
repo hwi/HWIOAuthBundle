@@ -22,7 +22,7 @@ class PathUserResponseTest extends TestCase
      */
     private $responseObject;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->responseObject = new PathUserResponse();
     }
@@ -43,19 +43,16 @@ class PathUserResponseTest extends TestCase
         $this->assertEquals($response, $this->responseObject->getData());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testSetInvalidResponseData()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->responseObject->setData('not_json');
     }
 
     public function testGetSetResourceOwner()
     {
-        $resourceOwner = $this->getMockBuilder(ResourceOwnerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceOwner = $this->createMock(ResourceOwnerInterface::class);
 
         $this->responseObject->setResourceOwner($resourceOwner);
         $this->assertEquals($resourceOwner, $this->responseObject->getResourceOwner());

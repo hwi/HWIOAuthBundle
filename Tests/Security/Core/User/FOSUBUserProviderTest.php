@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class FOSUBUserProviderTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         if (!interface_exists('FOS\UserBundle\Model\UserManagerInterface')) {
             $this->markTestSkipped('FOSUserBundle is not available.');
@@ -31,22 +31,20 @@ class FOSUBUserProviderTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No property defined for entity for resource owner 'not_configured'.
-     */
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No property defined for entity for resource owner \'not_configured\'.');
+
         $provider = $this->createFOSUBUserProvider();
         $provider->loadUserByOAuthUserResponse($this->createUserResponseMock(null, 'not_configured'));
     }
 
-    /**
-     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException
-     * @expectedExceptionMessage User 'asm89' not found.
-     */
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenUserIsNull()
     {
+        $this->expectException(\HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException::class);
+        $this->expectExceptionMessage('User \'asm89\' not found.');
+
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
         $provider = $this->createFOSUBUserProvider();
@@ -78,12 +76,11 @@ class FOSUBUserProviderTest extends TestCase
         $this->assertEquals('asm89', $user->getGithubId());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Could not determine access type for property "googleId".
-     */
     public function testConnectUserWithNoSetterThrowsException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Could not determine access type for property "googleId".');
+
         $user = new FOSUser();
 
         $userResponseMock = $this->createUserResponseMock(null, 'google');
@@ -94,14 +91,13 @@ class FOSUBUserProviderTest extends TestCase
 
     protected function createFOSUBUserProvider($user = null, $updateUser = null)
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)
-            ->getMock();
+        $userManagerMock = $this->createMock(UserManagerInterface::class);
 
         if (null !== $user) {
             $userManagerMock->expects($this->once())
                 ->method('findUserBy')
                 ->with(array('githubId' => 'asm89'))
-                ->will($this->returnValue($user));
+                ->willReturn(($user));
         }
 
         if (null !== $updateUser) {
@@ -115,15 +111,13 @@ class FOSUBUserProviderTest extends TestCase
 
     protected function createResourceOwnerMock($resourceOwnerName = null)
     {
-        $resourceOwnerMock = $this->getMockBuilder(ResourceOwnerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceOwnerMock = $this->createMock(ResourceOwnerInterface::class);
 
         if (null !== $resourceOwnerName) {
             $resourceOwnerMock
                 ->expects($this->once())
                 ->method('getName')
-                ->will($this->returnValue($resourceOwnerName));
+                ->willReturn(($resourceOwnerName));
         }
 
         return $resourceOwnerMock;
@@ -131,22 +125,20 @@ class FOSUBUserProviderTest extends TestCase
 
     protected function createUserResponseMock($username = null, $resourceOwnerName = null)
     {
-        $responseMock = $this->getMockBuilder(UserResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseMock = $this->createMock(UserResponseInterface::class);
 
         if (null !== $resourceOwnerName) {
             $responseMock
                 ->expects($this->once())
                 ->method('getResourceOwner')
-                ->will($this->returnValue($this->createResourceOwnerMock($resourceOwnerName)));
+                ->willReturn(($this->createResourceOwnerMock($resourceOwnerName)));
         }
 
         if (null !== $username) {
             $responseMock
                 ->expects($this->once())
                 ->method('getUsername')
-                ->will($this->returnValue($username));
+                ->willReturn(($username));
         }
 
         return $responseMock;

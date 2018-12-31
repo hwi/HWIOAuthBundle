@@ -31,7 +31,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         $this
             ->httpClient->expects($this->exactly(2))
             ->method('send')
-            ->will($this->returnCallback(function ($method, $uri, array $headers = [], $body = null) {
+            ->willReturnCallback(function ($method, $uri, array $headers = [], $body = null) {
                 $headers += array(
                     'Content-Type' => 'application/json; charset=utf-8',
                 );
@@ -44,7 +44,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
                         $this->userResponse
                     )
                 ;
-            }));
+            });
 
         $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret');
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
@@ -64,7 +64,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         $this
             ->httpClient->expects($this->at(0))
             ->method('send')
-            ->will($this->returnCallback(function ($method, $uri, array $headers = [], $body = null) {
+            ->willReturnCallback(function ($method, $uri, array $headers = [], $body = null) {
                 $headers += array(
                     'Content-Type' => 'application/json; charset=utf-8',
                 );
@@ -77,12 +77,12 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
                         $this->userResponse
                     )
                 ;
-            }))
+            })
         ;
         $this
             ->httpClient->expects($this->at(1))
             ->method('send')
-            ->will($this->returnCallback(function ($method, $uri, array $headers = [], $body = null) {
+            ->willReturnCallback(function ($method, $uri, array $headers = [], $body = null) {
                 $headers += array(
                     'Content-Type' => 'text/plain',
                 );
@@ -95,7 +95,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
                         ''
                     )
                 ;
-            }))
+            })
         ;
 
         /** @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */

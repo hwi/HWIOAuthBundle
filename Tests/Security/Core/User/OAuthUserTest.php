@@ -21,7 +21,7 @@ class OAuthUserTest extends TestCase
      */
     private $user;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->user = new OAuthUser('asm89');
     }

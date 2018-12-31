@@ -48,25 +48,23 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         'realname' => 'foo_disp',
     );
 
-    public function setUp()
+    protected function setUp()
     {
         $this->resourceOwnerName = str_replace(array('generic', 'resourceownertest'), '', strtolower(__CLASS__));
         $this->resourceOwner = $this->createResourceOwner($this->resourceOwnerName);
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
-     */
     public function testUndefinedOptionThrowsException()
     {
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+
         $this->createResourceOwner($this->resourceOwnerName, array('non_existing' => null));
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
-     */
     public function testInvalidOptionValueThrowsException()
     {
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+
         $this->createResourceOwner($this->resourceOwnerName, array('csrf' => 'invalid'));
     }
 
@@ -113,11 +111,10 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAuthorizationUrlFailedResponseContainOnlyOAuthToken()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('{"oauth_token": "token"}', 'application/json; charset=utf-8');
 
         $this->storage->expects($this->never())
@@ -126,11 +123,10 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->resourceOwner->getAuthorizationUrl('http://redirect.to/');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAuthorizationUrlFailedResponseContainOAuthProblem()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('oauth_problem=message');
 
         $this->storage->expects($this->never())
@@ -139,11 +135,10 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->resourceOwner->getAuthorizationUrl('http://redirect.to/');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAuthorizationUrlFailedResponseContainCallbackNotConfirmed()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('oauth_callback_confirmed=false');
 
         $this->storage->expects($this->never())
@@ -152,11 +147,10 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->resourceOwner->getAuthorizationUrl('http://redirect.to/');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAuthorizationUrlFailedResponseNotContainOAuthTokenOrSecret()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('invalid');
 
         $this->storage->expects($this->never())
@@ -174,7 +168,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($this->resourceOwner, 'token')
-            ->will($this->returnValue(array('oauth_token' => 'token2', 'oauth_token_secret' => 'secret2')));
+            ->willReturn((array('oauth_token' => 'token2', 'oauth_token_secret' => 'secret2')));
 
         $this->assertEquals(
             array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'),
@@ -191,7 +185,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($this->resourceOwner, 'token')
-            ->will($this->returnValue(array('oauth_token' => 'token2', 'oauth_token_secret' => 'secret2')));
+            ->willReturn((array('oauth_token' => 'token2', 'oauth_token_secret' => 'secret2')));
 
         $this->assertEquals(
             array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'),
@@ -208,7 +202,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($this->resourceOwner, 'token')
-            ->will($this->returnValue(array('oauth_token' => 'token2', 'oauth_token_secret' => 'secret2')));
+            ->willReturn((array('oauth_token' => 'token2', 'oauth_token_secret' => 'secret2')));
 
         $this->assertEquals(
             array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'),
@@ -216,16 +210,15 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAccessTokenFailedResponse()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('invalid');
 
         $this->storage->expects($this->once())
             ->method('fetch')
-            ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
+            ->willReturn((array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
 
         $this->storage->expects($this->never())
             ->method('save');
@@ -235,16 +228,15 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAccessTokenErrorResponse()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('error=foo');
 
         $this->storage->expects($this->once())
             ->method('fetch')
-            ->will($this->returnValue(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
+            ->willReturn((array('oauth_token' => 'token', 'oauth_token_secret' => 'secret')));
 
         $this->storage->expects($this->never())
             ->method('save');
@@ -254,14 +246,13 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAccessTokenInvalidArgumentException()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->storage->expects($this->once())
             ->method('fetch')
-            ->will($this->throwException(new \InvalidArgumentException()));
+            ->willThrowException(new \InvalidArgumentException());
 
         $this->httpClient->expects($this->never())
             ->method('send');
@@ -274,19 +265,17 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testRefreshAccessToken()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->resourceOwner->refreshAccessToken('token');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testRevokeToken()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->resourceOwner->revokeToken('token');
     }
 

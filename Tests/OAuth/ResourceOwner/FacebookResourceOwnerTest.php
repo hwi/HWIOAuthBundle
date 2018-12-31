@@ -34,11 +34,10 @@ json;
         'profilepicture' => 'picture.data.url',
     );
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAccessTokenFailedResponse()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('{"error": {"message": "invalid"}}', 'application/json; charset=utf-8');
         $request = new Request(array('code' => 'code'));
 
@@ -75,11 +74,10 @@ json;
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
-     */
     public function testInvalidDisplayOptionValueThrowsException()
     {
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+
         $this->createResourceOwner($this->resourceOwnerName, array('display' => 'invalid'));
     }
 
@@ -99,11 +97,10 @@ json;
         $this->assertFalse($this->resourceOwner->revokeToken('token'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAccessTokenErrorResponse()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient();
 
         $request = new Request(array(

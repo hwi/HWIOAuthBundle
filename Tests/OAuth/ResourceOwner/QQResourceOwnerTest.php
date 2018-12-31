@@ -91,11 +91,11 @@ json;
 
     /**
      * QQ returns errors in jsonp format.
-     *
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
      */
     public function testGetAccessTokenErrorResponse()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('callback({"error": 1, "msg": "error"})');
 
         $request = new Request(array('code' => 'code'));

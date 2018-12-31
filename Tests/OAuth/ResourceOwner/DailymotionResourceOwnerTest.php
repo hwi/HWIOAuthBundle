@@ -39,11 +39,10 @@ json;
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
-     */
     public function testInvalidDisplayOptionValueThrowsException()
     {
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+
         $this->createResourceOwner($this->resourceOwnerName, array('display' => 'invalid'));
     }
 }

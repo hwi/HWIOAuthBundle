@@ -46,7 +46,7 @@ abstract class ResourceOwnerTestCase extends TestCase
         }
 
         $mock->method('send')
-            ->will($this->returnCallback(function ($method, $uri, array $headers = [], $body = null) use ($response, $contentType) {
+            ->willReturnCallback(function ($method, $uri, array $headers = [], $body = null) use ($response, $contentType) {
                 $headers += array(
                     'Content-Type' => $contentType ?: $this->httpResponseContentType,
                 );
@@ -59,23 +59,17 @@ abstract class ResourceOwnerTestCase extends TestCase
                         $response ?: $this->httpResponse
                     )
                 ;
-            }));
+            });
     }
 
     protected function createResourceOwner($name, array $options = array(), array $paths = array())
     {
-        $this->httpClient = $this->getMockBuilder(HttpMethodsClient::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->httpClient = $this->createMock(HttpMethodsClient::class);
 
-        $this->storage = $this->getMockBuilder(RequestDataStorageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storage = $this->createMock(RequestDataStorageInterface::class);
 
         /** @var HttpUtils $httpUtils */
-        $httpUtils = $this->getMockBuilder(HttpUtils::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $httpUtils = $this->createMock(HttpUtils::class);
 
         $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
         $resourceOwner->addPaths(array_merge($this->paths, $paths));
@@ -96,7 +90,7 @@ abstract class ResourceOwnerTestCase extends TestCase
             throw new \RuntimeException('Missing resource owner class declaration!');
         }
 
-        if (!in_array(ResourceOwnerInterface::class, class_implements($this->resourceOwnerClass), true)) {
+        if (!\in_array(ResourceOwnerInterface::class, class_implements($this->resourceOwnerClass), true)) {
             throw new \RuntimeException('Class is not implementing "ResourceOwnerInterface"!');
         }
 

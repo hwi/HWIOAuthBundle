@@ -24,7 +24,7 @@ class OAuthUserProviderTest extends TestCase
      */
     private $provider;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->provider = new OAuthUserProvider();
     }
@@ -44,12 +44,11 @@ class OAuthUserProviderTest extends TestCase
         $this->assertEquals($user, $freshUser);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\UnsupportedUserException
-     * @expectedExceptionMessage Unsupported user class "Symfony\Component\Security\Core\User\User"
-     */
     public function testRefreshUserUnsupportedClass()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\UnsupportedUserException::class);
+        $this->expectExceptionMessage('Unsupported user class "Symfony\\Component\\Security\\Core\\User\\User"');
+
         $user = new User('asm89', 'foo');
 
         $this->provider->refreshUser($user);
@@ -57,7 +56,7 @@ class OAuthUserProviderTest extends TestCase
 
     public function testSupportsClass()
     {
-        $class = get_class(new OAuthUser('asm89'));
+        $class = \get_class(new OAuthUser('asm89'));
 
         $this->assertTrue($this->provider->supportsClass($class));
         $this->assertFalse($this->provider->supportsClass('\Some\Other\Class'));
@@ -65,14 +64,12 @@ class OAuthUserProviderTest extends TestCase
 
     public function testLoadUserByOAuthUserResponse()
     {
-        $responseMock = $this->getMockBuilder(UserResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseMock = $this->createMock(UserResponseInterface::class);
 
         $responseMock
             ->expects($this->once())
             ->method('getNickname')
-            ->will($this->returnValue('asm89'))
+            ->willReturn(('asm89'))
         ;
 
         $user = $this->provider->loadUserByOAuthUserResponse($responseMock);

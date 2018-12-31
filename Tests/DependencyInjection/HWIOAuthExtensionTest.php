@@ -14,54 +14,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\DependencyInjection;
 use Http\Client\Common\HttpMethodsClient;
 use Http\HttplugBundle\HttplugBundle;
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\MyCustomProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Yaml\Parser;
-
-class MyCustomProvider implements ResourceOwnerInterface
-{
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
-    {
-    }
-
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
-    {
-    }
-
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
-    {
-    }
-
-    public function isCsrfTokenValid($csrfToken)
-    {
-    }
-
-    public function getName()
-    {
-    }
-
-    public function getOption($name)
-    {
-    }
-
-    public function handles(Request $request)
-    {
-    }
-
-    public function setName($name)
-    {
-    }
-
-    public function addPaths(array $paths)
-    {
-    }
-
-    public function refreshAccessToken($refreshToken, array $extraParameters = array())
-    {
-    }
-}
 
 /**
  * Code bases on FOSUserBundle tests.
@@ -73,6 +29,23 @@ class HWIOAuthExtensionTest extends TestCase
      */
     protected $containerBuilder;
 
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->containerBuilder = new ContainerBuilder();
+
+        $this->containerBuilder->setParameter('kernel.bundles', [
+            'HttplugBundle' => new HttplugBundle(),
+        ]);
+    }
+
+    protected function tearDown()
+    {
+        $this->containerBuilder = null;
+        unset($this->containerBuilder);
+    }
+
     public function testHttpClientExists()
     {
         $this->createEmptyConfiguration();
@@ -83,11 +56,10 @@ class HWIOAuthExtensionTest extends TestCase
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testConfigurationThrowsExceptionUnlessFirewallNameSet()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         unset($config['firewall_names']);
@@ -95,11 +67,10 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testConfigurationThrowsExceptionUnlessResourceOwnersSet()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         unset($config['resource_owners']);
@@ -107,11 +78,10 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testConfigurationThrowsExceptionUnlessClientIdSet()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         unset($config['resource_owners']['any_name']['client_id']);
@@ -119,11 +89,10 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testConfigurationThrowsExceptionUnlessClientSecretSet()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         unset($config['resource_owners']['any_name']['client_secret']);
@@ -131,11 +100,10 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testConfigurationThrowsExceptionWhenPathIsEmpty()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['any_name']['paths'] = array(
@@ -145,11 +113,10 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testConfigurationThrowsExceptionWhenUnknownResourceOwnerIsCalled()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['unknown'] = array(
@@ -163,12 +130,13 @@ class HWIOAuthExtensionTest extends TestCase
 
     /**
      * @dataProvider provideInvalidData
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      *
      * @param array $invalidConfig
      */
     public function testConfigurationThrowsExceptionResourceOwnerRequiresSomeOptions($invalidConfig)
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = array(
@@ -178,11 +146,10 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testConfigurationThrowsExceptionWhenServiceHasSomePaths()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['some_service']['paths'] = array(
@@ -194,11 +161,10 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testConfigurationThrowsExceptionWhenServiceHasMoreOptions()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['some_service']['client_id'] = 'client_id';
@@ -206,12 +172,11 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "hwi_oauth.resource_owners.new_resourceowner": You should set at least the 'type', 'client_id' and the 'client_secret' of a resource owner.
-     */
     public function testConfigurationThrowsExceptionWhenServiceHasClass()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "hwi_oauth.resource_owners.new_resourceowner": You should set at least the \'type\', \'client_id\' and the \'client_secret\' of a resource owner.');
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['new_resourceowner']['class'] = 'My\Class';
@@ -219,12 +184,11 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load(array($config), $this->containerBuilder);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Invalid configuration for path "hwi_oauth.resource_owners.new_resourceowner": If you're setting a 'class', you must provide a 'oauth1' or 'oauth2' type
-     */
     public function testConfigurationThrowsExceptionWhenServiceHasClassAndWrongType()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "hwi_oauth.resource_owners.new_resourceowner": If you\'re setting a \'class\', you must provide a \'oauth1\' or \'oauth2\' type');
+
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['new_resourceowner']['class'] = 'My\Class';
@@ -257,6 +221,8 @@ class HWIOAuthExtensionTest extends TestCase
         );
 
         $loader->load(array($config), $this->containerBuilder);
+
+        $this->addToAssertionCount(1);
     }
 
     public function testConfigurationPassValidOAuth2WithPaths()
@@ -280,6 +246,8 @@ class HWIOAuthExtensionTest extends TestCase
         );
 
         $loader->load(array($config), $this->containerBuilder);
+
+        $this->addToAssertionCount(1);
     }
 
     public function testConfigurationPassValidOAuth1WithClass()
@@ -289,7 +257,7 @@ class HWIOAuthExtensionTest extends TestCase
         $config['resource_owners'] = array(
             'valid' => array(
                 'type' => 'oauth1',
-                'class' => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider',
+                'class' => MyCustomProvider::class,
                 'client_id' => 'client_id',
                 'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
@@ -305,6 +273,8 @@ class HWIOAuthExtensionTest extends TestCase
         );
 
         $loader->load(array($config), $this->containerBuilder);
+
+        $this->addToAssertionCount(1);
     }
 
     public function testConfigurationPassValidOAuth2WithClassOnly()
@@ -314,13 +284,15 @@ class HWIOAuthExtensionTest extends TestCase
         $config['resource_owners'] = array(
             'valid' => array(
                 'type' => 'oauth2',
-                'class' => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider',
+                'class' => MyCustomProvider::class,
                 'client_id' => 'client_id',
                 'client_secret' => 'client_secret',
             ),
         );
 
         $loader->load(array($config), $this->containerBuilder);
+
+        $this->addToAssertionCount(1);
     }
 
     public function testConfigurationPassValidOAuth2WithPathsAndClass()
@@ -330,7 +302,7 @@ class HWIOAuthExtensionTest extends TestCase
         $config['resource_owners'] = array(
             'valid' => array(
                 'type' => 'oauth2',
-                'class' => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider',
+                'class' => MyCustomProvider::class,
                 'client_id' => 'client_id',
                 'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
@@ -345,6 +317,8 @@ class HWIOAuthExtensionTest extends TestCase
         );
 
         $loader->load(array($config), $this->containerBuilder);
+
+        $this->addToAssertionCount(1);
     }
 
     public function testConfigurationPassValidOAuth2WithDeepPaths()
@@ -368,6 +342,8 @@ class HWIOAuthExtensionTest extends TestCase
         );
 
         $loader->load(array($config), $this->containerBuilder);
+
+        $this->addToAssertionCount(1);
     }
 
     public function testConfigurationPassValidOAuth2WithResponseClass()
@@ -387,6 +363,8 @@ class HWIOAuthExtensionTest extends TestCase
         );
 
         $loader->load(array($config), $this->containerBuilder);
+
+        $this->addToAssertionCount(1);
     }
 
     public function testConfigurationLoadDefaults()
@@ -529,12 +507,11 @@ class HWIOAuthExtensionTest extends TestCase
         $this->assertEquals('my.service', $aliases['hwi_oauth.resource_owner.external_ressource_owner']);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     * @expectedExceptionMessage Class "HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyWrongCustomProvider" must implement interface "HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface".
-     */
     public function testCreateResourceOwnerServiceWithWrongClass()
     {
+        $this->expectException(\Symfony\Component\Config\Definition\Exception\InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Class "HWI\\Bundle\\OAuthBundle\\Tests\\DependencyInjection\\MyWrongCustomProvider" must implement interface "HWI\\Bundle\\OAuthBundle\\OAuth\\ResourceOwnerInterface".');
+
         $extension = new HWIOAuthExtension();
         $extension->createResourceOwnerService($this->containerBuilder, 'external_ressource_owner', array(
             'type' => 'oauth2',
@@ -549,7 +526,7 @@ class HWIOAuthExtensionTest extends TestCase
         $extension = new HWIOAuthExtension();
         $extension->createResourceOwnerService($this->containerBuilder, 'external_ressource_owner', array(
             'type' => 'oauth2',
-            'class' => 'HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider',
+            'class' => MyCustomProvider::class,
             'client_id' => '42',
             'client_secret' => 'foo',
         ));
@@ -558,7 +535,7 @@ class HWIOAuthExtensionTest extends TestCase
 
         $this->assertArrayHasKey('hwi_oauth.resource_owner.external_ressource_owner', $definitions);
         $this->assertEquals('hwi_oauth.abstract_resource_owner.oauth2', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getParent());
-        $this->assertEquals('HWI\Bundle\OAuthBundle\Tests\DependencyInjection\MyCustomProvider', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getClass());
+        $this->assertEquals(MyCustomProvider::class, $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getClass());
 
         $argument2 = $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getArgument(2);
         $this->assertEquals('42', $argument2['client_id']);
@@ -685,23 +662,6 @@ EOF;
         $parser = new Parser();
 
         return $parser->parse($yaml);
-    }
-
-    protected function setUp()
-    {
-        parent::setUp();
-
-        $this->containerBuilder = new ContainerBuilder();
-
-        $this->containerBuilder->setParameter('kernel.bundles', [
-            'HttplugBundle' => new HttplugBundle(),
-        ]);
-    }
-
-    protected function tearDown()
-    {
-        $this->containerBuilder = null;
-        unset($this->containerBuilder);
     }
 
     /**

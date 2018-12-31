@@ -22,7 +22,7 @@ class OAuthTokenTest extends TestCase
      */
     private $token;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->token = new OAuthToken('access_token', array('ROLE_TEST'));
         $this->token->setResourceOwnerName('github');
@@ -108,6 +108,6 @@ class OAuthTokenTest extends TestCase
     {
         $exception = new AccountNotLinkedException($this->token);
         $str = serialize($exception);
-        unserialize($str);
+        $this->assertEquals($exception, unserialize($str));
     }
 }

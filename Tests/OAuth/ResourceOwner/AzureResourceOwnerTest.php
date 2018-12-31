@@ -99,7 +99,7 @@ json;
 
         $this->httpClient->expects($this->once())
             ->method('send')
-            ->will($this->throwException($exception));
+            ->willThrowException($exception);
 
         $token = '.'.base64_encode($this->userResponse);
 

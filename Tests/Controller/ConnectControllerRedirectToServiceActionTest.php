@@ -77,18 +77,17 @@ class ConnectControllerRedirectToServiceActionTest extends AbstractConnectContro
         $this->controller->redirectToServiceAction($this->request, 'facebook');
     }
 
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
     public function testUnknownResourceOwner()
     {
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+
         $this->oAuthUtils->expects($this->once())
             ->method('getAuthorizationUrl')
             ->with(
                 $this->isInstanceOf(Request::class),
                 'unknown'
             )
-            ->will($this->throwException(new \RuntimeException()))
+            ->willThrowException(new \RuntimeException())
         ;
 
         $this->controller->redirectToServiceAction($this->request, 'unknown');

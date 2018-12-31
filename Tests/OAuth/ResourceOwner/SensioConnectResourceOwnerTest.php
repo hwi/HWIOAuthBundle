@@ -18,7 +18,7 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $resourceOwnerClass = SensioConnectResourceOwner::class;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
