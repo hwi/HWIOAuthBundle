@@ -45,9 +45,9 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults(array(
-            'authorization_url' => 'https://connect.sensiolabs.com/oauth/authorize',
-            'access_token_url' => 'https://connect.sensiolabs.com/oauth/access_token',
-            'infos_url' => 'https://connect.sensiolabs.com/api',
+            'authorization_url' => 'https://connect.symfony.com/oauth/authorize',
+            'access_token_url' => 'https://connect.symfony.com/oauth/access_token',
+            'infos_url' => 'https://connect.symfony.com/api',
 
             'user_response_class' => SensioConnectUserResponse::class,
 
