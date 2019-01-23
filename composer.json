@@ -1,5 +1,5 @@
 {
-    "name":        "hwi/oauth-bundle",
+    "name":        "smyler/oauth-bundle",
     "type":        "symfony-bundle",
     "homepage":    "http://github.com/hwi/HWIOAuthBundle",
     "license":     "MIT",
