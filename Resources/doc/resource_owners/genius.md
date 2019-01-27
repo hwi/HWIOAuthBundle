@@ -1,4 +1,4 @@
-Step 2x: Setup GEnius
+Step 2x: Setup Genius
 =====================
 First you will have to register your application on Genius. Check out the
 documentation for more information: https://docs.genius.com/#/authentication-h1.
