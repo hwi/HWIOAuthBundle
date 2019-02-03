@@ -27,8 +27,18 @@ class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => 'name',
+        'firstname' => 'first_name',
+        'lastname' => 'last_name',
         'email' => 'emails.account', // requires 'wl.emails' scope
     );
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doGetTokenRequest($url, array $parameters = array())
+    {
+        return parent::httpRequest($url, http_build_query($parameters, '', '&'));
+    }
 
     /**
      * {@inheritdoc}
