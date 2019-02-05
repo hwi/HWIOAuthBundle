@@ -74,7 +74,7 @@ github_login:
 ## Add a link in `login.html.twig` to activate the login process
 ```
 <a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}">
-          <span>Login with Google</span>
+    <span>Login with Google</span>
 </a>
 ```
 
