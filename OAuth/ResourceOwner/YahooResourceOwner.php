@@ -49,7 +49,7 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
      */
     protected function doGetUserInformationRequest($url, array $parameters = array())
     {
-        return $this->httpRequest($url, null, $parameters, array('Accept: application/json'));
+        return $this->httpRequest($url, null, array('Accept: application/json'), null, $parameters);
     }
 
     /**
