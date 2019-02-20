@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use Http\Discovery\MessageFactoryDiscovery;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\JiraResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
+use Psr\Http\Message\RequestInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
@@ -30,23 +31,20 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     {
         $this
             ->httpClient->expects($this->exactly(2))
-            ->method('send')
-            ->will($this->returnCallback(function ($method, $uri, array $headers = [], $body = null) {
-                $headers += array(
-                    'Content-Type' => 'application/json; charset=utf-8',
-                );
+            ->method('sendRequest')
+            ->willReturnCallback(function (RequestInterface $request) {
+                $request = $request->withAddedHeader('Content-Type', 'application/json; charset=utf-8');
 
                 return MessageFactoryDiscovery::find()
                     ->createResponse(
                         $this->httpResponseHttpCode,
                         null,
-                        $headers,
+                        $request->getHeaders(),
                         $this->userResponse
-                    )
-                ;
-            }));
+                    );
+            });
 
-        $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret');
+        $accessToken  = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret');
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('asm89', $userResponse->getUsername());
@@ -63,40 +61,32 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
         $this
             ->httpClient->expects($this->at(0))
-            ->method('send')
-            ->will($this->returnCallback(function ($method, $uri, array $headers = [], $body = null) {
-                $headers += array(
-                    'Content-Type' => 'application/json; charset=utf-8',
-                );
+            ->method('sendRequest')
+            ->willReturnCallback(function (RequestInterface $request) {
+                $request = $request->withAddedHeader('Content-Type', 'application/json; charset=utf-8');
 
                 return MessageFactoryDiscovery::find()
                     ->createResponse(
                         $this->httpResponseHttpCode,
                         null,
-                        $headers,
+                        $request->getHeaders(),
                         $this->userResponse
-                    )
-                ;
-            }))
-        ;
+                    );
+            });
         $this
             ->httpClient->expects($this->at(1))
-            ->method('send')
-            ->will($this->returnCallback(function ($method, $uri, array $headers = [], $body = null) {
-                $headers += array(
-                    'Content-Type' => 'text/plain',
-                );
+            ->method('sendRequest')
+            ->willReturnCallback(function (RequestInterface $request) {
+                $request = $request->withAddedHeader('Content-Type', 'text/plain');
 
                 return MessageFactoryDiscovery::find()
                     ->createResponse(
                         $this->httpResponseHttpCode,
                         null,
-                        $headers,
+                        $request->getHeaders(),
                         ''
-                    )
-                ;
-            }))
-        ;
+                    );
+            });
 
         /** @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */
         $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'));

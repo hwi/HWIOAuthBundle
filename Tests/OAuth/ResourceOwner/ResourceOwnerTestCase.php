@@ -12,15 +12,19 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use Http\Client\Common\HttpMethodsClient;
+use Http\Client\HttpClient;
 use Http\Discovery\MessageFactoryDiscovery;
+use Http\Message\MessageFactory\GuzzleMessageFactory;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use PHPUnit\Framework\TestCase;
+use Http\Message\RequestFactory;
+use Psr\Http\Message\RequestInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 abstract class ResourceOwnerTestCase extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|HttpMethodsClient */
+    /** @var \PHPUnit_Framework_MockObject_MockObject|HttpClient */
     protected $httpClient;
     protected $httpResponse;
     protected $httpResponseContentType;
@@ -45,26 +49,24 @@ abstract class ResourceOwnerTestCase extends TestCase
             $mock = $this->httpClient->expects($this->once());
         }
 
-        $mock->method('send')
-            ->will($this->returnCallback(function ($method, $uri, array $headers = [], $body = null) use ($response, $contentType) {
-                $headers += array(
-                    'Content-Type' => $contentType ?: $this->httpResponseContentType,
-                );
+        $mock->method('sendRequest')
+            ->willReturnCallback(function (RequestInterface $request) use ($response, $contentType) {
+                $request = $request->withAddedHeader('Content-Type', $contentType ?: $this->httpResponseContentType);
 
                 return MessageFactoryDiscovery::find()
                     ->createResponse(
                         $this->httpResponseHttpCode,
                         null,
-                        $headers,
+                        $request->getHeaders(),
                         $response ?: $this->httpResponse
                     )
                 ;
-            }));
+            });
     }
 
     protected function createResourceOwner($name, array $options = array(), array $paths = array())
     {
-        $this->httpClient = $this->getMockBuilder(HttpMethodsClient::class)
+        $this->httpClient = $this->getMockBuilder(HttpClient::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -100,6 +102,6 @@ abstract class ResourceOwnerTestCase extends TestCase
             throw new \RuntimeException('Class is not implementing "ResourceOwnerInterface"!');
         }
 
-        return new $this->resourceOwnerClass($this->httpClient, $httpUtils, $options, $name, $this->storage);
+        return new $this->resourceOwnerClass(new HttpMethodsClient($this->httpClient, new GuzzleMessageFactory()), $httpUtils, $options, $name, $this->storage);
     }
 }

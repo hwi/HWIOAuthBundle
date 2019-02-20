@@ -58,7 +58,7 @@ json;
         $exception = new TransferException();
 
         $this->httpClient->expects($this->once())
-            ->method('send')
+            ->method('sendRequest')
             ->will($this->throwException($exception));
 
         try {
