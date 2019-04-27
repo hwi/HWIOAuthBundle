@@ -1,5 +1,8 @@
 Changelog
 =========
+## 1.0.0 (2019-xx-xx)
+* Droppped support for PHP 5.6 and 7.0,
+
 ## 0.6.3 (2018-07-31)
 * Fixed: Vkontakte profile picture & nickname path,
 * Fixed: `Content-Length` header must be a string,
