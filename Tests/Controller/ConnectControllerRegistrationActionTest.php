@@ -168,18 +168,13 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
         $this->container->setParameter('hwi_oauth.fosub_enabled', true);
 
-        if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
-            $registrationFormFactory = $this->getMockBuilder(FactoryInterface::class)
-                ->disableOriginalConstructor()
-                ->getMock();
-            $registrationFormFactory->expects($this->any())
-                ->method('createForm')
-                ->willReturn($registrationForm);
+        $registrationFormFactory = $this->getMockBuilder(FactoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $registrationFormFactory->expects($this->any())
+            ->method('createForm')
+            ->willReturn($registrationForm);
 
-            $this->container->set('hwi_oauth.registration.form.factory', $registrationFormFactory);
-        } else {
-            // FOSUser 1.3 BC. To be removed.
-            $this->container->set('hwi_oauth.registration.form', $registrationForm);
-        }
+        $this->container->set('hwi_oauth.registration.form.factory', $registrationFormFactory);
     }
 }

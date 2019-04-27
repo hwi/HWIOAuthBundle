@@ -204,14 +204,7 @@ class HWIOAuthExtension extends Extension
                 $container->setAlias('hwi_oauth.registration.form.handler', new Alias('hwi_oauth.registration.form.handler.fosub_bridge', true));
 
                 // enable compatibility with FOSUserBundle 1.3.x and 2.x
-                if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
-                    $container->setAlias('hwi_oauth.registration.form.factory', new Alias('fos_user.registration.form.factory', true));
-                } else {
-                    // FOSUser 1.3 BC. To be removed.
-                    $definition->setScope('request');
-
-                    $container->setAlias('hwi_oauth.registration.form', new Alias('fos_user.registration.form', true));
-                }
+                $container->setAlias('hwi_oauth.registration.form.factory', new Alias('fos_user.registration.form.factory', true));
             } else {
                 $container->setParameter('hwi_oauth.fosub_enabled', false);
             }
