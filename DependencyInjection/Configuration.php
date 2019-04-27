@@ -283,7 +283,7 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('type')
                                 ->validate()
                                     ->ifTrue(function ($type) {
-                                        return !Configuration::isResourceOwnerSupported($type);
+                                        return !self::isResourceOwnerSupported($type);
                                     })
                                     ->thenInvalid('Unknown resource owner type "%s".')
                                 ->end()
