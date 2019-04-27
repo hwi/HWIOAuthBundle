@@ -23,11 +23,11 @@ class EveOnlineResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'CharacterID',
         'nickname' => 'CharacterName',
         'realname' => 'CharacterName',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -36,11 +36,11 @@ class EveOnlineResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://login.eveonline.com/oauth/authorize',
             'access_token_url' => 'https://login.eveonline.com/oauth/token',
             'infos_url' => 'https://login.eveonline.com/oauth/verify',
             'use_commas_in_scope' => true,
-        ));
+        ]);
     }
 }

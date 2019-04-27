@@ -24,18 +24,18 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'user_id',
         'nickname' => 'nickname',
         'realname' => 'name',
         'email' => 'email',
         'profilepicture' => 'picture',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = [])
     {
         return $this->httpRequest(
             $url,
@@ -48,7 +48,7 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    protected function doGetUserInformationRequest($url, array $parameters = [])
     {
         return $this->httpRequest(
             $url,
@@ -64,25 +64,25 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $auth0Client = base64_encode(json_encode(array(
+        $auth0Client = base64_encode(json_encode([
             'name' => 'HWIOAuthBundle',
             'version' => 'unknown',
-            'environment' => array(
+            'environment' => [
                 'name' => 'PHP',
                 'version' => \PHP_VERSION,
-            ),
-        )));
+            ],
+        ]));
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => '{base_url}/authorize?auth0Client='.$auth0Client,
             'access_token_url' => '{base_url}/oauth/token',
             'infos_url' => '{base_url}/userinfo',
             'auth0_client' => $auth0Client,
-        ));
+        ]);
 
-        $resolver->setRequired(array(
+        $resolver->setRequired([
             'base_url',
-        ));
+        ]);
 
         $normalizer = function (Options $options, $value) {
             return str_replace('{base_url}', $options['base_url'], $value);
@@ -98,7 +98,7 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
      *
      * @return array
      */
-    private function getRequestHeaders(array $headers = array())
+    private function getRequestHeaders(array $headers = [])
     {
         if (isset($this->options['auth0_client'])) {
             $headers['Auth0-Client'] = $this->options['auth0_client'];

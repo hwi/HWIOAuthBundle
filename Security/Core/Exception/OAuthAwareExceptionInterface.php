@@ -38,21 +38,21 @@ interface OAuthAwareExceptionInterface
     /**
      * Get the refresh token information.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getRefreshToken();
 
     /**
      * Get the info when token will expire.
      *
-     * @return null|int
+     * @return int|null
      */
     public function getExpiresIn();
 
     /**
      * Get the oauth secret token.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getTokenSecret();
 

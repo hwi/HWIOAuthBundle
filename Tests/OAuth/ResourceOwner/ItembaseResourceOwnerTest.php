@@ -31,11 +31,11 @@ class ItembaseResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'uuid',
         'nickname' => 'username',
         'firstname' => 'first_name',
         'lastname' => 'last_name',
         'email' => 'email',
-    );
+    ];
 }

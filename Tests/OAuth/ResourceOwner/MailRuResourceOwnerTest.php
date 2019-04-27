@@ -26,9 +26,9 @@ class MailRuResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 ]
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'user_id',
         'nickname' => 'name',
         'email' => 'email',
-    );
+    ];
 }

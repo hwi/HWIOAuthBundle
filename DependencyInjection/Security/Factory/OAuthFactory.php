@@ -70,7 +70,7 @@ class OAuthFactory extends AbstractFactory
     {
         $definitionClassname = $this->getDefinitionClassname();
 
-        $resourceOwnersMap = array();
+        $resourceOwnersMap = [];
         foreach ($config['resource_owners'] as $name => $checkPath) {
             $resourceOwnersMap[$name] = $checkPath;
         }
@@ -169,15 +169,15 @@ class OAuthFactory extends AbstractFactory
     {
         $listenerId = parent::createListener($container, $id, $config, $userProvider);
 
-        $checkPaths = array();
+        $checkPaths = [];
         foreach ($config['resource_owners'] as $checkPath) {
             $checkPaths[] = $checkPath;
         }
 
         $container
             ->getDefinition($listenerId)
-            ->addMethodCall('setResourceOwnerMap', array($this->getResourceOwnerMapReference($id)))
-            ->addMethodCall('setCheckPaths', array($checkPaths))
+            ->addMethodCall('setResourceOwnerMap', [$this->getResourceOwnerMapReference($id)])
+            ->addMethodCall('setCheckPaths', [$checkPaths])
         ;
 
         return $listenerId;
@@ -225,7 +225,7 @@ class OAuthFactory extends AbstractFactory
                 ->end()
                 ->validate()
                     ->ifTrue(function ($c) {
-                        return 1 !== count($c) || !in_array(key($c), array('fosub', 'oauth', 'orm', 'service'), true);
+                        return 1 !== \count($c) || !\in_array(key($c), ['fosub', 'oauth', 'orm', 'service'], true);
                     })
                     ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
                 ->end()
@@ -244,9 +244,9 @@ class OAuthFactory extends AbstractFactory
                 ->end()
                 ->validate()
                     ->ifTrue(function ($c) {
-                        $checkPaths = array();
+                        $checkPaths = [];
                         foreach ($c as $checkPath) {
-                            if (in_array($checkPath, $checkPaths, true)) {
+                            if (\in_array($checkPath, $checkPaths, true)) {
                                 return true;
                             }
 

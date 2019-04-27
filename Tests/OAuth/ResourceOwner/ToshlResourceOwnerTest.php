@@ -26,18 +26,18 @@ class ToshlResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'email',
         'firstname' => 'first_name',
         'lastname' => 'last_name',
-        'realname' => array('first_name', 'last_name'),
+        'realname' => ['first_name', 'last_name'],
         'email' => 'email',
-    );
+    ];
 
-    protected $expectedUrls = array(
+    protected $expectedUrls = [
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    );
+    ];
 
     public function testRevokeToken()
     {
@@ -62,7 +62,7 @@ json;
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
+        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('example@website.com', $userResponse->getNickname());

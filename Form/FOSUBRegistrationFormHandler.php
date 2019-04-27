@@ -101,7 +101,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     /**
      * Set registration form handler.
      *
-     * @param null|RegistrationFormHandler $registrationFormHandler FOSUB registration form handler
+     * @param RegistrationFormHandler|null $registrationFormHandler FOSUB registration form handler
      */
     public function setFormHandler(RegistrationFormHandler $registrationFormHandler = null)
     {
@@ -137,7 +137,7 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
      */
     protected function reconstructFormHandler(Request $request, Form $form)
     {
-        $handlerClass = get_class($this->registrationFormHandler);
+        $handlerClass = \get_class($this->registrationFormHandler);
 
         return new $handlerClass($form, $request, $this->userManager, $this->mailer, $this->tokenGenerator);
     }

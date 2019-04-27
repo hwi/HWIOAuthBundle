@@ -18,8 +18,6 @@ matrix:
   fast_finish: true
   include:
     - php: 7.1
-      env: SYMFONY_VERSION=2.8.*
-    - php: 7.1
       env: SYMFONY_VERSION=3.4.*
     - php: 7.3
       env: TARGET=csfixer_dry_run

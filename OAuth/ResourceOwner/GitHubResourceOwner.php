@@ -24,18 +24,18 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'login',
         'realname' => 'name',
         'email' => 'email',
         'profilepicture' => 'avatar_url',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         $response = parent::getUserInformation($accessToken, $extraParameters);
 
@@ -43,7 +43,7 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
         if (empty($responseData['email'])) {
             // fetch the email addresses linked to the account
             $content = $this->httpRequest(
-                $this->normalizeUrl($this->options['emails_url']), null, array('Authorization' => 'Bearer '.$accessToken['access_token'])
+                $this->normalizeUrl($this->options['emails_url']), null, ['Authorization' => 'Bearer '.$accessToken['access_token']]
             );
 
             foreach ($this->getResponseContent($content) as $email) {
@@ -68,7 +68,7 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
         $response = $this->httpRequest(
             sprintf($this->options['revoke_token_url'], $this->options['client_id'], $token),
             null,
-            array('Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])),
+            ['Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])],
             'DELETE'
         );
 
@@ -82,7 +82,7 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://github.com/login/oauth/authorize',
             'access_token_url' => 'https://github.com/login/oauth/access_token',
             'revoke_token_url' => 'https://api.github.com/applications/%s/tokens/%s',
@@ -90,6 +90,6 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
             'emails_url' => 'https://api.github.com/user/emails',
 
             'use_commas_in_scope' => true,
-        ));
+        ]);
     }
 }

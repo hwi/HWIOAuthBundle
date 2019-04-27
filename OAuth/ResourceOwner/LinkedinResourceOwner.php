@@ -24,7 +24,7 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'formattedName',
         'firstname' => 'firstName',
@@ -32,20 +32,20 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
         'realname' => 'formattedName',
         'email' => 'emailAddress',
         'profilepicture' => 'pictureUrl',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($this->normalizeUrl($url, $parameters), null, array(), 'POST');
+        return $this->httpRequest($this->normalizeUrl($url, $parameters), null, [], 'POST');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    protected function doGetUserInformationRequest($url, array $parameters = [])
     {
         // LinkedIn uses different variable as they still support OAuth1.0a
         return parent::doGetUserInformationRequest(str_replace('access_token', 'oauth2_access_token', $url), $parameters);
@@ -58,7 +58,7 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://www.linkedin.com/oauth/v2/authorization',
             'access_token_url' => 'https://www.linkedin.com/oauth/v2/accessToken',
             'infos_url' => 'https://api.linkedin.com/v1/people/~:(id,first-name,last-name,formatted-name,email-address,picture-url)?format=json',
@@ -66,6 +66,6 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
             'csrf' => true,
 
             'use_bearer_authorization' => false,
-        ));
+        ]);
     }
 }

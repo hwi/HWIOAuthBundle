@@ -23,13 +23,13 @@ class TrelloResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     "fullName": "foo"
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'username',
         'realname' => 'fullName',
         'email' => 'email',
         'profilepicture' => 'avatarSource',
-    );
+    ];
 
     public function testGetAuthorizationUrlContainOAuthTokenAndSecret()
     {
@@ -37,7 +37,7 @@ json;
 
         $this->storage->expects($this->once())
             ->method('save')
-            ->with($this->resourceOwner, array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'timestamp' => time()));
+            ->with($this->resourceOwner, ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'timestamp' => time()]);
 
         $this->assertEquals(
             'http://user.auth/?test=3&scope=read&oauth_token=token',

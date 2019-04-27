@@ -23,12 +23,12 @@ class JawboneResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'xid' => 'data.id',
         'firstname' => 'data.first',
         'lastname' => 'data.last',
         'profilepicture' => 'data.image',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -43,14 +43,14 @@ class JawboneResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getInformation($accessToken, $type, array $extraParameters = array())
+    public function getInformation($accessToken, $type, array $extraParameters = [])
     {
         $url = $this->normalizeUrl($this->options['infos_url'].'/'.$type, $extraParameters);
 
-        $headers = array(
+        $headers = [
             'Authorization' => 'Bearer '.$accessToken['access_token'],
             'Accept' => 'application/json',
-        );
+        ];
 
         return $this->httpRequest($url, null, $headers);
     }
@@ -62,11 +62,11 @@ class JawboneResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://jawbone.com/auth/oauth2/auth',
             'access_token_url' => 'https://jawbone.com/auth/oauth2/token',
             'infos_url' => 'https://jawbone.com/nudge/api/v.1.0/users/@me',
             'use_commas_in_scope' => true,
-        ));
+        ]);
     }
 }

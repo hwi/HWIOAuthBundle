@@ -61,13 +61,13 @@ class OAuthToken extends AbstractToken
      * @param string|array $accessToken The OAuth access token
      * @param array        $roles       Roles for the token
      */
-    public function __construct($accessToken, array $roles = array())
+    public function __construct($accessToken, array $roles = [])
     {
         parent::__construct($roles);
 
         $this->setRawToken($accessToken);
 
-        parent::setAuthenticated(count($roles) > 0);
+        parent::setAuthenticated(\count($roles) > 0);
     }
 
     /**
@@ -101,7 +101,7 @@ class OAuthToken extends AbstractToken
      */
     public function setRawToken($token)
     {
-        if (is_array($token)) {
+        if (\is_array($token)) {
             if (isset($token['access_token'])) {
                 $this->accessToken = $token['access_token'];
             } elseif (isset($token['oauth_token'])) {
@@ -130,7 +130,7 @@ class OAuthToken extends AbstractToken
             $this->rawToken = $token;
         } else {
             $this->accessToken = $token;
-            $this->rawToken = array('access_token' => $token);
+            $this->rawToken = ['access_token' => $token];
         }
     }
 
@@ -212,7 +212,7 @@ class OAuthToken extends AbstractToken
     }
 
     /**
-     * @return null|string
+     * @return string|null
      */
     public function getTokenSecret()
     {
@@ -258,7 +258,7 @@ class OAuthToken extends AbstractToken
      */
     public function serialize()
     {
-        return serialize(array(
+        return serialize([
             $this->accessToken,
             $this->rawToken,
             $this->refreshToken,
@@ -266,7 +266,7 @@ class OAuthToken extends AbstractToken
             $this->createdAt,
             $this->resourceOwnerName,
             parent::serialize(),
-        ));
+        ]);
     }
 
     /**

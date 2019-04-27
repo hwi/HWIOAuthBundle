@@ -93,7 +93,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     {
         foreach ($this->resourceOwners as $name => $checkPath) {
             if ($this->httpUtils->checkRequestPath($request, $checkPath)) {
-                return array($this->getResourceOwnerByName($name), $checkPath);
+                return [$this->getResourceOwnerByName($name), $checkPath];
             }
         }
 

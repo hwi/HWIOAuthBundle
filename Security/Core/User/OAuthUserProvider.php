@@ -44,8 +44,8 @@ class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserProvider
      */
     public function refreshUser(UserInterface $user)
     {
-        if (!$this->supportsClass(get_class($user))) {
-            throw new UnsupportedUserException(sprintf('Unsupported user class "%s"', get_class($user)));
+        if (!$this->supportsClass(\get_class($user))) {
+            throw new UnsupportedUserException(sprintf('Unsupported user class "%s"', \get_class($user)));
         }
 
         return $this->loadUserByUsername($user->getUsername());

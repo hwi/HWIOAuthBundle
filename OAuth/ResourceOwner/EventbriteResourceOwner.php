@@ -23,21 +23,21 @@ class EventbriteResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'user.user_id',
         'nickname' => 'user.first_name',
         'firstname' => 'user.first_name',
         'lastname' => 'user.last_name',
-        'realname' => array('user.first_name', 'user.last_name'),
+        'realname' => ['user.first_name', 'user.last_name'],
         'email' => 'email',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($url, http_build_query($parameters, '', '&'), array(), 'POST');
+        return $this->httpRequest($url, http_build_query($parameters, '', '&'), [], 'POST');
     }
 
     /**
@@ -47,12 +47,12 @@ class EventbriteResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://www.eventbrite.com/oauth/authorize',
             'access_token_url' => 'https://www.eventbrite.com/oauth/token',
             'infos_url' => 'https://www.eventbrite.com/json/user_get',
 
             'use_bearer_authorization' => true,
-        ));
+        ]);
     }
 }
