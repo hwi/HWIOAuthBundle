@@ -118,7 +118,7 @@
         "friendsofsymfony/user-bundle": "^2.0",
         "php-http/httplug-bundle":      "^1.7",
         "php-http/guzzle6-adapter":     "^1.1",
-        "phpunit/phpunit":              "^5.7|6.0",
+        "phpunit/phpunit":              "^6.5",
         "friendsofphp/php-cs-fixer":    "^2.0"
     },
 
