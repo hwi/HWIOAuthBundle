@@ -53,6 +53,7 @@ hwi_oauth:
 - [FI-WARE](resource_owners/fiware.md)
 - [Flickr](resource_owners/flickr.md)
 - [Foursquare](resource_owners/foursquare.md)
+- [Genius](resource_owners/genius.md)
 - [GitHub](resource_owners/github.md)
 - [GitLab](resource_owners/gitlab.md)
 - [Google](resource_owners/google.md)
