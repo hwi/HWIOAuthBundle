@@ -35,7 +35,7 @@ class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = [])
     {
         return parent::httpRequest($url, http_build_query($parameters, '', '&'));
     }
