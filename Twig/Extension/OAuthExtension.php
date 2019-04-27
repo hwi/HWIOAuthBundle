@@ -12,13 +12,15 @@
 namespace HWI\Bundle\OAuthBundle\Twig\Extension;
 
 use HWI\Bundle\OAuthBundle\Templating\Helper\OAuthHelper;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFunction;
 
 /**
  * OAuthExtension.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
-class OAuthExtension extends \Twig_Extension
+class OAuthExtension extends AbstractExtension
 {
     /**
      * @var OAuthHelper
@@ -34,14 +36,14 @@ class OAuthExtension extends \Twig_Extension
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getFunctions()
     {
         return [
-            new \Twig_SimpleFunction('hwi_oauth_authorization_url', [$this, 'getAuthorizationUrl']),
-            new \Twig_SimpleFunction('hwi_oauth_login_url', [$this, 'getLoginUrl']),
-            new \Twig_SimpleFunction('hwi_oauth_resource_owners', [$this, 'getResourceOwners']),
+            new TwigFunction('hwi_oauth_authorization_url', [$this, 'getAuthorizationUrl']),
+            new TwigFunction('hwi_oauth_login_url', [$this, 'getLoginUrl']),
+            new TwigFunction('hwi_oauth_resource_owners', [$this, 'getResourceOwners']),
         ];
     }
 
