@@ -47,12 +47,12 @@ class SpotifyResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
   "uri": "spotify:user:wizzler"
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'id',
         'realname' => 'display_name',
         'email' => 'email',
-    );
+    ];
 
     public function testGetUserInformation()
     {
@@ -61,7 +61,7 @@ json;
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
+        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('wizzler', $userResponse->getUsername());
         $this->assertEquals('wizzler', $userResponse->getNickname());
@@ -73,14 +73,14 @@ json;
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner('oauth2', array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner('oauth2', ['user_response_class' => $class]);
 
         $this->mockHttpClient();
 
         /**
          * @var CustomUserResponse
          */
-        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());

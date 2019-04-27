@@ -17,32 +17,29 @@ use Symfony\Component\Form\FormInterface;
 
 class ConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
 {
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
     public function testNotEnabled()
     {
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+
         $this->container->setParameter('hwi_oauth.connect', false);
 
         $this->controller->connectServiceAction($this->request, 'facebook');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage Cannot connect an account.
-     */
     public function testAlreadyConnected()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('Cannot connect an account.');
+
         $this->mockAuthorizationCheck(false);
 
         $this->controller->connectServiceAction($this->request, 'facebook');
     }
 
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
     public function testUnknownResourceOwner()
     {
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+
         $this->container->setParameter('hwi_oauth.firewall_names', []);
 
         $this->mockAuthorizationCheck();
@@ -61,7 +58,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $this->session->expects($this->once())
             ->method('get')
             ->with('_hwi_oauth.connect_confirmation.'.$key)
-            ->willReturn(array())
+            ->willReturn([])
         ;
 
         $this->tokenStorage->expects($this->once())
@@ -103,7 +100,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $this->session->expects($this->once())
             ->method('get')
             ->with('_hwi_oauth.connect_confirmation.'.$key)
-            ->willReturn(array())
+            ->willReturn([])
         ;
 
         $form = $this->getMockBuilder(FormInterface::class)
@@ -152,7 +149,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $this->session->expects($this->once())
             ->method('get')
             ->with('_hwi_oauth.connect_confirmation.'.$key)
-            ->willReturn(array())
+            ->willReturn([])
         ;
 
         $this->tokenStorage->expects($this->once())
@@ -193,7 +190,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
 
         $this->resourceOwner->expects($this->once())
             ->method('getAccessToken')
-            ->willReturn(array())
+            ->willReturn([])
         ;
 
         $this->tokenStorage->expects($this->once())

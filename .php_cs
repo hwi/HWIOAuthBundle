@@ -13,9 +13,19 @@ return PhpCsFixer\Config::create()
     ->setRules(array(
         '@Symfony' => true,
         '@Symfony:risky' => true,
-        'no_unreachable_default_argument_value' => false,
+        '@PHP71Migration' => true,
+        '@PHPUnit60Migration:risky' => true,
+        'combine_consecutive_issets' => true,
+        'combine_consecutive_unsets' => true,
         'heredoc_to_nowdoc' => false,
-        'header_comment' => array('header' => $header),
+        'header_comment' => ['header' => $header],
+        'no_unreachable_default_argument_value' => false,
+        'ordered_class_elements' => true,
+        'ordered_imports' => true,
+        'php_unit_method_casing' => ['case' => 'camel_case'],
+        'php_unit_set_up_tear_down_visibility' => true,
+        'native_function_invocation' => ['include' => ['@compiler_optimized'], 'scope' => 'namespaced'],
+        'array_syntax' => ['syntax' => 'short'],
     ))
     ->setRiskyAllowed(true)
     ->setFinder(

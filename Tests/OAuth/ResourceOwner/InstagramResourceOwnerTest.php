@@ -25,18 +25,18 @@ class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     }
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'data.id',
         'nickname' => 'data.username',
-    );
+    ];
 
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
 
         /* @var $userResponse CustomUserResponse */
-        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('token', $userResponse->getAccessToken());

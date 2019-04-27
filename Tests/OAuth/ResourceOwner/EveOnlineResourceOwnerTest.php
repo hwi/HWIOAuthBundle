@@ -23,9 +23,9 @@ class EveOnlineResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'CharacterID',
         'nickname' => 'CharacterName',
         'realname' => 'CharacterName',
-    );
+    ];
 }

@@ -20,33 +20,30 @@ use Symfony\Component\Security\Http\SecurityEvents;
 
 class ConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
 {
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
-     */
     public function testNotEnabled()
     {
+        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+
         $this->container->setParameter('hwi_oauth.connect', false);
 
         $this->controller->registrationAction($this->request, time());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AccessDeniedException
-     * @expectedExceptionMessage Cannot connect already registered account.
-     */
     public function testAlreadyConnected()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AccessDeniedException::class);
+        $this->expectExceptionMessage('Cannot connect already registered account.');
+
         $this->mockAuthorizationCheck();
 
         $this->controller->registrationAction($this->request, time());
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cannot register an account.
-     */
     public function testCannotRegisterBadError()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Cannot register an account.');
+
         $key = time();
 
         $this->mockAuthorizationCheck(false);

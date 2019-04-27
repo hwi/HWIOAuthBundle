@@ -24,30 +24,30 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'user_nsid',
         'nickname' => 'username',
         'realname' => 'fullname',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
         $token = $this->getRequestToken($redirectUri, $extraParameters);
 
-        return $this->normalizeUrl($this->options['authorization_url'], array(
+        return $this->normalizeUrl($this->options['authorization_url'], [
             'oauth_token' => $token['oauth_token'],
             'perms' => $this->options['perms'],
             'nojsoncallback' => 1,
-        ));
+        ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         $response = $this->getUserResponse();
         $response->setData($accessToken);
@@ -64,7 +64,7 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'http://www.flickr.com/services/oauth/authorize',
             'request_token_url' => 'http://www.flickr.com/services/oauth/request_token',
             'access_token_url' => 'http://www.flickr.com/services/oauth/access_token',
@@ -73,6 +73,6 @@ class FlickrResourceOwner extends GenericOAuth1ResourceOwner
             'infos_url' => null,
 
             'perms' => 'read',
-        ));
+        ]);
     }
 }

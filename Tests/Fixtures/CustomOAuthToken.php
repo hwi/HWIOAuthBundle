@@ -17,11 +17,11 @@ class CustomOAuthToken extends OAuthToken
 {
     public function __construct()
     {
-        parent::__construct(array(
+        parent::__construct([
             'access_token' => 'access_token_data',
-        ), array(
+        ], [
             'ROLE_USER',
-        ));
+        ]);
 
         $this->setUser(new User());
     }

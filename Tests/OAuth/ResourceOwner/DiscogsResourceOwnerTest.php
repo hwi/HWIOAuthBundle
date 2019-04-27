@@ -24,8 +24,8 @@ class DiscogsResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
   "consumer_name": "Your Application Name"
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'username',
-    );
+    ];
 }

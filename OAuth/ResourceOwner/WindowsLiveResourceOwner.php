@@ -23,12 +23,12 @@ class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => 'name',
         'email' => 'emails.account', // requires 'wl.emails' scope
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -46,12 +46,12 @@ class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://login.live.com/oauth20_authorize.srf',
             'access_token_url' => 'https://login.live.com/oauth20_token.srf',
             'infos_url' => 'https://apis.live.net/v5.0/me',
 
             'scope' => 'wl.signin',
-        ));
+        ]);
     }
 }

@@ -24,14 +24,14 @@ class OdnoklassnikiResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'uid',
         'nickname' => 'username',
         'realname' => 'name',
         'email' => 'email',
         'firstname' => 'first_name',
         'lastname' => 'last_name',
-    );
+    ];
 
     protected function setUpResourceOwner($name, HttpUtils $httpUtils, array $options)
     {
@@ -39,9 +39,9 @@ json;
             $name,
             $httpUtils,
             array_merge(
-                array(
+                [
                     'application_key' => '123456',
-                ),
+                ],
                 $options
             )
         );

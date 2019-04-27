@@ -42,35 +42,35 @@ interface UserResponseInterface extends ResponseInterface
     /**
      * Get the first name of user.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getFirstName();
 
     /**
      * Get the last name of user.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getLastName();
 
     /**
      * Get the real name of user.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getRealName();
 
     /**
      * Get the email address.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getEmail();
 
     /**
      * Get the url to the profile picture.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getProfilePicture();
 
@@ -84,21 +84,21 @@ interface UserResponseInterface extends ResponseInterface
     /**
      * Get the access token used for the request.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getRefreshToken();
 
     /**
      * Get oauth token secret used for the request.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getTokenSecret();
 
     /**
      * Get the info when token will expire.
      *
-     * @return null|string
+     * @return string|null
      */
     public function getExpiresIn();
 

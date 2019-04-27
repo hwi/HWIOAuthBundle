@@ -23,14 +23,14 @@ class ToshlResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'email',
         'firstname' => 'first_name',
         'lastname' => 'last_name',
-        'realname' => array('first_name', 'last_name'),
+        'realname' => ['first_name', 'last_name'],
         'email' => 'email',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -41,7 +41,7 @@ class ToshlResourceOwner extends GenericOAuth2ResourceOwner
         $response = $this->httpRequest(
             $this->options['revoke_token_url'],
             null,
-            array('Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])),
+            ['Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])],
             'DELETE'
         );
 
@@ -55,13 +55,13 @@ class ToshlResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://toshl.com/oauth2/authorize',
             'access_token_url' => 'https://toshl.com/oauth2/token',
             'revoke_token_url' => 'https://toshl.com/oauth2/revoke',
             'infos_url' => 'https://api.toshl.com/me',
             'csrf' => true,
             'use_commas_in_scope' => true,
-        ));
+        ]);
     }
 }

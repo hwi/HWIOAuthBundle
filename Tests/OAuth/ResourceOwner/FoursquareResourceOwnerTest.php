@@ -29,13 +29,13 @@ class FoursquareResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'response.user.id',
         'firstname' => 'response.user.firstName',
         'lastname' => 'response.user.lastName',
         'nickname' => 'response.user.firstName',
-        'realname' => array('response.user.firstName', 'response.user.lastName'),
-    );
+        'realname' => ['response.user.firstName', 'response.user.lastName'],
+    ];
 
     public function testGetUserInformationFirstAndLastName()
     {
@@ -44,7 +44,7 @@ json;
         /**
          * @var AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
+        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('bar', $userResponse->getFirstName());
         $this->assertEquals('foo', $userResponse->getLastName());

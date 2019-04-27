@@ -23,10 +23,10 @@ class RunKeeperResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'realname' => 'name',
         'profilepicture' => 'medium_picture',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -36,7 +36,7 @@ class RunKeeperResourceOwner extends GenericOAuth2ResourceOwner
         $response = $this->httpRequest(
             $this->normalizeUrl($this->options['user_resource_url']),
             null,
-            array('Authorization' => 'Bearer '.$accessToken)
+            ['Authorization' => 'Bearer '.$accessToken]
         );
 
         return $this->getResponseContent($response);
@@ -49,11 +49,11 @@ class RunKeeperResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://runkeeper.com/apps/authorize',
             'access_token_url' => 'https://runkeeper.com/apps/token',
             'infos_url' => 'https://api.runkeeper.com/profile',
             'user_resource_url' => 'https://api.runkeeper.com/user',
-        ));
+        ]);
     }
 }

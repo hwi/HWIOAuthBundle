@@ -116,7 +116,7 @@ abstract class AbstractConnectControllerTest extends TestCase
 
         $this->container = new Container();
         $this->container->setParameter('hwi_oauth.connect', true);
-        $this->container->setParameter('hwi_oauth.firewall_names', array('default'));
+        $this->container->setParameter('hwi_oauth.firewall_names', ['default']);
         $this->container->setParameter('hwi_oauth.connect.confirmation', true);
         $this->container->setParameter('hwi_oauth.grant_rule', 'IS_AUTHENTICATED_REMEMBERED');
 
