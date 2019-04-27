@@ -68,11 +68,6 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
      */
     public function loadUserByUsername($username)
     {
-        // Compatibility with FOSUserBundle < 2.0
-        if (class_exists('FOS\UserBundle\Form\Handler\RegistrationFormHandler')) {
-            return $this->userManager->loadUserByUsername($username);
-        }
-
         return $this->userManager->findUserByUsername($username);
     }
 
@@ -135,11 +130,6 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
      */
     public function refreshUser(UserInterface $user)
     {
-        // Compatibility with FOSUserBundle < 2.0
-        if (class_exists('FOS\UserBundle\Form\Handler\RegistrationFormHandler')) {
-            return $this->userManager->refreshUser($user);
-        }
-
         $identifier = $this->properties['identifier'];
         if (!$user instanceof User || !$this->accessor->isReadable($user, $identifier)) {
             throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', \get_class($user)));
