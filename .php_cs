@@ -16,6 +16,8 @@ return PhpCsFixer\Config::create()
         'no_unreachable_default_argument_value' => false,
         'heredoc_to_nowdoc' => false,
         'header_comment' => array('header' => $header),
+        'native_function_invocation' => false,
+        'phpdoc_types_order' => array('null_adjustment' => 'none', 'sort_algorithm' => 'none')
     ))
     ->setRiskyAllowed(true)
     ->setFinder(
