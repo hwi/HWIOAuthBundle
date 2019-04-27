@@ -24,18 +24,18 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'user_id',
         'nickname' => 'nick_name',
         'realname' => 'nick_name',
         'email' => 'email',
         'profilepicture' => 'photos.picture',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         // SalesForce returns the infos_url in the OAuth Response Token
         $this->options['infos_url'] = $accessToken['id'];
@@ -46,12 +46,12 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    protected function doGetUserInformationRequest($url, array $parameters = [])
     {
         // Salesforce requires format parameter in order for API to return json response
-        $url = $this->normalizeUrl($url, array(
+        $url = $this->normalizeUrl($url, [
             'format' => $this->options['format'],
-        ));
+        ]);
 
         // Salesforce require to pass the OAuth token as 'oauth_token' instead of 'access_token'
         $url = str_replace('access_token', 'oauth_token', $url);
@@ -66,7 +66,7 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'sandbox' => false,
             'authorization_url' => 'https://login.salesforce.com/services/oauth2/authorize',
             'access_token_url' => 'https://login.salesforce.com/services/oauth2/token',
@@ -76,7 +76,7 @@ class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
 
             // @see SalesforceResourceOwner::doGetUserInformationRequest()
             'format' => 'json',
-        ));
+        ]);
 
         $sandboxTransformation = function (Options $options, $value) {
             if (!$options['sandbox']) {

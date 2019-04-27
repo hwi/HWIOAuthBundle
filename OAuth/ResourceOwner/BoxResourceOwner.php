@@ -23,26 +23,26 @@ class BoxResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => 'name',
         'email' => 'login',
         'profilepicture' => 'avatar_url',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
     public function revokeToken($token)
     {
-        $parameters = array(
+        $parameters = [
             'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
             'token' => $token,
-        );
+        ];
 
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url']), $parameters, array(), 'POST');
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url']), $parameters, [], 'POST');
 
         return 200 === $response->getStatusCode();
     }
@@ -54,11 +54,11 @@ class BoxResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://www.box.com/api/oauth2/authorize',
             'access_token_url' => 'https://www.box.com/api/oauth2/token',
             'revoke_token_url' => 'https://www.box.com/api/oauth2/revoke',
             'infos_url' => 'https://api.box.com/2.0/users/me',
-        ));
+        ]);
     }
 }

@@ -22,12 +22,12 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'openid',
         'nickname' => 'nickname',
         'realname' => 'nickname',
         'profilepicture' => 'figureurl_qq_1',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -52,16 +52,16 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken = null, array $extraParameters = array())
+    public function getUserInformation(array $accessToken = null, array $extraParameters = [])
     {
-        $openid = isset($extraParameters['openid']) ? $extraParameters['openid'] : $this->requestUserIdentifier($accessToken);
+        $openid = $extraParameters['openid'] ?? $this->requestUserIdentifier($accessToken);
 
-        $url = $this->normalizeUrl($this->options['infos_url'], array(
+        $url = $this->normalizeUrl($this->options['infos_url'], [
             'oauth_consumer_key' => $this->options['client_id'],
             'access_token' => $accessToken['access_token'],
             'openid' => $openid,
             'format' => 'json',
-        ));
+        ]);
 
         $response = $this->doGetUserInformationRequest($url);
         $content = $this->getResponseContent($response);
@@ -88,19 +88,19 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://graph.qq.com/oauth2.0/authorize?format=json',
             'access_token_url' => 'https://graph.qq.com/oauth2.0/token',
             'infos_url' => 'https://graph.qq.com/user/get_user_info',
             'me_url' => 'https://graph.qq.com/oauth2.0/me',
-        ));
+        ]);
     }
 
     private function requestUserIdentifier(array $accessToken = null)
     {
-        $url = $this->normalizeUrl($this->options['me_url'], array(
+        $url = $this->normalizeUrl($this->options['me_url'], [
             'access_token' => $accessToken['access_token'],
-        ));
+        ]);
 
         $response = $this->httpRequest($url);
         $content = $this->getResponseContent($response);

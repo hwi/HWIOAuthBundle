@@ -19,22 +19,22 @@ class SinaWeiboResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'screen_name',
         'realname' => 'screen_name',
         'profilepicture' => 'profile_image_url',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken = null, array $extraParameters = array())
+    public function getUserInformation(array $accessToken = null, array $extraParameters = [])
     {
-        $url = $this->normalizeUrl($this->options['infos_url'], array(
+        $url = $this->normalizeUrl($this->options['infos_url'], [
             'access_token' => $accessToken['access_token'],
             'uid' => $accessToken['uid'],
-        ));
+        ]);
 
         $content = $this->doGetUserInformationRequest($url)->getBody();
 
@@ -53,10 +53,10 @@ class SinaWeiboResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://api.weibo.com/oauth2/authorize',
             'access_token_url' => 'https://api.weibo.com/oauth2/access_token',
             'infos_url' => 'https://api.weibo.com/2/users/show.json',
-        ));
+        ]);
     }
 }

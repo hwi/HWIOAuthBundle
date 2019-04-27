@@ -25,17 +25,17 @@ class YahooResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     }
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'profile.guid',
         'nickname' => 'profile.nickname',
         'realname' => 'profile.givenName',
-    );
+    ];
 
     public function testGetUserInformation()
     {
         $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
-        $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1);
+        $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1];
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('1', $userResponse->getUsername());
@@ -48,14 +48,14 @@ json;
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner('oauth1', array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner('oauth1', ['user_response_class' => $class]);
 
         $this->mockHttpClient();
 
         /**
          * @var CustomUserResponse
          */
-        $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1));
+        $userResponse = $resourceOwner->getUserInformation(['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1]);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());

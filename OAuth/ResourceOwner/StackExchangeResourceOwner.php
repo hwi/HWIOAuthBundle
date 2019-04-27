@@ -24,21 +24,21 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'items.0.user_id',
         'nickname' => 'items.0.display_name',
         'realname' => 'items.0.display_name',
         'profilepicture' => 'items.0.profile_image',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         $parameters = array_merge(
-           array($this->options['attr_name'] => $accessToken['access_token']),
-           array('site' => $this->options['site'], 'key' => $this->options['key']),
+           [$this->options['attr_name'] => $accessToken['access_token']],
+           ['site' => $this->options['site'], 'key' => $this->options['key']],
            $extraParameters
         );
 
@@ -59,11 +59,11 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setRequired(array(
+        $resolver->setRequired([
             'key',
-        ));
+        ]);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://stackexchange.com/oauth',
             'access_token_url' => 'https://stackexchange.com/oauth/access_token',
             'infos_url' => 'https://api.stackexchange.com/2.0/me',
@@ -71,6 +71,6 @@ class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
             'scope' => 'no_expiry',
             'site' => 'stackoverflow',
             'use_bearer_authorization' => false,
-        ));
+        ]);
     }
 }

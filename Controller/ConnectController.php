@@ -67,7 +67,7 @@ class ConnectController extends Controller
 
             $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
-            return $this->redirectToRoute('hwi_oauth_connect_registration', array('key' => $key));
+            return $this->redirectToRoute('hwi_oauth_connect_registration', ['key' => $key]);
         }
 
         if ($error) {
@@ -78,9 +78,9 @@ class ConnectController extends Controller
             }
         }
 
-        return $this->render('@HWIOAuth/Connect/login.html.twig', array(
+        return $this->render('@HWIOAuth/Connect/login.html.twig', [
             'error' => $error,
-        ));
+        ]);
     }
 
     /**
@@ -151,9 +151,9 @@ class ConnectController extends Controller
                 if ($targetPath = $this->getTargetPath($session)) {
                     $response = $this->redirect($targetPath);
                 } else {
-                    $response = $this->render('@HWIOAuth/Connect/registration_success.html.twig', array(
+                    $response = $this->render('@HWIOAuth/Connect/registration_success.html.twig', [
                         'userInformation' => $userInformation,
-                    ));
+                    ]);
                 }
             }
 
@@ -173,11 +173,11 @@ class ConnectController extends Controller
             return $response;
         }
 
-        return $this->render('@HWIOAuth/Connect/registration.html.twig', array(
+        return $this->render('@HWIOAuth/Connect/registration.html.twig', [
             'key' => $key,
             'form' => $form->createView(),
             'userInformation' => $userInformation,
-        ));
+        ]);
     }
 
     /**
@@ -241,11 +241,9 @@ class ConnectController extends Controller
             return $this->getConfirmationResponse($request, $accessToken, $service);
         }
 
-        // Symfony <3.0 BC
         /** @var $form FormInterface */
-        $form = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? $this->createForm(FormType::class)
-            : $this->createForm('form');
+        $form = $this->createForm(FormType::class);
+
         // Handle the form
         $form->handleRequest($request);
 
@@ -260,12 +258,12 @@ class ConnectController extends Controller
             return $response;
         }
 
-        return $this->render('@HWIOAuth/Connect/connect_confirm.html.twig', array(
+        return $this->render('@HWIOAuth/Connect/connect_confirm.html.twig', [
             'key' => $key,
             'service' => $service,
             'form' => $form->createView(),
             'userInformation' => $resourceOwner->getUserInformation($accessToken),
-        ));
+        ]);
     }
 
     /**
@@ -378,7 +376,7 @@ class ConnectController extends Controller
      *
      * @return string
      */
-    protected function generate($route, array $params = array(), $absolute = false)
+    protected function generate($route, array $params = [], $absolute = false)
     {
         @trigger_error('The '.__METHOD__.' method is deprecated since version 0.4 and will be removed in 1.0. Use Symfony\Bundle\FrameworkBundle\Controller\Controller::generateUrl instead.', E_USER_DEPRECATED);
 
@@ -466,7 +464,7 @@ class ConnectController extends Controller
         if ($currentToken instanceof OAuthToken) {
             // Update user token with new details
             $newToken =
-                is_array($accessToken) &&
+                \is_array($accessToken) &&
                 (isset($accessToken['access_token']) || isset($accessToken['oauth_token'])) ?
                     $accessToken : $currentToken->getRawToken();
 
@@ -477,10 +475,10 @@ class ConnectController extends Controller
             if ($targetPath = $this->getTargetPath($request->getSession())) {
                 $response = $this->redirect($targetPath);
             } else {
-                $response = $this->render('@HWIOAuth/Connect/connect_success.html.twig', array(
+                $response = $this->render('@HWIOAuth/Connect/connect_success.html.twig', [
                     'userInformation' => $userInformation,
                     'service' => $service,
-                ));
+                ]);
             }
         }
 

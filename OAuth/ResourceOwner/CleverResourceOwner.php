@@ -23,17 +23,17 @@ class CleverResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'data.id',
         'email' => 'data.email',
         'firstname' => 'data.name.first',
         'lastname' => 'data.name.last',
-        'realname' => array(
+        'realname' => [
             'data.name.first',
             'data.name.middle',
             'data.name.last',
-        ),
-    );
+        ],
+    ];
 
     /**
      * {@inheritdoc}
@@ -42,17 +42,17 @@ class CleverResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://clever.com/oauth/authorize',
             'access_token_url' => 'https://clever.com/oauth/tokens',
             'infos_url' => 'https://api.clever.com/me',
-        ));
+        ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = [])
     {
         $authPreHash = $this->options['client_id'].':'.$this->options['client_secret'];
         $authHeader = 'Authorization: Basic '.base64_encode($authPreHash);
@@ -60,9 +60,9 @@ class CleverResourceOwner extends GenericOAuth2ResourceOwner
         return $this->httpRequest(
             $url,
             http_build_query($parameters, '', '&'),
-            array(
+            [
                 $authHeader,
-            )
+            ]
         );
     }
 }

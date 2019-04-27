@@ -24,18 +24,18 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'profile.guid',
         'nickname' => 'profile.nickname',
         'realname' => 'profile.givenName',
-    );
+    ];
 
     /**
      * Override to replace {guid} in the infos_url with the authenticating user's yahoo id.
      *
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         $this->options['infos_url'] = str_replace('{guid}', $accessToken['xoauth_yahoo_guid'], $this->options['infos_url']);
 
@@ -47,9 +47,9 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
      *
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    protected function doGetUserInformationRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($url, null, $parameters, array('Accept: application/json'));
+        return $this->httpRequest($url, null, ['Accept: application/json'], null, $parameters);
     }
 
     /**
@@ -59,13 +59,13 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://api.login.yahoo.com/oauth/v2/request_auth',
             'request_token_url' => 'https://api.login.yahoo.com/oauth/v2/get_request_token',
             'access_token_url' => 'https://api.login.yahoo.com/oauth/v2/get_token',
             'infos_url' => 'https://social.yahooapis.com/v1/user/{guid}/profile',
 
             'realm' => 'yahooapis.com',
-        ));
+        ]);
     }
 }

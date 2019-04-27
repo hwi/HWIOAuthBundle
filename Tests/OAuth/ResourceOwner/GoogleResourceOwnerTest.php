@@ -24,7 +24,7 @@ class GoogleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => 'name',
@@ -32,27 +32,25 @@ json;
         'lastname' => 'family_name',
         'email' => 'email',
         'profilepicture' => 'picture',
-    );
+    ];
 
-    protected $expectedUrls = array(
+    protected $expectedUrls = [
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline',
-    );
+    ];
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
-     */
     public function testInvalidAccessTypeOptionValueThrowsException()
     {
-        $this->createResourceOwner($this->resourceOwnerName, array('access_type' => 'invalid'));
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+
+        $this->createResourceOwner($this->resourceOwnerName, ['access_type' => 'invalid']);
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
-     */
     public function testInvalidApprovalPromptOptionValueThrowsException()
     {
-        $this->createResourceOwner($this->resourceOwnerName, array('approval_prompt' => 'invalid'));
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+
+        $this->createResourceOwner($this->resourceOwnerName, ['approval_prompt' => 'invalid']);
     }
 
     public function testGetAuthorizationUrl()
@@ -65,7 +63,7 @@ json;
 
     public function testRequestVisibleActions()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('request_visible_actions' => 'http://schemas.google.com/AddActivity'));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['request_visible_actions' => 'http://schemas.google.com/AddActivity']);
 
         $this->assertEquals(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&request_visible_actions=http%3A%2F%2Fschemas.google.com%2FAddActivity',
@@ -75,7 +73,7 @@ json;
 
     public function testApprovalPromptForce()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('approval_prompt' => 'force'));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['approval_prompt' => 'force']);
 
         $this->assertEquals(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&approval_prompt=force',
@@ -85,13 +83,13 @@ json;
 
     public function testHdParameter()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('hd' => 'mycollege.edu'));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['hd' => 'mycollege.edu']);
         $this->assertEquals(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&hd=mycollege.edu',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
 
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('hd' => 'mycollege.edu, mycollege.org'));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['hd' => 'mycollege.edu, mycollege.org']);
         $this->assertEquals(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&hd=mycollege.edu&mycollege.org',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
@@ -120,9 +118,9 @@ json;
             $name,
             $httpUtils,
             array_merge(
-                array(
+                [
                     'access_type' => 'offline',
-                ),
+                ],
                 $options
             )
         );

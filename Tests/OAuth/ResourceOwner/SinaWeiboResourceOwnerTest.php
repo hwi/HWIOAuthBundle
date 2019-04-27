@@ -26,12 +26,12 @@ class SinaWeiboResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "profile_image_url": "http://tp1.sinaimg.cn/1404376560/50/0/1"
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'screen_name',
         'realname' => 'screen_name',
         'profilepicture' => 'profile_image_url',
-    );
+    ];
 
     public function testGetUserInformation()
     {
@@ -40,7 +40,7 @@ json;
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token', 'uid' => '1'));
+        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token', 'uid' => '1']);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
@@ -58,7 +58,7 @@ json;
             ->will($this->throwException($exception));
 
         try {
-            $this->resourceOwner->getUserInformation(array('access_token' => 'token', 'uid' => 'someuser'));
+            $this->resourceOwner->getUserInformation(['access_token' => 'token', 'uid' => 'someuser']);
             $this->fail('An exception should have been raised');
         } catch (HttpTransportException $e) {
             $this->assertSame($exception, $e->getPrevious());
@@ -68,14 +68,14 @@ json;
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner('oauth2', array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner('oauth2', ['user_response_class' => $class]);
 
         $this->mockHttpClient();
 
         /**
          * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
          */
-        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token', 'uid' => '1'));
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token', 'uid' => '1']);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());

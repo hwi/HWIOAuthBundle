@@ -23,12 +23,12 @@ class AmazonResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'user_id',
         'nickname' => 'name',
         'realname' => 'name',
         'email' => 'email',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -37,12 +37,12 @@ class AmazonResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://www.amazon.com/ap/oa',
             'access_token_url' => 'https://api.amazon.com/auth/o2/token',
             'infos_url' => 'https://api.amazon.com/user/profile',
 
             'scope' => 'profile',
-        ));
+        ]);
     }
 }

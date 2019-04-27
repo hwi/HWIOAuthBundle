@@ -22,7 +22,7 @@ class CleverResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $resourceOwnerClass = CleverResourceOwner::class;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->resourceOwnerName = 'CleverResourceOwner';
         $this->resourceOwner = $this->createResourceOwner($this->resourceOwnerName);

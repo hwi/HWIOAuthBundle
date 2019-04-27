@@ -18,7 +18,7 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected $resourceOwnerClass = SensioConnectResourceOwner::class;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -28,14 +28,14 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     public function testGetUserInformation()
     {
         $class = SensioConnectUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
 
         $this->mockHttpClient($this->userResponse);
 
         /**
          * @var SensioConnectUserResponse
          */
-        $userResponse = $resourceOwner->getUserInformation(array('access_token' => 'token'));
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('aa5e22b0-6189-4113-9c68-91d4a3c32b7c', $userResponse->getUsername());

@@ -71,6 +71,13 @@ github_login:
     path: /login/check-github
 ```
 
+## Add a link in `login.html.twig` to activate the login process
+```
+<a href="{{ path('hwi_oauth_service_redirect', {'service': 'google' }) }}">
+    <span>Login with Google</span>
+</a>
+```
+
 ## That was it!
 
 That's the basic setup of the bundle. If you are interested in giving users the option to "connect"

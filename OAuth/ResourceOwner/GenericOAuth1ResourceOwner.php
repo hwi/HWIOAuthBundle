@@ -29,7 +29,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         $parameters = array_merge([
             'oauth_consumer_key' => $this->options['client_id'],
@@ -63,17 +63,17 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
         $token = $this->getRequestToken($redirectUri, $extraParameters);
 
-        return $this->normalizeUrl($this->options['authorization_url'], array('oauth_token' => $token['oauth_token']));
+        return $this->normalizeUrl($this->options['authorization_url'], ['oauth_token' => $token['oauth_token']]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = array())
+    public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = [])
     {
         OAuthErrorHandler::handleOAuthError($request);
 
@@ -85,7 +85,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             throw new AuthenticationException('Given token is not valid.');
         }
 
-        $parameters = array_merge(array(
+        $parameters = array_merge([
             'oauth_consumer_key' => $this->options['client_id'],
             'oauth_timestamp' => time(),
             'oauth_nonce' => $this->generateNonce(),
@@ -93,7 +93,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             'oauth_signature_method' => $this->options['signature_method'],
             'oauth_token' => $requestToken['oauth_token'],
             'oauth_verifier' => $request->query->get('oauth_verifier'),
-        ), $extraParameters);
+        ], $extraParameters);
 
         $url = $this->options['access_token_url'];
         $parameters['oauth_signature'] = OAuthUtils::signRequest(
@@ -139,7 +139,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getRequestToken($redirectUri, array $extraParameters = array())
+    public function getRequestToken($redirectUri, array $extraParameters = [])
     {
         $timestamp = time();
 
@@ -162,7 +162,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
             $this->options['signature_method']
         );
 
-        $apiResponse = $this->httpRequest($url, null, array(), 'POST', $parameters);
+        $apiResponse = $this->httpRequest($url, null, [], 'POST', $parameters);
 
         $response = $this->getResponseContent($apiResponse);
 
@@ -188,23 +188,23 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($url, null, array(), 'POST', $parameters);
+        return $this->httpRequest($url, null, [], 'POST', $parameters);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    protected function doGetUserInformationRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($url, null, array(), null, $parameters);
+        return $this->httpRequest($url, null, [], null, $parameters);
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function httpRequest($url, $content = null, array $headers = array(), $method = null, array $parameters = array())
+    protected function httpRequest($url, $content = null, array $headers = [], $method = null, array $parameters = [])
     {
         foreach ($parameters as $key => $value) {
             $parameters[$key] = $key.'="'.rawurlencode($value).'"';

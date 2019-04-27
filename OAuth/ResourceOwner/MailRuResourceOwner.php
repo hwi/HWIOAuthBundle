@@ -24,24 +24,24 @@ class MailRuResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'uid',
         'nickname' => 'nick',
         'realname' => 'nick',
         'email' => 'email',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
-        $params = array(
+        $params = [
             'app_id' => $this->options['client_id'],
             'method' => 'users.getInfo',
             'secure' => '1',
             'session_key' => $accessToken['access_token'],
-        );
+        ];
 
         $params['sig'] = md5(vsprintf('app_id=%smethod=%ssecure=%ssession_key=%s', $params).$this->options['client_secret']);
 
@@ -68,10 +68,10 @@ class MailRuResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://connect.mail.ru/oauth/authorize',
             'access_token_url' => 'https://connect.mail.ru/oauth/token',
             'infos_url' => 'http://www.appsmail.ru/platform/api',
-        ));
+        ]);
     }
 }

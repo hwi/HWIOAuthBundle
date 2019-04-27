@@ -38,11 +38,11 @@ class OAuthExtension extends \Twig_Extension
      */
     public function getFunctions()
     {
-        return array(
-            new \Twig_SimpleFunction('hwi_oauth_authorization_url', array($this, 'getAuthorizationUrl')),
-            new \Twig_SimpleFunction('hwi_oauth_login_url', array($this, 'getLoginUrl')),
-            new \Twig_SimpleFunction('hwi_oauth_resource_owners', array($this, 'getResourceOwners')),
-        );
+        return [
+            new \Twig_SimpleFunction('hwi_oauth_authorization_url', [$this, 'getAuthorizationUrl']),
+            new \Twig_SimpleFunction('hwi_oauth_login_url', [$this, 'getLoginUrl']),
+            new \Twig_SimpleFunction('hwi_oauth_resource_owners', [$this, 'getResourceOwners']),
+        ];
     }
 
     /**
@@ -70,7 +70,7 @@ class OAuthExtension extends \Twig_Extension
      *
      * @return string
      */
-    public function getAuthorizationUrl($name, $redirectUrl = null, array $extraParameters = array())
+    public function getAuthorizationUrl($name, $redirectUrl = null, array $extraParameters = [])
     {
         return $this->helper->getAuthorizationUrl($name, $redirectUrl, $extraParameters);
     }

@@ -23,12 +23,12 @@ class BitlyResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'data.login',
         'nickname' => 'data.display_name',
         'realname' => 'data.full_name',
         'profilepicture' => 'data.profile_image',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -37,11 +37,11 @@ class BitlyResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'use_bearer_authorization' => false,
             'authorization_url' => 'https://bitly.com/oauth/authorize',
             'access_token_url' => 'https://api-ssl.bitly.com/oauth/access_token',
             'infos_url' => 'https://api-ssl.bitly.com/v3/user/info?format=json',
-        ));
+        ]);
     }
 }

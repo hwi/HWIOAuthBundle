@@ -17,24 +17,24 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected $resourceOwnerClass = FlickrResourceOwner::class;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'user_nsid',
         'nickname' => 'username',
         'realname' => 'fullname',
-    );
+    ];
 
     /**
      * Together with OAuth token Flickr sends user data.
      */
     public function testGetUserInformation()
     {
-        $accessToken = array(
+        $accessToken = [
             'oauth_token' => 'token',
             'oauth_token_secret' => 'secret',
             'fullname' => 'Dmitri Lakachuskis',
             'user_nsid' => '15362483@N08',
             'username' => 'lakiboy83',
-        );
+        ];
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('15362483@N08', $userResponse->getUsername());
@@ -54,7 +54,7 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
         $this->storage->expects($this->once())
             ->method('save')
-            ->with($this->resourceOwner, array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'timestamp' => time()))
+            ->with($this->resourceOwner, ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'timestamp' => time()])
         ;
 
         $this->assertEquals(
@@ -69,10 +69,10 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
 
         /* @var $userResponse CustomUserResponse */
-        $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'));
+        $userResponse = $resourceOwner->getUserInformation(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());

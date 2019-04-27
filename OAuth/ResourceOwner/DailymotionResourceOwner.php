@@ -23,20 +23,20 @@ class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'screenname',
         'realname' => 'fullname', // requires 'userinfo' scope
         'email' => 'email', // requires 'email' scope
         'profilepicture' => 'avatar_medium_url',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
-        return parent::getAuthorizationUrl($redirectUri, array_merge(array('display' => $this->options['display']), $extraParameters));
+        return parent::getAuthorizationUrl($redirectUri, array_merge(['display' => $this->options['display']], $extraParameters));
     }
 
     /**
@@ -46,15 +46,15 @@ class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://api.dailymotion.com/oauth/authorize',
             'access_token_url' => 'https://api.dailymotion.com/oauth/token',
             'infos_url' => 'https://api.dailymotion.com/me',
 
             'display' => null,
-        ));
+        ]);
 
         // @link http://www.dailymotion.com/doc/api/authentication.html#dialog-form-factors
-        $resolver->setAllowedValues('display', array('page', 'popup', 'mobile', null));
+        $resolver->setAllowedValues('display', ['page', 'popup', 'mobile', null]);
     }
 }
