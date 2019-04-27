@@ -9,6 +9,7 @@ Changelog
 * Fixed: YahooResourceOwner::doGetUserInformationRequest uses wrong arguments,
 * Fixed: Symfony 4.2 deprecation warning in `symfony/config`,
 * Fixed: SensioConnect now uses new API URLs,
+* Added: Genius.com resource owner,
 
 ## 0.6.3 (2018-07-31)
 * Fixed: Vkontakte profile picture & nickname path,
