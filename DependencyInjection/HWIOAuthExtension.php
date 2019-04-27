@@ -202,8 +202,6 @@ class HWIOAuthExtension extends Extension
                 $definition->addArgument($config['fosub']['username_iterations']);
 
                 $container->setAlias('hwi_oauth.registration.form.handler', new Alias('hwi_oauth.registration.form.handler.fosub_bridge', true));
-
-                // enable compatibility with FOSUserBundle 1.3.x and 2.x
                 $container->setAlias('hwi_oauth.registration.form.factory', new Alias('fos_user.registration.form.factory', true));
             } else {
                 $container->setParameter('hwi_oauth.fosub_enabled', false);
