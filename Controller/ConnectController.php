@@ -241,11 +241,9 @@ class ConnectController extends Controller
             return $this->getConfirmationResponse($request, $accessToken, $service);
         }
 
-        // Symfony <3.0 BC
         /** @var $form FormInterface */
-        $form = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? $this->createForm(FormType::class)
-            : $this->createForm('form');
+        $form = $this->createForm(FormType::class);
+
         // Handle the form
         $form->handleRequest($request);
 
