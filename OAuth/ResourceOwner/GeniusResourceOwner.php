@@ -21,13 +21,13 @@ class GeniusResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'response.user.id',
         'nickname' => 'response.user.name',
         'realname' => 'response.user.name',
         'email' => 'response.user.email',
         'profilepicture' => 'response.user.avatar.medium.url',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -36,13 +36,13 @@ class GeniusResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://api.genius.com/oauth/authorize',
             'access_token_url' => 'https://api.genius.com/oauth/token',
             'infos_url' => 'https://api.genius.com/account',
             'use_bearer_authorization' => true,
             'use_commas_in_scope' => true,
             'scope' => 'me',
-        ));
+        ]);
     }
 }

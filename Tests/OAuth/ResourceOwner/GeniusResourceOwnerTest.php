@@ -63,16 +63,16 @@ class GeniusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'response.user.id',
         'nickname' => 'response.user.name',
         'realname' => 'response.user.name',
         'email' => 'response.user.email',
         'profilepicture' => 'response.user.avatar.medium.url',
-    );
+    ];
 
-    protected $expectedUrls = array(
+    protected $expectedUrls = [
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=me&redirect_uri=http%3A%2F%2Fredirect.to%2F',
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=me&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    );
+    ];
 }
