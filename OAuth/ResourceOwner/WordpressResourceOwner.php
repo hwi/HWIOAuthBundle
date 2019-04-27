@@ -23,13 +23,13 @@ class WordpressResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'ID',
         'nickname' => 'username',
         'realname' => 'display_name',
         'email' => 'email',
         'profilepicture' => 'avatar_URL',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -38,10 +38,10 @@ class WordpressResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://public-api.wordpress.com/oauth2/authorize',
             'access_token_url' => 'https://public-api.wordpress.com/oauth2/token',
             'infos_url' => 'https://public-api.wordpress.com/rest/v1/me',
-        ));
+        ]);
     }
 }

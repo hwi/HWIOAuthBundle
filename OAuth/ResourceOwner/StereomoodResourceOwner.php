@@ -21,15 +21,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
 {
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'oauth_token',
         'nickname' => 'oauth_token',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         $response = $this->getUserResponse();
         $response->setData($accessToken);
@@ -46,13 +46,13 @@ class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'http://www.stereomood.com/api/oauth/authenticate',
             'request_token_url' => 'http://www.stereomood.com/api/oauth/request_token',
             'access_token_url' => 'http://www.stereomood.com/api/oauth/access_token',
 
             // Stereomood don't use `infos_url`
             'infos_url' => null,
-        ));
+        ]);
     }
 }

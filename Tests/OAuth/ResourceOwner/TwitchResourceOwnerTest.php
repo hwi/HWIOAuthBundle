@@ -26,11 +26,11 @@ class TwitchResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => '_id',
         'nickname' => 'display_name',
         'realname' => 'name',
         'email' => 'email',
         'profilepicture' => 'logo',
-    );
+    ];
 }

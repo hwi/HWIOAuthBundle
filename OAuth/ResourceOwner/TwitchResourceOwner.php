@@ -23,26 +23,26 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => '_id',
         'nickname' => 'display_name',
         'realname' => 'name',
         'email' => 'email',
         'profilepicture' => 'logo',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($url, http_build_query($parameters, '', '&'), array(), 'POST');
+        return $this->httpRequest($url, http_build_query($parameters, '', '&'), [], 'POST');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    protected function doGetUserInformationRequest($url, array $parameters = [])
     {
         // Twitch require to pass the OAuth token as 'oauth_token' instead of 'access_token'
         return parent::doGetUserInformationRequest(str_replace('access_token', 'oauth_token', $url), $parameters);
@@ -55,11 +55,11 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://api.twitch.tv/kraken/oauth2/authorize',
             'access_token_url' => 'https://api.twitch.tv/kraken/oauth2/token',
             'infos_url' => 'https://api.twitch.tv/kraken/user',
             'use_bearer_authorization' => false,
-        ));
+        ]);
     }
 }

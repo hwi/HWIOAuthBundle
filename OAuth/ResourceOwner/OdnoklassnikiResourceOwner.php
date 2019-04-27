@@ -25,24 +25,24 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'uid',
         'nickname' => 'username',
         'realname' => 'name',
         'email' => 'email',
         'firstname' => 'first_name',
         'lastname' => 'last_name',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
-        $parameters = array(
+        $parameters = [
             'access_token' => $accessToken['access_token'],
             'application_key' => $this->options['application_key'],
-        );
+        ];
 
         if ($this->options['fields']) {
             $parameters['fields'] = $this->options['fields'];
@@ -78,21 +78,21 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://connect.ok.ru/oauth/authorize',
             'access_token_url' => 'https://api.ok.ru/oauth/token.do',
             'infos_url' => 'https://api.ok.ru/fb.do?method=users.getCurrentUser',
 
             'application_key' => null,
             'fields' => null,
-        ));
+        ]);
 
         $fieldsNormalizer = function (Options $options, $value) {
             if (!$value) {
                 return null;
             }
 
-            return is_array($value) ? implode(',', $value) : $value;
+            return \is_array($value) ? implode(',', $value) : $value;
         };
 
         $resolver->setNormalizer('fields', $fieldsNormalizer);

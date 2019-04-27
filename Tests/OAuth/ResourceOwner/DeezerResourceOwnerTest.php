@@ -40,7 +40,7 @@ class DeezerResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "status": 0
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => 'firstname',
@@ -49,13 +49,13 @@ json;
         'lastname' => 'lastname',
         'profilepicture' => 'picture',
         'gender' => 'gender',
-    );
+    ];
 
     public function testGetUserInformation()
     {
         $this->mockHttpClient($this->userResponse);
 
-        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
+        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('passkey', $userResponse->getNickname());
         $this->assertEquals('Kieu', $userResponse->getRealName());

@@ -23,25 +23,25 @@ class Bitbucket2ResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'uuid',
         'nickname' => 'username',
         'email' => 'email',
         'realname' => 'display_name',
         'profilepicture' => 'links.avatar.href',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         $response = parent::getUserInformation($accessToken, $extraParameters);
         $responseData = $response->getData();
 
         // fetch the email addresses linked to the account
         if (empty($responseData['email'])) {
-            $content = $this->httpRequest($this->normalizeUrl($this->options['emails_url']), null, array('Authorization' => 'Bearer '.$accessToken['access_token']));
+            $content = $this->httpRequest($this->normalizeUrl($this->options['emails_url']), null, ['Authorization' => 'Bearer '.$accessToken['access_token']]);
             foreach ($this->getResponseContent($content)['values'] as $email) {
                 // we only need the primary email address
                 if (true === $email['is_primary']) {
@@ -62,11 +62,11 @@ class Bitbucket2ResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://bitbucket.org/site/oauth2/authorize',
             'access_token_url' => 'https://bitbucket.org/site/oauth2/access_token',
             'infos_url' => 'https://api.bitbucket.org/2.0/user',
             'emails_url' => 'https://api.bitbucket.org/2.0/user/emails',
-        ));
+        ]);
     }
 }

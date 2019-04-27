@@ -25,14 +25,14 @@ json;
 
     protected $csrf = true;
 
-    protected $expectedUrls = array(
+    protected $expectedUrls = [
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=identity&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    );
+    ];
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => null,
         'email' => null,
-    );
+    ];
 }

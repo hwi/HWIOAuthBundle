@@ -21,17 +21,17 @@ class RedditResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => null,
         'email' => null,
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = [])
     {
         return $this->httpRequest(
             $url,

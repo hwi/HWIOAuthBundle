@@ -23,30 +23,19 @@ class WunderlistResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => 'name',
         'email' => 'email',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
-        return $this->httpRequest($url, null, array(
-            'X-Client-ID' => $this->options['client_id'],
-            'X-Access-Token' => $parameters['access_token'],
-        ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
-    {
-        $content = $this->doGetUserInformationRequest($this->options['infos_url'], array('access_token' => $accessToken['access_token']));
+        $content = $this->doGetUserInformationRequest($this->options['infos_url'], ['access_token' => $accessToken['access_token']]);
 
         $response = $this->getUserResponse();
         $response->setData($content instanceof ResponseInterface ? (string) $content->getBody() : $content);
@@ -59,14 +48,25 @@ class WunderlistResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
+    protected function doGetUserInformationRequest($url, array $parameters = [])
+    {
+        return $this->httpRequest($url, null, [
+            'X-Client-ID' => $this->options['client_id'],
+            'X-Access-Token' => $parameters['access_token'],
+        ]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://www.wunderlist.com/oauth/authorize',
             'access_token_url' => 'https://www.wunderlist.com/oauth/access_token',
             'infos_url' => 'https://a.wunderlist.com/api/v1/user',
-        ));
+        ]);
     }
 }

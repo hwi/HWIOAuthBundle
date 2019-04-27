@@ -19,9 +19,9 @@ use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
 
 /**
  * OAuthProvider.

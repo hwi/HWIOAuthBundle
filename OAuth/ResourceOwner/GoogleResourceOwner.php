@@ -24,7 +24,7 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => 'name',
@@ -32,19 +32,19 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
         'lastname' => 'family_name',
         'email' => 'email',
         'profilepicture' => 'picture',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
-        $url = parent::getAuthorizationUrl($redirectUri, array_merge(array(
+        $url = parent::getAuthorizationUrl($redirectUri, array_merge([
             'access_type' => $this->options['access_type'],
             'approval_prompt' => $this->options['approval_prompt'],
             'request_visible_actions' => $this->options['request_visible_actions'],
             'prompt' => $this->options['prompt'],
-        ), $extraParameters));
+        ], $extraParameters));
 
         // This parameter have specific value (uses "&" as a separator of domains)
         if (null !== $this->options['hd']) {
@@ -59,7 +59,7 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function revokeToken($token)
     {
-        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], array('token' => $token)));
+        $response = $this->httpRequest($this->normalizeUrl($this->options['revoke_token_url'], ['token' => $token]));
 
         return 200 === $response->getStatusCode();
     }
@@ -71,7 +71,7 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://accounts.google.com/o/oauth2/auth',
             'access_token_url' => 'https://accounts.google.com/o/oauth2/token',
             'revoke_token_url' => 'https://accounts.google.com/o/oauth2/revoke',
@@ -87,17 +87,17 @@ class GoogleResourceOwner extends GenericOAuth2ResourceOwner
             'login_hint' => null,
             'prompt' => null,
             'request_visible_actions' => null,
-        ));
+        ]);
 
         $resolver
             // @link https://developers.google.com/accounts/docs/OAuth2WebServer#offline
-            ->setAllowedValues('access_type', array('online', 'offline', null))
+            ->setAllowedValues('access_type', ['online', 'offline', null])
             // sometimes we need to force for approval prompt (e.g. when we lost refresh token)
-            ->setAllowedValues('approval_prompt', array('force', 'auto', null))
+            ->setAllowedValues('approval_prompt', ['force', 'auto', null])
             // @link https://developers.google.com/accounts/docs/OAuth2Login#authenticationuriparameters
-            ->setAllowedValues('display', array('page', 'popup', 'touch', 'wap', null))
-            ->setAllowedValues('login_hint', array('email address', 'sub', null))
-            ->setAllowedValues('prompt', array('consent', 'select_account', null))
+            ->setAllowedValues('display', ['page', 'popup', 'touch', 'wap', null])
+            ->setAllowedValues('login_hint', ['email address', 'sub', null])
+            ->setAllowedValues('prompt', ['consent', 'select_account', null])
         ;
     }
 }

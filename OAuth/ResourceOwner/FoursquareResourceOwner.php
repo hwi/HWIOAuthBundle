@@ -24,15 +24,15 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'response.user.id',
         'firstname' => 'response.user.firstName',
         'lastname' => 'response.user.lastName',
         'nickname' => 'response.user.firstName',
-        'realname' => array('response.user.firstName', 'response.user.lastName'),
+        'realname' => ['response.user.firstName', 'response.user.lastName'],
         'email' => 'response.user.contact.email',
         'profilepicture' => 'response.user.photo',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -63,12 +63,12 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    protected function doGetUserInformationRequest($url, array $parameters = [])
     {
         // Foursquare require to pass the 'v' ('version' = date in format 'YYYYMMDD') parameter when requesting API
-        $url = $this->normalizeUrl($url, array(
+        $url = $this->normalizeUrl($url, [
             'v' => $this->options['version'],
-        ));
+        ]);
 
         // Foursquare require to pass the OAuth token as 'oauth_token' instead of 'access_token'
         $url = str_replace('access_token', 'oauth_token', $url);
@@ -83,7 +83,7 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://foursquare.com/oauth2/authenticate',
             'access_token_url' => 'https://foursquare.com/oauth2/access_token',
             'infos_url' => 'https://api.foursquare.com/v2/users/self',
@@ -92,6 +92,6 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
             'version' => '20121206',
 
             'use_bearer_authorization' => false,
-        ));
+        ]);
     }
 }

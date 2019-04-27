@@ -31,9 +31,9 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 
     public function testRegistrationRedirect()
     {
-        $this->request->attributes = new ParameterBag(array(
+        $this->request->attributes = new ParameterBag([
             $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException(),
-        ));
+        ]);
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
@@ -53,9 +53,9 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 
     public function testRegistrationRedirectWithoutTokenStorage()
     {
-        $this->request->attributes = new ParameterBag(array(
+        $this->request->attributes = new ParameterBag([
             $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException(),
-        ));
+        ]);
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
@@ -77,13 +77,13 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 
     public function testRequestError()
     {
-        $this->request->attributes = new ParameterBag(array(
+        $this->request->attributes = new ParameterBag([
             $this->getAuthenticationErrorKey() => new AccessDeniedException('You shall not pass the request.'),
-        ));
+        ]);
 
         $this->twig->expects($this->once())
             ->method('render')
-            ->with('@HWIOAuth/Connect/login.html.twig', array('error' => 'You shall not pass the request.'))
+            ->with('@HWIOAuth/Connect/login.html.twig', ['error' => 'You shall not pass the request.'])
         ;
 
         $this->controller->connectAction($this->request);
@@ -105,7 +105,7 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 
         $this->twig->expects($this->once())
             ->method('render')
-            ->with('@HWIOAuth/Connect/login.html.twig', array('error' => 'You shall not pass the session.'))
+            ->with('@HWIOAuth/Connect/login.html.twig', ['error' => 'You shall not pass the session.'])
         ;
 
         $this->controller->connectAction($this->request);

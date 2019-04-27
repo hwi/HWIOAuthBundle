@@ -33,7 +33,7 @@ interface ResourceOwnerInterface
      *
      * @return UserResponseInterface the wrapped response interface
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array());
+    public function getUserInformation(array $accessToken, array $extraParameters = []);
 
     /**
      * Returns the provider's authorization url.
@@ -43,7 +43,7 @@ interface ResourceOwnerInterface
      *
      * @return string The authorization url
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array());
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = []);
 
     /**
      * Retrieve an access token for a given code.
@@ -56,7 +56,7 @@ interface ResourceOwnerInterface
      *
      * @return array The access token
      */
-    public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = array());
+    public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = []);
 
     /**
      * Check whatever CSRF token from request is valid or not.

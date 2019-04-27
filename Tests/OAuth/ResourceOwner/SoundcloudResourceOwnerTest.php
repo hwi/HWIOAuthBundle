@@ -24,14 +24,14 @@ class SoundcloudResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $expectedUrls = array(
+    protected $expectedUrls = [
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=non-expiring&redirect_uri=http%3A%2F%2Fredirect.to%2F',
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=non-expiring&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    );
+    ];
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'username',
         'realname' => 'full_name',
-    );
+    ];
 }

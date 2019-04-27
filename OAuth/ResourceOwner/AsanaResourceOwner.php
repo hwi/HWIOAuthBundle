@@ -23,12 +23,12 @@ class AsanaResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'data.id',
         'nickname' => 'data.name',
         'realname' => 'data.name',
         'email' => 'data.email',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -37,10 +37,10 @@ class AsanaResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://app.asana.com/-/oauth_authorize',
             'access_token_url' => 'https://app.asana.com/-/oauth_token',
             'infos_url' => 'https://app.asana.com/api/1.0/users/me',
-        ));
+        ]);
     }
 }

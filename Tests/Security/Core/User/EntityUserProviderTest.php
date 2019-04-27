@@ -22,29 +22,27 @@ use PHPUnit\Framework\TestCase;
 
 class EntityUserProviderTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         if (!class_exists('Doctrine\ORM\EntityManager')) {
             $this->markTestSkipped('The Doctrine ORM is not available');
         }
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No property defined for entity for resource owner 'not_configured'.
-     */
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No property defined for entity for resource owner \'not_configured\'.');
+
         $provider = $this->createEntityUserProvider();
         $provider->loadUserByOAuthUserResponse($this->createUserResponseMock(null, 'not_configured'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage User 'asm89' not found.
-     */
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenUserIsNull()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('User \'asm89\' not found.');
+
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
         $provider = $this->createEntityUserProvider();
@@ -62,17 +60,6 @@ class EntityUserProviderTest extends TestCase
         $loadedUser = $provider->loadUserByOAuthUserResponse($userResponseMock);
 
         $this->assertEquals($user, $loadedUser);
-    }
-
-    protected function createEntityUserProvider($user = null)
-    {
-        return new EntityUserProvider(
-            $this->createManagerRegistryMock($user),
-            User::class,
-            [
-                'github' => 'githubId',
-            ]
-        );
     }
 
     public function createManagerRegistryMock($user = null)
@@ -97,11 +84,22 @@ class EntityUserProviderTest extends TestCase
         if (null !== $user) {
             $mock->expects($this->once())
                 ->method('findOneBy')
-                ->with(array('githubId' => 'asm89'))
+                ->with(['githubId' => 'asm89'])
                 ->will($this->returnValue($user));
         }
 
         return $mock;
+    }
+
+    protected function createEntityUserProvider($user = null)
+    {
+        return new EntityUserProvider(
+            $this->createManagerRegistryMock($user),
+            User::class,
+            [
+                'github' => 'githubId',
+            ]
+        );
     }
 
     protected function createResourceOwnerMock($resourceOwnerName = null)

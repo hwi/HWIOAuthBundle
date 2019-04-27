@@ -22,16 +22,16 @@ class TwitterResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     "screen_name": "bar"
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id_str',
         'nickname' => 'screen_name',
         'realname' => 'name',
-    );
+    ];
 
     public function testGetUserInformationWithEmail()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('include_email' => true));
-        $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'user_id' => '1', 'screen_name' => 'bar');
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['include_email' => true]);
+        $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'user_id' => '1', 'screen_name' => 'bar'];
 
         $resourceOwner->getUserInformation($accessToken);
 
@@ -42,7 +42,7 @@ json;
     {
         $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
-        $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'user_id' => '1', 'screen_name' => 'bar');
+        $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'user_id' => '1', 'screen_name' => 'bar'];
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('1', $userResponse->getUsername());

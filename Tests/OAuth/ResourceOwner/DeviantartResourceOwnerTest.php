@@ -23,11 +23,11 @@ class DeviantartResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "usericonurl": "http://a.deviantart.net/avatars/k/o/kouiskas.png?15"
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'username',
         'nickname' => 'username',
         'profilepicture' => 'usericonurl',
-    );
+    ];
 
     public function testGetUserInformation()
     {
@@ -36,7 +36,7 @@ json;
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
+        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('kouiskas', $userResponse->getUsername());
         $this->assertEquals('kouiskas', $userResponse->getNickname());

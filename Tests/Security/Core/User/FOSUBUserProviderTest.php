@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class FOSUBUserProviderTest extends TestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         if (!interface_exists('FOS\UserBundle\Model\UserManagerInterface')) {
             $this->markTestSkipped('FOSUserBundle is not available.');
@@ -31,22 +31,20 @@ class FOSUBUserProviderTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage No property defined for entity for resource owner 'not_configured'.
-     */
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('No property defined for entity for resource owner \'not_configured\'.');
+
         $provider = $this->createFOSUBUserProvider();
         $provider->loadUserByOAuthUserResponse($this->createUserResponseMock(null, 'not_configured'));
     }
 
-    /**
-     * @expectedException \HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException
-     * @expectedExceptionMessage User 'asm89' not found.
-     */
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenUserIsNull()
     {
+        $this->expectException(\HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException::class);
+        $this->expectExceptionMessage('User \'asm89\' not found.');
+
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
         $provider = $this->createFOSUBUserProvider();
@@ -78,12 +76,11 @@ class FOSUBUserProviderTest extends TestCase
         $this->assertEquals('asm89', $user->getGithubId());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Could not determine access type for property "googleId".
-     */
     public function testConnectUserWithNoSetterThrowsException()
     {
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('Could not determine access type for property "googleId".');
+
         $user = new FOSUser();
 
         $userResponseMock = $this->createUserResponseMock(null, 'google');
@@ -100,7 +97,7 @@ class FOSUBUserProviderTest extends TestCase
         if (null !== $user) {
             $userManagerMock->expects($this->once())
                 ->method('findUserBy')
-                ->with(array('githubId' => 'asm89'))
+                ->with(['githubId' => 'asm89'])
                 ->will($this->returnValue($user));
         }
 
