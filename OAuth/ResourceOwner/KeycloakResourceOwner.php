@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: andreaquintino
- * Date: 17/01/19
- * Time: 17.18
- */
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
