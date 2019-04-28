@@ -98,7 +98,7 @@ json;
         $exception = new TransferException();
 
         $this->httpClient->expects($this->once())
-            ->method('send')
+            ->method('sendRequest')
             ->will($this->throwException($exception));
 
         $token = '.'.base64_encode($this->userResponse);

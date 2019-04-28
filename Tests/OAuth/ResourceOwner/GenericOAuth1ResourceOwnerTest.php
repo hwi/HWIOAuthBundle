@@ -255,7 +255,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
             ->will($this->throwException(new \InvalidArgumentException()));
 
         $this->httpClient->expects($this->never())
-            ->method('send');
+            ->method('sendRequest');
 
         $this->storage->expects($this->never())
             ->method('save');
