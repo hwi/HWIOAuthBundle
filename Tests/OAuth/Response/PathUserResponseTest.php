@@ -22,14 +22,14 @@ class PathUserResponseTest extends TestCase
      */
     private $responseObject;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->responseObject = new PathUserResponse();
     }
 
     public function testGetSetResponseDataWithJsonString()
     {
-        $response = array('foo' => 'bar');
+        $response = ['foo' => 'bar'];
 
         $this->responseObject->setData(json_encode($response));
         $this->assertEquals($response, $this->responseObject->getData());
@@ -37,17 +37,16 @@ class PathUserResponseTest extends TestCase
 
     public function testGetSetResponseDataWithPhpArray()
     {
-        $response = array('foo' => 'bar');
+        $response = ['foo' => 'bar'];
 
         $this->responseObject->setData($response);
         $this->assertEquals($response, $this->responseObject->getData());
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testSetInvalidResponseData()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->responseObject->setData('not_json');
     }
 
@@ -63,7 +62,7 @@ class PathUserResponseTest extends TestCase
 
     public function testGetPathsReturnsDefaultDefinedPaths()
     {
-        $paths = array(
+        $paths = [
             'identifier' => null,
             'nickname' => null,
             'firstname' => null,
@@ -71,14 +70,14 @@ class PathUserResponseTest extends TestCase
             'realname' => null,
             'email' => null,
             'profilepicture' => null,
-        );
+        ];
 
         $this->assertEquals($paths, $this->responseObject->getPaths());
     }
 
     public function testSetPathsAddsNewPathsToAlreadyDefined()
     {
-        $paths = array(
+        $paths = [
             'identifier' => null,
             'nickname' => null,
             'firstname' => null,
@@ -87,129 +86,129 @@ class PathUserResponseTest extends TestCase
             'email' => null,
             'profilepicture' => null,
             'foo' => 'bar',
-        );
+        ];
 
         $responseObject = new PathUserResponse();
-        $responseObject->setPaths(array('foo' => 'bar'));
+        $responseObject->setPaths(['foo' => 'bar']);
         $this->assertEquals($paths, $responseObject->getPaths());
     }
 
     public function testGetUsername()
     {
-        $paths = array('identifier' => 'id');
+        $paths = ['identifier' => 'id'];
 
         $this->responseObject->setPaths($paths);
-        $this->responseObject->setData(json_encode(array('id' => 666)));
+        $this->responseObject->setData(json_encode(['id' => 666]));
 
         $this->assertEquals(666, $this->responseObject->getUsername());
     }
 
     public function testGetUsernameWithoutResponseReturnsNull()
     {
-        $this->responseObject->setPaths(array('identifier' => 'id'));
+        $this->responseObject->setPaths(['identifier' => 'id']);
         $this->assertNull($this->responseObject->getUsername());
     }
 
     public function testGetNickname()
     {
         // easy path
-        $paths = array('nickname' => 'foo');
+        $paths = ['nickname' => 'foo'];
 
         $this->responseObject->setPaths($paths);
-        $this->responseObject->setData(json_encode(array('foo' => 'bar')));
+        $this->responseObject->setData(json_encode(['foo' => 'bar']));
 
         $this->assertEquals('bar', $this->responseObject->getNickname());
 
         // nesting
-        $paths = array('nickname' => 'foo.bar');
+        $paths = ['nickname' => 'foo.bar'];
 
         $this->responseObject->setPaths($paths);
-        $this->responseObject->setData(json_encode(array('foo' => array('bar' => 'qux'))));
+        $this->responseObject->setData(json_encode(['foo' => ['bar' => 'qux']]));
 
         $this->assertEquals('qux', $this->responseObject->getNickname());
     }
 
     public function testGetRealName()
     {
-        $paths = array('realname' => 'foo');
+        $paths = ['realname' => 'foo'];
 
         $this->responseObject->setPaths($paths);
-        $this->responseObject->setData(json_encode(array('foo' => 'bar')));
+        $this->responseObject->setData(json_encode(['foo' => 'bar']));
 
         $this->assertEquals('bar', $this->responseObject->getRealName());
     }
 
     public function testGetIdentifierInvalidPathReturnsNull()
     {
-        $paths = array('identifier' => 'non_existing');
+        $paths = ['identifier' => 'non_existing'];
 
         $this->responseObject->setPaths($paths);
-        $this->responseObject->setData(json_encode(array('foo' => 'bar')));
+        $this->responseObject->setData(json_encode(['foo' => 'bar']));
 
         $this->assertNull($this->responseObject->getNickname());
     }
 
     public function testNoIdentifierPathReturnsNull()
     {
-        $paths = array('non_username' => 'non_existing');
+        $paths = ['non_username' => 'non_existing'];
 
         $responseObject = new PathUserResponse();
         $responseObject->setPaths($paths);
-        $responseObject->setData(json_encode(array('foo' => 'bar')));
+        $responseObject->setData(json_encode(['foo' => 'bar']));
 
         $this->assertNull($responseObject->getNickname());
     }
 
     public function testGetEmail()
     {
-        $paths = array('email' => 'email');
+        $paths = ['email' => 'email'];
 
         $this->responseObject->setPaths($paths);
-        $this->responseObject->setData(json_encode(array('email' => 'foo@bar.baz')));
+        $this->responseObject->setData(json_encode(['email' => 'foo@bar.baz']));
 
         $this->assertEquals('foo@bar.baz', $this->responseObject->getEmail());
     }
 
     public function testGetEmailNotInResponse()
     {
-        $paths = array('email' => 'email');
+        $paths = ['email' => 'email'];
 
         $this->responseObject->setPaths($paths);
-        $this->responseObject->setData(json_encode(array('no_email' => 'foo@bar.baz')));
+        $this->responseObject->setData(json_encode(['no_email' => 'foo@bar.baz']));
 
         $this->assertNull($this->responseObject->getEmail());
     }
 
     public function testGetProfilePicture()
     {
-        $paths = array('profilepicture' => 'picture');
+        $paths = ['profilepicture' => 'picture'];
 
         $this->responseObject->setPaths($paths);
-        $this->responseObject->setData(json_encode(array('picture' => 'http://img')));
+        $this->responseObject->setData(json_encode(['picture' => 'http://img']));
 
         $this->assertEquals('http://img', $this->responseObject->getProfilePicture());
     }
 
     public function testGetProfilePictureNotInResponse()
     {
-        $paths = array('profilepicture' => 'picture');
+        $paths = ['profilepicture' => 'picture'];
 
         $this->responseObject->setPaths($paths);
-        $this->responseObject->setData(json_encode(array('no_picture' => 'foo@bar.baz')));
+        $this->responseObject->setData(json_encode(['no_picture' => 'foo@bar.baz']));
 
         $this->assertNull($this->responseObject->getProfilePicture());
     }
 
     public function testGetMergeOfPathsIntoSingleField()
     {
-        $paths = array('realname' => array('first_name', 'last_name'));
+        $paths = ['realname' => ['first_name', 'last_name']];
 
         $this->responseObject->setPaths($paths);
-        $this->responseObject->setData(array('first_name' => 'foo', 'last_name' => 'bar'));
+        $this->responseObject->setData(['first_name' => 'foo', 'last_name' => 'bar']);
 
         $this->assertEquals('foo bar', $this->responseObject->getRealName());
 
-        $this->responseObject->setData(array('first_name' => null, 'last_name' => 'bar'));
+        $this->responseObject->setData(['first_name' => null, 'last_name' => 'bar']);
 
         $this->assertEquals('bar', $this->responseObject->getRealName());
     }

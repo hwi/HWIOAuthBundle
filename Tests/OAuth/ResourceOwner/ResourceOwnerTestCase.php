@@ -36,8 +36,8 @@ abstract class ResourceOwnerTestCase extends TestCase
     protected $state = 'random';
     protected $csrf = false;
 
-    protected $options = array();
-    protected $paths = array();
+    protected $options = [];
+    protected $paths = [];
 
     protected $resourceOwnerClass;
 
@@ -64,7 +64,7 @@ abstract class ResourceOwnerTestCase extends TestCase
             });
     }
 
-    protected function createResourceOwner($name, array $options = array(), array $paths = array())
+    protected function createResourceOwner($name, array $options = [], array $paths = [])
     {
         $this->httpClient = $this->getMockBuilder(HttpClient::class)
             ->disableOriginalConstructor()
@@ -98,7 +98,7 @@ abstract class ResourceOwnerTestCase extends TestCase
             throw new \RuntimeException('Missing resource owner class declaration!');
         }
 
-        if (!in_array(ResourceOwnerInterface::class, class_implements($this->resourceOwnerClass), true)) {
+        if (!\in_array(ResourceOwnerInterface::class, class_implements($this->resourceOwnerClass), true)) {
             throw new \RuntimeException('Class is not implementing "ResourceOwnerInterface"!');
         }
 

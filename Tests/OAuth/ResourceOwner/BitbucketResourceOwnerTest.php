@@ -24,17 +24,17 @@ class BitbucketResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     }
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'user.username',
         'nickname' => 'user.username',
         'realname' => 'user.display_name',
-    );
+    ];
 
     public function testGetUserInformation()
     {
         $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
-        $accessToken = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret');
+        $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'];
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('1', $userResponse->getUsername());

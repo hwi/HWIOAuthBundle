@@ -38,6 +38,7 @@
         <parameter key="hwi_oauth.resource_owner.fiware.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FiwareResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.flickr.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FlickrResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.foursquare.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FoursquareResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.genius.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GeniusResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.github.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.gitlab.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitLabResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.google.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GoogleResourceOwner</parameter>
@@ -113,9 +114,6 @@
             <argument type="service" id="fos_user.user_manager" />
             <argument type="service" id="fos_user.mailer" />
             <argument type="service" id="fos_user.util.token_generator" on-invalid="null" />
-            <call method="setFormHandler">
-                <argument type="service" id="fos_user.registration.form.handler" on-invalid="null" />
-            </call>
         </service>
 
         <!-- Session storage -->

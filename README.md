@@ -27,6 +27,7 @@ This bundle contains support for 58 different providers:
 * FI-WARE,
 * Flickr,
 * Foursquare,
+* Genius,
 * GitHub,
 * Google,
 * Hubic,

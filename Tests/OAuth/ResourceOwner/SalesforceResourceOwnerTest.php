@@ -29,12 +29,12 @@ class SalesforceResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'user_id',
         'nickname' => 'nick_name',
         'realname' => 'nick_name',
         'email' => 'email',
-    );
+    ];
 
     public function testGetUserInformation()
     {
@@ -43,7 +43,7 @@ json;
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token', 'id' => 'someuser'));
+        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token', 'id' => 'someuser']);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
@@ -62,7 +62,7 @@ json;
             ->will($this->throwException($exception));
 
         try {
-            $this->resourceOwner->getUserInformation(array('access_token' => 'token', 'id' => 'someuser'));
+            $this->resourceOwner->getUserInformation(['access_token' => 'token', 'id' => 'someuser']);
             $this->fail('An exception should have been raised');
         } catch (HttpTransportException $e) {
             $this->assertSame($exception, $e->getPrevious());

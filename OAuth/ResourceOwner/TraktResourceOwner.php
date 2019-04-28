@@ -24,24 +24,24 @@ class TraktResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'username',
         'nickname' => 'username',
         'realname' => 'name',
         'profilepicture' => 'images.avatar.full',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
-        $content = $this->httpRequest($this->normalizeUrl($this->options['infos_url']), null, array(
+        $content = $this->httpRequest($this->normalizeUrl($this->options['infos_url']), null, [
             'Authorization' => 'Bearer '.$accessToken['access_token'],
             'Content-Type' => 'application/json',
             'trakt-api-key' => $this->options['client_id'],
             'trakt-api-version' => 2,
-        ));
+        ]);
 
         $response = $this->getUserResponse();
         $response->setData((string) $content->getBody());
@@ -58,10 +58,10 @@ class TraktResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://api-v2launch.trakt.tv/oauth/authorize',
             'access_token_url' => 'https://api-v2launch.trakt.tv/oauth/token',
             'infos_url' => 'https://api-v2launch.trakt.tv/users/me?extended=images',
-        ));
+        ]);
     }
 }

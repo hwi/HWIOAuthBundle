@@ -47,9 +47,9 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     /**
      * @var array
      */
-    protected $properties = array(
+    protected $properties = [
         'identifier' => 'id',
-    );
+    ];
 
     /**
      * Constructor.
@@ -71,7 +71,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
      */
     public function loadUserByUsername($username)
     {
-        $user = $this->findUser(array('username' => $username));
+        $user = $this->findUser(['username' => $username]);
         if (!$user) {
             throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
         }
@@ -91,7 +91,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
         }
 
         $username = $response->getUsername();
-        if (null === $user = $this->findUser(array($this->properties[$resourceOwnerName] => $username))) {
+        if (null === $user = $this->findUser([$this->properties[$resourceOwnerName] => $username])) {
             throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
         }
 
@@ -105,12 +105,12 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     {
         $accessor = PropertyAccess::createPropertyAccessor();
         $identifier = $this->properties['identifier'];
-        if (!$accessor->isReadable($user, $identifier) || !$this->supportsClass(get_class($user))) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', get_class($user)));
+        if (!$accessor->isReadable($user, $identifier) || !$this->supportsClass(\get_class($user))) {
+            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', \get_class($user)));
         }
 
         $userId = $accessor->getValue($user, $identifier);
-        if (null === $user = $this->findUser(array($identifier => $userId))) {
+        if (null === $user = $this->findUser([$identifier => $userId])) {
             throw new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $userId));
         }
 

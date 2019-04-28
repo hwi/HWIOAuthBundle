@@ -26,11 +26,11 @@ class WordpressResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'ID',
         'nickname' => 'username',
         'realname' => 'display_name',
         'email' => 'email',
         'profilepicture' => 'avatar_URL',
-    );
+    ];
 }

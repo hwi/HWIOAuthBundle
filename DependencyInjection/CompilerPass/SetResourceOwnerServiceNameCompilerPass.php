@@ -33,7 +33,7 @@ class SetResourceOwnerServiceNameCompilerPass implements CompilerPassInterface
 
             $aliasIdParts = explode('.', $alias);
             $resourceOwnerDefinition = $container->findDefinition($alias);
-            $resourceOwnerDefinition->addMethodCall('setName', array(end($aliasIdParts)));
+            $resourceOwnerDefinition->addMethodCall('setName', [end($aliasIdParts)]);
         }
     }
 }

@@ -25,17 +25,17 @@ class ThirtySevenSignalsResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     }
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'identity.id',
         'nickname' => 'identity.email_address',
         'firstname' => 'identity.first_name',
         'lastname' => 'identity.last_name',
-        'realname' => array('identity.last_name', 'identity.first_name'),
+        'realname' => ['identity.last_name', 'identity.first_name'],
         'email' => 'identity.email_address',
-    );
+    ];
 
-    protected $expectedUrls = array(
+    protected $expectedUrls = [
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F&type=web_server',
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&type=web_server',
-    );
+    ];
 }

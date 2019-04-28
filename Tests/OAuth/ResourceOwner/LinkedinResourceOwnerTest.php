@@ -22,7 +22,7 @@ class LinkedinResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "formattedName": "bar"
 }
 json;
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'formattedName',
         'firstname' => 'firstName',
@@ -30,10 +30,10 @@ json;
         'realname' => 'formattedName',
         'email' => 'emailAddress',
         'profilepicture' => 'pictureUrl',
-    );
+    ];
     protected $csrf = true;
 
-    protected $expectedUrls = array(
+    protected $expectedUrls = [
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    );
+    ];
 }

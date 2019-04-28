@@ -23,13 +23,13 @@ class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'login',
         'realname' => 'name',
         'email' => 'email',
         'profilepicture' => 'avatar_url',
-    );
+    ];
 
     protected $httpClientCalls = 1;
 

@@ -24,17 +24,17 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = array())
+    protected function doGetTokenRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($this->options['access_token_url'], $parameters, array(), 'POST');
+        return $this->httpRequest($this->options['access_token_url'], $parameters, [], 'POST');
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    protected function doGetUserInformationRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($url, null, array('Accept' => 'application/vnd.com.sensiolabs.connect+xml'));
+        return $this->httpRequest($url, null, ['Accept' => 'application/vnd.com.sensiolabs.connect+xml']);
     }
 
     /**
@@ -44,16 +44,16 @@ class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
-            'authorization_url' => 'https://connect.sensiolabs.com/oauth/authorize',
-            'access_token_url' => 'https://connect.sensiolabs.com/oauth/access_token',
-            'infos_url' => 'https://connect.sensiolabs.com/api',
+        $resolver->setDefaults([
+            'authorization_url' => 'https://connect.symfony.com/oauth/authorize',
+            'access_token_url' => 'https://connect.symfony.com/oauth/access_token',
+            'infos_url' => 'https://connect.symfony.com/api',
 
             'user_response_class' => SensioConnectUserResponse::class,
 
             'response_type' => 'code',
 
             'use_bearer_authorization' => false,
-        ));
+        ]);
     }
 }

@@ -14,19 +14,19 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * EveOnlineResourceOwner.
- *
- * @author Ivan Stankovic <ivan.stankovic@webstorm.rs>
+ * @author Krystian Marcisz <simivar@gmail.com>
  */
-class EveOnlineResourceOwner extends GenericOAuth2ResourceOwner
+class GeniusResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
     protected $paths = [
-        'identifier' => 'CharacterID',
-        'nickname' => 'CharacterName',
-        'realname' => 'CharacterName',
+        'identifier' => 'response.user.id',
+        'nickname' => 'response.user.name',
+        'realname' => 'response.user.name',
+        'email' => 'response.user.email',
+        'profilepicture' => 'response.user.avatar.medium.url',
     ];
 
     /**
@@ -37,10 +37,12 @@ class EveOnlineResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'authorization_url' => 'https://login.eveonline.com/oauth/authorize',
-            'access_token_url' => 'https://login.eveonline.com/oauth/token',
-            'infos_url' => 'https://login.eveonline.com/oauth/verify',
+            'authorization_url' => 'https://api.genius.com/oauth/authorize',
+            'access_token_url' => 'https://api.genius.com/oauth/token',
+            'infos_url' => 'https://api.genius.com/account',
+            'use_bearer_authorization' => true,
             'use_commas_in_scope' => true,
+            'scope' => 'me',
         ]);
     }
 }

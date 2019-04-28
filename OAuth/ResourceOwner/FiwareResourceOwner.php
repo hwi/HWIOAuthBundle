@@ -30,27 +30,27 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'nickName',
         'realname' => 'displayName',
         'email' => 'email',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
     {
-        $parameters = array_merge(array(
+        $parameters = array_merge([
             'code' => $request->query->get('code'),
             'grant_type' => 'authorization_code',
             'redirect_uri' => $redirectUri,
-        ), $extraParameters);
+        ], $extraParameters);
 
-        $headers = array(
+        $headers = [
             'Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret']),
-        );
+        ];
 
         $response = $this->httpRequest($this->options['access_token_url'], http_build_query($parameters, '', '&'), $headers, 'POST');
         $responseContent = $this->getResponseContent($response);
@@ -63,22 +63,22 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         if ($this->options['use_bearer_authorization']) {
             $content = $this->httpRequest(
                 $this->normalizeUrl(
                     $this->options['infos_url'],
-                    array('access_token' => $accessToken['access_token'])
+                    ['access_token' => $accessToken['access_token']]
                 ),
                 null,
-                array('Authorization' => 'Bearer')
+                ['Authorization' => 'Bearer']
             );
         } else {
             $content = $this->doGetUserInformationRequest(
                 $this->normalizeUrl(
                     $this->options['infos_url'],
-                    array($this->options['attr_name'] => $accessToken['access_token'])
+                    [$this->options['attr_name'] => $accessToken['access_token']]
                 )
             );
         }
@@ -98,16 +98,16 @@ class FiwareResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => '{base_url}/oauth2/authorize',
             'access_token_url' => '{base_url}/oauth2/token',
             'revoke_token_url' => '{base_url}/oauth2/revoke',
             'infos_url' => '{base_url}/user',
-        ));
+        ]);
 
-        $resolver->setRequired(array(
+        $resolver->setRequired([
             'base_url',
-        ));
+        ]);
 
         $normalizer = function (Options $options, $value) {
             return str_replace('{base_url}', $options['base_url'], $value);

@@ -23,27 +23,27 @@ class TrelloResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'username',
         'realname' => 'fullName',
         'email' => 'email',
         'profilepicture' => 'avatarSource',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
         $token = $this->getRequestToken($redirectUri, $extraParameters);
 
-        return $this->normalizeUrl($this->options['authorization_url'], array(
+        return $this->normalizeUrl($this->options['authorization_url'], [
             'scope' => $this->options['scopes'],
             'name' => $this->options['application'],
             'expiration' => $this->options['expiration'],
             'oauth_token' => $token['oauth_token'],
-        ));
+        ]);
     }
 
     /**
@@ -53,7 +53,7 @@ class TrelloResourceOwner extends GenericOAuth1ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://trello.com/1/OAuthAuthorizeToken',
             'request_token_url' => 'https://trello.com/1/OAuthGetRequestToken',
             'access_token_url' => 'https://trello.com/1/OAuthGetAccessToken',
@@ -62,6 +62,6 @@ class TrelloResourceOwner extends GenericOAuth1ResourceOwner
             'application' => null,
             'scopes' => 'read',
             'expiration' => null,
-        ));
+        ]);
     }
 }

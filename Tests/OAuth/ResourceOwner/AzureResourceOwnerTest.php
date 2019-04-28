@@ -32,17 +32,17 @@ class AzureResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'sub',
         'nickname' => 'unique_name',
-        'realname' => array('given_name', 'family_name'),
-        'email' => array('upn', 'email'),
+        'realname' => ['given_name', 'family_name'],
+        'email' => ['upn', 'email'],
         'profilepicture' => null,
-    );
+    ];
 
-    protected $expectedUrls = array(
+    protected $expectedUrls = [
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&resource=https%3A%2F%2Fgraph.windows.net',
-    );
+    ];
 
     public function testGetAuthorizationUrl()
     {
@@ -58,10 +58,10 @@ json;
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(array(
+        $userResponse = $this->resourceOwner->getUserInformation([
             'access_token' => 'token',
             'id_token' => $token,
-        ));
+        ]);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('Dummy Tester', $userResponse->getRealName());
@@ -73,17 +73,17 @@ json;
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
 
         $token = '.'.base64_encode($this->userResponse);
 
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $resourceOwner->getUserInformation(array(
+        $userResponse = $resourceOwner->getUserInformation([
             'access_token' => 'token',
             'id_token' => $token,
-        ));
+        ]);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
@@ -104,7 +104,7 @@ json;
         $token = '.'.base64_encode($this->userResponse);
 
         try {
-            $this->resourceOwner->getUserInformation(array('access_token' => 'token', 'id_token' => $token));
+            $this->resourceOwner->getUserInformation(['access_token' => 'token', 'id_token' => $token]);
             $this->fail('An exception should have been raised');
         } catch (HttpTransportException $e) {
             $this->assertSame($exception, $e->getPrevious());
@@ -117,9 +117,9 @@ json;
             $name,
             $httpUtils,
             array_merge(
-                array(
+                [
                     'resource' => 'https://graph.windows.net',
-                ),
+                ],
                 $options
             )
         );

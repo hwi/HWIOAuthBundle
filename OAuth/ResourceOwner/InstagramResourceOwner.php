@@ -23,19 +23,19 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'data.id',
         'nickname' => 'data.username',
         'realname' => 'data.full_name',
         'profilepicture' => 'data.profile_picture',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = array())
+    protected function doGetUserInformationRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($this->normalizeUrl($url, $parameters), null, array(), 'GET');
+        return $this->httpRequest($this->normalizeUrl($url, $parameters), null, [], 'GET');
     }
 
     /**
@@ -45,7 +45,7 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://api.instagram.com/oauth/authorize',
             'access_token_url' => 'https://api.instagram.com/oauth/access_token',
             'infos_url' => 'https://api.instagram.com/v1/users/self',
@@ -54,6 +54,6 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
             'auth_with_one_url' => true,
 
             'use_bearer_authorization' => false,
-        ));
+        ]);
     }
 }

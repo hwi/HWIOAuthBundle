@@ -21,11 +21,11 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected $resourceOwnerClass = JiraResourceOwner::class;
     protected $userResponse = '{"name": "asm89", "displayName": "Alexander"}';
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'name',
         'nickname' => 'name',
         'realname' => 'displayName',
-    );
+    ];
 
     public function testGetUserInformation()
     {
@@ -44,7 +44,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
                     );
             });
 
-        $accessToken  = array('oauth_token' => 'token', 'oauth_token_secret' => 'secret');
+        $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'];
         $userResponse = $this->resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('asm89', $userResponse->getUsername());
@@ -57,7 +57,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
 
         $this
             ->httpClient->expects($this->at(0))
@@ -73,6 +73,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
                         $this->userResponse
                     );
             });
+
         $this
             ->httpClient->expects($this->at(1))
             ->method('sendRequest')
@@ -89,7 +90,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
             });
 
         /** @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */
-        $userResponse = $resourceOwner->getUserInformation(array('oauth_token' => 'token', 'oauth_token_secret' => 'secret'));
+        $userResponse = $resourceOwner->getUserInformation(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
@@ -102,13 +103,13 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
             $name,
             $httpUtils,
             array_merge(
-                array(
+                [
                     // Used in option resolver to adjust all URLs that could be called
                     'base_url' => 'http://localhost/',
 
                     // This is to prevent errors with not existing .pem file
                     'signature_method' => 'PLAINTEXT',
-                ),
+                ],
                 $options
             )
         );

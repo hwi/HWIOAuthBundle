@@ -21,14 +21,14 @@ class OAuthUserTest extends TestCase
      */
     private $user;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->user = new OAuthUser('asm89');
     }
 
     public function testGetRoles()
     {
-        $this->assertEquals(array('ROLE_USER', 'ROLE_OAUTH_USER'), $this->user->getRoles());
+        $this->assertEquals(['ROLE_USER', 'ROLE_OAUTH_USER'], $this->user->getRoles());
     }
 
     public function testGetPassword()

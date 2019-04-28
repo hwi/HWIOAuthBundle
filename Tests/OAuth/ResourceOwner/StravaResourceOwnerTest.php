@@ -37,18 +37,18 @@ json;
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
-        'realname' => array('firstname', 'lastname'),
+        'realname' => ['firstname', 'lastname'],
         'profilepicture' => 'profile_medium',
         'email' => 'email',
-    );
+    ];
 
     public function testGetUserInformation()
     {
         $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
-        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
+        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('Foo Bar', $userResponse->getRealName());

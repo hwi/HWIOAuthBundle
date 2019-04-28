@@ -23,14 +23,14 @@ class HubicResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'email',
         'nickname' => 'email',
         'firstname' => 'firstname',
         'lastname' => 'lastname',
         'realname' => 'firstname',
         'email' => 'email',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -39,10 +39,10 @@ class HubicResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://api.hubic.com/oauth/auth/',
             'access_token_url' => 'https://api.hubic.com/oauth/token/',
             'infos_url' => 'https://api.hubic.com/1.0/account',
-        ));
+        ]);
     }
 }

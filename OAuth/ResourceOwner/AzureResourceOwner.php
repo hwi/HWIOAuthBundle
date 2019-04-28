@@ -23,13 +23,13 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'sub',
         'nickname' => 'unique_name',
-        'realname' => array('given_name', 'family_name'),
-        'email' => array('upn', 'email'),
+        'realname' => ['given_name', 'family_name'],
+        'email' => ['upn', 'email'],
         'profilepicture' => null,
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -43,17 +43,17 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
-        return parent::getAuthorizationUrl($redirectUri, $extraParameters + array('resource' => $this->options['resource']));
+        return parent::getAuthorizationUrl($redirectUri, $extraParameters + ['resource' => $this->options['resource']]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function refreshAccessToken($refreshToken, array $extraParameters = array())
+    public function refreshAccessToken($refreshToken, array $extraParameters = [])
     {
-        return parent::refreshAccessToken($refreshToken, $extraParameters + array('resource' => $this->options['resource']));
+        return parent::refreshAccessToken($refreshToken, $extraParameters + ['resource' => $this->options['resource']]);
     }
 
     /**
@@ -61,16 +61,16 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
      *
      * @throws \InvalidArgumentException
      */
-    public function getUserInformation(array $accessToken, array $extraParameters = array())
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         // from http://stackoverflow.com/a/28748285/624544
         list(, $jwt) = explode('.', $accessToken['id_token'], 3);
 
         // if the token was urlencoded, do some fixes to ensure that it is valid base64 encoded
-        $jwt = str_replace(array('-', '_'), array('+', '/'), $jwt);
+        $jwt = str_replace(['-', '_'], ['+', '/'], $jwt);
 
         // complete token if needed
-        switch (strlen($jwt) % 4) {
+        switch (\strlen($jwt) % 4) {
             case 0:
                 break;
 
@@ -96,9 +96,9 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setRequired(array('resource'));
+        $resolver->setRequired(['resource']);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'infos_url' => 'https://graph.microsoft.com/v1.0/me',
             'authorization_url' => 'https://login.windows.net/%s/oauth2/authorize',
             'access_token_url' => 'https://login.windows.net/%s/oauth2/token',
@@ -106,6 +106,6 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
             'application' => 'common',
             'api_version' => 'v1.0',
             'csrf' => true,
-        ));
+        ]);
     }
 }

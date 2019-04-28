@@ -23,12 +23,12 @@ class BitbucketResourceOwner extends GenericOAuth1ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'user.username',
         'nickname' => 'user.username',
         'realname' => 'user.display_name',
         'profilepicture' => 'user.avatar',
-    );
+    ];
 
     /**
      * {@inheritdoc}
@@ -37,11 +37,11 @@ class BitbucketResourceOwner extends GenericOAuth1ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://bitbucket.org/api/1.0/oauth/authenticate',
             'request_token_url' => 'https://bitbucket.org/api/1.0/oauth/request_token',
             'access_token_url' => 'https://bitbucket.org/api/1.0/oauth/access_token',
             'infos_url' => 'https://bitbucket.org/api/1.0/user',
-        ));
+        ]);
     }
 }

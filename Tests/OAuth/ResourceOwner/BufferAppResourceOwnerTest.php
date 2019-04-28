@@ -23,11 +23,11 @@ class BufferAppResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'id',
         'realname' => 'id',
-    );
+    ];
 
     public function testGetUserInformation()
     {
@@ -36,7 +36,7 @@ json;
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(array('access_token' => 'token'));
+        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('4f0c0a06512f7ef214000000', $userResponse->getUsername());
         $this->assertEquals('4f0c0a06512f7ef214000000', $userResponse->getNickname());

@@ -26,14 +26,14 @@ class DisqusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'response.id',
         'nickname' => 'response.username',
         'realname' => 'response.name',
-    );
+    ];
 
-    protected $expectedUrls = array(
+    protected $expectedUrls = [
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read&redirect_uri=http%3A%2F%2Fredirect.to%2F',
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    );
+    ];
 }

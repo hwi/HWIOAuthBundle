@@ -41,9 +41,9 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
     /**
      * @var array
      */
-    protected $properties = array(
+    protected $properties = [
         'identifier' => 'id',
-    );
+    ];
 
     /**
      * @var PropertyAccessor
@@ -68,11 +68,6 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
      */
     public function loadUserByUsername($username)
     {
-        // Compatibility with FOSUserBundle < 2.0
-        if (class_exists('FOS\UserBundle\Form\Handler\RegistrationFormHandler')) {
-            return $this->userManager->loadUserByUsername($username);
-        }
-
         return $this->userManager->findUserByUsername($username);
     }
 
@@ -83,7 +78,7 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
     {
         $username = $response->getUsername();
 
-        $user = $this->userManager->findUserBy(array($this->getProperty($response) => $username));
+        $user = $this->userManager->findUserBy([$this->getProperty($response) => $username]);
         if (null === $user || null === $username) {
             throw new AccountNotLinkedException(sprintf("User '%s' not found.", $username));
         }
@@ -97,13 +92,13 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
     public function connect(UserInterface $user, UserResponseInterface $response)
     {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', get_class($user)));
+            throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', \get_class($user)));
         }
 
         $property = $this->getProperty($response);
         $username = $response->getUsername();
 
-        if (null !== $previousUser = $this->userManager->findUserBy(array($property => $username))) {
+        if (null !== $previousUser = $this->userManager->findUserBy([$property => $username])) {
             $this->disconnect($previousUser, $response);
         }
 
@@ -135,18 +130,13 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
      */
     public function refreshUser(UserInterface $user)
     {
-        // Compatibility with FOSUserBundle < 2.0
-        if (class_exists('FOS\UserBundle\Form\Handler\RegistrationFormHandler')) {
-            return $this->userManager->refreshUser($user);
-        }
-
         $identifier = $this->properties['identifier'];
         if (!$user instanceof User || !$this->accessor->isReadable($user, $identifier)) {
-            throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', get_class($user)));
+            throw new UnsupportedUserException(sprintf('Expected an instance of FOS\UserBundle\Model\User, but got "%s".', \get_class($user)));
         }
 
         $userId = $this->accessor->getValue($user, $identifier);
-        if (null === $user = $this->userManager->findUserBy(array($identifier => $userId))) {
+        if (null === $user = $this->userManager->findUserBy([$identifier => $userId])) {
             throw new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $userId));
         }
 

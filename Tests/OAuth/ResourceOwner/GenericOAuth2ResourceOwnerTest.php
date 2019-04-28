@@ -27,9 +27,9 @@ class GenericOAuth2ResourceOwnerTest extends ResourceOwnerTestCase
     protected $resourceOwner;
     protected $resourceOwnerName;
 
-    protected $tokenData = array('access_token' => 'token');
+    protected $tokenData = ['access_token' => 'token'];
 
-    protected $options = array(
+    protected $options = [
         'client_id' => 'clientid',
         'client_secret' => 'clientsecret',
 
@@ -38,7 +38,7 @@ class GenericOAuth2ResourceOwnerTest extends ResourceOwnerTestCase
         'access_token_url' => 'http://user.access/?test=3',
 
         'attr_name' => 'access_token',
-    );
+    ];
 
     protected $userResponse = <<<json
 {
@@ -47,50 +47,48 @@ class GenericOAuth2ResourceOwnerTest extends ResourceOwnerTestCase
 }
 json;
 
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'id',
         'nickname' => 'foo',
         'realname' => 'foo_disp',
-    );
+    ];
 
-    protected $expectedUrls = array(
+    protected $expectedUrls = [
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    );
+    ];
 
-    public function setUp()
+    protected function setUp()
     {
-        $this->resourceOwnerName = str_replace(array('generic', 'resourceownertest'), '', strtolower(__CLASS__));
+        $this->resourceOwnerName = str_replace(['generic', 'resourceownertest'], '', strtolower(__CLASS__));
         $this->resourceOwner = $this->createResourceOwner($this->resourceOwnerName);
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
-     */
     public function testUndefinedOptionThrowsException()
     {
-        $this->createResourceOwner($this->resourceOwnerName, array('non_existing' => null));
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+
+        $this->createResourceOwner($this->resourceOwnerName, ['non_existing' => null]);
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\ExceptionInterface
-     */
     public function testInvalidOptionValueThrowsException()
     {
-        $this->createResourceOwner($this->resourceOwnerName, array('csrf' => 'invalid'));
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+
+        $this->createResourceOwner($this->resourceOwnerName, ['csrf' => 'invalid']);
     }
 
     public function testHandleRequest()
     {
-        $request = new Request(array('test' => 'test'));
+        $request = new Request(['test' => 'test']);
 
         $this->assertFalse($this->resourceOwner->handles($request));
 
-        $request = new Request(array('code' => 'test'));
+        $request = new Request(['code' => 'test']);
 
         $this->assertTrue($this->resourceOwner->handles($request));
 
-        $request = new Request(array('code' => 'test', 'test' => 'test'));
+        $request = new Request(['code' => 'test', 'test' => 'test']);
 
         $this->assertTrue($this->resourceOwner->handles($request));
     }
@@ -156,7 +154,7 @@ json;
             $this->markTestSkipped('CSRF is enabled for this Resource Owner.');
         }
 
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('csrf' => true));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['csrf' => true]);
 
         $this->storage->expects($this->once())
             ->method('save')
@@ -172,10 +170,10 @@ json;
     {
         $this->mockHttpClient('access_token=code');
 
-        $request = new Request(array('code' => 'somecode'));
+        $request = new Request(['code' => 'somecode']);
 
         $this->assertEquals(
-            array('access_token' => 'code'),
+            ['access_token' => 'code'],
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -184,10 +182,10 @@ json;
     {
         $this->mockHttpClient('{"access_token": "code"}', 'application/json');
 
-        $request = new Request(array('code' => 'somecode'));
+        $request = new Request(['code' => 'somecode']);
 
         $this->assertEquals(
-            array('access_token' => 'code'),
+            ['access_token' => 'code'],
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -196,10 +194,10 @@ json;
     {
         $this->mockHttpClient('{"access_token": "code"}', 'application/json; charset=utf-8');
 
-        $request = new Request(array('code' => 'somecode'));
+        $request = new Request(['code' => 'somecode']);
 
         $this->assertEquals(
-            array('access_token' => 'code'),
+            ['access_token' => 'code'],
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -208,10 +206,10 @@ json;
     {
         $this->mockHttpClient('{"access_token": "code"}', 'text/javascript');
 
-        $request = new Request(array('code' => 'somecode'));
+        $request = new Request(['code' => 'somecode']);
 
         $this->assertEquals(
-            array('access_token' => 'code'),
+            ['access_token' => 'code'],
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
@@ -220,32 +218,30 @@ json;
     {
         $this->mockHttpClient('{"access_token": "code"}', 'text/javascript; charset=utf-8');
 
-        $request = new Request(array('code' => 'somecode'));
+        $request = new Request(['code' => 'somecode']);
 
         $this->assertEquals(
-            array('access_token' => 'code'),
+            ['access_token' => 'code'],
             $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAccessTokenFailedResponse()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('invalid');
-        $request = new Request(array('code' => 'code'));
+        $request = new Request(['code' => 'code']);
 
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testGetAccessTokenErrorResponse()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('error=foo');
-        $request = new Request(array('code' => 'code'));
+        $request = new Request(['code' => 'code']);
 
         $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
@@ -259,31 +255,28 @@ json;
         $this->assertEquals(3600, $accessToken['expires_in']);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testRefreshAccessTokenInvalid()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('invalid');
 
         $this->resourceOwner->refreshAccessToken('foo');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testRefreshAccessTokenError()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->mockHttpClient('{"error": "invalid"}', 'application/json');
 
         $this->resourceOwner->refreshAccessToken('foo');
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testRevokeToken()
     {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
         $this->resourceOwner->revokeToken('token');
     }
 
@@ -308,7 +301,7 @@ json;
 
     public function testCsrfTokenValid()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('csrf' => true));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['csrf' => true]);
 
         $this->storage->expects($this->once())
             ->method('fetch')
@@ -318,12 +311,11 @@ json;
         $this->assertTrue($resourceOwner->isCsrfTokenValid('valid_token'));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Security\Core\Exception\AuthenticationException
-     */
     public function testCsrfTokenInvalid()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('csrf' => true));
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['csrf' => true]);
 
         $this->storage->expects($this->once())
             ->method('fetch')
@@ -336,7 +328,7 @@ json;
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('user_response_class' => $class));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
 
         $this->mockHttpClient();
 
@@ -351,11 +343,11 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    protected function createResourceOwner($name, array $options = array(), array $paths = array())
+    protected function createResourceOwner($name, array $options = [], array $paths = [])
     {
         $resourceOwner = parent::createResourceOwner($name, $options, $paths);
 
-        $reflection = new \ReflectionClass(get_class($resourceOwner));
+        $reflection = new \ReflectionClass(\get_class($resourceOwner));
         $stateProperty = $reflection->getProperty('state');
         $stateProperty->setAccessible(true);
         $stateProperty->setValue($resourceOwner, $this->state);

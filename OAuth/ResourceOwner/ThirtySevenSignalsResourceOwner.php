@@ -24,29 +24,29 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = array(
+    protected $paths = [
         'identifier' => 'identity.id',
         'nickname' => 'identity.email_address',
         'firstname' => 'identity.first_name',
         'lastname' => 'identity.last_name',
-        'realname' => array('identity.last_name', 'identity.first_name'),
+        'realname' => ['identity.last_name', 'identity.first_name'],
         'email' => 'identity.email_address',
-    );
+    ];
 
     /**
      * {@inheritdoc}
      */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
-        return parent::getAuthorizationUrl($redirectUri, array_merge(array('type' => 'web_server'), $extraParameters));
+        return parent::getAuthorizationUrl($redirectUri, array_merge(['type' => 'web_server'], $extraParameters));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = array())
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
     {
-        return parent::getAccessToken($request, $redirectUri, array_merge(array('type' => 'web_server'), $extraParameters));
+        return parent::getAccessToken($request, $redirectUri, array_merge(['type' => 'web_server'], $extraParameters));
     }
 
     /**
@@ -56,10 +56,10 @@ class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'authorization_url' => 'https://launchpad.37signals.com/authorization/new',
             'access_token_url' => 'https://launchpad.37signals.com/authorization/token',
             'infos_url' => 'https://launchpad.37signals.com/authorization.json',
-        ));
+        ]);
     }
 }
