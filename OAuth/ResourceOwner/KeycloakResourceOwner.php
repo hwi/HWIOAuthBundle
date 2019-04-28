@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the HWIOAuthBundle package.
+ *
+ * (c) Hardware.Info <opensource@hardware.info>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,11 +25,11 @@ class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
         $this->prepareBaseAuthenticationUrl();
     }
 
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = array())
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
         return parent::getAuthorizationUrl($redirectUri, array_merge([
-          'approval_prompt' => $this->getOption('approval_prompt')
-        ],$extraParameters));
+          'approval_prompt' => $this->getOption('approval_prompt'),
+        ], $extraParameters));
     }
 
     public function configureOptions(OptionsResolver $resolver)
@@ -32,9 +41,9 @@ class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
           ->setRequired('realms')
           ->setDefaults([
             'protocol' => 'openid-connect',
-            'scope' =>  'name,email',
+            'scope' => 'name,email',
             'response_type' => 'code',
-            'approval_prompt' => 'auto'
+            'approval_prompt' => 'auto',
           ]);
     }
 
@@ -42,7 +51,7 @@ class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
     {
         $baseAuthUrl = trim($this->getOption('authorization_url'), '/');
         //check if already configured
-        if(strpos($baseAuthUrl, '/realms') !== false) {
+        if (false !== strpos($baseAuthUrl, '/realms')) {
             return;
         }
 
@@ -50,6 +59,5 @@ class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
         $baseAuthUrl .= '/protocol/'.$this->getOption('protocol').'/auth';
 
         $this->options['authorization_url'] = $baseAuthUrl;
-
     }
 }
