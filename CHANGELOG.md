@@ -11,6 +11,7 @@ Changelog
 * Fixed: SensioConnect now uses new API URLs,
 * Added: Genius.com resource owner,
 * Added: HTTPlug 2.0 support,
+* Added: Keycloak resource owner,
 
 ## 0.6.3 (2018-07-31)
 * Fixed: Vkontakte profile picture & nickname path,
