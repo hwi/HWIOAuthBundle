@@ -11,6 +11,11 @@ Changelog
 * Fixed: SensioConnect now uses new API URLs,
 * Added: Genius.com resource owner,
 * Added: HTTPlug 2.0 support,
+* [BC break] Class `Configuration` has been marked final,
+* [BC break] Class `ConnectController` has been marked final,
+* [BC break] Class `HWIOAuthExtension` has been marked final,
+* [BC break] Class `OAuthExtension` has been marked final,
+* [BC break] Class `SetResourceOwnerServiceNameCompilerPass` has been marked final,
 
 ## 0.6.3 (2018-07-31)
 * Fixed: Vkontakte profile picture & nickname path,

@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  *
  * @author Tomas Pecserke <tomas.pecserke@gmail.com>
  */
-class SetResourceOwnerServiceNameCompilerPass implements CompilerPassInterface
+final class SetResourceOwnerServiceNameCompilerPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
