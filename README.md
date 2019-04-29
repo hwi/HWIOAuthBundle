@@ -35,6 +35,7 @@ This bundle contains support for 58 different providers:
 * Itembase,
 * Jawbone,
 * JIRA,
+* Keycloak,
 * LinkedIn,
 * Mail.ru
 * Odnoklassniki,
