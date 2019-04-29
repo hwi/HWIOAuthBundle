@@ -1,7 +1,7 @@
 Changelog
 =========
 ## 1.0.0 (2019-xx-xx)
-* Droppped support for PHP 5.6 and 7.0,
+* Dropped support for PHP 5.6 and 7.0,
 * Dropped support for FOSUserBundle 1.3,
 * Dropped support for Symfony 2.8,
 * Fixed: WindowsLive Resource Owner token request,
