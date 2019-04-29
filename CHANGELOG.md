@@ -4,6 +4,7 @@ Changelog
 * Dropped support for PHP 5.6 and 7.0,
 * Dropped support for FOSUserBundle 1.3,
 * Dropped support for Symfony 2.8,
+* Dropped support for Linkedin API v1,
 * Fixed: WindowsLive Resource Owner token request,
 * Fixed: Update Facebook API to v3.1,
 * Fixed: YahooResourceOwner::doGetUserInformationRequest uses wrong arguments,
@@ -12,6 +13,7 @@ Changelog
 * Added: Genius.com resource owner,
 * Added: HTTPlug 2.0 support,
 * Added: Keycloak resource owner,
+* Added: Linkedin API v2,
 
 ## 0.6.3 (2018-07-31)
 * Fixed: Vkontakte profile picture & nickname path,
