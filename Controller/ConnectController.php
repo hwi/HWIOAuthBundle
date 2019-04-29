@@ -19,7 +19,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -38,7 +38,7 @@ use Symfony\Component\Security\Http\SecurityEvents;
 /**
  * @author Alexander <iam.asm89@gmail.com>
  */
-class ConnectController extends Controller
+class ConnectController extends AbstractController
 {
     /**
      * Action that handles the login 'form'. If connecting is enabled the
