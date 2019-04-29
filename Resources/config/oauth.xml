@@ -95,14 +95,14 @@
         Cheers!
         -->
         <service id="hwi_oauth.authentication.listener.oauth" class="%hwi_oauth.authentication.listener.oauth.class%"
-                 parent="security.authentication.listener.abstract" public="false" abstract="true" />
-        <service id="hwi_oauth.authentication.provider.oauth" class="%hwi_oauth.authentication.provider.oauth.class%" public="false" />
-        <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" public="false" abstract="true">
+                 parent="security.authentication.listener.abstract" abstract="true" />
+        <service id="hwi_oauth.authentication.provider.oauth" class="%hwi_oauth.authentication.provider.oauth.class%" />
+        <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" abstract="true">
             <argument type="service" id="http_kernel" />
             <argument type="service" id="security.http_utils" />
         </service>
-        <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" public="false" />
-        <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" abstract="true" public="false">
+        <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" />
+        <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" abstract="true">
             <argument type="service" id="doctrine" />
         </service>
 
@@ -117,7 +117,7 @@
         </service>
 
         <!-- Session storage -->
-        <service id="hwi_oauth.storage.session" class="%hwi_oauth.storage.session.class%" public="false">
+        <service id="hwi_oauth.storage.session" class="%hwi_oauth.storage.session.class%">
             <argument type="service" id="session" />
         </service>
 
