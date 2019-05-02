@@ -127,12 +127,7 @@ final class ConnectController extends Controller
 
         /* @var $form FormInterface */
         if ($this->container->getParameter('hwi_oauth.fosub_enabled')) {
-            // enable compatibility with FOSUserBundle 1.3.x and 2.x
-            if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
-                $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
-            } else {
-                $form = $this->container->get('hwi_oauth.registration.form');
-            }
+            $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
         } else {
             $form = $this->container->get('hwi_oauth.registration.form');
         }
@@ -363,24 +358,6 @@ final class ConnectController extends Controller
         }
 
         throw new NotFoundHttpException(sprintf("No resource owner with name '%s'.", $name));
-    }
-
-    /**
-     * Generates a route.
-     *
-     * @deprecated since version 0.4. Will be removed in 1.0.
-     *
-     * @param string $route    Route name
-     * @param array  $params   Route parameters
-     * @param bool   $absolute absolute url or note
-     *
-     * @return string
-     */
-    protected function generate($route, array $params = [], $absolute = false)
-    {
-        @trigger_error('The '.__METHOD__.' method is deprecated since version 0.4 and will be removed in 1.0. Use Symfony\Bundle\FrameworkBundle\Controller\Controller::generateUrl instead.', E_USER_DEPRECATED);
-
-        return $this->container->get('router')->generate($route, $params, $absolute);
     }
 
     /**

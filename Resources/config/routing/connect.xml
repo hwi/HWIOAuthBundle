@@ -5,10 +5,10 @@
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
     <route id="hwi_oauth_connect_service" path="/service/{service}">
-        <default key="_controller">HWIOAuthBundle:Connect:connectService</default>
+        <default key="_controller">HWI\Bundle\OAuthBundle\Controller\ConnectController::connectServiceAction</default>
     </route>
 
     <route id="hwi_oauth_connect_registration" path="/registration/{key}">
-        <default key="_controller">HWIOAuthBundle:Connect:registration</default>
+        <default key="_controller">HWI\Bundle\OAuthBundle\Controller\ConnectController::registrationAction</default>
     </route>
 </routes>
