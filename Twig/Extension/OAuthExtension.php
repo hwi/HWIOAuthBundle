@@ -20,7 +20,7 @@ use Twig\TwigFunction;
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
-class OAuthExtension extends AbstractExtension
+final class OAuthExtension extends AbstractExtension
 {
     /**
      * @var OAuthHelper

@@ -38,7 +38,7 @@ use Symfony\Component\Security\Http\SecurityEvents;
 /**
  * @author Alexander <iam.asm89@gmail.com>
  */
-class ConnectController extends Controller
+final class ConnectController extends Controller
 {
     /**
      * Action that handles the login 'form'. If connecting is enabled the

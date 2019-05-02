@@ -20,7 +20,7 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class Configuration implements ConfigurationInterface
+final class Configuration implements ConfigurationInterface
 {
     /**
      * Array of supported resource owners, indentation is intentional to easily notice
