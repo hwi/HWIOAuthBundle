@@ -9,7 +9,7 @@
     </parameters>
 
     <services>
-        <service id="hwi_oauth.twig.extension.oauth" class="%hwi_oauth.twig.extension.oauth.class%" public="false">
+        <service id="hwi_oauth.twig.extension.oauth" class="%hwi_oauth.twig.extension.oauth.class%">
             <argument type="service" id="hwi_oauth.templating.helper.oauth" />
             <tag name="twig.extension" />
         </service>

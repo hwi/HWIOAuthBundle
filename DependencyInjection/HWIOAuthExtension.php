@@ -28,7 +28,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  * @author Alexander <iam.asm89@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
  */
-class HWIOAuthExtension extends Extension
+final class HWIOAuthExtension extends Extension
 {
     /**
      * {@inheritdoc}

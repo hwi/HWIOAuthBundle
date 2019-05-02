@@ -5,8 +5,8 @@ documentation for more information: https://developer.linkedin.com/documents/aut
 
 Next configure a resource owner of type `linkedin` with appropriate `client_id`,
 `client_secret` and `scope`.
-Example of values for scope: `r_basicprofile`, `r_emailaddress`, `r_fullprofile` 
-as described by [Linkedin API](https://developer.linkedin.com/documents/profile-fields)
+Example of values for scope: `r_liteprofile`, `r_emailaddress`
+as described by [Linkedin API](https://docs.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow?context=linkedin/context#step-2-request-an-authorization-code)
 
 ```yaml
 # app/config.yml
