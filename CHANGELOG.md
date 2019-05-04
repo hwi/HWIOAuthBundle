@@ -18,6 +18,7 @@ Changelog
 * [BC break] Class `HWIOAuthExtension` has been marked final,
 * [BC break] Class `OAuthExtension` has been marked final,
 * [BC break] Class `SetResourceOwnerServiceNameCompilerPass` has been marked final,
+* [BC break] Service `hwi_oauth.http_client` has been marked private,
 
 ## 0.6.3 (2018-07-31)
 * Fixed: Vkontakte profile picture & nickname path,
