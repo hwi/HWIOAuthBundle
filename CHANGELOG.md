@@ -13,11 +13,13 @@ Changelog
 * Added: Genius.com resource owner,
 * Added: HTTPlug 2.0 support,
 * Added: Keycloak resource owner,
+* Added: The controller is now available as a service,
 * [BC break] Class `Configuration` has been marked final,
 * [BC break] Class `ConnectController` has been marked final,
 * [BC break] Class `HWIOAuthExtension` has been marked final,
 * [BC break] Class `OAuthExtension` has been marked final,
 * [BC break] Class `SetResourceOwnerServiceNameCompilerPass` has been marked final,
+* [BC break] Service `hwi_oauth.security.oauth_utils` has been marked private,
 
 ## 0.6.3 (2018-07-31)
 * Fixed: Vkontakte profile picture & nickname path,

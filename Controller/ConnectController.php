@@ -19,6 +19,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
@@ -40,6 +41,19 @@ use Symfony\Component\Security\Http\SecurityEvents;
  */
 final class ConnectController extends Controller
 {
+    /**
+     * @var OAuthUtils
+     */
+    private $oauthUtils;
+
+    /**
+     * @param OAuthUtils $oauthUtils
+     */
+    public function __construct(OAuthUtils $oauthUtils)
+    {
+        $this->oauthUtils = $oauthUtils;
+    }
+
     /**
      * Action that handles the login 'form'. If connecting is enabled the
      * user will be redirected to the appropriate login urls or registration forms.
@@ -213,7 +227,7 @@ final class ConnectController extends Controller
         if ($resourceOwner->handles($request)) {
             $accessToken = $resourceOwner->getAccessToken(
                 $request,
-                $this->container->get('hwi_oauth.security.oauth_utils')->getServiceAuthUrl($request, $resourceOwner)
+                $this->oauthUtils->getServiceAuthUrl($request, $resourceOwner)
             );
 
             // save in session
@@ -272,7 +286,7 @@ final class ConnectController extends Controller
     public function redirectToServiceAction(Request $request, $service)
     {
         try {
-            $authorizationUrl = $this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($request, $service);
+            $authorizationUrl = $this->oauthUtils->getAuthorizationUrl($request, $service);
         } catch (\RuntimeException $e) {
             throw new NotFoundHttpException($e->getMessage(), $e);
         }
