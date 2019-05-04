@@ -3,7 +3,10 @@ Changelog
 ## 1.0.0 (2019-xx-xx)
 * Dropped support for PHP 5.6 and 7.0,
 * Dropped support for FOSUserBundle 1.3,
+* Dropped support for PHPUnit 5,
 * Dropped support for Symfony 2.8,
+* Minimum Symfony 3 requirement is 3.4,
+* Minimum Symfony 4 requirement is 4.2,
 * Fixed: WindowsLive Resource Owner token request,
 * Fixed: Update Facebook API to v3.1,
 * Fixed: Update Linkedin API to v2,
@@ -18,6 +21,7 @@ Changelog
 * [BC break] Class `HWIOAuthExtension` has been marked final,
 * [BC break] Class `OAuthExtension` has been marked final,
 * [BC break] Class `SetResourceOwnerServiceNameCompilerPass` has been marked final,
+* [BC break] Class `ConnectController` extends `AbstractController` instead of `Controller`,
 * [BC break] Service `hwi_oauth.http_client` has been marked private,
 
 ## 0.6.3 (2018-07-31)
