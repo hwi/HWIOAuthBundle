@@ -26,8 +26,7 @@ class FOSUBRegistrationFormHandlerTest extends TestCase
     {
         $formMock = $this->getForm(false);
 
-        $response = $this->getMockBuilder(UserResponseInterface::class)
-            ->getMock();
+        $response = $this->createMock(UserResponseInterface::class);
 
         $handler = new FOSUBRegistrationFormHandler($this->getUserManager(), $this->getMailer());
 
@@ -64,11 +63,9 @@ class FOSUBRegistrationFormHandlerTest extends TestCase
 
     private function getUserManager()
     {
-        $mock = $this->getMockBuilder(UserManagerInterface::class)
-            ->getMock();
+        $mock = $this->createMock(UserManagerInterface::class);
 
-        $userMock = $this->getMockBuilder(UserInterface::class)
-            ->getMock();
+        $userMock = $this->createMock(UserInterface::class);
         $userMock
             ->expects($this->once())
             ->method('setEnabled')
@@ -86,22 +83,17 @@ class FOSUBRegistrationFormHandlerTest extends TestCase
 
     private function getMailer()
     {
-        return $this->getMockBuilder(MailerInterface::class)
-            ->getMock();
+        return $this->createMock(MailerInterface::class);
     }
 
     private function getResponse()
     {
-        return $this->getMockBuilder(UserResponseInterface::class)
-            ->getMock();
+        return $this->createMock(UserResponseInterface::class);
     }
 
     private function getForm($handle = true)
     {
-        $formMock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock()
-        ;
+        $formMock = $this->createMock(Form::class);
 
         if ($handle) {
             $formMock

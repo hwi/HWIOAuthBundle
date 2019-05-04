@@ -108,6 +108,7 @@ class OAuthTokenTest extends TestCase
     {
         $exception = new AccountNotLinkedException($this->token);
         $str = serialize($exception);
-        unserialize($str);
+
+        $this->assertEquals($exception, unserialize($str));
     }
 }

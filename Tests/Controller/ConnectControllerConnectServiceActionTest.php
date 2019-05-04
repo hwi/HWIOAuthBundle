@@ -66,9 +66,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(new CustomOAuthToken())
         ;
 
-        $form = $this->getMockBuilder(FormInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $form = $this->createMock(FormInterface::class);
         $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($form)
@@ -103,9 +101,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn([])
         ;
 
-        $form = $this->getMockBuilder(FormInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $form = $this->createMock(FormInterface::class);
         $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($form)
@@ -198,9 +194,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(new CustomOAuthToken())
         ;
 
-        $form = $this->getMockBuilder(FormInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $form = $this->createMock(FormInterface::class);
         $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($form)

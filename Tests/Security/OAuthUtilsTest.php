@@ -30,9 +30,7 @@ class OAuthUtilsTest extends TestCase
         $request = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $authorizationChecker = $this->getMockBuilder(AuthorizationCheckerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $authorizationChecker, true, $this->grantRule);
         $utils->addResourceOwnerMap($this->getMap($url, $redirect, false, true));
@@ -166,44 +164,41 @@ class OAuthUtilsTest extends TestCase
 
     private function getMap($url, $redirect, $hasUser = false, $hasOneRedirectUrl = false)
     {
-        $resource = $this->getMockBuilder(ResourceOwnerInterface::class)
-            ->getMock();
+        $resource = $this->createMock(ResourceOwnerInterface::class);
 
         $resource
             ->expects($this->once())
             ->method('getAuthorizationUrl')
             ->with($url, [])
-            ->will($this->returnValue($redirect));
+            ->willReturn($redirect);
 
         $resource
             ->expects($this->any())
             ->method('getOption')
             ->with('auth_with_one_url')
-            ->will($this->returnValue($hasOneRedirectUrl));
+            ->willReturn($hasOneRedirectUrl);
 
-        $mapMock = $this->getMockBuilder(ResourceOwnerMap::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mapMock = $this->createMock(ResourceOwnerMap::class);
 
         $mapMock
             ->expects($this->once())
             ->method('getResourceOwnerByName')
             ->with('instagram')
-            ->will($this->returnValue($resource));
+            ->willReturn($resource);
 
         if (!$hasUser && !$hasOneRedirectUrl) {
             $mapMock
                 ->expects($this->once())
                 ->method('getResourceOwnerCheckPath')
                 ->with('instagram')
-                ->will($this->returnValue('/login/check-instagram'));
+                ->willReturn('/login/check-instagram');
         }
 
         if ($hasUser) {
             $resource
                 ->expects($this->once())
                 ->method('getName')
-                ->will($this->returnValue('instagram'));
+                ->willReturn('instagram');
         }
 
         return $mapMock;
@@ -211,14 +206,12 @@ class OAuthUtilsTest extends TestCase
 
     private function getHttpUtils($generatedUrl = '/')
     {
-        $urlGenerator = $this->getMockBuilder(UrlGeneratorInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 
         $urlGenerator
             ->expects($this->any())
             ->method('generate')
-            ->will($this->returnValue($generatedUrl))
+            ->willReturn(($generatedUrl))
         ;
 
         return new HttpUtils($urlGenerator);
@@ -226,13 +219,11 @@ class OAuthUtilsTest extends TestCase
 
     private function getAutorizationChecker($hasUser, $grantRule)
     {
-        $mock = $this->getMockBuilder(AuthorizationCheckerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mock = $this->createMock(AuthorizationCheckerInterface::class);
         $mock->expects($this->once())
             ->method('isGranted')
             ->with($grantRule)
-            ->will($this->returnValue($hasUser));
+            ->willReturn($hasUser);
 
         return $mock;
     }
