@@ -65,18 +65,12 @@ abstract class ResourceOwnerTestCase extends TestCase
 
     protected function createResourceOwner($name, array $options = [], array $paths = [])
     {
-        $this->httpClient = $this->getMockBuilder(HttpClient::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->httpClient = $this->createMock(HttpClient::class);
 
-        $this->storage = $this->getMockBuilder(RequestDataStorageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->storage = $this->createMock(RequestDataStorageInterface::class);
 
         /** @var HttpUtils $httpUtils */
-        $httpUtils = $this->getMockBuilder(HttpUtils::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $httpUtils = $this->createMock(HttpUtils::class);
 
         $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
         $resourceOwner->addPaths(array_merge($this->paths, $paths));

@@ -32,7 +32,7 @@ class OAuthProviderTest extends TestCase
         $resourceOwnerMapMock->expects($this->once())
             ->method('hasResourceOwnerByName')
             ->with($this->equalTo('owner'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $oauthProvider = new OAuthProvider($this->getOAuthAwareUserProviderMock(), $resourceOwnerMapMock, $this->getUserCheckerMock(), $this->getTokenStorageMock());
 
@@ -54,10 +54,10 @@ class OAuthProviderTest extends TestCase
         $oauthTokenMock = $this->getOAuthTokenMock();
         $oauthTokenMock->expects($this->exactly(2))
             ->method('getResourceOwnerName')
-            ->will($this->returnValue('github'));
+            ->willReturn('github');
         $oauthTokenMock->expects($this->exactly(2))
             ->method('getRawToken')
-            ->will($this->returnValue($expectedToken));
+            ->willReturn($expectedToken);
         $oauthTokenMock->expects($this->once())
             ->method('getRefreshToken')
             ->willReturn($expectedToken['refresh_token']);
@@ -66,30 +66,30 @@ class OAuthProviderTest extends TestCase
         $resourceOwnerMock->expects($this->once())
             ->method('getUserInformation')
             ->with($expectedToken)
-            ->will($this->returnValue($this->getUserResponseMock()));
+            ->willReturn($this->getUserResponseMock());
         $resourceOwnerMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('github'));
+            ->willReturn('github');
 
         $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
         $resourceOwnerMapMock->expects($this->once())
             ->method('getResourceOwnerByName')
             ->with($this->equalTo('github'))
-            ->will($this->returnValue($resourceOwnerMock));
+            ->willReturn($resourceOwnerMock);
         $resourceOwnerMapMock->expects($this->once())
             ->method('hasResourceOwnerByName')
             ->with($this->equalTo('github'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $userMock = $this->getUserMock();
         $userMock->expects($this->once())
             ->method('getRoles')
-            ->will($this->returnValue(['ROLE_TEST']));
+            ->willReturn(['ROLE_TEST']);
 
         $userProviderMock = $this->getOAuthAwareUserProviderMock();
         $userProviderMock->expects($this->once())
             ->method('loadUserByOAuthUserResponse')
-            ->will($this->returnValue($userMock));
+            ->willReturn($userMock);
 
         $userCheckerMock = $this->getUserCheckerMock();
         $userCheckerMock->expects($this->once())
@@ -129,43 +129,43 @@ class OAuthProviderTest extends TestCase
         $oauthTokenMock = $this->getOAuthTokenMock();
         $oauthTokenMock->expects($this->exactly(3))
             ->method('getResourceOwnerName')
-            ->will($this->returnValue('github'));
+            ->willReturn('github');
         $oauthTokenMock->expects($this->exactly(2))
             ->method('getRawToken')
-            ->will($this->returnValue($expectedToken));
+            ->willReturn($expectedToken);
         $oauthTokenMock->expects($this->once())
             ->method('getAccessToken')
-            ->will($this->returnValue($expectedToken['access_token']));
+            ->willReturn($expectedToken['access_token']);
         $oauthTokenMock->expects($this->once())
             ->method('getRefreshToken')
-            ->will($this->returnValue($expectedToken['refresh_token']));
+            ->willReturn($expectedToken['refresh_token']);
         $oauthTokenMock->expects($this->once())
             ->method('getExpiresIn')
-            ->will($this->returnValue($expectedToken['expires_in']));
+            ->willReturn($expectedToken['expires_in']);
         $oauthTokenMock->expects($this->once())
             ->method('getTokenSecret')
-            ->will($this->returnValue($expectedToken['oauth_token_secret']));
+            ->willReturn($expectedToken['oauth_token_secret']);
 
         $resourceOwnerMock = $this->getResourceOwnerMock();
         $resourceOwnerMock->expects($this->once())
             ->method('getUserInformation')
             ->with($expectedToken)
-            ->will($this->returnValue($this->getUserResponseMock()));
+            ->willReturn($this->getUserResponseMock());
 
         $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
         $resourceOwnerMapMock->expects($this->once())
             ->method('getResourceOwnerByName')
             ->with($this->equalTo('github'))
-            ->will($this->returnValue($resourceOwnerMock));
+            ->willReturn($resourceOwnerMock);
         $resourceOwnerMapMock->expects($this->once())
             ->method('hasResourceOwnerByName')
             ->with($this->equalTo('github'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $userProviderMock = $this->getOAuthAwareUserProviderMock();
         $userProviderMock->expects($this->once())
             ->method('loadUserByOAuthUserResponse')
-             ->will($this->throwException(new OAuthAwareException()));
+            ->will($this->throwException(new OAuthAwareException()));
 
         $userCheckerMock = $this->getUserCheckerMock();
 
@@ -211,7 +211,7 @@ class OAuthProviderTest extends TestCase
             ->willReturn(true);
         $oauthTokenMock->expects($this->exactly(2))
             ->method('getResourceOwnerName')
-            ->will($this->returnValue('github'));
+            ->willReturn('github');
         $oauthTokenMock->expects($this->exactly(3))
             ->method('getRefreshToken')
             ->willReturn($expiredToken['refresh_token']);
@@ -224,30 +224,30 @@ class OAuthProviderTest extends TestCase
         $resourceOwnerMock->expects($this->once())
             ->method('getUserInformation')
             ->with($refreshedToken)
-            ->will($this->returnValue($this->getUserResponseMock()));
+            ->willReturn($this->getUserResponseMock());
         $resourceOwnerMock->expects($this->once())
             ->method('getName')
-            ->will($this->returnValue('github'));
+            ->willReturn('github');
 
         $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
         $resourceOwnerMapMock->expects($this->once())
             ->method('getResourceOwnerByName')
             ->with($this->equalTo('github'))
-            ->will($this->returnValue($resourceOwnerMock));
+            ->willReturn($resourceOwnerMock);
         $resourceOwnerMapMock->expects($this->once())
             ->method('hasResourceOwnerByName')
             ->with($this->equalTo('github'))
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $userMock = $this->getUserMock();
         $userMock->expects($this->once())
             ->method('getRoles')
-            ->will($this->returnValue(['ROLE_TEST']));
+            ->willReturn(['ROLE_TEST']);
 
         $userProviderMock = $this->getOAuthAwareUserProviderMock();
         $userProviderMock->expects($this->once())
             ->method('loadUserByOAuthUserResponse')
-            ->will($this->returnValue($userMock));
+            ->willReturn($userMock);
 
         $userCheckerMock = $this->getUserCheckerMock();
         $userCheckerMock->expects($this->once())
@@ -277,57 +277,41 @@ class OAuthProviderTest extends TestCase
 
     protected function getOAuthAwareUserProviderMock()
     {
-        return $this->getMockBuilder(OAuthAwareUserProviderInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(OAuthAwareUserProviderInterface::class);
     }
 
     protected function getResourceOwnerMapMock()
     {
-        return $this->getMockBuilder(ResourceOwnerMap::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(ResourceOwnerMap::class);
     }
 
     protected function getOAuthTokenMock()
     {
-        return $this->getMockBuilder(OAuthToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(OAuthToken::class);
     }
 
     protected function getResourceOwnerMock()
     {
-        return $this->getMockBuilder(ResourceOwnerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(ResourceOwnerInterface::class);
     }
 
     protected function getUserResponseMock()
     {
-        return $this->getMockBuilder(UserResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(UserResponseInterface::class);
     }
 
     protected function getUserCheckerMock()
     {
-        return $this->getMockBuilder(UserCheckerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(UserCheckerInterface::class);
     }
 
     protected function getUserMock()
     {
-        return $this->getMockBuilder(UserInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(UserInterface::class);
     }
 
     protected function getTokenStorageMock()
     {
-        return $this->getMockBuilder(TokenStorageInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        return $this->createMock(TokenStorageInterface::class);
     }
 }

@@ -91,14 +91,13 @@ class FOSUBUserProviderTest extends TestCase
 
     protected function createFOSUBUserProvider($user = null, $updateUser = null)
     {
-        $userManagerMock = $this->getMockBuilder(UserManagerInterface::class)
-            ->getMock();
+        $userManagerMock = $this->createMock(UserManagerInterface::class);
 
         if (null !== $user) {
             $userManagerMock->expects($this->once())
                 ->method('findUserBy')
                 ->with(['githubId' => 'asm89'])
-                ->will($this->returnValue($user));
+                ->willReturn($user);
         }
 
         if (null !== $updateUser) {
@@ -112,15 +111,13 @@ class FOSUBUserProviderTest extends TestCase
 
     protected function createResourceOwnerMock($resourceOwnerName = null)
     {
-        $resourceOwnerMock = $this->getMockBuilder(ResourceOwnerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceOwnerMock = $this->createMock(ResourceOwnerInterface::class);
 
         if (null !== $resourceOwnerName) {
             $resourceOwnerMock
                 ->expects($this->once())
                 ->method('getName')
-                ->will($this->returnValue($resourceOwnerName));
+                ->willReturn($resourceOwnerName);
         }
 
         return $resourceOwnerMock;
@@ -128,22 +125,20 @@ class FOSUBUserProviderTest extends TestCase
 
     protected function createUserResponseMock($username = null, $resourceOwnerName = null)
     {
-        $responseMock = $this->getMockBuilder(UserResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseMock = $this->createMock(UserResponseInterface::class);
 
         if (null !== $resourceOwnerName) {
             $responseMock
                 ->expects($this->once())
                 ->method('getResourceOwner')
-                ->will($this->returnValue($this->createResourceOwnerMock($resourceOwnerName)));
+                ->willReturn($this->createResourceOwnerMock($resourceOwnerName));
         }
 
         if (null !== $username) {
             $responseMock
                 ->expects($this->once())
                 ->method('getUsername')
-                ->will($this->returnValue($username));
+                ->willReturn($username);
         }
 
         return $responseMock;
