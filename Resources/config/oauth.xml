@@ -5,17 +5,6 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="hwi_oauth.authentication.listener.oauth.class">HWI\Bundle\OAuthBundle\Security\Http\Firewall\OAuthListener</parameter>
-        <parameter key="hwi_oauth.authentication.provider.oauth.class">HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider</parameter>
-        <parameter key="hwi_oauth.authentication.entry_point.oauth.class">HWI\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint</parameter>
-        <parameter key="hwi_oauth.user.provider.class">HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider</parameter>
-        <parameter key="hwi_oauth.user.provider.entity.class">HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider</parameter>
-        <parameter key="hwi_oauth.user.provider.fosub_bridge.class">HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider</parameter>
-        <parameter key="hwi_oauth.registration.form.handler.fosub_bridge.class">HWI\Bundle\OAuthBundle\Form\FOSUBRegistrationFormHandler</parameter>
-
-        <parameter key="hwi_oauth.resource_owner.oauth1.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner</parameter>
-        <parameter key="hwi_oauth.resource_owner.oauth2.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner</parameter>
-
         <parameter key="hwi_oauth.resource_owner.amazon.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AmazonResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.asana.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AsanaResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.auth0.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\Auth0ResourceOwner</parameter>
@@ -78,11 +67,6 @@
         <parameter key="hwi_oauth.resource_owner.odnoklassniki.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\OdnoklassnikiResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.37signals.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ThirtySevenSignalsResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.itembase.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ItembaseResourceOwner</parameter>
-
-        <parameter key="hwi_oauth.resource_ownermap.class">HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap</parameter>
-        <parameter key="hwi_oauth.security.oauth_utils.class">HWI\Bundle\OAuthBundle\Security\OAuthUtils</parameter>
-
-        <parameter key="hwi_oauth.storage.session.class">HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage\SessionStorage</parameter>
     </parameters>
 
     <services>
@@ -94,34 +78,34 @@
 
         Cheers!
         -->
-        <service id="hwi_oauth.authentication.listener.oauth" class="%hwi_oauth.authentication.listener.oauth.class%"
+        <service id="hwi_oauth.authentication.listener.oauth" class="HWI\Bundle\OAuthBundle\Security\Http\Firewall\OAuthListener"
                  parent="security.authentication.listener.abstract" abstract="true" />
-        <service id="hwi_oauth.authentication.provider.oauth" class="%hwi_oauth.authentication.provider.oauth.class%" />
-        <service id="hwi_oauth.authentication.entry_point.oauth" class="%hwi_oauth.authentication.entry_point.oauth.class%" abstract="true">
+        <service id="hwi_oauth.authentication.provider.oauth" class="HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider" />
+        <service id="hwi_oauth.authentication.entry_point.oauth" class="HWI\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint" abstract="true">
             <argument type="service" id="http_kernel" />
             <argument type="service" id="security.http_utils" />
         </service>
-        <service id="hwi_oauth.user.provider" class="%hwi_oauth.user.provider.class%" />
-        <service id="hwi_oauth.user.provider.entity" class="%hwi_oauth.user.provider.entity.class%" abstract="true">
+        <service id="hwi_oauth.user.provider" class="HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider" />
+        <service id="hwi_oauth.user.provider.entity" class="HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider" abstract="true">
             <argument type="service" id="doctrine" />
         </service>
 
         <!-- fosub bridges -->
-        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="%hwi_oauth.user.provider.fosub_bridge.class%" abstract="true">
+        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider" abstract="true">
             <argument type="service" id="fos_user.user_manager" />
         </service>
-        <service id="hwi_oauth.registration.form.handler.fosub_bridge.def" class="%hwi_oauth.registration.form.handler.fosub_bridge.class%" abstract="true">
+        <service id="hwi_oauth.registration.form.handler.fosub_bridge.def" class="HWI\Bundle\OAuthBundle\Form\FOSUBRegistrationFormHandler" abstract="true">
             <argument type="service" id="fos_user.user_manager" />
             <argument type="service" id="fos_user.mailer" />
             <argument type="service" id="fos_user.util.token_generator" on-invalid="null" />
         </service>
 
         <!-- Session storage -->
-        <service id="hwi_oauth.storage.session" class="%hwi_oauth.storage.session.class%">
+        <service id="hwi_oauth.storage.session" class="HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage\SessionStorage">
             <argument type="service" id="session" />
         </service>
 
-        <service id="hwi_oauth.security.oauth_utils" class="%hwi_oauth.security.oauth_utils.class%" public="true">
+        <service id="hwi_oauth.security.oauth_utils" class="HWI\Bundle\OAuthBundle\Security\OAuthUtils" public="true">
             <argument type="service" id="security.http_utils" />
             <argument type="service" id="security.authorization_checker" />
             <argument>%hwi_oauth.connect%</argument>
@@ -129,7 +113,7 @@
         </service>
 
         <!-- Resource owners -->
-        <service id="hwi_oauth.abstract_resource_ownermap" class="%hwi_oauth.resource_ownermap.class%" abstract="true">
+        <service id="hwi_oauth.abstract_resource_ownermap" class="HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap" abstract="true">
             <argument type="service" id="security.http_utils" />
             <argument>%hwi_oauth.resource_owners%</argument>
             <argument type="collection" /><!-- map -->
@@ -145,12 +129,12 @@
             <argument /><!-- name -->
         </service>
 
-        <service id="hwi_oauth.abstract_resource_owner.oauth2" class="%hwi_oauth.resource_owner.oauth2.class%"
+        <service id="hwi_oauth.abstract_resource_owner.oauth2" class="HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner"
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.storage.session" />
         </service>
 
-        <service id="hwi_oauth.abstract_resource_owner.oauth1" class="%hwi_oauth.resource_owner.oauth1.class%"
+        <service id="hwi_oauth.abstract_resource_owner.oauth1" class="HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner"
                  parent="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.storage.session" />
         </service>
