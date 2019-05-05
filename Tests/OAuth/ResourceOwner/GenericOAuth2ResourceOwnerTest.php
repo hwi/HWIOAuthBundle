@@ -306,7 +306,7 @@ json;
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($resourceOwner, 'valid_token', 'csrf_state')
-            ->will($this->returnValue('valid_token'));
+            ->willReturn('valid_token');
 
         $this->assertTrue($resourceOwner->isCsrfTokenValid('valid_token'));
     }

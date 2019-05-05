@@ -81,9 +81,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
         $this->makeRegistrationForm();
 
-        $registrationFormHandler = $this->getMockBuilder(RegistrationFormHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $registrationFormHandler = $this->createMock(RegistrationFormHandlerInterface::class);
         $registrationFormHandler->expects($this->once())
             ->method('process')
             ->withAnyParameters()
@@ -119,9 +117,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
         $this->makeRegistrationForm();
 
-        $registrationFormHandler = $this->getMockBuilder(RegistrationFormHandlerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $registrationFormHandler = $this->createMock(RegistrationFormHandlerInterface::class);
         $registrationFormHandler->expects($this->once())
             ->method('process')
             ->withAnyParameters()
@@ -159,18 +155,14 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
     private function makeRegistrationForm()
     {
-        $registrationForm = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $registrationForm = $this->createMock(Form::class);
         $registrationForm->expects($this->any())
             ->method('getData')
             ->willReturn(new User());
 
         $this->container->setParameter('hwi_oauth.fosub_enabled', true);
 
-        $registrationFormFactory = $this->getMockBuilder(FactoryInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $registrationFormFactory = $this->createMock(FactoryInterface::class);
         $registrationFormFactory->expects($this->any())
             ->method('createForm')
             ->willReturn($registrationForm);

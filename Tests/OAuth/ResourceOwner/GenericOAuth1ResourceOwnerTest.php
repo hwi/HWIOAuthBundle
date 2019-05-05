@@ -168,7 +168,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($this->resourceOwner, 'token')
-            ->will($this->returnValue(['oauth_token' => 'token2', 'oauth_token_secret' => 'secret2']));
+            ->willReturn(['oauth_token' => 'token2', 'oauth_token_secret' => 'secret2']);
 
         $this->assertEquals(
             ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'],
@@ -185,7 +185,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($this->resourceOwner, 'token')
-            ->will($this->returnValue(['oauth_token' => 'token2', 'oauth_token_secret' => 'secret2']));
+            ->willReturn(['oauth_token' => 'token2', 'oauth_token_secret' => 'secret2']);
 
         $this->assertEquals(
             ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'],
@@ -202,7 +202,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($this->resourceOwner, 'token')
-            ->will($this->returnValue(['oauth_token' => 'token2', 'oauth_token_secret' => 'secret2']));
+            ->willReturn(['oauth_token' => 'token2', 'oauth_token_secret' => 'secret2']);
 
         $this->assertEquals(
             ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'],
@@ -218,7 +218,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
 
         $this->storage->expects($this->once())
             ->method('fetch')
-            ->will($this->returnValue(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']));
+            ->willReturn(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']);
 
         $this->storage->expects($this->never())
             ->method('save');
@@ -236,7 +236,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
 
         $this->storage->expects($this->once())
             ->method('fetch')
-            ->will($this->returnValue(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']));
+            ->willReturn(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']);
 
         $this->storage->expects($this->never())
             ->method('save');
