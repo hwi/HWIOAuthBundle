@@ -64,14 +64,12 @@ class OAuthUserProviderTest extends TestCase
 
     public function testLoadUserByOAuthUserResponse()
     {
-        $responseMock = $this->getMockBuilder(UserResponseInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $responseMock = $this->createMock(UserResponseInterface::class);
 
         $responseMock
             ->expects($this->once())
             ->method('getNickname')
-            ->will($this->returnValue('asm89'))
+            ->willReturn('asm89')
         ;
 
         $user = $this->provider->loadUserByOAuthUserResponse($responseMock);

@@ -52,9 +52,7 @@ class PathUserResponseTest extends TestCase
 
     public function testGetSetResourceOwner()
     {
-        $resourceOwner = $this->getMockBuilder(ResourceOwnerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $resourceOwner = $this->createMock(ResourceOwnerInterface::class);
 
         $this->responseObject->setResourceOwner($resourceOwner);
         $this->assertEquals($resourceOwner, $this->responseObject->getResourceOwner());

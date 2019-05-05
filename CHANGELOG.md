@@ -22,6 +22,7 @@ Changelog
 * [BC break] Class `OAuthExtension` has been marked final,
 * [BC break] Class `SetResourceOwnerServiceNameCompilerPass` has been marked final,
 * [BC break] Class `ConnectController` extends `AbstractController` instead of `Controller`,
+* [BC break] Service `hwi_oauth.http_client` has been marked private,
 * [BC break] Several service class parameters have been removed,
 
 ## 0.6.3 (2018-07-31)
