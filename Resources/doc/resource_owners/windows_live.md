@@ -1,7 +1,7 @@
 Step 2x: Setup Windows Live
 ===========================
 First you will have to register your application on Windows Live. Check out the
-documentation for more information: http://msdn.microsoft.com/en-us/library/live/hh243647.aspx.
+documentation for more information: https://msdn.microsoft.com/en-us/windows/desktop/hh243647.
 
 Next configure a resource owner of type `windows_live` with appropriate
 `client_id`, `client_secret` and `scope`. Refer to the Windows Live
