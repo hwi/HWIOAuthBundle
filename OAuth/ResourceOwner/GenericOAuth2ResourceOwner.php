@@ -87,8 +87,6 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $parameters = array_merge([
             'code' => $request->query->get('code'),
             'grant_type' => 'authorization_code',
-            'client_id' => $this->options['client_id'],
-            'client_secret' => $this->options['client_secret'],
             'redirect_uri' => $redirectUri,
         ], $extraParameters);
 
@@ -108,8 +106,6 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $parameters = array_merge([
             'refresh_token' => $refreshToken,
             'grant_type' => 'refresh_token',
-            'client_id' => $this->options['client_id'],
-            'client_secret' => $this->options['client_secret'],
         ], $extraParameters);
 
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
@@ -169,7 +165,12 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = [])
     {
-        return $this->httpRequest($url, http_build_query($parameters, '', '&'));
+        $query = http_build_query($parameters, '', '&');
+        $headers = [
+            'Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret']),
+        ];
+
+        return $this->httpRequest($url, $query, $headers);
     }
 
     /**
