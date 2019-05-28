@@ -105,7 +105,7 @@
             <argument type="service" id="session" />
         </service>
 
-        <service id="hwi_oauth.security.oauth_utils" class="HWI\Bundle\OAuthBundle\Security\OAuthUtils" public="true">
+        <service id="hwi_oauth.security.oauth_utils" class="HWI\Bundle\OAuthBundle\Security\OAuthUtils">
             <argument type="service" id="security.http_utils" />
             <argument type="service" id="security.authorization_checker" />
             <argument>%hwi_oauth.connect%</argument>
