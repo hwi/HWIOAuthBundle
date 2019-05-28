@@ -163,7 +163,7 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
 
-        $this->controller = new ConnectController();
+        $this->controller = new ConnectController($this->oAuthUtils);
         $this->controller->setContainer($this->container);
     }
 
