@@ -16,6 +16,7 @@ use HWI\Bundle\OAuthBundle\Controller\ConnectController;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
@@ -79,6 +80,11 @@ abstract class AbstractConnectControllerTest extends TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|OAuthUtils
      */
     protected $oAuthUtils;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|ResourceOwnerMapLocator
+     */
+    protected $resourceOwnerMapLocator;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|UserCheckerInterface
@@ -150,6 +156,10 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->oAuthUtils = $this->createMock(OAuthUtils::class);
         $this->container->set('hwi_oauth.security.oauth_utils', $this->oAuthUtils);
 
+        $this->resourceOwnerMapLocator = new ResourceOwnerMapLocator();
+        $this->resourceOwnerMapLocator->add('default', $this->resourceOwnerMap);
+        $this->container->set('hwi_oauth.resource_ownermap_locator', $this->resourceOwnerMapLocator);
+
         $this->userChecker = $this->createMock(UserCheckerInterface::class);
         $this->container->set('hwi_oauth.user_checker', $this->userChecker);
 
@@ -163,7 +173,7 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
 
-        $this->controller = new ConnectController($this->oAuthUtils);
+        $this->controller = new ConnectController($this->oAuthUtils, $this->resourceOwnerMapLocator);
         $this->controller->setContainer($this->container);
     }
 

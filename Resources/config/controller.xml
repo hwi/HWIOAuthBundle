@@ -7,6 +7,7 @@
     <services>
         <service id="hwi_oauth.controller" class="HWI\Bundle\OAuthBundle\Controller\ConnectController">
             <argument type="service" id="hwi_oauth.security.oauth_utils" />
+            <argument type="service" id="hwi_oauth.resource_ownermap_locator" />
         </service>
     </services>
 </container>
