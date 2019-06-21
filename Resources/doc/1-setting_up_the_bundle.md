@@ -6,7 +6,7 @@ Step 1: Setting up the bundle
 composer require hwi/oauth-bundle php-http/guzzle6-adapter php-http/httplug-bundle
 ```
 
-Why `php-http/guzzle6-adapter`? We are decoupled from any HTTP messaging client thanks to [HTTPlug](http://httplug.io/).
+Why `php-http/guzzle6-adapter`? We are decoupled from any HTTP messaging client thanks to [HTTPlug](http://httplug.io/). Using the guzzle6 adapter surely requires the [Guzzle HTTP Client](https://packagist.org/packages/guzzlehttp/guzzle) library to be installed as well or you will get a composer error. Check the [provided libraries](https://packagist.org/providers/php-http/client-implementation) when choosing your HTTP client library.
 
 Why `php-http/httplug-bundle`? This is the official [Symfony integration](https://packagist.org/packages/php-http/httplug-bundle) of HTTPlug.
 This makes it possible to provide the required HTTP client and message factory with ease.
