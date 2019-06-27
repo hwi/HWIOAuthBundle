@@ -19,6 +19,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -47,11 +48,18 @@ final class ConnectController extends AbstractController
     private $oauthUtils;
 
     /**
-     * @param OAuthUtils $oauthUtils
+     * @var ResourceOwnerMapLocator
      */
-    public function __construct(OAuthUtils $oauthUtils)
+    private $resourceOwnerMapLocator;
+
+    /**
+     * @param OAuthUtils              $oauthUtils
+     * @param ResourceOwnerMapLocator $resourceOwnerMapLocator
+     */
+    public function __construct(OAuthUtils $oauthUtils, ResourceOwnerMapLocator $resourceOwnerMapLocator)
     {
         $this->oauthUtils = $oauthUtils;
+        $this->resourceOwnerMapLocator = $resourceOwnerMapLocator;
     }
 
     /**
@@ -360,12 +368,11 @@ final class ConnectController extends AbstractController
     protected function getResourceOwnerByName($name)
     {
         foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $firewall) {
-            $id = 'hwi_oauth.resource_ownermap.'.$firewall;
-            if (!$this->container->has($id)) {
+            if (!$this->resourceOwnerMapLocator->has($firewall)) {
                 continue;
             }
 
-            $ownerMap = $this->container->get($id);
+            $ownerMap = $this->resourceOwnerMapLocator->get($firewall);
             if ($resourceOwner = $ownerMap->getResourceOwnerByName($name)) {
                 return $resourceOwner;
             }

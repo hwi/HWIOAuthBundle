@@ -125,6 +125,9 @@
             </call>
         </service>
 
+        <service id="hwi_oauth.resource_ownermap_locator" class="HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator">
+        </service>
+
         <service id="hwi_oauth.abstract_resource_owner.generic" abstract="true">
             <argument type="service" id="hwi_oauth.http_client" />
             <argument type="service" id="security.http_utils" />
