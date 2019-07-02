@@ -1,0 +1,65 @@
+framework:
+    secret:          secret
+    test: ~
+    router:          { resource: "%kernel.root_dir%/../App/routing.yml" }
+    session:
+        handler_id:  ~
+        storage_id: session.storage.mock_file
+        name: MOCKSESSID
+
+monolog:
+    handlers:
+        main:
+            type:  stream
+            path:  "%kernel.logs_dir%/%kernel.environment%.log"
+            level: debug
+
+security:
+    providers:
+        HWI\Bundle\OAuthBundle\Tests\App\UserProvider:
+            id: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+    firewalls:
+        secured_area:
+            pattern: ^/
+#            anonymous: ~
+            oauth:
+                resource_owners:
+                    google: "/login/check-google"
+                login_path: /login
+                use_forward: false
+                failure_path: /login
+                oauth_user_provider:
+                    service: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+                provider: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+    access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    HWI\Bundle\OAuthBundle\Tests\App\UserProvider: ~
+
+    Http\Adapter\Guzzle6\Client:
+        factory:
+            - Http\Adapter\Guzzle6\Client
+            - createWithConfig
+        arguments:
+            - timeout: 10
+
+    Http\Message\MessageFactory\GuzzleMessageFactory:
+
+hwi_oauth:
+    http:
+        client: Http\Adapter\Guzzle6\Client
+        message_factory: Http\Message\MessageFactory\GuzzleMessageFactory
+    firewall_names:
+        - secured_area
+
+    resource_owners:
+        google:
+            type:                google
+            client_id:           'google_client_id'
+            client_secret:       'google_client_secret'
+            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
