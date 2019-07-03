@@ -33,6 +33,11 @@ class AppKernel extends Kernel
         return $this->getBaseDir() . 'cache';
     }
 
+    public function getProjectDir(): string
+    {
+        return __DIR__;
+    }
+
     public function getLogDir(): string
     {
         return $this->getBaseDir() . 'log';

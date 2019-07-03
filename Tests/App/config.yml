@@ -19,9 +19,11 @@ security:
         HWI\Bundle\OAuthBundle\Tests\App\UserProvider:
             id: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
     firewalls:
+        login_area:
+            pattern: ^/login
+            anonymous: true
         secured_area:
             pattern: ^/
-#            anonymous: ~
             oauth:
                 resource_owners:
                     google: "/login/check-google"
@@ -38,6 +40,10 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+
+    HWI\Bundle\OAuthBundle\Tests\App\Controller\HomeController:
+        tags:
+            - controller.service_arguments
 
     HWI\Bundle\OAuthBundle\Tests\App\UserProvider: ~
 
@@ -66,3 +72,5 @@ hwi_oauth:
 
 twig:
     strict_variables: '%kernel.debug%'
+    paths:
+        '%kernel.project_dir%/templates': 'Acme'

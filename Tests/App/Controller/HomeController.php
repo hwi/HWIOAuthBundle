@@ -10,10 +10,6 @@ class HomeController
     /** @var Environment */
     private $twig;
 
-    /**
-     * HomeController constructor.
-     * @param Environment $twig
-     */
     public function __construct(Environment $twig)
     {
         $this->twig = $twig;
@@ -21,7 +17,7 @@ class HomeController
 
     public function login()
     {
-        return $this->twig->render('login.html.twig');
+        return new Response($this->twig->render('@Acme/login.html.twig'));
     }
 
     public function index()
