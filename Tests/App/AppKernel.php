@@ -17,7 +17,6 @@ class AppKernel extends Kernel
             new \Symfony\Bundle\MonologBundle\MonologBundle(),
             new \HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new \Symfony\Bundle\TwigBundle\TwigBundle(),
-//            new AcmeBundle(),
         ];
 
         return $bundles;

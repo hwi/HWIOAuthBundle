@@ -20,7 +20,7 @@ security:
             id: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
     firewalls:
         login_area:
-            pattern: ^/login
+            pattern: ^/(login|connect)
             anonymous: true
         secured_area:
             pattern: ^/
