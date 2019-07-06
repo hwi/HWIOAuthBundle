@@ -106,9 +106,15 @@ class OAuthTokenTest extends TestCase
 
     public function testSerializeTokenInException()
     {
-        $exception = new AccountNotLinkedException($this->token);
-        $str = serialize($exception);
+        $resourceOwnerName = 'github';
 
-        $this->assertEquals($exception, unserialize($str));
+        $exception = new AccountNotLinkedException();
+        $exception->setToken($this->token);
+        $exception->setResourceOwnerName($resourceOwnerName);
+
+        $processed = unserialize(serialize($exception));
+
+        $this->assertEquals($this->token, $processed->getToken());
+        $this->assertEquals($resourceOwnerName, $processed->getResourceOwnerName());
     }
 }
