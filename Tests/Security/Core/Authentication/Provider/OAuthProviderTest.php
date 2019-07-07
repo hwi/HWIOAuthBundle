@@ -318,7 +318,7 @@ class OAuthProviderTest extends TestCase
     }
 
     /**
-     * BC layer for Symfony < 4.3
+     * Symfony < 4.3 BC layer.
      *
      * @param TokenInterface $token
      *
