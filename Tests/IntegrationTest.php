@@ -45,7 +45,7 @@ class IntegrationTest extends WebTestCase
         $this->assertSame(302, $response->getStatusCode(), $response->getContent());
         $this->assertSame('http://localhost/login', $response->headers->get('Location'));
 
-        $client->request('GET', $response->headers->get('Location'));
+        $crawler = $client->request('GET', $response->headers->get('Location'));
 
         $response = $client->getResponse();
         $this->assertInstanceOf(Response::class, $response);
@@ -53,7 +53,8 @@ class IntegrationTest extends WebTestCase
 
         $client->disableReboot();
         $client->getContainer()->set(ClientInterface::class, $this->prophesize(ClientInterface::class)->reveal());
-        $client->clickLink('Login');
+        
+        $client->click($crawler->selectLink('Login')->link());
 
         $response = $client->getResponse();
 
