@@ -53,7 +53,7 @@ class IntegrationTest extends WebTestCase
 
         $client->disableReboot();
         $client->getContainer()->set(ClientInterface::class, $this->prophesize(ClientInterface::class)->reveal());
-        
+
         $client->click($crawler->selectLink('Login')->link());
 
         $response = $client->getResponse();
