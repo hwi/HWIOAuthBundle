@@ -44,6 +44,13 @@ class IntegrationTest extends WebTestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(302, $response->getStatusCode(), $response->getContent());
-        $this->assertSame('http://localhost/connect/google', $response->headers->get('Location'));
+        $expectedRedirectUrl = 'https://accounts.google.com/o/oauth2/auth?'
+            . http_build_query([
+                'response_type' => 'code',
+                'client_id' => 'google_client_id',
+                'scope' => 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+                'redirect_uri' => 'http://localhost/login/check-google',
+            ]);
+        $this->assertSame($expectedRedirectUrl, $response->headers->get('Location'));
     }
 }
