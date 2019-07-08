@@ -26,12 +26,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Templating\EngineInterface;
 
 abstract class AbstractConnectControllerTest extends TestCase
@@ -173,7 +175,11 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
 
-        $this->controller = new ConnectController($this->oAuthUtils, $this->resourceOwnerMapLocator);
+        $requestStack = new RequestStack();
+        $requestStack->push($this->request);
+        $authenticationUtils = new AuthenticationUtils($requestStack);
+
+        $this->controller = new ConnectController($this->oAuthUtils, $this->resourceOwnerMapLocator, $authenticationUtils);
         $this->controller->setContainer($this->container);
     }
 

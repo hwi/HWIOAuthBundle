@@ -31,9 +31,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
@@ -53,13 +52,20 @@ final class ConnectController extends AbstractController
     private $resourceOwnerMapLocator;
 
     /**
+     * @var AuthenticationUtils
+     */
+    private $authenticationUtils;
+
+    /**
      * @param OAuthUtils              $oauthUtils
      * @param ResourceOwnerMapLocator $resourceOwnerMapLocator
+     * @param AuthenticationUtils     $authenticationUtils
      */
-    public function __construct(OAuthUtils $oauthUtils, ResourceOwnerMapLocator $resourceOwnerMapLocator)
+    public function __construct(OAuthUtils $oauthUtils, ResourceOwnerMapLocator $resourceOwnerMapLocator, AuthenticationUtils $authenticationUtils)
     {
         $this->oauthUtils = $oauthUtils;
         $this->resourceOwnerMapLocator = $resourceOwnerMapLocator;
+        $this->authenticationUtils = $authenticationUtils;
     }
 
     /**
@@ -77,7 +83,7 @@ final class ConnectController extends AbstractController
         $connect = $this->container->getParameter('hwi_oauth.connect');
         $hasUser = $this->getUser() ? $this->isGranted($this->container->getParameter('hwi_oauth.grant_rule')) : false;
 
-        $error = $this->getErrorForRequest($request);
+        $error = $this->authenticationUtils->getLastAuthenticationError();
 
         // if connecting is enabled and there is no user, redirect to the registration form
         if ($connect && !$hasUser && $error instanceof AccountNotLinkedException) {
@@ -92,12 +98,8 @@ final class ConnectController extends AbstractController
             return $this->redirectToRoute('hwi_oauth_connect_registration', ['key' => $key]);
         }
 
-        if ($error) {
-            if ($error instanceof AuthenticationException) {
-                $error = $error->getMessageKey();
-            } else {
-                $error = $error->getMessage();
-            }
+        if (null !== $error) {
+            $error = $error->getMessageKey();
         }
 
         return $this->render('@HWIOAuth/Connect/login.html.twig', [
@@ -328,32 +330,6 @@ final class ConnectController extends AbstractController
         }
 
         return $this->redirect($authorizationUrl);
-    }
-
-    /**
-     * Get the security error for a given request.
-     *
-     * @param Request $request
-     *
-     * @return string|\Exception
-     */
-    protected function getErrorForRequest(Request $request)
-    {
-        $authenticationErrorKey = Security::AUTHENTICATION_ERROR;
-
-        if ($request->attributes->has($authenticationErrorKey)) {
-            return $request->attributes->get($authenticationErrorKey);
-        }
-
-        $session = $request->getSession();
-        if (null !== $session && $session->has($authenticationErrorKey)) {
-            $error = $session->get($authenticationErrorKey);
-            $session->remove($authenticationErrorKey);
-
-            return $error;
-        }
-
-        return '';
     }
 
     /**

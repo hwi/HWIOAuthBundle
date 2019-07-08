@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 {
@@ -77,13 +78,15 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 
     public function testRequestError()
     {
+        $authenticationException = new AuthenticationException();
+
         $this->request->attributes = new ParameterBag([
-            $this->getAuthenticationErrorKey() => new AccessDeniedException('You shall not pass the request.'),
+            $this->getAuthenticationErrorKey() => $authenticationException,
         ]);
 
         $this->twig->expects($this->once())
             ->method('render')
-            ->with('@HWIOAuth/Connect/login.html.twig', ['error' => 'You shall not pass the request.'])
+            ->with('@HWIOAuth/Connect/login.html.twig', ['error' => $authenticationException->getMessageKey()])
         ;
 
         $this->controller->connectAction($this->request);
@@ -97,15 +100,17 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
             ->willReturn(true)
         ;
 
+        $authenticationException = new AuthenticationException();
+
         $this->session->expects($this->once())
             ->method('get')
             ->with($this->getAuthenticationErrorKey())
-            ->willReturn(new AccessDeniedException('You shall not pass the session.'))
+            ->willReturn($authenticationException)
         ;
 
         $this->twig->expects($this->once())
             ->method('render')
-            ->with('@HWIOAuth/Connect/login.html.twig', ['error' => 'You shall not pass the session.'])
+            ->with('@HWIOAuth/Connect/login.html.twig', ['error' => $authenticationException->getMessageKey()])
         ;
 
         $this->controller->connectAction($this->request);

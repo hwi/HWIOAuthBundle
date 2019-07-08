@@ -9,6 +9,7 @@
             <tag name="controller.service_arguments" />
             <argument type="service" id="hwi_oauth.security.oauth_utils" />
             <argument type="service" id="hwi_oauth.resource_ownermap_locator" />
+            <argument type="service" id="security.authentication_utils" />
         </service>
     </services>
 </container>
