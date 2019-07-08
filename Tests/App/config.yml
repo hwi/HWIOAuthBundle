@@ -20,13 +20,13 @@ security:
             id: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
     firewalls:
         login_area:
-            pattern: ^/(login|connect)
+            pattern: ^/(login$|connect)
             anonymous: true
         secured_area:
             pattern: ^/
             oauth:
                 resource_owners:
-                    google: "/login/check-google"
+                    google: "/check-login/google"
                 login_path: /login
                 use_forward: false
                 failure_path: /login
@@ -47,18 +47,15 @@ services:
 
     HWI\Bundle\OAuthBundle\Tests\App\UserProvider: ~
 
-    Http\Adapter\Guzzle6\Client:
-        factory:
-            - Http\Adapter\Guzzle6\Client
-            - createWithConfig
-        arguments:
-            - timeout: 10
+    Psr\Http\Client\ClientInterface:
+        public: true
+        synthetic: true
 
     Http\Message\MessageFactory\GuzzleMessageFactory:
 
 hwi_oauth:
     http:
-        client: Http\Adapter\Guzzle6\Client
+        client: Psr\Http\Client\ClientInterface
         message_factory: Http\Message\MessageFactory\GuzzleMessageFactory
     firewall_names:
         - secured_area

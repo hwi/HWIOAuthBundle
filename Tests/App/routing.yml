@@ -7,7 +7,7 @@ login_landing:
     defaults: { _controller: 'HWI\Bundle\OAuthBundle\Tests\App\Controller\HomeController::login' }
 
 google_login:
-    path: /login/check-google
+    path: /check-login/google
 
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
