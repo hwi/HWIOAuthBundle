@@ -1,3 +1,6 @@
+imports:
+    - { resource: security.php }
+  
 framework:
     secret:          secret
     test: ~
@@ -22,10 +25,8 @@ security:
         login_area:
             pattern: ^/(login$|connect)
             anonymous: true
-            logout_on_user_change: true
         secured_area:
             pattern: ^/
-            logout_on_user_change: true
             oauth:
                 resource_owners:
                     google: "/check-login/google"
