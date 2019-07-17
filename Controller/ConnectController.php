@@ -81,7 +81,7 @@ final class ConnectController extends AbstractController
     public function connectAction(Request $request)
     {
         $connect = $this->container->getParameter('hwi_oauth.connect');
-        $hasUser = $this->getUser() ? $this->isGranted($this->container->getParameter('hwi_oauth.grant_rule')) : false;
+        $hasUser = $this->isGranted($this->container->getParameter('hwi_oauth.grant_rule'));
 
         $error = $this->authenticationUtils->getLastAuthenticationError();
 

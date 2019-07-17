@@ -13,13 +13,14 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 {
     public function testLoginPage()
     {
+        $this->mockAuthorizationCheck();
+
         $this->container->setParameter('hwi_oauth.connect', true);
 
         $this->twig->expects($this->once())
@@ -36,36 +37,7 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
             $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException(),
         ]);
 
-        $this->tokenStorage->expects($this->once())
-            ->method('getToken')
-            ->willReturn(new CustomOAuthToken())
-        ;
-
         $this->mockAuthorizationCheck(false);
-
-        $this->router->expects($this->once())
-            ->method('generate')
-            ->with('hwi_oauth_connect_registration')
-            ->willReturn('/')
-        ;
-
-        $this->controller->connectAction($this->request);
-    }
-
-    public function testRegistrationRedirectWithoutTokenStorage()
-    {
-        $this->request->attributes = new ParameterBag([
-            $this->getAuthenticationErrorKey() => $this->createAccountNotLinkedException(),
-        ]);
-
-        $this->tokenStorage->expects($this->once())
-            ->method('getToken')
-            ->willReturn(null)
-        ;
-
-        $this->authorizationChecker->expects($this->never())
-            ->method('isGranted')
-        ;
 
         $this->router->expects($this->once())
             ->method('generate')
@@ -78,6 +50,8 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 
     public function testRequestError()
     {
+        $this->mockAuthorizationCheck();
+
         $authenticationException = new AuthenticationException();
 
         $this->request->attributes = new ParameterBag([
@@ -94,6 +68,8 @@ class ConnectControllerConnectActionTest extends AbstractConnectControllerTest
 
     public function testSessionError()
     {
+        $this->mockAuthorizationCheck();
+
         $this->session->expects($this->once())
             ->method('has')
             ->with($this->getAuthenticationErrorKey())
