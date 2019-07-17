@@ -89,10 +89,6 @@ final class ConnectController extends AbstractController
         if ($connect && !$hasUser && $error instanceof AccountNotLinkedException) {
             $key = time();
             $session = $request->getSession();
-            if (!$session->isStarted()) {
-                $session->start();
-            }
-
             $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
             return $this->redirectToRoute('hwi_oauth_connect_registration', ['key' => $key]);
@@ -133,10 +129,6 @@ final class ConnectController extends AbstractController
         }
 
         $session = $request->getSession();
-        if (!$session->isStarted()) {
-            $session->start();
-        }
-
         $error = $session->get('_hwi_oauth.registration_error.'.$key);
         $session->remove('_hwi_oauth.registration_error.'.$key);
 
@@ -228,9 +220,6 @@ final class ConnectController extends AbstractController
         $resourceOwner = $this->getResourceOwnerByName($service);
 
         $session = $request->getSession();
-        if (!$session->isStarted()) {
-            $session->start();
-        }
 
         $key = $request->query->get('key', time());
 
@@ -305,11 +294,6 @@ final class ConnectController extends AbstractController
 
         // Check for a return path and store it before redirect
         if (null !== $session) {
-            // initialize the session for preventing SessionUnavailableException
-            if (!$session->isStarted()) {
-                $session->start();
-            }
-
             foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
                 $sessionKey = '_security.'.$providerKey.'.target_path';
                 $sessionKeyFailure = '_security.'.$providerKey.'.failed_target_path';
