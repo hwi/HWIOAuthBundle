@@ -1,0 +1,22 @@
+home:
+    path:  /
+    defaults: { _controller: 'HWI\Bundle\OAuthBundle\Tests\App\Controller\HomeController::index' }
+
+login_landing:
+    path:  /login
+    defaults: { _controller: 'HWI\Bundle\OAuthBundle\Tests\App\Controller\HomeController::login' }
+
+google_login:
+    path: /check-login/google
+
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix:   /connect
+
+hwi_oauth_login:
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    prefix:   /login
