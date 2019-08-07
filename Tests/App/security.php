@@ -15,7 +15,10 @@ use Symfony\Component\Security\Http\Controller\UserValueResolver;
 if (method_exists(Security::class, 'getUser') && !class_exists(UserValueResolver::class)) {
     $container->loadFromExtension('security', [
         'firewalls' => [
-            'main' => [
+            'login_area' => [
+                'logout_on_user_change' => true,
+            ],
+            'secured_area' => [
                 'logout_on_user_change' => true,
             ],
         ],
