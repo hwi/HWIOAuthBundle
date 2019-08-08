@@ -112,7 +112,13 @@ class OAuthTokenTest extends TestCase
         $exception->setToken($this->token);
         $exception->setResourceOwnerName($resourceOwnerName);
 
-        $processed = unserialize(serialize($exception));
+        // Symfony < 4.3 BC layer.
+        if (method_exists($exception, 'serialize')) {
+            $processed = new AccountNotLinkedException();
+            $processed->__unserialize($exception->__serialize());
+        } else {
+            $processed = unserialize(serialize($exception));
+        }
 
         $this->assertEquals($this->token, $processed->getToken());
         $this->assertEquals($resourceOwnerName, $processed->getResourceOwnerName());
