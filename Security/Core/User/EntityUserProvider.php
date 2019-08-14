@@ -73,7 +73,10 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     {
         $user = $this->findUser(['username' => $username]);
         if (!$user) {
-            throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
+            $exception = new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
+            $exception->setUsername($username);
+
+            throw $exception;
         }
 
         return $user;
@@ -92,7 +95,10 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
 
         $username = $response->getUsername();
         if (null === $user = $this->findUser([$this->properties[$resourceOwnerName] => $username])) {
-            throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
+            $exception = new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
+            $exception->setUsername($username);
+
+            throw $exception;
         }
 
         return $user;
@@ -110,8 +116,13 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
         }
 
         $userId = $accessor->getValue($user, $identifier);
+        $username = $user->getUsername();
+
         if (null === $user = $this->findUser([$identifier => $userId])) {
-            throw new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $userId));
+            $exception = new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $userId));
+            $exception->setUsername($username);
+
+            throw $exception;
         }
 
         return $user;
