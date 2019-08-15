@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class AccountNotLinkedException extends UsernameNotFoundException implements OAuthAwareExceptionInterface
@@ -19,6 +20,30 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      * @var string
      */
     protected $resourceOwnerName;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __serialize(): array
+    {
+        return [
+            $this->resourceOwnerName,
+            $this->serializationFromParent(),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function __unserialize(array $data): void
+    {
+        [
+            $this->resourceOwnerName,
+            $parentData
+        ] = $data;
+
+        $this->unserializationFromParent($parentData);
+    }
 
     /**
      * {@inheritdoc}
@@ -89,10 +114,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function serialize()
     {
-        return serialize([
-            $this->resourceOwnerName,
-            parent::serialize(),
-        ]);
+        return serialize($this->__serialize());
     }
 
     /**
@@ -100,11 +122,30 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function unserialize($str)
     {
-        list(
-            $this->resourceOwnerName,
-            $parentData
-        ) = unserialize($str);
+        $this->__unserialize((array) unserialize((string) $str));
+    }
 
-        parent::unserialize($parentData);
+    /**
+     * Symfony < 4.3 BC layer.
+     */
+    private function serializationFromParent(): array
+    {
+        if (method_exists(AuthenticationException::class, '__serialize')) {
+            return parent::__serialize();
+        }
+
+        return unserialize(parent::serialize());
+    }
+
+    /**
+     * Symfony < 4.3 BC layer.
+     */
+    private function unserializationFromParent(array $parentData): void
+    {
+        if (method_exists(AuthenticationException::class, '__unserialize')) {
+            parent::__unserialize($parentData);
+        } else {
+            parent::unserialize(serialize($parentData));
+        }
     }
 }
