@@ -20,7 +20,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class EntityUserProviderTest extends TestCase
 {
@@ -95,7 +94,7 @@ class EntityUserProviderTest extends TestCase
             $this->fail('Failed asserting exception');
         } catch (\RuntimeException $e) {
             $this->assertInstanceOf(UsernameNotFoundException::class, $e);
-            $this->assertSame("User with ID \"1\" could not be reloaded.", $e->getMessage());
+            $this->assertSame('User with ID "1" could not be reloaded.', $e->getMessage());
             $this->assertSame('foo', $e->getUsername());
         }
     }

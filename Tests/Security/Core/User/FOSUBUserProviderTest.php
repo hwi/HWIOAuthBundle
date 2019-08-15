@@ -105,7 +105,7 @@ class FOSUBUserProviderTest extends TestCase
             $this->fail('Failed asserting exception');
         } catch (\RuntimeException $e) {
             $this->assertInstanceOf(UsernameNotFoundException::class, $e);
-            $this->assertSame("User with ID \"1\" could not be reloaded.", $e->getMessage());
+            $this->assertSame('User with ID "1" could not be reloaded.', $e->getMessage());
             $this->assertSame('foo', $e->getUsername());
         }
     }
