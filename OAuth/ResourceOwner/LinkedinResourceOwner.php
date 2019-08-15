@@ -76,10 +76,16 @@ class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function httpRequest($url, $content = null, array $headers = [], $method = null)
     {
-        // Linkedin v2 API is supposed to require Content-Type: application/json but it works without
+        // LinkedIn v2 API is supposed to require Content-Type: application/json but it works without
         // and request to get the access token doesn't seems to work with Content-Type: application/json
         // so we don't put any Content-Type header.
         // Skip the Content-Type header in GenericOAuth2ResourceOwner::httpRequest
+        //
+        // LinkedIn API requires to always set Content-Length in POST requests
+        if ('POST' === $method) {
+            $headers['Content-Length'] = \is_string($content) ? (string) \strlen($content) : '0';
+        }
+
         return AbstractResourceOwner::httpRequest($url, $content, $headers, $method);
     }
 
