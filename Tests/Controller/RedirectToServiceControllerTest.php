@@ -11,28 +11,64 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
+use HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController;
+use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-class ConnectControllerRedirectToServiceActionTest extends AbstractConnectControllerTest
+class RedirectToServiceControllerTest extends TestCase
 {
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|OAuthUtils
+     */
+    private $oAuthUtils;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|SessionInterface
+     */
+    private $session;
+
+    /**
+     * @var Request
+     */
+    private $request;
+
+    /**
+     * @var array
+     */
+    private $firewallNames;
+
+    /**
+     * @var string
+     */
+    private $targetPathParameter;
+
     protected function setUp()
     {
         parent::setUp();
 
-        $this->container->setParameter('hwi_oauth.target_path_parameter', null);
-        $this->container->setParameter('hwi_oauth.use_referer', false);
-        $this->container->setParameter('hwi_oauth.failed_use_referer', false);
+        $this->oAuthUtils = $this->createMock(OAuthUtils::class);
+
+        $this->session = $this->createMock(SessionInterface::class);
+        $this->request = Request::create('/');
+        $this->request->setSession($this->session);
 
         $this->oAuthUtils->expects($this->any())
             ->method('getAuthorizationUrl')
             ->willReturn('http://domain.com/oauth/v2/auth')
         ;
+
+        $this->firewallNames = ['default'];
+        $this->targetPathParameter = 'target_path';
     }
 
     public function test()
     {
-        $response = $this->controller->redirectToServiceAction($this->request, 'facebook');
+        $controller = $this->createController();
+
+        $response = $controller->redirectToServiceAction($this->request, 'facebook');
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals('http://domain.com/oauth/v2/auth', $response->getTargetUrl());
@@ -40,20 +76,20 @@ class ConnectControllerRedirectToServiceActionTest extends AbstractConnectContro
 
     public function testTargetPathParameter()
     {
-        $this->container->setParameter('hwi_oauth.target_path_parameter', 'target_path');
-        $this->request->attributes->set('target_path', '/target/path');
+        $this->request->attributes->set($this->targetPathParameter, '/target/path');
 
         $this->session->expects($this->once())
             ->method('set')
             ->with('_security.default.target_path', '/target/path')
         ;
 
-        $this->controller->redirectToServiceAction($this->request, 'facebook');
+        $controller = $this->createController();
+
+        $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
     public function testUseReferer()
     {
-        $this->container->setParameter('hwi_oauth.use_referer', true);
         $this->request->headers->set('Referer', 'https://google.com');
 
         $this->session->expects($this->once())
@@ -61,12 +97,13 @@ class ConnectControllerRedirectToServiceActionTest extends AbstractConnectContro
             ->with('_security.default.target_path', 'https://google.com')
         ;
 
-        $this->controller->redirectToServiceAction($this->request, 'facebook');
+        $controller = $this->createController(false, true);
+
+        $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
     public function testFailedUseReferer()
     {
-        $this->container->setParameter('hwi_oauth.failed_use_referer', true);
         $this->request->headers->set('Referer', 'https://google.com');
 
         $this->session->expects($this->once())
@@ -74,7 +111,9 @@ class ConnectControllerRedirectToServiceActionTest extends AbstractConnectContro
             ->with('_security.default.failed_target_path', 'https://google.com')
         ;
 
-        $this->controller->redirectToServiceAction($this->request, 'facebook');
+        $controller = $this->createController(true, false);
+
+        $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
     public function testUnknownResourceOwner()
@@ -90,6 +129,13 @@ class ConnectControllerRedirectToServiceActionTest extends AbstractConnectContro
             ->will($this->throwException(new \RuntimeException()))
         ;
 
-        $this->controller->redirectToServiceAction($this->request, 'unknown');
+        $controller = $this->createController();
+
+        $controller->redirectToServiceAction($this->request, 'unknown');
+    }
+
+    private function createController(bool $failedUseReferer = false, bool $useReferer = false)
+    {
+        return new RedirectToServiceController($this->oAuthUtils, $this->firewallNames, $this->targetPathParameter, $failedUseReferer, $useReferer);
     }
 }

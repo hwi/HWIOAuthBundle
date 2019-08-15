@@ -15,5 +15,22 @@
 
             <tag name="controller.service_arguments" />
         </service>
+
+        <service id="HWI\Bundle\OAuthBundle\Controller\LoginController" public="true">
+            <argument type="service" id="security.authentication_utils" />
+            <argument type="service" id="twig" />
+            <argument type="service" id="router" />
+            <argument type="service" id="security.authorization_checker" />
+            <argument>%hwi_oauth.connect%</argument>
+            <argument>%hwi_oauth.grant_rule%</argument>
+        </service>
+
+        <service id="HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController" public="true">
+            <argument type="service" id="hwi_oauth.security.oauth_utils" />
+            <argument>%hwi_oauth.firewall_names%</argument>
+            <argument>%hwi_oauth.target_path_parameter%</argument>
+            <argument>%hwi_oauth.failed_use_referer%</argument>
+            <argument>%hwi_oauth.use_referer%</argument>
+        </service>
     </services>
 </container>

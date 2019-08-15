@@ -26,15 +26,12 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
@@ -65,51 +62,6 @@ final class ConnectController implements ContainerAwareInterface
     {
         $this->oauthUtils = $oauthUtils;
         $this->resourceOwnerMapLocator = $resourceOwnerMapLocator;
-    }
-
-    /**
-     * Action that handles the login 'form'. If connecting is enabled the
-     * user will be redirected to the appropriate login urls or registration forms.
-     *
-     * @param Request $request
-     *
-     * @throws \LogicException
-     *
-     * @return Response
-     */
-    public function connectAction(Request $request)
-    {
-        $connect = $this->container->getParameter('hwi_oauth.connect');
-        $hasUser = $this->getUser() ? $this->isGranted($this->container->getParameter('hwi_oauth.grant_rule')) : false;
-
-        $error = $this->getErrorForRequest($request);
-
-        // if connecting is enabled and there is no user, redirect to the registration form
-        if ($connect && !$hasUser && $error instanceof AccountNotLinkedException) {
-            $key = time();
-            $session = $request->hasSession() ? $request->getSession() : $this->get('session');
-            if ($session) {
-                if (!$session->isStarted()) {
-                    $session->start();
-                }
-
-                $session->set('_hwi_oauth.registration_error.'.$key, $error);
-            }
-
-            return $this->redirectToRoute('hwi_oauth_connect_registration', ['key' => $key]);
-        }
-
-        if ($error) {
-            if ($error instanceof AuthenticationException) {
-                $error = $error->getMessageKey();
-            } else {
-                $error = $error->getMessage();
-            }
-        }
-
-        return $this->render('@HWIOAuth/Connect/login.html.twig', [
-            'error' => $error,
-        ]);
     }
 
     /**
@@ -157,11 +109,7 @@ final class ConnectController implements ContainerAwareInterface
         ;
 
         /* @var $form FormInterface */
-        if ($this->container->getParameter('hwi_oauth.fosub_enabled')) {
-            $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
-        } else {
-            $form = $this->container->get('hwi_oauth.registration.form');
-        }
+        $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
 
         $formHandler = $this->container->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {
@@ -298,79 +246,6 @@ final class ConnectController implements ContainerAwareInterface
     }
 
     /**
-     * @param Request $request
-     * @param string  $service
-     *
-     * @throws NotFoundHttpException
-     *
-     * @return RedirectResponse
-     */
-    public function redirectToServiceAction(Request $request, $service)
-    {
-        try {
-            $authorizationUrl = $this->oauthUtils->getAuthorizationUrl($request, $service);
-        } catch (\RuntimeException $e) {
-            throw new NotFoundHttpException($e->getMessage(), $e);
-        }
-
-        $session = $request->hasSession() ? $request->getSession() : $this->get('session');
-
-        // Check for a return path and store it before redirect
-        if (null !== $session) {
-            // initialize the session for preventing SessionUnavailableException
-            if (!$session->isStarted()) {
-                $session->start();
-            }
-
-            foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
-                $sessionKey = '_security.'.$providerKey.'.target_path';
-                $sessionKeyFailure = '_security.'.$providerKey.'.failed_target_path';
-
-                $param = $this->container->getParameter('hwi_oauth.target_path_parameter');
-                if (!empty($param) && $targetUrl = $request->get($param)) {
-                    $session->set($sessionKey, $targetUrl);
-                }
-
-                if ($this->container->getParameter('hwi_oauth.failed_use_referer') && !$session->has($sessionKeyFailure) && ($targetUrl = $request->headers->get('Referer')) && $targetUrl !== $authorizationUrl) {
-                    $session->set($sessionKeyFailure, $targetUrl);
-                }
-
-                if ($this->container->getParameter('hwi_oauth.use_referer') && !$session->has($sessionKey) && ($targetUrl = $request->headers->get('Referer')) && $targetUrl !== $authorizationUrl) {
-                    $session->set($sessionKey, $targetUrl);
-                }
-            }
-        }
-
-        return $this->redirect($authorizationUrl);
-    }
-
-    /**
-     * Get the security error for a given request.
-     *
-     * @param Request $request
-     *
-     * @return string|\Exception
-     */
-    protected function getErrorForRequest(Request $request)
-    {
-        $authenticationErrorKey = Security::AUTHENTICATION_ERROR;
-
-        if ($request->attributes->has($authenticationErrorKey)) {
-            return $request->attributes->get($authenticationErrorKey);
-        }
-
-        $session = $request->hasSession() ? $request->getSession() : $this->get('session');
-        if (null !== $session && $session->has($authenticationErrorKey)) {
-            $error = $session->get($authenticationErrorKey);
-            $session->remove($authenticationErrorKey);
-
-            return $error;
-        }
-
-        return '';
-    }
-
-    /**
      * Get a resource owner by name.
      *
      * @param string $name
@@ -379,7 +254,7 @@ final class ConnectController implements ContainerAwareInterface
      *
      * @throws NotFoundHttpException if there is no resource owner with the given name
      */
-    protected function getResourceOwnerByName($name)
+    private function getResourceOwnerByName($name)
     {
         foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $firewall) {
             if (!$this->resourceOwnerMapLocator->has($firewall)) {
@@ -404,7 +279,7 @@ final class ConnectController implements ContainerAwareInterface
      * @param string|array  $accessToken
      * @param bool          $fakeLogin
      */
-    protected function authenticateUser(Request $request, UserInterface $user, $resourceOwnerName, $accessToken, $fakeLogin = true)
+    private function authenticateUser(Request $request, UserInterface $user, $resourceOwnerName, $accessToken, $fakeLogin = true)
     {
         try {
             $userChecker = $this->container->get('hwi_oauth.user_checker');
