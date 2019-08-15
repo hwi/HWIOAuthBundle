@@ -17,6 +17,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class FOSUBUserProviderTest extends TestCase
 {
@@ -87,6 +88,26 @@ class FOSUBUserProviderTest extends TestCase
         $provider = $this->createFOSUBUserProvider();
 
         $provider->connect($user, $userResponseMock);
+    }
+
+    public function testRefreshUserThrowsExceptionWhenUserIsNull()
+    {
+        $userManagerMock = $this->createMock(UserManagerInterface::class);
+        $userManagerMock->expects($this->once())
+            ->method('findUserBy')
+            ->willReturn(null);
+
+        $provider = new FOSUBUserProvider($userManagerMock, []);
+
+        try {
+            $provider->refreshUser(new FOSUser());
+
+            $this->fail('Failed asserting exception');
+        } catch (\RuntimeException $e) {
+            $this->assertInstanceOf(UsernameNotFoundException::class, $e);
+            $this->assertSame('User with ID "1" could not be reloaded.', $e->getMessage());
+            $this->assertSame('foo', $e->getUsername());
+        }
     }
 
     protected function createFOSUBUserProvider($user = null, $updateUser = null)

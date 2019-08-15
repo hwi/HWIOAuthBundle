@@ -20,6 +20,11 @@ class FOSUser extends BaseUser
 {
     private $githubId;
 
+    public function getId()
+    {
+        return 1;
+    }
+
     public function getUsername()
     {
         return 'foo';
