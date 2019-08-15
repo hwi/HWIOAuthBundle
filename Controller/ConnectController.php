@@ -21,7 +21,9 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -40,8 +42,11 @@ use Symfony\Component\Security\Http\SecurityEvents;
 /**
  * @author Alexander <iam.asm89@gmail.com>
  */
-final class ConnectController extends AbstractController
+final class ConnectController implements ContainerAwareInterface
 {
+    use ContainerAwareTrait;
+    use ControllerTrait;
+
     /**
      * @var OAuthUtils
      */
@@ -82,12 +87,14 @@ final class ConnectController extends AbstractController
         // if connecting is enabled and there is no user, redirect to the registration form
         if ($connect && !$hasUser && $error instanceof AccountNotLinkedException) {
             $key = time();
-            $session = $request->getSession();
-            if (!$session->isStarted()) {
-                $session->start();
-            }
+            $session = $request->hasSession() ? $request->getSession() : $this->get('session');
+            if ($session) {
+                if (!$session->isStarted()) {
+                    $session->start();
+                }
 
-            $session->set('_hwi_oauth.registration_error.'.$key, $error);
+                $session->set('_hwi_oauth.registration_error.'.$key, $error);
+            }
 
             return $this->redirectToRoute('hwi_oauth_connect_registration', ['key' => $key]);
         }
@@ -130,13 +137,15 @@ final class ConnectController extends AbstractController
             throw new AccessDeniedException('Cannot connect already registered account.');
         }
 
-        $session = $request->getSession();
-        if (!$session->isStarted()) {
-            $session->start();
+        $error = null;
+        $session = $request->hasSession() ? $request->getSession() : $this->get('session');
+        if ($session) {
+            if (!$session->isStarted()) {
+                $session->start();
+            }
+            $error = $session->get('_hwi_oauth.registration_error.'.$key);
+            $session->remove('_hwi_oauth.registration_error.'.$key);
         }
-
-        $error = $session->get('_hwi_oauth.registration_error.'.$key);
-        $session->remove('_hwi_oauth.registration_error.'.$key);
 
         if (!$error instanceof AccountNotLinkedException) {
             throw new \RuntimeException('Cannot register an account.', 0, $error instanceof \Exception ? $error : null);
@@ -180,8 +189,10 @@ final class ConnectController extends AbstractController
             return $response;
         }
 
-        // reset the error in the session
-        $session->set('_hwi_oauth.registration_error.'.$key, $error);
+        if ($session) {
+            // reset the error in the session
+            $session->set('_hwi_oauth.registration_error.'.$key, $error);
+        }
 
         $event = new GetResponseUserEvent($form->getData(), $request);
         $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::REGISTRATION_INITIALIZE, $event);
@@ -225,28 +236,31 @@ final class ConnectController extends AbstractController
         // Get the data from the resource owner
         $resourceOwner = $this->getResourceOwnerByName($service);
 
-        $session = $request->getSession();
-        if (!$session->isStarted()) {
+        $session = $request->hasSession() ? $request->getSession() : $this->get('session');
+        if ($session && !$session->isStarted()) {
             $session->start();
         }
 
         $key = $request->query->get('key', time());
 
+        $accessToken = null;
         if ($resourceOwner->handles($request)) {
             $accessToken = $resourceOwner->getAccessToken(
                 $request,
                 $this->oauthUtils->getServiceAuthUrl($request, $resourceOwner)
             );
 
-            // save in session
-            $session->set('_hwi_oauth.connect_confirmation.'.$key, $accessToken);
-        } else {
+            if ($session) {
+                // save in session
+                $session->set('_hwi_oauth.connect_confirmation.'.$key, $accessToken);
+            }
+        } elseif ($session) {
             $accessToken = $session->get('_hwi_oauth.connect_confirmation.'.$key);
         }
 
         // Redirect to the login path if the token is empty (Eg. User cancelled auth)
         if (null === $accessToken) {
-            if ($this->container->getParameter('hwi_oauth.failed_use_referer') && $targetPath = $this->getTargetPath($session, 'failed_target_path')) {
+            if ($this->container->getParameter('hwi_oauth.failed_use_referer') && $targetPath = $this->getTargetPath($session)) {
                 return $this->redirect($targetPath);
             }
 
@@ -299,7 +313,7 @@ final class ConnectController extends AbstractController
             throw new NotFoundHttpException($e->getMessage(), $e);
         }
 
-        $session = $request->getSession();
+        $session = $request->hasSession() ? $request->getSession() : $this->get('session');
 
         // Check for a return path and store it before redirect
         if (null !== $session) {
@@ -345,7 +359,7 @@ final class ConnectController extends AbstractController
             return $request->attributes->get($authenticationErrorKey);
         }
 
-        $session = $request->getSession();
+        $session = $request->hasSession() ? $request->getSession() : $this->get('session');
         if (null !== $session && $session->has($authenticationErrorKey)) {
             $error = $session->get($authenticationErrorKey);
             $session->remove($authenticationErrorKey);
@@ -387,14 +401,15 @@ final class ConnectController extends AbstractController
      * @param Request       $request
      * @param UserInterface $user
      * @param string        $resourceOwnerName
-     * @param string        $accessToken
+     * @param string|array  $accessToken
      * @param bool          $fakeLogin
      */
     protected function authenticateUser(Request $request, UserInterface $user, $resourceOwnerName, $accessToken, $fakeLogin = true)
     {
         try {
-            $this->container->get('hwi_oauth.user_checker')->checkPreAuth($user);
-            $this->container->get('hwi_oauth.user_checker')->checkPostAuth($user);
+            $userChecker = $this->container->get('hwi_oauth.user_checker');
+            $userChecker->checkPreAuth($user);
+            $userChecker->checkPostAuth($user);
         } catch (AccountStatusException $e) {
             // Don't authenticate locked, disabled or expired users
             return;
@@ -421,8 +436,12 @@ final class ConnectController extends AbstractController
      *
      * @return string|null
      */
-    private function getTargetPath(SessionInterface $session)
+    private function getTargetPath(?SessionInterface $session)
     {
+        if (!$session) {
+            return null;
+        }
+
         foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
             $sessionKey = '_security.'.$providerKey.'.target_path';
             if ($session->has($sessionKey)) {
