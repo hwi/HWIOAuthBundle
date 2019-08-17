@@ -1,6 +1,6 @@
 imports:
     - { resource: security.php }
-  
+
 framework:
     secret:          secret
     test: ~
@@ -23,7 +23,7 @@ security:
             id: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
     firewalls:
         login_area:
-            pattern: ^/(login$|connect)
+            pattern: ^/(login$|connect|login_hwi)
             anonymous: true
         secured_area:
             pattern: ^/
