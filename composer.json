@@ -112,6 +112,7 @@
     "require-dev": {
         "doctrine/orm":                 "^2.3",
         "symfony/browser-kit":          "^3.4|^4.2",
+        "symfony/css-selector":         "^3.4|^4.2",
         "symfony/property-access":      "^3.4|^4.2",
         "symfony/validator":            "^3.4|^4.2",
         "symfony/twig-bundle":          "^3.4|^4.2",

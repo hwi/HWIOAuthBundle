@@ -102,4 +102,18 @@ class IntegrationTest extends WebTestCase
         $this->assertSame(302, $response->getStatusCode(), $response->getContent());
         $this->assertSame('http://localhost/', $response->headers->get('Location'));
     }
+
+    public function testRequestLoginFromHWI(): void
+    {
+        $client = static::createClient();
+        $httpClient = $this->prophesize(ClientInterface::class);
+        $client->getContainer()->set(ClientInterface::class, $httpClient->reveal());
+
+        $crawler = $client->request('GET', '/login_hwi/');
+
+        $response = $client->getResponse();
+
+        $this->assertSame(200, $response->getStatusCode(), $response->getContent());
+        $this->assertSame('google', $crawler->filter('a')->text(), $response->getContent());
+    }
 }
