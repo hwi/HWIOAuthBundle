@@ -71,7 +71,7 @@ final class RedirectToServiceController
      *
      * @return RedirectResponse
      */
-    public function redirectToServiceAction(Request $request, $service)
+    public function redirectToServiceAction(Request $request, $service): RedirectResponse
     {
         try {
             $authorizationUrl = $this->oauthUtils->getAuthorizationUrl($request, $service);
@@ -92,11 +92,12 @@ final class RedirectToServiceController
             return;
         }
 
+        $param = $this->targetPathParameter;
+
         foreach ($this->firewallNames as $providerKey) {
             $sessionKey = '_security.'.$providerKey.'.target_path';
             $sessionKeyFailure = '_security.'.$providerKey.'.failed_target_path';
 
-            $param = $this->targetPathParameter;
             if (!empty($param) && $targetUrl = $request->get($param)) {
                 $session->set($sessionKey, $targetUrl);
             }

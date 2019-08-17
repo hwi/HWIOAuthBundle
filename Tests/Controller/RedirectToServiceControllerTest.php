@@ -14,7 +14,6 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 use HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -38,12 +37,12 @@ class RedirectToServiceControllerTest extends TestCase
     /**
      * @var array
      */
-    private $firewallNames;
+    private $firewallNames = ['default'];
 
     /**
      * @var string
      */
-    private $targetPathParameter;
+    private $targetPathParameter = 'target_path';
 
     protected function setUp()
     {
@@ -59,9 +58,6 @@ class RedirectToServiceControllerTest extends TestCase
             ->method('getAuthorizationUrl')
             ->willReturn('http://domain.com/oauth/v2/auth')
         ;
-
-        $this->firewallNames = ['default'];
-        $this->targetPathParameter = 'target_path';
     }
 
     public function test()
@@ -70,7 +66,6 @@ class RedirectToServiceControllerTest extends TestCase
 
         $response = $controller->redirectToServiceAction($this->request, 'facebook');
 
-        $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertEquals('http://domain.com/oauth/v2/auth', $response->getTargetUrl());
     }
 
@@ -134,7 +129,7 @@ class RedirectToServiceControllerTest extends TestCase
         $controller->redirectToServiceAction($this->request, 'unknown');
     }
 
-    private function createController(bool $failedUseReferer = false, bool $useReferer = false)
+    private function createController(bool $failedUseReferer = false, bool $useReferer = false): RedirectToServiceController
     {
         return new RedirectToServiceController($this->oAuthUtils, $this->firewallNames, $this->targetPathParameter, $failedUseReferer, $useReferer);
     }

@@ -90,7 +90,7 @@ final class LoginController
      *
      * @return Response
      */
-    public function connectAction(Request $request)
+    public function connectAction(Request $request): Response
     {
         $hasUser = $this->authorizationChecker->isGranted($this->grantRule);
 
@@ -115,8 +115,8 @@ final class LoginController
             $error = $error->getMessageKey();
         }
 
-        return $this->twig->render('@HWIOAuth/Connect/login.html.twig', [
+        return new Response($this->twig->render('@HWIOAuth/Connect/login.html.twig', [
             'error' => $error,
-        ]);
+        ]));
     }
 }

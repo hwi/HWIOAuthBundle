@@ -177,9 +177,9 @@ class LoginControllerTest extends TestCase
         return Security::AUTHENTICATION_ERROR;
     }
 
-    private function createController(bool $connect = true, string $grantRule = 'IS_AUTHENTICATED_REMEMBERED')
+    private function createController(bool $connect = true, string $grantRule = 'IS_AUTHENTICATED_REMEMBERED'): LoginController
     {
-        $controller = new LoginController(
+        return new LoginController(
             $this->authenticationUtils,
             $this->twig,
             $this->router,
@@ -187,7 +187,5 @@ class LoginControllerTest extends TestCase
             $connect,
             $grantRule
         );
-
-        return $controller;
     }
 }
