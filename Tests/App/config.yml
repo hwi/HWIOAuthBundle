@@ -25,6 +25,7 @@ security:
         login_area:
             pattern: ^/(login$|connect|login_hwi)
             anonymous: true
+            context: hwi_context
         secured_area:
             pattern: ^/
             oauth:
@@ -36,6 +37,7 @@ security:
                 oauth_user_provider:
                     service: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
                 provider: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+            context: hwi_context
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
@@ -57,6 +59,7 @@ services:
     Http\Message\MessageFactory\GuzzleMessageFactory:
 
 hwi_oauth:
+    connect: ~
     http:
         client: Psr\Http\Client\ClientInterface
         message_factory: Http\Message\MessageFactory\GuzzleMessageFactory

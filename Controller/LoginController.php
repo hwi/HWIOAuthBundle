@@ -67,7 +67,7 @@ final class LoginController
      * @param Environment                   $twig
      * @param RouterInterface               $router
      * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param SessionInterface $session
+     * @param SessionInterface              $session
      * @param bool                          $connect
      * @param string                        $grantRule
      */
