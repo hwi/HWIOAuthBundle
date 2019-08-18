@@ -14,7 +14,6 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 use HWI\Bundle\OAuthBundle\Controller\LoginController;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -57,11 +56,6 @@ class LoginControllerTest extends TestCase
      * @var Request
      */
     private $request;
-
-    /**
-     * @var ContainerInterface
-     */
-    private $container;
 
     protected function setUp()
     {
@@ -184,6 +178,7 @@ class LoginControllerTest extends TestCase
             $this->twig,
             $this->router,
             $this->authorizationChecker,
+            $this->session,
             $connect,
             $grantRule
         );

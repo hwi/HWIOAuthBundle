@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -57,10 +58,16 @@ final class LoginController
     private $authorizationChecker;
 
     /**
+     * @var SessionInterface
+     */
+    private $session;
+
+    /**
      * @param AuthenticationUtils           $authenticationUtils
      * @param Environment                   $twig
      * @param RouterInterface               $router
      * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param SessionInterface $session
      * @param bool                          $connect
      * @param string                        $grantRule
      */
@@ -69,6 +76,7 @@ final class LoginController
         Environment $twig,
         RouterInterface $router,
         AuthorizationCheckerInterface $authorizationChecker,
+        SessionInterface $session,
         bool $connect,
         string $grantRule
     ) {
@@ -99,7 +107,7 @@ final class LoginController
         // if connecting is enabled and there is no user, redirect to the registration form
         if ($this->connect && !$hasUser && $error instanceof AccountNotLinkedException) {
             $key = time();
-            $session = $request->hasSession() ? $request->getSession() : $this->get('session');
+            $session = $request->hasSession() ? $request->getSession() : $this->session;
             if ($session) {
                 if (!$session->isStarted()) {
                     $session->start();

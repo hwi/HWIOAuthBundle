@@ -21,6 +21,7 @@
             <argument type="service" id="twig" />
             <argument type="service" id="router" />
             <argument type="service" id="security.authorization_checker" />
+            <argument type="service" id="session" />
             <argument>%hwi_oauth.connect%</argument>
             <argument>%hwi_oauth.grant_rule%</argument>
         </service>
