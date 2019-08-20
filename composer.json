@@ -118,12 +118,14 @@
         "symfony/twig-bundle":          "^3.4|^4.2",
         "symfony/stopwatch":            "^3.4|^4.2",
         "symfony/phpunit-bridge":       "^3.4|^4.2",
-        "friendsofsymfony/user-bundle": "^2.0",
+        "symfony/translation":          "^3.4|^4.2",
+        "friendsofsymfony/user-bundle": "^2.1",
         "php-http/httplug-bundle":      "^1.7",
         "php-http/guzzle6-adapter":     "^2.0",
         "phpunit/phpunit":              "^6.5|^7.5",
         "friendsofphp/php-cs-fixer":    "^2.0",
-        "symfony/monolog-bundle": "^3.4"
+        "symfony/monolog-bundle":       "^3.4",
+        "doctrine/doctrine-bundle":     "^1.11"
     },
 
     "conflict": {

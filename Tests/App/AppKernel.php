@@ -24,8 +24,10 @@ class AppKernel extends Kernel
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new \Symfony\Bundle\MonologBundle\MonologBundle(),
-            new \HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
             new \Symfony\Bundle\TwigBundle\TwigBundle(),
+            new \FOS\UserBundle\FOSUserBundle(),
+            new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new \HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         ];
 
         return $bundles;
