@@ -34,14 +34,6 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = [])
-    {
-        return $this->httpRequest($url, http_build_query($parameters, '', '&'), [], 'POST');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function doGetUserInformationRequest($url, array $parameters = [])
     {
         // Twitch require to pass the OAuth token as 'oauth_token' instead of 'access_token'
@@ -60,6 +52,7 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
             'access_token_url' => 'https://api.twitch.tv/kraken/oauth2/token',
             'infos_url' => 'https://api.twitch.tv/kraken/user',
             'use_bearer_authorization' => false,
+            'use_authorization_to_get_token' => false,
         ]);
     }
 }
