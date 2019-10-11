@@ -3,7 +3,7 @@ Step 1: Setting up the bundle
 ### A) Add HWIOAuthBundle to your project
 
 ```bash
-composer require hwi/oauth-bundle php-http/guzzle6-adapter php-http/httplug-bundle
+composer require hwi/oauth-bundle php-http/guzzle6-adapter:^1.1 php-http/httplug-bundle
 ```
 
 Why `php-http/guzzle6-adapter`? We are decoupled from any HTTP messaging client thanks to [HTTPlug](http://httplug.io/).
