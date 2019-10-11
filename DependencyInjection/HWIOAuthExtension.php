@@ -54,10 +54,6 @@ final class HWIOAuthExtension extends Extension
 
         $this->createHttplugClient($container, $config);
 
-        // set current firewall
-        if (empty($config['firewall_names'])) {
-            throw new InvalidConfigurationException('The child node "firewall_names" at path "hwi_oauth" must be configured.');
-        }
         $container->setParameter('hwi_oauth.firewall_names', $config['firewall_names']);
 
         // set target path parameter

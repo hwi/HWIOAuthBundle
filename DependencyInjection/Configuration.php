@@ -160,7 +160,6 @@ final class Configuration implements ConfigurationInterface
             ->children()
                 ->arrayNode('firewall_names')
                     ->isRequired()
-                    ->requiresAtLeastOneElement()
                     ->prototype('scalar')->end()
                 ->end()
                 ->scalarNode('target_path_parameter')->defaultNull()->end()
