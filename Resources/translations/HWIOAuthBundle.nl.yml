@@ -1,8 +1,8 @@
 header:
     connecting: 'Koppelen'
-    success: 'De account "%name%" is gekoppeld!'
-    register: 'Registreer met de account "%name%"'
-    registration_success: 'De account "%username%" is succesvol geregistreerd en gekoppeld!'
+    success: 'Het account "%name%" is gekoppeld!'
+    register: 'Registreer met het account "%name%"'
+    registration_success: 'Het account "%username%" is succesvol geregistreerd en gekoppeld!'
 
 connect:
     confirm:
