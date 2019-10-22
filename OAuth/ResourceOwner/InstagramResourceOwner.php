@@ -30,16 +30,8 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
         'nickname' => 'username',
         'realname' => 'username',
         'email' => 'id',
-        'accounttype' => 'account_type'
+        'accounttype' => 'account_type',
     ];
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function doGetUserInformationRequest($url, array $parameters = [])
-    {
-        return $this->httpRequest($this->normalizeUrl($url, $parameters), null, [], 'GET');
-    }
 
     /**
      * {@inheritdoc}
@@ -86,6 +78,14 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
         $this->validateResponseContent($response);
 
         return $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doGetUserInformationRequest($url, array $parameters = [])
+    {
+        return $this->httpRequest($this->normalizeUrl($url, $parameters), null, [], 'GET');
     }
 
     /**

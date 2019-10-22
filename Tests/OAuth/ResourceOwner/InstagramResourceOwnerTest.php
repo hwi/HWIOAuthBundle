@@ -19,15 +19,18 @@ class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     protected $resourceOwnerClass = InstagramResourceOwner::class;
     protected $userResponse = <<<json
 {
-    "data": {
-        "id":  "1",
-        "username": "bar"
-    }
+    "id": "1",
+    "username": "bar"
 }
 json;
     protected $paths = [
         'identifier' => 'id',
         'nickname' => 'username',
+    ];
+
+    protected $expectedUrls = [
+        'authorization_url' => 'http://user.auth/?test=2&response_type=code&app_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+        'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&app_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
     ];
 
     public function testCustomResponseClass()
