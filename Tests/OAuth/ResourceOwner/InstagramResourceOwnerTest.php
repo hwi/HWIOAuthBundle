@@ -26,8 +26,8 @@ class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
     protected $paths = [
-        'identifier' => 'data.id',
-        'nickname' => 'data.username',
+        'identifier' => 'id',
+        'nickname' => 'username',
     ];
 
     public function testCustomResponseClass()
