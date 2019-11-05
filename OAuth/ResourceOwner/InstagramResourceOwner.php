@@ -18,6 +18,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * InstagramResourceOwner.
  *
+ * @author Jean-Christophe Cuvelier <jcc@atomseeds.com>
  * @author Fabiano Roberto <fabiano.roberto@ped.technology>
  */
 class InstagramResourceOwner extends GenericOAuth2ResourceOwner
