@@ -157,14 +157,10 @@ final class HWIOAuthExtension extends Extension
         $bundles = $container->getParameter('kernel.bundles');
 
         if ('httplug.client.default' === $httpClientId && !isset($bundles['HttplugBundle'])) {
-            throw new InvalidConfigurationException(
-                'You must setup php-http/httplug-bundle to use the default http client service.'
-            );
+            throw new InvalidConfigurationException('You must setup php-http/httplug-bundle to use the default http client service.');
         }
         if ('httplug.message_factory.default' === $httpMessageFactoryId && !isset($bundles['HttplugBundle'])) {
-            throw new InvalidConfigurationException(
-                'You must setup php-http/httplug-bundle to use the default http message factory service.'
-            );
+            throw new InvalidConfigurationException('You must setup php-http/httplug-bundle to use the default http message factory service.');
         }
 
         $container->setAlias('hwi_oauth.http.client', new Alias($config['http']['client'], true));
