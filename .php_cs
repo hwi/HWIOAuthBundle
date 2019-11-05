@@ -26,6 +26,7 @@ return PhpCsFixer\Config::create()
         'php_unit_set_up_tear_down_visibility' => true,
         'native_function_invocation' => ['include' => ['@compiler_optimized'], 'scope' => 'namespaced'],
         'array_syntax' => ['syntax' => 'short'],
+        'no_superfluous_phpdoc_tags' => false,
     ))
     ->setRiskyAllowed(true)
     ->setFinder(
