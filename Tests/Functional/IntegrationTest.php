@@ -11,28 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace HWI\Bundle\OAuthBundle\Tests;
+namespace HWI\Bundle\OAuthBundle\Tests\Functional;
 
-use HWI\Bundle\OAuthBundle\Tests\App\AppKernel;
 use Prophecy\Argument;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class IntegrationTest extends WebTestCase
 {
-    protected function setUp(): void
-    {
-        static::$class = AppKernel::class;
-    }
-
-    public static function getKernelClass(): string
-    {
-        return AppKernel::class;
-    }
-
     public function testRequestRedirect(): void
     {
         $client = static::createClient();

@@ -30,7 +30,6 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Templating\EngineInterface;
 
@@ -187,14 +186,6 @@ abstract class AbstractConnectControllerTest extends TestCase
         $accountNotLinked->setToken(new CustomOAuthToken());
 
         return $accountNotLinked;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getAuthenticationErrorKey()
-    {
-        return Security::AUTHENTICATION_ERROR;
     }
 
     protected function mockAuthorizationCheck($granted = true)
