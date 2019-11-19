@@ -23,6 +23,6 @@ class CustomOAuthToken extends OAuthToken
             'ROLE_USER',
         ]);
 
-        $this->setUser(new User());
+        $this->setUser(new FOSUser());
     }
 }

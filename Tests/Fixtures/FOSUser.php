@@ -11,14 +11,38 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 
+use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
+ * @ORM\Entity
  */
 class FOSUser extends BaseUser
 {
+    /**
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $googleId;
+
     private $githubId;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->username = 'foo';
+        $this->email = 'foo@bar.com';
+        $this->password = 'secret';
+        $this->enabled = true;
+    }
 
     public function getId()
     {
@@ -57,5 +81,15 @@ class FOSUser extends BaseUser
     public function setGithubId($githubId)
     {
         $this->githubId = $githubId;
+    }
+
+    public function getGoogleId()
+    {
+        return $this->googleId;
+    }
+
+    public function setGoogleId($googleId)
+    {
+        $this->googleId = $googleId;
     }
 }

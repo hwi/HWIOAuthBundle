@@ -80,11 +80,11 @@ class FOSUBUserProviderTest extends TestCase
     public function testConnectUserWithNoSetterThrowsException()
     {
         $this->expectException(\RuntimeException::class);
-        $this->expectExceptionMessage('Could not determine access type for property "googleId".');
+        $this->expectExceptionMessage('Could not determine access type for property "facebookId".');
 
         $user = new FOSUser();
 
-        $userResponseMock = $this->createUserResponseMock(null, 'google');
+        $userResponseMock = $this->createUserResponseMock(null, 'facebook');
         $provider = $this->createFOSUBUserProvider();
 
         $provider->connect($user, $userResponseMock);
@@ -127,7 +127,7 @@ class FOSUBUserProviderTest extends TestCase
                 ->with($updateUser);
         }
 
-        return new FOSUBUserProvider($userManagerMock, ['github' => 'githubId', 'google' => 'googleId']);
+        return new FOSUBUserProvider($userManagerMock, ['github' => 'githubId', 'google' => 'googleId', 'facebook' => 'facebookId']);
     }
 
     protected function createResourceOwnerMock($resourceOwnerName = null)
