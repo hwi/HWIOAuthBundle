@@ -94,7 +94,7 @@
 
     "require": {
         "php":                            "^7.1",
-        "symfony/framework-bundle":       "^3.4|^4.2",
+        "symfony/framework-bundle":       "^3.4.26|^4.2.7",
         "symfony/security-bundle":        "^3.4|^4.2",
         "symfony/options-resolver":       "^3.4|^4.2",
         "symfony/form":                   "^3.4|^4.2",
