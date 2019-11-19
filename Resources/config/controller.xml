@@ -24,6 +24,8 @@
             <argument type="service" id="session" />
             <argument>%hwi_oauth.connect%</argument>
             <argument>%hwi_oauth.grant_rule%</argument>
+                   
+            <tag name="controller.service_arguments" />
         </service>
 
         <service id="HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController" public="true">
@@ -32,6 +34,8 @@
             <argument>%hwi_oauth.target_path_parameter%</argument>
             <argument>%hwi_oauth.failed_use_referer%</argument>
             <argument>%hwi_oauth.use_referer%</argument>
+                   
+            <tag name="controller.service_arguments" />
         </service>
     </services>
 </container>
