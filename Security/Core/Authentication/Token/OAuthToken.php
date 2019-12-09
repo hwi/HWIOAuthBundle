@@ -59,7 +59,7 @@ class OAuthToken extends AbstractToken
 
     /**
      * @param string|array $accessToken The OAuth access token
-     * @param array        $roles       Roles for the token
+     * @param array $roles Roles for the token
      */
     public function __construct($accessToken, array $roles = [])
     {
@@ -293,5 +293,40 @@ class OAuthToken extends AbstractToken
         }
 
         parent::unserialize($parent);
+    }
+
+    public function __serialize(): array
+    {
+        return [
+            $this->accessToken,
+            $this->rawToken,
+            $this->refreshToken,
+            $this->expiresIn,
+            $this->createdAt,
+            $this->resourceOwnerName,
+            parent::__serialize(),
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        // add a few extra elements in the array to ensure that we have enough keys when un-serializing
+        // older data which does not include all properties.
+        $data = array_merge($data, array_fill(0, 4, null));
+
+        list(
+            $this->accessToken,
+            $this->rawToken,
+            $this->refreshToken,
+            $this->expiresIn,
+            $this->createdAt,
+            $this->resourceOwnerName,
+            $parent) = $data;
+
+        if (!$this->tokenSecret && isset($this->rawToken['oauth_token_secret'])) {
+            $this->tokenSecret = $this->rawToken['oauth_token_secret'];
+        }
+
+        parent::__unserialize($parent);
     }
 }
