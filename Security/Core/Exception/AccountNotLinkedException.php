@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class AccountNotLinkedException extends UsernameNotFoundException implements OAuthAwareExceptionInterface
@@ -130,7 +129,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     private function serializationFromParent(): array
     {
-        if (method_exists(AuthenticationException::class, '__serialize')) {
+        if (method_exists(UsernameNotFoundException::class, '__serialize')) {
             return parent::__serialize();
         }
 
@@ -142,7 +141,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     private function unserializationFromParent(array $parentData): void
     {
-        if (method_exists(AuthenticationException::class, '__unserialize')) {
+        if (method_exists(UsernameNotFoundException::class, '__unserialize')) {
             parent::__unserialize($parentData);
         } else {
             parent::unserialize(serialize($parentData));
