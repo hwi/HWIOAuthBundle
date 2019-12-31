@@ -38,7 +38,7 @@ use Symfony\Component\Security\Http\SecurityEvents;
 /**
  * @author Alexander <iam.asm89@gmail.com>
  */
-final class ConnectController implements AbstractController
+final class ConnectController extends AbstractController
 {
     /**
      * @var OAuthUtils
