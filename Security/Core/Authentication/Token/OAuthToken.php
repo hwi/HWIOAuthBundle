@@ -256,7 +256,7 @@ class OAuthToken extends AbstractToken
     /**
      * {@inheritdoc}
      */
-    public function serialize()
+    public function __serialize()
     {
         return serialize([
             $this->accessToken,
@@ -265,14 +265,14 @@ class OAuthToken extends AbstractToken
             $this->expiresIn,
             $this->createdAt,
             $this->resourceOwnerName,
-            parent::serialize(),
+            parent::__serialize(),
         ]);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function unserialize($serialized)
+    public function __unserialize($serialized)
     {
         $data = unserialize($serialized);
         // add a few extra elements in the array to ensure that we have enough keys when un-serializing
@@ -292,6 +292,6 @@ class OAuthToken extends AbstractToken
             $this->tokenSecret = $this->rawToken['oauth_token_secret'];
         }
 
-        parent::unserialize($parent);
+        parent::__unserialize($parent);
     }
 }
