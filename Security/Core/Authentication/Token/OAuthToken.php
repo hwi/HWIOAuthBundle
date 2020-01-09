@@ -70,6 +70,45 @@ class OAuthToken extends AbstractToken
         parent::setAuthenticated(\count($roles) > 0);
     }
 
+    public function __serialize(): array
+    {
+        return [
+            $this->accessToken,
+            $this->rawToken,
+            $this->refreshToken,
+            $this->expiresIn,
+            $this->createdAt,
+            $this->resourceOwnerName,
+            \is_callable('parent::__serialize') ? parent::__serialize() : unserialize(parent::serialize()),
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        // add a few extra elements in the array to ensure that we have enough keys when un-serializing
+        // older data which does not include all properties.
+        $data = array_merge($data, array_fill(0, 4, null));
+
+        list(
+            $this->accessToken,
+            $this->rawToken,
+            $this->refreshToken,
+            $this->expiresIn,
+            $this->createdAt,
+            $this->resourceOwnerName,
+            $parent) = $data;
+
+        if (!$this->tokenSecret && isset($this->rawToken['oauth_token_secret'])) {
+            $this->tokenSecret = $this->rawToken['oauth_token_secret'];
+        }
+
+        if (\is_callable('parent::__serialize')) {
+            parent::__unserialize($parent);
+        } else {
+            parent::unserialize(serialize($parent));
+        }
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -258,15 +297,7 @@ class OAuthToken extends AbstractToken
      */
     public function serialize()
     {
-        return serialize([
-            $this->accessToken,
-            $this->rawToken,
-            $this->refreshToken,
-            $this->expiresIn,
-            $this->createdAt,
-            $this->resourceOwnerName,
-            parent::serialize(),
-        ]);
+        return serialize($this->__serialize());
     }
 
     /**
@@ -275,23 +306,7 @@ class OAuthToken extends AbstractToken
     public function unserialize($serialized)
     {
         $data = unserialize($serialized);
-        // add a few extra elements in the array to ensure that we have enough keys when un-serializing
-        // older data which does not include all properties.
-        $data = array_merge($data, array_fill(0, 4, null));
 
-        list(
-            $this->accessToken,
-            $this->rawToken,
-            $this->refreshToken,
-            $this->expiresIn,
-            $this->createdAt,
-            $this->resourceOwnerName,
-            $parent) = $data;
-
-        if (!$this->tokenSecret && isset($this->rawToken['oauth_token_secret'])) {
-            $this->tokenSecret = $this->rawToken['oauth_token_secret'];
-        }
-
-        parent::unserialize($parent);
+        $this->__unserialize($data);
     }
 }
