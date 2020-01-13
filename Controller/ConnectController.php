@@ -300,7 +300,8 @@ class ConnectController extends Controller
 
                 $param = $this->container->getParameter('hwi_oauth.target_path_parameter');
                 if (!empty($param) && $targetUrl = $request->get($param)) {
-                    if (($domainsWhiteList = $this->container->getParameter('hwi_oauth.target_path_domains_whitelist')) &&
+                    $domainsWhiteList = $this->container->getParameter('hwi_oauth.target_path_domains_whitelist');
+                    if (count($domainsWhiteList) > 0 &&
                         ($urlParts = parse_url($targetUrl)) &&
                         !in_array($urlParts['host'], $domainsWhiteList)
                     ) {
