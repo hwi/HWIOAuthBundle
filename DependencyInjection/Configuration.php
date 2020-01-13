@@ -164,6 +164,7 @@ final class Configuration implements ConfigurationInterface
                     ->prototype('scalar')->end()
                 ->end()
                 ->scalarNode('target_path_parameter')->defaultNull()->end()
+                ->scalarNode('target_path_domains_whitelist')->defaultNull()->end()
                 ->booleanNode('use_referer')->defaultFalse()->end()
                 ->booleanNode('failed_use_referer')->defaultFalse()->end()
                 ->scalarNode('failed_auth_path')->defaultValue('hwi_oauth_connect')->end()
