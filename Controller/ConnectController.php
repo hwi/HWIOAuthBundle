@@ -27,6 +27,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -299,6 +300,13 @@ class ConnectController extends Controller
 
                 $param = $this->container->getParameter('hwi_oauth.target_path_parameter');
                 if (!empty($param) && $targetUrl = $request->get($param)) {
+                    if (($domainsWhiteList = $this->container->getParameter('hwi_oauth.target_path_domains_whitelist')) &&
+                        ($urlParts = parse_url($targetUrl)) &&
+                        !in_array($urlParts['host'], $domainsWhiteList)
+                    ) {
+                        throw new AccessDeniedHttpException("Not allowed to redirect to ".$targetUrl);
+                    }
+
                     $session->set($sessionKey, $targetUrl);
                 }
 
