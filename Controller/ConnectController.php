@@ -303,7 +303,7 @@ class ConnectController extends Controller
                     $domainsWhiteList = $this->container->getParameter('hwi_oauth.target_path_domains_whitelist');
                     if (count($domainsWhiteList) > 0 &&
                         ($urlParts = parse_url($targetUrl)) &&
-                        !in_array($urlParts['host'], $domainsWhiteList)
+                        !in_array($urlParts['host'], $domainsWhiteList, true)
                     ) {
                         throw new AccessDeniedHttpException("Not allowed to redirect to ".$targetUrl);
                     }
