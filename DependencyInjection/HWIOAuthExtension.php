@@ -63,7 +63,7 @@ final class HWIOAuthExtension extends Extension
         // set target path parameter
         $container->setParameter('hwi_oauth.target_path_parameter', $config['target_path_parameter']);
 
-        // set target path domains whitelist
+        // set target path domains whitelist parameter
         $container->setParameter('hwi_oauth.target_path_domains_whitelist', $config['target_path_domains_whitelist']);
 
         // set use referer parameter
