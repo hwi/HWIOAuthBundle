@@ -27,7 +27,8 @@ use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * uses FOSUserBundle which itself contains lots of deprecations
+ * uses FOSUserBundle which itself contains lots of deprecations.
+ *
  * @group legacy
  */
 final class ConnectControllerTest extends WebTestCase
