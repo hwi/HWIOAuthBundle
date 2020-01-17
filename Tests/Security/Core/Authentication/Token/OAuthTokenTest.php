@@ -22,7 +22,7 @@ class OAuthTokenTest extends TestCase
      */
     private $token;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->token = new OAuthToken('access_token', ['ROLE_TEST']);
         $this->token->setResourceOwnerName('github');

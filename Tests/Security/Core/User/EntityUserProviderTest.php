@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class EntityUserProviderTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!class_exists('Doctrine\ORM\EntityManager')) {
             $this->markTestSkipped('The Doctrine ORM is not available');
