@@ -110,5 +110,6 @@ fos_user:
 
 twig:
     strict_variables: '%kernel.debug%'
+    exception_controller: ~
     paths:
         '%kernel.project_dir%/templates': 'Acme'

@@ -11,8 +11,11 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
+use HWI\Bundle\OAuthBundle\Event\FilterUserResponseEvent;
+use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
+use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Symfony\Component\Form\FormInterface;
 
 class ConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
@@ -73,10 +76,16 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         ;
 
         $this->eventDispatcher->expects($this->once())->method('dispatch');
-        $this->eventDispatcher->expects($this->at(0))
-            ->method('dispatch')
-            ->with(HWIOAuthEvents::CONNECT_INITIALIZE)
-        ;
+
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            $this->eventDispatcher->expects($this->at(0))
+                ->method('dispatch')
+                ->with($this->isInstanceOf(GetResponseUserEvent::class), HWIOAuthEvents::CONNECT_INITIALIZE);
+        } else {
+            $this->eventDispatcher->expects($this->at(0))
+                ->method('dispatch')
+                ->with(HWIOAuthEvents::CONNECT_INITIALIZE);
+        }
 
         $this->twig->expects($this->once())
             ->method('render')
@@ -116,14 +125,21 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         ;
 
         $this->eventDispatcher->expects($this->exactly(2))->method('dispatch');
-        $this->eventDispatcher->expects($this->at(0))
-            ->method('dispatch')
-            ->with(HWIOAuthEvents::CONNECT_CONFIRMED)
-        ;
-        $this->eventDispatcher->expects($this->at(1))
-            ->method('dispatch')
-            ->with(HWIOAuthEvents::CONNECT_COMPLETED)
-        ;
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            $this->eventDispatcher->expects($this->at(0))
+                ->method('dispatch')
+                ->with($this->isInstanceOf(GetResponseUserEvent::class), HWIOAuthEvents::CONNECT_CONFIRMED);
+            $this->eventDispatcher->expects($this->at(1))
+                ->method('dispatch')
+                ->with($this->isInstanceOf(FilterUserResponseEvent::class), HWIOAuthEvents::CONNECT_COMPLETED);
+        } else {
+            $this->eventDispatcher->expects($this->at(0))
+                ->method('dispatch')
+                ->with(HWIOAuthEvents::CONNECT_CONFIRMED);
+            $this->eventDispatcher->expects($this->at(1))
+                ->method('dispatch')
+                ->with(HWIOAuthEvents::CONNECT_COMPLETED);
+        }
 
         $this->twig->expects($this->once())
             ->method('render')
@@ -154,14 +170,26 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         ;
 
         $this->eventDispatcher->expects($this->exactly(2))->method('dispatch');
-        $this->eventDispatcher->expects($this->at(0))
-            ->method('dispatch')
-            ->with(HWIOAuthEvents::CONNECT_CONFIRMED)
-        ;
-        $this->eventDispatcher->expects($this->at(1))
-            ->method('dispatch')
-            ->with(HWIOAuthEvents::CONNECT_COMPLETED)
-        ;
+
+        if (class_exists(LegacyEventDispatcherProxy::class)) {
+            $this->eventDispatcher->expects($this->at(0))
+                ->method('dispatch')
+                ->with($this->isInstanceOf(GetResponseUserEvent::class), HWIOAuthEvents::CONNECT_CONFIRMED)
+            ;
+            $this->eventDispatcher->expects($this->at(1))
+                ->method('dispatch')
+                ->with($this->isInstanceOf(FilterUserResponseEvent::class), HWIOAuthEvents::CONNECT_COMPLETED)
+            ;
+        } else {
+            $this->eventDispatcher->expects($this->at(0))
+                ->method('dispatch')
+                ->with(HWIOAuthEvents::CONNECT_CONFIRMED)
+            ;
+            $this->eventDispatcher->expects($this->at(1))
+                ->method('dispatch')
+                ->with(HWIOAuthEvents::CONNECT_COMPLETED)
+            ;
+        }
 
         $this->twig->expects($this->once())
             ->method('render')

@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
@@ -57,7 +58,7 @@ class LoginControllerTest extends TestCase
      */
     private $request;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -79,6 +80,24 @@ class LoginControllerTest extends TestCase
     public function testLoginPage()
     {
         $this->mockAuthorizationCheck();
+
+        $this->twig->expects($this->once())
+            ->method('render')
+            ->with('@HWIOAuth/Connect/login.html.twig')
+        ;
+
+        $controller = $this->createController();
+
+        $controller->connectAction($this->request);
+    }
+
+    public function testLoginPageWithoutToken()
+    {
+        $this->authorizationChecker->expects($this->once())
+            ->method('isGranted')
+            ->with('IS_AUTHENTICATED_REMEMBERED')
+            ->willThrowException(new AuthenticationCredentialsNotFoundException())
+        ;
 
         $this->twig->expects($this->once())
             ->method('render')
@@ -157,7 +176,7 @@ class LoginControllerTest extends TestCase
         $controller->connectAction($this->request);
     }
 
-    protected function mockAuthorizationCheck($granted = true)
+    private function mockAuthorizationCheck($granted = true)
     {
         $this->authorizationChecker->expects($this->once())
             ->method('isGranted')

@@ -22,7 +22,7 @@ class OAuthTokenTest extends TestCase
      */
     private $token;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->token = new OAuthToken('access_token', ['ROLE_TEST']);
         $this->token->setResourceOwnerName('github');
@@ -113,7 +113,7 @@ class OAuthTokenTest extends TestCase
         $exception->setResourceOwnerName($resourceOwnerName);
 
         // Symfony < 4.3 BC layer.
-        if (method_exists($exception, 'serialize')) {
+        if (method_exists($exception, '__serialize')) {
             $processed = new AccountNotLinkedException();
             $processed->__unserialize($exception->__serialize());
         } else {

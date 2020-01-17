@@ -24,7 +24,7 @@ class OAuthUserProviderTest extends TestCase
      */
     private $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->provider = new OAuthUserProvider();
     }

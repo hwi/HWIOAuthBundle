@@ -115,7 +115,7 @@ abstract class AbstractConnectControllerTest extends TestCase
      */
     protected $container;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
