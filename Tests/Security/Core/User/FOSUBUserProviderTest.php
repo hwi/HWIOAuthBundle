@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 class FOSUBUserProviderTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         if (!interface_exists('FOS\UserBundle\Model\UserManagerInterface')) {
             $this->markTestSkipped('FOSUserBundle is not available.');

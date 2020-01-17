@@ -44,7 +44,7 @@ class RedirectToServiceControllerTest extends TestCase
      */
     private $targetPathParameter = 'target_path';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

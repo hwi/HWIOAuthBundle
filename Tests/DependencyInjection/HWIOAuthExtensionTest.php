@@ -29,7 +29,7 @@ class HWIOAuthExtensionTest extends TestCase
      */
     protected $containerBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -40,7 +40,7 @@ class HWIOAuthExtensionTest extends TestCase
         ]);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->containerBuilder = null;
         unset($this->containerBuilder);
