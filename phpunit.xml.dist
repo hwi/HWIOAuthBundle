@@ -2,6 +2,10 @@
 
 <phpunit bootstrap="./Tests/bootstrap.php" colors="true">
 
+    <php>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0" />
+    </php>
+
     <testsuites>
         <testsuite name="HWIOAuthBundle test suite">
             <directory suffix="Test.php">./Tests</directory>

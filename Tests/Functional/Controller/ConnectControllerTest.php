@@ -26,6 +26,11 @@ use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+/**
+ * uses FOSUserBundle which itself contains lots of deprecations.
+ *
+ * @group legacy
+ */
 final class ConnectControllerTest extends WebTestCase
 {
     protected function setUp(): void

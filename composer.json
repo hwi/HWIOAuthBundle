@@ -117,7 +117,7 @@
         "symfony/validator":            "^3.4|^4.3",
         "symfony/twig-bundle":          "^3.4|^4.3",
         "symfony/stopwatch":            "^3.4|^4.3",
-        "symfony/phpunit-bridge":       "^3.4|^4.3",
+        "symfony/phpunit-bridge":       "^5.0",
         "symfony/translation":          "^3.4|^4.3",
         "friendsofsymfony/user-bundle": "^2.1",
         "php-http/httplug-bundle":      "^1.7",
