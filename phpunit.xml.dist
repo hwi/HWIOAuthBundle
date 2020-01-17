@@ -3,7 +3,7 @@
 <phpunit bootstrap="./Tests/bootstrap.php" colors="true">
 
     <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=999999" />
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0" />
     </php>
 
     <testsuites>

@@ -22,6 +22,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Security;
 
+/**
+ * uses FOSUserBundle which itself contains lots of deprecations
+ * @group legacy
+ */
 final class LoginControllerTest extends WebTestCase
 {
     public function testLoginPage(): void
