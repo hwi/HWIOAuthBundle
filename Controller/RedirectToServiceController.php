@@ -47,13 +47,6 @@ final class RedirectToServiceController
      */
     private $useReferer;
 
-    /**
-     * @param OAuthUtils $oauthUtils
-     * @param array      $firewallNames
-     * @param string     $targetPathParameter
-     * @param bool       $failedUseReferer
-     * @param bool       $useReferer
-     */
     public function __construct(OAuthUtils $oauthUtils, array $firewallNames, ?string $targetPathParameter, bool $failedUseReferer, bool $useReferer)
     {
         $this->oauthUtils = $oauthUtils;

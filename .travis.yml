@@ -19,7 +19,10 @@ matrix:
       env: SYMFONY_REQUIRE=4.4.*
     - php: 7.4
       env: SYMFONY_REQUIRE=4.4.*
+    - php: 7.4
+      env: SYMFONY_REQUIRE=5.0.* REMOVE_FOS=1
     - php: 7.3
+      env: SYMFONY_REQUIRE=5.0.* REMOVE_FOS=1
     - php: 7.4
       env: TARGET=csfixer_dry_run
 
@@ -29,6 +32,7 @@ before_install:
   - composer global require --no-progress --no-scripts --no-plugins symfony/flex
 
 before_script:
+  - if [[ ${REMOVE_FOS} ]]; then composer remove friendsofsymfony/user-bundle --no-update --no-interaction --dev; fi;
   - composer install --prefer-dist --no-interaction --no-scripts
 
 script:
