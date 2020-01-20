@@ -132,6 +132,10 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->container->set('security.token_storage', $this->tokenStorage);
 
         $this->twig = $this->createMock(EngineInterface::class);
+        $this->twig->expects($this->any())
+            ->method('render')
+            ->willReturn('')
+        ;
         $this->container->set('twig', $this->twig);
 
         $this->router = $this->createMock(RouterInterface::class);
@@ -153,11 +157,9 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->container->set('hwi_oauth.account.connector', $this->accountConnector);
 
         $this->oAuthUtils = $this->createMock(OAuthUtils::class);
-        $this->container->set('hwi_oauth.security.oauth_utils', $this->oAuthUtils);
 
         $this->resourceOwnerMapLocator = new ResourceOwnerMapLocator();
         $this->resourceOwnerMapLocator->add('default', $this->resourceOwnerMap);
-        $this->container->set('hwi_oauth.resource_ownermap_locator', $this->resourceOwnerMapLocator);
 
         $this->userChecker = $this->createMock(UserCheckerInterface::class);
         $this->container->set('hwi_oauth.user_checker', $this->userChecker);

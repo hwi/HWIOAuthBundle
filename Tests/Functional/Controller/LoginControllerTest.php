@@ -29,6 +29,13 @@ use Symfony\Component\Security\Core\Security;
  */
 final class LoginControllerTest extends WebTestCase
 {
+    protected function setUp(): void
+    {
+        if (!class_exists(\FOS\UserBundle\Model\User::class)) {
+            $this->markTestSkipped('FOSUserBundle not installed.');
+        }
+    }
+
     public function testLoginPage(): void
     {
         $client = static::createClient();
