@@ -39,7 +39,7 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     {
         $parameters['client_id'] = $this->options['client_id'];
         $parameters['client_secret'] = $this->options['client_secret'];
-        
+
         return $this->httpRequest(
             $url,
             http_build_query($parameters, '', '&'),
