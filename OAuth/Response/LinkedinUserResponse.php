@@ -68,7 +68,7 @@ class LinkedinUserResponse extends PathUserResponse
     protected function getPreferredLocaleValue($path)
     {
         $multiLocaleString = $this->getValueForPath($path);
-        if (\is_array($multiLocaleString) === false) {
+        if (false === \is_array($multiLocaleString)) {
             return $multiLocaleString;
         }
 
