@@ -67,6 +67,9 @@ hwi_oauth:
     # optional target_path_parameter to provide an explicit return URL
     #target_path_parameter: _destination
 
+    # optional target_path_domains_whitelist to provide a white list of domains that can be used for target_path_parameter
+    #target_path_domains_whitelist: [_destination.com]
+
     # use referer as fallback to determine default return URL
     #use_referer: true
 
