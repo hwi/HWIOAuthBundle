@@ -1,0 +1,12 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="hwi_oauth.util.domain_whitelist" class="HWI\Bundle\OAuthBundle\Util\DomainWhitelist">
+            <argument>%hwi_oauth.target_path_domains_whitelist%</argument>
+        </service>
+    </services>
+</container>
