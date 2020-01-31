@@ -1,9 +1,12 @@
 Changelog
 =========
-## 1.0.0 (2019-xx-xx)
+## 1.1.0 (2020-xx-xx)
+* Added Symfony 5 support,
+* Fixed: session service was not injected in `LoginController`,
+
+## 1.0.0 (2020-01-17)
 * Dropped support for PHP 5.6, 7.0 and 7.1,
 * Dropped support for FOSUserBundle 1.3,
-* Dropped support for PHPUnit 5,
 * Dropped support for Symfony 2.8,
 * Minimum Symfony 3 requirement is 3.4,
 * Minimum Symfony 4 requirement is 4.3,
@@ -14,6 +17,7 @@ Changelog
 * Fixed: Symfony deprecation warning in `symfony/config`,
 * Fixed: SensioConnect now uses new API URLs,
 * Fixed: Do not add Authorization header if no client_secret is present,
+* Fixed: `LoginController::connectAction` should not fail if no token is available,
 * Added: Genius.com resource owner,
 * Added: HTTPlug 2.0 support,
 * Added: Keycloak resource owner,

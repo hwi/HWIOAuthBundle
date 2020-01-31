@@ -21,6 +21,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class IntegrationTest extends WebTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        if (!class_exists(\FOS\UserBundle\Model\User::class)) {
+            $this->markTestSkipped('FOSUserBundle not installed.');
+        }
+    }
+
     public function testRequestRedirect(): void
     {
         $client = static::createClient();

@@ -48,7 +48,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         'realname' => 'foo_disp',
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resourceOwnerName = str_replace(['generic', 'resourceownertest'], '', strtolower(__CLASS__));
         $this->resourceOwner = $this->createResourceOwner($this->resourceOwnerName);

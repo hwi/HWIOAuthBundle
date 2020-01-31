@@ -191,6 +191,10 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
         $this->container->setParameter('hwi_oauth.fosub_enabled', true);
 
+        if (!class_exists(FactoryInterface::class)) {
+            $this->markTestSkipped('FOSUserBundle not installed.');
+        }
+
         $registrationFormFactory = $this->createMock(FactoryInterface::class);
         $registrationFormFactory->expects($this->any())
             ->method('createForm')

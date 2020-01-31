@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @author Marek Štípek
  */
-class FormEvent extends Event
+class FormEvent extends AbstractEvent
 {
     /**
      * @var FormInterface

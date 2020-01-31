@@ -22,7 +22,7 @@ class PathUserResponseTest extends TestCase
      */
     private $responseObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->responseObject = new PathUserResponse();
     }

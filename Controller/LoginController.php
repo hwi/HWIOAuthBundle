@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Twig\Environment;
 
@@ -62,15 +63,6 @@ final class LoginController
      */
     private $session;
 
-    /**
-     * @param AuthenticationUtils           $authenticationUtils
-     * @param Environment                   $twig
-     * @param RouterInterface               $router
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param SessionInterface              $session
-     * @param bool                          $connect
-     * @param string                        $grantRule
-     */
     public function __construct(
         AuthenticationUtils $authenticationUtils,
         Environment $twig,
@@ -84,6 +76,7 @@ final class LoginController
         $this->twig = $twig;
         $this->router = $router;
         $this->authorizationChecker = $authorizationChecker;
+        $this->session = $session;
         $this->connect = $connect;
         $this->grantRule = $grantRule;
     }
@@ -100,7 +93,11 @@ final class LoginController
      */
     public function connectAction(Request $request): Response
     {
-        $hasUser = $this->authorizationChecker->isGranted($this->grantRule);
+        try {
+            $hasUser = $this->authorizationChecker->isGranted($this->grantRule);
+        } catch (AuthenticationCredentialsNotFoundException $exception) {
+            $hasUser = false;
+        }
 
         $error = $this->authenticationUtils->getLastAuthenticationError();
 
