@@ -3,7 +3,7 @@
 /*
  * This file is part of the HWIOAuthBundle package.
  *
- * (c) Hardware Info <opensource@hardware.info>
+ * (c) Hardware.Info <opensource@hardware.info>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -19,20 +19,19 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
-use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
-use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
-use Symfony\Bundle\FrameworkBundle\Controller\ControllerTrait;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareTrait;
-use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
@@ -40,29 +39,49 @@ use Symfony\Component\Security\Http\SecurityEvents;
 /**
  * @author Alexander <iam.asm89@gmail.com>
  */
-final class ConnectController implements ContainerAwareInterface
+class ConnectController extends Controller
 {
-    use ContainerAwareTrait;
-    use ControllerTrait;
-
     /**
-     * @var OAuthUtils
+     * Action that handles the login 'form'. If connecting is enabled the
+     * user will be redirected to the appropriate login urls or registration forms.
+     *
+     * @param Request $request
+     *
+     * @throws \LogicException
+     *
+     * @return Response
      */
-    private $oauthUtils;
-
-    /**
-     * @var ResourceOwnerMapLocator
-     */
-    private $resourceOwnerMapLocator;
-
-    /**
-     * @param OAuthUtils              $oauthUtils
-     * @param ResourceOwnerMapLocator $resourceOwnerMapLocator
-     */
-    public function __construct(OAuthUtils $oauthUtils, ResourceOwnerMapLocator $resourceOwnerMapLocator)
+    public function connectAction(Request $request)
     {
-        $this->oauthUtils = $oauthUtils;
-        $this->resourceOwnerMapLocator = $resourceOwnerMapLocator;
+        $connect = $this->container->getParameter('hwi_oauth.connect');
+        $hasUser = $this->getUser() ? $this->isGranted($this->container->getParameter('hwi_oauth.grant_rule')) : false;
+
+        $error = $this->getErrorForRequest($request);
+
+        // if connecting is enabled and there is no user, redirect to the registration form
+        if ($connect && !$hasUser && $error instanceof AccountNotLinkedException) {
+            $key = time();
+            $session = $request->getSession();
+            if (!$session->isStarted()) {
+                $session->start();
+            }
+
+            $session->set('_hwi_oauth.registration_error.'.$key, $error);
+
+            return $this->redirectToRoute('hwi_oauth_connect_registration', array('key' => $key));
+        }
+
+        if ($error) {
+            if ($error instanceof AuthenticationException) {
+                $error = $error->getMessageKey();
+            } else {
+                $error = $error->getMessage();
+            }
+        }
+
+        return $this->render('@HWIOAuth/Connect/login.html.twig', array(
+            'error' => $error,
+        ));
     }
 
     /**
@@ -90,15 +109,13 @@ final class ConnectController implements ContainerAwareInterface
             throw new AccessDeniedException('Cannot connect already registered account.');
         }
 
-        $error = null;
-        $session = $request->hasSession() ? $request->getSession() : $this->get('session');
-        if ($session) {
-            if (!$session->isStarted()) {
-                $session->start();
-            }
-            $error = $session->get('_hwi_oauth.registration_error.'.$key);
-            $session->remove('_hwi_oauth.registration_error.'.$key);
+        $session = $request->getSession();
+        if (!$session->isStarted()) {
+            $session->start();
         }
+
+        $error = $session->get('_hwi_oauth.registration_error.'.$key);
+        $session->remove('_hwi_oauth.registration_error.'.$key);
 
         if (!$error instanceof AccountNotLinkedException) {
             throw new \RuntimeException('Cannot register an account.', 0, $error instanceof \Exception ? $error : null);
@@ -110,12 +127,21 @@ final class ConnectController implements ContainerAwareInterface
         ;
 
         /* @var $form FormInterface */
-        $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
+        if ($this->container->getParameter('hwi_oauth.fosub_enabled')) {
+            // enable compatibility with FOSUserBundle 1.3.x and 2.x
+            if (interface_exists('FOS\UserBundle\Form\Factory\FactoryInterface')) {
+                $form = $this->container->get('hwi_oauth.registration.form.factory')->createForm();
+            } else {
+                $form = $this->container->get('hwi_oauth.registration.form');
+            }
+        } else {
+            $form = $this->container->get('hwi_oauth.registration.form');
+        }
 
         $formHandler = $this->container->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {
             $event = new FormEvent($form, $request);
-            $this->dispatch($event, HWIOAuthEvents::REGISTRATION_SUCCESS);
+            $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::REGISTRATION_SUCCESS, $event);
 
             $this->container->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
 
@@ -126,35 +152,33 @@ final class ConnectController implements ContainerAwareInterface
                 if ($targetPath = $this->getTargetPath($session)) {
                     $response = $this->redirect($targetPath);
                 } else {
-                    $response = $this->render('@HWIOAuth/Connect/registration_success.html.twig', [
+                    $response = $this->render('@HWIOAuth/Connect/registration_success.html.twig', array(
                         'userInformation' => $userInformation,
-                    ]);
+                    ));
                 }
             }
 
             $event = new FilterUserResponseEvent($form->getData(), $request, $response);
-            $this->dispatch($event, HWIOAuthEvents::REGISTRATION_COMPLETED);
+            $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::REGISTRATION_COMPLETED, $event);
 
             return $response;
         }
 
-        if ($session) {
-            // reset the error in the session
-            $session->set('_hwi_oauth.registration_error.'.$key, $error);
-        }
+        // reset the error in the session
+        $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
         $event = new GetResponseUserEvent($form->getData(), $request);
-        $this->dispatch($event, HWIOAuthEvents::REGISTRATION_INITIALIZE);
+        $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::REGISTRATION_INITIALIZE, $event);
 
         if ($response = $event->getResponse()) {
             return $response;
         }
 
-        return $this->render('@HWIOAuth/Connect/registration.html.twig', [
+        return $this->render('@HWIOAuth/Connect/registration.html.twig', array(
             'key' => $key,
             'form' => $form->createView(),
             'userInformation' => $userInformation,
-        ]);
+        ));
     }
 
     /**
@@ -185,31 +209,28 @@ final class ConnectController implements ContainerAwareInterface
         // Get the data from the resource owner
         $resourceOwner = $this->getResourceOwnerByName($service);
 
-        $session = $request->hasSession() ? $request->getSession() : $this->get('session');
-        if ($session && !$session->isStarted()) {
+        $session = $request->getSession();
+        if (!$session->isStarted()) {
             $session->start();
         }
 
         $key = $request->query->get('key', time());
 
-        $accessToken = null;
         if ($resourceOwner->handles($request)) {
             $accessToken = $resourceOwner->getAccessToken(
                 $request,
-                $this->oauthUtils->getServiceAuthUrl($request, $resourceOwner)
+                $this->container->get('hwi_oauth.security.oauth_utils')->getServiceAuthUrl($request, $resourceOwner)
             );
 
-            if ($session) {
-                // save in session
-                $session->set('_hwi_oauth.connect_confirmation.'.$key, $accessToken);
-            }
-        } elseif ($session) {
+            // save in session
+            $session->set('_hwi_oauth.connect_confirmation.'.$key, $accessToken);
+        } else {
             $accessToken = $session->get('_hwi_oauth.connect_confirmation.'.$key);
         }
 
         // Redirect to the login path if the token is empty (Eg. User cancelled auth)
         if (null === $accessToken) {
-            if ($this->container->getParameter('hwi_oauth.failed_use_referer') && $targetPath = $this->getTargetPath($session)) {
+            if ($this->container->getParameter('hwi_oauth.failed_use_referer') && $targetPath = $this->getTargetPath($session, 'failed_target_path')) {
                 return $this->redirect($targetPath);
             }
 
@@ -221,9 +242,11 @@ final class ConnectController implements ContainerAwareInterface
             return $this->getConfirmationResponse($request, $accessToken, $service);
         }
 
+        // Symfony <3.0 BC
         /** @var $form FormInterface */
-        $form = $this->createForm(FormType::class);
-
+        $form = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+            ? $this->createForm(FormType::class)
+            : $this->createForm('form');
         // Handle the form
         $form->handleRequest($request);
 
@@ -232,19 +255,99 @@ final class ConnectController implements ContainerAwareInterface
         }
 
         $event = new GetResponseUserEvent($this->getUser(), $request);
-
-        $this->dispatch($event, HWIOAuthEvents::CONNECT_INITIALIZE);
+        $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::CONNECT_INITIALIZE, $event);
 
         if ($response = $event->getResponse()) {
             return $response;
         }
 
-        return $this->render('@HWIOAuth/Connect/connect_confirm.html.twig', [
+        return $this->render('@HWIOAuth/Connect/connect_confirm.html.twig', array(
             'key' => $key,
             'service' => $service,
             'form' => $form->createView(),
             'userInformation' => $resourceOwner->getUserInformation($accessToken),
-        ]);
+        ));
+    }
+
+    /**
+     * @param Request $request
+     * @param string  $service
+     *
+     * @throws NotFoundHttpException
+     *
+     * @return RedirectResponse
+     */
+    public function redirectToServiceAction(Request $request, $service)
+    {
+        try {
+            $authorizationUrl = $this->container->get('hwi_oauth.security.oauth_utils')->getAuthorizationUrl($request, $service);
+        } catch (\RuntimeException $e) {
+            throw new NotFoundHttpException($e->getMessage(), $e);
+        }
+
+        $session = $request->getSession();
+
+        // Check for a return path and store it before redirect
+        if (null !== $session) {
+            // initialize the session for preventing SessionUnavailableException
+            if (!$session->isStarted()) {
+                $session->start();
+            }
+
+            foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
+                $sessionKey = '_security.'.$providerKey.'.target_path';
+                $sessionKeyFailure = '_security.'.$providerKey.'.failed_target_path';
+
+                $param = $this->container->getParameter('hwi_oauth.target_path_parameter');
+                if (!empty($param) && $targetUrl = $request->get($param)) {
+                    $domainsWhiteList = $this->container->getParameter('hwi_oauth.target_path_domains_whitelist');
+                    if (count($domainsWhiteList) > 0 &&
+                        ($urlParts = parse_url($targetUrl)) &&
+                        !in_array($urlParts['host'], $domainsWhiteList, true)
+                    ) {
+                        throw new AccessDeniedHttpException("Not allowed to redirect to ".$targetUrl);
+                    }
+
+                    $session->set($sessionKey, $targetUrl);
+                }
+
+                if ($this->container->getParameter('hwi_oauth.failed_use_referer') && !$session->has($sessionKeyFailure) && ($targetUrl = $request->headers->get('Referer')) && $targetUrl !== $authorizationUrl) {
+                    $session->set($sessionKeyFailure, $targetUrl);
+                }
+
+                if ($this->container->getParameter('hwi_oauth.use_referer') && !$session->has($sessionKey) && ($targetUrl = $request->headers->get('Referer')) && $targetUrl !== $authorizationUrl) {
+                    $session->set($sessionKey, $targetUrl);
+                }
+            }
+        }
+
+        return $this->redirect($authorizationUrl);
+    }
+
+    /**
+     * Get the security error for a given request.
+     *
+     * @param Request $request
+     *
+     * @return string|\Exception
+     */
+    protected function getErrorForRequest(Request $request)
+    {
+        $authenticationErrorKey = Security::AUTHENTICATION_ERROR;
+
+        if ($request->attributes->has($authenticationErrorKey)) {
+            return $request->attributes->get($authenticationErrorKey);
+        }
+
+        $session = $request->getSession();
+        if (null !== $session && $session->has($authenticationErrorKey)) {
+            $error = $session->get($authenticationErrorKey);
+            $session->remove($authenticationErrorKey);
+
+            return $error;
+        }
+
+        return '';
     }
 
     /**
@@ -256,14 +359,15 @@ final class ConnectController implements ContainerAwareInterface
      *
      * @throws NotFoundHttpException if there is no resource owner with the given name
      */
-    private function getResourceOwnerByName($name)
+    protected function getResourceOwnerByName($name)
     {
         foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $firewall) {
-            if (!$this->resourceOwnerMapLocator->has($firewall)) {
+            $id = 'hwi_oauth.resource_ownermap.'.$firewall;
+            if (!$this->container->has($id)) {
                 continue;
             }
 
-            $ownerMap = $this->resourceOwnerMapLocator->get($firewall);
+            $ownerMap = $this->container->get($id);
             if ($resourceOwner = $ownerMap->getResourceOwnerByName($name)) {
                 return $resourceOwner;
             }
@@ -273,20 +377,37 @@ final class ConnectController implements ContainerAwareInterface
     }
 
     /**
+     * Generates a route.
+     *
+     * @deprecated since version 0.4. Will be removed in 1.0.
+     *
+     * @param string $route    Route name
+     * @param array  $params   Route parameters
+     * @param bool   $absolute absolute url or note
+     *
+     * @return string
+     */
+    protected function generate($route, array $params = array(), $absolute = false)
+    {
+        @trigger_error('The '.__METHOD__.' method is deprecated since version 0.4 and will be removed in 1.0. Use Symfony\Bundle\FrameworkBundle\Controller\Controller::generateUrl instead.', E_USER_DEPRECATED);
+
+        return $this->container->get('router')->generate($route, $params, $absolute);
+    }
+
+    /**
      * Authenticate a user with Symfony Security.
      *
      * @param Request       $request
      * @param UserInterface $user
      * @param string        $resourceOwnerName
-     * @param string|array  $accessToken
+     * @param string        $accessToken
      * @param bool          $fakeLogin
      */
-    private function authenticateUser(Request $request, UserInterface $user, $resourceOwnerName, $accessToken, $fakeLogin = true)
+    protected function authenticateUser(Request $request, UserInterface $user, $resourceOwnerName, $accessToken, $fakeLogin = true)
     {
         try {
-            $userChecker = $this->container->get('hwi_oauth.user_checker');
-            $userChecker->checkPreAuth($user);
-            $userChecker->checkPostAuth($user);
+            $this->container->get('hwi_oauth.user_checker')->checkPreAuth($user);
+            $this->container->get('hwi_oauth.user_checker')->checkPostAuth($user);
         } catch (AccountStatusException $e) {
             // Don't authenticate locked, disabled or expired users
             return;
@@ -301,9 +422,9 @@ final class ConnectController implements ContainerAwareInterface
 
         if ($fakeLogin) {
             // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
-            $this->dispatch(
-                new InteractiveLoginEvent($request, $token),
-                SecurityEvents::INTERACTIVE_LOGIN
+            $this->container->get('event_dispatcher')->dispatch(
+                SecurityEvents::INTERACTIVE_LOGIN,
+                new InteractiveLoginEvent($request, $token)
             );
         }
     }
@@ -313,12 +434,8 @@ final class ConnectController implements ContainerAwareInterface
      *
      * @return string|null
      */
-    private function getTargetPath(?SessionInterface $session)
+    private function getTargetPath(SessionInterface $session)
     {
-        if (!$session) {
-            return null;
-        }
-
         foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
             $sessionKey = '_security.'.$providerKey.'.target_path';
             if ($session->has($sessionKey)) {
@@ -351,14 +468,14 @@ final class ConnectController implements ContainerAwareInterface
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
         $event = new GetResponseUserEvent($currentUser, $request);
-        $this->dispatch($event, HWIOAuthEvents::CONNECT_CONFIRMED);
+        $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::CONNECT_CONFIRMED, $event);
 
         $this->container->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
 
         if ($currentToken instanceof OAuthToken) {
             // Update user token with new details
             $newToken =
-                \is_array($accessToken) &&
+                is_array($accessToken) &&
                 (isset($accessToken['access_token']) || isset($accessToken['oauth_token'])) ?
                     $accessToken : $currentToken->getRawToken();
 
@@ -369,28 +486,16 @@ final class ConnectController implements ContainerAwareInterface
             if ($targetPath = $this->getTargetPath($request->getSession())) {
                 $response = $this->redirect($targetPath);
             } else {
-                $response = $this->render('@HWIOAuth/Connect/connect_success.html.twig', [
+                $response = $this->render('@HWIOAuth/Connect/connect_success.html.twig', array(
                     'userInformation' => $userInformation,
                     'service' => $service,
-                ]);
+                ));
             }
         }
 
         $event = new FilterUserResponseEvent($currentUser, $request, $response);
-        $this->dispatch($event, HWIOAuthEvents::CONNECT_COMPLETED);
+        $this->get('event_dispatcher')->dispatch(HWIOAuthEvents::CONNECT_COMPLETED, $event);
 
         return $response;
-    }
-
-    private function dispatch($event, string $eventName = null)
-    {
-        // LegacyEventDispatcherProxy exists in Symfony >= 4.3
-        if (class_exists(LegacyEventDispatcherProxy::class)) {
-            // New Symfony 4.3 EventDispatcher signature
-            $this->get('event_dispatcher')->dispatch($event, $eventName);
-        } else {
-            // Old EventDispatcher signature
-            $this->get('event_dispatcher')->dispatch($eventName, $event);
-        }
     }
 }
