@@ -30,8 +30,8 @@
 
         <service id="HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController" public="true">
             <argument type="service" id="hwi_oauth.security.oauth_utils" />
-            <argument>%hwi_oauth.firewall_names%</argument>
             <argument type="service" id="hwi_oauth.util.domain_whitelist" />
+            <argument>%hwi_oauth.firewall_names%</argument>
             <argument>%hwi_oauth.target_path_parameter%</argument>
             <argument>%hwi_oauth.failed_use_referer%</argument>
             <argument>%hwi_oauth.use_referer%</argument>

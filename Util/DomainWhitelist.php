@@ -35,7 +35,7 @@ class DomainWhitelist
      */
     public function isValidTargetUrl(string $targetUrl)
     {
-        if (count($this->targetPathDomainsWhiteList) === 0) {
+        if (0 === count($this->targetPathDomainsWhiteList)) {
             return true;
         }
 

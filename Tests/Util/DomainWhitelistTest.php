@@ -29,7 +29,8 @@ class DomainWhitelistTest extends TestCase
         $this->assertSame($isValidTargetUrl, $domainsWhitelist->isValidTargetUrl($targetUrl));
     }
 
-    public function targetUrlProvider() {
+    public function targetUrlProvider()
+    {
         return [
             ['https://example.com/redirect', ['example.com'], true],
             ['https://example.com/redirect', ['foobar.com'], false],
