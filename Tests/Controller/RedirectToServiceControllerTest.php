@@ -17,6 +17,7 @@ use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class RedirectToServiceControllerTest extends TestCase
 {
@@ -143,10 +144,6 @@ class RedirectToServiceControllerTest extends TestCase
         $controller->redirectToServiceAction($this->request, 'unknown');
     }
 
-    /**
-     * @expectedException \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
-     * @expectedExceptionMessage Not allowed to redirect to /malicious/target/path
-     */
     public function testThrowAccessDeniedExceptionForNonWhitelistedTargetPath()
     {
         $this->request->attributes->set($this->targetPathParameter, '/malicious/target/path');
@@ -163,6 +160,9 @@ class RedirectToServiceControllerTest extends TestCase
             ->with('/malicious/target/path')
             ->willReturn(false)
         ;
+
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage('Not allowed to redirect to /malicious/target/path');
 
         $controller->redirectToServiceAction($this->request, 'facebook');
     }
