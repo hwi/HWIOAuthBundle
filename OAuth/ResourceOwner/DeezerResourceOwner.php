@@ -46,4 +46,15 @@ class DeezerResourceOwner extends GenericOAuth2ResourceOwner
             'use_bearer_authorization' => false,
         ]);
     }
+    
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
+    {
+        $extraParameters['app_id'] = $this->options['client_id'];
+        $extraParameters['secret'] = $this->options['client_secret'];
+        return parent::getAccessToken($request, $redirectUri, $extraParameters);
+    }
 }
