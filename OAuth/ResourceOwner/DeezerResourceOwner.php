@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -35,6 +36,16 @@ class DeezerResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
+    public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = [])
+    {
+        $extraParameters['app_id'] = $this->options['client_id'];
+        $extraParameters['secret'] = $this->options['client_secret'];
+        return parent::getAccessToken($request, $redirectUri, $extraParameters);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
@@ -45,16 +56,5 @@ class DeezerResourceOwner extends GenericOAuth2ResourceOwner
             'infos_url' => 'https://api.deezer.com/user/me',
             'use_bearer_authorization' => false,
         ]);
-    }
-    
-    
-    /**
-     * {@inheritdoc}
-     */
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
-    {
-        $extraParameters['app_id'] = $this->options['client_id'];
-        $extraParameters['secret'] = $this->options['client_secret'];
-        return parent::getAccessToken($request, $redirectUri, $extraParameters);
     }
 }
