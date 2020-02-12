@@ -31,11 +31,12 @@ class DomainWhitelist
 
     /**
      * @param string $targetUrl
+     *
      * @return bool
      */
     public function isValidTargetUrl(string $targetUrl)
     {
-        if (0 === count($this->targetPathDomainsWhiteList)) {
+        if (0 === \count($this->targetPathDomainsWhiteList)) {
             return true;
         }
 
@@ -44,7 +45,7 @@ class DomainWhitelist
             return false;
         }
 
-        if (!in_array($urlParts['host'], $this->targetPathDomainsWhiteList, true)) {
+        if (!\in_array($urlParts['host'], $this->targetPathDomainsWhiteList, true)) {
             return false;
         }
 

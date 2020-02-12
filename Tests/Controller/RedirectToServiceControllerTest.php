@@ -58,7 +58,6 @@ class RedirectToServiceControllerTest extends TestCase
         $this->oAuthUtils = $this->createMock(OAuthUtils::class);
         $this->domainsWhiteList = $this->createMock(DomainWhitelist::class);
 
-
         $this->session = $this->createMock(SessionInterface::class);
         $this->request = Request::create('/');
         $this->request->setSession($this->session);

@@ -11,8 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Util;
 
-use PHPUnit\Framework\TestCase;
 use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
+use PHPUnit\Framework\TestCase;
 
 class DomainWhitelistTest extends TestCase
 {
@@ -20,8 +20,8 @@ class DomainWhitelistTest extends TestCase
      * @dataProvider targetUrlProvider
      *
      * @param string $targetUrl
-     * @param array $domainsWhitelistParameter
-     * @param bool $isValidTargetUrl
+     * @param array  $domainsWhitelistParameter
+     * @param bool   $isValidTargetUrl
      */
     public function testValidateTargetUrl($targetUrl, $domainsWhitelistParameter, $isValidTargetUrl)
     {
