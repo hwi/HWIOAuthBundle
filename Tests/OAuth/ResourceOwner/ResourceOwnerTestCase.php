@@ -17,20 +17,21 @@ use Http\Discovery\MessageFactoryDiscovery;
 use Http\Message\MessageFactory\GuzzleMessageFactory;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 abstract class ResourceOwnerTestCase extends TestCase
 {
-    /** @var \PHPUnit_Framework_MockObject_MockObject|HttpClient */
+    /** @var MockObject|HttpClient */
     protected $httpClient;
     protected $httpResponse;
     protected $httpResponseContentType;
     protected $httpResponseHttpCode = 200;
     protected $httpClientCalls;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|RequestDataStorageInterface */
+    /** @var MockObject|RequestDataStorageInterface */
     protected $storage;
     protected $state = 'random';
     protected $csrf = false;
