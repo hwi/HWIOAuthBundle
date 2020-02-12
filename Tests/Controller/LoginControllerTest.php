@@ -13,7 +13,9 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Controller\LoginController;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -29,27 +31,32 @@ use Twig\Environment;
 class LoginControllerTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AuthorizationCheckerInterface
+     * @var MockObject|AuthorizationCheckerInterface
      */
     private $authorizationChecker;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|Environment
+     * @var MockObject|ContainerInterface
+     */
+    private $container;
+
+    /**
+     * @var MockObject|Environment
      */
     private $twig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RouterInterface
+     * @var MockObject|RouterInterface
      */
     private $router;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AuthenticationUtils
+     * @var MockObject|AuthenticationUtils
      */
     private $authenticationUtils;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SessionInterface
+     * @var MockObject|SessionInterface
      */
     private $session;
 
@@ -65,6 +72,19 @@ class LoginControllerTest extends TestCase
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
 
         $this->twig = $this->createMock(Environment::class);
+
+        $this->container = $this->createMock(ContainerInterface::class);
+        $this->container->expects($this->any())
+            ->method('has')
+            ->willReturnMap([
+                ['templating', false],
+                ['twig', true],
+            ]);
+        $this->container->expects($this->any())
+            ->method('get')
+            ->willReturnMap([
+                ['twig', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->twig],
+            ]);
 
         $this->router = $this->createMock(RouterInterface::class);
 
@@ -192,14 +212,16 @@ class LoginControllerTest extends TestCase
 
     private function createController(bool $connect = true, string $grantRule = 'IS_AUTHENTICATED_REMEMBERED'): LoginController
     {
-        return new LoginController(
+        $controller = new LoginController(
             $this->authenticationUtils,
-            $this->twig,
             $this->router,
             $this->authorizationChecker,
             $this->session,
             $connect,
             $grantRule
         );
+        $controller->setContainer($this->container);
+
+        return $controller;
     }
 }

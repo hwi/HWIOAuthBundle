@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Controller;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,12 +22,11 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Twig\Environment;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
  */
-final class LoginController
+final class LoginController extends AbstractController
 {
     /**
      * @var bool
@@ -42,11 +42,6 @@ final class LoginController
      * @var AuthenticationUtils
      */
     private $authenticationUtils;
-
-    /**
-     * @var Environment
-     */
-    private $twig;
 
     /**
      * @var RouterInterface
@@ -65,7 +60,6 @@ final class LoginController
 
     public function __construct(
         AuthenticationUtils $authenticationUtils,
-        Environment $twig,
         RouterInterface $router,
         AuthorizationCheckerInterface $authorizationChecker,
         SessionInterface $session,
@@ -73,7 +67,6 @@ final class LoginController
         string $grantRule
     ) {
         $this->authenticationUtils = $authenticationUtils;
-        $this->twig = $twig;
         $this->router = $router;
         $this->authorizationChecker = $authorizationChecker;
         $this->session = $session;
@@ -120,8 +113,8 @@ final class LoginController
             $error = $error->getMessageKey();
         }
 
-        return new Response($this->twig->render('@HWIOAuth/Connect/login.html.twig', [
+        return $this->render('@HWIOAuth/Connect/login.html.twig', [
             'error' => $error,
-        ]));
+        ]);
     }
 }
