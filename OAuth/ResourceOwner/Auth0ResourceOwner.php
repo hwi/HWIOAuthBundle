@@ -35,34 +35,6 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function doGetTokenRequest($url, array $parameters = [])
-    {
-        $parameters['client_id'] = $this->options['client_id'];
-        $parameters['client_secret'] = $this->options['client_secret'];
-
-        return $this->httpRequest(
-            $url,
-            http_build_query($parameters, '', '&'),
-            $this->getRequestHeaders(),
-            'POST'
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function doGetUserInformationRequest($url, array $parameters = [])
-    {
-        return $this->httpRequest(
-            $url,
-            http_build_query($parameters, '', '&'),
-            $this->getRequestHeaders()
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
@@ -97,16 +69,14 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
     }
 
     /**
-     * @param array $headers
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    private function getRequestHeaders(array $headers = [])
+    protected function httpRequest($url, $content = null, array $headers = [], $method = null)
     {
         if (isset($this->options['auth0_client'])) {
             $headers['Auth0-Client'] = $this->options['auth0_client'];
         }
 
-        return $headers;
+        return parent::httpRequest($url, $content, $headers, $method);
     }
 }
