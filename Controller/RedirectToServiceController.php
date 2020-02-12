@@ -12,10 +12,12 @@
 namespace HWI\Bundle\OAuthBundle\Controller;
 
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
@@ -26,6 +28,11 @@ final class RedirectToServiceController
      * @var OAuthUtils
      */
     private $oauthUtils;
+
+    /**
+     * @var DomainWhitelist
+     */
+    private $domainWhitelist;
 
     /**
      * @var array
@@ -47,9 +54,10 @@ final class RedirectToServiceController
      */
     private $useReferer;
 
-    public function __construct(OAuthUtils $oauthUtils, array $firewallNames, ?string $targetPathParameter, bool $failedUseReferer, bool $useReferer)
+    public function __construct(OAuthUtils $oauthUtils, DomainWhitelist $domainWhitelist, array $firewallNames, ?string $targetPathParameter, bool $failedUseReferer, bool $useReferer)
     {
         $this->oauthUtils = $oauthUtils;
+        $this->domainWhitelist = $domainWhitelist;
         $this->firewallNames = $firewallNames;
         $this->targetPathParameter = $targetPathParameter;
         $this->failedUseReferer = $failedUseReferer;
@@ -92,6 +100,11 @@ final class RedirectToServiceController
             $sessionKeyFailure = '_security.'.$providerKey.'.failed_target_path';
 
             if (!empty($param) && $targetUrl = $request->get($param)) {
+
+                if (!$this->domainWhitelist->isValidTargetUrl($targetUrl)) {
+                    throw new AccessDeniedHttpException('Not allowed to redirect to '.$targetUrl);
+                }
+
                 $session->set($sessionKey, $targetUrl);
             }
 

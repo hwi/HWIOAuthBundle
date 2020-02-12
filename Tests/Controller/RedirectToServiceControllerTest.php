@@ -13,9 +13,11 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class RedirectToServiceControllerTest extends TestCase
 {
@@ -23,6 +25,11 @@ class RedirectToServiceControllerTest extends TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|OAuthUtils
      */
     private $oAuthUtils;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|DomainWhitelist
+     */
+    private $domainsWhiteList;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|SessionInterface
@@ -49,6 +56,8 @@ class RedirectToServiceControllerTest extends TestCase
         parent::setUp();
 
         $this->oAuthUtils = $this->createMock(OAuthUtils::class);
+        $this->domainsWhiteList = $this->createMock(DomainWhitelist::class);
+
 
         $this->session = $this->createMock(SessionInterface::class);
         $this->request = Request::create('/');
@@ -79,6 +88,12 @@ class RedirectToServiceControllerTest extends TestCase
         ;
 
         $controller = $this->createController();
+
+        $this->domainsWhiteList->expects($this->once())
+            ->method('isValidTargetUrl')
+            ->with('/target/path')
+            ->willReturn(true)
+        ;
 
         $controller->redirectToServiceAction($this->request, 'facebook');
     }
@@ -129,8 +144,31 @@ class RedirectToServiceControllerTest extends TestCase
         $controller->redirectToServiceAction($this->request, 'unknown');
     }
 
+    public function testThrowAccessDeniedExceptionForNonWhitelistedTargetPath()
+    {
+        $this->request->attributes->set($this->targetPathParameter, '/malicious/target/path');
+
+        $this->session->expects($this->never())
+            ->method('set')
+            ->with('_security.default.target_path', '/malicious/target/path')
+        ;
+
+        $controller = $this->createController();
+
+        $this->domainsWhiteList->expects($this->once())
+            ->method('isValidTargetUrl')
+            ->with('/malicious/target/path')
+            ->willReturn(false)
+        ;
+
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage('Not allowed to redirect to /malicious/target/path');
+
+        $controller->redirectToServiceAction($this->request, 'facebook');
+    }
+
     private function createController(bool $failedUseReferer = false, bool $useReferer = false): RedirectToServiceController
     {
-        return new RedirectToServiceController($this->oAuthUtils, $this->firewallNames, $this->targetPathParameter, $failedUseReferer, $useReferer);
+        return new RedirectToServiceController($this->oAuthUtils, $this->domainsWhiteList, $this->firewallNames, $this->targetPathParameter, $failedUseReferer, $useReferer);
     }
 }

@@ -48,6 +48,7 @@ final class HWIOAuthExtension extends Extension
         $loader->load('oauth.xml');
         $loader->load('templating.xml');
         $loader->load('twig.xml');
+        $loader->load('util.xml');
 
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);
@@ -62,6 +63,9 @@ final class HWIOAuthExtension extends Extension
 
         // set target path parameter
         $container->setParameter('hwi_oauth.target_path_parameter', $config['target_path_parameter']);
+
+        // set target path domains whitelist parameter
+        $container->setParameter('hwi_oauth.target_path_domains_whitelist', $config['target_path_domains_whitelist']);
 
         // set use referer parameter
         $container->setParameter('hwi_oauth.use_referer', $config['use_referer']);
