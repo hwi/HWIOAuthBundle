@@ -18,13 +18,12 @@
 
         <service id="HWI\Bundle\OAuthBundle\Controller\LoginController" public="true">
             <argument type="service" id="security.authentication_utils" />
-            <argument type="service" id="twig" />
             <argument type="service" id="router" />
             <argument type="service" id="security.authorization_checker" />
             <argument type="service" id="session" />
             <argument>%hwi_oauth.connect%</argument>
             <argument>%hwi_oauth.grant_rule%</argument>
-                   
+
             <tag name="controller.service_arguments" />
         </service>
 
@@ -34,7 +33,7 @@
             <argument>%hwi_oauth.target_path_parameter%</argument>
             <argument>%hwi_oauth.failed_use_referer%</argument>
             <argument>%hwi_oauth.use_referer%</argument>
-                   
+
             <tag name="controller.service_arguments" />
         </service>
     </services>

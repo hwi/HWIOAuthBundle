@@ -22,7 +22,6 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
-use Twig\Environment;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
@@ -45,11 +44,6 @@ final class LoginController extends AbstractController
     private $authenticationUtils;
 
     /**
-     * @var Environment
-     */
-    private $twig;
-
-    /**
      * @var RouterInterface
      */
     private $router;
@@ -66,7 +60,6 @@ final class LoginController extends AbstractController
 
     public function __construct(
         AuthenticationUtils $authenticationUtils,
-        Environment $twig,
         RouterInterface $router,
         AuthorizationCheckerInterface $authorizationChecker,
         SessionInterface $session,
@@ -74,7 +67,6 @@ final class LoginController extends AbstractController
         string $grantRule
     ) {
         $this->authenticationUtils = $authenticationUtils;
-        $this->twig = $twig;
         $this->router = $router;
         $this->authorizationChecker = $authorizationChecker;
         $this->session = $session;

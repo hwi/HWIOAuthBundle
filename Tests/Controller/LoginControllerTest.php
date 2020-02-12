@@ -214,7 +214,6 @@ class LoginControllerTest extends TestCase
     {
         $controller = new LoginController(
             $this->authenticationUtils,
-            $this->twig,
             $this->router,
             $this->authorizationChecker,
             $this->session,
