@@ -121,8 +121,8 @@ final class LoginController extends AbstractController
             $error = $error->getMessageKey();
         }
 
-        return new Response($this->twig->render('@HWIOAuth/Connect/login.html.twig', [
+        return $this->render('@HWIOAuth/Connect/login.html.twig', [
             'error' => $error,
-        ]));
+        ]);
     }
 }
