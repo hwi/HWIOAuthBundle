@@ -34,7 +34,7 @@ class DomainWhitelist
      *
      * @return bool
      */
-    public function isValidTargetUrl(string $targetUrl)
+    public function isValidTargetUrl(string $targetUrl): bool
     {
         if (0 === \count($this->targetPathDomainsWhiteList)) {
             return true;
