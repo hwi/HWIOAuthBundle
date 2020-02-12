@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Controller;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,7 @@ use Twig\Environment;
 /**
  * @author Alexander <iam.asm89@gmail.com>
  */
-final class LoginController
+final class LoginController extends AbstractController
 {
     /**
      * @var bool
