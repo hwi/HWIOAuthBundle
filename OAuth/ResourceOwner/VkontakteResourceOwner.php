@@ -82,7 +82,6 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'authorization_url' => 'https://oauth.vk.com/authorize',
             'access_token_url' => 'https://oauth.vk.com/access_token',
             'infos_url' => 'https://api.vk.com/method/users.get',
-            'use_authorization_to_get_token' => false,
 
             'api_version' => '5.73',
 

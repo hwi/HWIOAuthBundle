@@ -52,7 +52,6 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
             'access_token_url' => 'https://id.twitch.tv/oauth2/token',
             'infos_url' => 'https://api.twitch.tv/helix/users',
             'use_bearer_authorization' => false,
-            'use_authorization_to_get_token' => false,
         ]);
     }
 }

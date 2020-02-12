@@ -220,7 +220,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'attr_name' => 'access_token',
             'use_commas_in_scope' => false,
             'use_bearer_authorization' => true,
-            'use_authorization_to_get_token' => true,
+            'use_authorization_to_get_token' => false,
         ]);
 
         $resolver->setDefined('revoke_token_url');
