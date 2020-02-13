@@ -155,12 +155,12 @@ json;
                     $this->assertSame(
                         $expectedRequestMethod,
                         $request->getMethod(),
-                        'The request should be send as POST request.'
+                        'The request should be send with the expected request method.'
                     );
                     $this->assertSame(
                         $expectedAuthorizationHeader,
                         $request->getHeader('Authorization'),
-                        'The Authorization header should be added to the request with the Base64 encoded client_id and client_secret.'
+                        'The Authorization header should be added to the request with the Base64 encoded client_id and client_secret or with a bearer token.'
                     );
                     $this->assertSame(
                         $expectedAuth0ClientRequestHeader,
@@ -170,7 +170,7 @@ json;
                     $this->assertSame(
                         $expectedRequestBodyContents,
                         $request->getBody()->getContents(),
-                        'The request body should contain the expected POST request variables.'
+                        'The request body should contain the expected content / variables.'
                     );
 
                     return true;
