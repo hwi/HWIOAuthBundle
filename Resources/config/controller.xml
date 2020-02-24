@@ -39,6 +39,10 @@
             <argument>%hwi_oauth.failed_use_referer%</argument>
             <argument>%hwi_oauth.use_referer%</argument>
 
+            <call method="setContainer">
+                <argument type="service" id="service_container" />
+            </call>
+
             <tag name="controller.service_arguments" />
         </service>
     </services>
