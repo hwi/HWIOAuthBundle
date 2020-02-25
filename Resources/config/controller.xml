@@ -5,28 +5,20 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="HWI\Bundle\OAuthBundle\Controller\ConnectController" public="true">
+        <service id="HWI\Bundle\OAuthBundle\Controller\ConnectController" public="true" autowire="true">
             <argument type="service" id="hwi_oauth.security.oauth_utils" />
             <argument type="service" id="hwi_oauth.resource_ownermap_locator" />
-
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
 
             <tag name="controller.service_arguments" />
         </service>
 
-        <service id="HWI\Bundle\OAuthBundle\Controller\LoginController" public="true">
+        <service id="HWI\Bundle\OAuthBundle\Controller\LoginController" public="true" autowire="true">
             <argument type="service" id="security.authentication_utils" />
             <argument type="service" id="router" />
             <argument type="service" id="security.authorization_checker" />
             <argument type="service" id="session" />
             <argument>%hwi_oauth.connect%</argument>
             <argument>%hwi_oauth.grant_rule%</argument>
-
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
 
             <tag name="controller.service_arguments" />
         </service>
@@ -38,10 +30,6 @@
             <argument>%hwi_oauth.target_path_parameter%</argument>
             <argument>%hwi_oauth.failed_use_referer%</argument>
             <argument>%hwi_oauth.use_referer%</argument>
-
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
 
             <tag name="controller.service_arguments" />
         </service>
