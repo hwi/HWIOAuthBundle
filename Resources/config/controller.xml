@@ -16,7 +16,7 @@
             <tag name="controller.service_arguments" />
         </service>
 
-        <service id="HWI\Bundle\OAuthBundle\Controller\LoginController" public="true">
+        <service id="HWI\Bundle\OAuthBundle\Controller\LoginController" public="true" autowire="true">
             <argument type="service" id="security.authentication_utils" />
             <argument type="service" id="router" />
             <argument type="service" id="security.authorization_checker" />
@@ -24,10 +24,7 @@
             <argument>%hwi_oauth.connect%</argument>
             <argument>%hwi_oauth.grant_rule%</argument>
 
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
-
+            <tag name="container.service_subscriber" />
             <tag name="controller.service_arguments" />
         </service>
 
