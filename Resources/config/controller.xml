@@ -24,6 +24,9 @@
             <argument>%hwi_oauth.connect%</argument>
             <argument>%hwi_oauth.grant_rule%</argument>
 
+            <call method="setContainer" />
+
+            <tag name="container.service_subscriber" />
             <tag name="controller.service_arguments" />
         </service>
 
