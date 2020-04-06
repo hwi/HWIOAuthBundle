@@ -4,7 +4,9 @@ Changelog
 * Added Symfony 5 support,
 * Added domain whitelist service to avoid open redirect on `target_path`,
 * Fixed: session service was not injected in `LoginController`,
+* Fixed: missing `setContainer` call to service configuration for `LoginController`,
 * Fixed: client id and client secret must be set in `Auth0ResourceOwner::doGetTokenRequest`,
+* Fixed: missing client id and client secret in `Auth0ResourceOwner`,
 * Twig dependency on `LoginController` is now optional,
 
 ## 1.0.0 (2020-01-17)
