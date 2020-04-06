@@ -1,6 +1,6 @@
 Changelog
 =========
-## 1.1.0 (2020-xx-xx)
+## 1.1.0 (2020-04-06)
 * Added Symfony 5 support,
 * Added domain whitelist service to avoid open redirect on `target_path`,
 * Fixed: session service was not injected in `LoginController`,
