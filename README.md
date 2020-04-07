@@ -13,7 +13,7 @@ Installation
 All the installation instructions are located in the documentation, check it for specific
 version:
 
-* [__1.0__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `^3.4`, `^4.3` and `^5.0`.
+* [__1.1__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `^3.4`, `^4.3` and `^5.0`.
 
 Documentation
 -------------
@@ -21,7 +21,7 @@ Documentation
 The bulk of the documentation is stored in the `Resources/doc/index.md`
 file in this bundle. Read the documentation for version:
 
-* [__1.0__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md)
+* [__1.1__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md)
 
 This bundle contains support for 58 different providers:
 * 37signals,
