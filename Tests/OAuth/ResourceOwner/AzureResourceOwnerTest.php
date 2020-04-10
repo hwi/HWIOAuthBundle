@@ -15,7 +15,6 @@ use Http\Client\Exception\TransferException;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AzureResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
-use Symfony\Component\Security\Http\HttpUtils;
 
 class AzureResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
