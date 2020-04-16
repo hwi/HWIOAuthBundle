@@ -126,7 +126,7 @@ final class ConnectController extends AbstractController
             $event = new FilterUserResponseEvent($form->getData(), $request, $response);
             $this->dispatch($event, HWIOAuthEvents::REGISTRATION_COMPLETED);
 
-            return $response;
+            return $event->getResponse();
         }
 
         if ($session) {
