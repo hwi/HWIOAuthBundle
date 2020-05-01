@@ -26,6 +26,8 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
     protected $paths = [
         'identifier' => 'sub',
         'nickname' => 'unique_name',
+        'lastname' => 'family_name',
+        'firstname' => 'given_name',
         'realname' => ['given_name', 'family_name'],
         'email' => ['upn', 'email'],
         'profilepicture' => null,
