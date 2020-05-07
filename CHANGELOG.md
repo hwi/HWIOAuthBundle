@@ -1,5 +1,10 @@
 Changelog
 =========
+## 1.2.0 (2020-xx-xx)
+* Added `first_name` & `last_name` in AzureResourceOwner,
+* Fixed: updated Azure `authorization` & `access_token` urls,
+* Allow modification of the response in `FilterUserResponseEvent`,
+
 ## 1.1.0 (2020-04-06)
 * Added Symfony 5 support,
 * Added domain whitelist service to avoid open redirect on `target_path`,
