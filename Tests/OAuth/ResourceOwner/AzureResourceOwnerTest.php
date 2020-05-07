@@ -64,6 +64,8 @@ json;
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('Dummy Tester', $userResponse->getRealName());
+        $this->assertEquals('Dummy', $userResponse->getFirstName());
+        $this->assertEquals('Tester', $userResponse->getLastName());
         $this->assertEquals('dummy123', $userResponse->getNickname());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
@@ -87,6 +89,8 @@ json;
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
         $this->assertEquals('foo', $userResponse->getNickname());
+        $this->assertEquals('foo', $userResponse->getFirstName());
+        $this->assertEquals('BAR', $userResponse->getLastName());
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
