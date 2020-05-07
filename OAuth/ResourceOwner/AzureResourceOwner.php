@@ -42,22 +42,6 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
 
     /**
      * {@inheritdoc}
-     */
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
-    {
-        return parent::getAuthorizationUrl($redirectUri, $extraParameters + ['resource' => $this->options['resource']]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function refreshAccessToken($refreshToken, array $extraParameters = [])
-    {
-        return parent::refreshAccessToken($refreshToken, $extraParameters + ['resource' => $this->options['resource']]);
-    }
-
-    /**
-     * {@inheritdoc}
      *
      * @throws \InvalidArgumentException
      */
@@ -96,13 +80,10 @@ class AzureResourceOwner extends GenericOAuth2ResourceOwner
     {
         parent::configureOptions($resolver);
 
-        $resolver->setRequired(['resource']);
-
         $resolver->setDefaults([
             'infos_url' => 'https://graph.microsoft.com/v1.0/me',
-            'authorization_url' => 'https://login.windows.net/%s/oauth2/authorize',
-            'access_token_url' => 'https://login.windows.net/%s/oauth2/token',
-
+            'authorization_url' => 'https://login.microsoftonline.com/%s/oauth2/v2.0/authorize',
+            'access_token_url' => 'https://login.microsoftonline.com/%s/oauth2/v2.0/token',
             'application' => 'common',
             'api_version' => 'v1.0',
             'csrf' => true,

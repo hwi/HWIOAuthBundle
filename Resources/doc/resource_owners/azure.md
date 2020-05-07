@@ -1,12 +1,12 @@
 Step 2x: Setup Azure
 ====================
 First you will have to register your application with Azure.
-Just follow the steps as described here: http://blogs.msdn.com/b/aadgraphteam/archive/2013/05/17/using-oauth-2-0-authorization-code-grant-for-delegated-access-of-directory-via-aad-graph.aspx
+Just follow the steps as described here: https://docs.microsoft.com/en-us/azure/active-directory/saas-apps/openidoauth-tutorial
 
-More details on the Azure and OAuth can be found here https://msdn.microsoft.com/en-us/library/azure/dn645542.aspx and for Azure Active Directory here https://msdn.microsoft.com/en-us/library/azure/hh974476.aspx
+More details on the Azure and OAuth can be found here https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-protocols
 
 Next configure a resource owner of type `azure` with appropriate `client_id`,
-`client_secret`, and `resource`. You can also specify which `application` it
+`client_secret`. You can also specify which `application` it
 should target (`common` by default)
 
 ```yaml
@@ -20,7 +20,6 @@ hwi_oauth:
             client_secret: <client_secret>
 
             options:
-                resource:    https://graph.windows.net
                 application: common
 ```
 
