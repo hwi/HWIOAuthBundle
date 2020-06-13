@@ -61,6 +61,7 @@ hwi_oauth:
 - [Instagram](resource_owners/instagram.md)
 - [itembase](resource_owners/itembase.md)
 - [Jira](resource_owners/jira.md)
+- [Keycloak](resource_owners/keycloak.md)
 - [Linkedin](resource_owners/linkedin.md)
 - [Mail.ru](resource_owners/mailru.md)
 - [Odnoklassniki](resource_owners/odnoklassniki.md)
