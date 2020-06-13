@@ -22,7 +22,7 @@ class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
 {
     public function configure()
     {
-        $this->prepareBaseAuthenticationUrl();
+        $this->prepareKeycloakUrls();
     }
 
     public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
@@ -37,27 +37,26 @@ class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver
-          ->setDefined(['protocol', 'response_type', 'approval_prompt'])
           ->setRequired('realms')
           ->setDefaults([
-            'protocol' => 'openid-connect',
-            'scope' => 'name,email',
-            'response_type' => 'code',
-            'approval_prompt' => 'auto',
-          ]);
+            'protocol'         => 'openid-connect',
+            'scope'            => 'openid email',
+            'response_type'    => 'code',
+            'approval_prompt'  => 'auto',
+            'infos_url'        => null,
+            'access_token_url' => null,
+           ]);
     }
 
-    protected function prepareBaseAuthenticationUrl()
+    protected function prepareKeycloakUrls()
     {
         $baseAuthUrl = trim($this->getOption('authorization_url'), '/');
-        //check if already configured
-        if (false !== strpos($baseAuthUrl, '/realms')) {
-            return;
-        }
 
-        $baseAuthUrl .= '/realms/'.$this->getOption('realms');
-        $baseAuthUrl .= '/protocol/'.$this->getOption('protocol').'/auth';
+        $baseAuthUrl .= '/realms/'.$this->getOption('realm');
+        $baseAuthUrl .= '/protocol/'.$this->getOption('protocol');
 
-        $this->options['authorization_url'] = $baseAuthUrl;
+        $this->options['authorization_url'] = $baseAuthUrl.'/auth';
+        $this->options['access_token_url']  = $baseAuthUrl.'/token';
+        $this->options['infos_url']         = $baseAuthUrl.'/userinfo';
     }
 }
