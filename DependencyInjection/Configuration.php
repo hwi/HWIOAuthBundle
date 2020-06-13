@@ -56,6 +56,7 @@ final class Configuration implements ConfigurationInterface
             'hubic',
             'instagram',
             'jawbone',
+            'keycloak',
             'linkedin',
             'mailru',
             'odnoklassniki',
