@@ -37,20 +37,21 @@ class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver
-          ->setRequired('realms')
+          ->setRequired(['base_url', 'realm'])
           ->setDefaults([
-            'protocol'         => 'openid-connect',
-            'scope'            => 'openid email',
-            'response_type'    => 'code',
-            'approval_prompt'  => 'auto',
-            'infos_url'        => null,
-            'access_token_url' => null,
+            'protocol'          => 'openid-connect',
+            'scope'             => 'openid email',
+            'response_type'     => 'code',
+            'approval_prompt'   => 'auto',
+            'authorization_url' => null,
+            'access_token_url'  => null,
+            'infos_url'         => null,
            ]);
     }
 
     protected function prepareKeycloakUrls()
     {
-        $baseAuthUrl = trim($this->getOption('authorization_url'), '/');
+        $baseAuthUrl = trim($this->getOption('base_url'), '/');
 
         $baseAuthUrl .= '/realms/'.$this->getOption('realm');
         $baseAuthUrl .= '/protocol/'.$this->getOption('protocol');
