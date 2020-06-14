@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -20,10 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
 {
-    public function configure()
-    {
-        $this->prepareKeycloakUrls();
-    }
 
     public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
@@ -32,32 +29,36 @@ class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
         ], $extraParameters));
     }
 
-    public function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
-        $resolver
-          ->setRequired(['base_url', 'realm'])
-          ->setDefaults([
-            'protocol'          => 'openid-connect',
-            'scope'             => 'openid email',
-            'response_type'     => 'code',
-            'approval_prompt'   => 'auto',
-            'authorization_url' => null,
-            'access_token_url'  => null,
-            'infos_url'         => null,
-           ]);
+        $resolver->setDefaults([
+          'protocol' => 'openid-connect',
+          'scope' => 'openid email',
+          'response_type' => 'code',
+          'approval_prompt' => 'auto',
+          'authorization_url' => '{keycloak_url}/auth',
+          'access_token_url' => '{keycloak_url}/token',
+          'infos_url' => '{keycloak_url}/userinfo',
+        ]);
+
+        $resolver->setRequired([
+          'realm',
+          'base_url',
+        ]);
+
+        $normalizer = function (Options $options, $value) {
+            return str_replace(
+              '{keycloak_url}',
+              $options['base_url'].'/realms/'.$options['realm'].'/protocol/'.$options['protocol'],
+              $value
+            );
+        };
+
+        $resolver->setNormalizer('authorization_url', $normalizer);
+        $resolver->setNormalizer('access_token_url', $normalizer);
+        $resolver->setNormalizer('infos_url', $normalizer);
     }
 
-    protected function prepareKeycloakUrls()
-    {
-        $baseAuthUrl = trim($this->getOption('base_url'), '/');
-
-        $baseAuthUrl .= '/realms/'.$this->getOption('realm');
-        $baseAuthUrl .= '/protocol/'.$this->getOption('protocol');
-
-        $this->options['authorization_url'] = $baseAuthUrl.'/auth';
-        $this->options['access_token_url']  = $baseAuthUrl.'/token';
-        $this->options['infos_url']         = $baseAuthUrl.'/userinfo';
-    }
 }
