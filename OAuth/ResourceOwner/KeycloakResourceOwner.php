@@ -35,7 +35,7 @@ class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults([
           'protocol' => 'openid-connect',
-          'scope' => 'openid,email',
+          'scope' => 'openid email',
           'response_type' => 'code',
           'approval_prompt' => 'auto',
           'authorization_url' => '{keycloak_url}/auth',
