@@ -21,7 +21,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
 {
-
     public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
         return parent::getAuthorizationUrl($redirectUri, array_merge([
@@ -60,5 +59,4 @@ class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
         $resolver->setNormalizer('access_token_url', $normalizer);
         $resolver->setNormalizer('infos_url', $normalizer);
     }
-
 }
