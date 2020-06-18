@@ -300,6 +300,14 @@ final class Configuration implements ConfigurationInterface
                                     ->thenUnset()
                                 ->end()
                             ->end()
+                            ->scalarNode('use_authorization_to_get_token')
+                                ->validate()
+                                    ->ifTrue(function ($v) {
+                                        return empty($v);
+                                    })
+                                    ->thenUnset()
+                                ->end()
+                            ->end()
                             ->arrayNode('paths')
                                 ->useAttributeAsKey('name')
                                 ->prototype('variable')
