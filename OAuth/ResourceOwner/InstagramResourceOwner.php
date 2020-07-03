@@ -49,7 +49,7 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
 
         $parameters = array_merge([
             'response_type' => 'code',
-            'app_id' => $this->options['client_id'],
+            'client_id' => $this->options['client_id'],
             'scope' => $this->options['scope'],
             'state' => $this->state ? urlencode($this->state) : null,
             'redirect_uri' => $redirectUri,
@@ -68,8 +68,8 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
         $parameters = array_merge([
             'code' => $request->query->get('code'),
             'grant_type' => 'authorization_code',
-            'app_id' => $this->options['client_id'],
-            'app_secret' => $this->options['client_secret'],
+            'client_id' => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
             'redirect_uri' => $redirectUri,
         ], $extraParameters);
 
@@ -99,7 +99,8 @@ class InstagramResourceOwner extends GenericOAuth2ResourceOwner
         $resolver->setDefaults([
             'authorization_url' => 'https://api.instagram.com/oauth/authorize',
             'access_token_url' => 'https://api.instagram.com/oauth/access_token',
-            'infos_url' => 'https://graph.instagram.com/me?fields=id,username,account_type',
+            'infos_url' => 'https://api.instagram.com/v1/users/self',
+            'use_bearer_authorization' => false,
         ]);
     }
 }
