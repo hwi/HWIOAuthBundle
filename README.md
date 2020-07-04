@@ -26,6 +26,7 @@ file in this bundle. Read the documentation for version:
 This bundle contains support for 58 different providers:
 * 37signals,
 * Amazon,
+* Apple,
 * Asana,
 * Auth0,
 * Azure,
