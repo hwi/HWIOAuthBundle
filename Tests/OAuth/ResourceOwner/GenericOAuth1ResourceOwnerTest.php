@@ -16,6 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 
 class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
 {
@@ -56,14 +57,14 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
 
     public function testUndefinedOptionThrowsException()
     {
-        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+        $this->expectException(ExceptionInterface::class);
 
         $this->createResourceOwner($this->resourceOwnerName, ['non_existing' => null]);
     }
 
     public function testInvalidOptionValueThrowsException()
     {
-        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+        $this->expectException(ExceptionInterface::class);
 
         $this->createResourceOwner($this->resourceOwnerName, ['csrf' => 'invalid']);
     }

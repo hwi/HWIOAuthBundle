@@ -71,6 +71,6 @@ json;
 
     public function testCustomResponseClass()
     {
-        $this->markTestSkipped('SalesForce do not need this test.');
+        $this->markTestSkipped('SalesForce does not need this test.');
     }
 }

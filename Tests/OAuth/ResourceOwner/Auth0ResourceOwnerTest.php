@@ -48,10 +48,7 @@ json;
         'profilepicture' => 'picture',
     ];
 
-    protected $expectedUrls = [
-        'authorization_url' => 'https://example.oauth0.com/authorize?auth0Client=eyJuYW1lIjoiSFdJT0F1dGhCdW5kbGUiLCJ2ZXJzaW9uIjoidW5rbm93biIsImVudmlyb25tZW50Ijp7Im5hbWUiOiJQSFAiLCJ2ZXJzaW9uIjoiRkFLRV9QSFBfVkVSU0lPTl9GT1JfVEVTVFMifX0=&response_type=code&client_id=clientid&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-        'authorization_url_csrf' => 'https://example.oauth0.com/authorize?auth0Client=eyJuYW1lIjoiSFdJT0F1dGhCdW5kbGUiLCJ2ZXJzaW9uIjoidW5rbm93biIsImVudmlyb25tZW50Ijp7Im5hbWUiOiJQSFAiLCJ2ZXJzaW9uIjoiRkFLRV9QSFBfVkVSU0lPTl9GT1JfVEVTVFMifX0=&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    ];
+    protected $authorizationUrlBasePart = 'https://example.oauth0.com/authorize?auth0Client=eyJuYW1lIjoiSFdJT0F1dGhCdW5kbGUiLCJ2ZXJzaW9uIjoidW5rbm93biIsImVudmlyb25tZW50Ijp7Im5hbWUiOiJQSFAiLCJ2ZXJzaW9uIjoiRkFLRV9QSFBfVkVSU0lPTl9GT1JfVEVTVFMifX0=&response_type=code&client_id=clientid';
 
     /**
      * Tests if {@see Auth0ResourceOwner::getAccessToken} would send the expected request to Auth0.

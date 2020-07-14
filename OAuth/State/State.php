@@ -82,7 +82,7 @@ final class State implements StateInterface
 
     public function getCsrfToken(): ?string
     {
-        return isset($this->values[self::CSRF_TOKEN_KEY]) ? $this->values[self::CSRF_TOKEN_KEY] : null;
+        return $this->values[self::CSRF_TOKEN_KEY] ?? null;
     }
 
     /**

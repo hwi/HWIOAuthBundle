@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -104,12 +105,17 @@ class OAuthUtils
     public function getAuthorizationUrl(Request $request, $name, $redirectUrl = null, array $extraParameters = [])
     {
         $resourceOwner = $this->getResourceOwner($name);
+
         if (null === $redirectUrl) {
             if (!$this->connect || !$this->authorizationChecker->isGranted($this->grantRule)) {
                 $redirectUrl = $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($name));
             } else {
                 $redirectUrl = $this->getServiceAuthUrl($request, $resourceOwner);
             }
+        }
+
+        if ($request->query->has('state')) {
+            $this->addQueryParameterToState($request->query->get('state'), $resourceOwner);
         }
 
         return $resourceOwner->getAuthorizationUrl($redirectUrl, $extraParameters);
@@ -281,5 +287,21 @@ class OAuthUtils
         }
 
         return null;
+    }
+
+    /**
+     * @param string|null            $queryParameter The query parameter to parse and add to the State
+     * @param ResourceOwnerInterface $resourceOwner  The resource owner holding the state to be added to
+     */
+    private function addQueryParameterToState(?string $queryParameter, ResourceOwnerInterface $resourceOwner): void
+    {
+        if (null === $queryParameter) {
+            return;
+        }
+
+        $additionalState = new State($queryParameter);
+        foreach ($additionalState->getAll() as $key => $value) {
+            $resourceOwner->addStateParameter($key, $value);
+        }
     }
 }
