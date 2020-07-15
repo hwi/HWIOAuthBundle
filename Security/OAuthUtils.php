@@ -155,7 +155,7 @@ class OAuthUtils
 
         if ($request->query->has('state')) {
             $data = ['state' => $request->query->get('state')];
-            $url .= '?' . http_build_query($data);
+            $url .= '?'.http_build_query($data);
         }
 
         return $url;
