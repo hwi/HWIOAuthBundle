@@ -151,7 +151,14 @@ class OAuthUtils
 
         $request->attributes->set('service', $name);
 
-        return $this->httpUtils->generateUri($request, 'hwi_oauth_service_redirect');
+        $url = $this->httpUtils->generateUri($request, 'hwi_oauth_service_redirect');
+
+        if ($request->query->has('state')) {
+            $data = ['state' => $request->query->get('state')];
+            $url .= '?' . http_build_query($data);
+        }
+
+        return $url;
     }
 
     /**

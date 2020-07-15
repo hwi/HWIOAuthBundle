@@ -163,6 +163,40 @@ class OAuthUtilsTest extends TestCase
         OAuthUtils::signRequest('GET', 'http://example.com', $parameters, 'client_secret');
     }
 
+    public function testGetLoginUrlWithStateQueryParameters()
+    {
+        $url = 'http://localhost:8080/instagram';
+
+        $authChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $resourceOwner = $this->createMock(ResourceOwnerInterface::class);
+        $mapMock = $this->createMock(ResourceOwnerMap::class);
+        $mapMock
+            ->expects($this->any())
+            ->method('getResourceOwnerByName')
+            ->with('instagram')
+            ->willReturn($resourceOwner);
+
+        $utils = new OAuthUtils($this->getHttpUtils($url), $authChecker, true, $this->grantRule);
+        $utils->addResourceOwnerMap($mapMock);
+
+        $this->assertEquals(
+            $url,
+            $utils->getLoginUrl($this->getRequest($url), 'instagram')
+        );
+        $this->assertEquals(
+            $url.'?state=foo',
+            $utils->getLoginUrl($this->getRequest($url.'?state=foo'), 'instagram')
+        );
+        $this->assertEquals(
+            $url.'?state%5B0%5D=foo&state%5B1%5D=bar',
+            $utils->getLoginUrl($this->getRequest($url.'?state[]=foo&state[]=bar'), 'instagram')
+        );
+        $this->assertEquals(
+            $url.'?state%5Bfoo%5D=bar&state%5Bbar%5D=baz',
+            $utils->getLoginUrl($this->getRequest($url.'?state[foo]=bar&state[bar]=baz'), 'instagram')
+        );
+    }
+
     public function provideValidData()
     {
         return [
@@ -189,7 +223,7 @@ class OAuthUtilsTest extends TestCase
 
     private function getMap($url, $redirect, $hasUser = false, $hasOneRedirectUrl = false, $resource = null)
     {
-        $resource = null !== $resource ? $resource : $this->createMock(ResourceOwnerInterface::class);
+        $resource = $resource ?? $this->createMock(ResourceOwnerInterface::class);
 
         $resource
             ->expects($this->once())
