@@ -22,12 +22,12 @@ final class State implements StateInterface
     public const CSRF_TOKEN_KEY = 'csrf_token';
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     private $values = [];
 
     /**
-     * @param string|array<string,string>|null The state parameter as a string or assoc array
+     * @param string|array<string,string> The state parameter as a string or assoc array
      *
      * @throws InvalidArgumentException
      */

@@ -33,6 +33,9 @@ interface StateInterface
      */
     public function get(string $key): ?string;
 
+    /**
+     * @return array<string>
+     */
     public function getAll(): array;
 
     public function setCsrfToken(string $token): void;
