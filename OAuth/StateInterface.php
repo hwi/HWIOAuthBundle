@@ -42,5 +42,5 @@ interface StateInterface
 
     public function getCsrfToken(): ?string;
 
-    public function encode(): string;
+    public function encode(): ?string;
 }

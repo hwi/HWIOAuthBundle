@@ -90,6 +90,13 @@ final class StateTest extends TestCase
         self::assertEquals($expectedParameter, $state->encode());
     }
 
+    public function testEncodeWithEmptyState()
+    {
+        $state = new State('');
+
+        self::assertEquals(null, $state->encode());
+    }
+
     public function testEncodeOnlyValue()
     {
         $state = new State('random');
@@ -99,6 +106,9 @@ final class StateTest extends TestCase
     public function testEncodeEmptyValue()
     {
         $state = new State(null);
+        self::assertEmpty($state->encode());
+
+        $state = new State('');
         self::assertEmpty($state->encode());
     }
 

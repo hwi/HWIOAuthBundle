@@ -67,7 +67,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'response_type' => 'code',
             'client_id' => $this->options['client_id'],
             'scope' => $this->options['scope'],
-            'state' => $this->state->encode() ?: null,
+            'state' => $this->state->encode(),
             'redirect_uri' => $redirectUri,
         ], $extraParameters);
 

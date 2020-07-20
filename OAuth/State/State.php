@@ -37,12 +37,14 @@ final class State implements StateInterface
             $parameters = $this->parseStringParameter($parameters);
         }
 
-        if (!$this->isAssociatedArray($parameters)) {
-            throw new InvalidArgumentException('Constructor argument should be a non-empty, associative array');
-        }
+        if (null !== $parameters) {
+            if (!$this->isAssociatedArray($parameters)) {
+                throw new InvalidArgumentException('Constructor argument should be a non-empty, associative array');
+            }
 
-        foreach ($parameters as $key => $value) {
-            $this->add($key, $value);
+            foreach ($parameters as $key => $value) {
+                $this->add($key, $value);
+            }
         }
     }
 
@@ -91,8 +93,12 @@ final class State implements StateInterface
      * Encodes the array of values to a string so it can be stored in a query parameter.
      * Returns the plain value if only the default key or CSRF token has been set.
      */
-    public function encode(): string
+    public function encode(): ?string
     {
+        if (!$this->values) {
+            return null;
+        }
+
         if ($this->isOnlyExistentKey(self::DEFAULT_KEY)) {
             return urlencode($this->values[self::DEFAULT_KEY]);
         }
@@ -101,20 +107,22 @@ final class State implements StateInterface
             return urlencode($this->values[self::CSRF_TOKEN_KEY]);
         }
 
-        return urlencode(self::encodeArray($this->values));
+        $encoded = urlencode(self::encodeArray($this->values));
+
+        return $encoded !== '' ? $encoded : null;
     }
 
     /**
      * @param string $queryParameter The state query parameter string
      *
-     * @return array<string,string>
+     * @return array<string,string>|null
      */
-    private function parseStringParameter(string $queryParameter = null): array
+    private function parseStringParameter(string $queryParameter = null): ?array
     {
         $urlDecoded = urldecode($queryParameter);
-        $values = json_decode(base64_decode($urlDecoded), 1);
+        $values = json_decode(base64_decode($urlDecoded), true);
 
-        if (null === $values) {
+        if (null === $values && '' !== $urlDecoded) {
             $values[self::DEFAULT_KEY] = $urlDecoded;
         }
 
