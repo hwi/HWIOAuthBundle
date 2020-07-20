@@ -34,7 +34,7 @@ interface StateInterface
     public function get(string $key): ?string;
 
     /**
-     * @return array<string>
+     * @return array<string, string>
      */
     public function getAll(): array;
 
