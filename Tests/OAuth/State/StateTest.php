@@ -94,7 +94,7 @@ final class StateTest extends TestCase
     {
         $state = new State('');
 
-        self::assertEquals(null, $state->encode());
+        self::assertNull($state->encode());
     }
 
     public function testEncodeOnlyValue()

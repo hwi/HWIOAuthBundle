@@ -109,7 +109,7 @@ final class State implements StateInterface
 
         $encoded = urlencode(self::encodeArray($this->values));
 
-        return $encoded !== '' ? $encoded : null;
+        return '' !== $encoded ? $encoded : null;
     }
 
     /**
