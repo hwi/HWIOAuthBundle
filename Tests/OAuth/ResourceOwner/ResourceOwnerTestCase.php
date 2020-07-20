@@ -64,7 +64,7 @@ abstract class ResourceOwnerTestCase extends TestCase
             });
     }
 
-    protected function createResourceOwner($name, array $options = [], array $paths = [])
+    protected function createResourceOwner(string $name, array $options = [], array $paths = [])
     {
         $this->httpClient = $this->createMock(HttpClient::class);
 

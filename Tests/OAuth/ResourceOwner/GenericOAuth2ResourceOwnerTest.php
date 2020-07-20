@@ -371,7 +371,7 @@ json;
      *
      * @return ResourceOwnerInterface
      */
-    protected function createResourceOwner($name, array $options = [], array $paths = [], $state = null)
+    protected function createResourceOwner(string $name, array $options = [], array $paths = [], ?StateInterface $state = null)
     {
         $resourceOwner = parent::createResourceOwner($name, $options, $paths);
 

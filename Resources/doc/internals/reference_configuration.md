@@ -16,7 +16,7 @@ hwi_oauth:
                 csrf:            true
                 state:
                   some:          parameter
-                  some-other:     parameter
+                  some-other:    parameter
 
         google:
             type:                google
