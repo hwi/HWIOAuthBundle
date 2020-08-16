@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Helper\NonceGenerator;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Psr\Http\Message\ResponseInterface;
@@ -34,7 +35,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $parameters = array_merge([
             'oauth_consumer_key' => $this->options['client_id'],
             'oauth_timestamp' => time(),
-            'oauth_nonce' => $this->generateNonce(),
+            'oauth_nonce' => NonceGenerator::generate(),
             'oauth_version' => '1.0',
             'oauth_signature_method' => $this->options['signature_method'],
             'oauth_token' => $accessToken['oauth_token'],
@@ -88,7 +89,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $parameters = array_merge([
             'oauth_consumer_key' => $this->options['client_id'],
             'oauth_timestamp' => time(),
-            'oauth_nonce' => $this->generateNonce(),
+            'oauth_nonce' => NonceGenerator::generate(),
             'oauth_version' => '1.0',
             'oauth_signature_method' => $this->options['signature_method'],
             'oauth_token' => $requestToken['oauth_token'],
@@ -146,7 +147,7 @@ class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $parameters = array_merge([
             'oauth_consumer_key' => $this->options['client_id'],
             'oauth_timestamp' => $timestamp,
-            'oauth_nonce' => $this->generateNonce(),
+            'oauth_nonce' => NonceGenerator::generate(),
             'oauth_version' => '1.0',
             'oauth_callback' => $redirectUri,
             'oauth_signature_method' => $this->options['signature_method'],

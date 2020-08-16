@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FacebookResourceOwner;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class FacebookResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
@@ -36,7 +37,7 @@ json;
 
     public function testGetAccessTokenFailedResponse()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+        $this->expectException(AuthenticationException::class);
 
         $this->mockHttpClient('{"error": {"message": "invalid"}}', 'application/json; charset=utf-8');
         $request = new Request(['code' => 'code']);
@@ -99,7 +100,7 @@ json;
 
     public function testGetAccessTokenErrorResponse()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+        $this->expectException(AuthenticationException::class);
 
         $this->mockHttpClient();
 

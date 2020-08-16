@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Helper\NonceGenerator;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
@@ -59,18 +60,14 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
         if ($this->options['csrf']) {
-            if (null === $this->state) {
-                $this->state = $this->generateNonce();
-            }
-
-            $this->storage->save($this, $this->state, 'csrf_state');
+            $this->handleCsrfToken();
         }
 
         $parameters = array_merge([
             'response_type' => 'code',
             'client_id' => $this->options['client_id'],
             'scope' => $this->options['scope'],
-            'state' => $this->state ? urlencode($this->state) : null,
+            'state' => $this->state->encode(),
             'redirect_uri' => $redirectUri,
         ], $extraParameters);
 
@@ -166,7 +163,6 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     protected function doGetTokenRequest($url, array $parameters = [])
     {
         $headers = [];
-
         if ($this->options['use_authorization_to_get_token']) {
             if ($this->options['client_secret']) {
                 $headers['Authorization'] = 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret']);
@@ -176,9 +172,7 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             $parameters['client_secret'] = $this->options['client_secret'];
         }
 
-        $query = http_build_query($parameters, '', '&');
-
-        return $this->httpRequest($url, $query, $headers);
+        return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers);
     }
 
     /**
@@ -250,5 +244,14 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $headers += ['Content-Type' => 'application/x-www-form-urlencoded'];
 
         return parent::httpRequest($url, $content, $headers, $method);
+    }
+
+    private function handleCsrfToken(): void
+    {
+        if (null === $this->state->getCsrfToken()) {
+            $this->state->setCsrfToken(NonceGenerator::generate());
+        }
+
+        $this->storage->save($this, $this->state->getCsrfToken(), 'csrf_state');
     }
 }

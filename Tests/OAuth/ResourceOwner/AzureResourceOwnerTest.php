@@ -39,17 +39,8 @@ json;
         'profilepicture' => null,
     ];
 
-    protected $expectedUrls = [
-        'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-    ];
-
-    public function testGetAuthorizationUrl()
-    {
-        $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
-        );
-    }
+    protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&resource=https%3A%2F%2Fgraph.windows.net';
+    protected $authorizationUrlParams = ['resource' => 'https://graph.windows.net'];
 
     public function testGetUserInformation()
     {
