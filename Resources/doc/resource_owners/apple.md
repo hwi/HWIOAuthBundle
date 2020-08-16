@@ -1,19 +1,20 @@
-Step 2x: Setup Amazon
+Step 2x: Setup Apple
 =====================
-First you will have to register your application on Amazon. Check out the
-documentation for more information: https://login.amazon.com/documentation.
+First you will have to register your application on Apple Developers website. Check out the
+documentation for more information: https://help.apple.com/developer-account/?lang=en#/devde676e696
 
-Next configure a resource owner of type `amazon` with appropriate
-`client_id`, `client_secret` and `scope`. Refer to the Amazon documentation
-for the available scopes.
-
+Next configure a resource owner of type `apple` with appropriate
+`client_id`, `client_secret` and `scope`.
+Example `scope` values include:
+* `name`
+* `email`
 ``` yaml
 # app/config/config.yml
 
 hwi_oauth:
     resource_owners:
         any_name:
-            type:                amazon
+            type:                apple
             client_id:           <client_id>
             client_secret:       <client_secret>
             scope:               "name email"

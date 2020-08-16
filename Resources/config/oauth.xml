@@ -9,6 +9,7 @@
         <parameter key="hwi_oauth.resource_owner.oauth2.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner</parameter>
         
         <parameter key="hwi_oauth.resource_owner.amazon.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AmazonResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.apple.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AppleResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.asana.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AsanaResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.auth0.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\Auth0ResourceOwner</parameter>
         <parameter key="hwi_oauth.resource_owner.azure.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AzureResourceOwner</parameter>
