@@ -17,7 +17,6 @@ hwi_oauth:
             client_id:           <client_id>
             client_secret:       <client_secret>
             scope:               "name email"
-
 ```
 
 When you're done. Continue by configuring the security layer or go back to

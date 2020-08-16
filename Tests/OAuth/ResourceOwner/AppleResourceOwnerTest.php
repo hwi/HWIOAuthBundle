@@ -24,16 +24,18 @@ class AppleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "email": "localhost@gmail.com"
 }
 json;
+
     protected $paths = [
         'identifier' => 'sub',
         'firstname' => 'firstName',
         'lastname' => 'lastName',
         'email' => 'email',
-        ];
+    ];
+
     protected $expectedUrls = [
         'authorization_url' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=name+email&redirect_uri=http%3A%2F%2Fredirect.to%2F&response_mode=form_post',
         'authorization_url_csrf' => 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=name+email&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&response_mode=form_post',
-        ];
+    ];
 
     public function testHandleRequest()
     {
@@ -95,9 +97,11 @@ json;
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
 
-        /** @var CustomUserResponse $userResponse */
         $token = '.'.base64_encode($this->userResponse);
+
+        /** @var CustomUserResponse $userResponse */
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token', 'id_token' => $token]);
+
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
         $this->assertEquals('foo', $userResponse->getNickname());
@@ -110,13 +114,18 @@ json;
 
     public function testGetUserInformation()
     {
+        $token = '.'.base64_encode($this->userResponse);
+
         /**
          * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
          */
-        $token = '.'.base64_encode($this->userResponse);
+        $userResponse = $this->resourceOwner->getUserInformation([
+            'access_token' => 'token',
+            'id_token' => $token,
+            'firstName' => 'Test',
+            'lastName' => 'User',
+        ]);
 
-        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token', 'id_token' => $token,
-                                                              'firstName' => 'Test', 'lastName' => 'User', ]);
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('localhost@gmail.com', $userResponse->getEmail());
         $this->assertEquals('token', $userResponse->getAccessToken());
@@ -138,6 +147,7 @@ json;
     public function testGetUserInformationFailure()
     {
         $exception = new \Exception('Undefined index id_token');
+
         try {
             $this->resourceOwner->getUserInformation(['access_token' => 'token']);
             $this->fail('An exception should have been raised');

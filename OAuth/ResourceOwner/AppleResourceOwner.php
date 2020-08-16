@@ -32,7 +32,7 @@ class AppleResourceOwner extends GenericOAuth2ResourceOwner
         'firstname' => 'firstName',
         'lastname' => 'lastName',
         'email' => 'email',
-        ];
+    ];
 
     /**
      * {@inheritdoc}
@@ -41,7 +41,7 @@ class AppleResourceOwner extends GenericOAuth2ResourceOwner
     {
         return parent::getAuthorizationUrl($redirectUri, array_merge([
             'response_mode' => $this->options['response_mode'],
-            ], $extraParameters));
+        ], $extraParameters));
     }
 
     /**
@@ -52,12 +52,15 @@ class AppleResourceOwner extends GenericOAuth2ResourceOwner
         if (!isset($accessToken['id_token'])) {
             throw new \Exception('Undefined index id_token');
         }
+
         $jwt = self::jwt_decode($accessToken['id_token']);
         $data = json_decode(base64_decode($jwt), true);
+
         if (isset($accessToken['firstName'], $accessToken['lastName'])) {
             $data['firstName'] = $accessToken['firstName'];
             $data['lastName'] = $accessToken['lastName'];
         }
+
         $response = $this->getUserResponse();
         $response->setData(json_encode($data));
         $response->setResourceOwner($this);
@@ -72,18 +75,21 @@ class AppleResourceOwner extends GenericOAuth2ResourceOwner
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
     {
         OAuthErrorHandler::handleOAuthError($request);
+
         $parameters = array_merge([
             'code' => $request->request->get('code'),
             'grant_type' => 'authorization_code',
             'client_id' => $this->options['client_id'],
             'client_secret' => $this->options['client_secret'],
             'redirect_uri' => $redirectUri,
-            ], $extraParameters);
+        ], $extraParameters);
+
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
         $response = $this->getResponseContent($response);
         $this->validateResponseContent($response);
         $user_info = $request->request->get('user');
         $user_info = json_decode($user_info, true);
+
         if (null !== $user_info) {
             $response['firstName'] = $user_info['name']['firstName'];
             $response['lastName'] = $user_info['name']['lastName'];
@@ -129,12 +135,11 @@ class AppleResourceOwner extends GenericOAuth2ResourceOwner
             'scope' => 'name email',
             'appsecret_proof' => false,
             'response_mode' => 'form_post',
-            ]);
+        ]);
     }
 
     private static function jwt_decode($id_token)
     {
-        // $data = self::jwt_decode($accessToken['id_token']);
         //// from http://stackoverflow.com/a/28748285/624544
         [, $jwt] = explode('.', $id_token, 3);
 
