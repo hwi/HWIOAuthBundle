@@ -13,7 +13,7 @@ Installation
 All the installation instructions are located in the documentation, check it for specific
 version:
 
-* [__1.1__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `^3.4`, `^4.3` and `^5.0`.
+* [__1.1__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) with support for Symfony `^3.4`, `^4.4` and `^5.0`.
 
 Documentation
 -------------
