@@ -6,6 +6,7 @@ Changelog
 * Added: Apple resource owner,
 * Fixed: updated Azure `authorization` & `access_token` urls,
 * Allow modification of the response in `FilterUserResponseEvent`,
+* Dropped Symfony 4.3 support,
 
 ## 1.1.0 (2020-04-06)
 * Added Symfony 5 support,
