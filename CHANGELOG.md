@@ -2,6 +2,7 @@ Changelog
 =========
 ## 1.2.0 (2020-xx-xx)
 * Added `first_name` & `last_name` in AzureResourceOwner,
+* Added: support for multiple OAuth2 state parameters,
 * Added: Apple resource owner,
 * Fixed: updated Azure `authorization` & `access_token` urls,
 * Allow modification of the response in `FilterUserResponseEvent`,
