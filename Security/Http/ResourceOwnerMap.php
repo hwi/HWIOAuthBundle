@@ -88,7 +88,6 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
         /** @var ResourceOwnerInterface $resourceOwner */
         $resourceOwner = $this->container->get('hwi_oauth.resource_owner.'.$name);
 
-
         return $resourceOwner;
     }
 

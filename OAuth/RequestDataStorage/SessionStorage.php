@@ -48,7 +48,7 @@ class SessionStorage implements RequestDataStorageInterface
         }
 
         // request tokens are one time use only
-        if (in_array($type, ['token', 'csrf_state'])) {
+        if (\in_array($type, ['token', 'csrf_state'])) {
             $this->session->remove($key);
         }
 
@@ -70,7 +70,7 @@ class SessionStorage implements RequestDataStorageInterface
             $key = $this->generateKey($resourceOwner, $this->getStorageKey($value), $type);
         }
 
-        if (is_object($value)) {
+        if (\is_object($value)) {
             $value = serialize($value);
         }
 
@@ -100,7 +100,7 @@ class SessionStorage implements RequestDataStorageInterface
     {
         if (\is_array($value)) {
             $storageKey = reset($value);
-        } else if (is_object($value)) {
+        } elseif (\is_object($value)) {
             $storageKey = \get_class($value);
         } else {
             $storageKey = $value;

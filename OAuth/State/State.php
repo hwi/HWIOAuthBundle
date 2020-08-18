@@ -28,7 +28,7 @@ final class State implements StateInterface
 
     /**
      * @param string|array<string,string>|null $parameters The state parameter as a string or assoc array
-     * @param bool $keepCsrf                               Whether to keep the CSRF token in the state or not
+     * @param bool                             $keepCsrf   Whether to keep the CSRF token in the state or not
      *
      * @throws InvalidArgumentException
      */
@@ -44,7 +44,7 @@ final class State implements StateInterface
             }
 
             foreach ($parameters as $key => $value) {
-                if (false === $keepCsrf && $key === self::CSRF_TOKEN_KEY) {
+                if (false === $keepCsrf && self::CSRF_TOKEN_KEY === $key) {
                     continue;
                 }
                 $this->add($key, $value);
@@ -81,7 +81,7 @@ final class State implements StateInterface
      */
     public function has(string $key): bool
     {
-        return array_key_exists($key, $this->values);
+        return \array_key_exists($key, $this->values);
     }
 
     public function setCsrfToken(string $token): void
@@ -123,6 +123,16 @@ final class State implements StateInterface
         $encoded = urlencode($this->encodeValues());
 
         return '' !== $encoded ? $encoded : null;
+    }
+
+    public function serialize(): ?string
+    {
+        return serialize($this->values);
+    }
+
+    public function unserialize($serialized): void
+    {
+        $this->values = unserialize($serialized);
     }
 
     /**
@@ -170,15 +180,5 @@ final class State implements StateInterface
         }
 
         return array_keys($array) !== range(0, \count($array) - 1);
-    }
-
-    public function serialize(): ?string
-    {
-        return serialize($this->values);
-    }
-
-    public function unserialize($serialized): void
-    {
-        $this->values = unserialize($serialized);
     }
 }
