@@ -70,11 +70,7 @@ class SessionStorage implements RequestDataStorageInterface
             $key = $this->generateKey($resourceOwner, $this->getStorageKey($value), $type);
         }
 
-        if (\is_object($value)) {
-            $value = serialize($value);
-        }
-
-        $this->session->set($key, $value);
+        $this->session->set($key, $this->getStorageValue($value));
     }
 
     /**
@@ -89,6 +85,20 @@ class SessionStorage implements RequestDataStorageInterface
     protected function generateKey(ResourceOwnerInterface $resourceOwner, $key, $type)
     {
         return sprintf('_hwi_oauth.%s.%s.%s.%s', $resourceOwner->getName(), $resourceOwner->getOption('client_id'), $type, $key);
+    }
+
+    /**
+     * @param array|string|object $value
+     *
+     * @return array|string
+     */
+    private function getStorageValue($value)
+    {
+        if (\is_object($value)) {
+            $value = serialize($value);
+        }
+
+        return $value;
     }
 
     /**
