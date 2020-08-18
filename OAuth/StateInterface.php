@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\StateRetrievalException;
 use Symfony\Component\Config\Definition\Exception\DuplicateKeyException;
 
-interface StateInterface
+interface StateInterface extends \Serializable
 {
     /**
      * @param string $key   The key to store a value to
@@ -32,6 +32,13 @@ interface StateInterface
      * @throws StateRetrievalException
      */
     public function get(string $key): ?string;
+
+    /**
+     * @param string $key
+     *
+     * @return bool
+     */
+    public function has(string $key): bool;
 
     /**
      * @return array<string, string>

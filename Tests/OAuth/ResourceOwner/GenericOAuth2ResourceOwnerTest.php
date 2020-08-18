@@ -159,6 +159,26 @@ json;
         $this->state = 'random';
     }
 
+    public function testGetState()
+    {
+        $stateParams = ['initial_state_param_1' => 'value'];
+        if (!$this->csrf) {
+            $initialState = new State($stateParams);
+        } else {
+            $initialState = new State(array_merge($stateParams, ['csrf_token' => NonceGenerator::generate()]));
+        }
+
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, [], [], $initialState);
+        $this->storage->expects($this->once())
+            ->method('fetch')
+            ->with($resourceOwner, State::class, 'state')
+            ->willReturn(serialize(new State(['state' => 'some-state'])));
+
+        $state = $resourceOwner->getState();
+        self::assertEquals($state->get('initial_state_param_1'), 'value');
+        self::assertEquals($state->get('state'), 'some-state');
+    }
+
     public function testGetAuthorizationUrlWithEnabledCsrf()
     {
         if ($this->csrf) {

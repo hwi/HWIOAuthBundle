@@ -27,11 +27,12 @@ final class State implements StateInterface
     private $values = [];
 
     /**
-     * @param string|array<string,string> The state parameter as a string or assoc array
+     * @param string|array<string,string>|null $parameters The state parameter as a string or assoc array
+     * @param bool $keepCsrf                               Whether to keep the CSRF token in the state or not
      *
      * @throws InvalidArgumentException
      */
-    public function __construct($parameters)
+    public function __construct($parameters, bool $keepCsrf = true)
     {
         if (!\is_array($parameters)) {
             $parameters = $this->parseStringParameter($parameters);
@@ -43,6 +44,9 @@ final class State implements StateInterface
             }
 
             foreach ($parameters as $key => $value) {
+                if (false === $keepCsrf && $key === self::CSRF_TOKEN_KEY) {
+                    continue;
+                }
                 $this->add($key, $value);
             }
         }
@@ -72,6 +76,14 @@ final class State implements StateInterface
         return $this->values[$key];
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function has(string $key): bool
+    {
+        return array_key_exists($key, $this->values);
+    }
+
     public function setCsrfToken(string $token): void
     {
         $this->values[self::CSRF_TOKEN_KEY] = $token;
@@ -79,7 +91,10 @@ final class State implements StateInterface
 
     public function getAll(): array
     {
-        return $this->values;
+        $values = $this->values;
+        unset($values[self::CSRF_TOKEN_KEY]);
+
+        return $values;
     }
 
     public function getCsrfToken(): ?string
@@ -88,8 +103,6 @@ final class State implements StateInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * Encodes the array of values to a string so it can be stored in a query parameter.
      * Returns the plain value if only the default key or CSRF token has been set.
      */
@@ -107,7 +120,7 @@ final class State implements StateInterface
             return urlencode($this->values[self::CSRF_TOKEN_KEY]);
         }
 
-        $encoded = urlencode(self::encodeArray($this->values));
+        $encoded = urlencode($this->encodeValues());
 
         return '' !== $encoded ? $encoded : null;
     }
@@ -117,7 +130,7 @@ final class State implements StateInterface
      *
      * @return array<string,string>|null
      */
-    private function parseStringParameter(string $queryParameter = null): ?array
+    private function parseStringParameter(?string $queryParameter = null): ?array
     {
         $urlDecoded = urldecode($queryParameter);
         $values = json_decode(base64_decode($urlDecoded), true);
@@ -130,13 +143,11 @@ final class State implements StateInterface
     }
 
     /**
-     * @param array $array The array to encode
-     *
      * @return string The encoded array
      */
-    private static function encodeArray(array $array): string
+    private function encodeValues(): string
     {
-        return base64_encode(json_encode($array));
+        return base64_encode(json_encode($this->values));
     }
 
     /**
@@ -159,5 +170,15 @@ final class State implements StateInterface
         }
 
         return array_keys($array) !== range(0, \count($array) - 1);
+    }
+
+    public function serialize(): ?string
+    {
+        return serialize($this->values);
+    }
+
+    public function unserialize($serialized): void
+    {
+        $this->values = unserialize($serialized);
     }
 }

@@ -34,6 +34,12 @@ final class StateTest extends TestCase
         }
     }
 
+    public function testConstructorWithNull()
+    {
+        $state = new State(null);
+        self::assertCount(0, $state->getAll());
+    }
+
     public function testConstructorWithSingleValue()
     {
         $state = new State('random');
@@ -47,6 +53,24 @@ final class StateTest extends TestCase
         foreach (self::TEST_VALUES as $key => $value) {
             self::assertEquals($value, $state->get($key));
         }
+    }
+
+    public function testConstructorWithArrayParameterWithoutKeepingCSRFToken()
+    {
+        $state = new State(array_merge(self::TEST_VALUES, ['csrf_token' => 'csrf']), false);
+
+        foreach (self::TEST_VALUES as $key => $value) {
+            self::assertEquals($value, $state->get($key));
+        }
+        self::assertArrayNotHasKey('csrf_token', $state->getAll());
+    }
+
+    public function testItCanBeSerializedAndUnserialized()
+    {
+        $state = new State(self::TEST_VALUES);
+        $unserialized = unserialize(serialize($state));
+
+        self::assertEquals($state, $unserialized);
     }
 
     public function testFromEncodedParameterWithInvalidFormat()
@@ -72,6 +96,12 @@ final class StateTest extends TestCase
 
         $state->add('baz', 'foo');
         self::assertEquals('foo', $state->get('baz'));
+    }
+
+    public function testHas()
+    {
+        $state = new State($this->encodeArray(self::TEST_VALUES));
+        self::assertTrue($state->has('foo'));
     }
 
     public function testAddDuplicateKey()
@@ -121,6 +151,12 @@ final class StateTest extends TestCase
 
         $state->setCsrfToken($token);
         self::assertEquals($token, $state->getCsrfToken());
+    }
+
+    public function testGetAllKeepingCSRFToken()
+    {
+        $state = new State(array_merge(self::TEST_VALUES, ['csrf_token' => 'csrf']), false);
+        self::assertArrayNotHasKey('csrf_token', $state->getAll());
     }
 
     private function encodeArray(array $array): string

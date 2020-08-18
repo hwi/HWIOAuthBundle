@@ -66,4 +66,8 @@ class MyCustomProvider implements ResourceOwnerInterface
     public function addStateParameter(string $key, string $value): void
     {
     }
+
+    public function storeState(StateInterface $state = null)
+    {
+    }
 }
