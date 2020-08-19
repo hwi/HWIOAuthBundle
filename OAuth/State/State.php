@@ -112,14 +112,6 @@ final class State implements StateInterface
             return null;
         }
 
-        if ($this->isOnlyExistentKey(self::DEFAULT_KEY)) {
-            return urlencode($this->values[self::DEFAULT_KEY]);
-        }
-
-        if ($this->isOnlyExistentKey(self::CSRF_TOKEN_KEY)) {
-            return urlencode($this->values[self::CSRF_TOKEN_KEY]);
-        }
-
         $encoded = urlencode($this->encodeValues());
 
         return '' !== $encoded ? $encoded : null;
