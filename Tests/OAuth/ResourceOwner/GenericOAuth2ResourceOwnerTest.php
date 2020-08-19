@@ -177,6 +177,18 @@ json;
         self::assertEquals($state->get('state'), 'some-state');
     }
 
+    public function testGetStateWithoutStoredValues()
+    {
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, [], [], new State(null));
+        $this->storage->expects($this->once())
+            ->method('fetch')
+            ->with($resourceOwner, State::class, 'state')
+            ->willThrowException(new \InvalidArgumentException('No data available in storage.'));
+
+        $state = $resourceOwner->getState();
+        self::assertEmpty($state->getAll());
+    }
+
     public function testGetAuthorizationUrlWithEnabledCsrf()
     {
         if ($this->csrf) {

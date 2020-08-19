@@ -169,7 +169,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         }
 
         // lazy-loading for stored states
-        $storedData = $this->storage->fetch($this, State::class, 'state');
+        try {
+            $storedData = $this->storage->fetch($this, State::class, 'state');
+        } catch (\Throwable $e) {
+            $storedData = null;
+        }
         if (null !== $storedData && false !== $storedState = unserialize($storedData)) {
             foreach ($storedState->getAll() as $key => $value) {
                 $this->addStateParameter($key, $value);
