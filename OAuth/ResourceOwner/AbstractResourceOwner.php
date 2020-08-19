@@ -195,7 +195,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     public function storeState(StateInterface $state = null): void
     {
-        if (null === $state || 0 === !\count($state->getAll())) {
+        if (null === $state || 0 === \count($state->getAll())) {
             return;
         }
 
