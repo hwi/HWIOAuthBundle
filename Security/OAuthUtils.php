@@ -297,10 +297,10 @@ class OAuthUtils
     }
 
     /**
-     * @param string|null            $queryParameter The query parameter to parse and add to the State
-     * @param ResourceOwnerInterface $resourceOwner  The resource owner holding the state to be added to
+     * @param string|array<string, string>|null $queryParameter The query parameter to parse and add to the State
+     * @param ResourceOwnerInterface            $resourceOwner  The resource owner holding the state to be added to
      */
-    private function addQueryParameterToState(?string $queryParameter, ResourceOwnerInterface $resourceOwner): void
+    private function addQueryParameterToState($queryParameter, ResourceOwnerInterface $resourceOwner): void
     {
         if (null === $queryParameter) {
             return;

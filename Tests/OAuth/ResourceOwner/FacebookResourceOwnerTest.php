@@ -50,7 +50,7 @@ json;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['auth_type' => 'rerequest']);
 
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&auth_type=rerequest',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F&auth_type=rerequest',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -60,7 +60,7 @@ json;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['display' => 'popup', 'auth_type' => 'rerequest']);
 
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&display=popup&auth_type=rerequest',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F&display=popup&auth_type=rerequest',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
@@ -70,7 +70,7 @@ json;
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['display' => 'popup']);
 
         $this->assertEquals(
-            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=random&redirect_uri=http%3A%2F%2Fredirect.to%2F&display=popup',
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F&display=popup',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }

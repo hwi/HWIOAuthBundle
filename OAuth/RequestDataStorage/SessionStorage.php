@@ -43,14 +43,16 @@ class SessionStorage implements RequestDataStorageInterface
     public function fetch(ResourceOwnerInterface $resourceOwner, $key, $type = 'token')
     {
         $key = $this->generateKey($resourceOwner, $key, $type);
-        if (null === $token = $this->session->get($key)) {
+        if (null === $data = $this->session->get($key)) {
             throw new \InvalidArgumentException('No data available in storage.');
         }
 
         // request tokens are one time use only
-        $this->session->remove($key);
+        if (\in_array($type, ['token', 'csrf_state'])) {
+            $this->session->remove($key);
+        }
 
-        return $token;
+        return $data;
     }
 
     /**
@@ -65,10 +67,10 @@ class SessionStorage implements RequestDataStorageInterface
 
             $key = $this->generateKey($resourceOwner, $value['oauth_token'], 'token');
         } else {
-            $key = $this->generateKey($resourceOwner, \is_array($value) ? reset($value) : $value, $type);
+            $key = $this->generateKey($resourceOwner, $this->getStorageKey($value), $type);
         }
 
-        $this->session->set($key, $value);
+        $this->session->set($key, $this->getStorageValue($value));
     }
 
     /**
@@ -83,5 +85,37 @@ class SessionStorage implements RequestDataStorageInterface
     protected function generateKey(ResourceOwnerInterface $resourceOwner, $key, $type)
     {
         return sprintf('_hwi_oauth.%s.%s.%s.%s', $resourceOwner->getName(), $resourceOwner->getOption('client_id'), $type, $key);
+    }
+
+    /**
+     * @param array|string|object $value
+     *
+     * @return array|string
+     */
+    private function getStorageValue($value)
+    {
+        if (\is_object($value)) {
+            $value = serialize($value);
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param array|string|object $value
+     *
+     * @return string
+     */
+    private function getStorageKey($value): string
+    {
+        if (\is_array($value)) {
+            $storageKey = reset($value);
+        } elseif (\is_object($value)) {
+            $storageKey = \get_class($value);
+        } else {
+            $storageKey = $value;
+        }
+
+        return (string) $storageKey;
     }
 }

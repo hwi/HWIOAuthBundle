@@ -72,6 +72,11 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     protected $storage;
 
     /**
+     * @var bool
+     */
+    private $stateLoaded = false;
+
+    /**
      * @param HttpMethodsClient           $httpClient Httplug client
      * @param HttpUtils                   $httpUtils  Http utils
      * @param array                       $options    Options for the resource owner
@@ -159,6 +164,23 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     public function getState(): StateInterface
     {
+        if ($this->stateLoaded) {
+            return $this->state;
+        }
+
+        // lazy-loading for stored states
+        try {
+            $storedData = $this->storage->fetch($this, State::class, 'state');
+        } catch (\Throwable $e) {
+            $storedData = null;
+        }
+        if (null !== $storedData && false !== $storedState = unserialize($storedData)) {
+            foreach ($storedState->getAll() as $key => $value) {
+                $this->addStateParameter($key, $value);
+            }
+        }
+        $this->stateLoaded = true;
+
         return $this->state;
     }
 
@@ -167,7 +189,21 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      */
     public function addStateParameter(string $key, string $value): void
     {
-        $this->state->add($key, $value);
+        if (!$this->state->has($key)) {
+            $this->state->add($key, $value);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function storeState(StateInterface $state = null): void
+    {
+        if (null === $state || 0 === \count($state->getAll())) {
+            return;
+        }
+
+        $this->storage->save($this, $state, 'state');
     }
 
     /**

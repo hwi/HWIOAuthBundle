@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Http;
 
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -83,7 +85,10 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
             return null;
         }
 
-        return $this->container->get('hwi_oauth.resource_owner.'.$name);
+        /** @var ResourceOwnerInterface $resourceOwner */
+        $resourceOwner = $this->container->get('hwi_oauth.resource_owner.'.$name);
+
+        return $resourceOwner;
     }
 
     /**
@@ -93,7 +98,14 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     {
         foreach ($this->resourceOwners as $name => $checkPath) {
             if ($this->httpUtils->checkRequestPath($request, $checkPath)) {
-                return [$this->getResourceOwnerByName($name), $checkPath];
+                $resourceOwner = $this->getResourceOwnerByName($name);
+
+                // save the round-tripped state to the resource owner
+                if (null !== $resourceOwner) {
+                    $resourceOwner->storeState(new State($request->get('state'), false));
+                }
+
+                return [$resourceOwner, $checkPath];
             }
         }
 

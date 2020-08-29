@@ -33,7 +33,7 @@ abstract class ResourceOwnerTestCase extends TestCase
 
     /** @var MockObject|RequestDataStorageInterface */
     protected $storage;
-    protected $state = 'random';
+    protected $state = 'eyJzdGF0ZSI6InJhbmRvbSJ9';
     protected $csrf = false;
 
     protected $options = [];

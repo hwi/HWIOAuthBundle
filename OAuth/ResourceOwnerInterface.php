@@ -123,6 +123,11 @@ interface ResourceOwnerInterface
     public function getState(): StateInterface;
 
     /**
+     * @param StateInterface|null $state
+     */
+    public function storeState(StateInterface $state = null);
+
+    /**
      * @param string $key
      * @param string $value
      */

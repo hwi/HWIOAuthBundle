@@ -148,15 +148,45 @@ json;
                 ->method('save')
                 ->with($resourceOwner, $state->getCsrfToken(), 'csrf_state');
 
-            $expectedUrl = $this->getExpectedAuthorizationUrlWithState($state->getCsrfToken());
+            $expectedUrl = $this->getExpectedAuthorizationUrlWithState($state->encode());
         }
 
         $this->assertEquals(
             $expectedUrl,
             $resourceOwner->getAuthorizationUrl('http://redirect.to/', $this->authorizationUrlParams)
         );
+    }
 
-        $this->state = 'random';
+    public function testGetState()
+    {
+        $stateParams = ['initial_state_param_1' => 'value'];
+        if (!$this->csrf) {
+            $initialState = new State($stateParams);
+        } else {
+            $initialState = new State(array_merge($stateParams, ['csrf_token' => NonceGenerator::generate()]));
+        }
+
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, [], [], $initialState);
+        $this->storage->expects($this->once())
+            ->method('fetch')
+            ->with($resourceOwner, State::class, 'state')
+            ->willReturn(serialize(new State(['state' => 'some-state'])));
+
+        $state = $resourceOwner->getState();
+        self::assertEquals($state->get('initial_state_param_1'), 'value');
+        self::assertEquals($state->get('state'), 'some-state');
+    }
+
+    public function testGetStateWithoutStoredValues()
+    {
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, [], [], new State(null));
+        $this->storage->expects($this->once())
+            ->method('fetch')
+            ->with($resourceOwner, State::class, 'state')
+            ->willThrowException(new \InvalidArgumentException('No data available in storage.'));
+
+        $state = $resourceOwner->getState();
+        self::assertEmpty($state->getAll());
     }
 
     public function testGetAuthorizationUrlWithEnabledCsrf()
@@ -174,9 +204,11 @@ json;
             ->with($resourceOwner, $nonce, 'csrf_state');
 
         $this->assertEquals(
-            $this->getExpectedAuthorizationUrlWithState($nonce),
+            $this->getExpectedAuthorizationUrlWithState($state->encode()),
             $resourceOwner->getAuthorizationUrl('http://redirect.to/', $this->authorizationUrlParams)
         );
+
+        $this->state = $state->encode();
     }
 
     public function testGetAccessToken()
@@ -358,7 +390,8 @@ json;
 
     protected function getExpectedAuthorizationUrlWithState($stateParameter)
     {
-        return $this->authorizationUrlBasePart.'&state='.$stateParameter.$this->redirectUrlPart;
+        // urlencode state parameter since AbstractResourceOwner::normalizeUrl() http_build_query method encodes them again
+        return $this->authorizationUrlBasePart.'&state='.urlencode($stateParameter).$this->redirectUrlPart;
     }
 
     /**

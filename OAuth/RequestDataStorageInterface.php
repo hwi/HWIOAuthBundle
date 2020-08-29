@@ -33,7 +33,7 @@ interface RequestDataStorageInterface
      * @param string                 $key
      * @param string                 $type
      *
-     * @return array
+     * @return mixed
      */
     public function fetch(ResourceOwnerInterface $resourceOwner, $key, $type = 'token');
 
@@ -41,7 +41,7 @@ interface RequestDataStorageInterface
      * Save a request data to the storage.
      *
      * @param ResourceOwnerInterface $resourceOwner
-     * @param array|string           $value
+     * @param array|string|object    $value
      * @param string                 $type
      */
     public function save(ResourceOwnerInterface $resourceOwner, $value, $type = 'token');
