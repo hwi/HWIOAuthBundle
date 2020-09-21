@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
@@ -54,12 +54,12 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     /**
      * Constructor.
      *
-     * @param ManagerRegistry $registry    manager registry
+     * @param Registry        $registry    manager registry
      * @param string          $class       user entity class to load
      * @param array           $properties  Mapping of resource owners to properties
      * @param string          $managerName Optional name of the entity manager to use
      */
-    public function __construct(ManagerRegistry $registry, $class, array $properties, $managerName = null)
+    public function __construct(Registry $registry, $class, array $properties, $managerName = null)
     {
         $this->em = $registry->getManager($managerName);
         $this->class = $class;
