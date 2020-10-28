@@ -1,5 +1,8 @@
 Changelog
 =========
+## 1.2.1 (2020-xx-xx)
+* Method `ConnectController::getParameter()` has been removed,
+
 ## 1.2.0 (2020-10-19)
 * Added `first_name` & `last_name` in AzureResourceOwner,
 * Added: support for multiple OAuth2 state parameters,
