@@ -58,4 +58,3 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
         ]);
     }
 }
-;
