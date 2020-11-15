@@ -24,20 +24,22 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected $paths = [
-        'identifier' => '_id',
-        'nickname' => 'display_name',
-        'realname' => 'name',
-        'email' => 'email',
-        'profilepicture' => 'logo',
+        'identifier' => 'data.0.id',
+        'nickname' => 'data.0.login',
+        'realname' => 'data.0.display_name',
+        'email' => 'data.0.email', // Require scope "user:read:email"
+        'profilepicture' => 'data.0.profile_image_url',
     ];
 
     /**
      * {@inheritdoc}
      */
-    protected function doGetUserInformationRequest($url, array $parameters = [])
+    protected function httpRequest($url, $content = null, array $headers = [], $method = null)
     {
-        // Twitch require to pass the OAuth token as 'oauth_token' instead of 'access_token'
-        return parent::doGetUserInformationRequest(str_replace('access_token', 'oauth_token', $url), $parameters);
+        // Twitch also require that you provide the client id as a header
+        $headers += ['Client-ID' => $this->options['client_id']];
+
+        return parent::httpRequest($url, $content, $headers, $method);
     }
 
     /**
@@ -51,7 +53,7 @@ class TwitchResourceOwner extends GenericOAuth2ResourceOwner
             'authorization_url' => 'https://id.twitch.tv/oauth2/authorize',
             'access_token_url' => 'https://id.twitch.tv/oauth2/token',
             'infos_url' => 'https://api.twitch.tv/helix/users',
-            'use_bearer_authorization' => false,
+            'use_bearer_authorization' => true,
             'use_authorization_to_get_token' => false,
         ]);
     }
