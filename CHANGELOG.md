@@ -2,6 +2,9 @@ Changelog
 =========
 ## 1.2.1 (2020-xx-xx)
 * Method `ConnectController::getParameter()` has been removed,
+* Upgraded Facebook API to v8.0,
+* Upgraded Twitch resource owner to incorporate latest Twitch API,
+* Fixed: undefined `id_token` exception in Azure resource owner,
 
 ## 1.2.0 (2020-10-19)
 * Added `first_name` & `last_name` in AzureResourceOwner,
