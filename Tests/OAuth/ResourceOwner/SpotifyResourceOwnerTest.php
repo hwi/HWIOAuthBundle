@@ -43,7 +43,7 @@ class SpotifyResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     }
   ],
   "product": "premium",
-  "type": "user", 
+  "type": "user",
   "uri": "spotify:user:wizzler"
 }
 json;

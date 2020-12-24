@@ -20,7 +20,7 @@ class AppleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     protected $resourceOwnerClass = AppleResourceOwner::class;
     protected $userResponse = <<<json
 {
-    "sub": "1", 
+    "sub": "1",
     "email": "localhost@gmail.com"
 }
 json;
