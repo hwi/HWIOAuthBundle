@@ -1,6 +1,7 @@
 Changelog
 =========
-## 1.2.1 (2020-xx-xx)
+## 1.3.0 (2020-xx-xx)
+* Added PHP 8 support,
 * Method `ConnectController::getParameter()` has been removed,
 * Upgraded Facebook API to v8.0,
 * Upgraded Twitch resource owner to incorporate latest Twitch API,
