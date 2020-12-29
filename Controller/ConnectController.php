@@ -60,16 +60,13 @@ final class ConnectController extends AbstractController
      * Shows a registration form if there is no user logged in and connecting
      * is enabled.
      *
-     * @param Request $request a request
-     * @param string  $key     key used for retrieving the right information for the registration form
-     *
-     * @return Response
+     * @param string $key key used for retrieving the right information for the registration form
      *
      * @throws NotFoundHttpException if `connect` functionality was not enabled
      * @throws AccessDeniedException if any user is authenticated
      * @throws \RuntimeException
      */
-    public function registrationAction(Request $request, $key)
+    public function registrationAction(Request $request, string $key): Response
     {
         $connect = $this->container->getParameter('hwi_oauth.connect');
         if (!$connect) {
@@ -151,17 +148,13 @@ final class ConnectController extends AbstractController
     /**
      * Connects a user to a given account if the user is logged in and connect is enabled.
      *
-     * @param Request $request the active request
-     * @param string  $service name of the resource owner to connect to
+     * @param string $service name of the resource owner to connect to
      *
      * @throws \Exception
-     *
-     * @return Response
-     *
      * @throws NotFoundHttpException if `connect` functionality was not enabled
      * @throws AccessDeniedException if no user is authenticated
      */
-    public function connectServiceAction(Request $request, $service)
+    public function connectServiceAction(Request $request, string $service): Response
     {
         $connect = $this->container->getParameter('hwi_oauth.connect');
         if (!$connect) {
@@ -241,13 +234,9 @@ final class ConnectController extends AbstractController
     /**
      * Get a resource owner by name.
      *
-     * @param string $name
-     *
-     * @return ResourceOwnerInterface
-     *
      * @throws NotFoundHttpException if there is no resource owner with the given name
      */
-    private function getResourceOwnerByName($name)
+    private function getResourceOwnerByName(string $name): ResourceOwnerInterface
     {
         foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $firewall) {
             if (!$this->resourceOwnerMapLocator->has($firewall)) {
@@ -266,13 +255,9 @@ final class ConnectController extends AbstractController
     /**
      * Authenticate a user with Symfony Security.
      *
-     * @param Request       $request
-     * @param UserInterface $user
-     * @param string        $resourceOwnerName
-     * @param string|array  $accessToken
-     * @param bool          $fakeLogin
+     * @param string|array $accessToken
      */
-    private function authenticateUser(Request $request, UserInterface $user, $resourceOwnerName, $accessToken, $fakeLogin = true)
+    private function authenticateUser(Request $request, UserInterface $user, string $resourceOwnerName, $accessToken, bool $fakeLogin = true): void
     {
         try {
             $userChecker = $this->get('hwi_oauth.user_checker');
@@ -299,12 +284,7 @@ final class ConnectController extends AbstractController
         }
     }
 
-    /**
-     * @param SessionInterface $session
-     *
-     * @return string|null
-     */
-    private function getTargetPath(?SessionInterface $session)
+    private function getTargetPath(?SessionInterface $session): ?string
     {
         if (!$session) {
             return null;
@@ -321,15 +301,11 @@ final class ConnectController extends AbstractController
     }
 
     /**
-     * @param Request $request     The active request
-     * @param array   $accessToken The access token
-     * @param string  $service     Name of the resource owner to connect to
-     *
-     * @return Response
+     * @param string $service name of the resource owner to connect to
      *
      * @throws NotFoundHttpException if there is no resource owner with the given name
      */
-    private function getConfirmationResponse(Request $request, array $accessToken, $service)
+    private function getConfirmationResponse(Request $request, array $accessToken, string $service): Response
     {
         /** @var $currentToken OAuthToken */
         $currentToken = $this->get('security.token_storage')->getToken();
@@ -373,7 +349,7 @@ final class ConnectController extends AbstractController
         return $response;
     }
 
-    private function dispatch($event, string $eventName = null)
+    private function dispatch($event, string $eventName = null): void
     {
         // LegacyEventDispatcherProxy exists in Symfony >= 4.3
         if (class_exists(LegacyEventDispatcherProxy::class)) {

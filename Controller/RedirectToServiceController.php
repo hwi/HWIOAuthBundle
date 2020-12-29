@@ -40,7 +40,7 @@ final class RedirectToServiceController
     private $firewallNames;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $targetPathParameter;
 
@@ -54,8 +54,14 @@ final class RedirectToServiceController
      */
     private $useReferer;
 
-    public function __construct(OAuthUtils $oauthUtils, DomainWhitelist $domainWhitelist, array $firewallNames, ?string $targetPathParameter, bool $failedUseReferer, bool $useReferer)
-    {
+    public function __construct(
+        OAuthUtils $oauthUtils,
+        DomainWhitelist $domainWhitelist,
+        array $firewallNames,
+        ?string $targetPathParameter,
+        bool $failedUseReferer,
+        bool $useReferer
+    ) {
         $this->oauthUtils = $oauthUtils;
         $this->domainWhitelist = $domainWhitelist;
         $this->firewallNames = $firewallNames;
@@ -65,14 +71,9 @@ final class RedirectToServiceController
     }
 
     /**
-     * @param Request $request
-     * @param string  $service
-     *
      * @throws NotFoundHttpException
-     *
-     * @return RedirectResponse
      */
-    public function redirectToServiceAction(Request $request, $service): RedirectResponse
+    public function redirectToServiceAction(Request $request, string $service): RedirectResponse
     {
         try {
             $authorizationUrl = $this->oauthUtils->getAuthorizationUrl($request, $service);
