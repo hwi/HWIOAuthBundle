@@ -13,10 +13,11 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LinkedinResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
 class LinkedinResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = LinkedinResourceOwner::class;
+    protected string $resourceOwnerClass = LinkedinResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -57,21 +58,41 @@ json;
 
     public function testCustomResponseClass()
     {
-        $this->httpClientCalls = 2;
+        $class = CustomUserResponse::class;
 
-        parent::testCustomResponseClass();
+        $resourceOwner = $this->createResourceOwner(
+            ['user_response_class' => $class],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+            ]
+        );
 
-        $this->httpClientCalls = 1;
+        /** @var CustomUserResponse */
+        $userResponse = $resourceOwner->getUserInformation($this->tokenData);
+
+        $this->assertInstanceOf($class, $userResponse);
+        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo', $userResponse->getNickname());
+        $this->assertEquals('token', $userResponse->getAccessToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
     }
 
     public function testGetUserInformation()
     {
-        $this->httpClientCalls = 2;
-
-        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+            ]
+        );
 
         /** @var AbstractUserResponse $userResponse */
-        $userResponse = $this->resourceOwner->getUserInformation($this->tokenData);
+        $userResponse = $resourceOwner->getUserInformation($this->tokenData);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('example@website.com', $userResponse->getNickname());
@@ -80,7 +101,5 @@ json;
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
-
-        $this->httpClientCalls = 1;
     }
 }

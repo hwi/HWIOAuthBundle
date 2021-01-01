@@ -11,8 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * FoursquareResourceOwner.
@@ -39,14 +39,14 @@ class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function getResponseContent(ResponseInterface $rawResponse)
+    protected function getResponseContent(ResponseInterface $rawResponse): array
     {
         $response = parent::getResponseContent($rawResponse);
 
         // Foursquare use quite custom response structure in case of error
         if (isset($response['meta']['errorType'])) {
             // Prevent to mark deprecated calls as errors
-            if (200 == $response['meta']['code']) {
+            if (200 === (int) $response['meta']['code']) {
                 $response['error'] = $response['meta']['errorType'];
                 // Try to add some details of error if available
                 if (isset($response['meta']['errorMessage'])) {

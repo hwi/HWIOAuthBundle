@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitbucketResourceOwner;
 
 class BitbucketResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
-    protected $resourceOwnerClass = BitbucketResourceOwner::class;
+    protected string $resourceOwnerClass = BitbucketResourceOwner::class;
     protected $userResponse = <<<json
 {
     "user": {
@@ -32,10 +32,16 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+            ]
+        );
 
         $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'];
-        $userResponse = $this->resourceOwner->getUserInformation($accessToken);
+        $userResponse = $resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('1', $userResponse->getNickname());

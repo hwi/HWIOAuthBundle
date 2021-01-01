@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\XingResourceOwner;
 
 class XingResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
-    protected $resourceOwnerClass = XingResourceOwner::class;
+    protected string $resourceOwnerClass = XingResourceOwner::class;
     protected $userResponse = <<<json
 {
     "users":[
@@ -44,10 +44,16 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+            ]
+        );
 
         $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'];
-        $userResponse = $this->resourceOwner->getUserInformation($accessToken);
+        $userResponse = $resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('42', $userResponse->getUsername());
         $this->assertEquals('foo bar', $userResponse->getNickname());

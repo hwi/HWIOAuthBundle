@@ -12,10 +12,12 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BufferAppResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class BufferAppResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = BufferAppResourceOwner::class;
+    protected string $resourceOwnerClass = BufferAppResourceOwner::class;
 
     protected $userResponse = <<<json
 {
@@ -31,12 +33,18 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+            ]
+        );
 
         /**
-         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         * @var AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('4f0c0a06512f7ef214000000', $userResponse->getUsername());
         $this->assertEquals('4f0c0a06512f7ef214000000', $userResponse->getNickname());
@@ -46,5 +54,20 @@ json;
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
+    }
+
+    public function testGetUserInformationFailure()
+    {
+        $this->expectException(AuthenticationException::class);
+
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('invalid', 'application/json; charset=utf-8', 401),
+            ]
+        );
+
+        $resourceOwner->getUserInformation($this->tokenData);
     }
 }

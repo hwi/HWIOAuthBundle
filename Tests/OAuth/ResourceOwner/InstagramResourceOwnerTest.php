@@ -16,7 +16,7 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
 class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = InstagramResourceOwner::class;
+    protected string $resourceOwnerClass = InstagramResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -31,7 +31,13 @@ json;
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
+        $resourceOwner = $this->createResourceOwner(
+            ['user_response_class' => $class],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
 
         /* @var $userResponse CustomUserResponse */
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);

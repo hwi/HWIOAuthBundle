@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\MailRuResourceOwner;
 
 class MailRuResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = MailRuResourceOwner::class;
+    protected string $resourceOwnerClass = MailRuResourceOwner::class;
     protected $userResponse = <<<json
 [
     {

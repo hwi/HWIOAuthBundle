@@ -16,7 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
 class FoursquareResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = FoursquareResourceOwner::class;
+    protected string $resourceOwnerClass = FoursquareResourceOwner::class;
     protected $userResponse = <<<json
 {
     "response": {
@@ -39,12 +39,18 @@ json;
 
     public function testGetUserInformationFirstAndLastName()
     {
-        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+            ]
+        );
 
         /**
          * @var AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('bar', $userResponse->getFirstName());
         $this->assertEquals('foo', $userResponse->getLastName());

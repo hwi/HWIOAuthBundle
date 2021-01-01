@@ -16,6 +16,9 @@ Changelog
 * BC Break: `ResourceOwnerMap` uses service locator instead of DI container,
 * BC Break: Removed abstract services: `hwi_oauth.abstract_resource_owner.generic`, `hwi_oauth.abstract_resource_owner.oauth1` & `hwi_oauth.abstract_resource_owner.oauth2`,
 * BC Break: Removed `setName()` method from `OAuth/ResourceOwnerInterface`,
+* BC Break: changed `__construct()` argument for `OAuth/ResourceOwner/AbstractResourceOwner`, from `HttpMethodsClient $httpClient` to `HttpClientInterface $httpClient`,
+* BC Break: replaced `php-http/httplug-bundle` with `symfony/http-client`
+* BC Break: removed `hwi_oauth.http` configuration
 
 ## 1.4.2 (2021-08-09)
 * Bugfix: remove `@final` declaration from `OAuthFactory` & `FOSUBUserProvider`,

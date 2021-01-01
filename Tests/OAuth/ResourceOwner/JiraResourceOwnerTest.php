@@ -11,15 +11,14 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Http\Discovery\MessageFactoryDiscovery;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\JiraResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
-use Psr\Http\Message\RequestInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
-    protected $resourceOwnerClass = JiraResourceOwner::class;
+    protected string $resourceOwnerClass = JiraResourceOwner::class;
     protected $userResponse = '{"name": "asm89", "displayName": "Alexander"}';
     protected $paths = [
         'identifier' => 'name',
@@ -29,23 +28,17 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 
     public function testGetUserInformation()
     {
-        $this
-            ->httpClient->expects($this->exactly(2))
-            ->method('sendRequest')
-            ->willReturnCallback(function (RequestInterface $request) {
-                $request = $request->withAddedHeader('Content-Type', 'application/json; charset=utf-8');
-
-                return MessageFactoryDiscovery::find()
-                    ->createResponse(
-                        $this->httpResponseHttpCode,
-                        null,
-                        $request->getHeaders(),
-                        $this->userResponse
-                    );
-            });
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
 
         $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'];
-        $userResponse = $this->resourceOwner->getUserInformation($accessToken);
+        $userResponse = $resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('asm89', $userResponse->getUsername());
         $this->assertEquals('asm89', $userResponse->getNickname());
@@ -57,37 +50,14 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
-
-        $this
-            ->httpClient->expects($this->atLeastOnce())
-            ->method('sendRequest')
-            ->willReturnCallback(function (RequestInterface $request) {
-                $request = $request->withAddedHeader('Content-Type', 'application/json; charset=utf-8');
-
-                return MessageFactoryDiscovery::find()
-                    ->createResponse(
-                        $this->httpResponseHttpCode,
-                        null,
-                        $request->getHeaders(),
-                        $this->userResponse
-                    );
-            });
-
-        $this
-            ->httpClient->expects($this->atLeastOnce())
-            ->method('sendRequest')
-            ->willReturnCallback(function (RequestInterface $request) {
-                $request = $request->withAddedHeader('Content-Type', 'text/plain');
-
-                return MessageFactoryDiscovery::find()
-                    ->createResponse(
-                        $this->httpResponseHttpCode,
-                        null,
-                        $request->getHeaders(),
-                        ''
-                    );
-            });
+        $resourceOwner = $this->createResourceOwner(
+            ['user_response_class' => $class],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+                $this->createMockResponse('', 'text/plain'),
+            ]
+        );
 
         /** @var CustomUserResponse $userResponse */
         $userResponse = $resourceOwner->getUserInformation(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']);
@@ -97,7 +67,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         $this->assertEquals('foo', $userResponse->getNickname());
     }
 
-    protected function setUpResourceOwner($name, HttpUtils $httpUtils, array $options)
+    protected function setUpResourceOwner(string $name, HttpUtils $httpUtils, array $options, array $responses): ResourceOwnerInterface
     {
         return parent::setUpResourceOwner(
             $name,
@@ -111,7 +81,8 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
                     'signature_method' => 'PLAINTEXT',
                 ],
                 $options
-            )
+            ),
+            $responses
         );
     }
 }

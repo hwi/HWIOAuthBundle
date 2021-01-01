@@ -11,11 +11,10 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use Http\Discovery\MessageFactoryDiscovery;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * @final since 1.4
@@ -35,18 +34,11 @@ class QQResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getResponseContent(ResponseInterface $rawResponse)
+    public function getResponseContent(ResponseInterface $rawResponse): array
     {
-        $content = (string) $rawResponse->getBody();
+        $content = $rawResponse->getContent(false);
         if (preg_match('/^callback\((.+)\);$/', $content, $matches)) {
-            $rawResponse = MessageFactoryDiscovery::find()
-                ->createResponse(
-                    $rawResponse->getStatusCode(),
-                    null,
-                    $rawResponse->getHeaders(),
-                    trim($matches[1])
-                )
-            ;
+            return json_decode(trim($matches[1]), true) ?: [];
         }
 
         return parent::getResponseContent($rawResponse);

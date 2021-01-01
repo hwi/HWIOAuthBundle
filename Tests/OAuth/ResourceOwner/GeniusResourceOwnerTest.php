@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GeniusResourceOwner;
 
 class GeniusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = GeniusResourceOwner::class;
+    protected string $resourceOwnerClass = GeniusResourceOwner::class;
 
     protected $userResponse = <<<json
 {

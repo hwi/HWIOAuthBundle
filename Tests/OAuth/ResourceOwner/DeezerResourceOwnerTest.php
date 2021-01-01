@@ -18,7 +18,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DeezerResourceOwner;
  */
 class DeezerResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = DeezerResourceOwner::class;
+    protected string $resourceOwnerClass = DeezerResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": 3038840,
@@ -53,9 +53,15 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockHttpClient($this->userResponse);
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
 
-        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('passkey', $userResponse->getNickname());
         $this->assertEquals('Kieu', $userResponse->getRealName());

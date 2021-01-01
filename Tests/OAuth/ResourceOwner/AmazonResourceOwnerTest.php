@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AmazonResourceOwner;
 
 class AmazonResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = AmazonResourceOwner::class;
+    protected string $resourceOwnerClass = AmazonResourceOwner::class;
     protected $userResponse = <<<json
 {
     "user_id": "1",

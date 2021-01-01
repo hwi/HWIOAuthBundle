@@ -11,9 +11,12 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
  * OdnoklassnikiResourceOwner.
@@ -61,16 +64,21 @@ class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
                 md5($accessToken['access_token'].$this->options['client_secret'])
             ));
         }
+
         $url = $this->normalizeUrl($this->options['infos_url'], $parameters);
 
-        $content = $this->doGetUserInformationRequest($url)->getBody();
+        try {
+            $content = $this->doGetUserInformationRequest($url)->toArray(false);
 
-        $response = $this->getUserResponse();
-        $response->setData((string) $content);
-        $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
+            $response = $this->getUserResponse();
+            $response->setData($content);
+            $response->setResourceOwner($this);
+            $response->setOAuthToken(new OAuthToken($accessToken));
 
-        return $response;
+            return $response;
+        } catch (TransportExceptionInterface | JsonException $e) {
+            throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
+        }
     }
 
     /**

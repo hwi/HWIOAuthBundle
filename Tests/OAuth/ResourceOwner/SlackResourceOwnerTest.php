@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SlackResourceOwner;
 
 class SlackResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = SlackResourceOwner::class;
+    protected string $resourceOwnerClass = SlackResourceOwner::class;
     protected $userResponse = <<<json
 {
     "ok": true,

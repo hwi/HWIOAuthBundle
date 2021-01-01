@@ -14,7 +14,6 @@ Getting Started With HWIOAuthBundle
 ## Internals
 
 - [Response object & "paths" explanation](internals/response_object_and_paths.md)
-- [Configuring the HTTP Client](internals/configuring_the_http_client.md)
 - [Reference configuration](internals/reference_configuration.md)
 - [Configuring an external Resource Owner](internals/external_resource_owner.md)
 

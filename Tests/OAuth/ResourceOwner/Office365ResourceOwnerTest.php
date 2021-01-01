@@ -15,5 +15,5 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\Office365ResourceOwner;
 
 class Office365ResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = Office365ResourceOwner::class;
+    protected string $resourceOwnerClass = Office365ResourceOwner::class;
 }

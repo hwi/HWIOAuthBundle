@@ -11,8 +11,12 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
  * SensioConnectResourceOwner.
@@ -23,6 +27,30 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function getUserInformation(array $accessToken, array $extraParameters = [])
+    {
+        $content = $this->doGetUserInformationRequest(
+            $this->normalizeUrl(
+                $this->options['infos_url'],
+                array_merge([$this->options['attr_name'] => $accessToken['access_token']], $extraParameters)
+            )
+        );
+
+        try {
+            $response = $this->getUserResponse();
+            $response->setData($content->getContent(false));
+            $response->setResourceOwner($this);
+            $response->setOAuthToken(new OAuthToken($accessToken));
+
+            return $response;
+        } catch (TransportExceptionInterface | JsonException $e) {
+            throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
+        }
+    }
+
     /**
      * {@inheritdoc}
      */

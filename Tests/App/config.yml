@@ -59,11 +59,10 @@ services:
     HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType: ~
     HWI\Bundle\OAuthBundle\Tests\App\UserProvider: ~
 
-    Psr\Http\Client\ClientInterface:
+    # Must be "public" to allow replacing it with mock client
+    hwi_oauth.http_client:
+        class: Symfony\Contracts\HttpClient\HttpClientInterface
         public: true
-        synthetic: true
-
-    Http\Message\MessageFactory\GuzzleMessageFactory:
 
 doctrine:
     dbal:
@@ -79,9 +78,6 @@ hwi_oauth:
         account_connector: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
         registration_form_handler: HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormHandler
         registration_form: HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType
-    http:
-        client: Psr\Http\Client\ClientInterface
-        message_factory: Http\Message\MessageFactory\GuzzleMessageFactory
     firewall_names: [main]
     resource_owners:
         google:

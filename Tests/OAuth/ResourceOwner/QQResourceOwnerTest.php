@@ -12,13 +12,16 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\QQResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
 
 class QQResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = QQResourceOwner::class;
+    protected string $resourceOwnerClass = QQResourceOwner::class;
     protected $userResponse = <<<json
 {
     "ret": 0,
@@ -39,12 +42,18 @@ json;
      */
     public function testGetUserInformation()
     {
-        $this->mockHttpClient($this->userResponse);
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
 
         /**
-         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         * @var AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token'], ['openid' => '1']);
+        $userResponse = $resourceOwner->getUserInformation($this->tokenData, ['openid' => '1']);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
@@ -59,12 +68,17 @@ json;
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner('oauth2', ['user_response_class' => $class]);
 
-        $this->mockHttpClient('{"ret": 0}');
+        $resourceOwner = $this->createResourceOwner(
+            ['user_response_class' => $class],
+            [],
+            [
+                $this->createMockResponse('{"ret": 0}'),
+            ]
+        );
 
         /** @var CustomUserResponse $userResponse */
-        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token'], ['openid' => '1']);
+        $userResponse = $resourceOwner->getUserInformation($this->tokenData, ['openid' => '1']);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
@@ -74,18 +88,39 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
+    public function testGetUserInformationFailure()
+    {
+        $this->expectException(AuthenticationException::class);
+
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('invalid', null, 401),
+            ]
+        );
+
+        $resourceOwner->getUserInformation($this->tokenData, ['openid' => '1']);
+    }
+
     /**
      * QQ returns access token in jsonp format.
      */
     public function testGetAccessTokenJsonpResponse()
     {
-        $this->mockHttpClient('callback({"access_token": "code"});');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('callback({"access_token": "code"});'),
+            ]
+        );
 
         $request = new Request(['code' => 'somecode']);
 
         $this->assertEquals(
             ['access_token' => 'code'],
-            $this->resourceOwner->getAccessToken($request, 'http://redirect.to/')
+            $resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
 
@@ -94,16 +129,22 @@ json;
      */
     public function testGetAccessTokenErrorResponse()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+        $this->expectException(AuthenticationException::class);
 
-        $this->mockHttpClient('callback({"error": 1, "msg": "error"})');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('callback({"error": 1, "msg": "error"})'),
+            ]
+        );
 
         $request = new Request(['code' => 'code']);
 
-        $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+        $resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    protected function setUpResourceOwner($name, HttpUtils $httpUtils, array $options)
+    protected function setUpResourceOwner(string $name, HttpUtils $httpUtils, array $options, array $responses): ResourceOwnerInterface
     {
         return parent::setUpResourceOwner(
             $name,
@@ -116,7 +157,8 @@ json;
                     'me_url' => 'https://graph.qq.com/oauth2.0/me',
                 ],
                 $options
-            )
+            ),
+            $responses
         );
     }
 }

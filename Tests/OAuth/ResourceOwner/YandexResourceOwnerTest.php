@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YandexResourceOwner;
 
 class YandexResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = YandexResourceOwner::class;
+    protected string $resourceOwnerClass = YandexResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",

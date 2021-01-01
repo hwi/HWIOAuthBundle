@@ -11,13 +11,13 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Http\Client\Exception\TransferException;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SalesforceResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
 class SalesforceResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = SalesforceResourceOwner::class;
+    protected string $resourceOwnerClass = SalesforceResourceOwner::class;
     protected $userResponse = <<<json
 {
     "user_id": "1",
@@ -38,12 +38,20 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+            ]
+        );
 
         /**
-         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         * @var AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token', 'id' => 'someuser']);
+        $userResponse = $resourceOwner->getUserInformation(
+            ['access_token' => 'token', 'id' => 'https://login.salesforce.com/services/oauth2/someuser']
+        );
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
@@ -55,18 +63,18 @@ json;
 
     public function testGetUserInformationFailure()
     {
-        $exception = new TransferException();
+        $this->expectException(HttpTransportException::class);
 
-        $this->httpClient->expects($this->once())
-            ->method('sendRequest')
-            ->will($this->throwException($exception));
-
-        try {
-            $this->resourceOwner->getUserInformation(['access_token' => 'token', 'id' => 'someuser']);
-            $this->fail('An exception should have been raised');
-        } catch (HttpTransportException $e) {
-            $this->assertSame($exception, $e->getPrevious());
-        }
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('invalid', 'application/json; charset=utf-8', 401),
+            ]
+        );
+        $resourceOwner->getUserInformation(
+            ['access_token' => 'token', 'id' => 'https://login.salesforce.com/services/oauth2/someuser']
+        );
     }
 
     public function testCustomResponseClass()

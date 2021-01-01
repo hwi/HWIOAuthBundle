@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AsanaResourceOwner;
 
 class AsanaResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = AsanaResourceOwner::class;
+    protected string $resourceOwnerClass = AsanaResourceOwner::class;
     protected $userResponse = <<<json
 {
     "data": {

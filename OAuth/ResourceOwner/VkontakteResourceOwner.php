@@ -11,9 +11,12 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
  * VkontakteResourceOwner.
@@ -51,25 +54,24 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'v' => $this->options['api_version'],
         ]);
 
-        $content = $this->doGetUserInformationRequest($url);
+        try {
+            $response = $this->getUserResponse();
+            $response->setResourceOwner($this);
+            $response->setOAuthToken(new OAuthToken($accessToken));
 
-        $response = $this->getUserResponse();
-        // This will translate string response into array
-        $response->setData((string) $content->getBody());
-        $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
+            $content = $this->doGetUserInformationRequest($url)->toArray(false);
+            $content['email'] = $accessToken['email'] ?? null;
 
-        $content = $response->getData();
-        $content['email'] = $accessToken['email'] ?? null;
+            if (isset($content['response'][0]['screen_name'])) {
+                $content['response'][0]['nickname'] = $content['response'][0]['screen_name'];
+            }
 
-        $response->setData($content);
-
-        if (!$response->getNickname() && isset($content['response'][0]['screen_name'])) {
-            $content['response'][0]['nickname'] = $content['response'][0]['screen_name'];
             $response->setData($content);
-        }
 
-        return $response;
+            return $response;
+        } catch (TransportExceptionInterface | JsonException $e) {
+            throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
+        }
     }
 
     /**

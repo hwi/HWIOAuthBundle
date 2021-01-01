@@ -12,11 +12,13 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GoogleResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 class GoogleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = GoogleResourceOwner::class;
+    protected string $resourceOwnerClass = GoogleResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -39,29 +41,32 @@ json;
 
     public function testInvalidAccessTypeOptionValueThrowsException()
     {
-        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+        $this->expectException(ExceptionInterface::class);
 
-        $this->createResourceOwner($this->resourceOwnerName, ['access_type' => 'invalid']);
+        $this->createResourceOwner(['access_type' => 'invalid']);
     }
 
     public function testInvalidApprovalPromptOptionValueThrowsException()
     {
-        $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
+        $this->expectException(ExceptionInterface::class);
 
-        $this->createResourceOwner($this->resourceOwnerName, ['approval_prompt' => 'invalid']);
+        $this->createResourceOwner(['approval_prompt' => 'invalid']);
     }
 
     public function testGetAuthorizationUrl()
     {
+        $resourceOwner = $this->createResourceOwner();
+
         $this->assertEquals(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline',
-            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 
     public function testRequestVisibleActions()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['request_visible_actions' => 'http://schemas.google.com/AddActivity']
+        $resourceOwner = $this->createResourceOwner(
+            ['request_visible_actions' => 'http://schemas.google.com/AddActivity']
         );
 
         $this->assertEquals(
@@ -72,7 +77,7 @@ json;
 
     public function testApprovalPromptForce()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['approval_prompt' => 'force']);
+        $resourceOwner = $this->createResourceOwner(['approval_prompt' => 'force']);
 
         $this->assertEquals(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&approval_prompt=force',
@@ -82,13 +87,13 @@ json;
 
     public function testHdParameter()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['hd' => 'mycollege.edu']);
+        $resourceOwner = $this->createResourceOwner(['hd' => 'mycollege.edu']);
         $this->assertEquals(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&hd=mycollege.edu',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
 
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['hd' => 'mycollege.edu, mycollege.org']);
+        $resourceOwner = $this->createResourceOwner(['hd' => 'mycollege.edu, mycollege.org']);
         $this->assertEquals(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline&hd=mycollege.edu&mycollege.org',
             $resourceOwner->getAuthorizationUrl('http://redirect.to/')
@@ -97,21 +102,31 @@ json;
 
     public function testRevokeToken()
     {
-        $this->httpResponseHttpCode = 200;
-        $this->mockHttpClient('{"access_token": "bar"}', 'application/json');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('{"access_token": "bar"}', 'application/json'),
+            ]
+        );
 
-        $this->assertTrue($this->resourceOwner->revokeToken('token'));
+        $this->assertTrue($resourceOwner->revokeToken('token'));
     }
 
     public function testRevokeTokenFails()
     {
-        $this->httpResponseHttpCode = 401;
-        $this->mockHttpClient('{"access_token": "bar"}', 'application/json');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('{"access_token": "bar"}', 'application/json', 401),
+            ]
+        );
 
-        $this->assertFalse($this->resourceOwner->revokeToken('token'));
+        $this->assertFalse($resourceOwner->revokeToken('token'));
     }
 
-    protected function setUpResourceOwner($name, HttpUtils $httpUtils, array $options)
+    protected function setUpResourceOwner(string $name, HttpUtils $httpUtils, array $options, array $responses): ResourceOwnerInterface
     {
         return parent::setUpResourceOwner(
             $name,
@@ -121,7 +136,8 @@ json;
                     'access_type' => 'offline',
                 ],
                 $options
-            )
+            ),
+            $responses
         );
     }
 }

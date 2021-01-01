@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TrelloResourceOwner;
 
 class TrelloResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
-    protected $resourceOwnerClass = TrelloResourceOwner::class;
+    protected string $resourceOwnerClass = TrelloResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -33,15 +33,21 @@ json;
 
     public function testGetAuthorizationUrlContainOAuthTokenAndSecret()
     {
-        $this->mockHttpClient('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json; charset=utf-8');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json; charset=utf-8'),
+            ]
+        );
 
         $this->storage->expects($this->once())
             ->method('save')
-            ->with($this->resourceOwner, ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'timestamp' => time()]);
+            ->with($resourceOwner, ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'timestamp' => time()]);
 
         $this->assertEquals(
             'http://user.auth/?test=3&scope=read&oauth_token=token',
-            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 }

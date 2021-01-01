@@ -12,10 +12,12 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
 class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = GitHubResourceOwner::class;
+    protected string $resourceOwnerClass = GitHubResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -35,35 +37,72 @@ json;
 
     public function testRevokeToken()
     {
-        $this->httpResponseHttpCode = 204;
-        $this->mockHttpClient(null, 'application/json');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json', 204),
+            ]
+        );
 
-        $this->assertTrue($this->resourceOwner->revokeToken('token'));
+        $this->assertTrue($resourceOwner->revokeToken('token'));
     }
 
     public function testRevokeTokenFails()
     {
-        $this->httpResponseHttpCode = 404;
-        $this->mockHttpClient('{"id": "666"}', 'application/json');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('{"id": "666"}', 'application/json', 404),
+            ]
+        );
 
-        $this->assertFalse($this->resourceOwner->revokeToken('token'));
+        $this->assertFalse($resourceOwner->revokeToken('token'));
     }
 
     public function testCustomResponseClass()
     {
-        $this->httpClientCalls = 2;
+        $class = CustomUserResponse::class;
 
-        parent::testCustomResponseClass();
+        $resourceOwner = $this->createResourceOwner(
+            ['user_response_class' => $class],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
 
-        $this->httpClientCalls = 1;
+        /** @var CustomUserResponse */
+        $userResponse = $resourceOwner->getUserInformation($this->tokenData);
+
+        $this->assertInstanceOf($class, $userResponse);
+        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo', $userResponse->getNickname());
+        $this->assertEquals('token', $userResponse->getAccessToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
     }
 
     public function testGetUserInformation()
     {
-        $this->httpClientCalls = 2;
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
 
-        parent::testGetUserInformation();
+        /** @var AbstractUserResponse */
+        $userResponse = $resourceOwner->getUserInformation($this->tokenData);
 
-        $this->httpClientCalls = 1;
+        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('bar', $userResponse->getNickname());
+        $this->assertEquals('token', $userResponse->getAccessToken());
+        $this->assertNull($userResponse->getRefreshToken());
+        $this->assertNull($userResponse->getExpiresIn());
     }
 }

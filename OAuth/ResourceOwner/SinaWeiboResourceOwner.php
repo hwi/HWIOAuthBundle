@@ -11,8 +11,11 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
  * @final since 1.4
@@ -39,14 +42,18 @@ class SinaWeiboResourceOwner extends GenericOAuth2ResourceOwner
             'uid' => $accessToken['uid'],
         ]);
 
-        $content = $this->doGetUserInformationRequest($url)->getBody();
+        try {
+            $content = $this->doGetUserInformationRequest($url);
 
-        $response = $this->getUserResponse();
-        $response->setData((string) $content);
-        $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
+            $response = $this->getUserResponse();
+            $response->setData($content->toArray(false));
+            $response->setResourceOwner($this);
+            $response->setOAuthToken(new OAuthToken($accessToken));
 
-        return $response;
+            return $response;
+        } catch (TransportExceptionInterface | JsonException $e) {
+            throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
+        }
     }
 
     /**

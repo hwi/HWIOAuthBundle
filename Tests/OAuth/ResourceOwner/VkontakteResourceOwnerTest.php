@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner;
 
 class VkontakteResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = VkontakteResourceOwner::class;
+    protected string $resourceOwnerClass = VkontakteResourceOwner::class;
     protected $userResponse = <<<json
 {
     "response": {

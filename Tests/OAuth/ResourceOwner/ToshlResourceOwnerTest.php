@@ -12,10 +12,11 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ToshlResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
 class ToshlResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = ToshlResourceOwner::class;
+    protected string $resourceOwnerClass = ToshlResourceOwner::class;
     protected $csrf = true;
     protected $userResponse = <<<json
 {
@@ -37,28 +38,44 @@ json;
 
     public function testRevokeToken()
     {
-        $this->httpResponseHttpCode = 204;
-        $this->mockHttpClient(null, 'application/json');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse(null, 'application/json', 204),
+            ]
+        );
 
-        $this->assertTrue($this->resourceOwner->revokeToken('token'));
+        $this->assertTrue($resourceOwner->revokeToken('token'));
     }
 
     public function testRevokeTokenFails()
     {
-        $this->httpResponseHttpCode = 404;
-        $this->mockHttpClient('{"id": "666"}', 'application/json');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('{"id": "666"}', 'application/json', 404),
+            ]
+        );
 
-        $this->assertFalse($this->resourceOwner->revokeToken('token'));
+        $this->assertFalse($resourceOwner->revokeToken('token'));
     }
 
     public function testGetUserInformation()
     {
-        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+            ]
+        );
 
         /**
-         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         * @var AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('example@website.com', $userResponse->getNickname());

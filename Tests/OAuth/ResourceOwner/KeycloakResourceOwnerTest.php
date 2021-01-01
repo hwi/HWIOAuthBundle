@@ -32,5 +32,5 @@ class KeycloakResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&approval_prompt=auto';
     protected $authorizationUrlParams = ['approval_prompt' => 'auto'];
 
-    protected $resourceOwnerClass = KeycloakResourceOwner::class;
+    protected string $resourceOwnerClass = KeycloakResourceOwner::class;
 }

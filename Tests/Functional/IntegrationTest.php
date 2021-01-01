@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace HWI\Bundle\OAuthBundle\Tests\Functional;
 
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 class IntegrationTest extends WebTestCase
@@ -38,8 +38,7 @@ class IntegrationTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode(), 'No landing, got redirect to '.$response->headers->get('Location'));
 
         $client->disableReboot();
-
-        self::$container->set(ClientInterface::class, $this->createMock(ClientInterface::class));
+        $client->getContainer()->set('hwi_oauth.http_client', new MockHttpClient());
 
         $client->click($crawler->selectLink('Login')->link());
 
@@ -68,19 +67,20 @@ class IntegrationTest extends WebTestCase
                 'prompt' => 'none',
             ]);
 
-        $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')
-            ->willReturn(json_encode(['access_token' => 'valid-access-token']));
-
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient->method('sendRequest')
-            ->withAnyParameters()
-            ->willReturn($response);
+        $httpClient = new MockHttpClient(
+            function ($method, $url, $options) {
+                return new MockResponse(
+                    '{"access_token":"valid-access-token"}',
+                    [
+                        'response_headers' => ['content-type' => 'application/json'],
+                    ]
+                );
+            }
+        );
 
         $client = static::createClient();
         $client->disableReboot();
-
-        self::$container->set(ClientInterface::class, $httpClient);
+        $client->getContainer()->set('hwi_oauth.http_client', $httpClient);
 
         $client->request('GET', $redirectLoginFromService);
 

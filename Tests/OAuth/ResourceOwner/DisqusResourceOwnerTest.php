@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DisqusResourceOwner;
 
 class DisqusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = DisqusResourceOwner::class;
+    protected string $resourceOwnerClass = DisqusResourceOwner::class;
     protected $userResponse = <<<json
 {
     "response": {
