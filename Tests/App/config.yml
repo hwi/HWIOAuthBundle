@@ -33,7 +33,7 @@ security:
             pattern: ^/(login$|connect|login_hwi)
             anonymous: true
             context: hwi_context
-        secured_area:
+        main:
             pattern: ^/
             oauth:
                 resource_owners:
@@ -88,9 +88,7 @@ hwi_oauth:
     http:
         client: Psr\Http\Client\ClientInterface
         message_factory: Http\Message\MessageFactory\GuzzleMessageFactory
-    firewall_names:
-        - secured_area
-
+    firewall_names: [main]
     resource_owners:
         google:
             type:                google
@@ -101,7 +99,7 @@ hwi_oauth:
 fos_user:
     db_driver: orm
     user_class: HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser
-    firewall_name: secured_area
+    firewall_name: main
     from_email:
         address: "test@example.com"
         sender_name: "test@example.com"
