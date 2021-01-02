@@ -20,9 +20,11 @@ use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,67 +43,67 @@ abstract class AbstractConnectControllerTest extends TestCase
     protected $controller;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AuthorizationCheckerInterface
+     * @var MockObject|AuthorizationCheckerInterface
      */
     protected $authorizationChecker;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|TokenStorageInterface
+     * @var MockObject|TokenStorageInterface
      */
     protected $tokenStorage;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EngineInterface
+     * @var MockObject|EngineInterface
      */
     protected $twig;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RouterInterface
+     * @var MockObject|RouterInterface
      */
     protected $router;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ResourceOwnerMap
+     * @var MockObject|ResourceOwnerMap
      */
     protected $resourceOwnerMap;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ResourceOwnerInterface
+     * @var MockObject|ResourceOwnerInterface
      */
     protected $resourceOwner;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|AccountConnectorInterface
+     * @var MockObject|AccountConnectorInterface
      */
     protected $accountConnector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OAuthUtils
+     * @var MockObject|OAuthUtils
      */
     protected $oAuthUtils;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ResourceOwnerMapLocator
+     * @var MockObject|ResourceOwnerMapLocator
      */
     protected $resourceOwnerMapLocator;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|UserCheckerInterface
+     * @var MockObject|UserCheckerInterface
      */
     protected $userChecker;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|EventDispatcherInterface
+     * @var MockObject|EventDispatcherInterface
      */
     protected $eventDispatcher;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|FormFactoryInterface
+     * @var MockObject|FormFactoryInterface
      */
     protected $formFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|SessionInterface
+     * @var MockObject|SessionInterface
      */
     protected $session;
 
@@ -119,11 +121,17 @@ abstract class AbstractConnectControllerTest extends TestCase
     {
         parent::setUp();
 
-        $this->container = new Container();
-        $this->container->setParameter('hwi_oauth.connect', true);
-        $this->container->setParameter('hwi_oauth.firewall_names', ['default']);
-        $this->container->setParameter('hwi_oauth.connect.confirmation', true);
-        $this->container->setParameter('hwi_oauth.grant_rule', 'IS_AUTHENTICATED_REMEMBERED');
+        $bag = new EnvPlaceholderParameterBag(
+            [
+                'hwi_oauth.connect' => true,
+                'hwi_oauth.firewall_names' => ['default'],
+                'hwi_oauth.connect.confirmation' => true,
+                'hwi_oauth.grant_rule' => 'IS_AUTHENTICATED_REMEMBERED',
+            ]
+        );
+
+        $this->container = new Container($bag);
+        $this->container->set('parameter_bag', $bag);
 
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->container->set('security.authorization_checker', $this->authorizationChecker);

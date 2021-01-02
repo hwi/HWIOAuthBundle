@@ -29,10 +29,6 @@ class UserEvent extends AbstractEvent
      */
     private $request;
 
-    /**
-     * @param UserInterface $user
-     * @param Request       $request
-     */
     public function __construct(UserInterface $user, Request $request)
     {
         $this->user = $user;
