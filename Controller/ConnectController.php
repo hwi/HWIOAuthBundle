@@ -22,7 +22,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\LegacyEventDispatcherProxy;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -351,13 +350,6 @@ final class ConnectController extends AbstractController
 
     private function dispatch($event, string $eventName = null): void
     {
-        // LegacyEventDispatcherProxy exists in Symfony >= 4.3
-        if (class_exists(LegacyEventDispatcherProxy::class)) {
-            // New Symfony 4.3 EventDispatcher signature
-            $this->get('event_dispatcher')->dispatch($event, $eventName);
-        } else {
-            // Old EventDispatcher signature
-            $this->get('event_dispatcher')->dispatch($eventName, $event);
-        }
+        $this->get('event_dispatcher')->dispatch($event, $eventName);
     }
 }

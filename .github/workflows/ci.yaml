@@ -42,8 +42,6 @@ jobs:
       fail-fast: false
     env:
       SYMFONY_PHPUNIT_VERSION: '8.5'
-      # Symfony Event Dispatcher proxy deprecation
-      SYMFONY_DEPRECATIONS_HELPER: max[total]=1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -135,8 +133,6 @@ jobs:
       fail-fast: false
     env:
       SYMFONY_PHPUNIT_VERSION: '8.5'
-      # Symfony Event Dispatcher proxy deprecation
-      SYMFONY_DEPRECATIONS_HELPER: max[total]=1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
