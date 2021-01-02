@@ -372,7 +372,7 @@ class HWIOAuthExtensionTest extends TestCase
     {
         $this->createEmptyConfiguration();
 
-        $this->assertParameter(['secured_area'], 'hwi_oauth.firewall_names');
+        $this->assertParameter(['main'], 'hwi_oauth.firewall_names');
         $this->assertParameter(null, 'hwi_oauth.target_path_parameter');
         $this->assertParameter(false, 'hwi_oauth.use_referer');
         $this->assertParameter(false, 'hwi_oauth.failed_use_referer');
@@ -564,7 +564,7 @@ class HWIOAuthExtensionTest extends TestCase
     protected function getEmptyConfig()
     {
         $yaml = <<<EOF
-firewall_names: [secured_area]
+firewall_names: [main]
 resource_owners:
     any_name:
         type:                github
@@ -581,7 +581,7 @@ EOF;
     protected function getFullConfig()
     {
         $yaml = <<<EOF
-firewall_names: [secured_area]
+firewall_names: [main]
 
 resource_owners:
     github:

@@ -65,7 +65,7 @@ hwi_oauth:
                 nickname:   username
 
     # list of firewall names the oauth bundle is active in
-    firewall_names: [secured_area]
+    firewall_names: [main]
 
     # optional target_path_parameter to provide an explicit return URL
     #target_path_parameter: _destination
@@ -108,7 +108,7 @@ security:
             id: fos_user.user_manager
 
     firewalls:
-        secured_area:
+        main:
             pattern:    ^/
             form_login:
                 provider: fos_userbundle

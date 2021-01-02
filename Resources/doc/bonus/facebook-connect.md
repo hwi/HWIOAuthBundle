@@ -10,7 +10,7 @@ This guide bases on Symfony 2.1+ and the [AcmeDemoBundle](https://github.com/sym
 # app/config/config.yml
 
 hwi_oauth:
-    firewall_names:        [secured_area]
+    firewall_names: [main]
     resource_owners:
         facebook:
             type:          facebook
@@ -45,8 +45,8 @@ facebook_login:
 
 firewalls:
     # ...
-    secured_area:
-        pattern:    ^/demo/secured/
+    main:
+        pattern: ^/demo/secured/
         oauth:
             resource_owners:
                 facebook:      /demo/secured/login_facebook

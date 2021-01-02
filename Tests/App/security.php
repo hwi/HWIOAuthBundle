@@ -18,7 +18,7 @@ if (method_exists(Security::class, 'getUser') && !class_exists(UserValueResolver
             'login_area' => [
                 'logout_on_user_change' => true,
             ],
-            'secured_area' => [
+            'main' => [
                 'logout_on_user_change' => true,
             ],
         ],

@@ -24,7 +24,7 @@ Additionally you will need to point the oauth firewall to the appropriate servic
 # app/config/security.yml
 security:
     firewalls:
-        secured_area:
+        main:
             anonymous: ~
             oauth:
                 resource_owners:
