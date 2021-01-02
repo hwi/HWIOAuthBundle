@@ -39,9 +39,11 @@ jobs:
           - '7.3'
           - '7.4'
           - '8.0'
-        include:
-          - php: '7.4'
       fail-fast: false
+    env:
+      SYMFONY_PHPUNIT_VERSION: '8.5'
+      # Symfony Event Dispatcher proxy deprecation
+      SYMFONY_DEPRECATIONS_HELPER: max[total]=1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -69,10 +71,12 @@ jobs:
         run: composer remove friendsofsymfony/user-bundle --no-update --no-interaction --dev
       - name: Update project dependencies
         run: composer update --no-interaction --no-progress --ansi
+      - name: Install PHPUnit
+        run: vendor/bin/simple-phpunit --version
       - name: Run PHPUnit tests
         run: |
           mkdir -p build/logs/phpunit
-          vendor/bin/phpunit --log-junit build/logs/phpunit/junit.xml
+          vendor/bin/simple-phpunit --log-junit build/logs/phpunit/junit.xml
       - name: Upload test artifacts
         if: always()
         uses: actions/upload-artifact@v1
@@ -90,6 +94,8 @@ jobs:
         php:
           - '7.4'
       fail-fast: false
+    env:
+      SYMFONY_DEPRECATIONS_HELPER: 'weak'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -113,8 +119,10 @@ jobs:
         run: composer remove friendsofsymfony/user-bundle --no-update --no-interaction --dev
       - name: Update project dependencies
         run: composer update --no-interaction --no-progress --ansi --prefer-lowest
+      - name: Install PHPUnit
+        run: vendor/bin/simple-phpunit --version
       - name: Run PHPUnit tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/simple-phpunit
 
   phpunit-no-deprecations:
     name: PHPUnit (PHP ${{ matrix.php }}) (no deprecations)
@@ -126,7 +134,9 @@ jobs:
           - '7.4'
       fail-fast: false
     env:
-      SYMFONY_DEPRECATIONS_HELPER: max[total]=8
+      SYMFONY_PHPUNIT_VERSION: '8.5'
+      # Symfony Event Dispatcher proxy deprecation
+      SYMFONY_DEPRECATIONS_HELPER: max[total]=1
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -150,5 +160,7 @@ jobs:
         run: composer remove friendsofsymfony/user-bundle --no-update --no-interaction --dev
       - name: Update project dependencies
         run: composer update --no-interaction --no-progress --ansi
+      - name: Install PHPUnit
+        run: vendor/bin/simple-phpunit --version
       - name: Run PHPUnit tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/simple-phpunit
