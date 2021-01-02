@@ -16,7 +16,6 @@ use HWI\Bundle\OAuthBundle\Event\FormEvent;
 use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
@@ -67,12 +66,12 @@ final class ConnectController extends AbstractController
      */
     public function registrationAction(Request $request, string $key): Response
     {
-        $connect = $this->container->getParameter('hwi_oauth.connect');
+        $connect = $this->getParameter('hwi_oauth.connect');
         if (!$connect) {
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->isGranted($this->container->getParameter('hwi_oauth.grant_rule'));
+        $hasUser = $this->isGranted($this->getParameter('hwi_oauth.grant_rule'));
         if ($hasUser) {
             throw new AccessDeniedException('Cannot connect already registered account.');
         }
@@ -155,12 +154,12 @@ final class ConnectController extends AbstractController
      */
     public function connectServiceAction(Request $request, string $service): Response
     {
-        $connect = $this->container->getParameter('hwi_oauth.connect');
+        $connect = $this->getParameter('hwi_oauth.connect');
         if (!$connect) {
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->isGranted($this->container->getParameter('hwi_oauth.grant_rule'));
+        $hasUser = $this->isGranted($this->getParameter('hwi_oauth.grant_rule'));
         if (!$hasUser) {
             throw new AccessDeniedException('Cannot connect an account.');
         }
@@ -192,15 +191,15 @@ final class ConnectController extends AbstractController
 
         // Redirect to the login path if the token is empty (Eg. User cancelled auth)
         if (null === $accessToken) {
-            if ($this->container->getParameter('hwi_oauth.failed_use_referer') && $targetPath = $this->getTargetPath($session)) {
+            if ($this->getParameter('hwi_oauth.failed_use_referer') && $targetPath = $this->getTargetPath($session)) {
                 return $this->redirect($targetPath);
             }
 
-            return $this->redirectToRoute($this->container->getParameter('hwi_oauth.failed_auth_path'));
+            return $this->redirectToRoute($this->getParameter('hwi_oauth.failed_auth_path'));
         }
 
         // Show confirmation page?
-        if (!$this->container->getParameter('hwi_oauth.connect.confirmation')) {
+        if (!$this->getParameter('hwi_oauth.connect.confirmation')) {
             return $this->getConfirmationResponse($request, $accessToken, $service);
         }
 
@@ -237,7 +236,7 @@ final class ConnectController extends AbstractController
      */
     private function getResourceOwnerByName(string $name): ResourceOwnerInterface
     {
-        foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $firewall) {
+        foreach ($this->getParameter('hwi_oauth.firewall_names') as $firewall) {
             if (!$this->resourceOwnerMapLocator->has($firewall)) {
                 continue;
             }
@@ -289,7 +288,7 @@ final class ConnectController extends AbstractController
             return null;
         }
 
-        foreach ($this->container->getParameter('hwi_oauth.firewall_names') as $providerKey) {
+        foreach ($this->getParameter('hwi_oauth.firewall_names') as $providerKey) {
             $sessionKey = '_security.'.$providerKey.'.target_path';
             if ($session->has($sessionKey)) {
                 return $session->get($sessionKey);
@@ -311,9 +310,7 @@ final class ConnectController extends AbstractController
         /** @var $currentUser UserInterface */
         $currentUser = $currentToken->getUser();
 
-        /** @var $resourceOwner ResourceOwnerInterface */
         $resourceOwner = $this->getResourceOwnerByName($service);
-        /** @var $userInformation UserResponseInterface */
         $userInformation = $resourceOwner->getUserInformation($accessToken);
 
         $event = new GetResponseUserEvent($currentUser, $request);

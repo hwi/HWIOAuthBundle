@@ -35,10 +35,6 @@ class FormEvent extends AbstractEvent
      */
     private $response;
 
-    /**
-     * @param FormInterface $form
-     * @param Request       $request
-     */
     public function __construct(FormInterface $form, Request $request)
     {
         $this->form = $form;
@@ -61,9 +57,6 @@ class FormEvent extends AbstractEvent
         return $this->request;
     }
 
-    /**
-     * @param Response $response
-     */
     public function setResponse(Response $response)
     {
         $this->response = $response;

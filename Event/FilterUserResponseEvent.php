@@ -25,11 +25,6 @@ class FilterUserResponseEvent extends UserEvent
      */
     private $response;
 
-    /**
-     * @param UserInterface $user
-     * @param Request       $request
-     * @param Response      $response
-     */
     public function __construct(UserInterface $user, Request $request, Response $response)
     {
         parent::__construct($user, $request);
@@ -44,9 +39,6 @@ class FilterUserResponseEvent extends UserEvent
         return $this->response;
     }
 
-    /**
-     * @param Response $response
-     */
     public function setResponse(Response $response)
     {
         $this->response = $response;

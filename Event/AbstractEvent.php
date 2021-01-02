@@ -11,17 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\Event;
 
-use Symfony\Component\EventDispatcher\Event;
-use Symfony\Contracts\EventDispatcher\Event as ContractsEvent;
+use Symfony\Contracts\EventDispatcher\Event;
 
-if (class_exists(Event::class)) {
-    // Symfony < 5
-    abstract class AbstractEvent extends Event
-    {
-    }
-} else {
-    // Symfony 5
-    abstract class AbstractEvent extends ContractsEvent
-    {
-    }
+abstract class AbstractEvent extends Event
+{
 }
