@@ -28,6 +28,9 @@ class EntityUserProviderTest extends TestCase
         if (!class_exists('Doctrine\ORM\EntityManager')) {
             $this->markTestSkipped('The Doctrine ORM is not available');
         }
+        if (!class_exists('Doctrine\Persistence\ManagerRegistry')) {
+            $this->markTestSkipped('The Doctrine ORM is too old');
+        }
     }
 
     public function testLoadUserByUsernameThrowsExceptionWhenUserIsNull()

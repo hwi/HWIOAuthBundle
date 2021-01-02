@@ -154,7 +154,7 @@ class OAuthUtils
         $url = $this->httpUtils->generateUri($request, 'hwi_oauth_service_redirect');
 
         if ($request->query->has('state')) {
-            $data = ['state' => $request->query->get('state')];
+            $data = ['state' => $request->query->all()['state']];
             $url .= '?'.http_build_query($data);
         }
 
