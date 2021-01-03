@@ -1,20 +1,23 @@
 Changelog
 =========
-## 1.3.0 (2020-xx-xx)
+## 1.3.0 (2021-01-03)
+* BC Break: dropped support for Symfony `<4.4`,
+* BC Break: dropped support for Doctrine Bundle `<2.0`,
 * Added PHP 8 support,
-* Method `ConnectController::getParameter()` has been removed,
 * Upgraded Facebook API to v8.0,
 * Upgraded Twitch resource owner to incorporate latest Twitch API,
 * Fixed: undefined `id_token` exception in Azure resource owner,
+* Docs: changed firewall name to match flex receipt,
+* Maintain: moved from Travis CI to Github Actions
 
 ## 1.2.0 (2020-10-19)
+* BC Break: dropped Symfony 4.3 support,
 * Added `first_name` & `last_name` in AzureResourceOwner,
 * Added: support for multiple OAuth2 state parameters,
 * Added: Apple resource owner,
 * Fixed: updated Azure `authorization` & `access_token` urls,
 * Fixed: Doctrine persistence deprecation errors,
 * Allow modification of the response in `FilterUserResponseEvent`,
-* Dropped Symfony 4.3 support,
 
 ## 1.1.0 (2020-04-06)
 * Added Symfony 5 support,
