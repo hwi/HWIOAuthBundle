@@ -10,10 +10,7 @@
             <argument type="service" id="hwi_oauth.resource_ownermap_locator" />
             <argument type="service" id="request_stack" />
 
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
-
+            <tag name="container.service_subscriber" />
             <tag name="controller.service_arguments" />
         </service>
 
@@ -22,13 +19,9 @@
             <argument type="service" id="router" />
             <argument type="service" id="security.authorization_checker" />
             <argument type="service" id="request_stack" />
+            <argument type="service" id="twig" />
             <argument>%hwi_oauth.connect%</argument>
             <argument>%hwi_oauth.grant_rule%</argument>
-
-            <call method="setContainer" />
-
-            <tag name="container.service_subscriber" />
-            <tag name="controller.service_arguments" />
         </service>
 
         <service id="HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController" public="true">
@@ -38,8 +31,6 @@
             <argument>%hwi_oauth.target_path_parameter%</argument>
             <argument>%hwi_oauth.failed_use_referer%</argument>
             <argument>%hwi_oauth.use_referer%</argument>
-
-            <tag name="controller.service_arguments" />
         </service>
     </services>
 </container>

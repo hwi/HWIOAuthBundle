@@ -12,7 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\Controller;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -23,11 +22,12 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Twig\Environment;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
  */
-final class LoginController extends AbstractController
+final class LoginController
 {
     /**
      * @var bool
@@ -59,11 +59,17 @@ final class LoginController extends AbstractController
      */
     private $requestStack;
 
+    /**
+     * @var Environment
+     */
+    private $twig;
+
     public function __construct(
         AuthenticationUtils $authenticationUtils,
         RouterInterface $router,
         AuthorizationCheckerInterface $authorizationChecker,
         RequestStack $requestStack,
+        Environment $twig,
         bool $connect,
         string $grantRule
     ) {
@@ -71,6 +77,7 @@ final class LoginController extends AbstractController
         $this->router = $router;
         $this->authorizationChecker = $authorizationChecker;
         $this->requestStack = $requestStack;
+        $this->twig = $twig;
         $this->connect = $connect;
         $this->grantRule = $grantRule;
     }
@@ -110,9 +117,9 @@ final class LoginController extends AbstractController
             $error = $error->getMessageKey();
         }
 
-        return $this->render('@HWIOAuth/Connect/login.html.twig', [
-            'error' => $error,
-        ]);
+        return new Response(
+            $this->twig->render('@HWIOAuth/Connect/login.html.twig', ['error' => $error])
+        );
     }
 
     private function getSession(): ?SessionInterface
