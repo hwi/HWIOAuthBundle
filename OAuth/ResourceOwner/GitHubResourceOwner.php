@@ -66,9 +66,12 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
     public function revokeToken($token)
     {
         $response = $this->httpRequest(
-            sprintf($this->options['revoke_token_url'], $this->options['client_id'], $token),
-            null,
-            ['Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret'])],
+            sprintf($this->options['revoke_token_url'], $this->options['client_id']),
+            json_encode(['access_token' => $token]),
+            [
+                'Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret']),
+                'Content-Type' => 'application/json',
+            ],
             'DELETE'
         );
 
@@ -85,7 +88,7 @@ class GitHubResourceOwner extends GenericOAuth2ResourceOwner
         $resolver->setDefaults([
             'authorization_url' => 'https://github.com/login/oauth/authorize',
             'access_token_url' => 'https://github.com/login/oauth/access_token',
-            'revoke_token_url' => 'https://api.github.com/applications/%s/tokens/%s',
+            'revoke_token_url' => 'https://api.github.com/applications/%s/token',
             'infos_url' => 'https://api.github.com/user',
             'emails_url' => 'https://api.github.com/user/emails',
 
