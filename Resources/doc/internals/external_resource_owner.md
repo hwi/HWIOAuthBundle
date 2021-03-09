@@ -19,7 +19,7 @@ standards and for such providers you cannot use our generic Resource Owner witho
 to needs of those specific providers.
 
 I.e. you should check
-[`WunderlistResourceOwner`](https://github.com/hwi/HWIOAuthBundle/blob/master/OAuth/ResourceOwner/WunderlistResourceOwner.php),
+[`FoursquareResourceOwner`](https://github.com/hwi/HWIOAuthBundle/blob/master/OAuth/ResourceOwner/FoursquareResourceOwner.php),
 where the method doGetUserInformationRequest was overwritten to be replace header names.
 
 Good news, you could do so in your project, without having to endure all the submission and pull
