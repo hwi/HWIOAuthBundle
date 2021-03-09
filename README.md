@@ -81,7 +81,6 @@ This bundle contains support for 58 different providers:
 * VKontakte,
 * Windows Live,
 * Wordpress,
-* Wunderlist,
 * XING,
 * Yahoo,
 * Yandex,
