@@ -81,7 +81,6 @@ hwi_oauth:
 - [Trello](resource_owners/trello.md)
 - [Twitch](resource_owners/twitch.md)
 - [Twitter](resource_owners/twitter.md)
-- [Wunderlist](resource_owners/wunderlist.md)
 - [Vkontakte](resource_owners/vkontakte.md)
 - [Windows Live](resource_owners/windows_live.md)
 - [XING](resource_owners/xing.md)

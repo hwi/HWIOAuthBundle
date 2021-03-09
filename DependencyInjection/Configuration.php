@@ -80,7 +80,6 @@ final class Configuration implements ConfigurationInterface
             'vkontakte',
             'windows_live',
             'wordpress',
-            'wunderlist',
             'yandex',
             '37signals',
             'itembase',
