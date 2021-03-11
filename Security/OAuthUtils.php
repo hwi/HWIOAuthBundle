@@ -134,6 +134,9 @@ class OAuthUtils
         }
 
         $request->attributes->set('service', $resourceOwner->getName());
+        if ($request->query->has('state')) {
+            $this->addQueryParameterToState($request->query->get('state'), $resourceOwner);
+        }
 
         return $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service');
     }
