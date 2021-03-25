@@ -214,7 +214,7 @@ class OAuthProviderTest extends TestCase
         $oauthTokenMock->expects($this->exactly(2))
             ->method('getResourceOwnerName')
             ->willReturn('github');
-        $oauthTokenMock->expects($this->exactly(3))
+        $oauthTokenMock->expects($this->exactly(2))
             ->method('getRefreshToken')
             ->willReturn($expiredToken['refresh_token']);
 
