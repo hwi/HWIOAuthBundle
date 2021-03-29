@@ -3,14 +3,19 @@ Step 1: Setting up the bundle
 ### A) Add HWIOAuthBundle to your project
 
 ```bash
-composer require hwi/oauth-bundle php-http/guzzle6-adapter php-http/httplug-bundle
+composer require hwi/oauth-bundle symfony/http-client nyholm/psr7 guzzlehttp/promises php-http/httplug-bundle
 ```
 
-Why `php-http/guzzle6-adapter`? We are decoupled from any HTTP messaging client thanks to [HTTPlug](http://httplug.io/).
+Why `symfony/http-client` and its dependencies? We are decoupled from any HTTP messaging client thanks to [HTTPlug](http://httplug.io/).
 
 Why `php-http/httplug-bundle`? This is the official [Symfony integration](https://packagist.org/packages/php-http/httplug-bundle) of HTTPlug.
 This makes it possible to provide the required HTTP client and message factory with ease.
 The dependency is optional but you will have to [provide your own services](internals/configuring_the_http_client.md) if you don't set it up.
+
+If you use a recent version of Symfony supporting [Symfony Flex](https://symfony.com/doc/current/quick_tour/flex_recipes.html), when prompted, accept to execute the recipes coming from the contrib repository.
+You'll see an error at the end of the process, it's intended. Continue straight to the second step: [configuring resource owners (Facebook, GitHub, Google, Windows Live and others](2-configuring_resource_owners.md) to fix it.
+
+If you use an old version of Symfony, follow the intructions provided in the next sections.
 
 ### B) Enable the bundle
 
