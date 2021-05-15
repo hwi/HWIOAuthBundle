@@ -19,38 +19,19 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @author Tom <tomilett@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
  */
-class YahooResourceOwner extends GenericOAuth1ResourceOwner
+class YahooResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
     protected $paths = [
-        'identifier' => 'profile.guid',
-        'nickname' => 'profile.nickname',
-        'realname' => 'profile.givenName',
+        'identifier' => 'sub',
+        'nickname' => 'given_name',
+        'realname' => 'name',
+        'email' => 'email',
+        'firstname' => 'given_name',
+        'lastname' => 'family_name'
     ];
-
-    /**
-     * Override to replace {guid} in the infos_url with the authenticating user's yahoo id.
-     *
-     * {@inheritdoc}
-     */
-    public function getUserInformation(array $accessToken, array $extraParameters = [])
-    {
-        $this->options['infos_url'] = str_replace('{guid}', $accessToken['xoauth_yahoo_guid'], $this->options['infos_url']);
-
-        return parent::getUserInformation($accessToken, $extraParameters);
-    }
-
-    /**
-     * Override to set the Accept header as otherwise Yahoo defaults to XML.
-     *
-     * {@inheritdoc}
-     */
-    protected function doGetUserInformationRequest($url, array $parameters = [])
-    {
-        return $this->httpRequest($url, null, ['Accept: application/json'], null, $parameters);
-    }
 
     /**
      * {@inheritdoc}
@@ -60,10 +41,10 @@ class YahooResourceOwner extends GenericOAuth1ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'authorization_url' => 'https://api.login.yahoo.com/oauth/v2/request_auth',
-            'request_token_url' => 'https://api.login.yahoo.com/oauth/v2/get_request_token',
-            'access_token_url' => 'https://api.login.yahoo.com/oauth/v2/get_token',
-            'infos_url' => 'https://social.yahooapis.com/v1/user/{guid}/profile',
+            'authorization_url' => 'https://api.login.yahoo.com/oauth2/request_auth',
+            'request_token_url' => 'https://api.login.yahoo.com/oauth2/get_token',
+            'access_token_url' => 'https://api.login.yahoo.com/oauth2/get_token',
+            'infos_url' => 'https://api.login.yahoo.com/openid/v1/userinfo',
 
             'realm' => 'yahooapis.com',
         ]);
