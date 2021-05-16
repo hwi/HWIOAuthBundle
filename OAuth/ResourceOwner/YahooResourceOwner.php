@@ -30,7 +30,7 @@ class YahooResourceOwner extends GenericOAuth2ResourceOwner
         'realname' => 'name',
         'email' => 'email',
         'firstname' => 'given_name',
-        'lastname' => 'family_name'
+        'lastname' => 'family_name',
     ];
 
     /**
