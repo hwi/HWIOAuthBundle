@@ -13,8 +13,6 @@ jobs:
         php:
           - '7.4'
       fail-fast: false
-    env:
-      PHP_CS_FIXER_FUTURE_MODE: '1'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
