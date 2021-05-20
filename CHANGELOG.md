@@ -1,5 +1,8 @@
 Changelog
 =========
+## 1.4.0 (2021-xx-xx)
+* Dropped Symfony 5.0 support as it is EOL,
+
 ## 1.3.0 (2021-01-03)
 * BC Break: dropped support for Symfony `<4.4`,
 * BC Break: dropped support for Doctrine Bundle `<2.0`,
