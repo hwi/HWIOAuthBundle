@@ -22,9 +22,9 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: curl, openssl, mbstring
           ini-values: memory_limit=-1
-          tools: pecl, composer, php-cs-fixer
+          tools: pecl, composer
       - name: Run PHP-CS-Fixer fix
-        run: php-cs-fixer fix --dry-run --diff --ansi
+      run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --ansi
 
   phpunit:
     name: PHPUnit (PHP ${{ matrix.php }})
