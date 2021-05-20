@@ -24,7 +24,7 @@ jobs:
           ini-values: memory_limit=-1
           tools: pecl, composer
       - name: Run PHP-CS-Fixer fix
-      run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --ansi
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --diff --ansi
 
   phpunit:
     name: PHPUnit (PHP ${{ matrix.php }})
