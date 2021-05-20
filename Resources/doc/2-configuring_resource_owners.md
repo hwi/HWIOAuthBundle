@@ -5,7 +5,10 @@ use in your application. These resource owners will be used in the oauth
 firewall. The bundle ships several pre-configured resource owners that need
 only a little configuration.
 
-To make this bundle work you need to add the following to your app/config/config.yml:
+If you use a recent version of Symfony, the configuration has automatically been generated
+in `config/packages/hwi_oauth.yaml`.
+
+Otherwise, to make this bundle work you need to add the following to your `app/config/config.yml`:
 
 ```yaml
 # app/config/config.yml
