@@ -44,7 +44,7 @@ class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
             'version' => 'unknown',
             'environment' => [
                 'name' => 'PHP',
-                'version' => PHP_VERSION,
+                'version' => \PHP_VERSION,
             ],
         ]));
 

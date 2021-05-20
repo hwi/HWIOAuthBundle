@@ -89,14 +89,14 @@ abstract class AbstractOAuthToken extends AbstractToken
         // older data which does not include all properties.
         $data = array_merge($data, array_fill(0, 4, null));
 
-        list(
+        [
             $this->accessToken,
             $this->rawToken,
             $this->refreshToken,
             $this->expiresIn,
             $this->createdAt,
             $this->resourceOwnerName,
-            $parent) = $data;
+            $parent] = $data;
 
         if (!$this->tokenSecret && isset($this->rawToken['oauth_token_secret'])) {
             $this->tokenSecret = $this->rawToken['oauth_token_secret'];

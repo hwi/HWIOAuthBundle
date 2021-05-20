@@ -75,7 +75,7 @@ class OAuthListener extends AbstractAuthenticationListener
     protected function attemptAuthentication(Request $request)
     {
         /* @var ResourceOwnerInterface $resourceOwner */
-        list($resourceOwner, $checkPath) = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
+        [$resourceOwner, $checkPath] = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
 
         if (!$resourceOwner) {
             throw new AuthenticationException('No resource owner match the request.');
