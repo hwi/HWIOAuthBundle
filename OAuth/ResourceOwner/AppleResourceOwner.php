@@ -90,7 +90,7 @@ class AppleResourceOwner extends GenericOAuth2ResourceOwner
         $user_info = $request->request->get('user');
         $user_info = json_decode($user_info, true);
 
-        if (null !== $user_info) {
+        if (null !== $user_info && isset($user_info['name'])) {
             $response['firstName'] = $user_info['name']['firstName'];
             $response['lastName'] = $user_info['name']['lastName'];
         }
