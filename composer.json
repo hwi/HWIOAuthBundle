@@ -123,7 +123,7 @@
         "php-http/httplug-bundle":      "^1.7",
         "php-http/guzzle6-adapter":     "^2.0",
         "phpunit/phpunit":              "^8.5",
-        "friendsofphp/php-cs-fixer":    "^2.0",
+        "friendsofphp/php-cs-fixer":    "^3.0",
         "symfony/monolog-bundle":       "^3.4",
         "doctrine/doctrine-bundle":     "^2.0"
     },
