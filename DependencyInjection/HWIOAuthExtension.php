@@ -47,11 +47,11 @@ final class HWIOAuthExtension extends Extension
         $loader->load('http_client.xml');
         $loader->load('oauth.xml');
         $loader->load('templating.xml');
-        $loader->load('twig.xml');
         $loader->load('util.xml');
 
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);
+        $this->loadTwigConfig($container, $config, $loader);
 
         $this->createHttplugClient($container, $config);
 
@@ -216,5 +216,17 @@ final class HWIOAuthExtension extends Extension
             $container->setParameter('hwi_oauth.fosub_enabled', false);
             $container->setParameter('hwi_oauth.connect', false);
         }
+    }
+
+    private function loadTwigConfig(ContainerBuilder $builder, array $config, XmlFileLoader $loader): void
+    {
+        if ($config['use_twig_runtime_extension'] === true) {
+            $loader->load('twig.xml');
+
+            return;
+        }
+
+        trigger_deprecation('hwi/oauth-bundle', '1.4.0', 'Not setting the configuration parameter "use_twig_runtime_extension" to true is deprecated.');
+        $loader->load('twig_deprecated.xml');
     }
 }

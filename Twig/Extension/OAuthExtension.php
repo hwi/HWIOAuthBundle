@@ -19,6 +19,8 @@ use Twig\TwigFunction;
  * OAuthExtension.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
+ *
+ * @deprecated in favor of OAuthRuntimeExtension
  */
 final class OAuthExtension extends AbstractExtension
 {

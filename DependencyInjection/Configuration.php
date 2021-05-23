@@ -165,6 +165,7 @@ final class Configuration implements ConfigurationInterface
                     ->prototype('scalar')->end()
                 ->end()
                 ->scalarNode('target_path_parameter')->defaultNull()->end()
+                ->booleanNode('use_twig_runtime_extension')->defaultFalse()->end()
                 ->arrayNode('target_path_domains_whitelist')
                     ->defaultValue([])
                     ->prototype('scalar')->end()
