@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage;
 
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Request token storage implementation using the Symfony session.
@@ -24,14 +24,11 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  */
 class SessionStorage implements RequestDataStorageInterface
 {
-    /**
-     * @var SessionInterface
-     */
-    private $session;
+    private $requestStack;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->session = $session;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -40,13 +37,13 @@ class SessionStorage implements RequestDataStorageInterface
     public function fetch(ResourceOwnerInterface $resourceOwner, $key, $type = 'token')
     {
         $key = $this->generateKey($resourceOwner, $key, $type);
-        if (null === $data = $this->session->get($key)) {
+        if (null === $data = $this->requestStack->getSession()->get($key)) {
             throw new \InvalidArgumentException('No data available in storage.');
         }
 
         // request tokens are one time use only
         if (\in_array($type, ['token', 'csrf_state'])) {
-            $this->session->remove($key);
+            $this->requestStack->getSession()->remove($key);
         }
 
         return $data;
@@ -67,7 +64,7 @@ class SessionStorage implements RequestDataStorageInterface
             $key = $this->generateKey($resourceOwner, $this->getStorageKey($value), $type);
         }
 
-        $this->session->set($key, $this->getStorageValue($value));
+        $this->requestStack->getSession()->set($key, $this->getStorageValue($value));
     }
 
     /**
