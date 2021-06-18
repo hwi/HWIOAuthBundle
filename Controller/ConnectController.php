@@ -77,7 +77,7 @@ final class ConnectController extends AbstractController
         }
 
         $error = null;
-        $session = $request->hasSession() ? $request->getSession() : $this->get('session');
+        $session = $request->hasSession() ? $request->getSession() : $this->get('request_stack')->getSession();
         if ($session) {
             if (!$session->isStarted()) {
                 $session->start();
@@ -167,7 +167,7 @@ final class ConnectController extends AbstractController
         // Get the data from the resource owner
         $resourceOwner = $this->getResourceOwnerByName($service);
 
-        $session = $request->hasSession() ? $request->getSession() : $this->get('session');
+        $session = $request->hasSession() ? $request->getSession() : $this->get('request_stack')->getSession();
         if ($session && !$session->isStarted()) {
             $session->start();
         }

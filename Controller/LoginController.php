@@ -15,8 +15,8 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -54,22 +54,22 @@ final class LoginController extends AbstractController
     private $authorizationChecker;
 
     /**
-     * @var SessionInterface
+     * @var RequestStack
      */
-    private $session;
+    private $requestStack;
 
     public function __construct(
         AuthenticationUtils $authenticationUtils,
         RouterInterface $router,
         AuthorizationCheckerInterface $authorizationChecker,
-        SessionInterface $session,
+        RequestStack $requestStack,
         bool $connect,
         string $grantRule
     ) {
         $this->authenticationUtils = $authenticationUtils;
         $this->router = $router;
         $this->authorizationChecker = $authorizationChecker;
-        $this->session = $session;
+        $this->requestStack = $requestStack;
         $this->connect = $connect;
         $this->grantRule = $grantRule;
     }
@@ -93,7 +93,7 @@ final class LoginController extends AbstractController
         // if connecting is enabled and there is no user, redirect to the registration form
         if ($this->connect && !$hasUser && $error instanceof AccountNotLinkedException) {
             $key = time();
-            $session = $request->hasSession() ? $request->getSession() : $this->session;
+            $session = $request->hasSession() ? $request->getSession() : $this->requestStack->getSession();
             if ($session) {
                 if (!$session->isStarted()) {
                     $session->start();

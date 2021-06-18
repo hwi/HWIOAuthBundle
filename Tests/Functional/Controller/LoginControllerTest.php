@@ -69,7 +69,7 @@ final class LoginControllerTest extends WebTestCase
         $client = static::createClient();
         $httpClient = $this->prophesize(ClientInterface::class);
         $client->getContainer()->set(ClientInterface::class, $httpClient->reveal());
-        $session = $client->getContainer()->get('session');
+        $session = $client->getContainer()->get('request_stack')->getSession();
 
         $this->logIn($client, $session);
         $exception = new UsernameNotFoundException();

@@ -110,7 +110,7 @@ final class ConnectControllerTest extends WebTestCase
 
         $this->createDatabase($client);
 
-        $session = $client->getContainer()->get('session');
+        $session = $client->getContainer()->get('request_stack')->getSession();
         $key = 1;
         $session->set('_hwi_oauth.connect_confirmation.'.$key, ['access_token' => 'valid-access-token']);
         $this->logIn($client, $session);
