@@ -14,7 +14,9 @@ namespace HWI\Bundle\OAuthBundle;
 use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\ResourceOwnerMapCompilerPass;
 use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\SetResourceOwnerServiceNameCompilerPass;
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
+use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthAuthenticatorFactory;
 use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AuthenticatorFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -34,7 +36,14 @@ class HWIOAuthBundle extends Bundle
 
         /** @var $extension SecurityExtension */
         $extension = $container->getExtension('security');
-        $extension->addSecurityListenerFactory(new OAuthFactory());
+
+        // Symfony < 5.1 BC layer: support new Authenticator-based security system in Symfony 5.1+
+        // and old security system in all Symfony versions.
+        if (interface_exists(AuthenticatorFactoryInterface::class)) {
+            $extension->addSecurityListenerFactory(new OAuthAuthenticatorFactory());
+        } else {
+            $extension->addSecurityListenerFactory(new OAuthFactory());
+        }
 
         $container->addCompilerPass(new SetResourceOwnerServiceNameCompilerPass());
         $container->addCompilerPass(new ResourceOwnerMapCompilerPass());
