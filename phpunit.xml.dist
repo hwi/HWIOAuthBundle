@@ -3,7 +3,8 @@
 <phpunit bootstrap="./Tests/bootstrap.php" colors="true">
 
     <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0" />
+        <!-- Allowing 4 deprecations related to changes in Symfony Security 5.3+ -->
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=4" />
     </php>
 
     <testsuites>
