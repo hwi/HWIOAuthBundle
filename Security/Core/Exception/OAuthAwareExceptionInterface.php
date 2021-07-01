@@ -58,8 +58,6 @@ interface OAuthAwareExceptionInterface
 
     /**
      * Set the token.
-     *
-     * @param TokenInterface $token
      */
     public function setToken(TokenInterface $token);
 

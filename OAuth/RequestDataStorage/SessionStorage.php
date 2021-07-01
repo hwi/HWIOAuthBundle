@@ -29,9 +29,6 @@ class SessionStorage implements RequestDataStorageInterface
      */
     private $session;
 
-    /**
-     * @param SessionInterface $session
-     */
     public function __construct(SessionInterface $session)
     {
         $this->session = $session;
@@ -76,9 +73,8 @@ class SessionStorage implements RequestDataStorageInterface
     /**
      * Key to for fetching or saving a token.
      *
-     * @param ResourceOwnerInterface $resourceOwner
-     * @param string                 $key
-     * @param string                 $type
+     * @param string $key
+     * @param string $type
      *
      * @return string
      */

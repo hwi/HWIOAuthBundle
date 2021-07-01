@@ -15,8 +15,6 @@ final class StateRetrievalException extends \InvalidArgumentException
 {
     /**
      * @param string $key The provided string key
-     *
-     * @return self
      */
     public static function forKey(string $key): self
     {

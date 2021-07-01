@@ -62,8 +62,6 @@ class LinkedinUserResponse extends PathUserResponse
      * https://docs.microsoft.com/en-us/linkedin/shared/references/v2/object-types#multilocalestring.
      *
      * @param $path
-     *
-     * @return mixed
      */
     protected function getPreferredLocaleValue($path)
     {

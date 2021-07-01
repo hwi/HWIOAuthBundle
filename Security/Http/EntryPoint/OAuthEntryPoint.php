@@ -48,10 +48,8 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     protected $useForward;
 
     /**
-     * @param HttpKernelInterface $kernel
-     * @param HttpUtils           $httpUtils
-     * @param string              $loginPath
-     * @param bool                $useForward
+     * @param string $loginPath
+     * @param bool   $useForward
      */
     public function __construct(HttpKernelInterface $kernel, HttpUtils $httpUtils, $loginPath, $useForward = false)
     {

@@ -29,20 +29,16 @@ interface RequestDataStorageInterface
     /**
      * Fetch a request data from the storage.
      *
-     * @param ResourceOwnerInterface $resourceOwner
-     * @param string                 $key
-     * @param string                 $type
-     *
-     * @return mixed
+     * @param string $key
+     * @param string $type
      */
     public function fetch(ResourceOwnerInterface $resourceOwner, $key, $type = 'token');
 
     /**
      * Save a request data to the storage.
      *
-     * @param ResourceOwnerInterface $resourceOwner
-     * @param array|string|object    $value
-     * @param string                 $type
+     * @param array|string|object $value
+     * @param string              $type
      */
     public function save(ResourceOwnerInterface $resourceOwner, $value, $type = 'token');
 }

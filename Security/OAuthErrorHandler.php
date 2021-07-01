@@ -34,8 +34,6 @@ final class OAuthErrorHandler
     ];
 
     /**
-     * @param Request $request
-     *
      * @throws AuthenticationException
      */
     public static function handleOAuthError(Request $request)
