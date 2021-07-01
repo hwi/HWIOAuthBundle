@@ -2,6 +2,7 @@ Changelog
 =========
 ## 1.4.0 (2021-xx-xx)
 * Dropped Symfony 5.0 support as it is EOL,
+* Dropped PHP 7.2 support as it is EOL,
 * Fixed: PHP notice in `AppleResourceOwner`,
 * Fixed: use new GitHub API in `GitHubResourceOwner`,
 * Maintain: removed `Wunderlist` resource owner,
