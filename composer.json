@@ -119,7 +119,6 @@
         "symfony/twig-bundle":          "^4.4|^5.1",
         "symfony/stopwatch":            "^5.1",
         "symfony/translation":          "^4.4|^5.1",
-        "friendsofsymfony/user-bundle": "^2.1",
         "php-http/httplug-bundle":      "^1.7",
         "php-http/guzzle6-adapter":     "^2.0",
         "phpunit/phpunit":              "^9.5",
@@ -143,7 +142,6 @@
 
     "suggest": {
         "doctrine/doctrine-bundle":     "to use Doctrine user provider",
-        "friendsofsymfony/user-bundle": "to connect FOSUB with this bundle",
         "php-http/httplug-bundle":      "to provide required HTTP client with ease.",
         "symfony/property-access":      "to use FOSUB integration with this bundle",
         "symfony/twig-bundle":          "to use the Twig hwi_oauth_* functions"

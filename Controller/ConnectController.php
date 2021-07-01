@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
+use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\Event\FilterUserResponseEvent;
 use HWI\Bundle\OAuthBundle\Event\FormEvent;
 use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
@@ -23,14 +24,15 @@ use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\Event as DeprecatedEvent;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
+use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
@@ -128,15 +130,17 @@ final class ConnectController extends AbstractController
             ->getUserInformation($error->getRawToken())
         ;
 
-        /* @var $form FormInterface */
-        $form = $this->get('hwi_oauth.registration.form.factory')->createForm();
+        /** @var $form FormInterface */
+        $form = $this->get('hwi_oauth.registration.form');
 
         $formHandler = $this->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {
             $event = new FormEvent($form, $request);
             $this->dispatch($event, HWIOAuthEvents::REGISTRATION_SUCCESS);
 
-            $this->get('hwi_oauth.account.connector')->connect($form->getData(), $userInformation);
+            /** @var AccountConnectorInterface $connector */
+            $connector = $this->get('hwi_oauth.account.connector');
+            $connector->connect($form->getData(), $userInformation);
 
             // Authenticate the user
             $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getAccessToken());
@@ -236,8 +240,6 @@ final class ConnectController extends AbstractController
         }
 
         $form = $this->createForm(FormType::class);
-
-        // Handle the form
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -289,6 +291,7 @@ final class ConnectController extends AbstractController
     private function authenticateUser(Request $request, UserInterface $user, string $resourceOwnerName, $accessToken, bool $fakeLogin = true): void
     {
         try {
+            /** @var UserCheckerInterface $userChecker */
             $userChecker = $this->get('hwi_oauth.user_checker');
             $userChecker->checkPreAuth($user);
             $userChecker->checkPostAuth($user);
@@ -302,7 +305,9 @@ final class ConnectController extends AbstractController
         $token->setUser($user);
         $token->setAuthenticated(true);
 
-        $this->get('security.token_storage')->setToken($token);
+        /** @var TokenStorageInterface $tokenStorage */
+        $tokenStorage = $this->get('security.token_storage');
+        $tokenStorage->setToken($token);
 
         if ($fakeLogin) {
             // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
@@ -336,8 +341,11 @@ final class ConnectController extends AbstractController
      */
     private function getConfirmationResponse(Request $request, array $accessToken, string $service): Response
     {
+        /** @var TokenStorageInterface $tokenStorage */
+        $tokenStorage = $this->get('security.token_storage');
+
         /** @var OAuthToken $currentToken */
-        $currentToken = $this->get('security.token_storage')->getToken();
+        $currentToken = $tokenStorage->getToken();
         /** @var UserInterface $currentUser */
         $currentUser = $currentToken->getUser();
 
@@ -347,7 +355,9 @@ final class ConnectController extends AbstractController
         $event = new GetResponseUserEvent($currentUser, $request);
         $this->dispatch($event, HWIOAuthEvents::CONNECT_CONFIRMED);
 
-        $this->get('hwi_oauth.account.connector')->connect($currentUser, $userInformation);
+        /** @var AccountConnectorInterface $connector */
+        $connector = $this->get('hwi_oauth.account.connector');
+        $connector->connect($currentUser, $userInformation);
 
         if ($currentToken instanceof OAuthToken) {
             // Update user token with new details

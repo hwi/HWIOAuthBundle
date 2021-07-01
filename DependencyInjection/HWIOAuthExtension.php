@@ -18,6 +18,8 @@ use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -35,8 +37,8 @@ final class HWIOAuthExtension extends Extension
      * @throws \Exception
      * @throws \RuntimeException
      * @throws InvalidConfigurationException
-     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     * @throws BadMethodCallException
+     * @throws InvalidArgumentException
      * @throws \Symfony\Component\DependencyInjection\Exception\OutOfBoundsException
      * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
      */
@@ -105,8 +107,8 @@ final class HWIOAuthExtension extends Extension
      * @param array            $options   Additional options of the service
      *
      * @throws InvalidConfigurationException
-     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     * @throws BadMethodCallException
+     * @throws InvalidArgumentException
      */
     public function createResourceOwnerService(ContainerBuilder $container, $name, array $options)
     {
@@ -170,46 +172,29 @@ final class HWIOAuthExtension extends Extension
     /**
      * Check of the connect controllers etc should be enabled.
      *
-     * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
-     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     * @throws BadMethodCallException
+     * @throws InvalidArgumentException
      */
-    private function createConnectIntegration(ContainerBuilder $container, array $config)
+    private function createConnectIntegration(ContainerBuilder $container, array $config): void
     {
         $container->setParameter('hwi_oauth.connect.confirmation', false);
 
-        if (isset($config['connect'])) {
-            $container->setParameter('hwi_oauth.connect', true);
-
-            if (isset($config['fosub'])) {
-                $container->setParameter('hwi_oauth.fosub_enabled', true);
-
-                $definition = $container->setDefinition('hwi_oauth.user.provider.fosub_bridge', new ChildDefinition('hwi_oauth.user.provider.fosub_bridge.def'));
-                $definition->addArgument($config['fosub']['properties']);
-
-                // setup fosub bridge services
-                $container->setAlias('hwi_oauth.account.connector', new Alias('hwi_oauth.user.provider.fosub_bridge', true));
-
-                $definition = $container->setDefinition('hwi_oauth.registration.form.handler.fosub_bridge', new ChildDefinition('hwi_oauth.registration.form.handler.fosub_bridge.def'));
-                $definition->addArgument($config['fosub']['username_iterations']);
-
-                $container->setAlias('hwi_oauth.registration.form.handler', new Alias('hwi_oauth.registration.form.handler.fosub_bridge', true));
-                $container->setAlias('hwi_oauth.registration.form.factory', new Alias('fos_user.registration.form.factory', true));
-            } else {
-                $container->setParameter('hwi_oauth.fosub_enabled', false);
-            }
-
-            foreach ($config['connect'] as $key => $serviceId) {
-                if ('confirmation' === $key) {
-                    $container->setParameter('hwi_oauth.connect.confirmation', $config['connect']['confirmation']);
-
-                    continue;
-                }
-
-                $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), new Alias($serviceId, true));
-            }
-        } else {
-            $container->setParameter('hwi_oauth.fosub_enabled', false);
+        if (!isset($config['connect'])) {
             $container->setParameter('hwi_oauth.connect', false);
+
+            return;
+        }
+
+        $container->setParameter('hwi_oauth.connect', true);
+
+        foreach ($config['connect'] as $key => $serviceId) {
+            if ('confirmation' === $key) {
+                $container->setParameter('hwi_oauth.connect.confirmation', $config['connect']['confirmation']);
+
+                continue;
+            }
+
+            $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), new Alias($serviceId, true));
         }
     }
 }

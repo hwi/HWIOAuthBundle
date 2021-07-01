@@ -94,16 +94,6 @@
             <argument type="service" id="doctrine" />
         </service>
 
-        <!-- fosub bridges -->
-        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider" abstract="true">
-            <argument type="service" id="fos_user.user_manager" />
-        </service>
-        <service id="hwi_oauth.registration.form.handler.fosub_bridge.def" class="HWI\Bundle\OAuthBundle\Form\FOSUBRegistrationFormHandler" abstract="true">
-            <argument type="service" id="fos_user.user_manager" />
-            <argument type="service" id="fos_user.mailer" />
-            <argument type="service" id="fos_user.util.token_generator" on-invalid="null" />
-        </service>
-
         <!-- Session storage -->
         <service id="hwi_oauth.storage.session" class="HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage\SessionStorage">
             <argument type="service" id="request_stack" />

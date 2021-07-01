@@ -29,6 +29,11 @@ final class UserProvider implements OAuthAwareUserProviderInterface, UserProvide
         return new User();
     }
 
+    public function loadUserByIdentifier(string $identifier): UserInterface
+    {
+        return $this->loadUserByUsername($identifier);
+    }
+
     public function refreshUser(UserInterface $user)
     {
         return $user;
@@ -36,6 +41,6 @@ final class UserProvider implements OAuthAwareUserProviderInterface, UserProvide
 
     public function supportsClass($class)
     {
-        return $class instanceof User;
+        return true;
     }
 }

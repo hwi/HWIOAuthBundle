@@ -36,9 +36,6 @@ final class ConnectControllerTest extends WebTestCase
     protected function setUp(): void
     {
         static::$class = AppKernel::class;
-        if (!class_exists(\FOS\UserBundle\Model\User::class)) {
-            $this->markTestSkipped('FOSUserBundle not installed.');
-        }
     }
 
     public static function getKernelClass(): string
@@ -81,10 +78,10 @@ final class ConnectControllerTest extends WebTestCase
 
         $form = $crawler->filter('form')->form();
 
-        $form['fos_user_registration_form[email]']->setValue('test@example.com');
-        $form['fos_user_registration_form[username]']->setValue('username');
-        $form['fos_user_registration_form[plainPassword][first]']->setValue('bar');
-        $form['fos_user_registration_form[plainPassword][second]']->setValue('bar');
+        $form['registration_form[email]']->setValue('test@example.com');
+        $form['registration_form[username]']->setValue('username');
+        $form['registration_form[plainPassword][first]']->setValue('bar');
+        $form['registration_form[plainPassword][second]']->setValue('bar');
 
         $crawler = $client->submit($form);
         $response = $client->getResponse();
@@ -123,7 +120,7 @@ final class ConnectControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode(), $response->getContent());
-        $this->assertSame(1, $crawler->filter('.fos_user_registration_register')->count(), $response->getContent());
+        $this->assertSame(1, $crawler->filter('.registration_register')->count(), $response->getContent());
 
         $form = $crawler->filter('form')->form();
 

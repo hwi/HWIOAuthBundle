@@ -15,7 +15,6 @@ namespace HWI\Bundle\OAuthBundle\Tests\Functional\Controller;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
-use HWI\Bundle\OAuthBundle\Tests\Functional\WebTestCase;
 use Psr\Http\Client\ClientInterface;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -30,15 +29,6 @@ use Symfony\Component\Security\Core\Security;
  */
 final class LoginControllerTest extends WebTestCase
 {
-    protected function setUp(): void
-    {
-        if (!class_exists(\FOS\UserBundle\Model\User::class)) {
-            $this->markTestSkipped('FOSUserBundle not installed.');
-        }
-
-        parent::setUp();
-    }
-
     public function testLoginPage(): void
     {
         $client = static::createClient();
