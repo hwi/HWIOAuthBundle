@@ -31,10 +31,6 @@ class OAuthHelper extends Helper
      */
     private $requestStack;
 
-    /**
-     * @param OAuthUtils   $oauthUtils
-     * @param RequestStack $requestStack
-     */
     public function __construct(OAuthUtils $oauthUtils, RequestStack $requestStack)
     {
         $this->oauthUtils = $oauthUtils;
