@@ -18,6 +18,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -153,7 +154,7 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->resourceOwnerMap = $this->createMock(ResourceOwnerMap::class);
         $this->resourceOwnerMap->expects($this->any())
             ->method('getResourceOwnerByName')
-            ->withAnyParameters()
+            ->with('facebook')
             ->willReturn($this->resourceOwner);
         $this->container->set('hwi_oauth.resource_ownermap.default', $this->resourceOwnerMap);
 
@@ -211,7 +212,8 @@ abstract class AbstractConnectControllerTest extends TestCase
             true,
             'fake_route',
             $confirmConnect,
-            $firewallNames
+            $firewallNames,
+            RegistrationFormType::class
         );
         $controller->setContainer($this->container);
 

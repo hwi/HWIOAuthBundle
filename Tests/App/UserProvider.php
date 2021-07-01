@@ -11,13 +11,14 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\App;
 
+use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-final class UserProvider implements OAuthAwareUserProviderInterface, UserProviderInterface
+final class UserProvider implements OAuthAwareUserProviderInterface, UserProviderInterface, AccountConnectorInterface
 {
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
@@ -42,5 +43,10 @@ final class UserProvider implements OAuthAwareUserProviderInterface, UserProvide
     public function supportsClass($class)
     {
         return true;
+    }
+
+    public function connect(UserInterface $user, UserResponseInterface $response)
+    {
+        // noop
     }
 }

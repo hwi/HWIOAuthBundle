@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\Event\FilterUserResponseEvent;
 use HWI\Bundle\OAuthBundle\Event\FormEvent;
 use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
+use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
@@ -64,6 +65,7 @@ final class ConnectController extends AbstractController
     private $failedAuthPath;
     private $enableConnectConfirmation;
     private $firewallNames;
+    private $registrationForm;
 
     /**
      * @param string[] $firewallNames
@@ -77,7 +79,8 @@ final class ConnectController extends AbstractController
         bool $failedUseReferer,
         string $failedAuthPath,
         bool $enableConnectConfirmation,
-        array $firewallNames
+        array $firewallNames,
+        string $registrationForm
     ) {
         $this->oauthUtils = $oauthUtils;
         $this->resourceOwnerMapLocator = $resourceOwnerMapLocator;
@@ -88,6 +91,7 @@ final class ConnectController extends AbstractController
         $this->failedAuthPath = $failedAuthPath;
         $this->enableConnectConfirmation = $enableConnectConfirmation;
         $this->firewallNames = $firewallNames;
+        $this->registrationForm = $registrationForm;
     }
 
     /**
@@ -130,9 +134,9 @@ final class ConnectController extends AbstractController
             ->getUserInformation($error->getRawToken())
         ;
 
-        /** @var $form FormInterface */
-        $form = $this->get('hwi_oauth.registration.form');
+        $form = $this->createForm($this->registrationForm);
 
+        /** @var RegistrationFormHandlerInterface $formHandler */
         $formHandler = $this->get('hwi_oauth.registration.form.handler');
         if ($formHandler->process($request, $form, $userInformation)) {
             $event = new FormEvent($form, $request);

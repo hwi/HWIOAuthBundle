@@ -5,9 +5,7 @@ framework:
         utf8: true
         resource: "%kernel.project_dir%/../App/routing.yml"
     session:
-        handler_id:  ~
         storage_id: session.storage.mock_file
-        name: MOCKSESSID
     translator: ~
     form:
         enabled: true
@@ -57,6 +55,8 @@ services:
         tags:
             - controller.service_arguments
 
+    HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormHandler: ~
+    HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType: ~
     HWI\Bundle\OAuthBundle\Tests\App\UserProvider: ~
 
     Psr\Http\Client\ClientInterface:
@@ -74,7 +74,11 @@ doctrine:
         auto_mapping: true
 
 hwi_oauth:
-    connect: ~
+    connect:
+        confirmation: true
+        account_connector: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+        registration_form_handler: HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormHandler
+        registration_form: HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType
     http:
         client: Psr\Http\Client\ClientInterface
         message_factory: Http\Message\MessageFactory\GuzzleMessageFactory

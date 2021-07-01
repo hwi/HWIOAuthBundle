@@ -133,8 +133,6 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
       - name: Update project dependencies
         run: composer update --no-interaction --no-progress --ansi --prefer-lowest
-      - name: Install PHPUnit
-        run: vendor/bin/phpunit --version
       - name: Run PHPUnit tests
         run: vendor/bin/phpunit
 

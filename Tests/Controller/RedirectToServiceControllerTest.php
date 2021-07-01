@@ -19,6 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RedirectToServiceControllerTest extends TestCase
 {
@@ -128,7 +129,7 @@ class RedirectToServiceControllerTest extends TestCase
 
     public function testUnknownResourceOwner()
     {
-        $this->expectException(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException::class);
+        $this->expectException(NotFoundHttpException::class);
 
         $this->oAuthUtils->expects($this->once())
             ->method('getAuthorizationUrl')

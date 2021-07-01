@@ -16,17 +16,14 @@ namespace HWI\Bundle\OAuthBundle\Tests\Functional\Controller;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use Psr\Http\Client\ClientInterface;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Security;
 
-/**
- * uses FOSUserBundle which itself contains lots of deprecations.
- *
- * @group legacy
- */
 final class LoginControllerTest extends WebTestCase
 {
     public function testLoginPage(): void
@@ -96,7 +93,11 @@ final class LoginControllerTest extends WebTestCase
 
         $session = null;
         if (method_exists($requestStack, 'getSession')) {
-            $session = $requestStack->getSession();
+            try {
+                $session = $requestStack->getSession();
+            } catch (SessionNotFoundException $e) {
+                // Ignore & fallback to service
+            }
         } elseif ((null !== $request = $requestStack->getCurrentRequest()) && $request->hasSession()) {
             $session = $request->getSession();
         }

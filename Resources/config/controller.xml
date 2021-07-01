@@ -15,6 +15,7 @@
             <argument key="$failedAuthPath">%hwi_oauth.failed_auth_path%</argument>
             <argument key="$enableConnectConfirmation">%hwi_oauth.connect.confirmation%</argument>
             <argument key="$firewallNames">%hwi_oauth.firewall_names%</argument>
+            <argument key="$registrationForm">%hwi_oauth.connect.registration_form%</argument>
 
             <call method="setContainer">
                 <argument type="service" id="service_container" />

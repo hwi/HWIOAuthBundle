@@ -23,14 +23,10 @@ use Psr\Http\Message\ResponseInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-/**
- * uses FOSUserBundle which itself contains lots of deprecations.
- *
- * @group legacy
- */
 final class ConnectControllerTest extends WebTestCase
 {
     protected function setUp(): void
@@ -78,10 +74,10 @@ final class ConnectControllerTest extends WebTestCase
 
         $form = $crawler->filter('form')->form();
 
-        $form['registration_form[email]']->setValue('test@example.com');
-        $form['registration_form[username]']->setValue('username');
-        $form['registration_form[plainPassword][first]']->setValue('bar');
-        $form['registration_form[plainPassword][second]']->setValue('bar');
+        $form['registration[email]']->setValue('test@example.com');
+        $form['registration[username]']->setValue('foo');
+        $form['registration[plainPassword][first]']->setValue('bar');
+        $form['registration[plainPassword][second]']->setValue('bar');
 
         $crawler = $client->submit($form);
         $response = $client->getResponse();
@@ -157,7 +153,11 @@ final class ConnectControllerTest extends WebTestCase
 
         $session = null;
         if (method_exists($requestStack, 'getSession')) {
-            $session = $requestStack->getSession();
+            try {
+                $session = $requestStack->getSession();
+            } catch (SessionNotFoundException $e) {
+                // Ignore & fallback to service
+            }
         } elseif ((null !== $request = $requestStack->getCurrentRequest()) && $request->hasSession()) {
             $session = $request->getSession();
         }

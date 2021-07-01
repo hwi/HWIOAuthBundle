@@ -15,6 +15,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Functional;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class IntegrationTest extends WebTestCase

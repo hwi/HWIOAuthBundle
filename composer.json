@@ -94,7 +94,7 @@
 
     "require": {
         "php":                            "^7.3 || ^8.0",
-        "symfony/framework-bundle":       "^4.4|^5.1",
+        "symfony/framework-bundle":       "^4.4.20|^5.1",
         "symfony/security-bundle":        "^4.4|^5.1",
         "symfony/options-resolver":       "^4.4|^5.1",
         "symfony/form":                   "^4.4|^5.1",
@@ -110,9 +110,9 @@
     },
 
     "require-dev": {
-        "doctrine/doctrine-bundle":     "^2.0",
-        "doctrine/orm":                 "^2.6.4",
-        "symfony/browser-kit":          "^4.4|^5.1",
+        "doctrine/doctrine-bundle":     "^2.4",
+        "doctrine/orm":                 "^2.9",
+        "symfony/browser-kit":          "^4.4.20|^5.1",
         "symfony/css-selector":         "^4.4|^5.1",
         "symfony/property-access":      "^4.4|^5.1",
         "symfony/validator":            "^4.4|^5.1",
