@@ -25,7 +25,7 @@ final class OAuthExtension extends AbstractExtension
     /**
      * @var OAuthHelper
      */
-    protected $helper;
+    private $helper;
 
     public function __construct(OAuthHelper $helper)
     {

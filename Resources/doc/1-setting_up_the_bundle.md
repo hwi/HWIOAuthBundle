@@ -15,7 +15,7 @@ The dependency is optional but you will have to [provide your own services](inte
 If you use a recent version of Symfony supporting [Symfony Flex](https://symfony.com/doc/current/quick_tour/flex_recipes.html), when prompted, accept to execute the recipes coming from the contrib repository.
 You'll see an error at the end of the process, it's intended. Continue straight to the second step: [configuring resource owners (Facebook, GitHub, Google, Windows Live and others](2-configuring_resource_owners.md) to fix it.
 
-If you use an old version of Symfony, follow the intructions provided in the next sections.
+If you use an old version of Symfony, follow the instructions provided in the next sections.
 
 ### B) Enable the bundle
 
