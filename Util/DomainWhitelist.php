@@ -37,10 +37,6 @@ class DomainWhitelist
             return false;
         }
 
-        if (!\in_array($urlParts['host'], $this->targetPathDomainsWhiteList, true)) {
-            return false;
-        }
-
-        return true;
+        return \in_array($urlParts['host'], $this->targetPathDomainsWhiteList, true);
     }
 }

@@ -27,7 +27,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
     {
         return [
             $this->resourceOwnerName,
-            $this->serializationFromParent(),
+            parent::__serialize(),
         ];
     }
 
@@ -41,7 +41,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
             $parentData
         ] = $data;
 
-        $this->unserializationFromParent($parentData);
+        parent::__unserialize($parentData);
     }
 
     /**
@@ -122,29 +122,5 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
     public function unserialize($str)
     {
         $this->__unserialize((array) unserialize((string) $str));
-    }
-
-    /**
-     * Symfony < 4.3 BC layer.
-     */
-    private function serializationFromParent(): array
-    {
-        if (method_exists(UsernameNotFoundException::class, '__serialize')) {
-            return parent::__serialize();
-        }
-
-        return unserialize(parent::serialize());
-    }
-
-    /**
-     * Symfony < 4.3 BC layer.
-     */
-    private function unserializationFromParent(array $parentData): void
-    {
-        if (method_exists(UsernameNotFoundException::class, '__unserialize')) {
-            parent::__unserialize($parentData);
-        } else {
-            parent::unserialize(serialize($parentData));
-        }
     }
 }

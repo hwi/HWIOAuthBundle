@@ -114,7 +114,7 @@ class PathUserResponse extends AbstractUserResponse
      */
     public function getPath($name)
     {
-        return \array_key_exists($name, $this->paths) ? $this->paths[$name] : null;
+        return $this->paths[$name] ?? null;
     }
 
     /**
