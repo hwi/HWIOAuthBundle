@@ -155,7 +155,7 @@ class PathUserResponse extends AbstractUserResponse
     /**
      * @return array|string|null
      */
-    private function getValue($steps, array $data)
+    private function getValue(string $steps, array $data)
     {
         $value = $data;
         foreach (explode('.', $steps) as $step) {
