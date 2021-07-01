@@ -153,9 +153,7 @@ class PathUserResponse extends AbstractUserResponse
     }
 
     /**
-     * @param string $steps
-     *
-     * @return string|null
+     * @return array|string|null
      */
     private function getValue($steps, array $data)
     {
