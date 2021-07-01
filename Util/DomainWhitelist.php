@@ -21,6 +21,9 @@ class DomainWhitelist
      */
     private $targetPathDomainsWhiteList;
 
+    /**
+     * @param array<int, string> $targetPathDomainsWhiteList
+     */
     public function __construct(array $targetPathDomainsWhiteList)
     {
         $this->targetPathDomainsWhiteList = $targetPathDomainsWhiteList;

@@ -117,7 +117,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
             $this->data = $data;
         } else {
             try {
-                $this->data = json_decode($data, true, 512,\JSON_THROW_ON_ERROR);
+                $this->data = json_decode($data, true, 512, \JSON_THROW_ON_ERROR);
             } catch (JsonException $exception) {
                 throw new AuthenticationException('Response is not a valid JSON code.');
             }
