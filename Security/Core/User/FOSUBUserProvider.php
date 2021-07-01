@@ -113,9 +113,6 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
 
     /**
      * Disconnects a user.
-     *
-     * @param UserInterface         $user
-     * @param UserResponseInterface $response
      */
     public function disconnect(UserInterface $user, UserResponseInterface $response)
     {
@@ -160,8 +157,6 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
 
     /**
      * Gets the property for the response.
-     *
-     * @param UserResponseInterface $response
      *
      * @return string
      *

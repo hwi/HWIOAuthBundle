@@ -21,19 +21,11 @@ class DomainWhitelist
      */
     private $targetPathDomainsWhiteList;
 
-    /**
-     * @param array $targetPathDomainsWhiteList
-     */
     public function __construct(array $targetPathDomainsWhiteList)
     {
         $this->targetPathDomainsWhiteList = $targetPathDomainsWhiteList;
     }
 
-    /**
-     * @param string $targetUrl
-     *
-     * @return bool
-     */
     public function isValidTargetUrl(string $targetUrl): bool
     {
         if (0 === \count($this->targetPathDomainsWhiteList)) {

@@ -43,8 +43,6 @@ interface ResponseInterface
 
     /**
      * Set the resource owner for the response.
-     *
-     * @param ResourceOwnerInterface $resourceOwner
      */
     public function setResourceOwner(ResourceOwnerInterface $resourceOwner);
 }

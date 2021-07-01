@@ -100,9 +100,6 @@ class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
     /**
      * Set user information from form.
      *
-     * @param UserInterface         $user
-     * @param UserResponseInterface $userInformation
-     *
      * @return UserInterface
      */
     protected function setUserInformation(UserInterface $user, UserResponseInterface $userInformation)

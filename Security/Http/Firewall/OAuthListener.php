@@ -38,17 +38,11 @@ class OAuthListener extends AbstractAuthenticationListener
      */
     private $checkPaths;
 
-    /**
-     * @param ResourceOwnerMapInterface $resourceOwnerMap
-     */
     public function setResourceOwnerMap(ResourceOwnerMapInterface $resourceOwnerMap)
     {
         $this->resourceOwnerMap = $resourceOwnerMap;
     }
 
-    /**
-     * @param array $checkPaths
-     */
     public function setCheckPaths(array $checkPaths)
     {
         $this->checkPaths = $checkPaths;

@@ -40,8 +40,6 @@ interface ResourceOwnerMapInterface
     /**
      * Gets the appropriate resource owner for a request.
      *
-     * @param Request $request
-     *
      * @return array|null
      */
     public function getResourceOwnerByRequest(Request $request);
