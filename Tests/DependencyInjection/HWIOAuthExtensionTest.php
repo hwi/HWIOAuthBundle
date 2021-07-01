@@ -670,9 +670,6 @@ EOF;
         $this->assertEquals($value, (string) $this->containerBuilder->getAlias($key), sprintf('%s alias is correct', $key));
     }
 
-    /**
-     * @param mixed $value
-     */
     private function assertParameter($value, string $key)
     {
         $this->assertEquals($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
