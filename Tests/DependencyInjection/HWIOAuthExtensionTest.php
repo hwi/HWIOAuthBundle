@@ -665,29 +665,20 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    /**
-     * @param string $value
-     * @param string $key
-     */
-    private function assertAlias($value, $key)
+    private function assertAlias(string $value, string $key) : void
     {
         $this->assertEquals($value, (string) $this->containerBuilder->getAlias($key), sprintf('%s alias is correct', $key));
     }
 
     /**
      * @param mixed  $value
-     * @param string $key
      */
-    private function assertParameter($value, $key)
+    private function assertParameter($value, string $key)
     {
         $this->assertEquals($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
     }
 
-    /**
-     * @param string $id
-     * @param string $className
-     */
-    private function assertHasDefinition($id, $className = null)
+    private function assertHasDefinition(string $id, ?string $className = null)
     {
         $this->assertTrue(($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id)));
 
@@ -696,10 +687,7 @@ EOF;
         }
     }
 
-    /**
-     * @param string $id
-     */
-    private function assertNotHasDefinition($id)
+    private function assertNotHasDefinition(string $id)
     {
         $this->assertFalse($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id));
     }

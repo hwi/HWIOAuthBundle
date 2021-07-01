@@ -103,8 +103,6 @@ class SessionStorage implements RequestDataStorageInterface
 
     /**
      * @param array|string|object $value
-     *
-     * @return string
      */
     private function getStorageKey($value): string
     {

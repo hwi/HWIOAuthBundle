@@ -115,15 +115,10 @@ abstract class AbstractUserResponse implements UserResponseInterface
         if (\is_array($data)) {
             $this->data = $data;
         } else {
-            // First check that response exists, due too bug: https://bugs.php.net/bug.php?id=54484
-            if (!$data) {
-                $this->data = [];
-            } else {
-                $this->data = json_decode($data, true);
+            $this->data = json_decode($data, true);
 
-                if (\JSON_ERROR_NONE !== json_last_error()) {
-                    throw new AuthenticationException('Response is not a valid JSON code.');
-                }
+            if (\JSON_ERROR_NONE !== json_last_error()) {
+                throw new AuthenticationException('Response is not a valid JSON code.');
             }
         }
     }
