@@ -155,7 +155,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $this->controller->registrationAction($this->request, $key);
     }
 
-    private function makeRegistrationForm() : void
+    private function makeRegistrationForm(): void
     {
         $registrationForm = $this->createMock(Form::class);
         $registrationForm->expects($this->any())

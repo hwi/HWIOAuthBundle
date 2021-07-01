@@ -665,13 +665,13 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    private function assertAlias(string $value, string $key) : void
+    private function assertAlias(string $value, string $key): void
     {
         $this->assertEquals($value, (string) $this->containerBuilder->getAlias($key), sprintf('%s alias is correct', $key));
     }
 
     /**
-     * @param mixed  $value
+     * @param mixed $value
      */
     private function assertParameter($value, string $key)
     {
