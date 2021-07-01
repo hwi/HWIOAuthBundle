@@ -22,6 +22,11 @@ class User implements UserInterface
         return '1';
     }
 
+    public function getUserIdentifier()
+    {
+        return 'foo';
+    }
+
     public function getUsername()
     {
         return 'foo';
