@@ -675,7 +675,6 @@ EOF;
     }
 
     /**
-     * @param mixed  $value
      * @param string $key
      */
     private function assertParameter($value, $key)

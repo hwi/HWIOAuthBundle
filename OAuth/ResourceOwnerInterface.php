@@ -91,8 +91,6 @@ interface ResourceOwnerInterface
     /**
      * Checks whether the class can handle the request.
      *
-     * @param HttpRequest $request
-     *
      * @return bool
      */
     public function handles(HttpRequest $request);
@@ -106,8 +104,6 @@ interface ResourceOwnerInterface
 
     /**
      * Add extra paths to the configuration.
-     *
-     * @param array $paths
      */
     public function addPaths(array $paths);
 
@@ -117,19 +113,9 @@ interface ResourceOwnerInterface
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = []);
 
-    /**
-     * @return StateInterface
-     */
     public function getState(): StateInterface;
 
-    /**
-     * @param StateInterface|null $state
-     */
     public function storeState(StateInterface $state = null);
 
-    /**
-     * @param string $key
-     * @param string $value
-     */
     public function addStateParameter(string $key, string $value): void;
 }

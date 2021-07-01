@@ -272,7 +272,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
     /**
      * @param string $url
-     * @param array  $parameters
      *
      * @return string
      */
@@ -328,8 +327,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * Get the 'parsed' content based on the response headers.
      *
-     * @param ResponseInterface $rawResponse
-     *
      * @return array
      */
     protected function getResponseContent(ResponseInterface $rawResponse)
@@ -350,7 +347,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
     /**
      * @param string $url
-     * @param array  $parameters
      *
      * @throws HttpTransportException
      *
@@ -360,7 +356,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
     /**
      * @param string $url
-     * @param array  $parameters
      *
      * @throws HttpTransportException
      *
@@ -370,8 +365,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
     /**
      * Configure the option resolver.
-     *
-     * @param OptionsResolver $resolver
      *
      * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
      * @throws \Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException

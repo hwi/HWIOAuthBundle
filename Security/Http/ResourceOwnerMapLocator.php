@@ -21,30 +21,16 @@ final class ResourceOwnerMapLocator
      */
     private $resourceOwnerMaps = [];
 
-    /**
-     * @param string                    $firewallId
-     * @param ResourceOwnerMapInterface $resourceOwnerMap
-     */
     public function add(string $firewallId, ResourceOwnerMapInterface $resourceOwnerMap): void
     {
         $this->resourceOwnerMaps[$firewallId] = $resourceOwnerMap;
     }
 
-    /**
-     * @param string $firewallId
-     *
-     * @return bool
-     */
     public function has(string $firewallId): bool
     {
         return isset($this->resourceOwnerMaps[$firewallId]);
     }
 
-    /**
-     * @param string $firewallId
-     *
-     * @return ResourceOwnerMapInterface
-     */
     public function get(string $firewallId): ResourceOwnerMapInterface
     {
         return $this->resourceOwnerMaps[$firewallId];

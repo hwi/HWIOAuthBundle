@@ -101,8 +101,6 @@ class PathUserResponse extends AbstractUserResponse
 
     /**
      * Configure the paths.
-     *
-     * @param array $paths
      */
     public function setPaths(array $paths)
     {
@@ -156,7 +154,6 @@ class PathUserResponse extends AbstractUserResponse
 
     /**
      * @param string $steps
-     * @param array  $data
      *
      * @return string|null
      */

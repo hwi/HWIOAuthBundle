@@ -25,8 +25,6 @@ interface OAuthAwareUserProviderInterface
     /**
      * Loads the user by a given UserResponseInterface object.
      *
-     * @param UserResponseInterface $response
-     *
      * @return UserInterface
      *
      * @throws UsernameNotFoundException if the user is not found

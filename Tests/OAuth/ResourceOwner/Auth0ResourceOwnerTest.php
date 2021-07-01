@@ -130,12 +130,6 @@ json;
 
     /**
      * Mocks the {@see HttpClient::sendRequest} method with assertions on the request.
-     *
-     * @param string $expectedRequestUri
-     * @param string $expectedRequestMethod
-     * @param array  $expectedAuthorizationHeader
-     * @param array  $expectedAuth0ClientRequestHeader
-     * @param string $expectedRequestBodyContents
      */
     private function mockHttpClientSendRequestWithRequestAssertions(
         string $expectedRequestUri,

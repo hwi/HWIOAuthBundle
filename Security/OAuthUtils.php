@@ -55,10 +55,8 @@ class OAuthUtils
     protected $authorizationChecker;
 
     /**
-     * @param HttpUtils                     $httpUtils
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param bool                          $connect
-     * @param string                        $grantRule
+     * @param bool   $connect
+     * @param string $grantRule
      */
     public function __construct(
         HttpUtils $httpUtils,
@@ -72,9 +70,6 @@ class OAuthUtils
         $this->grantRule = $grantRule;
     }
 
-    /**
-     * @param ResourceOwnerMapInterface $ownerMap
-     */
     public function addResourceOwnerMap(ResourceOwnerMapInterface $ownerMap)
     {
         $this->ownerMaps[] = $ownerMap;
@@ -95,10 +90,9 @@ class OAuthUtils
     }
 
     /**
-     * @param Request $request
-     * @param string  $name
-     * @param string  $redirectUrl     Optional
-     * @param array   $extraParameters Optional
+     * @param string $name
+     * @param string $redirectUrl     Optional
+     * @param array  $extraParameters Optional
      *
      * @return string
      */
@@ -122,9 +116,6 @@ class OAuthUtils
     }
 
     /**
-     * @param Request                $request
-     * @param ResourceOwnerInterface $resourceOwner
-     *
      * @return string
      */
     public function getServiceAuthUrl(Request $request, ResourceOwnerInterface $resourceOwner)
@@ -142,8 +133,7 @@ class OAuthUtils
     }
 
     /**
-     * @param Request $request
-     * @param string  $name
+     * @param string $name
      *
      * @return string
      */
