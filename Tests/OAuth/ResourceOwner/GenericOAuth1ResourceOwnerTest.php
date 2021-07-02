@@ -15,6 +15,7 @@ use Http\Client\Common\HttpMethodsClient;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 
@@ -24,11 +25,11 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
     /** @var GenericOAuth1ResourceOwner */
     protected $resourceOwner;
     protected $resourceOwnerName;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|HttpMethodsClient */
+    /** @var MockObject|HttpMethodsClient */
     protected $httpClient;
     protected $httpResponse;
     protected $httpResponseContentType;
-    /** @var \PHPUnit_Framework_MockObject_MockObject|RequestDataStorageInterface */
+    /** @var MockObject|RequestDataStorageInterface */
     protected $storage;
 
     protected $options = [

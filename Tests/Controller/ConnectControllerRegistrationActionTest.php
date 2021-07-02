@@ -133,19 +133,13 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
             ->method('connect')
         ;
 
-        $this->eventDispatcher->expects($this->exactly(3))->method('dispatch');
-        $this->eventDispatcher->expects($this->at(0))
+        $this->eventDispatcher->expects($this->exactly(3))
             ->method('dispatch')
-            ->with($this->isInstanceOf(FormEvent::class), HWIOAuthEvents::REGISTRATION_SUCCESS)
-        ;
-        $this->eventDispatcher->expects($this->at(1))
-            ->method('dispatch')
-            ->with($this->isInstanceOf(InteractiveLoginEvent::class), SecurityEvents::INTERACTIVE_LOGIN)
-        ;
-        $this->eventDispatcher->expects($this->at(2))
-            ->method('dispatch')
-            ->with($this->isInstanceOf(FilterUserResponseEvent::class), HWIOAuthEvents::REGISTRATION_COMPLETED)
-        ;
+            ->withConsecutive(
+                [$this->isInstanceOf(FormEvent::class), HWIOAuthEvents::REGISTRATION_SUCCESS],
+                [$this->isInstanceOf(InteractiveLoginEvent::class), SecurityEvents::INTERACTIVE_LOGIN],
+                [$this->isInstanceOf(FilterUserResponseEvent::class), HWIOAuthEvents::REGISTRATION_COMPLETED]
+            );
 
         $this->twig->expects($this->once())
             ->method('render')

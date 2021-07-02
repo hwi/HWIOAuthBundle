@@ -117,13 +117,12 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(new CustomOAuthToken())
         ;
 
-        $this->eventDispatcher->expects($this->exactly(2))->method('dispatch');
-        $this->eventDispatcher->expects($this->at(0))
+        $this->eventDispatcher->expects($this->exactly(2))
             ->method('dispatch')
-            ->with($this->isInstanceOf(GetResponseUserEvent::class), HWIOAuthEvents::CONNECT_CONFIRMED);
-        $this->eventDispatcher->expects($this->at(1))
-            ->method('dispatch')
-            ->with($this->isInstanceOf(FilterUserResponseEvent::class), HWIOAuthEvents::CONNECT_COMPLETED);
+            ->withConsecutive(
+                [$this->isInstanceOf(GetResponseUserEvent::class), HWIOAuthEvents::CONNECT_CONFIRMED],
+                [$this->isInstanceOf(FilterUserResponseEvent::class), HWIOAuthEvents::CONNECT_COMPLETED]
+            );
 
         $this->twig->expects($this->once())
             ->method('render')
@@ -153,15 +152,12 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->willReturn(new CustomOAuthToken())
         ;
 
-        $this->eventDispatcher->expects($this->exactly(2))->method('dispatch');
-        $this->eventDispatcher->expects($this->at(0))
+        $this->eventDispatcher->expects($this->exactly(2))
             ->method('dispatch')
-            ->with($this->isInstanceOf(GetResponseUserEvent::class), HWIOAuthEvents::CONNECT_CONFIRMED)
-        ;
-        $this->eventDispatcher->expects($this->at(1))
-            ->method('dispatch')
-            ->with($this->isInstanceOf(FilterUserResponseEvent::class), HWIOAuthEvents::CONNECT_COMPLETED)
-        ;
+            ->withConsecutive(
+                [$this->isInstanceOf(GetResponseUserEvent::class), HWIOAuthEvents::CONNECT_CONFIRMED],
+                [$this->isInstanceOf(FilterUserResponseEvent::class), HWIOAuthEvents::CONNECT_COMPLETED]
+            );
 
         $this->twig->expects($this->once())
             ->method('render')
