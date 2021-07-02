@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="./Tests/bootstrap.php" colors="true">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./Tests/bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+
+    <coverage>
+        <include>
+            <directory>./</directory>
+        </include>
+        <exclude>
+            <directory>./Resources</directory>
+            <directory>./Tests</directory>
+            <directory>./vendor</directory>
+        </exclude>
+    </coverage>
 
     <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0" />
+        <!-- Allowing 4 deprecations related to changes in Symfony Security 5.3+ -->
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=3"/>
+        <env name="KERNEL_CLASS" value="HWI\Bundle\OAuthBundle\Tests\App\AppKernel"/>
     </php>
 
     <testsuites>
@@ -11,15 +24,4 @@
             <directory suffix="Test.php">./Tests</directory>
         </testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Resources</directory>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
 </phpunit>

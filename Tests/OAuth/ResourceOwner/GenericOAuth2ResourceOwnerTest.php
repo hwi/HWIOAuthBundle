@@ -404,10 +404,7 @@ json;
     }
 
     /**
-     * @param string         $name
-     * @param array          $options
-     * @param array          $paths
-     * @param StateInterface $state   Optional
+     * @param StateInterface $state Optional
      *
      * @throws \ReflectionException
      *

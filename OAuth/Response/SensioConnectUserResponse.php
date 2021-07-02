@@ -122,9 +122,8 @@ class SensioConnectUserResponse extends AbstractUserResponse
     }
 
     /**
-     * @param string      $query
-     * @param \DOMElement $element
-     * @param string      $nodeType
+     * @param string $query
+     * @param string $nodeType
      *
      * @return mixed|null
      */
@@ -152,8 +151,6 @@ class SensioConnectUserResponse extends AbstractUserResponse
 
     /**
      * @param string $value
-     *
-     * @return mixed
      */
     protected function sanitizeValue($value)
     {

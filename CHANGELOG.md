@@ -2,6 +2,13 @@ Changelog
 =========
 ## 1.4.0 (2021-xx-xx)
 * Dropped Symfony 5.0 support as it is EOL,
+* Dropped PHP 7.2 support as it is EOL,
+* Added: state support for service authentication URL's,
+* Added: ability to change the response after `HWIOAuthEvents::CONNECT_COMPLETED` is fired,
+* Fixed: PHP notice in `AppleResourceOwner`,
+* Fixed: use new GitHub API in `GitHubResourceOwner`,
+* Maintain: removed `Wunderlist` resource owner,
+* Maintain: removed several Symfony BC layers,
 
 ## 1.3.0 (2021-01-03)
 * BC Break: dropped support for Symfony `<4.4`,
@@ -11,7 +18,7 @@ Changelog
 * Upgraded Twitch resource owner to incorporate latest Twitch API,
 * Fixed: undefined `id_token` exception in Azure resource owner,
 * Docs: changed firewall name to match flex receipt,
-* Maintain: moved from Travis CI to Github Actions
+* Maintain: moved from Travis CI to Github Actions,
 
 ## 1.2.0 (2020-10-19)
 * BC Break: dropped Symfony 4.3 support,

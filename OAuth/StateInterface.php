@@ -25,19 +25,12 @@ interface StateInterface extends \Serializable
     public function add(string $key, string $value);
 
     /**
-     * @param string $key
-     *
      * @return string The value set to this key
      *
      * @throws StateRetrievalException
      */
     public function get(string $key): ?string;
 
-    /**
-     * @param string $key
-     *
-     * @return bool
-     */
     public function has(string $key): bool;
 
     /**

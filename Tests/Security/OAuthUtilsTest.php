@@ -50,7 +50,7 @@ class OAuthUtilsTest extends TestCase
         $request = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(true, $this->grantRule), true, $this->grantRule);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAuthorizationChecker(true, $this->grantRule), true, $this->grantRule);
         $utils->addResourceOwnerMap($this->getMap($url, $redirect, true, false));
 
         $this->assertEquals(
@@ -75,7 +75,7 @@ class OAuthUtilsTest extends TestCase
         $request = $this->getRequest($url.'?state='.$state->encode());
         $resource = $this->getMockBuilder(ResourceOwnerInterface::class)->getMock();
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(false, $this->grantRule), true, $this->grantRule);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAuthorizationChecker(false, $this->grantRule), true, $this->grantRule);
         $utils->addResourceOwnerMap($this->getMap($url, $redirect, false, false, $resource));
 
         $resource->expects($this->exactly(2))
@@ -94,7 +94,7 @@ class OAuthUtilsTest extends TestCase
         $request = $this->getRequest($url);
         $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
 
-        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAutorizationChecker(false, $this->grantRule), true, $this->grantRule);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAuthorizationChecker(false, $this->grantRule), true, $this->grantRule);
         $utils->addResourceOwnerMap($this->getMap($url, $redirect));
 
         $this->assertEquals(
@@ -113,7 +113,7 @@ class OAuthUtilsTest extends TestCase
 
         $utils = new OAuthUtils(
             $this->getHttpUtils($url),
-            $this->getAutorizationChecker(false, 'IS_AUTHENTICATED_FULLY'),
+            $this->getAuthorizationChecker(false, 'IS_AUTHENTICATED_FULLY'),
             true,
             'IS_AUTHENTICATED_FULLY'
         );
@@ -125,6 +125,41 @@ class OAuthUtilsTest extends TestCase
         );
 
         $this->assertNull($request->attributes->get('service'));
+    }
+
+    public function testGetServiceAuthUrlWithStateQueryParameters()
+    {
+        $parameters = ['foo' => 'bar', 'foobar' => 'foobaz'];
+        $state = new State($parameters);
+
+        $url = 'http://localhost:8080/service/instagram';
+
+        $request = $this->getRequest($url.'?state='.$state->encode());
+        $resource = $this->getMockBuilder(ResourceOwnerInterface::class)->getMock();
+        $resource
+            ->expects($this->any())
+            ->method('getName')
+            ->willReturn('instagram');
+
+        $mapMock = $this->createMock(ResourceOwnerMap::class);
+        $mapMock
+            ->expects($this->any())
+            ->method('getResourceOwnerByName')
+            ->with('instagram')
+            ->willReturn($resource);
+
+        $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
+        $utils = new OAuthUtils($this->getHttpUtils($url), $authorizationChecker, true, $this->grantRule);
+        $utils->addResourceOwnerMap($mapMock);
+
+        $resource->expects($this->exactly(2))
+            ->method('addStateParameter')
+            ->withConsecutive(['foo', 'bar'], ['foobar', 'foobaz']);
+
+        $this->assertEquals(
+            $url,
+            $utils->getServiceAuthUrl($request, $resource)
+        );
     }
 
     /**
@@ -276,7 +311,7 @@ class OAuthUtilsTest extends TestCase
         return new HttpUtils($urlGenerator);
     }
 
-    private function getAutorizationChecker($hasUser, $grantRule)
+    private function getAuthorizationChecker($hasUser, $grantRule)
     {
         $mock = $this->createMock(AuthorizationCheckerInterface::class);
         $mock->expects($this->once())

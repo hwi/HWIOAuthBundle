@@ -320,8 +320,6 @@ class OAuthProviderTest extends TestCase
     /**
      * Symfony < 4.3 BC layer.
      *
-     * @param TokenInterface $token
-     *
      * @return array
      */
     private function getRoleNames(TokenInterface $token)

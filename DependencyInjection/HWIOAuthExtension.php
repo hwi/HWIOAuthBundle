@@ -150,10 +150,6 @@ final class HWIOAuthExtension extends Extension
         return 'hwi_oauth';
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param array            $config
-     */
     protected function createHttplugClient(ContainerBuilder $container, array $config)
     {
         $httpClientId = $config['http']['client'];
@@ -173,9 +169,6 @@ final class HWIOAuthExtension extends Extension
 
     /**
      * Check of the connect controllers etc should be enabled.
-     *
-     * @param ContainerBuilder $container
-     * @param array            $config
      *
      * @throws \Symfony\Component\DependencyInjection\Exception\BadMethodCallException
      * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException

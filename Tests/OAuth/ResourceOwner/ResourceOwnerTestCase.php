@@ -80,9 +80,7 @@ abstract class ResourceOwnerTestCase extends TestCase
     }
 
     /**
-     * @param string    $name
-     * @param HttpUtils $httpUtils
-     * @param array     $options
+     * @param string $name
      *
      * @return \HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
      */

@@ -36,6 +36,14 @@ class OAuthUser implements UserInterface
     /**
      * {@inheritdoc}
      */
+    public function getUserIdentifier()
+    {
+        return $this->username;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getRoles()
     {
         return ['ROLE_USER', 'ROLE_OAUTH_USER'];
@@ -62,7 +70,7 @@ class OAuthUser implements UserInterface
      */
     public function getUsername()
     {
-        return $this->username;
+        return $this->getUserIdentifier();
     }
 
     /**

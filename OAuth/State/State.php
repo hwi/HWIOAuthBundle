@@ -155,10 +155,6 @@ final class State implements StateInterface
     /**
      * Checks if a given key is set in the values array,
      * and if it's the only key present.
-     *
-     * @param string $key
-     *
-     * @return bool
      */
     private function isOnlyExistentKey(string $key): bool
     {

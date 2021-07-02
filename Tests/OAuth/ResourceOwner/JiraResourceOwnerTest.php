@@ -60,7 +60,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
 
         $this
-            ->httpClient->expects($this->at(0))
+            ->httpClient->expects($this->atLeastOnce())
             ->method('sendRequest')
             ->willReturnCallback(function (RequestInterface $request) {
                 $request = $request->withAddedHeader('Content-Type', 'application/json; charset=utf-8');
@@ -75,7 +75,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
             });
 
         $this
-            ->httpClient->expects($this->at(1))
+            ->httpClient->expects($this->atLeastOnce())
             ->method('sendRequest')
             ->willReturnCallback(function (RequestInterface $request) {
                 $request = $request->withAddedHeader('Content-Type', 'text/plain');

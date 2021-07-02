@@ -137,8 +137,6 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     }
 
     /**
-     * @param array $criteria
-     *
      * @return object
      */
     protected function findUser(array $criteria)
