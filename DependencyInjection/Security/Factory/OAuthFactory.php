@@ -163,10 +163,7 @@ class OAuthFactory extends AbstractFactory
     {
         $listenerId = parent::createListener($container, $id, $config, $userProvider);
 
-        $checkPaths = [];
-        foreach ($config['resource_owners'] as $checkPath) {
-            $checkPaths[] = $checkPath;
-        }
+        $checkPaths = $config['resource_owners'];
 
         $container
             ->getDefinition($listenerId)

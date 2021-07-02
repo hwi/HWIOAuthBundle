@@ -114,7 +114,7 @@ class PathUserResponse extends AbstractUserResponse
      */
     public function getPath($name)
     {
-        return \array_key_exists($name, $this->paths) ? $this->paths[$name] : null;
+        return $this->paths[$name] ?? null;
     }
 
     /**
@@ -153,11 +153,9 @@ class PathUserResponse extends AbstractUserResponse
     }
 
     /**
-     * @param string $steps
-     *
-     * @return string|null
+     * @return array|string|null
      */
-    private function getValue($steps, array $data)
+    private function getValue(string $steps, array $data)
     {
         $value = $data;
         foreach (explode('.', $steps) as $step) {

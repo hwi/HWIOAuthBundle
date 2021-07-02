@@ -21,6 +21,9 @@ class DomainWhitelist
      */
     private $targetPathDomainsWhiteList;
 
+    /**
+     * @param array<int, string> $targetPathDomainsWhiteList
+     */
     public function __construct(array $targetPathDomainsWhiteList)
     {
         $this->targetPathDomainsWhiteList = $targetPathDomainsWhiteList;
@@ -37,10 +40,6 @@ class DomainWhitelist
             return false;
         }
 
-        if (!\in_array($urlParts['host'], $this->targetPathDomainsWhiteList, true)) {
-            return false;
-        }
-
-        return true;
+        return \in_array($urlParts['host'], $this->targetPathDomainsWhiteList, true);
     }
 }

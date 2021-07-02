@@ -32,6 +32,7 @@ use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
@@ -349,7 +350,7 @@ final class ConnectController extends AbstractController
         return $response;
     }
 
-    private function dispatch($event, string $eventName = null): void
+    private function dispatch(Event $event, string $eventName = null): void
     {
         $this->get('event_dispatcher')->dispatch($event, $eventName);
     }
