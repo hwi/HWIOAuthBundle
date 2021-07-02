@@ -374,7 +374,7 @@ json;
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
 
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, array('csrf' => true));
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['csrf' => true]);
 
         $resourceOwner->isCsrfTokenValid(null);
     }
