@@ -370,6 +370,15 @@ json;
         $resourceOwner->isCsrfTokenValid('invalid_token');
     }
 
+    public function testCsrfTokenMissing()
+    {
+        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+
+        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['csrf' => true]);
+
+        $resourceOwner->isCsrfTokenValid(null);
+    }
+
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;

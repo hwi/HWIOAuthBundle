@@ -150,9 +150,12 @@ class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             return true;
         }
 
+        if (null === $csrfToken) {
+            throw new AuthenticationException('Given CSRF token is not valid.');
+        }
+
         try {
-            return null !== $csrfToken
-                && null !== $this->storage->fetch($this, urldecode($csrfToken), 'csrf_state');
+            return null !== $this->storage->fetch($this, urldecode($csrfToken), 'csrf_state');
         } catch (\InvalidArgumentException $e) {
             throw new AuthenticationException('Given CSRF token is not valid.');
         }
