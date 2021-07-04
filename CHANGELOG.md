@@ -3,7 +3,7 @@ Changelog
 ## 1.4.0 (2021-xx-xx)
 * Dropped Symfony 5.0 support as it is EOL,
 * Dropped PHP 7.2 support as it is EOL,
-* Added: new Symfony 5.1 Security system support,
+* Added: Symfony 5.1 Security system support,
 * Added: state support for service authentication URL's,
 * Added: ability to change the response after `HWIOAuthEvents::CONNECT_COMPLETED` is fired,
 * Fixed: PHP notice in `AppleResourceOwner`,
