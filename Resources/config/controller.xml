@@ -8,6 +8,7 @@
         <service id="HWI\Bundle\OAuthBundle\Controller\ConnectController" public="true">
             <argument type="service" id="hwi_oauth.security.oauth_utils" />
             <argument type="service" id="hwi_oauth.resource_ownermap_locator" />
+            <argument type="service" id="request_stack" />
 
             <call method="setContainer">
                 <argument type="service" id="service_container" />
@@ -20,7 +21,7 @@
             <argument type="service" id="security.authentication_utils" />
             <argument type="service" id="router" />
             <argument type="service" id="security.authorization_checker" />
-            <argument type="service" id="session" />
+            <argument type="service" id="request_stack" />
             <argument>%hwi_oauth.connect%</argument>
             <argument>%hwi_oauth.grant_rule%</argument>
 
