@@ -61,6 +61,11 @@ class LoginControllerTest extends TestCase
     private $session;
 
     /**
+     * @var MockObject|RequestStack
+     */
+    private $requestStack;
+
+    /**
      * @var Request
      */
     private $request;
@@ -91,6 +96,9 @@ class LoginControllerTest extends TestCase
         $this->session = $this->createMock(SessionInterface::class);
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
+
+        $this->requestStack = $this->createMock(RequestStack::class);
+        $this->requestStack->push($this->request);
 
         $requestStack = new RequestStack();
         $requestStack->push($this->request);
@@ -216,7 +224,7 @@ class LoginControllerTest extends TestCase
             $this->authenticationUtils,
             $this->router,
             $this->authorizationChecker,
-            $this->session,
+            $this->requestStack,
             $connect,
             $grantRule
         );
