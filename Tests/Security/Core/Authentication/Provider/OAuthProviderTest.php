@@ -161,7 +161,10 @@ class OAuthProviderTest extends TestCase
         }
     }
 
-    public function testTokenRefreshesWhenExpired()
+    /**
+     * @dataProvider provideAuthenticationData
+     */
+    public function testTokenRefreshesWhenExpired(bool $authenticated)
     {
         $expiredToken = [
             'access_token' => 'access_token',
@@ -217,6 +220,7 @@ class OAuthProviderTest extends TestCase
         $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock, $tokenStorageMock);
 
         $oauthToken = new OAuthToken($refreshedToken);
+        $oauthToken->setAuthenticated($authenticated);
         $oauthToken->setResourceOwnerName('github');
         $oauthToken->setRefreshToken($expiredToken['refresh_token']);
         $oauthToken->setExpiresIn(30);
@@ -238,6 +242,12 @@ class OAuthProviderTest extends TestCase
         $roles = $token->getRoleNames();
         $this->assertCount(1, $roles);
         $this->assertEquals('ROLE_TEST', $roles[0]);
+    }
+
+    public function provideAuthenticationData(): iterable
+    {
+        yield 'authenticated' => [true];
+        yield 'not authenticated' => [false];
     }
 
     protected function getOAuthAwareUserProviderMock()

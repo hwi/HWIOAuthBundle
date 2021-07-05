@@ -80,7 +80,7 @@ class OAuthProvider implements AuthenticationProviderInterface
 
         // If token is authenticated, re-create it to reload user details
         /** @var OAuthToken $token */
-        if ($token->isAuthenticated()) {
+        if ($token->isAuthenticated() && !$token->isExpired()) {
             /** @var UserInterface $user */
             $user = $token->getUser();
 
