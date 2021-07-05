@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Request token storage implementation using the Symfony session.
@@ -21,9 +22,14 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @author Alexander <iam.asm89@gmail.com>
  * @author Francisco Facioni <fran6co@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
+ *
+ * @final since 1.4
  */
 class SessionStorage implements RequestDataStorageInterface
 {
+    /**
+     * @var RequestStack
+     */
     private $requestStack;
 
     public function __construct(RequestStack $requestStack)
@@ -37,13 +43,13 @@ class SessionStorage implements RequestDataStorageInterface
     public function fetch(ResourceOwnerInterface $resourceOwner, $key, $type = 'token')
     {
         $key = $this->generateKey($resourceOwner, $key, $type);
-        if (null === $data = $this->requestStack->getSession()->get($key)) {
+        if (null === $data = $this->getSession()->get($key)) {
             throw new \InvalidArgumentException('No data available in storage.');
         }
 
-        // request tokens are one time use only
-        if (\in_array($type, ['token', 'csrf_state'])) {
-            $this->requestStack->getSession()->remove($key);
+        // Request tokens are one time use only
+        if (\in_array($type, ['token', 'csrf_state'], true)) {
+            $this->getSession()->remove($key);
         }
 
         return $data;
@@ -64,7 +70,7 @@ class SessionStorage implements RequestDataStorageInterface
             $key = $this->generateKey($resourceOwner, $this->getStorageKey($value), $type);
         }
 
-        $this->requestStack->getSession()->set($key, $this->getStorageValue($value));
+        $this->getSession()->set($key, $this->getStorageValue($value));
     }
 
     /**
@@ -108,5 +114,18 @@ class SessionStorage implements RequestDataStorageInterface
         }
 
         return (string) $storageKey;
+    }
+
+    private function getSession(): SessionInterface
+    {
+        if (method_exists($this->requestStack, 'getSession')) {
+            return $this->requestStack->getSession();
+        }
+
+        if ((null !== $request = $this->requestStack->getCurrentRequest()) && $request->hasSession()) {
+            return $request->getSession();
+        }
+
+        throw new \LogicException('There is currently no session available.');
     }
 }

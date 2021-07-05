@@ -24,6 +24,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -49,10 +50,19 @@ final class ConnectController extends AbstractController
      */
     private $resourceOwnerMapLocator;
 
-    public function __construct(OAuthUtils $oauthUtils, ResourceOwnerMapLocator $resourceOwnerMapLocator)
-    {
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    public function __construct(
+        OAuthUtils $oauthUtils,
+        ResourceOwnerMapLocator $resourceOwnerMapLocator,
+        RequestStack $requestStack
+    ) {
         $this->oauthUtils = $oauthUtils;
         $this->resourceOwnerMapLocator = $resourceOwnerMapLocator;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -78,7 +88,7 @@ final class ConnectController extends AbstractController
         }
 
         $error = null;
-        $session = $request->hasSession() ? $request->getSession() : $this->get('request_stack')->getSession();
+        $session = $request->hasSession() ? $request->getSession() : $this->getSession();
         if ($session) {
             if (!$session->isStarted()) {
                 $session->start();
@@ -168,7 +178,7 @@ final class ConnectController extends AbstractController
         // Get the data from the resource owner
         $resourceOwner = $this->getResourceOwnerByName($service);
 
-        $session = $request->hasSession() ? $request->getSession() : $this->get('request_stack')->getSession();
+        $session = $request->hasSession() ? $request->getSession() : $this->getSession();
         if ($session && !$session->isStarted()) {
             $session->start();
         }
@@ -353,5 +363,18 @@ final class ConnectController extends AbstractController
     private function dispatch(Event $event, string $eventName = null): void
     {
         $this->get('event_dispatcher')->dispatch($event, $eventName);
+    }
+
+    private function getSession(): ?SessionInterface
+    {
+        if (method_exists($this->requestStack, 'getSession')) {
+            return $this->requestStack->getSession();
+        }
+
+        if ((null !== $request = $this->requestStack->getCurrentRequest()) && $request->hasSession()) {
+            return $request->getSession();
+        }
+
+        return null;
     }
 }

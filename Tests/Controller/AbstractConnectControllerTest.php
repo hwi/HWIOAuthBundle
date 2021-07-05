@@ -28,6 +28,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBa
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -182,7 +183,7 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
 
-        $this->controller = new ConnectController($this->oAuthUtils, $this->resourceOwnerMapLocator);
+        $this->controller = new ConnectController($this->oAuthUtils, $this->resourceOwnerMapLocator, $this->createMock(RequestStack::class));
         $this->controller->setContainer($this->container);
     }
 

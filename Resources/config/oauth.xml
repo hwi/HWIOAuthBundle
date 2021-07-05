@@ -106,7 +106,7 @@
 
         <!-- Session storage -->
         <service id="hwi_oauth.storage.session" class="HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage\SessionStorage">
-            <argument type="service" id="session" />
+            <argument type="service" id="request_stack" />
         </service>
 
         <service id="hwi_oauth.security.oauth_utils" class="HWI\Bundle\OAuthBundle\Security\OAuthUtils">
