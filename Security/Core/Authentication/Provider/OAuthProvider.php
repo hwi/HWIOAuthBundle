@@ -24,8 +24,6 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * OAuthProvider.
- *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
  */
@@ -51,11 +49,6 @@ class OAuthProvider implements AuthenticationProviderInterface
      */
     private $tokenStorage;
 
-    /**
-     * @param OAuthAwareUserProviderInterface $userProvider     User provider
-     * @param ResourceOwnerMapInterface       $resourceOwnerMap Resource owner map
-     * @param UserCheckerInterface            $userChecker      User checker
-     */
     public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMapInterface $resourceOwnerMap, UserCheckerInterface $userChecker, TokenStorageInterface $tokenStorage)
     {
         $this->userProvider = $userProvider;
@@ -67,29 +60,34 @@ class OAuthProvider implements AuthenticationProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(TokenInterface $token)
+    public function supports(TokenInterface $token): bool
     {
-        return
-            $token instanceof OAuthToken
-            && $this->resourceOwnerMap->hasResourceOwnerByName($token->getResourceOwnerName())
-        ;
+        if (!$token instanceof OAuthToken) {
+            return false;
+        }
+
+        return $this->resourceOwnerMap->hasResourceOwnerByName($token->getResourceOwnerName());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function authenticate(TokenInterface $token)
+    public function authenticate(TokenInterface $token): ?TokenInterface
     {
         if (!$this->supports($token)) {
-            return;
+            return null;
         }
 
-        // fix connect to external social very time
+        // If token is authenticated, re-create it to reload user details
+        /** @var OAuthToken $token */
         if ($token->isAuthenticated()) {
-            return $token;
+            /** @var UserInterface $user */
+            $user = $token->getUser();
+
+            return $this->createOAuthToken($token->getRawToken(), $token, $user);
         }
 
-        /* @var OAuthToken $token */
+        /** @var ResourceOwnerInterface $resourceOwner */
         $resourceOwner = $this->resourceOwnerMap->getResourceOwnerByName($token->getResourceOwnerName());
 
         $oldToken = $token->isExpired() ? $this->refreshToken($token, $resourceOwner) : $token;
@@ -111,28 +109,50 @@ class OAuthProvider implements AuthenticationProviderInterface
         $this->userChecker->checkPreAuth($user);
         $this->userChecker->checkPostAuth($user);
 
-        $token = new OAuthToken($oldToken->getRawToken(), $user->getRoles());
-        $token->setResourceOwnerName($resourceOwner->getName());
-        $token->setUser($user);
-        $token->setAuthenticated(true);
-        $token->setRefreshToken($oldToken->getRefreshToken());
-        $token->setCreatedAt($oldToken->getCreatedAt());
-
-        return $token;
+        return $this->createOAuthToken($oldToken->getRawToken(), $oldToken, $user);
     }
 
     /**
-     * @return OAuthToken|TokenInterface
+     * @param OAuthToken $expiredToken
      */
-    protected function refreshToken(TokenInterface $expiredToken, ResourceOwnerInterface $resourceOwner)
+    private function refreshToken(TokenInterface $expiredToken, ResourceOwnerInterface $resourceOwner): OAuthToken
     {
         if (!$expiredToken->getRefreshToken()) {
             return $expiredToken;
         }
 
-        $token = new OAuthToken($resourceOwner->refreshAccessToken($expiredToken->getRefreshToken()));
-        $token->setRefreshToken($expiredToken->getRefreshToken());
+        /** @var UserInterface $user */
+        $user = $expiredToken->getUser();
+
+        $token = $this->createOAuthToken(
+            $resourceOwner->refreshAccessToken($expiredToken->getRefreshToken()),
+            $expiredToken,
+            $user
+        );
+
         $this->tokenStorage->setToken($token);
+
+        return $token;
+    }
+
+    /**
+     * @param string|array $data
+     */
+    private function createOAuthToken(
+        $data,
+        OAuthToken $oldToken,
+        UserInterface $user
+    ): OAuthToken {
+        $token = new OAuthToken($data, $user->getRoles());
+        $token->setResourceOwnerName($oldToken->getResourceOwnerName());
+        $token->setUser($user);
+        $token->setAuthenticated(true);
+        $token->setCreatedAt($oldToken->getCreatedAt());
+
+        // Don't use old data if newer was already set
+        if (!$token->getRefreshToken()) {
+            $token->setRefreshToken($oldToken->getRefreshToken());
+        }
 
         return $token;
     }
