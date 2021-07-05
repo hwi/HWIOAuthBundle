@@ -28,6 +28,31 @@ jobs:
       - name: Run PHP-CS-Fixer fix
         run: php-cs-fixer fix --dry-run --diff --ansi
 
+  phpstan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        php:
+        - '7.4'
+      fail-fast: false
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ matrix.php }}
+        extensions: curl, openssl, mbstring
+        ini-values: memory_limit=-1
+        tools: composer
+    - name: Remove FOSUser
+      run: composer remove friendsofsymfony/user-bundle --no-update --no-interaction --dev
+    - name: Update project dependencies
+      run: composer update --no-interaction --no-progress --ansi
+    - name: Run phpstan
+      run: make phpstan
+
   phpunit:
     name: PHPUnit (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
