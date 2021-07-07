@@ -14,7 +14,10 @@ declare(strict_types=1);
 namespace HWI\Bundle\OAuthBundle\Tests\App;
 
 use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
+use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Http\Controller\UserValueResolver;
 
 class AppKernel extends Kernel
 {
@@ -39,6 +42,24 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(__DIR__.'/config.yml');
+    }
+
+    public function prepareContainer(ContainerBuilder $container): void
+    {
+        parent::prepareContainer($container);
+
+        if (method_exists(Security::class, 'getUser') && !class_exists(UserValueResolver::class)) {
+            $container->loadFromExtension('security', [
+                'firewalls' => [
+                    'login_area' => [
+                        'logout_on_user_change' => true,
+                    ],
+                    'main' => [
+                        'logout_on_user_change' => true,
+                    ],
+                ],
+            ]);
+        }
     }
 
     public function getCacheDir(): string
