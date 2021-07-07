@@ -39,11 +39,6 @@ use Symfony\Component\Templating\EngineInterface;
 abstract class AbstractConnectControllerTest extends TestCase
 {
     /**
-     * @var ConnectController
-     */
-    protected $controller;
-
-    /**
      * @var MockObject&AuthorizationCheckerInterface
      */
     protected $authorizationChecker;
@@ -182,15 +177,9 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->session = $this->createMock(SessionInterface::class);
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
-
-        $this->controller = new ConnectController($this->oAuthUtils, $this->resourceOwnerMapLocator, $this->createMock(RequestStack::class));
-        $this->controller->setContainer($this->container);
     }
 
-    /**
-     * @return AccountNotLinkedException
-     */
-    protected function createAccountNotLinkedException()
+    protected function createAccountNotLinkedException(): AccountNotLinkedException
     {
         $accountNotLinked = new AccountNotLinkedException();
         $accountNotLinked->setResourceOwnerName('facebook');
@@ -199,12 +188,33 @@ abstract class AbstractConnectControllerTest extends TestCase
         return $accountNotLinked;
     }
 
-    protected function mockAuthorizationCheck($granted = true)
+    protected function mockAuthorizationCheck(bool $granted = true): void
     {
         $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
             ->with('IS_AUTHENTICATED_REMEMBERED')
             ->willReturn($granted)
         ;
+    }
+
+    protected function createConnectController(
+        bool $connectEnabled = true,
+        bool $confirmConnect = true,
+        array $firewallNames = ['default']
+    ): ConnectController {
+        $controller = new ConnectController(
+            $this->oAuthUtils,
+            $this->resourceOwnerMapLocator,
+            $this->createMock(RequestStack::class),
+            $connectEnabled,
+            'IS_AUTHENTICATED_REMEMBERED',
+            true,
+            'fake_route',
+            $confirmConnect,
+            $firewallNames
+        );
+        $controller->setContainer($this->container);
+
+        return $controller;
     }
 }
