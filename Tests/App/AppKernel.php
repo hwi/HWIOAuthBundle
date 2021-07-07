@@ -25,11 +25,13 @@ class AppKernel extends Kernel
             new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new \Symfony\Bundle\MonologBundle\MonologBundle(),
             new \Symfony\Bundle\TwigBundle\TwigBundle(),
-            /* @phpstan-ignore-next-line */
-            new \FOS\UserBundle\FOSUserBundle(),
             new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new \HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         ];
+
+        if (class_exists(\FOS\UserBundle\FOSUserBundle::class)) {
+            $bundles[] = new \FOS\UserBundle\FOSUserBundle();
+        }
 
         return $bundles;
     }
