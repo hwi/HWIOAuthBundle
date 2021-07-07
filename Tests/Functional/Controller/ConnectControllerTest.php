@@ -21,8 +21,8 @@ use Prophecy\Argument;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Client;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -133,7 +133,7 @@ final class ConnectControllerTest extends WebTestCase
         $this->assertSame('Successfully connected the account "foo"!', $crawler->filter('h3')->text(), $response->getContent());
     }
 
-    private function logIn(Client $client, SessionInterface $session): void
+    private function logIn(KernelBrowser $client, SessionInterface $session): void
     {
         $firewallContext = 'hwi_context';
         $token = new CustomOAuthToken();
@@ -142,7 +142,7 @@ final class ConnectControllerTest extends WebTestCase
         $client->getCookieJar()->set($cookie);
     }
 
-    private function createDatabase(Client $client): void
+    private function createDatabase(KernelBrowser $client): void
     {
         $entityManager = $client->getContainer()->get('doctrine.orm.entity_manager');
 

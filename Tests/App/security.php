@@ -9,10 +9,12 @@
  * file that was distributed with this source code.
  */
 
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Controller\UserValueResolver;
 
-if (method_exists(Security::class, 'getUser') && !class_exists(UserValueResolver::class)) {
+if (isset($container) && method_exists(Security::class, 'getUser') && !class_exists(UserValueResolver::class)) {
+    /* @var ContainerBuilder $container */
     $container->loadFromExtension('security', [
         'firewalls' => [
             'login_area' => [

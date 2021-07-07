@@ -1,0 +1,14 @@
+parameters:
+    level: 1
+    paths:
+        - .
+    excludePaths:
+        - vendor/*
+
+        # todo: remove when FOSUserBundle support is dropped
+        - ./Tests/Form/FOSUBRegistrationFormHandlerTest.php
+        - ./Tests/Fixtures/FOSUser.php
+        - ./Tests/Fixtures/CustomOAuthToken.php
+        - ./Security/Core/User/FOSUBUserProvider.php
+        - ./Form/FOSUBRegistrationFormHandler.php
+        - ./Tests/Security/Core/User/FOSUBUserProviderTest.php

@@ -124,7 +124,8 @@
         "php-http/guzzle6-adapter":     "^2.0",
         "phpunit/phpunit":              "^9.5",
         "friendsofphp/php-cs-fixer":    "^3.0",
-        "symfony/monolog-bundle":       "^3.4"
+        "symfony/monolog-bundle":       "^3.4",
+        "phpstan/phpstan":              "^0.12.91"
     },
 
     "conflict": {

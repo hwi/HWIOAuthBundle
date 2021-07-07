@@ -6,3 +6,6 @@ csfixer_dry_run:
 
 phpunit_run:
 	./vendor/bin/phpunit
+
+phpstan:
+	./vendor/bin/phpstan
