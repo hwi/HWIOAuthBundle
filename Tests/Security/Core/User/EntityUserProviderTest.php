@@ -20,6 +20,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 class EntityUserProviderTest extends TestCase
 {
@@ -31,6 +32,20 @@ class EntityUserProviderTest extends TestCase
         if (!class_exists('Doctrine\Persistence\ManagerRegistry')) {
             $this->markTestSkipped('The Doctrine ORM is too old');
         }
+    }
+
+    public function testLoadUserByIdentifierThrowsExceptionWhenUserIsNotFound()
+    {
+        if (!class_exists(UserNotFoundException::class)) {
+            $this->markTestSkipped('This test only runs on Symfony >= 5.3');
+        }
+
+        $provider = $this->createEntityUserProvider();
+
+        $this->expectException(UserNotFoundException::class);
+        $this->expectDeprecationMessage('User \'asm89\' not found.');
+
+        $provider->loadUserByIdentifier('asm89');
     }
 
     public function testLoadUserByUsernameThrowsExceptionWhenUserIsNull()
