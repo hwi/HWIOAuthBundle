@@ -17,6 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Marek Štípek
+ *
+ * @final since 1.4
  */
 class FormEvent extends AbstractEvent
 {

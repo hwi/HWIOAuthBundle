@@ -13,6 +13,9 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
+/**
+ * @final since 1.4
+ */
 class AccountNotLinkedException extends UsernameNotFoundException implements OAuthAwareExceptionInterface
 {
     /**

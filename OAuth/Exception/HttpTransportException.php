@@ -13,6 +13,9 @@ namespace HWI\Bundle\OAuthBundle\OAuth\Exception;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
+/**
+ * @final since 1.4
+ */
 class HttpTransportException extends AuthenticationException
 {
     private $ownerName;

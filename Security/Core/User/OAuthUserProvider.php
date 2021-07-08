@@ -17,9 +17,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
- * OAuthUserProvider.
- *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ *
+ * @final since 1.4
  */
 class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
 {

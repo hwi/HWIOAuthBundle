@@ -22,6 +22,8 @@ use Symfony\Component\Security\Http\HttpUtils;
  * @author Alexander <iam.asm89@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
  * @author Francisco Facioni <fran6co@gmail.com>
+ *
+ * @final since 1.4
  */
 class OAuthUtils
 {

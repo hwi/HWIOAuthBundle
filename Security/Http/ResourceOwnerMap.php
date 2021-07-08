@@ -23,6 +23,8 @@ use Symfony\Component\Security\Http\HttpUtils;
  * loads the appropriate resource owner when requested.
  *
  * @author Alexander <iam.asm89@gmail.com>
+ *
+ * @final since 1.4
  */
 class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInterface
 {

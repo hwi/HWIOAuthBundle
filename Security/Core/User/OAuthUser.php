@@ -14,9 +14,9 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * OAuthUser.
- *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ *
+ * @final since 1.4
  */
 class OAuthUser implements UserInterface
 {

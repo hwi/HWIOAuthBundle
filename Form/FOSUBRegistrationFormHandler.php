@@ -22,6 +22,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
+ *
+ * @final since 1.4
  */
 class FOSUBRegistrationFormHandler implements RegistrationFormHandlerInterface
 {

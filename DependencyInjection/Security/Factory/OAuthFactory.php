@@ -19,10 +19,10 @@ use Symfony\Component\DependencyInjection\Parameter;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * OAuthFactory.
- *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
+ *
+ * @final since 1.4
  */
 class OAuthFactory extends AbstractFactory
 {

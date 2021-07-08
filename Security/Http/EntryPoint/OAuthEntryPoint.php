@@ -24,6 +24,8 @@ use Symfony\Component\Security\Http\HttpUtils;
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
+ *
+ * @final since 1.4
  */
 class OAuthEntryPoint implements AuthenticationEntryPointInterface
 {
