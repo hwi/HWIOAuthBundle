@@ -26,9 +26,17 @@ class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserProvider
     /**
      * {@inheritdoc}
      */
+    public function loadUserByIdentifier(string $identifier): UserInterface
+    {
+        return new OAuthUser($identifier);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function loadUserByUsername($username)
     {
-        return new OAuthUser($username);
+        return $this->loadUserByIdentifier($username);
     }
 
     /**

@@ -18,6 +18,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -64,6 +65,23 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
         $this->em = $registry->getManager($managerName);
         $this->class = $class;
         $this->properties = array_merge($this->properties, $properties);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function loadUserByIdentifier(string $identifier): UserInterface
+    {
+        $user = $this->findUser(['username' => $identifier]);
+
+        if (!$user) {
+            $exception = new UserNotFoundException(sprintf("User '%s' not found.", $identifier));
+            $exception->setUserIdentifier($identifier);
+
+            throw $exception;
+        }
+
+        return $user;
     }
 
     /**
@@ -137,7 +155,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     }
 
     /**
-     * @return object
+     * @return UserInterface
      */
     protected function findUser(array $criteria)
     {

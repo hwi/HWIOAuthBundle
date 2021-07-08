@@ -36,6 +36,13 @@ class OAuthUserProviderTest extends TestCase
         $this->assertEquals('asm89', $user->getUsername());
     }
 
+    public function testLoadUserByIdentifier()
+    {
+        $user = $this->provider->loadUserByIdentifier('asm89');
+        $this->assertInstanceOf(OAuthUser::class, $user);
+        $this->assertEquals('asm89', $user->getUserIdentifier());
+    }
+
     public function testRefreshUser()
     {
         $user = new OAuthUser('asm89');

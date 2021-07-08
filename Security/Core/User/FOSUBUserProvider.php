@@ -66,9 +66,17 @@ class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterf
     /**
      * {@inheritdoc}
      */
+    public function loadUserByIdentifier(string $identifier): UserInterface
+    {
+        return $this->userManager->findUserByUsername($identifier);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function loadUserByUsername($username)
     {
-        return $this->userManager->findUserByUsername($username);
+        return $this->loadUserByIdentifier($username);
     }
 
     /**
