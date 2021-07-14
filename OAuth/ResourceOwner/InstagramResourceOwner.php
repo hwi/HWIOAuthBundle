@@ -20,6 +20,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Jean-Christophe Cuvelier <jcc@atomseeds.com>
  * @author Fabiano Roberto <fabiano.roberto@ped.technology>
+ *
+ * @final since 1.4
  */
 class InstagramResourceOwner extends GenericOAuth2ResourceOwner
 {

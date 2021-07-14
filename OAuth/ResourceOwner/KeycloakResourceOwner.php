@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * KeycloakResourceOwner.
  *
  * @author Andrea Quintino <andreaquin1990@gmail.com>
+ *
+ * @final since 1.4
  */
 class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
 {

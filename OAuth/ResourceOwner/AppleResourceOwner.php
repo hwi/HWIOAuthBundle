@@ -21,6 +21,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Josip Letica <leticajosip.09@gmail.com>
+ *
+ * @final since 1.4
  */
 class AppleResourceOwner extends GenericOAuth2ResourceOwner
 {

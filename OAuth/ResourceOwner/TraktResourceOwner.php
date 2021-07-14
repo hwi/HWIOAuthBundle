@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * TraktResourceOwner.
  *
  * @author Julien DIDIER <julien@didier.io>
+ *
+ * @final since 1.4
  */
 class TraktResourceOwner extends GenericOAuth2ResourceOwner
 {

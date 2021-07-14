@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * BitbucketResourceOwner.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
+ *
+ * @final since 1.4
  */
 class BitbucketResourceOwner extends GenericOAuth1ResourceOwner
 {

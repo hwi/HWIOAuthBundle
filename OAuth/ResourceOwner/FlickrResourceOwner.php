@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * FlickrResourceOwner.
  *
  * @author Dmitri Lakachauskis <lakiboy83@gmail.com>
+ *
+ * @final since 1.4
  */
 class FlickrResourceOwner extends GenericOAuth1ResourceOwner
 {

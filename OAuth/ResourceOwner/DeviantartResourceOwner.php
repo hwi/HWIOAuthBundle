@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * DeviantartResourceOwner.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
+ *
+ * @final since 1.4
  */
 class DeviantartResourceOwner extends GenericOAuth2ResourceOwner
 {

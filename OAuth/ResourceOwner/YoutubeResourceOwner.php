@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * YoutubeResourceOwner.
  *
  * @author Gennady Telegin <gtelegin@gmail.com>
+ *
+ * @final since 1.4
  */
 class YoutubeResourceOwner extends GenericOAuth2ResourceOwner
 {

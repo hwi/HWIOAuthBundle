@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * ItembaseResourceOwner.
  *
  * @author Thomas Bretzke <tb@itembase.biz>
+ *
+ * @final since 1.4
  */
 class ItembaseResourceOwner extends GenericOAuth2ResourceOwner
 {

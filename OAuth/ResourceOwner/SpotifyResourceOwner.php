@@ -16,6 +16,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Janne Savolainen <janne.savolainen@sempre.fi>
+ *
+ * @final since 1.4
  */
 class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
 {

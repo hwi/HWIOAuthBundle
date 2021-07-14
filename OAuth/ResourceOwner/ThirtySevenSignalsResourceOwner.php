@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * ThirtySevenSignalsResourceOwner (37signals).
  *
  * @author Richard van den Brand <richard@vandenbrand.org>
+ *
+ * @final since 1.4
  */
 class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
 {

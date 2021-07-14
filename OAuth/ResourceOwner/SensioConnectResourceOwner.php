@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * SensioConnectResourceOwner.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
+ *
+ * @final since 1.4
  */
 class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
 {

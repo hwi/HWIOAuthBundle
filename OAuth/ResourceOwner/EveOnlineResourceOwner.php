@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * EveOnlineResourceOwner.
  *
  * @author Ivan Stankovic <ivan.stankovic@webstorm.rs>
+ *
+ * @final since 1.4
  */
 class EveOnlineResourceOwner extends GenericOAuth2ResourceOwner
 {

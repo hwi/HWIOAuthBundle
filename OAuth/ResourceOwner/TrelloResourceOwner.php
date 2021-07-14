@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * TrelloResourceOwner.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
+ *
+ * @final since 1.4
  */
 class TrelloResourceOwner extends GenericOAuth1ResourceOwner
 {

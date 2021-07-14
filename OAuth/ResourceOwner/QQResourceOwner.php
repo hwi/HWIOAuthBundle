@@ -17,6 +17,9 @@ use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
+/**
+ * @final since 1.4
+ */
 class QQResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**

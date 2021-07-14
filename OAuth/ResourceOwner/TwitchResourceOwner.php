@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * TwitchResourceOwner.
  *
  * @author Simon Bräuer <redshark1802>
+ *
+ * @final since 1.4
  */
 class TwitchResourceOwner extends GenericOAuth2ResourceOwner
 {

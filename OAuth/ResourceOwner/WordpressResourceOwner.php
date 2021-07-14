@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * WordpressResourceOwner.
  *
  * @author Joseph Bielawski <stloyd@gmail.com>
+ *
+ * @final since 1.4
  */
 class WordpressResourceOwner extends GenericOAuth2ResourceOwner
 {

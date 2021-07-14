@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * PaypalResourceOwner.
  *
  * @author Berny Cantos <be@rny.cc>
+ *
+ * @final since 1.4
  */
 class PaypalResourceOwner extends GenericOAuth2ResourceOwner
 {

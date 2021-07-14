@@ -14,6 +14,9 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @final since 1.4
+ */
 class Office365ResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**

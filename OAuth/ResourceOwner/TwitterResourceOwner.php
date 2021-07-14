@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * TwitterResourceOwner.
  *
  * @author Alexander <iam.asm89@gmail.com>
+ *
+ * @final since 1.4
  */
 class TwitterResourceOwner extends GenericOAuth1ResourceOwner
 {

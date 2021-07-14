@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * HubicResourceOwner.
  *
  * @author Vincent Cassé <vincent@casse.me>
+ *
+ * @final since 1.4
  */
 class HubicResourceOwner extends GenericOAuth2ResourceOwner
 {

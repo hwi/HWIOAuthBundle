@@ -22,6 +22,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * JiraResourceOwner.
  *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
+ *
+ * @final since 1.4
  */
 class JiraResourceOwner extends GenericOAuth1ResourceOwner
 {

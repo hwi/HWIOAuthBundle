@@ -15,6 +15,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Kieu Anh Tuan <passkey1510@gmail.com>
+ *
+ * @final since 1.4
  */
 class DeezerResourceOwner extends GenericOAuth2ResourceOwner
 {

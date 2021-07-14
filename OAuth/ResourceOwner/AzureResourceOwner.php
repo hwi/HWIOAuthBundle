@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * AzureResourceOwner.
  *
  * @author Baptiste Clavié <clavie.b@gmail.com>
+ *
+ * @final since 1.4
  */
 class AzureResourceOwner extends GenericOAuth2ResourceOwner
 {

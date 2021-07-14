@@ -15,6 +15,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Krystian Marcisz <simivar@gmail.com>
+ *
+ * @final since 1.4
  */
 class GeniusResourceOwner extends GenericOAuth2ResourceOwner
 {
