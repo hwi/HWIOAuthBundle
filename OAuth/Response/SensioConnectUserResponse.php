@@ -16,6 +16,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 /**
  * @author Joseph Bielawski <stloyd@gmail.com>
  * @author SensioLabs <contact@sensiolabs.com>
+ *
+ * @final since 1.4
  */
 class SensioConnectUserResponse extends AbstractUserResponse
 {

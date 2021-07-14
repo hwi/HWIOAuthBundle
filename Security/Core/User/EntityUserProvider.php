@@ -27,6 +27,8 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  * owner names and the properties of the entities.
  *
  * @author Alexander <iam.asm89@gmail.com>
+ *
+ * @final since 1.4
  */
 class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
 {

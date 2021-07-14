@@ -30,6 +30,8 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  * property mapping should be available.
  *
  * @author Alexander <iam.asm89@gmail.com>
+ *
+ * @final since 1.4
  */
 class FOSUBUserProvider implements UserProviderInterface, AccountConnectorInterface, OAuthAwareUserProviderInterface
 {

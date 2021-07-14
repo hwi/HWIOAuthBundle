@@ -18,6 +18,8 @@ use Symfony\Component\Templating\Helper\Helper;
 /**
  * @author Alexander <iam.asm89@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
+ *
+ * @final since 1.4
  */
 class OAuthHelper extends Helper
 {

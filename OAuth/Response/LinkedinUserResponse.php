@@ -11,6 +11,9 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
+/**
+ * @final since 1.4
+ */
 class LinkedinUserResponse extends PathUserResponse
 {
     /**
