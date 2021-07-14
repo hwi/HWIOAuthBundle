@@ -22,12 +22,12 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class SessionStorageTest extends TestCase
 {
     /**
-     * @var MockObject|SessionInterface
+     * @var MockObject&SessionInterface
      */
     private $session;
 
     /**
-     * @var MockObject|ResourceOwnerInterface
+     * @var MockObject&ResourceOwnerInterface
      */
     private $resourceOwner;
 
