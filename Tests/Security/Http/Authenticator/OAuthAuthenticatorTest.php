@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security\Http\Authenticator;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\OAuthAuthenticator;
@@ -27,6 +28,7 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
@@ -144,10 +146,12 @@ class OAuthAuthenticatorTest extends TestCase
             $this->getAuthenticationFailureHandlerMock()
         );
 
+        /** @var UserPassportInterface $passport */
         $passport = $authenticator->authenticate($request);
         $this->assertInstanceOf(SelfValidatingPassport::class, $passport);
         $this->assertSame($userMock, $passport->getUser());
 
+        /** @var AbstractOAuthToken $token */
         $token = $authenticator->createAuthenticatedToken($passport, 'main');
         $this->assertInstanceOf(OAuthToken::class, $token);
         $this->assertEquals($resourceOwnerName, $token->getResourceOwnerName());

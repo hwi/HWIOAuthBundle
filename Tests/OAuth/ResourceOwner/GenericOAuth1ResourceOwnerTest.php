@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Http\Client\Common\HttpMethodsClient;
+use Http\Client\HttpClient;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
@@ -25,7 +25,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
     /** @var GenericOAuth1ResourceOwner */
     protected $resourceOwner;
     protected $resourceOwnerName;
-    /** @var MockObject&HttpMethodsClient */
+    /** @var MockObject&HttpClient */
     protected $httpClient;
     protected $httpResponse;
     protected $httpResponseContentType;
@@ -313,7 +313,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
 
         $this->mockHttpClient();
 
-        /** @var $userResponse CustomUserResponse */
+        /** @var CustomUserResponse $userResponse */
         $userResponse = $resourceOwner->getUserInformation(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']);
 
         $this->assertInstanceOf($class, $userResponse);

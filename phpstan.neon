@@ -1,5 +1,5 @@
 parameters:
-    level: 1
+    level: 2
     paths:
         - .
     excludePaths:
@@ -12,3 +12,6 @@ parameters:
         - ./Security/Core/User/FOSUBUserProvider.php
         - ./Form/FOSUBRegistrationFormHandler.php
         - ./Tests/Security/Core/User/FOSUBUserProviderTest.php
+    ignoreErrors:
+        - '#Parameter \$event of method HWI\\Bundle\\OAuthBundle\\Controller\\ConnectController::dispatch\(\) has invalid typehint type Symfony\\Component\\EventDispatcher\\Event#'
+    treatPhpDocTypesAsCertain: false

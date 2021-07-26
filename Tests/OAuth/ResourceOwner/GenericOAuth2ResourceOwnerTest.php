@@ -102,7 +102,7 @@ json;
     {
         $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
 
-        /** @var $userResponse AbstractUserResponse */
+        /** @var AbstractUserResponse $userResponse */
         $userResponse = $this->resourceOwner->getUserInformation($this->tokenData);
 
         $this->assertEquals('1', $userResponse->getUsername());

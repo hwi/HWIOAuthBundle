@@ -89,7 +89,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
                     );
             });
 
-        /** @var $userResponse \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse */
+        /** @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse $userResponse */
         $userResponse = $resourceOwner->getUserInformation(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']);
 
         $this->assertInstanceOf($class, $userResponse);

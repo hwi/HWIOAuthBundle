@@ -63,7 +63,7 @@ json;
 
         $this->mockHttpClient('{"ret": 0}');
 
-        /** @var $userResponse CustomUserResponse */
+        /** @var CustomUserResponse $userResponse */
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token'], ['openid' => '1']);
 
         $this->assertInstanceOf($class, $userResponse);

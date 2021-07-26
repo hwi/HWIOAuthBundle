@@ -17,6 +17,7 @@ use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\MyCustomProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Yaml\Parser;
 
@@ -484,6 +485,7 @@ class HWIOAuthExtensionTest extends TestCase
             'client_secret' => 'foo',
         ]);
 
+        /** @var array<string, ChildDefinition> $definitions */
         $definitions = $this->containerBuilder->getDefinitions();
 
         $this->assertArrayHasKey('hwi_oauth.resource_owner.my_github', $definitions);
@@ -532,6 +534,7 @@ class HWIOAuthExtensionTest extends TestCase
             'client_secret' => 'foo',
         ]);
 
+        /** @var array<string, ChildDefinition> $definitions */
         $definitions = $this->containerBuilder->getDefinitions();
 
         $this->assertArrayHasKey('hwi_oauth.resource_owner.external_ressource_owner', $definitions);

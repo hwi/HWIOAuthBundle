@@ -79,7 +79,7 @@ abstract class AbstractConnectControllerTest extends TestCase
     protected $oAuthUtils;
 
     /**
-     * @var MockObject&ResourceOwnerMapLocator
+     * @var ResourceOwnerMapLocator
      */
     protected $resourceOwnerMapLocator;
 

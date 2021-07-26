@@ -235,7 +235,6 @@ final class ConnectController extends AbstractController
             return $this->getConfirmationResponse($request, $accessToken, $service);
         }
 
-        /** @var $form FormInterface */
         $form = $this->createForm(FormType::class);
 
         // Handle the form
@@ -337,9 +336,9 @@ final class ConnectController extends AbstractController
      */
     private function getConfirmationResponse(Request $request, array $accessToken, string $service): Response
     {
-        /** @var $currentToken OAuthToken */
+        /** @var OAuthToken $currentToken */
         $currentToken = $this->get('security.token_storage')->getToken();
-        /** @var $currentUser UserInterface */
+        /** @var UserInterface $currentUser */
         $currentUser = $currentToken->getUser();
 
         $resourceOwner = $this->getResourceOwnerByName($service);
