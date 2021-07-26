@@ -1,16 +1,23 @@
 Changelog
 =========
-## 1.4.0 (2021-xx-xx)
+## 1.4.0 (2021-07-26)
 * BC Break: dropped Symfony 5.0 support as it is EOL,
 * BC Break: dropped PHP 7.2 support as it is EOL,
 * BC Break: changed `__construct()` argument for `OAuth/RequestDataStorage/SessionStorage`, from `SessionInterface $session` to `RequestStack $requestStack`,
+* BC Break: all internal classes are "softly" marked as `final`,
 * Added: Symfony 5.1 Security system support,
+* Added: Forward compatibility layer for session service deprecation,
 * Added: state support for service authentication URL's,
 * Added: ability to change the response after `HWIOAuthEvents::CONNECT_COMPLETED` is fired,
+* Added: PHPStan static analyse into CI,
+* Fixed: `OAuthProvide` to properly refresh data inside tokens,
 * Fixed: PHP notice in `AppleResourceOwner`,
 * Fixed: use new GitHub API in `GitHubResourceOwner`,
+* Fixed: functional tests with & without FOSUserBundle,
+* Fixed: controller don't depend on service container if possible,
 * Maintain: removed `Wunderlist` resource owner,
 * Maintain: removed several Symfony BC layers,
+* Maintain: removed Prophecy in favour of PHPUnit mocking,
 
 ## 1.3.0 (2021-01-03)
 * BC Break: dropped support for Symfony `<4.4`,
