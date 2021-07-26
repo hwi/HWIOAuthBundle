@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * ToshlResourceOwner.
  *
  * @author Davide Bellettini <davide@bellettini.me>
+ *
+ * @final since 1.4
  */
 class ToshlResourceOwner extends GenericOAuth2ResourceOwner
 {

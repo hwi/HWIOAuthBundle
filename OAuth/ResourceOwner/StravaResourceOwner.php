@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * StravaResourceOwner.
  *
  * @author Artem Genvald <genvaldartem@gmail.com>
+ *
+ * @final since 1.4
  */
 class StravaResourceOwner extends GenericOAuth2ResourceOwner
 {

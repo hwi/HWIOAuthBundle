@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * MailRuResourceOwner.
  *
  * @author Gaponov Igor <jiminy96@gmail.com>
+ *
+ * @final since 1.4
  */
 class MailRuResourceOwner extends GenericOAuth2ResourceOwner
 {

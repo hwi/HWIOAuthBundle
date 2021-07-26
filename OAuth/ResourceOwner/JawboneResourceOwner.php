@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * JawboneResourceOwner.
  *
  * @author Dmitry Matora <dmitry.matora@gmail.com>
+ *
+ * @final since 1.4
  */
 class JawboneResourceOwner extends GenericOAuth2ResourceOwner
 {

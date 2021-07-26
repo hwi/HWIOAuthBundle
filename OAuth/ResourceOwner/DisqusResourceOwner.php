@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * DisqusResourceOwner.
  *
  * @author Alexander Müller <amr@kapthon.com>
+ *
+ * @final since 1.4
  */
 class DisqusResourceOwner extends GenericOAuth2ResourceOwner
 {

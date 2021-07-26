@@ -24,14 +24,14 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 abstract class ResourceOwnerTestCase extends TestCase
 {
-    /** @var MockObject|HttpClient */
+    /** @var MockObject&HttpClient */
     protected $httpClient;
     protected $httpResponse;
     protected $httpResponseContentType;
     protected $httpResponseHttpCode = 200;
     protected $httpClientCalls;
 
-    /** @var MockObject|RequestDataStorageInterface */
+    /** @var MockObject&RequestDataStorageInterface */
     protected $storage;
     protected $state = 'eyJzdGF0ZSI6InJhbmRvbSJ9';
     protected $csrf = false;

@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * YandexResourceOwner.
  *
  * @author Anton Kamenschikov <wiistriker [at] gmail.com>
+ *
+ * @final since 1.4
  */
 class YandexResourceOwner extends GenericOAuth2ResourceOwner
 {

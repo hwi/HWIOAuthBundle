@@ -31,37 +31,37 @@ use Twig\Environment;
 class LoginControllerTest extends TestCase
 {
     /**
-     * @var MockObject|AuthorizationCheckerInterface
+     * @var MockObject&AuthorizationCheckerInterface
      */
     private $authorizationChecker;
 
     /**
-     * @var MockObject|ContainerInterface
+     * @var MockObject&ContainerInterface
      */
     private $container;
 
     /**
-     * @var MockObject|Environment
+     * @var MockObject&Environment
      */
     private $twig;
 
     /**
-     * @var MockObject|RouterInterface
+     * @var MockObject&RouterInterface
      */
     private $router;
 
     /**
-     * @var MockObject|AuthenticationUtils
+     * @var MockObject&AuthenticationUtils
      */
     private $authenticationUtils;
 
     /**
-     * @var MockObject|SessionInterface
+     * @var MockObject&SessionInterface
      */
     private $session;
 
     /**
-     * @var MockObject|RequestStack
+     * @var MockObject&RequestStack
      */
     private $requestStack;
 

@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  *
  * @author Francisco Facioni <fran6co@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
+ *
+ * @final since 1.4
  */
 class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
 {

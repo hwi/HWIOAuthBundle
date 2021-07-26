@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * GitLabResourceOwner.
  *
  * @author Indra Gunawan <hello@indra.my.id>
+ *
+ * @final since 1.4
  */
 class GitLabResourceOwner extends GenericOAuth2ResourceOwner
 {

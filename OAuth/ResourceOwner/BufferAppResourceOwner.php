@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * BufferAppResourceOwner.
  *
  * @author João Paulo Cercal <sistemas@cekurte.com>
+ *
+ * @final since 1.4
  */
 class BufferAppResourceOwner extends GenericOAuth2ResourceOwner
 {

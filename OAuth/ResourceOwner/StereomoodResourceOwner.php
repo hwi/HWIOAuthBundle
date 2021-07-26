@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * StereomoodResourceOwner.
  *
  * @author Vincenzo Di Biaggio <aniceweb@gmail.com>
+ *
+ * @final since 1.4
  */
 class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
 {

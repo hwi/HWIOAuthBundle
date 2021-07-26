@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * SoundcloudResourceOwner.
  *
  * @author Anthony AHMED <antho.ahmed@gmail.com>
+ *
+ * @final since 1.4
  */
 class SoundcloudResourceOwner extends GenericOAuth2ResourceOwner
 {

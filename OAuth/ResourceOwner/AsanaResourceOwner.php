@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * AsanaResourceOwner.
  *
  * @author Guillaume Potier <guillaume@wisembly.com>
+ *
+ * @final since 1.4
  */
 class AsanaResourceOwner extends GenericOAuth2ResourceOwner
 {

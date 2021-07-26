@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * CleverResourceOwner.
  *
  * @author Matt Farmer <work@mattfarmer.net>
+ *
+ * @final since 1.4
  */
 class CleverResourceOwner extends GenericOAuth2ResourceOwner
 {

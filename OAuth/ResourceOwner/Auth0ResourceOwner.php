@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Auth0ResourceOwner.
  *
  * @author Hernan Rajchert <hrajchert@gmail.com>
+ *
+ * @final since 1.4
  */
 class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
 {

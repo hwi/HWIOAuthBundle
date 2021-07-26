@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * RunKeeperResourceOwner.
  *
  * @author Artem Genvald <genvaldartem@gmail.com>
+ *
+ * @final since 1.4
  */
 class RunKeeperResourceOwner extends GenericOAuth2ResourceOwner
 {

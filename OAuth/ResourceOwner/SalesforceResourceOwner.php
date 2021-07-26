@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * Salesforce Resource Owner.
  *
  * @author Tyler Pugh <tylerism@gmail.com>
+ *
+ * @final since 1.4
  */
 class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
 {

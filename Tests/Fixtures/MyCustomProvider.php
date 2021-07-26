@@ -20,22 +20,27 @@ class MyCustomProvider implements ResourceOwnerInterface
 {
     public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
+        return new CustomUserResponse();
     }
 
     public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
+        return '';
     }
 
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
     {
+        return [];
     }
 
     public function isCsrfTokenValid($csrfToken)
     {
+        return false;
     }
 
     public function getName()
     {
+        return 'custom_provider';
     }
 
     public function getOption($name)
@@ -44,6 +49,7 @@ class MyCustomProvider implements ResourceOwnerInterface
 
     public function handles(Request $request)
     {
+        return false;
     }
 
     public function setName($name)

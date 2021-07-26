@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * XingResourceOwner.
  *
  * @author othillo <othillo@othillo.nl>
+ *
+ * @final since 1.4
  */
 class XingResourceOwner extends GenericOAuth1ResourceOwner
 {

@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * OdnoklassnikiResourceOwner.
  *
  * @author Sergey Polischook <spolischook@gmail.com>
+ *
+ * @final since 1.4
  */
 class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
 {

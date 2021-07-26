@@ -24,6 +24,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * more infos at https://github.com/ging/fi-ware-idm/wiki/Using-the-FIWARE-LAB-instance
  *
  * @author Christian Kaspar <christian@sponsoo.de>
+ *
+ * @final since 1.4
  */
 class FiwareResourceOwner extends GenericOAuth2ResourceOwner
 {

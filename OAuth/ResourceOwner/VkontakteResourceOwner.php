@@ -22,6 +22,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * @author Adrov Igor <nucleartux@gmail.com>
  * @author Vladislav Vlastovskiy <me@vlastv.ru>
  * @author Alexander Latushkin <alex@skazo4neg.ru>
+ *
+ * @final since 1.4
  */
 class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 {

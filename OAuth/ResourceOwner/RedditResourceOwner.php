@@ -15,6 +15,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Martin Aarhof <martin.aarhof@gmail.com>
+ *
+ * @final since 1.4
  */
 class RedditResourceOwner extends GenericOAuth2ResourceOwner
 {

@@ -17,6 +17,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * AmazonResourceOwner.
  *
  * @author Fabian Kiss <fabian.kiss@ymc.ch>
+ *
+ * @final since 1.4
  */
 class AmazonResourceOwner extends GenericOAuth2ResourceOwner
 {

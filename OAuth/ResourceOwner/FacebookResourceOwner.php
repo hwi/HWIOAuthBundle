@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  * FacebookResourceOwner.
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
+ *
+ * @final since 1.4
  */
 class FacebookResourceOwner extends GenericOAuth2ResourceOwner
 {

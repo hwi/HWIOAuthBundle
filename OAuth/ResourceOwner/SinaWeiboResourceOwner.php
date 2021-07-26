@@ -14,6 +14,9 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @final since 1.4
+ */
 class SinaWeiboResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**

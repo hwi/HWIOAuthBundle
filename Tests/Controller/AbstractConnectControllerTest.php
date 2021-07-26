@@ -44,67 +44,67 @@ abstract class AbstractConnectControllerTest extends TestCase
     protected $controller;
 
     /**
-     * @var MockObject|AuthorizationCheckerInterface
+     * @var MockObject&AuthorizationCheckerInterface
      */
     protected $authorizationChecker;
 
     /**
-     * @var MockObject|TokenStorageInterface
+     * @var MockObject&TokenStorageInterface
      */
     protected $tokenStorage;
 
     /**
-     * @var MockObject|EngineInterface
+     * @var MockObject&EngineInterface
      */
     protected $twig;
 
     /**
-     * @var MockObject|RouterInterface
+     * @var MockObject&RouterInterface
      */
     protected $router;
 
     /**
-     * @var MockObject|ResourceOwnerMap
+     * @var MockObject&ResourceOwnerMap
      */
     protected $resourceOwnerMap;
 
     /**
-     * @var MockObject|ResourceOwnerInterface
+     * @var MockObject&ResourceOwnerInterface
      */
     protected $resourceOwner;
 
     /**
-     * @var MockObject|AccountConnectorInterface
+     * @var MockObject&AccountConnectorInterface
      */
     protected $accountConnector;
 
     /**
-     * @var MockObject|OAuthUtils
+     * @var MockObject&OAuthUtils
      */
     protected $oAuthUtils;
 
     /**
-     * @var MockObject|ResourceOwnerMapLocator
+     * @var MockObject&ResourceOwnerMapLocator
      */
     protected $resourceOwnerMapLocator;
 
     /**
-     * @var MockObject|UserCheckerInterface
+     * @var MockObject&UserCheckerInterface
      */
     protected $userChecker;
 
     /**
-     * @var MockObject|EventDispatcherInterface
+     * @var MockObject&EventDispatcherInterface
      */
     protected $eventDispatcher;
 
     /**
-     * @var MockObject|FormFactoryInterface
+     * @var MockObject&FormFactoryInterface
      */
     protected $formFactory;
 
     /**
-     * @var MockObject|SessionInterface
+     * @var MockObject&SessionInterface
      */
     protected $session;
 

@@ -207,7 +207,7 @@ class OAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return HttpUtils|MockObject
+     * @return HttpUtils&MockObject
      */
     private function getHttpUtilsMock(): HttpUtils
     {
@@ -215,7 +215,7 @@ class OAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return OAuthAwareUserProviderInterface|MockObject
+     * @return OAuthAwareUserProviderInterface&MockObject
      */
     private function getOAuthAwareUserProviderMock(): OAuthAwareUserProviderInterface
     {
@@ -223,7 +223,7 @@ class OAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return ResourceOwnerMap|MockObject
+     * @return ResourceOwnerMap&MockObject
      */
     private function getResourceOwnerMapMock(): ResourceOwnerMap
     {
@@ -231,7 +231,7 @@ class OAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return AuthenticationSuccessHandlerInterface|MockObject
+     * @return AuthenticationSuccessHandlerInterface&MockObject
      */
     private function getAuthenticationSuccessHandlerMock(): AuthenticationSuccessHandlerInterface
     {
@@ -239,7 +239,7 @@ class OAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return AuthenticationFailureHandlerInterface|MockObject
+     * @return AuthenticationFailureHandlerInterface&MockObject
      */
     private function getAuthenticationFailureHandlerMock(): AuthenticationFailureHandlerInterface
     {
@@ -247,7 +247,7 @@ class OAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return ResourceOwnerInterface|MockObject
+     * @return ResourceOwnerInterface&MockObject
      */
     private function getResourceOwnerMock(): ResourceOwnerInterface
     {
@@ -255,7 +255,7 @@ class OAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return UserResponseInterface|MockObject
+     * @return UserResponseInterface&MockObject
      */
     private function getUserResponseMock(): UserResponseInterface
     {
@@ -263,7 +263,7 @@ class OAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return UserInterface|MockObject
+     * @return UserInterface&MockObject
      */
     private function getUserMock(): UserInterface
     {
@@ -271,7 +271,7 @@ class OAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return OAuthToken|MockObject
+     * @return OAuthToken&MockObject
      */
     private function getOAuthTokenMock(): OAuthToken
     {

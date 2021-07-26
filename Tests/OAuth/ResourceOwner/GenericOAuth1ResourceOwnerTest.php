@@ -25,11 +25,11 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
     /** @var GenericOAuth1ResourceOwner */
     protected $resourceOwner;
     protected $resourceOwnerName;
-    /** @var MockObject|HttpMethodsClient */
+    /** @var MockObject&HttpMethodsClient */
     protected $httpClient;
     protected $httpResponse;
     protected $httpResponseContentType;
-    /** @var MockObject|RequestDataStorageInterface */
+    /** @var MockObject&RequestDataStorageInterface */
     protected $storage;
 
     protected $options = [
