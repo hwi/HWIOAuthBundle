@@ -15,7 +15,6 @@ use HWI\Bundle\OAuthBundle\Controller\LoginController;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -34,11 +33,6 @@ class LoginControllerTest extends TestCase
      * @var MockObject&AuthorizationCheckerInterface
      */
     private $authorizationChecker;
-
-    /**
-     * @var MockObject&ContainerInterface
-     */
-    private $container;
 
     /**
      * @var MockObject&Environment
@@ -75,24 +69,8 @@ class LoginControllerTest extends TestCase
         parent::setUp();
 
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
-
         $this->twig = $this->createMock(Environment::class);
-
-        $this->container = $this->createMock(ContainerInterface::class);
-        $this->container->expects($this->any())
-            ->method('has')
-            ->willReturnMap([
-                ['templating', false],
-                ['twig', true],
-            ]);
-        $this->container->expects($this->any())
-            ->method('get')
-            ->willReturnMap([
-                ['twig', ContainerInterface::EXCEPTION_ON_INVALID_REFERENCE, $this->twig],
-            ]);
-
         $this->router = $this->createMock(RouterInterface::class);
-
         $this->session = $this->createMock(SessionInterface::class);
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
@@ -220,16 +198,14 @@ class LoginControllerTest extends TestCase
 
     private function createController(bool $connect = true, string $grantRule = 'IS_AUTHENTICATED_REMEMBERED'): LoginController
     {
-        $controller = new LoginController(
+        return new LoginController(
             $this->authenticationUtils,
             $this->router,
             $this->authorizationChecker,
             $this->requestStack,
+            $this->twig,
             $connect,
             $grantRule
         );
-        $controller->setContainer($this->container);
-
-        return $controller;
     }
 }

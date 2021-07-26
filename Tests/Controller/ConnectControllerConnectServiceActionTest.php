@@ -25,9 +25,8 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
     {
         $this->expectException(NotFoundHttpException::class);
 
-        $this->container->setParameter('hwi_oauth.connect', false);
-
-        $this->controller->connectServiceAction($this->request, 'facebook');
+        $controller = $this->createConnectController(false);
+        $controller->connectServiceAction($this->request, 'facebook');
     }
 
     public function testAlreadyConnected()
@@ -37,18 +36,18 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
 
         $this->mockAuthorizationCheck(false);
 
-        $this->controller->connectServiceAction($this->request, 'facebook');
+        $controller = $this->createConnectController();
+        $controller->connectServiceAction($this->request, 'facebook');
     }
 
     public function testUnknownResourceOwner()
     {
         $this->expectException(NotFoundHttpException::class);
 
-        $this->container->setParameter('hwi_oauth.firewall_names', []);
-
         $this->mockAuthorizationCheck();
 
-        $this->controller->connectServiceAction($this->request, 'unknown');
+        $controller = $this->createConnectController(true, true, []);
+        $controller->connectServiceAction($this->request, 'unknown');
     }
 
     public function testConnectConfirm()
@@ -85,7 +84,8 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->with('@HWIOAuth/Connect/connect_confirm.html.twig')
         ;
 
-        $this->controller->connectServiceAction($this->request, 'facebook');
+        $controller = $this->createConnectController();
+        $controller->connectServiceAction($this->request, 'facebook');
     }
 
     public function testConnectSuccess()
@@ -129,7 +129,8 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->with('@HWIOAuth/Connect/connect_success.html.twig')
         ;
 
-        $this->controller->connectServiceAction($this->request, 'facebook');
+        $controller = $this->createConnectController();
+        $controller->connectServiceAction($this->request, 'facebook');
     }
 
     public function testConnectNoConfirmation()
@@ -137,7 +138,6 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $key = time();
 
         $this->request->query->set('key', $key);
-        $this->container->setParameter('hwi_oauth.connect.confirmation', false);
 
         $this->mockAuthorizationCheck();
 
@@ -164,7 +164,8 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->with('@HWIOAuth/Connect/connect_success.html.twig')
         ;
 
-        $this->controller->connectServiceAction($this->request, 'facebook');
+        $controller = $this->createConnectController(true, false);
+        $controller->connectServiceAction($this->request, 'facebook');
     }
 
     public function testResourceOwnerHandle()
@@ -201,6 +202,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
             ->with('@HWIOAuth/Connect/connect_confirm.html.twig')
         ;
 
-        $this->controller->connectServiceAction($this->request, 'facebook');
+        $controller = $this->createConnectController();
+        $controller->connectServiceAction($this->request, 'facebook');
     }
 }

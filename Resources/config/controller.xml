@@ -9,12 +9,18 @@
             <argument type="service" id="hwi_oauth.security.oauth_utils" />
             <argument type="service" id="hwi_oauth.resource_ownermap_locator" />
             <argument type="service" id="request_stack" />
+            <argument key="$enableConnect">%hwi_oauth.connect%</argument>
+            <argument key="$grantRule">%hwi_oauth.grant_rule%</argument>
+            <argument key="$failedUseReferer">%hwi_oauth.failed_use_referer%</argument>
+            <argument key="$failedAuthPath">%hwi_oauth.failed_auth_path%</argument>
+            <argument key="$enableConnectConfirmation">%hwi_oauth.connect.confirmation%</argument>
+            <argument key="$firewallNames">%hwi_oauth.firewall_names%</argument>
 
             <call method="setContainer">
                 <argument type="service" id="service_container" />
             </call>
 
-            <tag name="controller.service_arguments" />
+            <tag name="container.service_subscriber" />
         </service>
 
         <service id="HWI\Bundle\OAuthBundle\Controller\LoginController" public="true">
@@ -22,13 +28,9 @@
             <argument type="service" id="router" />
             <argument type="service" id="security.authorization_checker" />
             <argument type="service" id="request_stack" />
+            <argument type="service" id="twig" />
             <argument>%hwi_oauth.connect%</argument>
             <argument>%hwi_oauth.grant_rule%</argument>
-
-            <call method="setContainer" />
-
-            <tag name="container.service_subscriber" />
-            <tag name="controller.service_arguments" />
         </service>
 
         <service id="HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController" public="true">
@@ -38,8 +40,6 @@
             <argument>%hwi_oauth.target_path_parameter%</argument>
             <argument>%hwi_oauth.failed_use_referer%</argument>
             <argument>%hwi_oauth.use_referer%</argument>
-
-            <tag name="controller.service_arguments" />
         </service>
     </services>
 </container>
