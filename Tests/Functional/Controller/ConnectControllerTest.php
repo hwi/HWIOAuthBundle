@@ -26,19 +26,11 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-/**
- * uses FOSUserBundle which itself contains lots of deprecations.
- *
- * @group legacy
- */
 final class ConnectControllerTest extends WebTestCase
 {
     protected function setUp(): void
     {
         static::$class = AppKernel::class;
-        if (!class_exists(\FOS\UserBundle\Model\User::class)) {
-            $this->markTestSkipped('FOSUserBundle not installed.');
-        }
     }
 
     public static function getKernelClass(): string
@@ -110,7 +102,8 @@ final class ConnectControllerTest extends WebTestCase
 
         $this->createDatabase($client);
 
-        $session = $client->getContainer()->get('request_stack')->getSession();
+        $session = $client->getContainer()->get('session');
+
         $key = 1;
         $session->set('_hwi_oauth.connect_confirmation.'.$key, ['access_token' => 'valid-access-token']);
         $this->logIn($client, $session);

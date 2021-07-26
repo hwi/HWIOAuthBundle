@@ -36,6 +36,6 @@ final class UserProvider implements OAuthAwareUserProviderInterface, UserProvide
 
     public function supportsClass($class)
     {
-        return $class instanceof User;
+        return User::class === $class;
     }
 }

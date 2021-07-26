@@ -22,20 +22,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Security;
 
-/**
- * uses FOSUserBundle which itself contains lots of deprecations.
- *
- * @group legacy
- */
 final class LoginControllerTest extends WebTestCase
 {
-    protected function setUp(): void
-    {
-        if (!class_exists(\FOS\UserBundle\Model\User::class)) {
-            $this->markTestSkipped('FOSUserBundle not installed.');
-        }
-    }
-
     public function testLoginPage(): void
     {
         $client = static::createClient();
@@ -69,7 +57,7 @@ final class LoginControllerTest extends WebTestCase
         $client = static::createClient();
         $httpClient = $this->prophesize(ClientInterface::class);
         $client->getContainer()->set(ClientInterface::class, $httpClient->reveal());
-        $session = $client->getContainer()->get('request_stack')->getSession();
+        $session = $client->getContainer()->get('session');
 
         $this->logIn($client, $session);
         $exception = new UsernameNotFoundException();
