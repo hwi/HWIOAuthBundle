@@ -18,6 +18,7 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use HWI\Bundle\OAuthBundle\Tests\Functional\WebTestCase;
 use Psr\Http\Client\ClientInterface;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Security;
@@ -34,13 +35,15 @@ final class LoginControllerTest extends WebTestCase
         if (!class_exists(\FOS\UserBundle\Model\User::class)) {
             $this->markTestSkipped('FOSUserBundle not installed.');
         }
+
+        parent::setUp();
     }
 
     public function testLoginPage(): void
     {
         $client = static::createClient();
-        $httpClient = $this->prophesize(ClientInterface::class);
-        $client->getContainer()->set(ClientInterface::class, $httpClient->reveal());
+
+        self::$container->set(ClientInterface::class, $this->createMock(ClientInterface::class));
 
         $crawler = $client->request('GET', '/login_hwi/');
 
@@ -53,7 +56,8 @@ final class LoginControllerTest extends WebTestCase
     public function testRedirectingToRegistrationFormWithError(): void
     {
         $client = static::createClient();
-        $session = $client->getContainer()->get('session');
+
+        $session = $this->getSession();
         $session->set(Security::AUTHENTICATION_ERROR, new AccountNotLinkedException());
 
         $client->request('GET', '/login_hwi/');
@@ -67,9 +71,10 @@ final class LoginControllerTest extends WebTestCase
     public function testLoginPageWithError(): void
     {
         $client = static::createClient();
-        $httpClient = $this->prophesize(ClientInterface::class);
-        $client->getContainer()->set(ClientInterface::class, $httpClient->reveal());
-        $session = $client->getContainer()->get('request_stack')->getSession();
+
+        self::$container->set(ClientInterface::class, $this->createMock(ClientInterface::class));
+
+        $session = $this->getSession();
 
         $this->logIn($client, $session);
         $exception = new UsernameNotFoundException();
@@ -92,5 +97,20 @@ final class LoginControllerTest extends WebTestCase
 
         $cookie = new Cookie($session->getName(), $session->getId());
         $client->getCookieJar()->set($cookie);
+    }
+
+    private function getSession(): SessionInterface
+    {
+        /** @var RequestStack $requestStack */
+        $requestStack = self::$container->get('request_stack');
+
+        $session = null;
+        if (method_exists($requestStack, 'getSession')) {
+            $session = $requestStack->getSession();
+        } elseif ((null !== $request = $requestStack->getCurrentRequest()) && $request->hasSession()) {
+            $session = $request->getSession();
+        }
+
+        return $session ?: self::$container->get('session');
     }
 }
