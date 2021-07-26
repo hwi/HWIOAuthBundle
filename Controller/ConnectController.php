@@ -21,6 +21,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\Event as DeprecatedEvent;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -380,7 +381,10 @@ final class ConnectController extends AbstractController
         return $response;
     }
 
-    private function dispatch(Event $event, string $eventName = null): void
+    /**
+     * @param Event|DeprecatedEvent $event
+     */
+    private function dispatch($event, string $eventName = null): void
     {
         $this->get('event_dispatcher')->dispatch($event, $eventName);
     }
