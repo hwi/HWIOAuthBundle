@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace HWI\Bundle\OAuthBundle\Tests\Functional\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Tests\App\AppKernel;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
-use Prophecy\Argument;
 use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
@@ -48,29 +48,29 @@ final class ConnectControllerTest extends WebTestCase
 
     public function testRegistration(): void
     {
-        $mockResponse = $this->prophesize(ResponseInterface::class);
-        $mockResponse->getBody()
+        $mockResponse = $this->createMock(ResponseInterface::class);
+        $mockResponse->method('getBody')
             ->willReturn(json_encode(['access_token' => 'valid-access-token']));
 
-        $httpClient = $this->prophesize(ClientInterface::class);
-        $httpClient->sendRequest(Argument::type(RequestInterface::class))
-            ->shouldBeCalled()
-            ->willReturn($mockResponse->reveal());
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->method('sendRequest')
+            ->withAnyParameters()
+            ->willReturn($mockResponse);
 
         $client = static::createClient();
         $client->disableReboot();
 
-        $client->getContainer()->set(ClientInterface::class, $httpClient->reveal());
+        self::$container->set(ClientInterface::class, $httpClient);
 
         $key = 1;
         $exception = new AccountNotLinkedException();
         $exception->setResourceOwnerName('google');
         $exception->setToken(new CustomOAuthToken());
 
-        $session = $client->getContainer()->get('session');
+        $session = $this->getSession();
         $session->set('_hwi_oauth.registration_error.'.$key, $exception);
 
-        $this->createDatabase($client);
+        $this->createDatabase();
 
         $crawler = $client->request('GET', '/connect/registration/'.$key);
 
@@ -95,22 +95,23 @@ final class ConnectControllerTest extends WebTestCase
 
     public function testConnectService(): void
     {
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')
+            ->willReturn(json_encode(['name' => 'foo']));
+
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->method('sendRequest')
+            ->withAnyParameters()
+            ->willReturn($response);
+
         $client = static::createClient();
         $client->disableReboot();
 
-        $mockResponse = $this->prophesize(ResponseInterface::class);
-        $httpClient = $this->prophesize(ClientInterface::class);
-        $mockResponse->getBody()
-            ->willReturn(json_encode(['name' => 'foo']));
+        self::$container->set(ClientInterface::class, $httpClient);
 
-        $httpClient->sendRequest(Argument::any())
-            ->shouldBeCalled()
-            ->willReturn($mockResponse->reveal());
-        $client->getContainer()->set(ClientInterface::class, $httpClient->reveal());
+        $this->createDatabase();
 
-        $this->createDatabase($client);
-
-        $session = $client->getContainer()->get('request_stack')->getSession();
+        $session = $this->getSession();
         $key = 1;
         $session->set('_hwi_oauth.connect_confirmation.'.$key, ['access_token' => 'valid-access-token']);
         $this->logIn($client, $session);
@@ -142,12 +143,28 @@ final class ConnectControllerTest extends WebTestCase
         $client->getCookieJar()->set($cookie);
     }
 
-    private function createDatabase(KernelBrowser $client): void
+    private function createDatabase(): void
     {
-        $entityManager = $client->getContainer()->get('doctrine.orm.entity_manager');
+        /** @var EntityManagerInterface $entityManager */
+        $entityManager = self::$container->get('doctrine.orm.entity_manager');
 
         $metadata = $entityManager->getMetadataFactory()->getAllMetadata();
         $schemaTool = new SchemaTool($entityManager);
         $schemaTool->updateSchema($metadata);
+    }
+
+    private function getSession(): SessionInterface
+    {
+        /** @var RequestStack $requestStack */
+        $requestStack = self::$container->get('request_stack');
+
+        $session = null;
+        if (method_exists($requestStack, 'getSession')) {
+            $session = $requestStack->getSession();
+        } elseif ((null !== $request = $requestStack->getCurrentRequest()) && $request->hasSession()) {
+            $session = $request->getSession();
+        }
+
+        return $session ?: self::$container->get('session');
     }
 }

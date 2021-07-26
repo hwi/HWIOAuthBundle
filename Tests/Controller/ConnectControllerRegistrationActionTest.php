@@ -159,12 +159,13 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
             ->method('getData')
             ->willReturn(new User());
 
-        if (!class_exists(FactoryInterface::class)) {
+        if (!class_exists(\FOS\UserBundle\Model\User::class)) {
             $this->markTestSkipped('FOSUserBundle not installed.');
         }
 
         $this->container->setParameter('hwi_oauth.fosub_enabled', true);
 
+        // @phpstan-ignore-next-line
         $registrationFormFactory = $this->createMock(FactoryInterface::class);
         $registrationFormFactory->expects($this->any())
             ->method('createForm')

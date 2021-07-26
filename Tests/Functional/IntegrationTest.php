@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace HWI\Bundle\OAuthBundle\Tests\Functional;
 
-use Prophecy\Argument;
 use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,7 +30,6 @@ class IntegrationTest extends WebTestCase
     public function testRequestRedirect(): void
     {
         $client = static::createClient();
-
         $client->request('GET', '/');
 
         $response = $client->getResponse();
@@ -48,7 +45,8 @@ class IntegrationTest extends WebTestCase
         $this->assertSame(200, $response->getStatusCode(), 'No landing, got redirect to '.$response->headers->get('Location'));
 
         $client->disableReboot();
-        $client->getContainer()->set(ClientInterface::class, $this->prophesize(ClientInterface::class)->reveal());
+
+        self::$container->set(ClientInterface::class, $this->createMock(ClientInterface::class));
 
         $client->click($crawler->selectLink('Login')->link());
 
@@ -77,18 +75,19 @@ class IntegrationTest extends WebTestCase
                 'prompt' => 'none',
             ]);
 
-        $response = $this->prophesize(ResponseInterface::class);
-        $response->getBody()
+        $response = $this->createMock(ResponseInterface::class);
+        $response->method('getBody')
             ->willReturn(json_encode(['access_token' => 'valid-access-token']));
 
-        $httpClient = $this->prophesize(ClientInterface::class);
-        $httpClient->sendRequest(Argument::type(RequestInterface::class))
-            ->shouldBeCalled()
-            ->willReturn($response->reveal());
+        $httpClient = $this->createMock(ClientInterface::class);
+        $httpClient->method('sendRequest')
+            ->withAnyParameters()
+            ->willReturn($response);
 
         $client = static::createClient();
         $client->disableReboot();
-        $client->getContainer()->set(ClientInterface::class, $httpClient->reveal());
+
+        self::$container->set(ClientInterface::class, $httpClient);
 
         $client->request('GET', $redirectLoginFromService);
 
