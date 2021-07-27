@@ -383,6 +383,7 @@ class HWIOAuthExtensionTest extends TestCase
         $this->assertNotHasDefinition('hwi_oauth.user.provider.fosub_bridge');
 
         $this->assertParameter(false, 'hwi_oauth.connect');
+        $this->assertParameter(false, 'hwi_oauth.connect.confirmation');
 
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
