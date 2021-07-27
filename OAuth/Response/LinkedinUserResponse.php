@@ -64,7 +64,7 @@ class LinkedinUserResponse extends PathUserResponse
      * Helper to extract the preferred locale value from MultiLocaleString
      * https://docs.microsoft.com/en-us/linkedin/shared/references/v2/object-types#multilocalestring.
      *
-     * @param $path
+     * @param string $path
      */
     protected function getPreferredLocaleValue($path)
     {

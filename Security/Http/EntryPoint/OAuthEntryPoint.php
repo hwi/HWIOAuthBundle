@@ -68,7 +68,10 @@ class OAuthEntryPoint implements AuthenticationEntryPointInterface
     {
         if ($this->useForward) {
             $subRequest = $this->httpUtils->createRequest($request, $this->loginPath);
-            $subRequest->query->add($request->query->getIterator()->getArrayCopy());
+
+            /** @var \ArrayIterator $iterator */
+            $iterator = $request->query->getIterator();
+            $subRequest->query->add($iterator->getArrayCopy());
 
             $response = $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             if (200 === $response->getStatusCode()) {

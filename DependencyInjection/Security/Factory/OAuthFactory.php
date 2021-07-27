@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -27,7 +28,7 @@ use Symfony\Component\DependencyInjection\Reference;
 class OAuthFactory extends AbstractFactory
 {
     /**
-     * {@inheritdoc}
+     * @param ArrayNodeDefinition $node
      */
     public function addConfiguration(NodeDefinition $node)
     {
@@ -182,7 +183,7 @@ class OAuthFactory extends AbstractFactory
         return 'hwi_oauth.authentication.listener.oauth';
     }
 
-    private function addOAuthProviderConfiguration(NodeDefinition $node)
+    private function addOAuthProviderConfiguration(ArrayNodeDefinition $node)
     {
         $builder = $node->children();
         $builder
@@ -224,7 +225,7 @@ class OAuthFactory extends AbstractFactory
         ;
     }
 
-    private function addResourceOwnersConfiguration(NodeDefinition $node)
+    private function addResourceOwnersConfiguration(ArrayNodeDefinition $node)
     {
         $builder = $node->children();
         $builder

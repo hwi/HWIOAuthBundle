@@ -148,6 +148,8 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $builder = new TreeBuilder('hwi_oauth');
+
+        /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $builder->getRootNode();
 
         $rootNode

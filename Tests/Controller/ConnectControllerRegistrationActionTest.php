@@ -167,6 +167,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
         // @phpstan-ignore-next-line
         $registrationFormFactory = $this->createMock(FactoryInterface::class);
+        // @phpstan-ignore-next-line
         $registrationFormFactory->expects($this->any())
             ->method('createForm')
             ->willReturn($registrationForm);

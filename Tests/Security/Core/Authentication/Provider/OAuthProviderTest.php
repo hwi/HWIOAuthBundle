@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\Authentication\Provider;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
@@ -89,6 +90,7 @@ class OAuthProviderTest extends TestCase
 
         $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock, $tokenStorageMock);
 
+        /** @var AbstractOAuthToken $token */
         $token = $oauthProvider->authenticate($oauthToken);
         $this->assertTrue($token->isAuthenticated());
         $this->assertInstanceOf(OAuthToken::class, $token);
@@ -227,6 +229,7 @@ class OAuthProviderTest extends TestCase
         $oauthToken->setCreatedAt(time() - 3600);
         $oauthToken->setUser($userMock);
 
+        /** @var AbstractOAuthToken $token */
         $token = $oauthProvider->authenticate($oauthToken);
         $this->assertTrue($token->isAuthenticated());
         $this->assertInstanceOf(OAuthToken::class, $token);

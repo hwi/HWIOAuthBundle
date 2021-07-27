@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
 /**
@@ -60,7 +61,10 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function getAccessToken()
     {
-        return $this->getToken()->getAccessToken();
+        /** @var AbstractOAuthToken $token */
+        $token = $this->getToken();
+
+        return $token->getAccessToken();
     }
 
     /**
@@ -68,7 +72,10 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function getRawToken()
     {
-        return $this->getToken()->getRawToken();
+        /** @var AbstractOAuthToken $token */
+        $token = $this->getToken();
+
+        return $token->getRawToken();
     }
 
     /**
@@ -76,7 +83,10 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function getRefreshToken()
     {
-        return $this->getToken()->getRefreshToken();
+        /** @var AbstractOAuthToken $token */
+        $token = $this->getToken();
+
+        return $token->getRefreshToken();
     }
 
     /**
@@ -84,7 +94,10 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function getExpiresIn()
     {
-        return $this->getToken()->getExpiresIn();
+        /** @var AbstractOAuthToken $token */
+        $token = $this->getToken();
+
+        return $token->getExpiresIn();
     }
 
     /**
@@ -92,7 +105,10 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
      */
     public function getTokenSecret()
     {
-        return $this->getToken()->getTokenSecret();
+        /** @var AbstractOAuthToken $token */
+        $token = $this->getToken();
+
+        return $token->getTokenSecret();
     }
 
     /**

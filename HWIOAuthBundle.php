@@ -34,7 +34,7 @@ class HWIOAuthBundle extends Bundle
     {
         parent::build($container);
 
-        /** @var $extension SecurityExtension */
+        /** @var SecurityExtension $extension */
         $extension = $container->getExtension('security');
 
         // Symfony < 5.1 BC layer: support new Authenticator-based security system in Symfony 5.1+

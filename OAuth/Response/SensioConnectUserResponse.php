@@ -36,7 +36,10 @@ class SensioConnectUserResponse extends AbstractUserResponse
      */
     public function getUsername()
     {
-        return $this->data->attributes->getNamedItem('id')->value;
+        /** @var \DOMAttr $attribute */
+        $attribute = $this->data->attributes->getNamedItem('id');
+
+        return $attribute->value;
     }
 
     /**
@@ -136,7 +139,9 @@ class SensioConnectUserResponse extends AbstractUserResponse
             $node = $nodeList->item(0);
             switch ($nodeType) {
                 case 'link':
-                    $nodeValue = $node->attributes->getNamedItem('href')->value;
+                    /** @var \DOMAttr $attribute */
+                    $attribute = $node->attributes->getNamedItem('href');
+                    $nodeValue = $attribute->value;
                     break;
 
                 case 'normal':
