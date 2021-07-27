@@ -208,6 +208,7 @@ final class HWIOAuthExtension extends Extension
         } else {
             $container->setParameter('hwi_oauth.fosub_enabled', false);
             $container->setParameter('hwi_oauth.connect', false);
+            $container->setParameter('hwi_oauth.connect.confirmation', false);
         }
     }
 }
