@@ -1,7 +1,7 @@
 HWIOAuthBundle
 ==============
 
-[![Build Status](https://github.com/hwi/HWIOAuthBundle/workflows/CI/badge.svg?branch=master)](https://github.com/hwi/HWIOAuthBundle/actions?query=workflow%3ACI) [![Latest Stable Version](https://poser.pugx.org/hwi/oauth-bundle/v/stable.svg)](https://packagist.org/packages/hwi/oauth-bundle) [![Total Downloads](https://poser.pugx.org/hwi/oauth-bundle/downloads.svg)](https://packagist.org/packages/hwi/oauth-bundle) [![License](https://poser.pugx.org/hwi/oauth-bundle/license.svg)](https://packagist.org/packages/hwi/oauth-bundle)
+[![Build Status](https://github.com/hwi/HWIOAuthBundle/workflows/CI/badge.svg?branch=1.4)](https://github.com/hwi/HWIOAuthBundle/actions?query=workflow%3ACI) [![Latest Stable Version](https://poser.pugx.org/hwi/oauth-bundle/v/stable.svg)](https://packagist.org/packages/hwi/oauth-bundle) [![Total Downloads](https://poser.pugx.org/hwi/oauth-bundle/downloads.svg)](https://packagist.org/packages/hwi/oauth-bundle) [![License](https://poser.pugx.org/hwi/oauth-bundle/license.svg)](https://packagist.org/packages/hwi/oauth-bundle)
 
 The HWIOAuthBundle adds support for authenticating users via OAuth1.0a or OAuth2 in Symfony.
 
@@ -12,7 +12,9 @@ Installation
 
 All the installation instructions are located in the documentation, check it for a specific version:
 
-* [__1.4__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) - with support for Symfony: `^4.4` & `^5.1` (PHP: `^7.3` & `^8.0`),
+* [__2.0__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/1-setting_up_the_bundle.md) (upcoming) - with support for Symfony: `^4.4` & `^5.3` (PHP: `^7.3` & `^8.0`),
+
+* [__1.4__](https://github.com/hwi/HWIOAuthBundle/blob/1.4/Resources/doc/1-setting_up_the_bundle.md) (current) - with support for Symfony: `^4.4` & `^5.1` (PHP: `^7.3` & `^8.0`),
 
 * __1.3__ (outdated) - with support for Symfony: `^4.4` and `^5.0` (PHP: `^7.2` & `^8.0`).
 
@@ -23,7 +25,7 @@ Documentation
 The bulk of the documentation is stored in the `Resources/doc/index.md`
 file in this bundle. Read the documentation for version:
 
-* [__1.4__](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/index.md)
+* [__1.4__](https://github.com/hwi/HWIOAuthBundle/blob/1.4/Resources/doc/index.md)
 
 This bundle contains support for 58 different providers:
 * 37signals,
