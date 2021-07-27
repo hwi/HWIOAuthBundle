@@ -152,7 +152,6 @@ final class Configuration implements ConfigurationInterface
         /** @var ArrayNodeDefinition $rootNode */
         $rootNode = $builder->getRootNode();
 
-        /* @phpstan-ignore-next-line */
         $rootNode
             ->fixXmlConfig('firewall_name')
             ->children()
@@ -191,7 +190,6 @@ final class Configuration implements ConfigurationInterface
 
     private function addResourceOwnersConfiguration(ArrayNodeDefinition $node)
     {
-        /* @phpstan-ignore-next-line */
         $node
             ->fixXmlConfig('resource_owner')
             ->children()
@@ -436,7 +434,6 @@ final class Configuration implements ConfigurationInterface
 
     private function addHttpClientConfiguration(ArrayNodeDefinition $node)
     {
-        /* @phpstan-ignore-next-line */
         $node
             ->children()
                 ->arrayNode('http')
@@ -452,7 +449,6 @@ final class Configuration implements ConfigurationInterface
 
     private function addConnectConfiguration(ArrayNodeDefinition $node)
     {
-        /* @phpstan-ignore-next-line */
         $node
             ->children()
                 ->arrayNode('connect')
@@ -469,7 +465,6 @@ final class Configuration implements ConfigurationInterface
 
     private function addFosubConfiguration(ArrayNodeDefinition $node)
     {
-        /* @phpstan-ignore-next-line */
         $node
             ->children()
                 ->arrayNode('fosub')

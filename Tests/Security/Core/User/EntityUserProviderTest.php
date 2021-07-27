@@ -56,9 +56,7 @@ class EntityUserProviderTest extends TestCase
             $provider->loadUserByUsername('asm89');
 
             $this->fail('Failed asserting exception');
-        } catch (\RuntimeException $e) {
-            \assert($e instanceof UsernameNotFoundException);
-            $this->assertInstanceOf(UsernameNotFoundException::class, $e);
+        } catch (UsernameNotFoundException $e) {
             $this->assertSame("User 'asm89' not found.", $e->getMessage());
             $this->assertSame('asm89', $e->getUsername());
         }
@@ -83,9 +81,7 @@ class EntityUserProviderTest extends TestCase
             $provider->loadUserByOAuthUserResponse($userResponseMock);
 
             $this->fail('Failed asserting exception');
-        } catch (\RuntimeException $e) {
-            \assert($e instanceof UsernameNotFoundException);
-            $this->assertInstanceOf(UsernameNotFoundException::class, $e);
+        } catch (UsernameNotFoundException $e) {
             $this->assertSame("User 'asm89' not found.", $e->getMessage());
             $this->assertSame('asm89', $e->getUsername());
         }
@@ -112,9 +108,7 @@ class EntityUserProviderTest extends TestCase
             $provider->refreshUser($user);
 
             $this->fail('Failed asserting exception');
-        } catch (\RuntimeException $e) {
-            \assert($e instanceof UsernameNotFoundException);
-            $this->assertInstanceOf(UsernameNotFoundException::class, $e);
+        } catch (UsernameNotFoundException $e) {
             $this->assertSame('User with ID "1" could not be reloaded.', $e->getMessage());
             $this->assertSame('foo', $e->getUsername());
         }

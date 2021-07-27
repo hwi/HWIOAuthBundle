@@ -186,7 +186,6 @@ class OAuthFactory extends AbstractFactory
     private function addOAuthProviderConfiguration(ArrayNodeDefinition $node)
     {
         $builder = $node->children();
-        /* @phpstan-ignore-next-line */
         $builder
             ->arrayNode('oauth_user_provider')
                 ->isRequired()
@@ -229,7 +228,6 @@ class OAuthFactory extends AbstractFactory
     private function addResourceOwnersConfiguration(ArrayNodeDefinition $node)
     {
         $builder = $node->children();
-        /* @phpstan-ignore-next-line */
         $builder
             ->arrayNode('resource_owners')
                 ->isRequired()
