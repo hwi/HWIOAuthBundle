@@ -42,16 +42,9 @@ final class OAuthAuthenticatorFactory extends OAuthFactory implements Authentica
             )
             ->addArgument($this->getResourceOwnerMapReference($firewallName))
             ->addArgument($config['resource_owners'])
-            ->addArgument(
-                isset($config['success_handler'])
-                    ? new Reference($this->createAuthenticationSuccessHandler($container, $firewallName, $config))
-                    : null
-            )
-            ->addArgument(
-                isset($config['failure_handler'])
-                    ? new Reference($this->createAuthenticationFailureHandler($container, $firewallName, $config))
-                    : null
-            );
+            ->addArgument(new Reference($this->createAuthenticationSuccessHandler($container, $firewallName, $config)))
+            ->addArgument(new Reference($this->createAuthenticationFailureHandler($container, $firewallName, $config)))
+        ;
 
         return $authenticatorId;
     }

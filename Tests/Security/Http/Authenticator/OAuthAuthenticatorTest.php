@@ -175,7 +175,7 @@ class OAuthAuthenticatorTest extends TestCase
             $this->getResourceOwnerMapMock(),
             [],
             $successHandlerMock,
-            null
+            $this->getAuthenticationFailureHandlerMock()
         );
 
         $this->assertSame($response, $authenticator->onAuthenticationSuccess($request, $token, 'main'));
@@ -199,7 +199,7 @@ class OAuthAuthenticatorTest extends TestCase
             $this->getOAuthAwareUserProviderMock(),
             $this->getResourceOwnerMapMock(),
             [],
-            null,
+            $this->getAuthenticationSuccessHandlerMock(),
             $failureHandlerMock
         );
 
