@@ -59,12 +59,12 @@ final class OAuthAuthenticator implements AuthenticatorInterface
     private $checkPaths;
 
     /**
-     * @var AuthenticationSuccessHandlerInterface|null
+     * @var AuthenticationSuccessHandlerInterface
      */
     private $successHandler;
 
     /**
-     * @var AuthenticationFailureHandlerInterface|null
+     * @var AuthenticationFailureHandlerInterface
      */
     private $failureHandler;
 
@@ -93,8 +93,8 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         OAuthAwareUserProviderInterface $userProvider,
         ResourceOwnerMapInterface $resourceOwnerMap,
         array $checkPaths,
-        ?AuthenticationSuccessHandlerInterface $successHandler = null,
-        ?AuthenticationFailureHandlerInterface $failureHandler = null
+        AuthenticationSuccessHandlerInterface $successHandler,
+        AuthenticationFailureHandlerInterface $failureHandler
     ) {
         $this->failureHandler = $failureHandler;
         $this->successHandler = $successHandler;
@@ -203,12 +203,12 @@ final class OAuthAuthenticator implements AuthenticatorInterface
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        return $this->successHandler ? $this->successHandler->onAuthenticationSuccess($request, $token) : null;
+        return $this->successHandler->onAuthenticationSuccess($request, $token);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        return $this->failureHandler ? $this->failureHandler->onAuthenticationFailure($request, $exception) : null;
+        return $this->failureHandler->onAuthenticationFailure($request, $exception);
     }
 
     private function refreshToken(OAuthToken $expiredToken, ResourceOwnerInterface $resourceOwner): OAuthToken
