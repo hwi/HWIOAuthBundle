@@ -1,5 +1,8 @@
 Changelog
 =========
+## 2.0.0 (2021-xx-xx)
+* BC Break: `OAuthExtension` is now a lazy Twig extension using a Runtime,
+
 ## 1.4.1 (2021-07-28)
 * Bugfix: Define missing `hwi_oauth.connect.confirmation` parameter,
 * Bugfix: Added missing success/failure handlers,

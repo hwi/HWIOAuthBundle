@@ -6,8 +6,11 @@
 
     <services>
         <service id="hwi_oauth.twig.extension.oauth" class="HWI\Bundle\OAuthBundle\Twig\Extension\OAuthExtension">
-            <argument type="service" id="hwi_oauth.templating.helper.oauth" />
             <tag name="twig.extension" />
+        </service>
+        <service id="hwi_oauth.twig.extension.oauth.runtime" class="HWI\Bundle\OAuthBundle\Twig\Extension\OAuthRuntime">
+            <argument type="service" id="hwi_oauth.templating.helper.oauth" />
+            <tag name="twig.runtime" />
         </service>
     </services>
 </container>
