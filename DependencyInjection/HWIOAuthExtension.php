@@ -175,6 +175,8 @@ final class HWIOAuthExtension extends Extension
      */
     private function createConnectIntegration(ContainerBuilder $container, array $config)
     {
+        $container->setParameter('hwi_oauth.connect.confirmation', false);
+
         if (isset($config['connect'])) {
             $container->setParameter('hwi_oauth.connect', true);
 
