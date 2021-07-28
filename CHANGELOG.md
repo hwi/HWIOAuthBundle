@@ -1,5 +1,9 @@
 Changelog
 =========
+## 1.4.1 (2021-07-28)
+* Bugfix: Define missing `hwi_oauth.connect.confirmation` parameter,
+* Bugfix: Added missing success/failure handlers,
+
 ## 1.4.0 (2021-07-26)
 * BC Break: dropped Symfony 5.0 support as it is EOL,
 * BC Break: dropped PHP 7.2 support as it is EOL,
