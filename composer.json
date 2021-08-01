@@ -1,7 +1,7 @@
 {
     "name":        "hwi/oauth-bundle",
     "type":        "symfony-bundle",
-    "homepage":    "http://github.com/hwi/HWIOAuthBundle",
+    "homepage":    "https://github.com/hwi/HWIOAuthBundle",
     "license":     "MIT",
     "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
     "keywords":    [
@@ -132,6 +132,13 @@
 
     "conflict": {
         "twig/twig":                    "<1.34"
+    },
+
+    "scripts": {
+        "csfixer": "vendor/bin/php-cs-fixer fix --verbose --dry-run",
+        "csfixer-fix": "vendor/bin/php-cs-fixer fix --verbose",
+        "phpunit": "vendor/bin/phpunit",
+        "phpstan": "vendor/bin/phpstan"
     },
 
     "suggest": {

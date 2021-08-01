@@ -51,7 +51,7 @@ jobs:
     - name: Update project dependencies
       run: composer update --no-interaction --no-progress --ansi
     - name: Run phpstan
-      run: make phpstan
+      run: composer phpstan
 
   phpunit:
     name: PHPUnit (PHP ${{ matrix.php }})
