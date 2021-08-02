@@ -40,9 +40,9 @@ class OAuthHelper extends Helper
     }
 
     /**
-     * @return array
+     * @return string[]
      */
-    public function getResourceOwners()
+    public function getResourceOwners(): array
     {
         return $this->oauthUtils->getResourceOwners();
     }
