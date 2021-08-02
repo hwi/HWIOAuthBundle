@@ -4,13 +4,5 @@ parameters:
         - .
     excludePaths:
         - vendor/*
-
-        # todo: remove when FOSUserBundle support is dropped
-        - ./Tests/Form/FOSUBRegistrationFormHandlerTest.php
-        - ./Tests/Fixtures/FOSUser.php
-        - ./Tests/Fixtures/CustomOAuthToken.php
-        - ./Security/Core/User/FOSUBUserProvider.php
-        - ./Form/FOSUBRegistrationFormHandler.php
-        - ./Tests/Security/Core/User/FOSUBUserProviderTest.php
     ignoreErrors:
         - '#Parameter \$event of method HWI\\Bundle\\OAuthBundle\\Controller\\ConnectController::dispatch\(\) has invalid typehint type Symfony\\Component\\EventDispatcher\\Event#'

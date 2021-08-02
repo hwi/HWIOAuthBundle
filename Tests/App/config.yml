@@ -1,11 +1,11 @@
 framework:
-    secret:          secret
+    secret: secret
     test: ~
-    router:          { resource: "%kernel.root_dir%/../App/routing.yml" }
+    router:
+        utf8: true
+        resource: "%kernel.project_dir%/../App/routing.yml"
     session:
-        handler_id:  ~
         storage_id: session.storage.mock_file
-        name: MOCKSESSID
     translator: ~
     form:
         enabled: true
@@ -20,7 +20,8 @@ monolog:
 
 security:
     encoders:
-        HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser: sha512
+        HWI\Bundle\OAuthBundle\Tests\Fixtures\User: sha512
+
     providers:
         HWI\Bundle\OAuthBundle\Tests\App\UserProvider:
             id: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
@@ -54,6 +55,8 @@ services:
         tags:
             - controller.service_arguments
 
+    HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormHandler: ~
+    HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType: ~
     HWI\Bundle\OAuthBundle\Tests\App\UserProvider: ~
 
     Psr\Http\Client\ClientInterface:
@@ -64,24 +67,18 @@ services:
 
 doctrine:
     dbal:
+        driver: pdo_sqlite
         url: 'sqlite:///:memory:'
     orm:
-        entity_managers:
-            default:
-                auto_mapping: true
-                mappings:
-                    App:
-                        is_bundle: false
-                        type: annotation
-                        dir: '%kernel.project_dir%/../Fixtures'
-                        prefix: 'HWI\Bundle\OAuthBundle\Tests\Fixtures'
-                        alias: HWI\Bundle\OAuthBundle\Tests\Fixtures
+        auto_generate_proxy_classes: '%kernel.debug%'
+        auto_mapping: true
 
 hwi_oauth:
-    connect: ~
-    fosub:
-        properties:
-            google: googleId
+    connect:
+        confirmation: true
+        account_connector: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+        registration_form_handler: HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormHandler
+        registration_form: HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType
     http:
         client: Psr\Http\Client\ClientInterface
         message_factory: Http\Message\MessageFactory\GuzzleMessageFactory
@@ -92,16 +89,6 @@ hwi_oauth:
             client_id:           'google_client_id'
             client_secret:       'google_client_secret'
             scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
-
-fos_user:
-    db_driver: orm
-    user_class: HWI\Bundle\OAuthBundle\Tests\Fixtures\FOSUser
-    firewall_name: main
-    from_email:
-        address: "test@example.com"
-        sender_name: "test@example.com"
-    service:
-        mailer: 'fos_user.mailer.noop'
 
 twig:
     strict_variables: '%kernel.debug%'

@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
-use FOS\UserBundle\Form\Factory\FactoryInterface;
 use HWI\Bundle\OAuthBundle\Event\FilterUserResponseEvent;
 use HWI\Bundle\OAuthBundle\Event\FormEvent;
 use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
@@ -19,6 +18,7 @@ use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -109,7 +109,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $controller->registrationAction($this->request, $key);
     }
 
-    public function test()
+    public function testProcessWorks()
     {
         $key = time();
 
@@ -155,23 +155,16 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
     private function makeRegistrationForm(): void
     {
         $registrationForm = $this->createMock(Form::class);
-        $registrationForm->expects($this->any())
+        $registrationForm->expects($this->atLeastOnce())
             ->method('getData')
             ->willReturn(new User());
 
-        if (!class_exists(\FOS\UserBundle\Model\User::class)) {
-            $this->markTestSkipped('FOSUserBundle not installed.');
-        }
-
-        $this->container->setParameter('hwi_oauth.fosub_enabled', true);
-
-        // @phpstan-ignore-next-line
-        $registrationFormFactory = $this->createMock(FactoryInterface::class);
-        // @phpstan-ignore-next-line
-        $registrationFormFactory->expects($this->any())
-            ->method('createForm')
+        $formFactory = $this->createMock(FormFactoryInterface::class);
+        $formFactory->expects($this->once())
+            ->method('create')
             ->willReturn($registrationForm);
 
-        $this->container->set('hwi_oauth.registration.form.factory', $registrationFormFactory);
+        $this->container->set('form.factory', $formFactory);
+        $this->container->set('hwi_oauth.registration.form', $registrationForm);
     }
 }

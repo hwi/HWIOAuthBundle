@@ -15,18 +15,11 @@ namespace HWI\Bundle\OAuthBundle\Tests\Functional;
 
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
 class IntegrationTest extends WebTestCase
 {
-    protected function setUp(): void
-    {
-        parent::setUp();
-        if (!class_exists(\FOS\UserBundle\Model\User::class)) {
-            $this->markTestSkipped('FOSUserBundle not installed.');
-        }
-    }
-
     public function testRequestRedirect(): void
     {
         $client = static::createClient();

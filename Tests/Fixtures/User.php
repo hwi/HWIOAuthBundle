@@ -15,6 +15,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class User implements UserInterface
 {
+    private $plainPassword;
+    private $username = 'foo';
+    private $email;
     private $githubId;
 
     public function getId()
@@ -27,9 +30,14 @@ class User implements UserInterface
         return 'foo';
     }
 
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
     public function getUsername()
     {
-        return 'foo';
+        return $this->username;
     }
 
     public function getRoles()
@@ -49,6 +57,26 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
+    }
+
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword($plainPassword): void
+    {
+        $this->plainPassword = $plainPassword;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
+
+    public function setEmail($email): void
+    {
+        $this->email = $email;
     }
 
     public function getGithubId()

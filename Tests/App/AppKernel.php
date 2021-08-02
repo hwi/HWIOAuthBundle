@@ -23,7 +23,7 @@ class AppKernel extends Kernel
 {
     public function registerBundles(): array
     {
-        $bundles = [
+        return [
             new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
             new \Symfony\Bundle\MonologBundle\MonologBundle(),
@@ -31,12 +31,6 @@ class AppKernel extends Kernel
             new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new \HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
         ];
-
-        if (class_exists(\FOS\UserBundle\FOSUserBundle::class)) {
-            $bundles[] = new \FOS\UserBundle\FOSUserBundle();
-        }
-
-        return $bundles;
     }
 
     public function registerContainerConfiguration(LoaderInterface $loader): void

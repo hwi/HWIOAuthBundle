@@ -11,8 +11,6 @@ The HWIOAuthBundle also ships with three default implementations:
 
 - `OAuthUserProvider` (service name: `hwi_oauth.user.provider`) - doesn't persist users
 - `EntityUserProvider` (service name: `hwi_oauth.user.provider.entity`) - loads users from a database
-- `FOSUserBundle` integration  (service name: `hwi_oauth.user.provider.fosub_bridge`). Checkout the documentation for integrating
-  `HWIOAuthBundle` with `FOSUserBundle` for more information: (todo)
 
 ### B) Configure the oauth firewall
 

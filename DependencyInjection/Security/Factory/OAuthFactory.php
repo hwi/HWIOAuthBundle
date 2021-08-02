@@ -204,22 +204,12 @@ class OAuthFactory extends AbstractFactory
                     ->end()
                     ->scalarNode('service')->cannotBeEmpty()->end()
                     ->scalarNode('oauth')->end()
-                    ->arrayNode('fosub')
-                        ->children()
-                            ->arrayNode('properties')
-                                ->isRequired()
-                                ->useAttributeAsKey('name')
-                                    ->prototype('scalar')
-                                ->end()
-                            ->end()
-                        ->end()
-                    ->end()
                 ->end()
                 ->validate()
                     ->ifTrue(function ($c) {
-                        return 1 !== \count($c) || !\in_array(key($c), ['fosub', 'oauth', 'orm', 'service'], true);
+                        return 1 !== \count($c) || !\in_array(key($c), ['oauth', 'orm', 'service'], true);
                     })
-                    ->thenInvalid("You should configure (only) one of: 'fosub', 'oauth', 'orm', 'service'.")
+                    ->thenInvalid("You should configure (only) one of: 'oauth', 'orm', 'service'.")
                 ->end()
             ->end()
         ;

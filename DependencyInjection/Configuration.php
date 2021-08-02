@@ -182,13 +182,12 @@ final class Configuration implements ConfigurationInterface
 
         $this->addHttpClientConfiguration($rootNode);
         $this->addConnectConfiguration($rootNode);
-        $this->addFosubConfiguration($rootNode);
         $this->addResourceOwnersConfiguration($rootNode);
 
         return $builder;
     }
 
-    private function addResourceOwnersConfiguration(ArrayNodeDefinition $node)
+    private function addResourceOwnersConfiguration(ArrayNodeDefinition $node): void
     {
         $node
             ->fixXmlConfig('resource_owner')
@@ -432,7 +431,7 @@ final class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function addHttpClientConfiguration(ArrayNodeDefinition $node)
+    private function addHttpClientConfiguration(ArrayNodeDefinition $node): void
     {
         $node
             ->children()
@@ -447,7 +446,7 @@ final class Configuration implements ConfigurationInterface
         ;
     }
 
-    private function addConnectConfiguration(ArrayNodeDefinition $node)
+    private function addConnectConfiguration(ArrayNodeDefinition $node): void
     {
         $node
             ->children()
@@ -457,25 +456,6 @@ final class Configuration implements ConfigurationInterface
                         ->scalarNode('account_connector')->cannotBeEmpty()->end()
                         ->scalarNode('registration_form_handler')->cannotBeEmpty()->end()
                         ->scalarNode('registration_form')->cannotBeEmpty()->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
-    }
-
-    private function addFosubConfiguration(ArrayNodeDefinition $node)
-    {
-        $node
-            ->children()
-                ->arrayNode('fosub')
-                    ->children()
-                        ->scalarNode('username_iterations')->defaultValue(5)->cannotBeEmpty()->end()
-                        ->arrayNode('properties')
-                            ->isRequired()
-                            ->useAttributeAsKey('name')
-                                ->prototype('scalar')
-                            ->end()
-                        ->end()
                     ->end()
                 ->end()
             ->end()

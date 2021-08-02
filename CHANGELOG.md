@@ -2,6 +2,12 @@ Changelog
 =========
 ## 2.0.0 (2021-xx-xx)
 * BC Break: `OAuthExtension` is now a lazy Twig extension using a Runtime,
+* BC Break: removed support for `FOSUserBundle`,
+* BC Break: changed `process()` argument for `Form/RegistrationFormHandlerInterface`, from `Form $form` to `FormInterface $form`,
+* BC Break: changed form class name in template `Resources/views/Connect/connect_confirm.html.twig` from `fos_user_registration_register` to `registration_register`,
+* BC Break: removed configuration option `fosub` from `oauth_user_provider`,
+* BC Break: removed configuration options `hwi_oauth.fosub`, & all related DI parameters,
+* BC Break: removed DI parameter `hwi_oauth.registration.form.factory` in favour of declaring form class name as DI parameter: `hwi_oauth.connect.registration_form`,
 
 ## 1.4.1 (2021-07-28)
 * Bugfix: Define missing `hwi_oauth.connect.confirmation` parameter,
