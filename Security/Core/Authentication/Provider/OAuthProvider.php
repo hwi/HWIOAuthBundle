@@ -149,7 +149,7 @@ class OAuthProvider implements AuthenticationProviderInterface
         $token->setResourceOwnerName($oldToken->getResourceOwnerName());
         $token->setUser($user);
         $token->setAuthenticated(true);
-        $token->setCreatedAt($oldToken->getCreatedAt());
+        $token->setCreatedAt($oldToken->isExpired() ? time() : $oldToken->getCreatedAt());
 
         // Don't use old data if newer was already set
         if (!$token->getRefreshToken()) {

@@ -148,7 +148,7 @@ class OAuthProviderTest extends TestCase
         try {
             $oauthProvider->authenticate($oauthToken);
 
-            $this->assertTrue(false, 'Exception was not thrown.');
+            $this->fail('Exception was not thrown.');
         } catch (OAuthAwareException $e) {
             $this->assertTrue(true, 'Exception was thrown.');
             $this->assertInstanceOf(OAuthAwareExceptionInterface::class, $e);
@@ -176,7 +176,7 @@ class OAuthProviderTest extends TestCase
         $refreshedToken = [
             'access_token' => 'access_token_new',
             'refresh_token' => 'refresh_token',
-            'expires_in' => '666_new',
+            'expires_in' => '777',
             'oauth_token_secret' => 'secret_new',
         ];
 
