@@ -62,7 +62,7 @@ interface ResourceOwnerInterface
     /**
      * Check whatever CSRF token from request is valid or not.
      *
-     * @param string $csrfToken
+     * @param string|null $csrfToken
      *
      * @return bool True if CSRF token is valid
      *

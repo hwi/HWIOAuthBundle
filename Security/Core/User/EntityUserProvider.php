@@ -48,7 +48,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     protected $repository;
 
     /**
-     * @var array
+     * @var array<string, string>
      */
     protected $properties = [
         'identifier' => 'id',
@@ -157,7 +157,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     }
 
     /**
-     * @return UserInterface
+     * @return UserInterface|null
      */
     protected function findUser(array $criteria)
     {

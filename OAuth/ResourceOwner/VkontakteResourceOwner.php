@@ -12,7 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -56,7 +55,7 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 
         $response = $this->getUserResponse();
         // This will translate string response into array
-        $response->setData($content instanceof ResponseInterface ? (string) $content->getBody() : $content);
+        $response->setData((string) $content->getBody());
         $response->setResourceOwner($this);
         $response->setOAuthToken(new OAuthToken($accessToken));
 

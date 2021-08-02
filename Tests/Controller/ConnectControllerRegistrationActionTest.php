@@ -31,7 +31,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $this->expectException(NotFoundHttpException::class);
 
         $controller = $this->createConnectController(false);
-        $controller->registrationAction($this->request, time());
+        $controller->registrationAction($this->request, (string) time());
     }
 
     public function testAlreadyConnected()
@@ -42,7 +42,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $this->mockAuthorizationCheck();
 
         $controller = $this->createConnectController();
-        $controller->registrationAction($this->request, time());
+        $controller->registrationAction($this->request, (string) time());
     }
 
     public function testCannotRegisterBadError()
@@ -50,7 +50,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Cannot register an account.');
 
-        $key = time();
+        $key = (string) time();
 
         $this->mockAuthorizationCheck(false);
 
@@ -71,7 +71,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
     public function testFailedProcess()
     {
-        $key = time();
+        $key = (string) time();
 
         $this->mockAuthorizationCheck(false);
 
@@ -111,7 +111,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
 
     public function testProcessWorks()
     {
-        $key = time();
+        $key = (string) time();
 
         $this->mockAuthorizationCheck(false);
 

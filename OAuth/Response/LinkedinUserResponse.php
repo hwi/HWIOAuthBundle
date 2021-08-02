@@ -38,12 +38,12 @@ class LinkedinUserResponse extends PathUserResponse
     public function getProfilePicture()
     {
         // https://docs.microsoft.com/en-us/linkedin/shared/references/v2/profile/profile-picture
+        /** @var array<string, string|array<string, array<int, array<string, mixed>>>> $profilePicture */
         $profilePicture = $this->getValueForPath('profilepicture');
         if (
             !\is_array($profilePicture)
-            || !isset($profilePicture['displayImage~'])
             || !isset($profilePicture['displayImage~']['elements'])
-            || 0 == \count($profilePicture['displayImage~']['elements'])
+            || 0 === \count($profilePicture['displayImage~']['elements'])
         ) {
             return null;
         }
@@ -51,7 +51,7 @@ class LinkedinUserResponse extends PathUserResponse
         $publicElements = array_filter($profilePicture['displayImage~']['elements'], function ($element) {
             return 'PUBLIC' === $element['authorizationMethod'];
         });
-        if (0 == \count($publicElements)) {
+        if (0 === \count($publicElements)) {
             return null;
         }
 
