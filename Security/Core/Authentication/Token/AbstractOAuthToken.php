@@ -231,7 +231,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getExpiresAt()
     {

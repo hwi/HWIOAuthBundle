@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\Controller\LoginController;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -45,7 +45,7 @@ class LoginControllerTest extends TestCase
     private $router;
 
     /**
-     * @var MockObject&AuthenticationUtils
+     * @var AuthenticationUtils
      */
     private $authenticationUtils;
 

@@ -40,7 +40,8 @@ class LinkedinUserResponse extends PathUserResponse
         // https://docs.microsoft.com/en-us/linkedin/shared/references/v2/profile/profile-picture
         $profilePicture = $this->getValueForPath('profilepicture');
         if (
-            !isset($profilePicture['displayImage~'])
+            !\is_array($profilePicture)
+            || !isset($profilePicture['displayImage~'])
             || !isset($profilePicture['displayImage~']['elements'])
             || 0 == \count($profilePicture['displayImage~']['elements'])
         ) {
@@ -68,6 +69,7 @@ class LinkedinUserResponse extends PathUserResponse
      */
     protected function getPreferredLocaleValue($path)
     {
+        /** @var array $multiLocaleString */
         $multiLocaleString = $this->getValueForPath($path);
 
         $locale = '';
