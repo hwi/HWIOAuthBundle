@@ -14,7 +14,6 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use Http\Client\Exception\TransferException;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
-use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
@@ -408,10 +407,11 @@ json;
      *
      * @throws \ReflectionException
      *
-     * @return ResourceOwnerInterface
+     * @return GenericOAuth2ResourceOwner
      */
     protected function createResourceOwner(string $name, array $options = [], array $paths = [], ?StateInterface $state = null)
     {
+        /** @var GenericOAuth2ResourceOwner $resourceOwner */
         $resourceOwner = parent::createResourceOwner($name, $options, $paths);
 
         $reflection = new \ReflectionClass(\get_class($resourceOwner));

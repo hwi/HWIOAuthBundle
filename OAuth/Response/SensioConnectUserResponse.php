@@ -123,7 +123,10 @@ class SensioConnectUserResponse extends AbstractUserResponse
             throw new AuthenticationException('Could not retrieve user info.');
         }
 
-        $this->data = $user->item(0);
+        /** @var \DOMElement $userElement */
+        $userElement = $user->item(0);
+
+        $this->data = $userElement;
     }
 
     /**
@@ -143,7 +146,6 @@ class SensioConnectUserResponse extends AbstractUserResponse
                     $attribute = $node->attributes->getNamedItem('href');
                     $nodeValue = $attribute->value;
                     break;
-
                 case 'normal':
                 default:
                     $nodeValue = $node->nodeValue;

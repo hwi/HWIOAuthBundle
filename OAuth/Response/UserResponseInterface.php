@@ -98,7 +98,7 @@ interface UserResponseInterface extends ResponseInterface
     /**
      * Get the info when token will expire.
      *
-     * @return string|null
+     * @return int|null
      */
     public function getExpiresIn();
 

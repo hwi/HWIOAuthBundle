@@ -56,7 +56,7 @@ class OAuthAwareException extends \Exception implements OAuthAwareExceptionInter
     }
 
     /**
-     * @return OAuthToken
+     * {@inheritdoc}
      */
     public function getRawToken()
     {
@@ -88,6 +88,8 @@ class OAuthAwareException extends \Exception implements OAuthAwareExceptionInter
     }
 
     /**
+     * @param OAuthToken $token
+     *
      * {@inheritdoc}
      */
     public function setToken(TokenInterface $token)

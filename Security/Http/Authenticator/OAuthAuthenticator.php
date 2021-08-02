@@ -70,22 +70,22 @@ final class OAuthAuthenticator implements AuthenticatorInterface
     private $failureHandler;
 
     /**
-     * @var mixed[]
+     * @var mixed[]|null
      */
     private $rawToken;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $resourceOwnerName;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $refreshToken;
 
     /**
-     * @var string
+     * @var int|null
      */
     private $createdAt;
 

@@ -44,7 +44,6 @@ class HWIOAuthExtensionTest extends TestCase
 
     protected function tearDown(): void
     {
-        $this->containerBuilder = null;
         unset($this->containerBuilder);
     }
 
