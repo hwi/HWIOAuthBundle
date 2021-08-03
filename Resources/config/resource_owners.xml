@@ -1,0 +1,87 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="hwi_oauth.resource_owner.oauth1.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.oauth2.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner</parameter>
+        
+        <parameter key="hwi_oauth.resource_owner.amazon.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AmazonResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.apple.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AppleResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.asana.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AsanaResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.auth0.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\Auth0ResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.azure.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AzureResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.bitbucket.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitbucketResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.bitbucket2.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\Bitbucket2ResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.bitly.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitlyResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.box.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BoxResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.bufferapp.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BufferAppResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.clever.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\CleverResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.dailymotion.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DailymotionResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.deviantart.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DeviantartResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.deezer.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DeezerResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.discogs.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DiscogsResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.disqus.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DisqusResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.dropbox.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DropboxResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.eve_online.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\EveOnlineResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.eventbrite.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\EventbriteResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.facebook.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FacebookResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.fiware.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FiwareResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.flickr.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FlickrResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.foursquare.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FoursquareResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.genius.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GeniusResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.github.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.gitlab.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitLabResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.google.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GoogleResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.youtube.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YoutubeResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.hubic.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\HubicResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.instagram.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\InstagramResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.jawbone.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\JawboneResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.jira.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\JiraResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.keycloak.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\KeycloakResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.linkedin.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\LinkedinResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.mailru.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\MailRuResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.office365.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\Office365ResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.paypal.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\PaypalResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.qq.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\QQResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.reddit.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\RedditResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.runkeeper.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\RunKeeperResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.salesforce.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SalesforceResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.sensio_connect.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SensioConnectResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.sina_weibo.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SinaWeiboResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.slack.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SlackResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.spotify.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SpotifyResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.soundcloud.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SoundcloudResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.stack_exchange.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StackExchangeResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.stereomood.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StereomoodResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.strava.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StravaResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.toshl.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ToshlResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.trakt.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TraktResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.trello.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TrelloResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.twitch.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitchResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.twitter.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.vkontakte.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.windows_live.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WindowsLiveResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.wordpress.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WordpressResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.xing.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\XingResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.yahoo.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YahooResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.yandex.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YandexResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.odnoklassniki.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\OdnoklassnikiResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.37signals.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ThirtySevenSignalsResourceOwner</parameter>
+        <parameter key="hwi_oauth.resource_owner.itembase.class">HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ItembaseResourceOwner</parameter>
+    </parameters>
+
+    <services>
+        <!-- Resource owners -->
+        <service id="hwi_oauth.abstract_resource_ownermap" class="HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap" abstract="true">
+            <argument key="$httpUtils" type="service" id="security.http_utils" />
+            <argument key="$possibleResourceOwners">%hwi_oauth.resource_owners%</argument>
+            <argument key="$resourceOwners" type="collection" /><!-- map -->
+            <argument key="$locator" type="tagged_locator" tag="hwi_oauth.resource_owner" index-by="resource-name" />
+        </service>
+
+        <service id="hwi_oauth.resource_ownermap_locator" class="HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator" />
+    </services>
+</container>
