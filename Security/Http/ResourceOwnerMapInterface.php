@@ -21,42 +21,28 @@ interface ResourceOwnerMapInterface
 {
     /**
      * Check that resource owner with given name exists.
-     *
-     * @param string $name
-     *
-     * @return bool
      */
-    public function hasResourceOwnerByName($name);
+    public function hasResourceOwnerByName(string $name): bool;
 
     /**
      * Gets the appropriate resource owner given the name.
-     *
-     * @param string $name
-     *
-     * @return ResourceOwnerInterface|null
      */
-    public function getResourceOwnerByName($name);
+    public function getResourceOwnerByName(string $name): ?ResourceOwnerInterface;
 
     /**
      * Gets the appropriate resource owner for a request.
-     *
-     * @return array|null
      */
-    public function getResourceOwnerByRequest(Request $request);
+    public function getResourceOwnerByRequest(Request $request): ?array;
 
     /**
      * Gets the check path for given resource name.
-     *
-     * @param string $name
-     *
-     * @return string|null
      */
-    public function getResourceOwnerCheckPath($name);
+    public function getResourceOwnerCheckPath(string $name): ?string;
 
     /**
      * Get all the resource owners.
      *
-     * @return ResourceOwnerInterface[]
+     * @return array<string, string>
      */
-    public function getResourceOwners();
+    public function getResourceOwners(): array;
 }

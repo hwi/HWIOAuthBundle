@@ -8,6 +8,10 @@ Changelog
 * BC Break: removed configuration option `fosub` from `oauth_user_provider`,
 * BC Break: removed configuration options `hwi_oauth.fosub`, & all related DI parameters,
 * BC Break: removed DI parameter `hwi_oauth.registration.form.factory` in favour of declaring form class name as DI parameter: `hwi_oauth.connect.registration_form`,
+* BC Break: changed `ResourceOwnerMapInterface::hasResourceOwnerByName` signature, update if you use a custom resource owner,
+* BC Break: changed `ResourceOwnerMapInterface::getResourceOwnerByName` signature, update if you use a custom resource owner,
+* BC Break: changed `ResourceOwnerMapInterface::getResourceOwnerByRequest` signature, update if you use a custom resource owner,
+* BC Break: changed `ResourceOwnerMapInterface::getResourceOwnerCheckPath` signature, update if you use a custom resource owner,
 
 ## 1.4.1 (2021-07-28)
 * Bugfix: Define missing `hwi_oauth.connect.confirmation` parameter,

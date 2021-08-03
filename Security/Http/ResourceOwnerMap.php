@@ -28,34 +28,16 @@ use Symfony\Component\Security\Http\HttpUtils;
  */
 class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInterface
 {
-    /**
-     * @var HttpUtils
-     */
-    protected $httpUtils;
+    protected HttpUtils $httpUtils;
+    protected array $resourceOwners;
+    protected array $possibleResourceOwners;
+    protected ContainerInterface $container;
 
     /**
-     * @var array
+     * @param array<string, string> $possibleResourceOwners array with possible resource owners names
+     * @param array<string, string> $resourceOwners         array with configured resource owners
      */
-    protected $resourceOwners;
-
-    /**
-     * @var array
-     */
-    protected $possibleResourceOwners;
-
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
-
-    /**
-     * Constructor.
-     *
-     * @param HttpUtils $httpUtils              HttpUtils
-     * @param array     $possibleResourceOwners array with possible resource owners names
-     * @param array     $resourceOwners         array with configured resource owners
-     */
-    public function __construct(HttpUtils $httpUtils, array $possibleResourceOwners, $resourceOwners)
+    public function __construct(HttpUtils $httpUtils, array $possibleResourceOwners, array $resourceOwners)
     {
         $this->httpUtils = $httpUtils;
         $this->possibleResourceOwners = $possibleResourceOwners;
@@ -73,7 +55,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     /**
      * {@inheritdoc}
      */
-    public function hasResourceOwnerByName($name)
+    public function hasResourceOwnerByName(string $name): bool
     {
         return isset($this->resourceOwners[$name], $this->possibleResourceOwners[$name]);
     }
@@ -81,7 +63,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     /**
      * {@inheritdoc}
      */
-    public function getResourceOwnerByName($name)
+    public function getResourceOwnerByName(string $name): ?ResourceOwnerInterface
     {
         if (!$this->hasResourceOwnerByName($name)) {
             return null;
@@ -96,7 +78,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     /**
      * {@inheritdoc}
      */
-    public function getResourceOwnerByRequest(Request $request)
+    public function getResourceOwnerByRequest(Request $request): ?array
     {
         foreach ($this->resourceOwners as $name => $checkPath) {
             if ($this->httpUtils->checkRequestPath($request, $checkPath)) {
@@ -117,7 +99,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     /**
      * {@inheritdoc}
      */
-    public function getResourceOwnerCheckPath($name)
+    public function getResourceOwnerCheckPath(string $name): ?string
     {
         if (isset($this->resourceOwners[$name])) {
             return $this->resourceOwners[$name];
@@ -129,7 +111,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
     /**
      * {@inheritdoc}
      */
-    public function getResourceOwners()
+    public function getResourceOwners(): array
     {
         return $this->resourceOwners;
     }
