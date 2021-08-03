@@ -134,14 +134,6 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * {@inheritdoc}
      */
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getOption($name)
     {
         if (!\array_key_exists($name, $this->options)) {

@@ -96,13 +96,6 @@ interface ResourceOwnerInterface
     public function handles(HttpRequest $request);
 
     /**
-     * Sets a name for the resource owner.
-     *
-     * @param string $name
-     */
-    public function setName($name);
-
-    /**
      * Add extra paths to the configuration.
      */
     public function addPaths(array $paths);

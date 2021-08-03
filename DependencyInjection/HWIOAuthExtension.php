@@ -143,7 +143,6 @@ final class HWIOAuthExtension extends Extension
         $definition->setArgument('$options', $options);
         $definition->setArgument('$name', $name);
         $definition->setArgument('$storage', new Reference('hwi_oauth.storage.session'));
-        $definition->addMethodCall('setName', [$name]);
         $definition->addTag('hwi_oauth.resource_owner', ['resource-name' => $name]);
 
         $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);

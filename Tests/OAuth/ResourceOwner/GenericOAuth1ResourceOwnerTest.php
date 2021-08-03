@@ -302,8 +302,6 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
     public function testGetSetName()
     {
         $this->assertEquals($this->resourceOwnerName, $this->resourceOwner->getName());
-        $this->resourceOwner->setName('foo');
-        $this->assertEquals('foo', $this->resourceOwner->getName());
     }
 
     public function testCustomResponseClass()

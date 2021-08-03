@@ -14,7 +14,8 @@ Changelog
 * BC Break: changed `ResourceOwnerMapInterface::getResourceOwnerByRequest` signature, update if you use a custom resource owner,
 * BC Break: changed `ResourceOwnerMapInterface::getResourceOwnerCheckPath` signature, update if you use a custom resource owner,
 * BC Break: `ResourceOwnerMap` uses service locator instead of DI container,
-* BC Break: Removed abstract services: `hwi_oauth.abstract_resource_owner.generic`, `hwi_oauth.abstract_resource_owner.oauth1` & `hwi_oauth.abstract_resource_owner.oauth2`
+* BC Break: Removed abstract services: `hwi_oauth.abstract_resource_owner.generic`, `hwi_oauth.abstract_resource_owner.oauth1` & `hwi_oauth.abstract_resource_owner.oauth2`,
+* BC Break: Removed `setName()` method from `OAuth/ResourceOwnerInterface`,
 
 ## 1.4.1 (2021-07-28)
 * Bugfix: Define missing `hwi_oauth.connect.confirmation` parameter,
