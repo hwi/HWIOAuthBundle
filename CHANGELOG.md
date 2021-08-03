@@ -1,6 +1,7 @@
 Changelog
 =========
 ## 2.0.0 (2021-xx-xx)
+* Dropped PHP 7.3 support,
 * BC Break: `OAuthExtension` is now a lazy Twig extension using a Runtime,
 * BC Break: removed support for `FOSUserBundle`,
 * BC Break: changed `process()` argument for `Form/RegistrationFormHandlerInterface`, from `Form $form` to `FormInterface $form`,

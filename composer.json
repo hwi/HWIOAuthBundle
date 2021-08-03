@@ -93,7 +93,7 @@
     ],
 
     "require": {
-        "php":                            "^7.3 || ^8.0",
+        "php":                            "^7.4 || ^8.0",
         "symfony/framework-bundle":       "^4.4.20|^5.1",
         "symfony/security-bundle":        "^4.4|^5.1",
         "symfony/options-resolver":       "^4.4|^5.1",
