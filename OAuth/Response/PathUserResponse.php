@@ -110,7 +110,7 @@ class PathUserResponse extends AbstractUserResponse
     /**
      * @param string $name
      *
-     * @return array|null
+     * @return array|string|null
      */
     public function getPath($name)
     {

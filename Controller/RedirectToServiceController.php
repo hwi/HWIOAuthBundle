@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Controller;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
 use RuntimeException;
+use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -88,9 +89,9 @@ final class RedirectToServiceController
 
     private function storeReturnPath(Request $request, string $authorizationUrl): void
     {
-        $session = $request->getSession();
-
-        if (null === $session) {
+        try {
+            $session = $request->getSession();
+        } catch (SessionNotFoundException $e) {
             return;
         }
 

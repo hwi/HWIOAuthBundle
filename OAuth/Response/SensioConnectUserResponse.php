@@ -27,7 +27,7 @@ class SensioConnectUserResponse extends AbstractUserResponse
     protected $xpath;
 
     /**
-     * @var \DOMElement
+     * @var \DOMNode
      */
     protected $data;
 
@@ -50,6 +50,7 @@ class SensioConnectUserResponse extends AbstractUserResponse
         $username = null;
         $accounts = $this->xpath->query('./foaf:account/foaf:OnlineAccount', $this->data);
         for ($i = 0; $i < $accounts->length; ++$i) {
+            /** @var \DOMNode $account */
             $account = $accounts->item($i);
             if ('SensioLabs Connect' === $this->getNodeValue('./foaf:name', $account)) {
                 $username = $this->getNodeValue('foaf:accountName', $account);
@@ -123,7 +124,7 @@ class SensioConnectUserResponse extends AbstractUserResponse
             throw new AuthenticationException('Could not retrieve user info.');
         }
 
-        /** @var \DOMElement $userElement */
+        /** @var \DOMNode $userElement */
         $userElement = $user->item(0);
 
         $this->data = $userElement;
@@ -135,7 +136,7 @@ class SensioConnectUserResponse extends AbstractUserResponse
      *
      * @return mixed|null
      */
-    protected function getNodeValue($query, \DOMElement $element, $nodeType = 'normal')
+    protected function getNodeValue($query, \DOMNode $element, $nodeType = 'normal')
     {
         $nodeList = $this->xpath->query($query, $element);
         if ($nodeList && $nodeList->length > 0) {

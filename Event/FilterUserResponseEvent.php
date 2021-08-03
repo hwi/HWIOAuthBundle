@@ -22,10 +22,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class FilterUserResponseEvent extends UserEvent
 {
-    /**
-     * @var Response
-     */
-    private $response;
+    private Response $response;
 
     public function __construct(UserInterface $user, Request $request, Response $response)
     {
@@ -33,15 +30,12 @@ class FilterUserResponseEvent extends UserEvent
         $this->response = $response;
     }
 
-    /**
-     * @return Response
-     */
-    public function getResponse()
+    public function getResponse(): Response
     {
         return $this->response;
     }
 
-    public function setResponse(Response $response)
+    public function setResponse(Response $response): void
     {
         $this->response = $response;
     }
