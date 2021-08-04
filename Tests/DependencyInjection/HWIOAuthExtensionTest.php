@@ -487,13 +487,12 @@ class HWIOAuthExtensionTest extends TestCase
         $definitions = $this->containerBuilder->getDefinitions();
 
         $this->assertArrayHasKey('hwi_oauth.resource_owner.my_github', $definitions);
-        $this->assertEquals('hwi_oauth.abstract_resource_owner.oauth2', $definitions['hwi_oauth.resource_owner.my_github']->getParent());
         $this->assertEquals('%hwi_oauth.resource_owner.github.class%', $definitions['hwi_oauth.resource_owner.my_github']->getClass());
 
-        $argument2 = $definitions['hwi_oauth.resource_owner.my_github']->getArgument(2);
+        $argument2 = $definitions['hwi_oauth.resource_owner.my_github']->getArgument('$options');
         $this->assertEquals('42', $argument2['client_id']);
         $this->assertEquals('foo', $argument2['client_secret']);
-        $this->assertEquals('my_github', $definitions['hwi_oauth.resource_owner.my_github']->getArgument(3));
+        $this->assertEquals('my_github', $definitions['hwi_oauth.resource_owner.my_github']->getArgument('$name'));
     }
 
     public function testCreateResourceOwnerServiceWithService()
@@ -536,13 +535,12 @@ class HWIOAuthExtensionTest extends TestCase
         $definitions = $this->containerBuilder->getDefinitions();
 
         $this->assertArrayHasKey('hwi_oauth.resource_owner.external_ressource_owner', $definitions);
-        $this->assertEquals('hwi_oauth.abstract_resource_owner.oauth2', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getParent());
         $this->assertEquals(MyCustomProvider::class, $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getClass());
 
-        $argument2 = $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getArgument(2);
+        $argument2 = $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getArgument('$options');
         $this->assertEquals('42', $argument2['client_id']);
         $this->assertEquals('foo', $argument2['client_secret']);
-        $this->assertEquals('external_ressource_owner', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getArgument(3));
+        $this->assertEquals('external_ressource_owner', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getArgument('$name'));
     }
 
     protected function createEmptyConfiguration()

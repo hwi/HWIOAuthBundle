@@ -13,43 +13,40 @@ namespace HWI\Bundle\OAuthBundle\Security\Http;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
- * ResourceOwnerMap. Holds several resource owners for a firewall. Lazy
+ * Holds several resource owners for a firewall. Lazy
  * loads the appropriate resource owner when requested.
  *
  * @author Alexander <iam.asm89@gmail.com>
  *
  * @final since 1.4
  */
-class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInterface
+class ResourceOwnerMap implements ResourceOwnerMapInterface
 {
     protected HttpUtils $httpUtils;
     protected array $resourceOwners;
     protected array $possibleResourceOwners;
-    protected ContainerInterface $container;
+    private ServiceLocator $locator;
 
     /**
      * @param array<string, string> $possibleResourceOwners array with possible resource owners names
      * @param array<string, string> $resourceOwners         array with configured resource owners
      */
-    public function __construct(HttpUtils $httpUtils, array $possibleResourceOwners, array $resourceOwners)
-    {
+    public function __construct(
+        HttpUtils $httpUtils,
+        array $possibleResourceOwners,
+        array $resourceOwners,
+        ServiceLocator $locator
+    ) {
         $this->httpUtils = $httpUtils;
         $this->possibleResourceOwners = $possibleResourceOwners;
         $this->resourceOwners = $resourceOwners;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setContainer(ContainerInterface $container = null)
-    {
-        $this->container = $container;
+        $this->locator = $locator;
     }
 
     /**
@@ -69,8 +66,12 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
             return null;
         }
 
-        /** @var ResourceOwnerInterface $resourceOwner */
-        $resourceOwner = $this->container->get('hwi_oauth.resource_owner.'.$name);
+        try {
+            /** @var ResourceOwnerInterface $resourceOwner */
+            $resourceOwner = $this->locator->get($name);
+        } catch (NotFoundExceptionInterface $e) {
+            return null;
+        }
 
         return $resourceOwner;
     }
@@ -101,11 +102,7 @@ class ResourceOwnerMap implements ContainerAwareInterface, ResourceOwnerMapInter
      */
     public function getResourceOwnerCheckPath(string $name): ?string
     {
-        if (isset($this->resourceOwners[$name])) {
-            return $this->resourceOwners[$name];
-        }
-
-        return null;
+        return $this->resourceOwners[$name] ?? null;
     }
 
     /**

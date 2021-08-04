@@ -16,10 +16,12 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
-use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
+use Symfony\Component\DependencyInjection\Exception\OutOfBoundsException;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -39,8 +41,8 @@ final class HWIOAuthExtension extends Extension
      * @throws InvalidConfigurationException
      * @throws BadMethodCallException
      * @throws InvalidArgumentException
-     * @throws \Symfony\Component\DependencyInjection\Exception\OutOfBoundsException
-     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     * @throws OutOfBoundsException
+     * @throws ServiceNotFoundException
      */
     public function load(array $configs, ContainerBuilder $container)
     {
@@ -48,6 +50,7 @@ final class HWIOAuthExtension extends Extension
         $loader->load('controller.xml');
         $loader->load('http_client.xml');
         $loader->load('oauth.xml');
+        $loader->load('resource_owners.xml');
         $loader->load('templating.xml');
         $loader->load('twig.xml');
         $loader->load('util.xml');
@@ -110,7 +113,7 @@ final class HWIOAuthExtension extends Extension
      * @throws BadMethodCallException
      * @throws InvalidArgumentException
      */
-    public function createResourceOwnerService(ContainerBuilder $container, $name, array $options)
+    public function createResourceOwnerService(ContainerBuilder $container, string $name, array $options): void
     {
         // alias services
         if (isset($options['service'])) {
@@ -129,17 +132,18 @@ final class HWIOAuthExtension extends Extension
                 throw new InvalidConfigurationException(sprintf('Class "%s" must implement interface "HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface".', $options['class']));
             }
 
-            $definition = new ChildDefinition('hwi_oauth.abstract_resource_owner.'.$type);
-            $definition->setClass($options['class']);
+            $definition = new Definition($options['class']);
             unset($options['class']);
         } else {
-            $definition = new ChildDefinition('hwi_oauth.abstract_resource_owner.'.Configuration::getResourceOwnerType($type));
-            $definition->setClass("%hwi_oauth.resource_owner.$type.class%");
+            $definition = new Definition("%hwi_oauth.resource_owner.$type.class%");
         }
 
-        $definition->replaceArgument(2, $options);
-        $definition->replaceArgument(3, $name);
-        $definition->setPublic(true);
+        $definition->setArgument('$httpClient', new Reference('hwi_oauth.http_client'));
+        $definition->setArgument('$httpUtils', new Reference('security.http_utils'));
+        $definition->setArgument('$options', $options);
+        $definition->setArgument('$name', $name);
+        $definition->setArgument('$storage', new Reference('hwi_oauth.storage.session'));
+        $definition->addTag('hwi_oauth.resource_owner', ['resource-name' => $name]);
 
         $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
     }
