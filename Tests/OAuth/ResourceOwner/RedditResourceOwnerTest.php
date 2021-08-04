@@ -23,11 +23,11 @@ class RedditResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $csrf = true;
+    protected bool $csrf = true;
 
     protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=identity';
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => null,

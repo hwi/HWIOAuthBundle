@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * TwitchResourceOwner.
- *
  * @author Simon Bräuer <redshark1802>
- *
- * @final since 1.4
  */
-class TwitchResourceOwner extends GenericOAuth2ResourceOwner
+final class TwitchResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'data.0.id',
         'nickname' => 'data.0.login',
         'realname' => 'data.0.display_name',

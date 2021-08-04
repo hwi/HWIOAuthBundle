@@ -11,19 +11,13 @@
 
 namespace HWI\Bundle\OAuthBundle\Util;
 
-/**
- * @final
- */
-class DomainWhitelist
+final class DomainWhitelist
 {
     /**
-     * @var array
+     * @var array<int, string>
      */
-    private $targetPathDomainsWhiteList;
+    private array $targetPathDomainsWhiteList;
 
-    /**
-     * @param array<int, string> $targetPathDomainsWhiteList
-     */
     public function __construct(array $targetPathDomainsWhiteList)
     {
         $this->targetPathDomainsWhiteList = $targetPathDomainsWhiteList;
@@ -31,7 +25,7 @@ class DomainWhitelist
 
     public function isValidTargetUrl(string $targetUrl): bool
     {
-        if (0 === \count($this->targetPathDomainsWhiteList)) {
+        if (!$this->targetPathDomainsWhiteList) {
             return true;
         }
 

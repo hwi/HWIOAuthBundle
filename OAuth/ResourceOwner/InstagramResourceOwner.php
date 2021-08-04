@@ -16,19 +16,15 @@ use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * InstagramResourceOwner.
- *
  * @author Jean-Christophe Cuvelier <jcc@atomseeds.com>
  * @author Fabiano Roberto <fabiano.roberto@ped.technology>
- *
- * @final since 1.4
  */
-class InstagramResourceOwner extends GenericOAuth2ResourceOwner
+final class InstagramResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'username',
         'realname' => 'username',

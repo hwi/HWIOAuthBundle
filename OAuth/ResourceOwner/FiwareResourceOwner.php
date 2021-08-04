@@ -17,22 +17,17 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * FiwareResourceOwner.
- *
  * Resource owner for the fiware keyrock idm oauth 2.0 service
- *
- * more infos at https://github.com/ging/fi-ware-idm/wiki/Using-the-FIWARE-LAB-instance
+ * more infos at https://github.com/ging/fi-ware-idm/wiki/Using-the-FIWARE-LAB-instance.
  *
  * @author Christian Kaspar <christian@sponsoo.de>
- *
- * @final since 1.4
  */
-class FiwareResourceOwner extends GenericOAuth2ResourceOwner
+final class FiwareResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'nickName',
         'realname' => 'displayName',

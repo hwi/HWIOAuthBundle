@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * SoundcloudResourceOwner.
- *
  * @author Anthony AHMED <antho.ahmed@gmail.com>
- *
- * @final since 1.4
  */
-class SoundcloudResourceOwner extends GenericOAuth2ResourceOwner
+final class SoundcloudResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'username',
         'realname' => 'full_name',

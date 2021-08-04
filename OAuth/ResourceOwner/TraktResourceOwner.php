@@ -18,18 +18,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
- * TraktResourceOwner.
- *
  * @author Julien DIDIER <julien@didier.io>
- *
- * @final since 1.4
  */
-class TraktResourceOwner extends GenericOAuth2ResourceOwner
+final class TraktResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'username',
         'nickname' => 'username',
         'realname' => 'name',

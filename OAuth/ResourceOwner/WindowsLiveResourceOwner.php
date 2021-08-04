@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * WindowsLiveResourceOwner.
- *
  * @author Alexander <iam.asm89@gmail.com>
- *
- * @final since 1.4
  */
-class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
+final class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => 'name',

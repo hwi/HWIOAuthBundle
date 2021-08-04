@@ -15,15 +15,11 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * StereomoodResourceOwner.
- *
  * @author Vincenzo Di Biaggio <aniceweb@gmail.com>
- *
- * @final since 1.4
  */
-class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
+final class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
 {
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'oauth_token',
         'nickname' => 'oauth_token',
     ];

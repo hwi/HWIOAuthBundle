@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * DisqusResourceOwner.
- *
  * @author Alexander Müller <amr@kapthon.com>
- *
- * @final since 1.4
  */
-class DisqusResourceOwner extends GenericOAuth2ResourceOwner
+final class DisqusResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'response.id',
         'nickname' => 'response.username',
         'realname' => 'response.name',

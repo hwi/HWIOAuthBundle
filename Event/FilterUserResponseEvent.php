@@ -17,10 +17,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @author Marek Štípek
- *
- * @final since 1.4
  */
-class FilterUserResponseEvent extends UserEvent
+final class FilterUserResponseEvent extends UserEvent
 {
     private Response $response;
 

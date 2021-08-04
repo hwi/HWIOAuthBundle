@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * DeviantartResourceOwner.
- *
  * @author Joseph Bielawski <stloyd@gmail.com>
- *
- * @final since 1.4
  */
-class DeviantartResourceOwner extends GenericOAuth2ResourceOwner
+final class DeviantartResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'username',
         'nickname' => 'username',
         'profilepicture' => 'usericonurl',

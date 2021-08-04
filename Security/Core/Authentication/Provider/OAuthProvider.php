@@ -26,30 +26,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
- *
- * @final since 1.4
  */
-class OAuthProvider implements AuthenticationProviderInterface
+final class OAuthProvider implements AuthenticationProviderInterface
 {
-    /**
-     * @var ResourceOwnerMapInterface
-     */
-    private $resourceOwnerMap;
+    private ResourceOwnerMapInterface $resourceOwnerMap;
 
-    /**
-     * @var OAuthAwareUserProviderInterface
-     */
-    private $userProvider;
+    private OAuthAwareUserProviderInterface $userProvider;
 
-    /**
-     * @var UserCheckerInterface
-     */
-    private $userChecker;
+    private UserCheckerInterface $userChecker;
 
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
+    private TokenStorageInterface $tokenStorage;
 
     public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMapInterface $resourceOwnerMap, UserCheckerInterface $userChecker, TokenStorageInterface $tokenStorage)
     {

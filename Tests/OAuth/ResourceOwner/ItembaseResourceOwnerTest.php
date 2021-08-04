@@ -29,7 +29,7 @@ class ItembaseResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'uuid',
         'nickname' => 'username',
         'firstname' => 'first_name',

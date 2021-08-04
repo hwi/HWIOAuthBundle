@@ -19,13 +19,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
- * SensioConnectResourceOwner.
- *
  * @author Joseph Bielawski <stloyd@gmail.com>
- *
- * @final since 1.4
  */
-class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
+final class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}

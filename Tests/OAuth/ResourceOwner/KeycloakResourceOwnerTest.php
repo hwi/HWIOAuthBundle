@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\KeycloakResourceOwner;
 
 class KeycloakResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $options = [
+    protected array $options = [
       'base_url' => 'http://keycloak.example.com/auth',
       'realm' => 'example',
       'client_id' => 'clientid',

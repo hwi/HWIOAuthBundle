@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * DailymotionResourceOwner.
- *
  * @author Joseph Bielawski <stloyd@gmail.com>
- *
- * @final since 1.4
  */
-class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
+final class DailymotionResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'screenname',
         'realname' => 'fullname', // requires 'userinfo' scope

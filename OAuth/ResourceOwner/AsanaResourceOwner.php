@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * AsanaResourceOwner.
- *
  * @author Guillaume Potier <guillaume@wisembly.com>
- *
- * @final since 1.4
  */
-class AsanaResourceOwner extends GenericOAuth2ResourceOwner
+final class AsanaResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'data.id',
         'nickname' => 'data.name',
         'realname' => 'data.name',

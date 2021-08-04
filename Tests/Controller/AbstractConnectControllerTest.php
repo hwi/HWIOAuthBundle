@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\Controller\ConnectController;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
-use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType;
@@ -24,7 +24,6 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -35,10 +34,16 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Templating\EngineInterface;
 
 abstract class AbstractConnectControllerTest extends TestCase
 {
+    protected ResourceOwnerMapLocator $resourceOwnerMapLocator;
+    protected Request $request;
+    protected Container $container;
+    protected OAuthUtils $oAuthUtils;
+
     /**
      * @var MockObject&AuthorizationCheckerInterface
      */
@@ -60,7 +65,7 @@ abstract class AbstractConnectControllerTest extends TestCase
     protected $router;
 
     /**
-     * @var MockObject&ResourceOwnerMap
+     * @var MockObject&ResourceOwnerMapInterface
      */
     protected $resourceOwnerMap;
 
@@ -73,16 +78,6 @@ abstract class AbstractConnectControllerTest extends TestCase
      * @var MockObject&AccountConnectorInterface
      */
     protected $accountConnector;
-
-    /**
-     * @var MockObject&OAuthUtils
-     */
-    protected $oAuthUtils;
-
-    /**
-     * @var ResourceOwnerMapLocator
-     */
-    protected $resourceOwnerMapLocator;
 
     /**
      * @var MockObject&UserCheckerInterface
@@ -103,16 +98,6 @@ abstract class AbstractConnectControllerTest extends TestCase
      * @var MockObject&SessionInterface
      */
     protected $session;
-
-    /**
-     * @var Request
-     */
-    protected $request;
-
-    /**
-     * @var ContainerInterface
-     */
-    protected $container;
 
     protected function setUp(): void
     {
@@ -151,7 +136,7 @@ abstract class AbstractConnectControllerTest extends TestCase
             ->method('getUserInformation')
             ->willReturn(new CustomUserResponse())
         ;
-        $this->resourceOwnerMap = $this->createMock(ResourceOwnerMap::class);
+        $this->resourceOwnerMap = $this->createMock(ResourceOwnerMapInterface::class);
         $this->resourceOwnerMap->expects($this->any())
             ->method('getResourceOwnerByName')
             ->with('facebook')
@@ -161,7 +146,12 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->accountConnector = $this->createMock(AccountConnectorInterface::class);
         $this->container->set('hwi_oauth.account.connector', $this->accountConnector);
 
-        $this->oAuthUtils = $this->createMock(OAuthUtils::class);
+        $this->oAuthUtils = new OAuthUtils(
+            $this->createMock(HttpUtils::class),
+            $this->createMock(AuthorizationCheckerInterface::class),
+            true,
+            'IS_AUTHENTICATED_REMEMBERED'
+        );
 
         $this->resourceOwnerMapLocator = new ResourceOwnerMapLocator();
         $this->resourceOwnerMapLocator->add('default', $this->resourceOwnerMap);

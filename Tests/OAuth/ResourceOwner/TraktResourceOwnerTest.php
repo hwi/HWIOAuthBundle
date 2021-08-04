@@ -30,7 +30,7 @@ class TraktResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'username',
         'nickname' => 'username',
         'realname' => 'name',

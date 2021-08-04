@@ -25,7 +25,7 @@ class ThirtySevenSignalsResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     }
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'identity.id',
         'nickname' => 'identity.email_address',
         'firstname' => 'identity.first_name',

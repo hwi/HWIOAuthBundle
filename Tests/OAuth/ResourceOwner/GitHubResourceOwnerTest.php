@@ -25,7 +25,7 @@ class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'login',
         'realname' => 'name',
@@ -33,7 +33,7 @@ json;
         'profilepicture' => 'avatar_url',
     ];
 
-    protected $httpClientCalls = 1;
+    protected int $httpClientCalls = 1;
 
     public function testRevokeToken()
     {

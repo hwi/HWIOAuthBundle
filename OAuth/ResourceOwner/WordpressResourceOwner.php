@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * WordpressResourceOwner.
- *
  * @author Joseph Bielawski <stloyd@gmail.com>
- *
- * @final since 1.4
  */
-class WordpressResourceOwner extends GenericOAuth2ResourceOwner
+final class WordpressResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'ID',
         'nickname' => 'username',
         'realname' => 'display_name',

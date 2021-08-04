@@ -19,20 +19,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
- * VkontakteResourceOwner.
- *
  * @author Adrov Igor <nucleartux@gmail.com>
  * @author Vladislav Vlastovskiy <me@vlastv.ru>
  * @author Alexander Latushkin <alex@skazo4neg.ru>
- *
- * @final since 1.4
  */
-class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
+final class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'response.0.id',
         'nickname' => 'response.0.nickname',
         'firstname' => 'response.0.first_name',

@@ -30,7 +30,7 @@ class StackExchangeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'items.0.user_id',
         'nickname' => 'items.0.display_name',
         'realname' => 'items.0.display_name',

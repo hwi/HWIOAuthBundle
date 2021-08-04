@@ -22,7 +22,7 @@ class StereomoodResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     "oauth_token": "token"
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'oauth_token',
         'nickname' => 'oauth_token',
     ];

@@ -25,7 +25,7 @@ class YahooResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     }
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'profile.guid',
         'nickname' => 'profile.nickname',
         'realname' => 'profile.givenName',

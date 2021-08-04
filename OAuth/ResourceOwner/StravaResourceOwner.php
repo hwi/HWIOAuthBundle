@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * StravaResourceOwner.
- *
  * @author Artem Genvald <genvaldartem@gmail.com>
- *
- * @final since 1.4
  */
-class StravaResourceOwner extends GenericOAuth2ResourceOwner
+final class StravaResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'realname' => ['firstname', 'lastname'],
         'profilepicture' => 'profile_medium',

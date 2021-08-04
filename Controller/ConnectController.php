@@ -41,31 +41,21 @@ use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
+ *
+ * @internal
  */
 final class ConnectController extends AbstractController
 {
-    /**
-     * @var OAuthUtils
-     */
-    private $oauthUtils;
-
-    /**
-     * @var ResourceOwnerMapLocator
-     */
-    private $resourceOwnerMapLocator;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    private $enableConnect;
-    private $grantRule;
-    private $failedUseReferer;
-    private $failedAuthPath;
-    private $enableConnectConfirmation;
-    private $firewallNames;
-    private $registrationForm;
+    private OAuthUtils $oauthUtils;
+    private ResourceOwnerMapLocator $resourceOwnerMapLocator;
+    private RequestStack $requestStack;
+    private bool $enableConnect;
+    private string $grantRule;
+    private bool $failedUseReferer;
+    private string $failedAuthPath;
+    private bool $enableConnectConfirmation;
+    private array $firewallNames;
+    private string $registrationForm;
 
     /**
      * @param string[] $firewallNames

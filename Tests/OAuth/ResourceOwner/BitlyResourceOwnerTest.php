@@ -26,7 +26,7 @@ class BitlyResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     }
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'data.login',
         'nickname' => 'data.display_name',
         'realname' => 'data.full_name',

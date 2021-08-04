@@ -18,18 +18,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
- * StackExchangeResourceOwner.
- *
  * @author Joseph Bielawski <stloyd@gmail.com>
- *
- * @final since 1.4
  */
-class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
+final class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'items.0.user_id',
         'nickname' => 'items.0.display_name',
         'realname' => 'items.0.display_name',

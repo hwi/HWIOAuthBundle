@@ -42,7 +42,7 @@ class LinkedinResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "emailAddress": "example@website.com"
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'emailAddress',
         'firstname' => 'firstName',
@@ -50,11 +50,11 @@ json;
         'email' => 'emailAddress',
         'profilepicture' => 'profilePicture',
     ];
-    protected $csrf = true;
+    protected bool $csrf = true;
 
     protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=r_liteprofile+r_emailaddress';
 
-    protected $httpClientCalls = 1;
+    protected int $httpClientCalls = 1;
 
     public function testCustomResponseClass()
     {

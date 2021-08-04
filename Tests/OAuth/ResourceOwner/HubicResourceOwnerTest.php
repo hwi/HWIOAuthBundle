@@ -18,7 +18,7 @@ class HubicResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = HubicResourceOwner::class;
     protected $userResponse = '{ "email": "1", "firstname": "bar", "activated": true , "creationDate": "2013-12-31T19:09:42+01:00", "language": "fr", "status": "ok", "offer": "25g", "lastname": "foo" }';
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'email',
         'nickname' => 'firstname',
         'firstname' => 'firstname',

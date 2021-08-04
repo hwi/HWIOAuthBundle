@@ -22,49 +22,31 @@ use Symfony\Component\Security\Http\HttpUtils;
  * @author Alexander <iam.asm89@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
  * @author Francisco Facioni <fran6co@gmail.com>
- *
- * @final since 1.4
  */
-class OAuthUtils
+final class OAuthUtils
 {
     public const SIGNATURE_METHOD_HMAC = 'HMAC-SHA1';
     public const SIGNATURE_METHOD_RSA = 'RSA-SHA1';
     public const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
 
-    /**
-     * @var bool
-     */
-    protected $connect;
+    private bool $connect;
 
-    /**
-     * @var string
-     */
-    protected $grantRule;
+    private string $grantRule;
 
-    /**
-     * @var HttpUtils
-     */
-    protected $httpUtils;
+    private HttpUtils $httpUtils;
 
     /**
      * @var ResourceOwnerMapInterface[]
      */
-    protected $ownerMaps = [];
+    private array $ownerMaps = [];
 
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    protected $authorizationChecker;
+    private AuthorizationCheckerInterface $authorizationChecker;
 
-    /**
-     * @param bool   $connect
-     * @param string $grantRule
-     */
     public function __construct(
         HttpUtils $httpUtils,
         AuthorizationCheckerInterface $authorizationChecker,
-        $connect,
-        $grantRule
+        bool $connect,
+        string $grantRule
     ) {
         $this->httpUtils = $httpUtils;
         $this->authorizationChecker = $authorizationChecker;
@@ -263,7 +245,7 @@ class OAuthUtils
      *
      * @throws \RuntimeException
      */
-    protected function getResourceOwner($name)
+    private function getResourceOwner($name)
     {
         foreach ($this->ownerMaps as $ownerMap) {
             $resourceOwner = $ownerMap->getResourceOwnerByName($name);
@@ -280,7 +262,7 @@ class OAuthUtils
      *
      * @return string|null
      */
-    protected function getResourceOwnerCheckPath($name)
+    private function getResourceOwnerCheckPath($name)
     {
         foreach ($this->ownerMaps as $ownerMap) {
             if ($potentialResourceOwnerCheckPath = $ownerMap->getResourceOwnerCheckPath($name)) {

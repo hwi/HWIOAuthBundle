@@ -38,7 +38,7 @@ class Auth0ResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'user_id',
         'nickname' => 'nickname',
         'realname' => 'name',

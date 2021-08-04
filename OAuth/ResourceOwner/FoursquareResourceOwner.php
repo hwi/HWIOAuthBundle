@@ -15,18 +15,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
- * FoursquareResourceOwner.
- *
  * @author Joseph Bielawski <stloyd@gmail.com>
- *
- * @final since 1.4
  */
-class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
+final class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'response.user.id',
         'firstname' => 'response.user.firstName',
         'lastname' => 'response.user.lastName',

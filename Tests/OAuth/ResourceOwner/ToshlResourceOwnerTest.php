@@ -17,7 +17,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 class ToshlResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = ToshlResourceOwner::class;
-    protected $csrf = true;
+    protected bool $csrf = true;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -27,7 +27,7 @@ class ToshlResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'email',
         'firstname' => 'first_name',

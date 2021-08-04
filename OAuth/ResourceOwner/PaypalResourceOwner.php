@@ -15,18 +15,14 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * PaypalResourceOwner.
- *
  * @author Berny Cantos <be@rny.cc>
- *
- * @final since 1.4
  */
-class PaypalResourceOwner extends GenericOAuth2ResourceOwner
+final class PaypalResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'user_id',
         'nickname' => 'email',
         'email' => 'email',

@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * BitbucketResourceOwner.
- *
  * @author Joseph Bielawski <stloyd@gmail.com>
- *
- * @final since 1.4
  */
-class BitbucketResourceOwner extends GenericOAuth1ResourceOwner
+final class BitbucketResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'user.username',
         'nickname' => 'user.username',
         'realname' => 'user.display_name',

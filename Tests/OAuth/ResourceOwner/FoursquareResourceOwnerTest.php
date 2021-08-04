@@ -29,7 +29,7 @@ class FoursquareResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'response.user.id',
         'firstname' => 'response.user.firstName',
         'lastname' => 'response.user.lastName',

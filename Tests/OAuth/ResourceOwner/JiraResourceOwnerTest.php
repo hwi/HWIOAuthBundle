@@ -20,7 +20,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected string $resourceOwnerClass = JiraResourceOwner::class;
     protected $userResponse = '{"name": "asm89", "displayName": "Alexander"}';
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'name',
         'nickname' => 'name',
         'realname' => 'displayName',

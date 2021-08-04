@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * JawboneResourceOwner.
- *
  * @author Dmitry Matora <dmitry.matora@gmail.com>
- *
- * @final since 1.4
  */
-class JawboneResourceOwner extends GenericOAuth2ResourceOwner
+final class JawboneResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'xid' => 'data.id',
         'firstname' => 'data.first',
         'lastname' => 'data.last',

@@ -15,25 +15,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Marek Štípek
- *
- * @final since 1.4
  */
-class GetResponseUserEvent extends UserEvent
+final class GetResponseUserEvent extends UserEvent
 {
-    /**
-     * @var Response
-     */
-    private $response;
+    private ?Response $response = null;
 
     public function setResponse(Response $response)
     {
         $this->response = $response;
     }
 
-    /**
-     * @return Response|null
-     */
-    public function getResponse()
+    public function getResponse(): ?Response
     {
         return $this->response;
     }

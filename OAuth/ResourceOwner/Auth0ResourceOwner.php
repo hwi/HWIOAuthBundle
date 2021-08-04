@@ -15,18 +15,14 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Auth0ResourceOwner.
- *
  * @author Hernan Rajchert <hrajchert@gmail.com>
- *
- * @final since 1.4
  */
-class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
+final class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'sub',
         'nickname' => 'nickname',
         'realname' => 'name',

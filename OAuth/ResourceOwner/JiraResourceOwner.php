@@ -20,18 +20,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
- * JiraResourceOwner.
- *
  * @author Benjamin Eberlei <kontakt@beberlei.de>
- *
- * @final since 1.4
  */
-class JiraResourceOwner extends GenericOAuth1ResourceOwner
+final class JiraResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'name',
         'nickname' => 'name',
         'realname' => 'displayName',

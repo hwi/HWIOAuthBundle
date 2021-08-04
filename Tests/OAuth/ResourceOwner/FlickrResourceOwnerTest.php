@@ -17,7 +17,7 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected string $resourceOwnerClass = FlickrResourceOwner::class;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'user_nsid',
         'nickname' => 'username',
         'realname' => 'fullname',

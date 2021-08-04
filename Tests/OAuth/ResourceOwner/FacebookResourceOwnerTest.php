@@ -26,7 +26,7 @@ class FacebookResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'username',
         'firstname' => 'first_name',

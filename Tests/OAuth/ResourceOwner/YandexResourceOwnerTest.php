@@ -24,7 +24,7 @@ class YandexResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'display_name',
         'realname' => 'real_name',

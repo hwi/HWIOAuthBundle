@@ -12,6 +12,8 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -25,11 +27,16 @@ abstract class ResourceOwnerTestCase extends TestCase
 
     /** @var MockObject&RequestDataStorageInterface */
     protected $storage;
-    protected $state = 'eyJzdGF0ZSI6InJhbmRvbSJ9';
-    protected $csrf = false;
 
-    protected $options = [];
-    protected $paths = [];
+    protected string $state = 'eyJzdGF0ZSI6InJhbmRvbSJ9';
+    protected bool $csrf = false;
+
+    protected int $httpResponseHttpCode = 200;
+    protected int $httpClientCalls = 0;
+
+    protected array $options = [];
+    /** @var array<string, mixed> */
+    protected array $paths = [];
 
     /** @var class-string */
     protected string $resourceOwnerClass;
@@ -47,21 +54,15 @@ abstract class ResourceOwnerTestCase extends TestCase
         );
     }
 
-    protected function mockHttpClient(string $response = '', string $contentType = 'text/plain')
-    {
-        $this->httpClient = new MockHttpClient(
-            [
-                $this->createMockResponse($response, $contentType),
-            ]
-        );
-    }
-
     protected function prepareResourceOwnerName(): string
     {
         return str_replace(['generic', 'resourceownertest'], '', strtolower(__CLASS__));
     }
 
-    protected function createResourceOwner(array $options = [], array $paths = [], array $responses = [])
+    /**
+     * @return OAuth1ResourceOwnerStub|OAuth2ResourceOwnerStub
+     */
+    protected function createResourceOwner(array $options = [], array $paths = [], array $responses = []): ResourceOwnerInterface
     {
         $this->storage = $this->createMock(RequestDataStorageInterface::class);
 
@@ -79,6 +80,9 @@ abstract class ResourceOwnerTestCase extends TestCase
         return $resourceOwner;
     }
 
+    /**
+     * @return OAuth1ResourceOwnerStub|OAuth2ResourceOwnerStub
+     */
     protected function setUpResourceOwner(string $name, HttpUtils $httpUtils, array $options, array $responses): ResourceOwnerInterface
     {
         if (!$this->resourceOwnerClass) {
@@ -89,7 +93,14 @@ abstract class ResourceOwnerTestCase extends TestCase
             throw new \RuntimeException('Class is not implementing "ResourceOwnerInterface"!');
         }
 
-        return new $this->resourceOwnerClass(
+        $resourceOwnerClass = $this->resourceOwnerClass;
+        if (GenericOAuth1ResourceOwner::class === $resourceOwnerClass) {
+            $resourceOwnerClass = OAuth1ResourceOwnerStub::class;
+        } elseif (GenericOAuth2ResourceOwner::class === $resourceOwnerClass) {
+            $resourceOwnerClass = OAuth2ResourceOwnerStub::class;
+        }
+
+        return new $resourceOwnerClass(
             $this->httpClient ?: new MockHttpClient($responses),
             $httpUtils,
             $options,

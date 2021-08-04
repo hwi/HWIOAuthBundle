@@ -19,7 +19,7 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = SensioConnectResourceOwner::class;
 
-    protected $csrf = true;
+    protected bool $csrf = true;
 
     protected function setUp(): void
     {

@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * CleverResourceOwner.
- *
  * @author Matt Farmer <work@mattfarmer.net>
- *
- * @final since 1.4
  */
-class CleverResourceOwner extends GenericOAuth2ResourceOwner
+final class CleverResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'data.id',
         'email' => 'data.email',
         'firstname' => 'data.name.first',

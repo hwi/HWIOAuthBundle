@@ -19,7 +19,7 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 class AzureResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = AzureResourceOwner::class;
-    protected $csrf = true;
+    protected bool $csrf = true;
 
     protected $userResponse = <<<json
 {
@@ -31,7 +31,7 @@ class AzureResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'sub',
         'nickname' => 'unique_name',
         'realname' => ['given_name', 'family_name'],

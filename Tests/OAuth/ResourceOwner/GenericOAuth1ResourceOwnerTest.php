@@ -26,7 +26,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
     /** @var MockObject&RequestDataStorageInterface */
     protected $storage;
 
-    protected $options = [
+    protected array $options = [
         'client_id' => 'clientid',
         'client_secret' => 'clientsecret',
 
@@ -38,7 +38,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
 
     protected $userResponse = '{"id": "1", "foo": "bar"}';
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'foo',
         'realname' => 'foo_disp',

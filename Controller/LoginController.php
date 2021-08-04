@@ -26,43 +26,18 @@ use Twig\Environment;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
+ *
+ * @internal
  */
 final class LoginController
 {
-    /**
-     * @var bool
-     */
-    private $connect;
-
-    /**
-     * @var string
-     */
-    private $grantRule;
-
-    /**
-     * @var AuthenticationUtils
-     */
-    private $authenticationUtils;
-
-    /**
-     * @var RouterInterface
-     */
-    private $router;
-
-    /**
-     * @var AuthorizationCheckerInterface
-     */
-    private $authorizationChecker;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
-
-    /**
-     * @var Environment
-     */
-    private $twig;
+    private bool $connect;
+    private string $grantRule;
+    private AuthenticationUtils $authenticationUtils;
+    private RouterInterface $router;
+    private AuthorizationCheckerInterface $authorizationChecker;
+    private RequestStack $requestStack;
+    private Environment $twig;
 
     public function __construct(
         AuthenticationUtils $authenticationUtils,

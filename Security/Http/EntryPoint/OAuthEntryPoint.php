@@ -24,41 +24,20 @@ use Symfony\Component\Security\Http\HttpUtils;
  *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
- *
- * @final since 1.4
  */
-class OAuthEntryPoint implements AuthenticationEntryPointInterface
+final class OAuthEntryPoint implements AuthenticationEntryPointInterface
 {
-    /**
-     * @var HttpKernelInterface
-     */
-    protected $httpKernel;
+    private HttpKernelInterface $httpKernel;
+    private HttpUtils $httpUtils;
+    private string $loginPath;
+    private bool $useForward;
 
-    /**
-     * @var HttpUtils
-     */
-    protected $httpUtils;
-
-    /**
-     * @var string
-     */
-    protected $loginPath;
-
-    /**
-     * @var bool
-     */
-    protected $useForward;
-
-    /**
-     * @param string $loginPath
-     * @param bool   $useForward
-     */
-    public function __construct(HttpKernelInterface $kernel, HttpUtils $httpUtils, $loginPath, $useForward = false)
+    public function __construct(HttpKernelInterface $kernel, HttpUtils $httpUtils, string $loginPath, bool $useForward = false)
     {
         $this->httpKernel = $kernel;
         $this->httpUtils = $httpUtils;
         $this->loginPath = $loginPath;
-        $this->useForward = (bool) $useForward;
+        $this->useForward = $useForward;
     }
 
     /**

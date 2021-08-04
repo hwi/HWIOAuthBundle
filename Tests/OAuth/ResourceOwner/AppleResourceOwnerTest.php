@@ -27,7 +27,7 @@ class AppleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'sub',
         'firstname' => 'firstName',
         'lastname' => 'lastName',

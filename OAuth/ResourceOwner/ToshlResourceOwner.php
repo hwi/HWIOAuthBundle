@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * ToshlResourceOwner.
- *
  * @author Davide Bellettini <davide@bellettini.me>
- *
- * @final since 1.4
  */
-class ToshlResourceOwner extends GenericOAuth2ResourceOwner
+final class ToshlResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'email',
         'firstname' => 'first_name',

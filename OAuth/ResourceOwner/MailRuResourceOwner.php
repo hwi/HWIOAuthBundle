@@ -18,18 +18,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
- * MailRuResourceOwner.
- *
  * @author Gaponov Igor <jiminy96@gmail.com>
- *
- * @final since 1.4
  */
-class MailRuResourceOwner extends GenericOAuth2ResourceOwner
+final class MailRuResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'uid',
         'nickname' => 'nick',
         'realname' => 'nick',

@@ -28,7 +28,7 @@ class GenericOAuth2ResourceOwnerTest extends ResourceOwnerTestCase
     protected string $resourceOwnerClass = GenericOAuth2ResourceOwner::class;
     protected $tokenData = ['access_token' => 'token'];
 
-    protected $options = [
+    protected array $options = [
         'client_id' => 'clientid',
         'client_secret' => 'clientsecret',
 
@@ -46,7 +46,7 @@ class GenericOAuth2ResourceOwnerTest extends ResourceOwnerTestCase
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'foo',
         'realname' => 'foo_disp',

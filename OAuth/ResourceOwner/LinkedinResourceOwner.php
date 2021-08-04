@@ -15,19 +15,15 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\LinkedinUserResponse;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * LinkedinResourceOwner.
- *
  * @author Francisco Facioni <fran6co@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
- *
- * @final since 1.4
  */
-class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
+final class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'emailAddress',
         'firstname' => 'firstName',

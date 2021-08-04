@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * AmazonResourceOwner.
- *
  * @author Fabian Kiss <fabian.kiss@ymc.ch>
- *
- * @final since 1.4
  */
-class AmazonResourceOwner extends GenericOAuth2ResourceOwner
+final class AmazonResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'user_id',
         'nickname' => 'name',
         'realname' => 'name',

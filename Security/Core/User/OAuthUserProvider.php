@@ -18,10 +18,8 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 /**
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
- *
- * @final since 1.4
  */
-class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
+final class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
 {
     /**
      * {@inheritdoc}

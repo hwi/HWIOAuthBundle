@@ -20,6 +20,7 @@ use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\OAuthAuthenticator;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -63,7 +64,7 @@ class OAuthAuthenticatorTest extends TestCase
         $authenticator = new OAuthAuthenticator(
             $httpUtilsMock,
             $this->getOAuthAwareUserProviderMock(),
-            $this->getResourceOwnerMapMock(),
+            $this->getResourceOwnerMap(),
             ['/a', '/b'],
             $this->getAuthenticationSuccessHandlerMock(),
             $this->getAuthenticationFailureHandlerMock()
@@ -77,7 +78,6 @@ class OAuthAuthenticatorTest extends TestCase
         $httpUtilsMock = $this->getHttpUtilsMock();
         $userProviderMock = $this->getOAuthAwareUserProviderMock();
         $resourceOwnerMock = $this->getResourceOwnerMock();
-        $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
         $checkPath = '/oauth/login_check';
         $request = Request::create($checkPath);
         $checkUri = 'http://localhost/oauth/login_check';
@@ -91,10 +91,22 @@ class OAuthAuthenticatorTest extends TestCase
         $userMock = $this->getUserMock();
         $resourceOwnerName = 'github';
 
-        $resourceOwnerMapMock->expects($this->once())
-            ->method('getResourceOwnerByRequest')
-            ->with($request)
-            ->willReturn([$resourceOwnerMock, $checkPath]);
+        $httpUtilsMock->expects($this->once())
+            ->method('checkRequestPath')
+            ->with($request, $checkPath)
+            ->willReturn(true);
+
+        $serviceLocator = $this->createMock(ServiceLocator::class);
+        $serviceLocator->expects($this->once())
+            ->method('get')
+            ->with($resourceOwnerName)
+            ->willReturn($resourceOwnerMock);
+
+        $resourceOwnerMap = $this->getResourceOwnerMap(
+            [$resourceOwnerName => $checkPath],
+            $httpUtilsMock,
+            $serviceLocator
+        );
 
         $resourceOwnerMock->expects($this->once())
             ->method('handles')
@@ -140,7 +152,7 @@ class OAuthAuthenticatorTest extends TestCase
         $authenticator = new OAuthAuthenticator(
             $httpUtilsMock,
             $userProviderMock,
-            $resourceOwnerMapMock,
+            $resourceOwnerMap,
             [],
             $this->getAuthenticationSuccessHandlerMock(),
             $this->getAuthenticationFailureHandlerMock()
@@ -176,7 +188,7 @@ class OAuthAuthenticatorTest extends TestCase
         $authenticator = new OAuthAuthenticator(
             $this->getHttpUtilsMock(),
             $this->getOAuthAwareUserProviderMock(),
-            $this->getResourceOwnerMapMock(),
+            $this->getResourceOwnerMap(),
             [],
             $successHandlerMock,
             $this->getAuthenticationFailureHandlerMock()
@@ -201,7 +213,7 @@ class OAuthAuthenticatorTest extends TestCase
         $authenticator = new OAuthAuthenticator(
             $this->getHttpUtilsMock(),
             $this->getOAuthAwareUserProviderMock(),
-            $this->getResourceOwnerMapMock(),
+            $this->getResourceOwnerMap(),
             [],
             $this->getAuthenticationSuccessHandlerMock(),
             $failureHandlerMock
@@ -224,14 +236,6 @@ class OAuthAuthenticatorTest extends TestCase
     private function getOAuthAwareUserProviderMock(): OAuthAwareUserProviderInterface
     {
         return $this->createMock(OAuthAwareUserProviderInterface::class);
-    }
-
-    /**
-     * @return ResourceOwnerMap&MockObject
-     */
-    private function getResourceOwnerMapMock(): ResourceOwnerMap
-    {
-        return $this->createMock(ResourceOwnerMap::class);
     }
 
     /**
@@ -280,5 +284,18 @@ class OAuthAuthenticatorTest extends TestCase
     private function getOAuthTokenMock(): OAuthToken
     {
         return $this->createMock(OAuthToken::class);
+    }
+
+    private function getResourceOwnerMap(
+        array $resources = [],
+              $httpUtils = null,
+              $serviceLocator = null
+    ): ResourceOwnerMap {
+        return new ResourceOwnerMap(
+            $httpUtils ?: $this->createMock(HttpUtils::class),
+            $resources,
+            $resources,
+            $serviceLocator ?: $this->createMock(ServiceLocator::class)
+        );
     }
 }

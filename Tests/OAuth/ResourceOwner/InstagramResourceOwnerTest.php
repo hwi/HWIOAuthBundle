@@ -23,7 +23,7 @@ class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "username": "bar"
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'username',
     ];

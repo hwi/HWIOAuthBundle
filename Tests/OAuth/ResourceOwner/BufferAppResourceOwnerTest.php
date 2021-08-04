@@ -25,7 +25,7 @@ class BufferAppResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'id',
         'realname' => 'id',
