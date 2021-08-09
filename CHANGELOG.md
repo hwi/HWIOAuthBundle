@@ -1,5 +1,9 @@
 Changelog
 =========
+## 1.4.2 (2021-08-09)
+* Bugfix: remove `@final` declaration from `OAuthFactory` & `FOSUBUserProvider`,
+* Maintain: added `.gitattributes` to reduce amount of code in archives,
+
 ## 1.4.1 (2021-07-28)
 * Bugfix: Define missing `hwi_oauth.connect.confirmation` parameter,
 * Bugfix: Added missing success/failure handlers,
