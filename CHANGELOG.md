@@ -17,6 +17,10 @@ Changelog
 * BC Break: Removed abstract services: `hwi_oauth.abstract_resource_owner.generic`, `hwi_oauth.abstract_resource_owner.oauth1` & `hwi_oauth.abstract_resource_owner.oauth2`,
 * BC Break: Removed `setName()` method from `OAuth/ResourceOwnerInterface`,
 
+## 1.4.2 (2021-08-09)
+* Bugfix: remove `@final` declaration from `OAuthFactory` & `FOSUBUserProvider`,
+* Maintain: added `.gitattributes` to reduce amount of code in archives,
+
 ## 1.4.1 (2021-07-28)
 * Bugfix: Define missing `hwi_oauth.connect.confirmation` parameter,
 * Bugfix: Added missing success/failure handlers,
