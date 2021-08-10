@@ -85,13 +85,15 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
       - name: Set Composer platform config
-        if: (startsWith(matrix.php, '8.0'))
+        if: (startsWith(matrix.php, '8.1'))
         run: |
-          composer config platform.php 7.4.99
+          composer config platform.php 8.0.99
       - name: Remove FOSUser
         run: composer remove friendsofsymfony/user-bundle --no-update --no-interaction --dev
       - name: Update project dependencies
-        run: composer update --no-interaction --no-progress --ansi
+        run: |
+          composer global require --no-progress --no-scripts --no-plugins symfony/flex
+          composer update --no-interaction --no-progress --ansi
       - name: Run PHPUnit tests
         run: |
           mkdir -p build/logs/phpunit
@@ -112,6 +114,7 @@ jobs:
       matrix:
         php:
           - '7.4'
+          - '8.0'
       fail-fast: false
     env:
       SYMFONY_DEPRECATIONS_HELPER: 'weak'
