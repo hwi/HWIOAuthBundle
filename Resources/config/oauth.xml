@@ -85,20 +85,20 @@
         <service id="hwi_oauth.authentication.listener.oauth" class="HWI\Bundle\OAuthBundle\Security\Http\Firewall\OAuthListener"
                  parent="security.authentication.listener.abstract" abstract="true" />
         <service id="hwi_oauth.authentication.provider.oauth" class="HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider" />
-        <service id="hwi_oauth.authentication.entry_point.oauth" class="HWI\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint" abstract="true">
+        <service id="hwi_oauth.authentication.entry_point.oauth" class="HWI\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint">
             <argument type="service" id="http_kernel" />
             <argument type="service" id="security.http_utils" />
         </service>
         <service id="hwi_oauth.user.provider" class="HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider" />
-        <service id="hwi_oauth.user.provider.entity" class="HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider" abstract="true">
+        <service id="hwi_oauth.user.provider.entity" class="HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider">
             <argument type="service" id="doctrine" />
         </service>
 
         <!-- fosub bridges -->
-        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider" abstract="true">
+        <service id="hwi_oauth.user.provider.fosub_bridge.def" class="HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider">
             <argument type="service" id="fos_user.user_manager" />
         </service>
-        <service id="hwi_oauth.registration.form.handler.fosub_bridge.def" class="HWI\Bundle\OAuthBundle\Form\FOSUBRegistrationFormHandler" abstract="true">
+        <service id="hwi_oauth.registration.form.handler.fosub_bridge.def" class="HWI\Bundle\OAuthBundle\Form\FOSUBRegistrationFormHandler">
             <argument type="service" id="fos_user.user_manager" />
             <argument type="service" id="fos_user.mailer" />
             <argument type="service" id="fos_user.util.token_generator" on-invalid="null" />
