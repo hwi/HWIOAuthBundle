@@ -59,6 +59,7 @@ This bundle contains support for 58 different providers:
 * Jawbone,
 * JIRA,
 * Keycloak,
+* LINE,
 * LinkedIn,
 * Mail.ru
 * Odnoklassniki,
