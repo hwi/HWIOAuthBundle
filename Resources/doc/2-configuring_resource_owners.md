@@ -66,6 +66,7 @@ hwi_oauth:
 - [itembase](resource_owners/itembase.md)
 - [Jira](resource_owners/jira.md)
 - [Keycloak](resource_owners/keycloak.md)
+- [LINE](resource_owners/line.md)
 - [Linkedin](resource_owners/linkedin.md)
 - [Mail.ru](resource_owners/mailru.md)
 - [Odnoklassniki](resource_owners/odnoklassniki.md)
