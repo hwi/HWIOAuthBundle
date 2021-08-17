@@ -12,12 +12,14 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AppleResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class AppleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = AppleResourceOwner::class;
+    protected string $resourceOwnerClass = AppleResourceOwner::class;
     protected $userResponse = <<<json
 {
     "sub": "1",
@@ -37,36 +39,44 @@ json;
 
     public function testHandleRequest()
     {
+        $resourceOwner = $this->createResourceOwner();
+
         $request = new Request(['test' => 'test']);
 
-        $this->assertFalse($this->resourceOwner->handles($request));
+        $this->assertFalse($resourceOwner->handles($request));
 
         $request = new Request(['code' => 'test']);
 
-        $this->assertFalse($this->resourceOwner->handles($request));
+        $this->assertFalse($resourceOwner->handles($request));
 
         $request = new Request([], ['code' => 'test']);
 
-        $this->assertTrue($this->resourceOwner->handles($request));
+        $this->assertTrue($resourceOwner->handles($request));
 
         $request = new Request([], ['code' => 'test', 'test' => 'test']);
 
-        $this->assertTrue($this->resourceOwner->handles($request));
+        $this->assertTrue($resourceOwner->handles($request));
     }
 
     public function testGetAccessTokenFailedResponse()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
+        $this->expectException(AuthenticationException::class);
 
-        $this->mockHttpClient('{"error": {"message": "invalid"}}', 'application/json; charset=utf-8');
         $request = new Request(['code' => 'code']);
 
-        $this->resourceOwner->getAccessToken($request, 'http://redirect.to/');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('{"error": {"message": "invalid"}}', 'application/json; charset=utf-8'),
+            ]
+        );
+        $resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
     public function testDisplayPopup()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['display' => 'popup']);
+        $resourceOwner = $this->createResourceOwner(['display' => 'popup']);
 
         $this->assertEquals(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&scope=name+email&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F&response_mode=form_post',
@@ -74,31 +84,19 @@ json;
         );
     }
 
-    public function testRevokeToken()
-    {
-        $this->httpResponseHttpCode = 200;
-        $this->mockHttpClient('{"access_token": "bar"}', 'application/json');
-
-        $this->assertTrue($this->resourceOwner->revokeToken('token'));
-    }
-
-    public function testRevokeTokenFails()
-    {
-        $this->httpResponseHttpCode = 401;
-        $this->mockHttpClient('{"access_token": "bar"}', 'application/json');
-
-        $this->assertFalse($this->resourceOwner->revokeToken('token'));
-    }
-
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
-
-        $token = '.'.base64_encode($this->userResponse);
+        $resourceOwner = $this->createResourceOwner(
+            ['user_response_class' => $class],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
 
         /** @var CustomUserResponse $userResponse */
-        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token', 'id_token' => $token]);
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token', 'id_token' => '.'.base64_encode($this->userResponse)]);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
@@ -114,10 +112,18 @@ json;
     {
         $token = '.'.base64_encode($this->userResponse);
 
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
+
         /**
-         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         * @var AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation([
+        $userResponse = $resourceOwner->getUserInformation([
             'access_token' => 'token',
             'id_token' => $token,
             'firstName' => 'Test',
@@ -132,7 +138,7 @@ json;
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
 
-        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token', 'id_token' => $token]);
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token', 'id_token' => $token]);
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('localhost@gmail.com', $userResponse->getEmail());
         $this->assertEquals('token', $userResponse->getAccessToken());
@@ -144,13 +150,16 @@ json;
 
     public function testGetUserInformationFailure()
     {
-        $exception = new \Exception('Undefined index id_token');
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Undefined index id_token');
 
-        try {
-            $this->resourceOwner->getUserInformation(['access_token' => 'token']);
-            $this->fail('An exception should have been raised');
-        } catch (\Exception $e) {
-            $this->assertSame($exception->getMessage(), $e->getMessage());
-        }
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
+        $resourceOwner->getUserInformation(['access_token' => 'token']);
     }
 }

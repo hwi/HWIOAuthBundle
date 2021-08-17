@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ThirtySevenSignalsResourceOwner;
 
 class ThirtySevenSignalsResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = ThirtySevenSignalsResourceOwner::class;
+    protected string $resourceOwnerClass = ThirtySevenSignalsResourceOwner::class;
     protected $userResponse = <<<json
 {
     "expires_at": "2014-03-22T16:56:48-05:00",

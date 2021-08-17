@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitchResourceOwner;
 
 class TwitchResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = TwitchResourceOwner::class;
+    protected string $resourceOwnerClass = TwitchResourceOwner::class;
     protected $userResponse = <<<json
 {
     "_id": "1",

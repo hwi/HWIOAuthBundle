@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WindowsLiveResourceOwner;
 
 class WindowsLiveResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = WindowsLiveResourceOwner::class;
+    protected string $resourceOwnerClass = WindowsLiveResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",

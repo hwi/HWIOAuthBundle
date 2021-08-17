@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitlyResourceOwner;
 
 class BitlyResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = BitlyResourceOwner::class;
+    protected string $resourceOwnerClass = BitlyResourceOwner::class;
     protected $userResponse = <<<json
 {
     "data": {

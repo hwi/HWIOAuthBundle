@@ -11,14 +11,14 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Http\Client\Exception\TransferException;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SinaWeiboResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
 class SinaWeiboResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = SinaWeiboResourceOwner::class;
+    protected string $resourceOwnerClass = SinaWeiboResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",
@@ -35,12 +35,18 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockHttpClient($this->userResponse);
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
 
         /**
-         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         * @var AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token', 'uid' => '1']);
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token', 'uid' => '1']);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
@@ -51,29 +57,32 @@ json;
 
     public function testGetUserInformationFailure()
     {
-        $exception = new TransferException();
+        $this->expectException(HttpTransportException::class);
 
-        $this->httpClient->expects($this->once())
-            ->method('sendRequest')
-            ->will($this->throwException($exception));
-
-        try {
-            $this->resourceOwner->getUserInformation(['access_token' => 'token', 'uid' => 'someuser']);
-            $this->fail('An exception should have been raised');
-        } catch (HttpTransportException $e) {
-            $this->assertSame($exception, $e->getPrevious());
-        }
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('invalid'),
+            ]
+        );
+        $resourceOwner->getUserInformation(['access_token' => 'token', 'uid' => 'someuser']);
     }
 
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner('oauth2', ['user_response_class' => $class]);
 
-        $this->mockHttpClient();
+        $resourceOwner = $this->createResourceOwner(
+            ['user_response_class' => $class],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
 
         /**
-         * @var \HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse
+         * @var CustomUserResponse
          */
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token', 'uid' => '1']);
 

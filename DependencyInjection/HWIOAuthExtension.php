@@ -48,7 +48,6 @@ final class HWIOAuthExtension extends Extension
     {
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
         $loader->load('controller.xml');
-        $loader->load('http_client.xml');
         $loader->load('oauth.xml');
         $loader->load('resource_owners.xml');
         $loader->load('templating.xml');
@@ -57,8 +56,6 @@ final class HWIOAuthExtension extends Extension
 
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);
-
-        $this->createHttplugClient($container, $config);
 
         // set current firewall
         if (empty($config['firewall_names'])) {
@@ -154,23 +151,6 @@ final class HWIOAuthExtension extends Extension
     public function getAlias()
     {
         return 'hwi_oauth';
-    }
-
-    protected function createHttplugClient(ContainerBuilder $container, array $config)
-    {
-        $httpClientId = $config['http']['client'];
-        $httpMessageFactoryId = $config['http']['message_factory'];
-        $bundles = $container->getParameter('kernel.bundles');
-
-        if ('httplug.client.default' === $httpClientId && !isset($bundles['HttplugBundle'])) {
-            throw new InvalidConfigurationException('You must setup php-http/httplug-bundle to use the default http client service.');
-        }
-        if ('httplug.message_factory.default' === $httpMessageFactoryId && !isset($bundles['HttplugBundle'])) {
-            throw new InvalidConfigurationException('You must setup php-http/httplug-bundle to use the default http message factory service.');
-        }
-
-        $container->setAlias('hwi_oauth.http.client', new Alias($config['http']['client'], true));
-        $container->setAlias('hwi_oauth.http.message_factory', new Alias($config['http']['message_factory'], true));
     }
 
     /**

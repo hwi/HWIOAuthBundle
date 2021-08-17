@@ -52,10 +52,10 @@ class AppleResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         if (!isset($accessToken['id_token'])) {
-            throw new \Exception('Undefined index id_token');
+            throw new \InvalidArgumentException('Undefined index id_token');
         }
 
-        $jwt = self::jwt_decode($accessToken['id_token']);
+        $jwt = self::jwtDecode($accessToken['id_token']);
         $data = json_decode(base64_decode($jwt), true);
 
         if (isset($accessToken['firstName'], $accessToken['lastName'])) {
@@ -105,9 +105,10 @@ class AppleResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = [])
     {
-        $parameters = [];
-        $parameters['client_id'] = $this->options['client_id'];
-        $parameters['client_secret'] = $this->options['client_secret'];
+        $parameters = [
+            'client_id' => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
+        ];
 
         return parent::refreshAccessToken($refreshToken, array_merge($parameters, $extraParameters));
     }
@@ -130,7 +131,6 @@ class AppleResourceOwner extends GenericOAuth2ResourceOwner
         $resolver->setDefaults([
             'authorization_url' => 'https://appleid.apple.com/auth/authorize',
             'access_token_url' => 'https://appleid.apple.com/auth/token',
-            'revoke_token_url' => '',
             'infos_url' => '',
             'use_commas_in_scope' => false,
             'display' => null,
@@ -140,10 +140,10 @@ class AppleResourceOwner extends GenericOAuth2ResourceOwner
         ]);
     }
 
-    private static function jwt_decode($id_token)
+    private static function jwtDecode(string $idToken)
     {
         //// from http://stackoverflow.com/a/28748285/624544
-        [, $jwt] = explode('.', $id_token, 3);
+        [, $jwt] = explode('.', $idToken, 3);
 
         // if the token was urlencoded, do some fixes to ensure that it is valid base64 encoded
         $jwt = str_replace(['-', '_'], ['+', '/'], $jwt);

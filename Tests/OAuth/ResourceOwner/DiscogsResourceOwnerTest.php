@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DiscogsResourceOwner;
 
 class DiscogsResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
-    protected $resourceOwnerClass = DiscogsResourceOwner::class;
+    protected string $resourceOwnerClass = DiscogsResourceOwner::class;
     protected $userResponse = <<<json
 {
   "id": 1,

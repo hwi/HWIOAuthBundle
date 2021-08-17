@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DropboxResourceOwner;
 
 class DropboxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = DropboxResourceOwner::class;
+    protected string $resourceOwnerClass = DropboxResourceOwner::class;
     protected $userResponse = '{"account_id": "1", "email": "bar"}';
     protected $paths = [
         'identifier' => 'account_id',
@@ -26,9 +26,11 @@ class DropboxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 
     public function testGetAuthorizationUrl()
     {
+        $resourceOwner = $this->createResourceOwner();
+
         $this->assertEquals(
             $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F',
-            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 }

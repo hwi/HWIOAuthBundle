@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner;
 
 class TwitterResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
-    protected $resourceOwnerClass = TwitterResourceOwner::class;
+    protected string $resourceOwnerClass = TwitterResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id_str": "1",
@@ -30,7 +30,14 @@ json;
 
     public function testGetUserInformationWithEmail()
     {
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['include_email' => true]);
+        $resourceOwner = $this->createResourceOwner(
+            ['include_email' => true],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+            ]
+        );
+
         $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'user_id' => '1', 'screen_name' => 'bar'];
 
         $resourceOwner->getUserInformation($accessToken);
@@ -40,10 +47,16 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+            ]
+        );
 
         $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'user_id' => '1', 'screen_name' => 'bar'];
-        $userResponse = $this->resourceOwner->getUserInformation($accessToken);
+        $userResponse = $resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());

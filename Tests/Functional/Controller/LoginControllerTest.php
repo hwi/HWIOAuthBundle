@@ -15,22 +15,22 @@ namespace HWI\Bundle\OAuthBundle\Tests\Functional\Controller;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
-use Psr\Http\Client\ClientInterface;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Security;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class LoginControllerTest extends WebTestCase
 {
     public function testLoginPage(): void
     {
         $client = static::createClient();
-
-        self::$container->set(ClientInterface::class, $this->createMock(ClientInterface::class));
+        $client->getContainer()->set('hwi_oauth.http_client', $this->createMock(HttpClientInterface::class));
 
         $crawler = $client->request('GET', '/login_hwi/');
 
@@ -57,11 +57,12 @@ final class LoginControllerTest extends WebTestCase
 
     public function testLoginPageWithError(): void
     {
+        $httpClient = new MockHttpClient();
+
         $client = static::createClient();
+        $client->getContainer()->set('hwi_oauth.http_client', $httpClient);
 
-        self::$container->set(ClientInterface::class, $this->createMock(ClientInterface::class));
-
-        $session = $this->getSession();
+        $session = $client->getContainer()->get('session');
 
         $this->logIn($client, $session);
         $exception = new UsernameNotFoundException();

@@ -11,8 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\DependencyInjection;
 
-use Http\Client\Common\HttpMethodsClient;
-use Http\HttplugBundle\HttplugBundle;
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\MyCustomProvider;
 use PHPUnit\Framework\TestCase;
@@ -36,25 +34,11 @@ class HWIOAuthExtensionTest extends TestCase
         parent::setUp();
 
         $this->containerBuilder = new ContainerBuilder();
-
-        $this->containerBuilder->setParameter('kernel.bundles', [
-            'HttplugBundle' => new HttplugBundle(),
-        ]);
     }
 
     protected function tearDown(): void
     {
         unset($this->containerBuilder);
-    }
-
-    public function testHttpClientExists()
-    {
-        $this->createEmptyConfiguration();
-
-        $this->assertHasDefinition(
-            'hwi_oauth.http_client',
-            HttpMethodsClient::class
-        );
     }
 
     public function testConfigurationThrowsExceptionUnlessFirewallNameSet()
@@ -669,21 +653,12 @@ EOF;
         $this->assertEquals($value, (string) $this->containerBuilder->getAlias($key), sprintf('%s alias is correct', $key));
     }
 
-    private function assertParameter($value, string $key)
+    private function assertParameter($value, string $key): void
     {
         $this->assertEquals($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
     }
 
-    private function assertHasDefinition(string $id, ?string $className = null)
-    {
-        $this->assertTrue(($this->containerBuilder->hasDefinition($id) ?: $this->containerBuilder->hasAlias($id)));
-
-        if (null !== $className) {
-            $this->assertSame($this->containerBuilder->findDefinition($id)->getClass(), $className);
-        }
-    }
-
-    private function assertNotHasDefinition(string $id)
+    private function assertNotHasDefinition(string $id): void
     {
         $this->assertFalse($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id));
     }

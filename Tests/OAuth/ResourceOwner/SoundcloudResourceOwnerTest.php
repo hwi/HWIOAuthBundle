@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SoundcloudResourceOwner;
 
 class SoundcloudResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = SoundcloudResourceOwner::class;
+    protected string $resourceOwnerClass = SoundcloudResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",

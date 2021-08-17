@@ -11,25 +11,17 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Http\Client\Common\HttpMethodsClient;
-use Http\Client\HttpClient;
-use Http\Discovery\MessageFactoryDiscovery;
-use Http\Message\MessageFactory\GuzzleMessageFactory;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Psr\Http\Message\RequestInterface;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Security\Http\HttpUtils;
 
 abstract class ResourceOwnerTestCase extends TestCase
 {
-    /** @var MockObject&HttpClient */
-    protected $httpClient;
-    protected $httpResponse;
-    protected $httpResponseContentType;
-    protected $httpResponseHttpCode = 200;
-    protected $httpClientCalls;
+    protected ?MockHttpClient $httpClient = null;
 
     /** @var MockObject&RequestDataStorageInterface */
     protected $storage;
@@ -39,52 +31,55 @@ abstract class ResourceOwnerTestCase extends TestCase
     protected $options = [];
     protected $paths = [];
 
-    protected $resourceOwnerClass;
+    /** @var class-string */
+    protected string $resourceOwnerClass;
 
-    protected function mockHttpClient($response = '', $contentType = 'text/plain')
+    protected function createMockResponse(?string $response, ?string $contentType = null, ?int $httpCode = null): MockResponse
     {
-        if (null !== $this->httpClientCalls) {
-            $mock = $this->httpClient->expects($this->exactly($this->httpClientCalls));
-        } else {
-            $mock = $this->httpClient->expects($this->once());
-        }
-
-        $mock->method('sendRequest')
-            ->willReturnCallback(function (RequestInterface $request) use ($response, $contentType) {
-                $request = $request->withAddedHeader('Content-Type', $contentType ?: $this->httpResponseContentType);
-
-                return MessageFactoryDiscovery::find()
-                    ->createResponse(
-                        $this->httpResponseHttpCode,
-                        null,
-                        $request->getHeaders(),
-                        $response ?: $this->httpResponse
-                    )
-                ;
-            });
+        return new MockResponse(
+            $response,
+            [
+                'http_code' => $httpCode ?: 200,
+                'response_headers' => [
+                    'Content-Type' => $contentType ?: 'application/json',
+                ],
+            ]
+        );
     }
 
-    protected function createResourceOwner(string $name, array $options = [], array $paths = [])
+    protected function mockHttpClient(string $response = '', string $contentType = 'text/plain')
     {
-        $this->httpClient = $this->createMock(HttpClient::class);
+        $this->httpClient = new MockHttpClient(
+            [
+                $this->createMockResponse($response, $contentType),
+            ]
+        );
+    }
 
+    protected function prepareResourceOwnerName(): string
+    {
+        return str_replace(['generic', 'resourceownertest'], '', strtolower(__CLASS__));
+    }
+
+    protected function createResourceOwner(array $options = [], array $paths = [], array $responses = [])
+    {
         $this->storage = $this->createMock(RequestDataStorageInterface::class);
 
         /** @var HttpUtils $httpUtils */
         $httpUtils = $this->createMock(HttpUtils::class);
 
-        $resourceOwner = $this->setUpResourceOwner($name, $httpUtils, array_merge($this->options, $options));
+        $resourceOwner = $this->setUpResourceOwner(
+            $this->prepareResourceOwnerName(),
+            $httpUtils,
+            array_merge($this->options, $options),
+            $responses
+        );
         $resourceOwner->addPaths(array_merge($this->paths, $paths));
 
         return $resourceOwner;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return \HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface
-     */
-    protected function setUpResourceOwner($name, HttpUtils $httpUtils, array $options)
+    protected function setUpResourceOwner(string $name, HttpUtils $httpUtils, array $options, array $responses): ResourceOwnerInterface
     {
         if (!$this->resourceOwnerClass) {
             throw new \RuntimeException('Missing resource owner class declaration!');
@@ -94,6 +89,12 @@ abstract class ResourceOwnerTestCase extends TestCase
             throw new \RuntimeException('Class is not implementing "ResourceOwnerInterface"!');
         }
 
-        return new $this->resourceOwnerClass(new HttpMethodsClient($this->httpClient, new GuzzleMessageFactory()), $httpUtils, $options, $name, $this->storage);
+        return new $this->resourceOwnerClass(
+            $this->httpClient ?: new MockHttpClient($responses),
+            $httpUtils,
+            $options,
+            $name,
+            $this->storage
+        );
     }
 }

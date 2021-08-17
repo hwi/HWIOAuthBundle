@@ -13,10 +13,11 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SensioConnectResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = SensioConnectResourceOwner::class;
+    protected string $resourceOwnerClass = SensioConnectResourceOwner::class;
 
     protected $csrf = true;
 
@@ -30,9 +31,13 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     public function testGetUserInformation()
     {
         $class = SensioConnectUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
-
-        $this->mockHttpClient($this->userResponse);
+        $resourceOwner = $this->createResourceOwner(
+            ['user_response_class' => $class],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/xml'),
+            ]
+        );
 
         /**
          * @var SensioConnectUserResponse
@@ -45,5 +50,24 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         $this->assertEquals('Fake Guy', $userResponse->getRealName());
         $this->assertEquals('fake@email.com', $userResponse->getEmail());
         $this->assertEquals('token', $userResponse->getAccessToken());
+    }
+
+    public function testCustomResponseClass()
+    {
+        $this->markTestSkipped('SensioConnect already tests this approach');
+    }
+
+    public function testGetUserInformationFailure()
+    {
+        $this->expectException(AuthenticationException::class);
+
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('invalid', 'application/xml'),
+            ]
+        );
+        $resourceOwner->getUserInformation(['access_token' => 'token']);
     }
 }

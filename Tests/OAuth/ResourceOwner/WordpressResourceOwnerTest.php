@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\WordpressResourceOwner;
 
 class WordpressResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = WordpressResourceOwner::class;
+    protected string $resourceOwnerClass = WordpressResourceOwner::class;
     protected $userResponse = <<<json
 {
     "ID": "1",

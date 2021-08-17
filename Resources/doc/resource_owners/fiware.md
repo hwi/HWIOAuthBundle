@@ -17,15 +17,6 @@ If you are using the FI-WARE Lab Cloud you will have to increase the timeout for
 
 ```yaml
 # app/config/config.yml
-
-# With php-http/httplug-bundle
-httplug:
-    clients:
-        default:
-            factory: 'httplug.factory.guzzle6'
-            config:
-                timeout: 15
-
 hwi_oauth:
     resource_owners:
         any_name:

@@ -14,13 +14,11 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\RunKeeperResourceOwner;
 
 /**
- * RunKeeperResourceOwnerTest.
- *
  * @author Artem Genvald <genvaldartem@gmail.com>
  */
 class RunKeeperResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = RunKeeperResourceOwner::class;
+    protected string $resourceOwnerClass = RunKeeperResourceOwner::class;
     /**
      * {@inheritdoc}
      */
@@ -41,9 +39,15 @@ json;
 
     public function testGetUserInformation()
     {
-        $this->mockHttpClient($this->userResponse, 'application/json; charset=utf-8');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
+            ]
+        );
 
-        $userResponse = $this->resourceOwner->getUserInformation(['access_token' => 'token']);
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertEquals('Foo Bar', $userResponse->getRealName());
         $this->assertEquals('http://www.gravatar.com/avatar/default', $userResponse->getProfilePicture());

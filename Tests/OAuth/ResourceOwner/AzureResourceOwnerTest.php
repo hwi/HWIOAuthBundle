@@ -11,14 +11,14 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
-use Http\Client\Exception\TransferException;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AzureResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
 class AzureResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = AzureResourceOwner::class;
+    protected string $resourceOwnerClass = AzureResourceOwner::class;
     protected $csrf = true;
 
     protected $userResponse = <<<json
@@ -44,13 +44,20 @@ json;
 
     public function testGetUserInformation()
     {
-        $token = '.'.base64_encode($this->userResponse);
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
+
         /**
-         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         * @var AbstractUserResponse
          */
-        $userResponse = $this->resourceOwner->getUserInformation([
+        $userResponse = $resourceOwner->getUserInformation([
             'access_token' => 'token',
-            'id_token' => $token,
+            'id_token' => '.'.base64_encode($this->userResponse),
         ]);
 
         $this->assertEquals('1', $userResponse->getUsername());
@@ -65,16 +72,20 @@ json;
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
-
-        $token = '.'.base64_encode($this->userResponse);
+        $resourceOwner = $this->createResourceOwner(
+            ['user_response_class' => $class],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
 
         /**
-         * @var \HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse
+         * @var AbstractUserResponse
          */
         $userResponse = $resourceOwner->getUserInformation([
             'access_token' => 'token',
-            'id_token' => $token,
+            'id_token' => '.'.base64_encode($this->userResponse),
         ]);
 
         $this->assertInstanceOf($class, $userResponse);
@@ -89,19 +100,15 @@ json;
 
     public function testGetUserInformationFailure()
     {
-        $exception = new TransferException();
+        $this->expectException(HttpTransportException::class);
 
-        $this->httpClient->expects($this->once())
-            ->method('sendRequest')
-            ->will($this->throwException($exception));
-
-        $token = '.'.base64_encode($this->userResponse);
-
-        try {
-            $this->resourceOwner->getUserInformation(['access_token' => 'token', 'id_token' => $token]);
-            $this->fail('An exception should have been raised');
-        } catch (HttpTransportException $e) {
-            $this->assertSame($exception, $e->getPrevious());
-        }
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('', null, 401),
+            ]
+        );
+        $resourceOwner->getUserInformation(['access_token' => 'token', 'id_token' => '.'.base64_encode($this->userResponse)]);
     }
 }

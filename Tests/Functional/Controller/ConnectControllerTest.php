@@ -18,11 +18,11 @@ use Doctrine\ORM\Tools\SchemaTool;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Tests\App\AppKernel;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\ResponseInterface;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -41,19 +41,20 @@ final class ConnectControllerTest extends WebTestCase
 
     public function testRegistration(): void
     {
-        $mockResponse = $this->createMock(ResponseInterface::class);
-        $mockResponse->method('getBody')
-            ->willReturn(json_encode(['access_token' => 'valid-access-token']));
-
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient->method('sendRequest')
-            ->withAnyParameters()
-            ->willReturn($mockResponse);
+        $httpClient = new MockHttpClient(
+            function ($method, $url, $options) {
+                return new MockResponse(
+                    '{"access_token":"valid-access-token"}',
+                    [
+                        'response_headers' => ['content-type' => 'application/json'],
+                    ]
+                );
+            }
+        );
 
         $client = static::createClient();
         $client->disableReboot();
-
-        self::$container->set(ClientInterface::class, $httpClient);
+        $client->getContainer()->set('hwi_oauth.http_client', $httpClient);
 
         $key = 1;
         $exception = new AccountNotLinkedException();
@@ -88,19 +89,20 @@ final class ConnectControllerTest extends WebTestCase
 
     public function testConnectService(): void
     {
-        $response = $this->createMock(ResponseInterface::class);
-        $response->method('getBody')
-            ->willReturn(json_encode(['name' => 'foo']));
-
-        $httpClient = $this->createMock(ClientInterface::class);
-        $httpClient->method('sendRequest')
-            ->withAnyParameters()
-            ->willReturn($response);
+        $httpClient = new MockHttpClient(
+            function ($method, $url, $options) {
+                return new MockResponse(
+                    '{"name":"foo"}',
+                    [
+                        'response_headers' => ['content-type' => 'application/json'],
+                    ]
+                );
+            }
+        );
 
         $client = static::createClient();
         $client->disableReboot();
-
-        self::$container->set(ClientInterface::class, $httpClient);
+        $client->getContainer()->set('hwi_oauth.http_client', $httpClient);
 
         $this->createDatabase();
 

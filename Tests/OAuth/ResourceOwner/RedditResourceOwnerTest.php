@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\RedditResourceOwner;
 
 class RedditResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = RedditResourceOwner::class;
+    protected string $resourceOwnerClass = RedditResourceOwner::class;
     protected $userResponse = <<<json
 {
     "id": "1",

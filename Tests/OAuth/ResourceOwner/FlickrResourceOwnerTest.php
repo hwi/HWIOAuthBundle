@@ -16,7 +16,7 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
 class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
-    protected $resourceOwnerClass = FlickrResourceOwner::class;
+    protected string $resourceOwnerClass = FlickrResourceOwner::class;
     protected $paths = [
         'identifier' => 'user_nsid',
         'nickname' => 'username',
@@ -28,6 +28,14 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
      */
     public function testGetUserInformation()
     {
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse($this->userResponse),
+            ]
+        );
+
         $accessToken = [
             'oauth_token' => 'token',
             'oauth_token_secret' => 'secret',
@@ -35,7 +43,7 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
             'user_nsid' => '15362483@N08',
             'username' => 'lakiboy83',
         ];
-        $userResponse = $this->resourceOwner->getUserInformation($accessToken);
+        $userResponse = $resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('15362483@N08', $userResponse->getUsername());
         $this->assertEquals('lakiboy83', $userResponse->getNickname());
@@ -50,16 +58,22 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
      */
     public function testGetAuthorizationUrlContainOAuthTokenAndSecret()
     {
-        $this->mockHttpClient('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json; charset=utf-8');
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('{"oauth_token": "token", "oauth_token_secret": "secret"}', 'application/json; charset=utf-8'),
+            ]
+        );
 
         $this->storage->expects($this->once())
             ->method('save')
-            ->with($this->resourceOwner, ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'timestamp' => time()])
+            ->with($resourceOwner, ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'timestamp' => time()])
         ;
 
         $this->assertEquals(
             $this->options['authorization_url'].'&oauth_token=token&perms=read&nojsoncallback=1',
-            $this->resourceOwner->getAuthorizationUrl('http://redirect.to/')
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
         );
     }
 
@@ -69,7 +83,7 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     public function testCustomResponseClass()
     {
         $class = CustomUserResponse::class;
-        $resourceOwner = $this->createResourceOwner($this->resourceOwnerName, ['user_response_class' => $class]);
+        $resourceOwner = $this->createResourceOwner(['user_response_class' => $class]);
 
         /* @var $userResponse CustomUserResponse */
         $userResponse = $resourceOwner->getUserInformation(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']);

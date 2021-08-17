@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\EveOnlineResourceOwner;
 
 class EveOnlineResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
-    protected $resourceOwnerClass = EveOnlineResourceOwner::class;
+    protected string $resourceOwnerClass = EveOnlineResourceOwner::class;
     protected $userResponse = <<<json
 {
     "CharacterID": "1",

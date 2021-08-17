@@ -11,8 +11,11 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
  * MailRuResourceOwner.
@@ -49,18 +52,21 @@ class MailRuResourceOwner extends GenericOAuth2ResourceOwner
 
         $url = $this->normalizeUrl($this->options['infos_url'], $params);
 
-        $content = (string) $this->doGetUserInformationRequest($url)->getBody();
-        $content = json_decode($content, true);
-        if (isset($content[0])) {
-            $content = (array) $content[0];
+        try {
+            $content = $this->doGetUserInformationRequest($url)->toArray(false);
+            if (isset($content[0])) {
+                $content = (array) $content[0];
+            }
+
+            $response = $this->getUserResponse();
+            $response->setData($content);
+            $response->setResourceOwner($this);
+            $response->setOAuthToken(new OAuthToken($accessToken));
+
+            return $response;
+        } catch (TransportExceptionInterface | JsonException $e) {
+            throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
         }
-
-        $response = $this->getUserResponse();
-        $response->setData($content);
-        $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
-
-        return $response;
     }
 
     /**
