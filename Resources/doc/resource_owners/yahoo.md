@@ -1,7 +1,7 @@
 Step 2x: Setup Yahoo
 =======================
 First you will have to register your application on Yahoo ("Create a Project"). Check out the
-documentation for more information: http://developer.yahoo.com/oauth/.
+documentation for more information: https://developer.yahoo.com/oauth2/guide/
 
 The Yahoo Resource Owner uses the Yahoo Profile API to get user information, so when setting up your Yahoo Project
 you must ensure that you have enabled access to the "Social Directory" service, with at least "Read Public" access
@@ -16,9 +16,9 @@ Next configure a resource owner of type `yahoo` with appropriate `client_id`,
 hwi_oauth:
     resource_owners:
         any_name:
-            type:                yahoo
-            client_id:           <client_id>
-            client_secret:       <client_secret>
+            type:          yahoo
+            client_id:     <client_id>
+            client_secret: <client_secret>
 ```
 
 When you're done. Continue by configuring the security layer or go back to

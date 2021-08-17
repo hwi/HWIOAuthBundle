@@ -14,24 +14,25 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YahooResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
-class YahooResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class YahooResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = YahooResourceOwner::class;
     protected $userResponse = <<<json
 {
-    "profile": {
-        "guid": "1",
-        "nickname": "bar"
-    }
+    "sub": "1",
+    "given_name": "bar"
 }
 json;
     protected array $paths = [
-        'identifier' => 'profile.guid',
-        'nickname' => 'profile.nickname',
-        'realname' => 'profile.givenName',
+        'identifier' => 'sub',
+        'nickname' => 'given_name',
+        'realname' => 'name',
+        'email' => 'email',
+        'firstname' => 'given_name',
+        'lastname' => 'family_name',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -41,17 +42,17 @@ json;
             ]
         );
 
-        $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1];
+        $accessToken = ['access_token' => 'token', 'oauth_token_secret' => 'secret'];
         $userResponse = $resourceOwner->getUserInformation($accessToken);
 
         $this->assertEquals('1', $userResponse->getUsername());
         $this->assertEquals('bar', $userResponse->getNickname());
-        $this->assertEquals($accessToken['oauth_token'], $userResponse->getAccessToken());
+        $this->assertEquals($accessToken['access_token'], $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner(
@@ -65,7 +66,7 @@ json;
         /**
          * @var CustomUserResponse
          */
-        $userResponse = $resourceOwner->getUserInformation(['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'xoauth_yahoo_guid' => 1]);
+        $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token', 'oauth_token_secret' => 'secret']);
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('foo666', $userResponse->getUsername());
