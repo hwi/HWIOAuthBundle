@@ -19,7 +19,7 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class RegistrationFormHandler implements RegistrationFormHandlerInterface
+final class RegistrationFormHandler implements RegistrationFormHandlerInterface
 {
     /**
      * {@inheritdoc}

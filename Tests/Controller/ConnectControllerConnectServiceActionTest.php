@@ -19,9 +19,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-class ConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
+final class ConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
 {
-    public function testNotEnabled()
+    public function testNotEnabled(): void
     {
         $this->expectException(NotFoundHttpException::class);
 
@@ -29,7 +29,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $controller->connectServiceAction($this->request, 'facebook');
     }
 
-    public function testAlreadyConnected()
+    public function testAlreadyConnected(): void
     {
         $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('Cannot connect an account.');
@@ -40,7 +40,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $controller->connectServiceAction($this->request, 'facebook');
     }
 
-    public function testUnknownResourceOwner()
+    public function testUnknownResourceOwner(): void
     {
         $this->expectException(NotFoundHttpException::class);
 
@@ -50,7 +50,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $controller->connectServiceAction($this->request, 'unknown');
     }
 
-    public function testConnectConfirm()
+    public function testConnectConfirm(): void
     {
         $key = time();
 
@@ -88,7 +88,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $controller->connectServiceAction($this->request, 'facebook');
     }
 
-    public function testConnectSuccess()
+    public function testConnectSuccess(): void
     {
         $key = time();
 
@@ -133,7 +133,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $controller->connectServiceAction($this->request, 'facebook');
     }
 
-    public function testConnectNoConfirmation()
+    public function testConnectNoConfirmation(): void
     {
         $key = time();
 
@@ -168,7 +168,7 @@ class ConnectControllerConnectServiceActionTest extends AbstractConnectControlle
         $controller->connectServiceAction($this->request, 'facebook');
     }
 
-    public function testResourceOwnerHandle()
+    public function testResourceOwnerHandle(): void
     {
         $key = time();
 

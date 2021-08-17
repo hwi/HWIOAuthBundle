@@ -16,10 +16,10 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SinaWeiboResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
-class SinaWeiboResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class SinaWeiboResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = SinaWeiboResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "1",
     "screen_name": "bar",
@@ -33,7 +33,7 @@ json;
         'profilepicture' => 'profile_image_url',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -55,7 +55,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testGetUserInformationFailure()
+    public function testGetUserInformationFailure(): void
     {
         $this->expectException(HttpTransportException::class);
 
@@ -69,7 +69,7 @@ json;
         $resourceOwner->getUserInformation(['access_token' => 'token', 'uid' => 'someuser']);
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
 

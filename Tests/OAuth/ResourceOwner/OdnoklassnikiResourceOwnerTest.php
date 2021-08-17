@@ -15,10 +15,10 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\OdnoklassnikiResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class OdnoklassnikiResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class OdnoklassnikiResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = OdnoklassnikiResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "uid": "1",
     "username": "bar"

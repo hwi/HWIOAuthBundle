@@ -14,11 +14,11 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ToshlResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
-class ToshlResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class ToshlResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = ToshlResourceOwner::class;
     protected bool $csrf = true;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "1",
     "email": "example@website.com",
@@ -36,7 +36,7 @@ json;
         'email' => 'email',
     ];
 
-    public function testRevokeToken()
+    public function testRevokeToken(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -49,7 +49,7 @@ json;
         $this->assertTrue($resourceOwner->revokeToken('token'));
     }
 
-    public function testRevokeTokenFails()
+    public function testRevokeTokenFails(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -62,7 +62,7 @@ json;
         $this->assertFalse($resourceOwner->revokeToken('token'));
     }
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

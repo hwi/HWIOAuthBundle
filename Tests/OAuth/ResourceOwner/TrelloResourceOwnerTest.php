@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TrelloResourceOwner;
 
-class TrelloResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class TrelloResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected string $resourceOwnerClass = TrelloResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "1",
     "username": "bar",
@@ -31,7 +31,7 @@ json;
         'profilepicture' => 'avatarSource',
     ];
 
-    public function testGetAuthorizationUrlContainOAuthTokenAndSecret()
+    public function testGetAuthorizationUrlContainOAuthTokenAndSecret(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

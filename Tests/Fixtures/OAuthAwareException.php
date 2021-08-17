@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class OAuthAwareException extends \Exception implements OAuthAwareExceptionInterface
+final class OAuthAwareException extends \Exception implements OAuthAwareExceptionInterface
 {
     /**
      * @var OAuthToken

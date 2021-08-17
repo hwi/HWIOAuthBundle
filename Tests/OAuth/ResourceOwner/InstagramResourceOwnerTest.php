@@ -14,10 +14,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\InstagramResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
-class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = InstagramResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "1",
     "username": "bar"
@@ -28,7 +28,7 @@ json;
         'nickname' => 'username',
     ];
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner(

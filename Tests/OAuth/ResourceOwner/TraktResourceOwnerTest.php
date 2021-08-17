@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TraktResourceOwner;
 
-class TraktResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class TraktResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = TraktResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "username": "georges",
     "private": false,
@@ -37,7 +37,7 @@ json;
         'profilepicture' => 'images.avatar.full',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

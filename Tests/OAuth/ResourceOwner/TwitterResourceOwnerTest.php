@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner;
 
-class TwitterResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class TwitterResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected string $resourceOwnerClass = TwitterResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id_str": "1",
     "screen_name": "bar"
@@ -28,7 +28,7 @@ json;
         'realname' => 'name',
     ];
 
-    public function testGetUserInformationWithEmail()
+    public function testGetUserInformationWithEmail(): void
     {
         $resourceOwner = $this->createResourceOwner(
             ['include_email' => true],
@@ -45,7 +45,7 @@ json;
         $this->assertEquals('http://user.info/?test=1&include_email=true', $resourceOwner->getOption('infos_url'));
     }
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

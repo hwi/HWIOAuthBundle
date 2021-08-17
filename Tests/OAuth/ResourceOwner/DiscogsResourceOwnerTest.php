@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DiscogsResourceOwner;
 
-class DiscogsResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class DiscogsResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected string $resourceOwnerClass = DiscogsResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
   "id": 1,
   "username": "bar",

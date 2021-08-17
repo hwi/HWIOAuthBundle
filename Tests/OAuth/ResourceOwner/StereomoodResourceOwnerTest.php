@@ -14,10 +14,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StereomoodResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
-class StereomoodResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class StereomoodResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected string $resourceOwnerClass = StereomoodResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "oauth_token": "token"
 }
@@ -27,7 +27,7 @@ json;
         'nickname' => 'oauth_token',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $accessToken = [
             'oauth_token' => 'token',
@@ -51,7 +51,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner(['user_response_class' => $class]);

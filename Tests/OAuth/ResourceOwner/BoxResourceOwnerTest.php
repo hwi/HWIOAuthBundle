@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BoxResourceOwner;
 
-class BoxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class BoxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = BoxResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "1",
     "name": "bar",
@@ -33,7 +33,7 @@ json;
         'profilepicture' => 'avatar_url',
     ];
 
-    public function testRevokeToken()
+    public function testRevokeToken(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -46,7 +46,7 @@ json;
         $this->assertTrue($resourceOwner->revokeToken('token'));
     }
 
-    public function testRevokeTokenFails()
+    public function testRevokeTokenFails(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

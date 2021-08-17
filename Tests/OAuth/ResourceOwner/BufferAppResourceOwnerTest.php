@@ -15,11 +15,11 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BufferAppResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-class BufferAppResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class BufferAppResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = BufferAppResourceOwner::class;
 
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "4f0c0a06512f7ef214000000"
 }
@@ -31,7 +31,7 @@ json;
         'realname' => 'id',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -56,7 +56,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testGetUserInformationFailure()
+    public function testGetUserInformationFailure(): void
     {
         $this->expectException(AuthenticationException::class);
 

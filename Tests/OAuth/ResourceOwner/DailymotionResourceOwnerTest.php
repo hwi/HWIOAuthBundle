@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DailymotionResourceOwner;
 
-class DailymotionResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class DailymotionResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = DailymotionResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "1",
     "screenname": "bar"
@@ -29,7 +29,7 @@ json;
         'realname' => 'fullname',
     ];
 
-    public function testDisplayPopup()
+    public function testDisplayPopup(): void
     {
         $resourceOwner = $this->createResourceOwner(['display' => 'popup']);
 
@@ -39,7 +39,7 @@ json;
         );
     }
 
-    public function testInvalidDisplayOptionValueThrowsException()
+    public function testInvalidDisplayOptionValueThrowsException(): void
     {
         $this->expectException(\Symfony\Component\OptionsResolver\Exception\ExceptionInterface::class);
 

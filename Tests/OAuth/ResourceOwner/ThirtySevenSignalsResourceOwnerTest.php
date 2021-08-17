@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ThirtySevenSignalsResourceOwner;
 
-class ThirtySevenSignalsResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class ThirtySevenSignalsResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = ThirtySevenSignalsResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "expires_at": "2014-03-22T16:56:48-05:00",
     "identity": {
@@ -34,6 +34,6 @@ json;
         'email' => 'identity.email_address',
     ];
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid';
-    protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&type=web_server';
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid';
+    protected string $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&type=web_server';
 }

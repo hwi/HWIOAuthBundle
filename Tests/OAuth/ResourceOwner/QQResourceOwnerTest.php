@@ -19,10 +19,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class QQResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class QQResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = QQResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "ret": 0,
     "openid": "1",
@@ -40,7 +40,7 @@ json;
     /**
      * {@inheritdoc}
      */
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -65,7 +65,7 @@ json;
     /**
      * {@inheritdoc}
      */
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
 
@@ -88,7 +88,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testGetUserInformationFailure()
+    public function testGetUserInformationFailure(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -106,7 +106,7 @@ json;
     /**
      * QQ returns access token in jsonp format.
      */
-    public function testGetAccessTokenJsonpResponse()
+    public function testGetAccessTokenJsonpResponse(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -127,7 +127,7 @@ json;
     /**
      * QQ returns errors in jsonp format.
      */
-    public function testGetAccessTokenErrorResponse()
+    public function testGetAccessTokenErrorResponse(): void
     {
         $this->expectException(AuthenticationException::class);
 

@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\KeycloakResourceOwner;
 
-class KeycloakResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class KeycloakResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected array $options = [
       'base_url' => 'http://keycloak.example.com/auth',
@@ -28,9 +28,9 @@ class KeycloakResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
       'attr_name' => 'access_token',
     ];
 
-    protected $authorizationUrlBasePart = 'http://keycloak.example.com/auth/realms/example/protocol/openid-connect/auth?response_type=code&client_id=clientid&scope=openid+email';
-    protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&approval_prompt=auto';
-    protected $authorizationUrlParams = ['approval_prompt' => 'auto'];
+    protected string $authorizationUrlBasePart = 'http://keycloak.example.com/auth/realms/example/protocol/openid-connect/auth?response_type=code&client_id=clientid&scope=openid+email';
+    protected string $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&approval_prompt=auto';
+    protected array $authorizationUrlParams = ['approval_prompt' => 'auto'];
 
     protected string $resourceOwnerClass = KeycloakResourceOwner::class;
 }

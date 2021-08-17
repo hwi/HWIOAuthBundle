@@ -16,17 +16,17 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected string $resourceOwnerClass = JiraResourceOwner::class;
-    protected $userResponse = '{"name": "asm89", "displayName": "Alexander"}';
+    protected string $userResponse = '{"name": "asm89", "displayName": "Alexander"}';
     protected array $paths = [
         'identifier' => 'name',
         'nickname' => 'name',
         'realname' => 'displayName',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -47,7 +47,7 @@ class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner(

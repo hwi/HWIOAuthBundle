@@ -15,12 +15,9 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use PHPUnit\Framework\TestCase;
 
-class OAuthTokenTest extends TestCase
+final class OAuthTokenTest extends TestCase
 {
-    /**
-     * @var OAuthToken
-     */
-    private $token;
+    private OAuthToken $token;
 
     protected function setUp(): void
     {
@@ -28,7 +25,7 @@ class OAuthTokenTest extends TestCase
         $this->token->setResourceOwnerName('github');
     }
 
-    public function testGets()
+    public function testGets(): void
     {
         $expectedToken = [
             'access_token' => 'access_token',
@@ -45,19 +42,19 @@ class OAuthTokenTest extends TestCase
         $this->assertEquals('github', $token->getResourceOwnerName());
     }
 
-    public function testIsAuthenticated()
+    public function testIsAuthenticated(): void
     {
         $this->assertTrue($this->token->isAuthenticated());
     }
 
-    public function testGetSetResourceOwnerName()
+    public function testGetSetResourceOwnerName(): void
     {
         $this->assertEquals('github', $this->token->getResourceOwnerName());
         $this->token->setResourceOwnerName('foobar');
         $this->assertEquals('foobar', $this->token->getResourceOwnerName());
     }
 
-    public function testSerialization()
+    public function testSerialization(): void
     {
         /**
          * @var OAuthToken
@@ -68,7 +65,7 @@ class OAuthTokenTest extends TestCase
         $this->assertEquals('github', $token->getResourceOwnerName());
     }
 
-    public function testSerializationOfOAuth1Token()
+    public function testSerializationOfOAuth1Token(): void
     {
         $oauth1Token = new OAuthToken([
             'oauth_token' => 'oauth1_access_token',
@@ -84,7 +81,7 @@ class OAuthTokenTest extends TestCase
         $this->assertEquals('twitter', $oauth1Token->getResourceOwnerName());
     }
 
-    public function testIsExpired()
+    public function testIsExpired(): void
     {
         $expectedToken = [
             'access_token' => 'access_token',
@@ -104,7 +101,7 @@ class OAuthTokenTest extends TestCase
         $this->assertTrue($token->isExpired());
     }
 
-    public function testSerializeTokenInException()
+    public function testSerializeTokenInException(): void
     {
         $resourceOwnerName = 'github';
 

@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
-class CustomOAuthToken extends OAuthToken
+final class CustomOAuthToken extends OAuthToken
 {
     public function __construct()
     {

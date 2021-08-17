@@ -14,10 +14,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\EventbriteResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
-class EventbriteResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class EventbriteResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = EventbriteResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "user": {
         "user_id": "1",
@@ -36,7 +36,7 @@ json;
         'email' => 'email',
     ];
 
-    public function testGetUserInformationFirstAndLastName()
+    public function testGetUserInformationFirstAndLastName(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

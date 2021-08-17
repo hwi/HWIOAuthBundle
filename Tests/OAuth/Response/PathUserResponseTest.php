@@ -15,19 +15,16 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use PHPUnit\Framework\TestCase;
 
-class PathUserResponseTest extends TestCase
+final class PathUserResponseTest extends TestCase
 {
-    /**
-     * @var PathUserResponse
-     */
-    private $responseObject;
+    private PathUserResponse $responseObject;
 
     protected function setUp(): void
     {
         $this->responseObject = new PathUserResponse();
     }
 
-    public function testGetSetResponseDataWithJsonString()
+    public function testGetSetResponseDataWithJsonString(): void
     {
         $response = ['foo' => 'bar'];
 
@@ -35,7 +32,7 @@ class PathUserResponseTest extends TestCase
         $this->assertEquals($response, $this->responseObject->getData());
     }
 
-    public function testGetSetResponseDataWithPhpArray()
+    public function testGetSetResponseDataWithPhpArray(): void
     {
         $response = ['foo' => 'bar'];
 
@@ -43,14 +40,14 @@ class PathUserResponseTest extends TestCase
         $this->assertEquals($response, $this->responseObject->getData());
     }
 
-    public function testSetInvalidResponseData()
+    public function testSetInvalidResponseData(): void
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\AuthenticationException::class);
 
         $this->responseObject->setData('not_json');
     }
 
-    public function testGetSetResourceOwner()
+    public function testGetSetResourceOwner(): void
     {
         $resourceOwner = $this->createMock(ResourceOwnerInterface::class);
 
@@ -58,7 +55,7 @@ class PathUserResponseTest extends TestCase
         $this->assertEquals($resourceOwner, $this->responseObject->getResourceOwner());
     }
 
-    public function testGetPathsReturnsDefaultDefinedPaths()
+    public function testGetPathsReturnsDefaultDefinedPaths(): void
     {
         $paths = [
             'identifier' => null,
@@ -73,7 +70,7 @@ class PathUserResponseTest extends TestCase
         $this->assertEquals($paths, $this->responseObject->getPaths());
     }
 
-    public function testSetPathsAddsNewPathsToAlreadyDefined()
+    public function testSetPathsAddsNewPathsToAlreadyDefined(): void
     {
         $paths = [
             'identifier' => null,
@@ -91,7 +88,7 @@ class PathUserResponseTest extends TestCase
         $this->assertEquals($paths, $responseObject->getPaths());
     }
 
-    public function testGetUsername()
+    public function testGetUsername(): void
     {
         $paths = ['identifier' => 'id'];
 
@@ -101,13 +98,13 @@ class PathUserResponseTest extends TestCase
         $this->assertEquals(666, $this->responseObject->getUsername());
     }
 
-    public function testGetUsernameWithoutResponseReturnsNull()
+    public function testGetUsernameWithoutResponseReturnsNull(): void
     {
         $this->responseObject->setPaths(['identifier' => 'id']);
         $this->assertNull($this->responseObject->getUsername());
     }
 
-    public function testGetNickname()
+    public function testGetNickname(): void
     {
         // easy path
         $paths = ['nickname' => 'foo'];
@@ -126,7 +123,7 @@ class PathUserResponseTest extends TestCase
         $this->assertEquals('qux', $this->responseObject->getNickname());
     }
 
-    public function testGetRealName()
+    public function testGetRealName(): void
     {
         $paths = ['realname' => 'foo'];
 
@@ -136,7 +133,7 @@ class PathUserResponseTest extends TestCase
         $this->assertEquals('bar', $this->responseObject->getRealName());
     }
 
-    public function testGetIdentifierInvalidPathReturnsNull()
+    public function testGetIdentifierInvalidPathReturnsNull(): void
     {
         $paths = ['identifier' => 'non_existing'];
 
@@ -146,7 +143,7 @@ class PathUserResponseTest extends TestCase
         $this->assertNull($this->responseObject->getNickname());
     }
 
-    public function testNoIdentifierPathReturnsNull()
+    public function testNoIdentifierPathReturnsNull(): void
     {
         $paths = ['non_username' => 'non_existing'];
 
@@ -157,7 +154,7 @@ class PathUserResponseTest extends TestCase
         $this->assertNull($responseObject->getNickname());
     }
 
-    public function testGetEmail()
+    public function testGetEmail(): void
     {
         $paths = ['email' => 'email'];
 
@@ -167,7 +164,7 @@ class PathUserResponseTest extends TestCase
         $this->assertEquals('foo@bar.baz', $this->responseObject->getEmail());
     }
 
-    public function testGetEmailNotInResponse()
+    public function testGetEmailNotInResponse(): void
     {
         $paths = ['email' => 'email'];
 
@@ -177,7 +174,7 @@ class PathUserResponseTest extends TestCase
         $this->assertNull($this->responseObject->getEmail());
     }
 
-    public function testGetProfilePicture()
+    public function testGetProfilePicture(): void
     {
         $paths = ['profilepicture' => 'picture'];
 
@@ -187,7 +184,7 @@ class PathUserResponseTest extends TestCase
         $this->assertEquals('http://img', $this->responseObject->getProfilePicture());
     }
 
-    public function testGetProfilePictureNotInResponse()
+    public function testGetProfilePictureNotInResponse(): void
     {
         $paths = ['profilepicture' => 'picture'];
 
@@ -197,7 +194,7 @@ class PathUserResponseTest extends TestCase
         $this->assertNull($this->responseObject->getProfilePicture());
     }
 
-    public function testGetMergeOfPathsIntoSingleField()
+    public function testGetMergeOfPathsIntoSingleField(): void
     {
         $paths = ['realname' => ['first_name', 'last_name']];
 

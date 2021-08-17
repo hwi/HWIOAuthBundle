@@ -27,9 +27,9 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class OAuthProviderTest extends TestCase
+final class OAuthProviderTest extends TestCase
 {
-    public function testSupportsOAuthToken()
+    public function testSupportsOAuthToken(): void
     {
         $oauthProvider = new OAuthProvider(
             $this->getOAuthAwareUserProviderMock(),
@@ -44,7 +44,7 @@ class OAuthProviderTest extends TestCase
         $this->assertTrue($oauthProvider->supports($token));
     }
 
-    public function testAuthenticatesToken()
+    public function testAuthenticatesToken(): void
     {
         $expectedToken = [
             'access_token' => 'access_token',
@@ -109,7 +109,7 @@ class OAuthProviderTest extends TestCase
         $this->assertEquals('ROLE_TEST', $roles[0]);
     }
 
-    public function testOAuthAwareExceptionGetsInfo()
+    public function testOAuthAwareExceptionGetsInfo(): void
     {
         $expectedToken = [
             'access_token' => 'access_token',
@@ -167,7 +167,7 @@ class OAuthProviderTest extends TestCase
     /**
      * @dataProvider provideAuthenticationData
      */
-    public function testTokenRefreshesWhenExpired(bool $authenticated)
+    public function testTokenRefreshesWhenExpired(bool $authenticated): void
     {
         $expiredToken = [
             'access_token' => 'access_token',
@@ -262,7 +262,7 @@ class OAuthProviderTest extends TestCase
     protected function getResourceOwnerMap(
         array $resources = [],
         $serviceLocator = null
-    ) {
+    ): ResourceOwnerMap {
         return new ResourceOwnerMap(
             $this->createMock(HttpUtils::class),
             $resources,

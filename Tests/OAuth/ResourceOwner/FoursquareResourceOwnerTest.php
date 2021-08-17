@@ -14,10 +14,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FoursquareResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
-class FoursquareResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class FoursquareResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = FoursquareResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "response": {
         "user": {
@@ -37,7 +37,7 @@ json;
         'realname' => ['response.user.firstName', 'response.user.lastName'],
     ];
 
-    public function testGetUserInformationFirstAndLastName()
+    public function testGetUserInformationFirstAndLastName(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

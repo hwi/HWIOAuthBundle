@@ -17,10 +17,10 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-class AppleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class AppleResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = AppleResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "sub": "1",
     "email": "localhost@gmail.com"
@@ -34,10 +34,10 @@ json;
         'email' => 'email',
     ];
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=name+email';
-    protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&response_mode=form_post';
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=name+email';
+    protected string $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&response_mode=form_post';
 
-    public function testHandleRequest()
+    public function testHandleRequest(): void
     {
         $resourceOwner = $this->createResourceOwner();
 
@@ -58,7 +58,7 @@ json;
         $this->assertTrue($resourceOwner->handles($request));
     }
 
-    public function testGetAccessTokenFailedResponse()
+    public function testGetAccessTokenFailedResponse(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -74,7 +74,7 @@ json;
         $resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    public function testDisplayPopup()
+    public function testDisplayPopup(): void
     {
         $resourceOwner = $this->createResourceOwner(['display' => 'popup']);
 
@@ -84,7 +84,7 @@ json;
         );
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner(
@@ -108,7 +108,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $token = '.'.base64_encode($this->userResponse);
 
@@ -148,7 +148,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testGetUserInformationFailure()
+    public function testGetUserInformationFailure(): void
     {
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Undefined index id_token');

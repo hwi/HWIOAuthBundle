@@ -14,34 +14,31 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use PHPUnit\Framework\TestCase;
 
-class OAuthUserTest extends TestCase
+final class OAuthUserTest extends TestCase
 {
-    /**
-     * @var OAuthUser
-     */
-    private $user;
+    private OAuthUser $user;
 
     protected function setUp(): void
     {
         $this->user = new OAuthUser('asm89');
     }
 
-    public function testGetRoles()
+    public function testGetRoles(): void
     {
         $this->assertEquals(['ROLE_USER', 'ROLE_OAUTH_USER'], $this->user->getRoles());
     }
 
-    public function testGetPassword()
+    public function testGetPassword(): void
     {
         $this->assertNull($this->user->getPassword());
     }
 
-    public function testGetSalt()
+    public function testGetSalt(): void
     {
         $this->assertNull($this->user->getSalt());
     }
 
-    public function testGetUsername()
+    public function testGetUsername(): void
     {
         $this->assertEquals('asm89', $this->user->getUsername());
 
@@ -49,12 +46,12 @@ class OAuthUserTest extends TestCase
         $this->assertEquals('other', $user->getUsername());
     }
 
-    public function testEraseCredentials()
+    public function testEraseCredentials(): void
     {
         $this->assertTrue($this->user->eraseCredentials());
     }
 
-    public function testEquals()
+    public function testEquals(): void
     {
         $otherUser = new OAuthUser('other');
         $sameUser = new OAuthUser('asm89');

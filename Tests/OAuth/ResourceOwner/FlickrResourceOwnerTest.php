@@ -14,7 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FlickrResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
-class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected string $resourceOwnerClass = FlickrResourceOwner::class;
     protected array $paths = [
@@ -26,7 +26,7 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     /**
      * Together with OAuth token Flickr sends user data.
      */
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -56,7 +56,7 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     /**
      * Ensure permissions level is appended to authorization URL. Do not wrap JSON response with padding.
      */
-    public function testGetAuthorizationUrlContainOAuthTokenAndSecret()
+    public function testGetAuthorizationUrlContainOAuthTokenAndSecret(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -80,7 +80,7 @@ class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     /**
      * Flickr resource owner relies on user data sent with OAuth token, hence no request is made to get user information.
      */
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner(['user_response_class' => $class]);

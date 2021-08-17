@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class User implements UserInterface
+final class User implements UserInterface
 {
     private $plainPassword;
     private $username = 'foo';

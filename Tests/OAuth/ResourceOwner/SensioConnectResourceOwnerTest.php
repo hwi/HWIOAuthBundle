@@ -15,7 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SensioConnectResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = SensioConnectResourceOwner::class;
 
@@ -28,7 +28,7 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         $this->userResponse = file_get_contents(__DIR__.'/../../Fixtures/sensioconnect_response.xml');
     }
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $class = SensioConnectUserResponse::class;
         $resourceOwner = $this->createResourceOwner(
@@ -52,12 +52,12 @@ class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         $this->assertEquals('token', $userResponse->getAccessToken());
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $this->markTestSkipped('SensioConnect already tests this approach');
     }
 
-    public function testGetUserInformationFailure()
+    public function testGetUserInformationFailure(): void
     {
         $this->expectException(AuthenticationException::class);
 

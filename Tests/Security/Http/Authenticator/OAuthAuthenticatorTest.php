@@ -35,7 +35,7 @@ use Symfony\Component\Security\Http\HttpUtils;
 /**
  * @author Vadim Borodavko <vadim.borodavko@gmail.com>
  */
-class OAuthAuthenticatorTest extends TestCase
+final class OAuthAuthenticatorTest extends TestCase
 {
     protected function setUp(): void
     {
@@ -288,8 +288,8 @@ class OAuthAuthenticatorTest extends TestCase
 
     private function getResourceOwnerMap(
         array $resources = [],
-              $httpUtils = null,
-              $serviceLocator = null
+        $httpUtils = null,
+        $serviceLocator = null
     ): ResourceOwnerMap {
         return new ResourceOwnerMap(
             $httpUtils ?: $this->createMock(HttpUtils::class),

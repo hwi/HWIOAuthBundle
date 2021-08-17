@@ -16,10 +16,10 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\PaypalResourceOwner;
 /**
  * @author Berny Cantos <be@rny.cc>
  */
-class PaypalResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class PaypalResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = PaypalResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "user_id": "1",
     "email": "bar",
@@ -32,5 +32,5 @@ json;
         'realname' => 'name',
     ];
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=openid+email';
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=openid+email';
 }

@@ -18,7 +18,7 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = GitHubResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "1",
     "login": "bar"
@@ -35,7 +35,7 @@ json;
 
     protected int $httpClientCalls = 1;
 
-    public function testRevokeToken()
+    public function testRevokeToken(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -48,7 +48,7 @@ json;
         $this->assertTrue($resourceOwner->revokeToken('token'));
     }
 
-    public function testRevokeTokenFails()
+    public function testRevokeTokenFails(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -61,7 +61,7 @@ json;
         $this->assertFalse($resourceOwner->revokeToken('token'));
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
 
@@ -85,7 +85,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

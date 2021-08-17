@@ -13,11 +13,11 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GeniusResourceOwner;
 
-class GeniusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class GeniusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = GeniusResourceOwner::class;
 
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "meta":{
         "status":200
@@ -71,5 +71,5 @@ json;
         'profilepicture' => 'response.user.avatar.medium.url',
     ];
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=me';
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=me';
 }

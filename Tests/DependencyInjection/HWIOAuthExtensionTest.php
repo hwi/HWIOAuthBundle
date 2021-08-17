@@ -22,12 +22,9 @@ use Symfony\Component\Yaml\Parser;
 /**
  * Code bases on FOSUserBundle tests.
  */
-class HWIOAuthExtensionTest extends TestCase
+final class HWIOAuthExtensionTest extends TestCase
 {
-    /**
-     * @var ContainerBuilder
-     */
-    protected $containerBuilder;
+    protected ContainerBuilder $containerBuilder;
 
     protected function setUp(): void
     {
@@ -41,7 +38,7 @@ class HWIOAuthExtensionTest extends TestCase
         unset($this->containerBuilder);
     }
 
-    public function testConfigurationThrowsExceptionUnlessFirewallNameSet()
+    public function testConfigurationThrowsExceptionUnlessFirewallNameSet(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
@@ -52,7 +49,7 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load([$config], $this->containerBuilder);
     }
 
-    public function testConfigurationThrowsExceptionUnlessResourceOwnersSet()
+    public function testConfigurationThrowsExceptionUnlessResourceOwnersSet(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
@@ -63,7 +60,7 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load([$config], $this->containerBuilder);
     }
 
-    public function testConfigurationThrowsExceptionUnlessClientIdSet()
+    public function testConfigurationThrowsExceptionUnlessClientIdSet(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
@@ -74,7 +71,7 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load([$config], $this->containerBuilder);
     }
 
-    public function testConfigurationThrowsExceptionUnlessClientSecretSet()
+    public function testConfigurationThrowsExceptionUnlessClientSecretSet(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
@@ -85,7 +82,7 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load([$config], $this->containerBuilder);
     }
 
-    public function testConfigurationThrowsExceptionWhenPathIsEmpty()
+    public function testConfigurationThrowsExceptionWhenPathIsEmpty(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
@@ -98,7 +95,7 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load([$config], $this->containerBuilder);
     }
 
-    public function testConfigurationThrowsExceptionWhenUnknownResourceOwnerIsCalled()
+    public function testConfigurationThrowsExceptionWhenUnknownResourceOwnerIsCalled(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
@@ -116,9 +113,9 @@ class HWIOAuthExtensionTest extends TestCase
     /**
      * @dataProvider provideInvalidData
      *
-     * @param array $invalidConfig
+     * @param mixed $invalidConfig
      */
-    public function testConfigurationThrowsExceptionResourceOwnerRequiresSomeOptions($invalidConfig)
+    public function testConfigurationThrowsExceptionResourceOwnerRequiresSomeOptions($invalidConfig): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
@@ -131,11 +128,10 @@ class HWIOAuthExtensionTest extends TestCase
         $loader->load([$config], $this->containerBuilder);
     }
 
-    public function testConfigurationThrowsExceptionWhenServiceHasSomePaths()
+    public function testConfigurationThrowsExceptionWhenServiceHasSomePaths(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['some_service']['paths'] = [
             'identifier' => 'some_id',
@@ -143,50 +139,50 @@ class HWIOAuthExtensionTest extends TestCase
             'realname' => 'some_name',
         ];
 
+        $loader = new HWIOAuthExtension();
         $loader->load([$config], $this->containerBuilder);
     }
 
-    public function testConfigurationThrowsExceptionWhenServiceHasMoreOptions()
+    public function testConfigurationThrowsExceptionWhenServiceHasMoreOptions(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['some_service']['client_id'] = 'client_id';
 
+        $loader = new HWIOAuthExtension();
         $loader->load([$config], $this->containerBuilder);
     }
 
-    public function testConfigurationThrowsExceptionWhenServiceHasClass()
+    public function testConfigurationThrowsExceptionWhenServiceHasClass(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('Invalid configuration for path "hwi_oauth.resource_owners.new_resourceowner": You should set at least the \'type\', \'client_id\' and the \'client_secret\' of a resource owner.');
 
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['new_resourceowner']['class'] = 'My\Class';
 
+        $loader = new HWIOAuthExtension();
         $loader->load([$config], $this->containerBuilder);
     }
 
-    public function testConfigurationThrowsExceptionWhenServiceHasClassAndWrongType()
+    public function testConfigurationThrowsExceptionWhenServiceHasClassAndWrongType(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('Invalid configuration for path "hwi_oauth.resource_owners.new_resourceowner": If you\'re setting a \'class\', you must provide a \'oauth1\' or \'oauth2\' type');
 
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['new_resourceowner']['class'] = 'My\Class';
         $config['resource_owners']['new_resourceowner']['type'] = 'github';
         $config['resource_owners']['new_resourceowner']['client_id'] = 42;
         $config['resource_owners']['new_resourceowner']['client_secret'] = 'foo';
 
+        $loader = new HWIOAuthExtension();
         $loader->load([$config], $this->containerBuilder);
     }
 
-    public function testConfigurationPassValidOAuth1()
+    public function testConfigurationPassValidOAuth1(): void
     {
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = [
             'valid' => [
@@ -205,14 +201,14 @@ class HWIOAuthExtensionTest extends TestCase
             ],
         ];
 
+        $loader = new HWIOAuthExtension();
         $loader->load([$config], $this->containerBuilder);
 
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    public function testConfigurationPassValidOAuth2WithPaths()
+    public function testConfigurationPassValidOAuth2WithPaths(): void
     {
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = [
             'valid' => [
@@ -230,14 +226,14 @@ class HWIOAuthExtensionTest extends TestCase
             ],
         ];
 
+        $loader = new HWIOAuthExtension();
         $loader->load([$config], $this->containerBuilder);
 
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    public function testConfigurationPassValidOAuth1WithClass()
+    public function testConfigurationPassValidOAuth1WithClass(): void
     {
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = [
             'valid' => [
@@ -257,14 +253,14 @@ class HWIOAuthExtensionTest extends TestCase
             ],
         ];
 
+        $loader = new HWIOAuthExtension();
         $loader->load([$config], $this->containerBuilder);
 
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    public function testConfigurationPassValidOAuth2WithClassOnly()
+    public function testConfigurationPassValidOAuth2WithClassOnly(): void
     {
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = [
             'valid' => [
@@ -275,14 +271,14 @@ class HWIOAuthExtensionTest extends TestCase
             ],
         ];
 
+        $loader = new HWIOAuthExtension();
         $loader->load([$config], $this->containerBuilder);
 
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    public function testConfigurationPassValidOAuth2WithPathsAndClass()
+    public function testConfigurationPassValidOAuth2WithPathsAndClass(): void
     {
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = [
             'valid' => [
@@ -301,14 +297,14 @@ class HWIOAuthExtensionTest extends TestCase
             ],
         ];
 
+        $loader = new HWIOAuthExtension();
         $loader->load([$config], $this->containerBuilder);
 
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    public function testConfigurationPassValidOAuth2WithDeepPaths()
+    public function testConfigurationPassValidOAuth2WithDeepPaths(): void
     {
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = [
             'valid' => [
@@ -326,14 +322,14 @@ class HWIOAuthExtensionTest extends TestCase
             ],
         ];
 
+        $loader = new HWIOAuthExtension();
         $loader->load([$config], $this->containerBuilder);
 
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    public function testConfigurationPassValidOAuth2WithResponseClass()
+    public function testConfigurationPassValidOAuth2WithResponseClass(): void
     {
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners'] = [
             'valid' => [
@@ -347,12 +343,13 @@ class HWIOAuthExtensionTest extends TestCase
             ],
         ];
 
+        $loader = new HWIOAuthExtension();
         $loader->load([$config], $this->containerBuilder);
 
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    public function testConfigurationLoadDefaults()
+    public function testConfigurationLoadDefaults(): void
     {
         $this->createEmptyConfiguration();
 
@@ -369,7 +366,7 @@ class HWIOAuthExtensionTest extends TestCase
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    public function provideInvalidData()
+    public function provideInvalidData(): array
     {
         return [
             'missing_request_token_url' => [
@@ -458,7 +455,7 @@ class HWIOAuthExtensionTest extends TestCase
         ];
     }
 
-    public function testCreateResourceOwnerService()
+    public function testCreateResourceOwnerService(): void
     {
         $extension = new HWIOAuthExtension();
         $extension->createResourceOwnerService($this->containerBuilder, 'my_github', [
@@ -479,7 +476,7 @@ class HWIOAuthExtensionTest extends TestCase
         $this->assertEquals('my_github', $definitions['hwi_oauth.resource_owner.my_github']->getArgument('$name'));
     }
 
-    public function testCreateResourceOwnerServiceWithService()
+    public function testCreateResourceOwnerServiceWithService(): void
     {
         $extension = new HWIOAuthExtension();
         $extension->createResourceOwnerService($this->containerBuilder, 'external_ressource_owner', [
@@ -491,7 +488,7 @@ class HWIOAuthExtensionTest extends TestCase
         $this->assertEquals('my.service', $aliases['hwi_oauth.resource_owner.external_ressource_owner']);
     }
 
-    public function testCreateResourceOwnerServiceWithWrongClass()
+    public function testCreateResourceOwnerServiceWithWrongClass(): void
     {
         $this->expectException(InvalidConfigurationException::class);
         $this->expectExceptionMessage('Class "HWI\\Bundle\\OAuthBundle\\Tests\\DependencyInjection\\MyWrongCustomProvider" must implement interface "HWI\\Bundle\\OAuthBundle\\OAuth\\ResourceOwnerInterface".');
@@ -505,7 +502,7 @@ class HWIOAuthExtensionTest extends TestCase
         ]);
     }
 
-    public function testCreateResourceOwnerServiceWithClass()
+    public function testCreateResourceOwnerServiceWithClass(): void
     {
         $extension = new HWIOAuthExtension();
         $extension->createResourceOwnerService($this->containerBuilder, 'external_ressource_owner', [
@@ -527,24 +524,21 @@ class HWIOAuthExtensionTest extends TestCase
         $this->assertEquals('external_ressource_owner', $definitions['hwi_oauth.resource_owner.external_ressource_owner']->getArgument('$name'));
     }
 
-    protected function createEmptyConfiguration()
+    protected function createEmptyConfiguration(): void
     {
-        $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
-        $loader->load([$config], $this->containerBuilder);
-    }
-
-    protected function createFullConfiguration()
-    {
         $loader = new HWIOAuthExtension();
-        $config = $this->getFullConfig();
         $loader->load([$config], $this->containerBuilder);
     }
 
-    /**
-     * @return array
-     */
-    protected function getEmptyConfig()
+    protected function createFullConfiguration(): void
+    {
+        $config = $this->getFullConfig();
+        $loader = new HWIOAuthExtension();
+        $loader->load([$config], $this->containerBuilder);
+    }
+
+    protected function getEmptyConfig(): array
     {
         $yaml = <<<EOF
 firewall_names: [main]
@@ -561,7 +555,7 @@ EOF;
         return $parser->parse($yaml);
     }
 
-    protected function getFullConfig()
+    protected function getFullConfig(): array
     {
         $yaml = <<<EOF
 firewall_names: [main]
@@ -656,10 +650,5 @@ EOF;
     private function assertParameter($value, string $key): void
     {
         $this->assertEquals($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
-    }
-
-    private function assertNotHasDefinition(string $id): void
-    {
-        $this->assertFalse($this->containerBuilder->hasDefinition($id) || $this->containerBuilder->hasAlias($id));
     }
 }

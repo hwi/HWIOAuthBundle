@@ -25,7 +25,7 @@ final class StateTest extends TestCase
         'foobar' => 'foobaz',
     ];
 
-    public function testConstructorWithEncodedParameter()
+    public function testConstructorWithEncodedParameter(): void
     {
         $state = new State($this->encodeArray(self::TEST_VALUES));
 
@@ -34,19 +34,19 @@ final class StateTest extends TestCase
         }
     }
 
-    public function testConstructorWithNull()
+    public function testConstructorWithNull(): void
     {
         $state = new State(null);
         self::assertCount(0, $state->getAll());
     }
 
-    public function testConstructorWithSingleValue()
+    public function testConstructorWithSingleValue(): void
     {
         $state = new State('random');
         self::assertEquals('random', $state->get('state'));
     }
 
-    public function testConstructorWithArrayParameter()
+    public function testConstructorWithArrayParameter(): void
     {
         $state = new State(self::TEST_VALUES);
 
@@ -55,7 +55,7 @@ final class StateTest extends TestCase
         }
     }
 
-    public function testConstructorWithArrayParameterWithoutKeepingCSRFToken()
+    public function testConstructorWithArrayParameterWithoutKeepingCSRFToken(): void
     {
         $state = new State(array_merge(self::TEST_VALUES, ['csrf_token' => 'csrf']), false);
 
@@ -65,7 +65,7 @@ final class StateTest extends TestCase
         self::assertArrayNotHasKey('csrf_token', $state->getAll());
     }
 
-    public function testItCanBeSerializedAndUnserialized()
+    public function testItCanBeSerializedAndUnserialized(): void
     {
         $state = new State(self::TEST_VALUES);
         $unserialized = unserialize(serialize($state));
@@ -73,7 +73,7 @@ final class StateTest extends TestCase
         self::assertEquals($state, $unserialized);
     }
 
-    public function testFromEncodedParameterWithInvalidFormat()
+    public function testFromEncodedParameterWithInvalidFormat(): void
     {
         $this->expectException(\InvalidArgumentException::class);
 
@@ -82,7 +82,7 @@ final class StateTest extends TestCase
         new State($this->encodeArray($values));
     }
 
-    public function testGetNonExistentValue()
+    public function testGetNonExistentValue(): void
     {
         $this->expectException(StateRetrievalException::class);
 
@@ -90,7 +90,7 @@ final class StateTest extends TestCase
         $state->get('baz');
     }
 
-    public function testAdd()
+    public function testAdd(): void
     {
         $state = new State($this->encodeArray(self::TEST_VALUES));
 
@@ -98,13 +98,13 @@ final class StateTest extends TestCase
         self::assertEquals('foo', $state->get('baz'));
     }
 
-    public function testHas()
+    public function testHas(): void
     {
         $state = new State($this->encodeArray(self::TEST_VALUES));
         self::assertTrue($state->has('foo'));
     }
 
-    public function testAddDuplicateKey()
+    public function testAddDuplicateKey(): void
     {
         $this->expectException(DuplicateKeyException::class);
 
@@ -112,7 +112,7 @@ final class StateTest extends TestCase
         $state->add('foo', 'foobar');
     }
 
-    public function testEncode()
+    public function testEncode(): void
     {
         $expectedParameter = $this->encodeArray(self::TEST_VALUES);
         $state = new State($expectedParameter);
@@ -120,14 +120,14 @@ final class StateTest extends TestCase
         self::assertEquals($expectedParameter, $state->encode());
     }
 
-    public function testEncodeWithEmptyState()
+    public function testEncodeWithEmptyState(): void
     {
         $state = new State('');
 
         self::assertNull($state->encode());
     }
 
-    public function testEncodeEmptyValue()
+    public function testEncodeEmptyValue(): void
     {
         $state = new State(null);
         self::assertEmpty($state->encode());
@@ -136,7 +136,7 @@ final class StateTest extends TestCase
         self::assertEmpty($state->encode());
     }
 
-    public function testSetCsrfTokenSetsProvidedToken()
+    public function testSetCsrfTokenSetsProvidedToken(): void
     {
         $token = NonceGenerator::generate();
 
@@ -147,7 +147,7 @@ final class StateTest extends TestCase
         self::assertEquals($token, $state->getCsrfToken());
     }
 
-    public function testGetAllKeepingCSRFToken()
+    public function testGetAllKeepingCSRFToken(): void
     {
         $state = new State(array_merge(self::TEST_VALUES, ['csrf_token' => 'csrf']), false);
         self::assertArrayNotHasKey('csrf_token', $state->getAll());

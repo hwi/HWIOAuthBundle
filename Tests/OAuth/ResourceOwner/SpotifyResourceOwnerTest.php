@@ -18,10 +18,10 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 /**
  * @author Janne Savolainen <janne.savolainen@sempre.fi>
  */
-class SpotifyResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class SpotifyResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = SpotifyResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
   "birthdate": "1937-06-01",
   "country": "SE",
@@ -55,7 +55,7 @@ json;
         'email' => 'email',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -77,7 +77,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner(

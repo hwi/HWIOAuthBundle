@@ -14,22 +14,20 @@ namespace HWI\Bundle\OAuthBundle\Tests\Util;
 use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
 use PHPUnit\Framework\TestCase;
 
-class DomainWhitelistTest extends TestCase
+final class DomainWhitelistTest extends TestCase
 {
     /**
      * @dataProvider targetUrlProvider
      *
-     * @param string $targetUrl
-     * @param array  $domainsWhitelistParameter
-     * @param bool   $isValidTargetUrl
+     * @param array<int, string> $domainsWhitelistParameter
      */
-    public function testValidateTargetUrl($targetUrl, $domainsWhitelistParameter, $isValidTargetUrl)
+    public function testValidateTargetUrl(string $targetUrl, array $domainsWhitelistParameter, bool $isValidTargetUrl): void
     {
         $domainsWhitelist = new DomainWhitelist($domainsWhitelistParameter);
         $this->assertSame($isValidTargetUrl, $domainsWhitelist->isValidTargetUrl($targetUrl));
     }
 
-    public function targetUrlProvider()
+    public function targetUrlProvider(): array
     {
         return [
             ['https://example.com/redirect', ['example.com'], true],

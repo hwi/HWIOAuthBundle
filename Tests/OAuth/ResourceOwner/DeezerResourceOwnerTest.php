@@ -16,10 +16,10 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DeezerResourceOwner;
 /**
  * @author Kieu Anh Tuan <passkey1510@gmail.com>
  */
-class DeezerResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class DeezerResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = DeezerResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": 3038840,
     "name": "passkey",
@@ -51,7 +51,7 @@ json;
         'gender' => 'gender',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
