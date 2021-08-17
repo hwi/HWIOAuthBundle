@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SlackResourceOwner;
 
-class SlackResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class SlackResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = SlackResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "ok": true,
     "url": "https:\/\/myteam.slack.com\/",
@@ -32,5 +32,5 @@ json;
         'nickname' => 'user',
     ];
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=identify';
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=identify';
 }

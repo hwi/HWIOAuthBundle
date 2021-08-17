@@ -16,7 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-class MyCustomProvider implements ResourceOwnerInterface
+final class MyCustomProvider implements ResourceOwnerInterface
 {
     public function getUserInformation(array $accessToken, array $extraParameters = [])
     {

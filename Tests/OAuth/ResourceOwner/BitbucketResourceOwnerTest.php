@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitbucketResourceOwner;
 
-class BitbucketResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class BitbucketResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected string $resourceOwnerClass = BitbucketResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "user": {
         "username": "1",
@@ -30,7 +30,7 @@ json;
         'realname' => 'user.display_name',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

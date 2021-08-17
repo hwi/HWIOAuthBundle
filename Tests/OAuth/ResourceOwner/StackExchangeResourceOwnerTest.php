@@ -15,10 +15,10 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StackExchangeResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class StackExchangeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class StackExchangeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = StackExchangeResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
    "items" : [
       {
@@ -37,7 +37,7 @@ json;
         'profilepicture' => 'items.0.profile_image',
     ];
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=no_expiry';
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=no_expiry';
 
     protected function setUpResourceOwner(string $name, HttpUtils $httpUtils, array $options, array $responses): ResourceOwnerInterface
     {

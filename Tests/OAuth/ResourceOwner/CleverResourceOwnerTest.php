@@ -16,7 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\CleverResourceOwner;
 /**
  * @author Matt Farmer <work@mattfarmer.net>
  */
-class CleverResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class CleverResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = CleverResourceOwner::class;
 }

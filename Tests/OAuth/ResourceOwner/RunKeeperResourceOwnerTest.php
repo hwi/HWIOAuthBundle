@@ -22,7 +22,7 @@ class RunKeeperResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     /**
      * {@inheritdoc}
      */
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "name": "Foo Bar",
     "medium_picture": "http://www.gravatar.com/avatar/default"
@@ -37,7 +37,7 @@ json;
         'profilepicture' => 'medium_picture',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

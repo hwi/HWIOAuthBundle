@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SoundcloudResourceOwner;
 
-class SoundcloudResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class SoundcloudResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = SoundcloudResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "1",
     "username": "bar",
@@ -24,7 +24,7 @@ class SoundcloudResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=non-expiring';
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=non-expiring';
 
     protected array $paths = [
         'identifier' => 'id',

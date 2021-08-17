@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\VkontakteResourceOwner;
 
-class VkontakteResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class VkontakteResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = VkontakteResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "response": {
         "user_id": "1",
@@ -31,5 +31,5 @@ json;
         'realname' => 'response.user_name',
     ];
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=email';
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=email';
 }

@@ -19,7 +19,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class FacebookResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = FacebookResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "1",
     "username": "bar"
@@ -36,7 +36,7 @@ json;
         'profilepicture' => 'picture.data.url',
     ];
 
-    public function testGetAccessTokenFailedResponse()
+    public function testGetAccessTokenFailedResponse(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -53,7 +53,7 @@ json;
         $resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    public function testAuthTypeRerequest()
+    public function testAuthTypeRerequest(): void
     {
         $resourceOwner = $this->createResourceOwner(['auth_type' => 'rerequest']);
 
@@ -63,7 +63,7 @@ json;
         );
     }
 
-    public function testAuthTypeRerequestAndDisplayPopup()
+    public function testAuthTypeRerequestAndDisplayPopup(): void
     {
         $resourceOwner = $this->createResourceOwner(['display' => 'popup', 'auth_type' => 'rerequest']);
 
@@ -73,7 +73,7 @@ json;
         );
     }
 
-    public function testDisplayPopup()
+    public function testDisplayPopup(): void
     {
         $resourceOwner = $this->createResourceOwner(['display' => 'popup']);
 
@@ -83,14 +83,14 @@ json;
         );
     }
 
-    public function testInvalidDisplayOptionValueThrowsException()
+    public function testInvalidDisplayOptionValueThrowsException(): void
     {
         $this->expectException(ExceptionInterface::class);
 
         $this->createResourceOwner(['display' => 'invalid']);
     }
 
-    public function testRevokeToken()
+    public function testRevokeToken(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -103,7 +103,7 @@ json;
         $this->assertTrue($resourceOwner->revokeToken('token'));
     }
 
-    public function testRevokeTokenFails()
+    public function testRevokeTokenFails(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -116,7 +116,7 @@ json;
         $this->assertFalse($resourceOwner->revokeToken('token'));
     }
 
-    public function testGetAccessTokenErrorResponse()
+    public function testGetAccessTokenErrorResponse(): void
     {
         $this->expectException(AuthenticationException::class);
 

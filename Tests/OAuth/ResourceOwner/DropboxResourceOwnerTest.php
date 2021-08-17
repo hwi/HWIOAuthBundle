@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DropboxResourceOwner;
 
-class DropboxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class DropboxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = DropboxResourceOwner::class;
-    protected $userResponse = '{"account_id": "1", "email": "bar"}';
+    protected string $userResponse = '{"account_id": "1", "email": "bar"}';
     protected array $paths = [
         'identifier' => 'account_id',
         'nickname' => 'email',
@@ -24,7 +24,7 @@ class DropboxResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
         'email' => 'email',
     ];
 
-    public function testGetAuthorizationUrl()
+    public function testGetAuthorizationUrl(): void
     {
         $resourceOwner = $this->createResourceOwner();
 

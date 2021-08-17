@@ -24,9 +24,9 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
-class ConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
+final class ConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
 {
-    public function testNotEnabled()
+    public function testNotEnabled(): void
     {
         $this->expectException(NotFoundHttpException::class);
 
@@ -34,7 +34,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $controller->registrationAction($this->request, (string) time());
     }
 
-    public function testAlreadyConnected()
+    public function testAlreadyConnected(): void
     {
         $this->expectException(AccessDeniedException::class);
         $this->expectExceptionMessage('Cannot connect already registered account.');
@@ -45,7 +45,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $controller->registrationAction($this->request, (string) time());
     }
 
-    public function testCannotRegisterBadError()
+    public function testCannotRegisterBadError(): void
     {
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Cannot register an account.');
@@ -69,7 +69,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $controller->registrationAction($this->request, $key);
     }
 
-    public function testFailedProcess()
+    public function testFailedProcess(): void
     {
         $key = (string) time();
 
@@ -109,7 +109,7 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $controller->registrationAction($this->request, $key);
     }
 
-    public function testProcessWorks()
+    public function testProcessWorks(): void
     {
         $key = (string) time();
 

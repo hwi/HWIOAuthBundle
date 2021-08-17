@@ -16,12 +16,12 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AzureResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 
-class AzureResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class AzureResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = AzureResourceOwner::class;
     protected bool $csrf = true;
 
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "sub": "1",
     "given_name": "Dummy",
@@ -39,10 +39,10 @@ json;
         'profilepicture' => null,
     ];
 
-    protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&resource=https%3A%2F%2Fgraph.windows.net';
-    protected $authorizationUrlParams = ['resource' => 'https://graph.windows.net'];
+    protected string $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&resource=https%3A%2F%2Fgraph.windows.net';
+    protected array $authorizationUrlParams = ['resource' => 'https://graph.windows.net'];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -69,7 +69,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner(
@@ -98,7 +98,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testGetUserInformationFailure()
+    public function testGetUserInformationFailure(): void
     {
         $this->expectException(HttpTransportException::class);
 

@@ -27,7 +27,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Twig\Environment;
 
-class LoginControllerTest extends TestCase
+final class LoginControllerTest extends TestCase
 {
     /**
      * @var MockObject&AuthorizationCheckerInterface
@@ -83,7 +83,7 @@ class LoginControllerTest extends TestCase
         $this->authenticationUtils = new AuthenticationUtils($requestStack);
     }
 
-    public function testLoginPage()
+    public function testLoginPage(): void
     {
         $this->mockAuthorizationCheck();
 
@@ -97,7 +97,7 @@ class LoginControllerTest extends TestCase
         $controller->connectAction($this->request);
     }
 
-    public function testLoginPageWithoutToken()
+    public function testLoginPageWithoutToken(): void
     {
         $this->authorizationChecker->expects($this->once())
             ->method('isGranted')
@@ -115,7 +115,7 @@ class LoginControllerTest extends TestCase
         $controller->connectAction($this->request);
     }
 
-    public function testRegistrationRedirect()
+    public function testRegistrationRedirect(): void
     {
         $this->request->attributes = new ParameterBag(
             [
@@ -136,7 +136,7 @@ class LoginControllerTest extends TestCase
         $controller->connectAction($this->request);
     }
 
-    public function testRequestError()
+    public function testRequestError(): void
     {
         $this->mockAuthorizationCheck();
 
@@ -158,7 +158,7 @@ class LoginControllerTest extends TestCase
         $controller->connectAction($this->request);
     }
 
-    public function testSessionError()
+    public function testSessionError(): void
     {
         $this->mockAuthorizationCheck();
 

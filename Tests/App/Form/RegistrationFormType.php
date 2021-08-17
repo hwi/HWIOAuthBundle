@@ -21,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RegistrationFormType extends AbstractType
+final class RegistrationFormType extends AbstractType
 {
     /**
      * {@inheritdoc}

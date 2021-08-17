@@ -14,10 +14,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DeviantartResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
-class DeviantartResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class DeviantartResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = DeviantartResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "username": "kouiskas",
     "symbol": "$",
@@ -30,7 +30,7 @@ json;
         'profilepicture' => 'usericonurl',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

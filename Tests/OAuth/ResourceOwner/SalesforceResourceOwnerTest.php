@@ -15,10 +15,10 @@ use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SalesforceResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
-class SalesforceResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class SalesforceResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = SalesforceResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "user_id": "1",
     "nick_name": "bar",
@@ -36,7 +36,7 @@ json;
         'email' => 'email',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -61,7 +61,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testGetUserInformationFailure()
+    public function testGetUserInformationFailure(): void
     {
         $this->expectException(HttpTransportException::class);
 
@@ -77,7 +77,7 @@ json;
         );
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $this->markTestSkipped('SalesForce does not need this test.');
     }

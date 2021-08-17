@@ -15,10 +15,10 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\Auth0ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class Auth0ResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class Auth0ResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = Auth0ResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
   "email": "baz",
   "email_verified": false,
@@ -46,7 +46,7 @@ json;
         'profilepicture' => 'picture',
     ];
 
-    protected $authorizationUrlBasePart = 'https://example.oauth0.com/authorize?auth0Client=eyJuYW1lIjoiSFdJT0F1dGhCdW5kbGUiLCJ2ZXJzaW9uIjoidW5rbm93biIsImVudmlyb25tZW50Ijp7Im5hbWUiOiJQSFAiLCJ2ZXJzaW9uIjoiRkFLRV9QSFBfVkVSU0lPTl9GT1JfVEVTVFMifX0=&response_type=code&client_id=clientid';
+    protected string $authorizationUrlBasePart = 'https://example.oauth0.com/authorize?auth0Client=eyJuYW1lIjoiSFdJT0F1dGhCdW5kbGUiLCJ2ZXJzaW9uIjoidW5rbm93biIsImVudmlyb25tZW50Ijp7Im5hbWUiOiJQSFAiLCJ2ZXJzaW9uIjoiRkFLRV9QSFBfVkVSU0lPTl9GT1JfVEVTVFMifX0=&response_type=code&client_id=clientid';
 
     protected function setUpResourceOwner(string $name, HttpUtils $httpUtils, array $options, array $responses): ResourceOwnerInterface
     {

@@ -16,10 +16,10 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ItembaseResourceOwner;
 /**
  * @author Thomas Bretzke <tb@itembase.biz>
  */
-class ItembaseResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class ItembaseResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = ItembaseResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "uuid": "1",
     "username": "bar",

@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\Office365ResourceOwner;
 
-class Office365ResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class Office365ResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = Office365ResourceOwner::class;
 }

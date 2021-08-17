@@ -17,7 +17,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\User\User;
 
-class OAuthUserProviderTest extends TestCase
+final class OAuthUserProviderTest extends TestCase
 {
     /**
      * @var OAuthUserProvider
@@ -29,21 +29,21 @@ class OAuthUserProviderTest extends TestCase
         $this->provider = new OAuthUserProvider();
     }
 
-    public function testLoadUserByUsername()
+    public function testLoadUserByUsername(): void
     {
         $user = $this->provider->loadUserByUsername('asm89');
         $this->assertInstanceOf(OAuthUser::class, $user);
         $this->assertEquals('asm89', $user->getUsername());
     }
 
-    public function testLoadUserByIdentifier()
+    public function testLoadUserByIdentifier(): void
     {
         $user = $this->provider->loadUserByIdentifier('asm89');
         $this->assertInstanceOf(OAuthUser::class, $user);
         $this->assertEquals('asm89', $user->getUserIdentifier());
     }
 
-    public function testRefreshUser()
+    public function testRefreshUser(): void
     {
         $user = new OAuthUser('asm89');
 
@@ -51,7 +51,7 @@ class OAuthUserProviderTest extends TestCase
         $this->assertEquals($user, $freshUser);
     }
 
-    public function testRefreshUserUnsupportedClass()
+    public function testRefreshUserUnsupportedClass(): void
     {
         $this->expectException(\Symfony\Component\Security\Core\Exception\UnsupportedUserException::class);
         $this->expectExceptionMessage('Unsupported user class "Symfony\\Component\\Security\\Core\\User\\User"');
@@ -61,7 +61,7 @@ class OAuthUserProviderTest extends TestCase
         $this->provider->refreshUser($user);
     }
 
-    public function testSupportsClass()
+    public function testSupportsClass(): void
     {
         $class = \get_class(new OAuthUser('asm89'));
 
@@ -69,7 +69,7 @@ class OAuthUserProviderTest extends TestCase
         $this->assertFalse($this->provider->supportsClass('\Some\Other\Class'));
     }
 
-    public function testLoadUserByOAuthUserResponse()
+    public function testLoadUserByOAuthUserResponse(): void
     {
         $responseMock = $this->createMock(UserResponseInterface::class);
 

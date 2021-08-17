@@ -16,13 +16,13 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StravaResourceOwner;
 /**
  * @author Artem Genvald <genvaldartem@gmail.com>
  */
-class StravaResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class StravaResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = StravaResourceOwner::class;
     /**
      * {@inheritdoc}
      */
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "1",
     "firstname": "Foo",
@@ -42,7 +42,7 @@ json;
         'email' => 'email',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

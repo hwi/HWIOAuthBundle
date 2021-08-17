@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AmazonResourceOwner;
 
-class AmazonResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class AmazonResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = AmazonResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "user_id": "1",
     "name": "bar",
@@ -31,5 +31,5 @@ json;
         'email' => 'email',
     ];
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=profile';
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=profile';
 }

@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\User;
 
+use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
@@ -22,19 +23,19 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
-class EntityUserProviderTest extends TestCase
+final class EntityUserProviderTest extends TestCase
 {
     protected function setUp(): void
     {
-        if (!class_exists('Doctrine\ORM\EntityManager')) {
+        if (!class_exists(EntityManager::class)) {
             $this->markTestSkipped('The Doctrine ORM is not available');
         }
-        if (!class_exists('Doctrine\Persistence\ManagerRegistry')) {
+        if (!class_exists(ManagerRegistry::class)) {
             $this->markTestSkipped('The Doctrine ORM is too old');
         }
     }
 
-    public function testLoadUserByIdentifierThrowsExceptionWhenUserIsNotFound()
+    public function testLoadUserByIdentifierThrowsExceptionWhenUserIsNotFound(): void
     {
         if (!class_exists(UserNotFoundException::class)) {
             $this->markTestSkipped('This test only runs on Symfony >= 5.3');
@@ -48,7 +49,7 @@ class EntityUserProviderTest extends TestCase
         $provider->loadUserByIdentifier('asm89');
     }
 
-    public function testLoadUserByUsernameThrowsExceptionWhenUserIsNull()
+    public function testLoadUserByUsernameThrowsExceptionWhenUserIsNull(): void
     {
         $provider = $this->createEntityUserProvider();
 
@@ -58,11 +59,11 @@ class EntityUserProviderTest extends TestCase
             $this->fail('Failed asserting exception');
         } catch (UsernameNotFoundException $e) {
             $this->assertSame("User 'asm89' not found.", $e->getMessage());
-            $this->assertSame('asm89', $e->getUsername());
+            $this->assertSame('asm89', method_exists($e, 'getUserIdentifier') ? $e->getUserIdentifier() : $e->getUsername());
         }
     }
 
-    public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured()
+    public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->expectExceptionMessage('No property defined for entity for resource owner \'not_configured\'.');
@@ -71,7 +72,7 @@ class EntityUserProviderTest extends TestCase
         $provider->loadUserByOAuthUserResponse($this->createUserResponseMock(null, 'not_configured'));
     }
 
-    public function testLoadUserByOAuthUserResponseThrowsExceptionWhenUserIsNull()
+    public function testLoadUserByOAuthUserResponseThrowsExceptionWhenUserIsNull(): void
     {
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
@@ -83,11 +84,11 @@ class EntityUserProviderTest extends TestCase
             $this->fail('Failed asserting exception');
         } catch (UsernameNotFoundException $e) {
             $this->assertSame("User 'asm89' not found.", $e->getMessage());
-            $this->assertSame('asm89', $e->getUsername());
+            $this->assertSame('asm89', method_exists($e, 'getUserIdentifier') ? $e->getUserIdentifier() : $e->getUsername());
         }
     }
 
-    public function testLoadUserByOAuthUserResponse()
+    public function testLoadUserByOAuthUserResponse(): void
     {
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
@@ -99,7 +100,7 @@ class EntityUserProviderTest extends TestCase
         $this->assertEquals($user, $loadedUser);
     }
 
-    public function testRefreshUserThrowsExceptionWhenUserIsNull()
+    public function testRefreshUserThrowsExceptionWhenUserIsNull(): void
     {
         $provider = $this->createEntityUserProvider();
         $user = new User();
@@ -110,7 +111,7 @@ class EntityUserProviderTest extends TestCase
             $this->fail('Failed asserting exception');
         } catch (UsernameNotFoundException $e) {
             $this->assertSame('User with ID "1" could not be reloaded.', $e->getMessage());
-            $this->assertSame('foo', $e->getUsername());
+            $this->assertSame('foo', method_exists($e, 'getUserIdentifier') ? $e->getUserIdentifier() : $e->getUsername());
         }
     }
 
@@ -140,7 +141,7 @@ class EntityUserProviderTest extends TestCase
         return $mock;
     }
 
-    protected function createEntityUserProvider($user = null)
+    protected function createEntityUserProvider($user = null): EntityUserProvider
     {
         return new EntityUserProvider(
             $this->createManagerRegistryMock($user),

@@ -16,10 +16,10 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class YoutubeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class YoutubeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = YoutubeResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id": "1",
     "name": "bar"
@@ -34,24 +34,24 @@ json;
         'profilepicture' => 'picture',
     ];
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly';
-    protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline';
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fyoutube.readonly';
+    protected string $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F&access_type=offline';
 
-    public function testInvalidAccessTypeOptionValueThrowsException()
+    public function testInvalidAccessTypeOptionValueThrowsException(): void
     {
         $this->expectException(InvalidOptionsException::class);
 
         $this->createResourceOwner(['access_type' => 'invalid']);
     }
 
-    public function testInvalidApprovalPromptOptionValueThrowsException()
+    public function testInvalidApprovalPromptOptionValueThrowsException(): void
     {
         $this->expectException(InvalidOptionsException::class);
 
         $this->createResourceOwner(['approval_prompt' => 'invalid']);
     }
 
-    public function testGetAuthorizationUrl()
+    public function testGetAuthorizationUrl(): void
     {
         $resourceOwner = $this->createResourceOwner();
 
@@ -61,7 +61,7 @@ json;
         );
     }
 
-    public function testRequestVisibleActions()
+    public function testRequestVisibleActions(): void
     {
         $resourceOwner = $this->createResourceOwner(
             ['request_visible_actions' => 'http://schemas.google.com/AddActivity']
@@ -73,7 +73,7 @@ json;
         );
     }
 
-    public function testApprovalPromptForce()
+    public function testApprovalPromptForce(): void
     {
         $resourceOwner = $this->createResourceOwner(['approval_prompt' => 'force']);
 
@@ -83,7 +83,7 @@ json;
         );
     }
 
-    public function testHdParameter()
+    public function testHdParameter(): void
     {
         $resourceOwner = $this->createResourceOwner(['hd' => 'mycollege.edu']);
         $this->assertEquals(
@@ -92,7 +92,7 @@ json;
         );
     }
 
-    public function testRevokeToken()
+    public function testRevokeToken(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -105,7 +105,7 @@ json;
         $this->assertTrue($resourceOwner->revokeToken('token'));
     }
 
-    public function testRevokeTokenFails()
+    public function testRevokeTokenFails(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

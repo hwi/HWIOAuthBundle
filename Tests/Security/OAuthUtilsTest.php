@@ -22,11 +22,11 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class OAuthUtilsTest extends TestCase
+final class OAuthUtilsTest extends TestCase
 {
     private string $grantRule = 'IS_AUTHENTICATED_REMEMBERED';
 
-    public function testGetAuthorizationUrlWithRedirectUrl()
+    public function testGetAuthorizationUrlWithRedirectUrl(): void
     {
         $url = 'http://localhost:8080/login/check-instagram';
         $request = $this->getRequest($url);
@@ -45,7 +45,7 @@ class OAuthUtilsTest extends TestCase
         $this->assertNull($request->attributes->get('service'));
     }
 
-    public function testGetAuthorizationUrlWithConnectAndUserToken()
+    public function testGetAuthorizationUrlWithConnectAndUserToken(): void
     {
         $url = 'http://localhost:8080/login/check-instagram';
         $request = $this->getRequest($url);
@@ -65,7 +65,7 @@ class OAuthUtilsTest extends TestCase
         );
     }
 
-    public function testGetAuthorizationUrlWithStateQueryParameters()
+    public function testGetAuthorizationUrlWithStateQueryParameters(): void
     {
         $parameters = ['foo' => 'bar', 'foobar' => 'foobaz'];
         $state = new State($parameters);
@@ -89,7 +89,7 @@ class OAuthUtilsTest extends TestCase
         );
     }
 
-    public function testGetAuthorizationUrlWithoutUserToken()
+    public function testGetAuthorizationUrlWithoutUserToken(): void
     {
         $url = 'http://localhost:8080/login/check-instagram';
         $request = $this->getRequest($url);
@@ -106,7 +106,7 @@ class OAuthUtilsTest extends TestCase
         $this->assertNull($request->attributes->get('service'));
     }
 
-    public function testGetAuthorizationUrlWithAuthenticatedFullyRule()
+    public function testGetAuthorizationUrlWithAuthenticatedFullyRule(): void
     {
         $url = 'http://localhost:8080/login/check-instagram';
         $request = $this->getRequest($url);
@@ -128,7 +128,7 @@ class OAuthUtilsTest extends TestCase
         $this->assertNull($request->attributes->get('service'));
     }
 
-    public function testGetServiceAuthUrlWithStateQueryParameters()
+    public function testGetServiceAuthUrlWithStateQueryParameters(): void
     {
         $parameters = ['foo' => 'bar', 'foobar' => 'foobaz'];
         $state = new State($parameters);
@@ -204,7 +204,7 @@ class OAuthUtilsTest extends TestCase
         OAuthUtils::signRequest('GET', 'http://example.com', $parameters, 'client_secret');
     }
 
-    public function testGetLoginUrlWithStateQueryParameters()
+    public function testGetLoginUrlWithStateQueryParameters(): void
     {
         $url = 'http://localhost:8080/instagram';
 
@@ -244,7 +244,7 @@ class OAuthUtilsTest extends TestCase
         );
     }
 
-    public function provideValidData()
+    public function provideValidData(): array
     {
         return [
             ['iflJZCKxEsZ58FFDyCysxfLbuKM=', 'http://photos.example.net/photos'],
@@ -252,7 +252,7 @@ class OAuthUtilsTest extends TestCase
         ];
     }
 
-    public function provideInvalidData()
+    public function provideInvalidData(): array
     {
         return [
             ['oauth_timestamp' => '', 'oauth_nonce' => '', 'oauth_version' => '', 'oauth_signature_method' => ''],
@@ -263,12 +263,12 @@ class OAuthUtilsTest extends TestCase
         ];
     }
 
-    private function getRequest($url)
+    private function getRequest(string $url): Request
     {
         return Request::create($url, 'get', [], [], [], ['SERVER_PORT' => 8080]);
     }
 
-    private function getMap($url, $redirect, $hasUser = false, $hasOneRedirectUrl = false, $resource = null)
+    private function getMap($url, $redirect, $hasUser = false, $hasOneRedirectUrl = false, $resource = null): ResourceOwnerMap
     {
         $resource = $resource ?? $this->createMock(ResourceOwnerInterface::class);
 
@@ -296,7 +296,7 @@ class OAuthUtilsTest extends TestCase
                 ->willReturn('/login/check-instagram');
         }
 
-        $mapMock = new ResourceOwnerMap(
+        $ownerMap = new ResourceOwnerMap(
             $utils,
             ['instagram' => '/fake'],
             ['instagram' => !$hasUser && !$hasOneRedirectUrl ? '/login/check-instagram' : '/fake'],
@@ -310,10 +310,10 @@ class OAuthUtilsTest extends TestCase
                 ->willReturn('instagram');
         }
 
-        return $mapMock;
+        return $ownerMap;
     }
 
-    private function getHttpUtils($generatedUrl = '/')
+    private function getHttpUtils(string $generatedUrl = '/'): HttpUtils
     {
         $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
 

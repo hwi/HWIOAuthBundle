@@ -13,6 +13,12 @@ declare(strict_types=1);
 
 namespace HWI\Bundle\OAuthBundle\Tests\App;
 
+use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
+use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
+use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
+use Symfony\Bundle\MonologBundle\MonologBundle;
+use Symfony\Bundle\SecurityBundle\SecurityBundle;
+use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
@@ -24,12 +30,12 @@ class AppKernel extends Kernel
     public function registerBundles(): array
     {
         return [
-            new \Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
-            new \Symfony\Bundle\SecurityBundle\SecurityBundle(),
-            new \Symfony\Bundle\MonologBundle\MonologBundle(),
-            new \Symfony\Bundle\TwigBundle\TwigBundle(),
-            new \Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
-            new \HWI\Bundle\OAuthBundle\HWIOAuthBundle(),
+            new FrameworkBundle(),
+            new SecurityBundle(),
+            new MonologBundle(),
+            new TwigBundle(),
+            new DoctrineBundle(),
+            new HWIOAuthBundle(),
         ];
     }
 

@@ -17,7 +17,7 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 class YahooResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected string $resourceOwnerClass = YahooResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "profile": {
         "guid": "1",
@@ -31,7 +31,7 @@ json;
         'realname' => 'profile.givenName',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -51,7 +51,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner(

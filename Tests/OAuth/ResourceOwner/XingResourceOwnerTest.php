@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\XingResourceOwner;
 
-class XingResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class XingResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
 {
     protected string $resourceOwnerClass = XingResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "users":[
         {
@@ -42,7 +42,7 @@ json;
         'email' => 'users.0.active_email',
     ];
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

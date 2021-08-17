@@ -56,7 +56,7 @@ class RedirectToServiceControllerTest extends TestCase
         $this->assertEquals('https://domain.com/oauth/v2/auth', $response->getTargetUrl());
     }
 
-    public function testTargetPathParameter()
+    public function testTargetPathParameter(): void
     {
         $this->request->attributes->set($this->targetPathParameter, 'https://domain.com/target/path');
 
@@ -69,7 +69,7 @@ class RedirectToServiceControllerTest extends TestCase
         $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
-    public function testUseReferer()
+    public function testUseReferer(): void
     {
         $this->request->headers->set('Referer', 'https://google.com');
 
@@ -82,7 +82,7 @@ class RedirectToServiceControllerTest extends TestCase
         $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
-    public function testFailedUseReferer()
+    public function testFailedUseReferer(): void
     {
         $this->request->headers->set('Referer', 'https://google.com');
 
@@ -95,7 +95,7 @@ class RedirectToServiceControllerTest extends TestCase
         $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
-    public function testUnknownResourceOwner()
+    public function testUnknownResourceOwner(): void
     {
         $this->expectException(NotFoundHttpException::class);
 
@@ -103,7 +103,7 @@ class RedirectToServiceControllerTest extends TestCase
         $controller->redirectToServiceAction($this->request, 'unknown');
     }
 
-    public function testThrowAccessDeniedExceptionForNonWhitelistedTargetPath()
+    public function testThrowAccessDeniedExceptionForNonWhitelistedTargetPath(): void
     {
         $this->expectException(AccessDeniedHttpException::class);
         $this->expectExceptionMessage('Not allowed to redirect to /malicious/target/path');

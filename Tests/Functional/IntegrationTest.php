@@ -18,7 +18,7 @@ use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Response;
 
-class IntegrationTest extends WebTestCase
+final class IntegrationTest extends WebTestCase
 {
     public function testRequestRedirect(): void
     {

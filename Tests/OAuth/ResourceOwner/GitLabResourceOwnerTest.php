@@ -13,14 +13,14 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitLabResourceOwner;
 
-class GitLabResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class GitLabResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = GitLabResourceOwner::class;
     protected int $httpClientCalls = 1;
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read_user';
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read_user';
 
-    public function testRevokeToken()
+    public function testRevokeToken(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],

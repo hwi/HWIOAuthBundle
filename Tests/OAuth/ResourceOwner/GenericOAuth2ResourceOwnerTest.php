@@ -26,7 +26,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 class GenericOAuth2ResourceOwnerTest extends ResourceOwnerTestCase
 {
     protected string $resourceOwnerClass = GenericOAuth2ResourceOwner::class;
-    protected $tokenData = ['access_token' => 'token'];
+    protected array $tokenData = ['access_token' => 'token'];
 
     protected array $options = [
         'client_id' => 'clientid',
@@ -39,7 +39,7 @@ class GenericOAuth2ResourceOwnerTest extends ResourceOwnerTestCase
         'attr_name' => 'access_token',
     ];
 
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "id":  "1",
     "foo": "bar"
@@ -52,25 +52,25 @@ json;
         'realname' => 'foo_disp',
     ];
 
-    protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid';
-    protected $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F';
-    protected $authorizationUrlParams = [];
+    protected string $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid';
+    protected string $redirectUrlPart = '&redirect_uri=http%3A%2F%2Fredirect.to%2F';
+    protected array $authorizationUrlParams = [];
 
-    public function testUndefinedOptionThrowsException()
+    public function testUndefinedOptionThrowsException(): void
     {
         $this->expectException(ExceptionInterface::class);
 
         $this->createResourceOwner(['non_existing' => null]);
     }
 
-    public function testInvalidOptionValueThrowsException()
+    public function testInvalidOptionValueThrowsException(): void
     {
         $this->expectException(ExceptionInterface::class);
 
         $this->createResourceOwner(['csrf' => 'invalid']);
     }
 
-    public function testHandleRequest()
+    public function testHandleRequest(): void
     {
         $resourceOwner = $this->createResourceOwner();
 
@@ -87,7 +87,7 @@ json;
         $this->assertTrue($resourceOwner->handles($request));
     }
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -107,7 +107,7 @@ json;
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testGetUserInformationFailure()
+    public function testGetUserInformationFailure(): void
     {
         $this->expectException(HttpTransportException::class);
 
@@ -121,7 +121,7 @@ json;
         $resourceOwner->getUserInformation($this->tokenData);
     }
 
-    public function testGetAuthorizationUrl()
+    public function testGetAuthorizationUrl(): void
     {
         if (!$this->csrf) {
             $state = new State(null);
@@ -150,7 +150,7 @@ json;
         );
     }
 
-    public function testGetState()
+    public function testGetState(): void
     {
         $stateParams = ['initial_state_param_1' => 'value'];
         if (!$this->csrf) {
@@ -170,7 +170,7 @@ json;
         self::assertEquals($state->get('state'), 'some-state');
     }
 
-    public function testGetStateWithoutStoredValues()
+    public function testGetStateWithoutStoredValues(): void
     {
         $resourceOwner = $this->createResourceOwner([], [], [], new State(null));
         $this->storage->expects($this->once())
@@ -182,7 +182,7 @@ json;
         self::assertEmpty($state->getAll());
     }
 
-    public function testGetAuthorizationUrlWithEnabledCsrf()
+    public function testGetAuthorizationUrlWithEnabledCsrf(): void
     {
         if ($this->csrf) {
             $this->markTestSkipped('CSRF is enabled for this Resource Owner.');
@@ -253,7 +253,7 @@ json;
         ];
     }
 
-    public function testGetAccessTokenFailedResponse()
+    public function testGetAccessTokenFailedResponse(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -269,7 +269,7 @@ json;
         $resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    public function testGetAccessTokenErrorResponse()
+    public function testGetAccessTokenErrorResponse(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -342,7 +342,7 @@ json;
         ];
     }
 
-    public function testRevokeToken()
+    public function testRevokeToken(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -350,13 +350,13 @@ json;
         $resourceOwner->revokeToken('token');
     }
 
-    public function testGetSetName()
+    public function testGetSetName(): void
     {
         $resourceOwner = $this->createResourceOwner();
         $this->assertEquals($this->prepareResourceOwnerName(), $resourceOwner->getName());
     }
 
-    public function testCsrfTokenIsValidWhenDisabled()
+    public function testCsrfTokenIsValidWhenDisabled(): void
     {
         if ($this->csrf) {
             $this->markTestSkipped('CSRF is enabled for this Resource Owner.');
@@ -370,7 +370,7 @@ json;
         $this->assertTrue($resourceOwner->isCsrfTokenValid('whatever you want'));
     }
 
-    public function testCsrfTokenValid()
+    public function testCsrfTokenValid(): void
     {
         $resourceOwner = $this->createResourceOwner(['csrf' => true]);
 
@@ -382,7 +382,7 @@ json;
         $this->assertTrue($resourceOwner->isCsrfTokenValid('valid_token'));
     }
 
-    public function testCsrfTokenInvalid()
+    public function testCsrfTokenInvalid(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -396,7 +396,7 @@ json;
         $resourceOwner->isCsrfTokenValid('invalid_token');
     }
 
-    public function testCsrfTokenMissing()
+    public function testCsrfTokenMissing(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -405,7 +405,7 @@ json;
         $resourceOwner->isCsrfTokenValid(null);
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
 

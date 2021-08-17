@@ -13,10 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\EveOnlineResourceOwner;
 
-class EveOnlineResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class EveOnlineResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = EveOnlineResourceOwner::class;
-    protected $userResponse = <<<json
+    protected string $userResponse = <<<json
 {
     "CharacterID": "1",
     "CharacterName": "bar"

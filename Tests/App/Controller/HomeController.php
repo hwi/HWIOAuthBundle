@@ -14,22 +14,21 @@ namespace HWI\Bundle\OAuthBundle\Tests\App\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
-class HomeController
+final class HomeController
 {
-    /** @var Environment */
-    private $twig;
+    private Environment $twig;
 
     public function __construct(Environment $twig)
     {
         $this->twig = $twig;
     }
 
-    public function login()
+    public function login(): Response
     {
         return new Response($this->twig->render('@Acme/login.html.twig'));
     }
 
-    public function index()
+    public function index(): Response
     {
         return new Response('Hello, this is the homepage');
     }

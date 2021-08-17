@@ -14,11 +14,9 @@ namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
 /**
- * CustomUserResponse.
- *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class CustomUserResponse extends AbstractUserResponse
+final class CustomUserResponse extends AbstractUserResponse
 {
     public function getUsername()
     {

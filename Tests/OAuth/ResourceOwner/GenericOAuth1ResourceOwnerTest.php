@@ -36,7 +36,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         'access_token_url' => 'http://user.access/?test=4',
     ];
 
-    protected $userResponse = '{"id": "1", "foo": "bar"}';
+    protected string $userResponse = '{"id": "1", "foo": "bar"}';
 
     protected array $paths = [
         'identifier' => 'id',
@@ -44,21 +44,21 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         'realname' => 'foo_disp',
     ];
 
-    public function testUndefinedOptionThrowsException()
+    public function testUndefinedOptionThrowsException(): void
     {
         $this->expectException(ExceptionInterface::class);
 
         $this->createResourceOwner(['non_existing' => null]);
     }
 
-    public function testInvalidOptionValueThrowsException()
+    public function testInvalidOptionValueThrowsException(): void
     {
         $this->expectException(ExceptionInterface::class);
 
         $this->createResourceOwner(['csrf' => 'invalid']);
     }
 
-    public function testHandleRequest()
+    public function testHandleRequest(): void
     {
         $request = new Request(['test' => 'test']);
 
@@ -75,7 +75,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->assertTrue($resourceOwner->handles($request));
     }
 
-    public function testGetUserInformation()
+    public function testGetUserInformation(): void
     {
         $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'];
 
@@ -95,7 +95,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->assertNull($userResponse->getExpiresIn());
     }
 
-    public function testGetAuthorizationUrlContainOAuthTokenAndSecret()
+    public function testGetAuthorizationUrlContainOAuthTokenAndSecret(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -115,7 +115,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         );
     }
 
-    public function testGetAuthorizationUrlFailedResponseContainOnlyOAuthToken()
+    public function testGetAuthorizationUrlFailedResponseContainOnlyOAuthToken(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -133,7 +133,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $resourceOwner->getAuthorizationUrl('http://redirect.to/');
     }
 
-    public function testGetAuthorizationUrlFailedResponseContainOAuthProblem()
+    public function testGetAuthorizationUrlFailedResponseContainOAuthProblem(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -151,7 +151,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $resourceOwner->getAuthorizationUrl('http://redirect.to/');
     }
 
-    public function testGetAuthorizationUrlFailedResponseContainCallbackNotConfirmed()
+    public function testGetAuthorizationUrlFailedResponseContainCallbackNotConfirmed(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -169,7 +169,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $resourceOwner->getAuthorizationUrl('http://redirect.to/');
     }
 
-    public function testGetAuthorizationUrlFailedResponseNotContainOAuthTokenOrSecret()
+    public function testGetAuthorizationUrlFailedResponseNotContainOAuthTokenOrSecret(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -187,7 +187,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $resourceOwner->getAuthorizationUrl('http://redirect.to/');
     }
 
-    public function testGetAccessToken()
+    public function testGetAccessToken(): void
     {
         $request = new Request(['oauth_verifier' => 'code', 'oauth_token' => 'token']);
 
@@ -210,7 +210,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         );
     }
 
-    public function testGetAccessTokenJsonResponse()
+    public function testGetAccessTokenJsonResponse(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -233,7 +233,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         );
     }
 
-    public function testGetAccessTokenJsonCharsetResponse()
+    public function testGetAccessTokenJsonCharsetResponse(): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -256,7 +256,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         );
     }
 
-    public function testGetAccessTokenFailedResponse()
+    public function testGetAccessTokenFailedResponse(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -280,7 +280,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    public function testGetAccessTokenErrorResponse()
+    public function testGetAccessTokenErrorResponse(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -304,7 +304,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    public function testGetAccessTokenInvalidArgumentException()
+    public function testGetAccessTokenInvalidArgumentException(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -322,7 +322,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    public function testRefreshAccessToken()
+    public function testRefreshAccessToken(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -330,7 +330,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $resourceOwner->refreshAccessToken('token');
     }
 
-    public function testRevokeToken()
+    public function testRevokeToken(): void
     {
         $this->expectException(AuthenticationException::class);
 
@@ -338,7 +338,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $resourceOwner->revokeToken('token');
     }
 
-    public function testCsrfTokenIsAlwaysValidForOAuth1()
+    public function testCsrfTokenIsAlwaysValidForOAuth1(): void
     {
         $resourceOwner = $this->createResourceOwner();
 
@@ -348,7 +348,7 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->assertTrue($resourceOwner->isCsrfTokenValid('valid_token'));
     }
 
-    public function testCsrfTokenValid()
+    public function testCsrfTokenValid(): void
     {
         $resourceOwner = $this->createResourceOwner(['csrf' => true]);
 
@@ -358,13 +358,13 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         $this->assertTrue($resourceOwner->isCsrfTokenValid('valid_token'));
     }
 
-    public function testGetSetName()
+    public function testGetSetName(): void
     {
         $resourceOwner = $this->createResourceOwner();
         $this->assertEquals($this->prepareResourceOwnerName(), $resourceOwner->getName());
     }
 
-    public function testCustomResponseClass()
+    public function testCustomResponseClass(): void
     {
         $class = CustomUserResponse::class;
         $resourceOwner = $this->createResourceOwner(
