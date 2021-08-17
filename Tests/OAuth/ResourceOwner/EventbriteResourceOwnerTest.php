@@ -27,7 +27,7 @@ class EventbriteResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'user.user_id',
         'nickname' => 'user.first_name',
         'firstname' => 'user.first_name',

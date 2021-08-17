@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * RunKeeperResourceOwner.
- *
  * @author Artem Genvald <genvaldartem@gmail.com>
- *
- * @final since 1.4
  */
-class RunKeeperResourceOwner extends GenericOAuth2ResourceOwner
+final class RunKeeperResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'realname' => 'name',
         'profilepicture' => 'medium_picture',
     ];

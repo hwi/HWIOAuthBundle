@@ -26,7 +26,7 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
  */
-class GenericOAuth2ResourceOwner extends AbstractResourceOwner
+abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 {
     /**
      * {@inheritdoc}

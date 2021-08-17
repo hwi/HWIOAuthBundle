@@ -16,15 +16,12 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
-/**
- * @final since 1.4
- */
-class QQResourceOwner extends GenericOAuth2ResourceOwner
+final class QQResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'openid',
         'nickname' => 'nickname',
         'realname' => 'nickname',

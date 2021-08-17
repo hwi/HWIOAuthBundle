@@ -15,18 +15,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * ThirtySevenSignalsResourceOwner (37signals).
- *
  * @author Richard van den Brand <richard@vandenbrand.org>
- *
- * @final since 1.4
  */
-class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
+final class ThirtySevenSignalsResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'identity.id',
         'nickname' => 'identity.email_address',
         'firstname' => 'identity.first_name',

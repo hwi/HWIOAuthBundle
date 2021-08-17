@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * SlackResourceOwner.
- *
  * @author Baptiste Clavié <clavie.b@gmail.com>
- *
- * @final since 1.4
  */
-class SlackResourceOwner extends GenericOAuth2ResourceOwner
+final class SlackResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'user.id',
         'nickname' => 'user.name',
         'email' => 'user.email',

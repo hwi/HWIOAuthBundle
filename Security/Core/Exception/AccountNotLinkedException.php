@@ -14,15 +14,9 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 
-/**
- * @final since 1.4
- */
-class AccountNotLinkedException extends UsernameNotFoundException implements OAuthAwareExceptionInterface
+final class AccountNotLinkedException extends UsernameNotFoundException implements OAuthAwareExceptionInterface
 {
-    /**
-     * @var string
-     */
-    protected $resourceOwnerName;
+    protected ?string $resourceOwnerName = null;
 
     /**
      * {@inheritdoc}

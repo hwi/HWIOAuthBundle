@@ -22,38 +22,17 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
+ *
+ * @internal
  */
 final class RedirectToServiceController
 {
-    /**
-     * @var OAuthUtils
-     */
-    private $oauthUtils;
-
-    /**
-     * @var DomainWhitelist
-     */
-    private $domainWhitelist;
-
-    /**
-     * @var array
-     */
-    private $firewallNames;
-
-    /**
-     * @var string|null
-     */
-    private $targetPathParameter;
-
-    /**
-     * @var bool
-     */
-    private $failedUseReferer;
-
-    /**
-     * @var bool
-     */
-    private $useReferer;
+    private OAuthUtils $oauthUtils;
+    private DomainWhitelist $domainWhitelist;
+    private array $firewallNames;
+    private ?string $targetPathParameter = null;
+    private bool $failedUseReferer;
+    private bool $useReferer;
 
     public function __construct(
         OAuthUtils $oauthUtils,

@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * GitLabResourceOwner.
- *
  * @author Indra Gunawan <hello@indra.my.id>
- *
- * @final since 1.4
  */
-class GitLabResourceOwner extends GenericOAuth2ResourceOwner
+final class GitLabResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'username',
         'realname' => 'name',

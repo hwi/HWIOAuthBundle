@@ -26,7 +26,7 @@ class WordpressResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'ID',
         'nickname' => 'username',
         'realname' => 'display_name',

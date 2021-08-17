@@ -15,18 +15,14 @@ use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Salesforce Resource Owner.
- *
  * @author Tyler Pugh <tylerism@gmail.com>
- *
- * @final since 1.4
  */
-class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
+final class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'user_id',
         'nickname' => 'nick_name',
         'realname' => 'nick_name',

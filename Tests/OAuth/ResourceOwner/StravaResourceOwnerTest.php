@@ -35,7 +35,7 @@ json;
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'realname' => ['firstname', 'lastname'],
         'profilepicture' => 'profile_medium',

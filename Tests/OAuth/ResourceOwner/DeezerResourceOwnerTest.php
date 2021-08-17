@@ -40,7 +40,7 @@ class DeezerResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "status": 0
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => 'firstname',

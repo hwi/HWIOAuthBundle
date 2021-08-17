@@ -17,25 +17,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 /**
  * @author Marek Štípek
- *
- * @final since 1.4
  */
-class FormEvent extends AbstractEvent
+final class FormEvent extends AbstractEvent
 {
-    /**
-     * @var FormInterface
-     */
-    private $form;
-
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var Response
-     */
-    private $response;
+    private FormInterface $form;
+    private Request $request;
+    private ?Response $response = null;
 
     public function __construct(FormInterface $form, Request $request)
     {
@@ -43,31 +30,22 @@ class FormEvent extends AbstractEvent
         $this->request = $request;
     }
 
-    /**
-     * @return FormInterface
-     */
-    public function getForm()
+    public function getForm(): FormInterface
     {
         return $this->form;
     }
 
-    /**
-     * @return Request
-     */
-    public function getRequest()
+    public function getRequest(): Request
     {
         return $this->request;
     }
 
-    public function setResponse(Response $response)
+    public function setResponse(Response $response): void
     {
         $this->response = $response;
     }
 
-    /**
-     * @return Response|null
-     */
-    public function getResponse()
+    public function getResponse(): ?Response
     {
         return $this->response;
     }

@@ -13,20 +13,17 @@ namespace HWI\Bundle\OAuthBundle\OAuth\Exception;
 
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
-/**
- * @final since 1.4
- */
-class HttpTransportException extends AuthenticationException
+final class HttpTransportException extends AuthenticationException
 {
-    private $ownerName;
+    private string $ownerName;
 
-    public function __construct($message, $ownerName, $code = 0, \Throwable $previous = null)
+    public function __construct(string $message, string $ownerName, int $code = 0, \Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->ownerName = $ownerName;
     }
 
-    public function getOwnerName()
+    public function getOwnerName(): string
     {
         return $this->ownerName;
     }

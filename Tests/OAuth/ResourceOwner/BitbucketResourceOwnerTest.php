@@ -24,7 +24,7 @@ class BitbucketResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     }
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'user.username',
         'nickname' => 'user.username',
         'realname' => 'user.display_name',

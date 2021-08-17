@@ -25,7 +25,7 @@ class VkontakteResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'response.user_id',
         'nickname' => 'response.user_name',
         'realname' => 'response.user_name',

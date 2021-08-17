@@ -20,11 +20,9 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
- * GenericOAuth1ResourceOwner.
- *
  * @author Francisco Facioni <fran6co@gmail.com>
  */
-class GenericOAuth1ResourceOwner extends AbstractResourceOwner
+abstract class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 {
     /**
      * {@inheritdoc}

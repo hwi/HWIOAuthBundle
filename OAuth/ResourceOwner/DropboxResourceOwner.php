@@ -19,18 +19,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 /**
- * DropboxResourceOwner.
- *
  * @author Jamie Sutherland<me@jamiesutherland.com>
- *
- * @final since 1.4
  */
-class DropboxResourceOwner extends GenericOAuth2ResourceOwner
+final class DropboxResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'account_id',
         'nickname' => 'email',
         'realname' => 'email',

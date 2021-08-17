@@ -14,19 +14,15 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * YahooResourceOwner.
- *
  * @author Tom <tomilett@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
- *
- * @final since 1.4
  */
-class YahooResourceOwner extends GenericOAuth1ResourceOwner
+final class YahooResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'profile.guid',
         'nickname' => 'profile.nickname',
         'realname' => 'profile.givenName',

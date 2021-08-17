@@ -32,7 +32,7 @@ class XingResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
     ]
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'users.0.id',
         'nickname' => 'users.0.display_name',
         'firstname' => 'users.0.first_name',

@@ -17,19 +17,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * AppleResourceOwner.
- *
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Josip Letica <leticajosip.09@gmail.com>
- *
- * @final since 1.4
  */
-class AppleResourceOwner extends GenericOAuth2ResourceOwner
+final class AppleResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'sub',
         'firstname' => 'firstName',
         'lastname' => 'lastName',

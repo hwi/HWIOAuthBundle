@@ -15,18 +15,14 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * FlickrResourceOwner.
- *
  * @author Dmitri Lakachauskis <lakiboy83@gmail.com>
- *
- * @final since 1.4
  */
-class FlickrResourceOwner extends GenericOAuth1ResourceOwner
+final class FlickrResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'user_nsid',
         'nickname' => 'username',
         'realname' => 'fullname',

@@ -26,7 +26,7 @@ class YoutubeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => 'name',

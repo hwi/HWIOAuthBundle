@@ -15,15 +15,13 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Martin Aarhof <martin.aarhof@gmail.com>
- *
- * @final since 1.4
  */
-class RedditResourceOwner extends GenericOAuth2ResourceOwner
+final class RedditResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'name',
         'realname' => null,

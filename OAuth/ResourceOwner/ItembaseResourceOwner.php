@@ -14,13 +14,9 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * ItembaseResourceOwner.
- *
  * @author Thomas Bretzke <tb@itembase.biz>
- *
- * @final since 1.4
  */
-class ItembaseResourceOwner extends GenericOAuth2ResourceOwner
+final class ItembaseResourceOwner extends GenericOAuth2ResourceOwner
 {
     public const ITEMBASE_AUTH_URL = 'https://accounts.itembase.com/oauth/v2/auth';
     public const ITEMBASE_TOKEN_URL = 'https://accounts.itembase.com/oauth/v2/token';
@@ -29,7 +25,7 @@ class ItembaseResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'uuid',
         'nickname' => 'username',
         'firstname' => 'first_name',

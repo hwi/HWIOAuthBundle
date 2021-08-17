@@ -15,20 +15,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
- *
- * @final since 1.4
  */
-class OAuthUser implements UserInterface
+final class OAuthUser implements UserInterface
 {
-    /**
-     * @var string
-     */
-    protected $username;
+    private string $username;
 
-    /**
-     * @param string $username
-     */
-    public function __construct($username)
+    public function __construct(string $username)
     {
         $this->username = $username;
     }
@@ -36,7 +28,7 @@ class OAuthUser implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function getUserIdentifier()
+    public function getUserIdentifier(): string
     {
         return $this->username;
     }
@@ -44,7 +36,7 @@ class OAuthUser implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function getRoles()
+    public function getRoles(): array
     {
         return ['ROLE_USER', 'ROLE_OAUTH_USER'];
     }
@@ -52,7 +44,7 @@ class OAuthUser implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return null;
     }
@@ -60,7 +52,7 @@ class OAuthUser implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function getSalt()
+    public function getSalt(): ?string
     {
         return null;
     }
@@ -68,7 +60,7 @@ class OAuthUser implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->getUserIdentifier();
     }
@@ -76,7 +68,7 @@ class OAuthUser implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): bool
     {
         return true;
     }
@@ -84,7 +76,7 @@ class OAuthUser implements UserInterface
     /**
      * {@inheritdoc}
      */
-    public function equals(UserInterface $user)
+    public function equals(UserInterface $user): bool
     {
         return $user->getUsername() === $this->username;
     }

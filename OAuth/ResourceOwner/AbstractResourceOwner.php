@@ -20,6 +20,8 @@ use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
 use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
+use Symfony\Component\OptionsResolver\Exception\AccessException;
+use Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -35,45 +37,19 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 abstract class AbstractResourceOwner implements ResourceOwnerInterface
 {
-    /**
-     * @var array
-     */
-    protected $options = [];
+    protected array $options = [];
 
     /**
-     * @var array
+     * @var array<string, array<int, string>|string|null>
      */
-    protected $paths = [];
+    protected array $paths = [];
 
-    /**
-     * @var HttpClientInterface
-     */
-    protected $httpClient;
-
-    /**
-     * @var HttpUtils
-     */
-    protected $httpUtils;
-
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var StateInterface
-     */
-    protected $state;
-
-    /**
-     * @var RequestDataStorageInterface
-     */
-    protected $storage;
-
-    /**
-     * @var bool
-     */
-    private $stateLoaded = false;
+    protected HttpClientInterface $httpClient;
+    protected HttpUtils $httpUtils;
+    protected string $name;
+    protected StateInterface $state;
+    protected RequestDataStorageInterface $storage;
+    private bool $stateLoaded = false;
 
     /**
      * @param array  $options Options for the resource owner
@@ -349,8 +325,8 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * Configure the option resolver.
      *
-     * @throws \Symfony\Component\OptionsResolver\Exception\AccessException
-     * @throws \Symfony\Component\OptionsResolver\Exception\UndefinedOptionsException
+     * @throws AccessException
+     * @throws UndefinedOptionsException
      */
     protected function configureOptions(OptionsResolver $resolver)
     {

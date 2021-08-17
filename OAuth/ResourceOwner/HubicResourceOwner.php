@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * HubicResourceOwner.
- *
  * @author Vincent Cassé <vincent@casse.me>
- *
- * @final since 1.4
  */
-class HubicResourceOwner extends GenericOAuth2ResourceOwner
+final class HubicResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'email',
         'nickname' => 'email',
         'firstname' => 'firstname',

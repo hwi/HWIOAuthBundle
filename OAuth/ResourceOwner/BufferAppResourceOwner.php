@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * BufferAppResourceOwner.
- *
  * @author João Paulo Cercal <sistemas@cekurte.com>
- *
- * @final since 1.4
  */
-class BufferAppResourceOwner extends GenericOAuth2ResourceOwner
+final class BufferAppResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'id',
         'realname' => 'id',

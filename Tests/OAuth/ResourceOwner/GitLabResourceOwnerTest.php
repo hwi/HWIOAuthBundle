@@ -16,7 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitLabResourceOwner;
 class GitLabResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 {
     protected string $resourceOwnerClass = GitLabResourceOwner::class;
-    protected $httpClientCalls = 1;
+    protected int $httpClientCalls = 1;
 
     protected $authorizationUrlBasePart = 'http://user.auth/?test=2&response_type=code&client_id=clientid&scope=read_user';
 

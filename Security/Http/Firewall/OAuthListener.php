@@ -28,15 +28,12 @@ use Symfony\Component\Security\Http\Firewall\AbstractAuthenticationListener;
  */
 class OAuthListener extends AbstractAuthenticationListener
 {
-    /**
-     * @var ResourceOwnerMapInterface
-     */
-    private $resourceOwnerMap;
+    private ResourceOwnerMapInterface $resourceOwnerMap;
 
     /**
-     * @var array
+     * @var array<int, string>
      */
-    private $checkPaths;
+    private array $checkPaths;
 
     public function setResourceOwnerMap(ResourceOwnerMapInterface $resourceOwnerMap)
     {

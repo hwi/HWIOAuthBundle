@@ -18,20 +18,11 @@ use Symfony\Component\Templating\Helper\Helper;
 /**
  * @author Alexander <iam.asm89@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
- *
- * @final since 1.4
  */
-class OAuthHelper extends Helper
+final class OAuthHelper extends Helper
 {
-    /**
-     * @var OAuthUtils
-     */
-    private $oauthUtils;
-
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private OAuthUtils $oauthUtils;
+    private RequestStack $requestStack;
 
     public function __construct(OAuthUtils $oauthUtils, RequestStack $requestStack)
     {

@@ -23,14 +23,12 @@ use Symfony\Component\Security\Http\HttpUtils;
  * loads the appropriate resource owner when requested.
  *
  * @author Alexander <iam.asm89@gmail.com>
- *
- * @final since 1.4
  */
-class ResourceOwnerMap implements ResourceOwnerMapInterface
+final class ResourceOwnerMap implements ResourceOwnerMapInterface
 {
-    protected HttpUtils $httpUtils;
-    protected array $resourceOwners;
-    protected array $possibleResourceOwners;
+    private HttpUtils $httpUtils;
+    private array $resourceOwners;
+    private array $possibleResourceOwners;
     private ServiceLocator $locator;
 
     /**

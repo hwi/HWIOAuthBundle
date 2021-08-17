@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * XingResourceOwner.
- *
  * @author othillo <othillo@othillo.nl>
- *
- * @final since 1.4
  */
-class XingResourceOwner extends GenericOAuth1ResourceOwner
+final class XingResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'users.0.id',
         'nickname' => 'users.0.display_name',
         'firstname' => 'users.0.first_name',

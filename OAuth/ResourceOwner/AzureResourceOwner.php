@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * AzureResourceOwner.
- *
  * @author Baptiste Clavié <clavie.b@gmail.com>
- *
- * @final since 1.4
  */
-class AzureResourceOwner extends GenericOAuth2ResourceOwner
+final class AzureResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'sub',
         'nickname' => 'unique_name',
         'lastname' => 'family_name',

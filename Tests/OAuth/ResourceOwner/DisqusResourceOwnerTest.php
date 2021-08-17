@@ -26,7 +26,7 @@ class DisqusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'response.id',
         'nickname' => 'response.username',
         'realname' => 'response.name',

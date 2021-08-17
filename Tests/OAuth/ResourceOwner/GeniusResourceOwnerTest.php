@@ -63,7 +63,7 @@ class GeniusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
 }
 json;
 
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'response.user.id',
         'nickname' => 'response.user.name',
         'realname' => 'response.user.name',

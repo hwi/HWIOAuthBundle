@@ -24,7 +24,7 @@ class DeviantartResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "usericonurl": "http://a.deviantart.net/avatars/k/o/kouiskas.png?15"
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'username',
         'nickname' => 'username',
         'profilepicture' => 'usericonurl',

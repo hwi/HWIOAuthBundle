@@ -27,42 +27,27 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  * owner names and the properties of the entities.
  *
  * @author Alexander <iam.asm89@gmail.com>
- *
- * @final since 1.4
  */
-class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
+final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
 {
-    /**
-     * @var ObjectManager
-     */
-    protected $em;
-
-    /**
-     * @var string
-     */
-    protected $class;
-
-    /**
-     * @var ObjectRepository
-     */
-    protected $repository;
+    private ObjectManager $em;
+    private string $class;
+    private ?ObjectRepository $repository = null;
 
     /**
      * @var array<string, string>
      */
-    protected $properties = [
+    private $properties = [
         'identifier' => 'id',
     ];
 
     /**
-     * Constructor.
-     *
      * @param ManagerRegistry $registry    manager registry
      * @param string          $class       user entity class to load
      * @param array           $properties  Mapping of resource owners to properties
-     * @param string          $managerName Optional name of the entity manager to use
+     * @param string|null     $managerName Optional name of the entity manager to use
      */
-    public function __construct(ManagerRegistry $registry, $class, array $properties, $managerName = null)
+    public function __construct(ManagerRegistry $registry, string $class, array $properties, ?string $managerName = null)
     {
         $this->em = $registry->getManager($managerName);
         $this->class = $class;
@@ -159,7 +144,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     /**
      * @return UserInterface|null
      */
-    protected function findUser(array $criteria)
+    private function findUser(array $criteria)
     {
         if (null === $this->repository) {
             $this->repository = $this->em->getRepository($this->class);

@@ -48,7 +48,7 @@ class SpotifyResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
   "uri": "spotify:user:wizzler"
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'id',
         'realname' => 'display_name',

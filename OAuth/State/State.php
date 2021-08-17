@@ -24,7 +24,7 @@ final class State implements StateInterface
     /**
      * @var array<string, string>
      */
-    private $values = [];
+    private array $values = [];
 
     /**
      * @param string|array<string,string>|null $parameters The state parameter as a string or assoc array

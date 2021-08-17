@@ -17,15 +17,12 @@ use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-/**
- * @final since 1.4
- */
-class SinaWeiboResourceOwner extends GenericOAuth2ResourceOwner
+final class SinaWeiboResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'screen_name',
         'realname' => 'screen_name',

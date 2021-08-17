@@ -26,7 +26,7 @@ class PaypalResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "name": "Example Default"
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'user_id',
         'nickname' => 'email',
         'realname' => 'name',

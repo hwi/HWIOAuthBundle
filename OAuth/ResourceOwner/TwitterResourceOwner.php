@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * TwitterResourceOwner.
- *
  * @author Alexander <iam.asm89@gmail.com>
- *
- * @final since 1.4
  */
-class TwitterResourceOwner extends GenericOAuth1ResourceOwner
+final class TwitterResourceOwner extends GenericOAuth1ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id_str',
         'nickname' => 'screen_name',
         'realname' => 'name',

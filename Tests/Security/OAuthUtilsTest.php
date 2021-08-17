@@ -16,6 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -23,7 +24,7 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 class OAuthUtilsTest extends TestCase
 {
-    private $grantRule = 'IS_AUTHENTICATED_REMEMBERED';
+    private string $grantRule = 'IS_AUTHENTICATED_REMEMBERED';
 
     public function testGetAuthorizationUrlWithRedirectUrl()
     {
@@ -141,12 +142,17 @@ class OAuthUtilsTest extends TestCase
             ->method('getName')
             ->willReturn('instagram');
 
-        $mapMock = $this->createMock(ResourceOwnerMap::class);
-        $mapMock
-            ->expects($this->any())
-            ->method('getResourceOwnerByName')
+        $serviceLocator = $this->createMock(ServiceLocator::class);
+        $serviceLocator->method('get')
             ->with('instagram')
             ->willReturn($resource);
+
+        $mapMock = new ResourceOwnerMap(
+            $this->createMock(HttpUtils::class),
+            ['instagram' => '/fake'],
+            ['instagram' => '/fake'],
+            $serviceLocator
+        );
 
         $authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $utils = new OAuthUtils($this->getHttpUtils($url), $authorizationChecker, true, $this->grantRule);
@@ -204,12 +210,18 @@ class OAuthUtilsTest extends TestCase
 
         $authChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $resourceOwner = $this->createMock(ResourceOwnerInterface::class);
-        $mapMock = $this->createMock(ResourceOwnerMap::class);
-        $mapMock
-            ->expects($this->any())
-            ->method('getResourceOwnerByName')
+
+        $serviceLocator = $this->createMock(ServiceLocator::class);
+        $serviceLocator->method('get')
             ->with('instagram')
             ->willReturn($resourceOwner);
+
+        $mapMock = new ResourceOwnerMap(
+            $this->createMock(HttpUtils::class),
+            ['instagram' => '/fake'],
+            ['instagram' => '/fake'],
+            $serviceLocator
+        );
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $authChecker, true, $this->grantRule);
         $utils->addResourceOwnerMap($mapMock);
@@ -272,21 +284,24 @@ class OAuthUtilsTest extends TestCase
             ->with('auth_with_one_url')
             ->willReturn($hasOneRedirectUrl);
 
-        $mapMock = $this->createMock(ResourceOwnerMap::class);
-
-        $mapMock
-            ->expects($this->once())
-            ->method('getResourceOwnerByName')
+        $serviceLocator = $this->createMock(ServiceLocator::class);
+        $serviceLocator->method('get')
             ->with('instagram')
             ->willReturn($resource);
 
+        $utils = $this->createMock(HttpUtils::class);
+
         if (!$hasUser && !$hasOneRedirectUrl) {
-            $mapMock
-                ->expects($this->once())
-                ->method('getResourceOwnerCheckPath')
-                ->with('instagram')
+            $utils->method('checkRequestPath')
                 ->willReturn('/login/check-instagram');
         }
+
+        $mapMock = new ResourceOwnerMap(
+            $utils,
+            ['instagram' => '/fake'],
+            ['instagram' => !$hasUser && !$hasOneRedirectUrl ? '/login/check-instagram' : '/fake'],
+            $serviceLocator
+        );
 
         if ($hasUser) {
             $resource

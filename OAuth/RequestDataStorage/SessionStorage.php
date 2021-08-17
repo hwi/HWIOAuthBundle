@@ -22,15 +22,10 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
  * @author Alexander <iam.asm89@gmail.com>
  * @author Francisco Facioni <fran6co@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
- *
- * @final since 1.4
  */
-class SessionStorage implements RequestDataStorageInterface
+final class SessionStorage implements RequestDataStorageInterface
 {
-    /**
-     * @var RequestStack
-     */
-    private $requestStack;
+    private RequestStack $requestStack;
 
     public function __construct(RequestStack $requestStack)
     {
@@ -81,7 +76,7 @@ class SessionStorage implements RequestDataStorageInterface
      *
      * @return string
      */
-    protected function generateKey(ResourceOwnerInterface $resourceOwner, $key, $type)
+    private function generateKey(ResourceOwnerInterface $resourceOwner, $key, $type)
     {
         return sprintf('_hwi_oauth.%s.%s.%s.%s', $resourceOwner->getName(), $resourceOwner->getOption('client_id'), $type, $key);
     }

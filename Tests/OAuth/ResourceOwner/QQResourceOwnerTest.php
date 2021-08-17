@@ -30,7 +30,7 @@ class QQResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "figureurl_qq_1": "http://q.qlogo.cn/qqapp/100312990/DE1931D5330620DBD07FB4A5422917B6/40"
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'openid',
         'nickname' => 'nickname',
         'realname' => 'nickname',

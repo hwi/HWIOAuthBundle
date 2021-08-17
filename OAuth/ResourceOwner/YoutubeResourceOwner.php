@@ -14,18 +14,14 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * YoutubeResourceOwner.
- *
  * @author Gennady Telegin <gtelegin@gmail.com>
- *
- * @final since 1.4
  */
-class YoutubeResourceOwner extends GenericOAuth2ResourceOwner
+final class YoutubeResourceOwner extends GenericOAuth2ResourceOwner
 {
     /**
      * {@inheritdoc}
      */
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'items.0.id',
         'nickname' => 'items.0.snippet.title',
         'realname' => 'items.0.snippet.title',

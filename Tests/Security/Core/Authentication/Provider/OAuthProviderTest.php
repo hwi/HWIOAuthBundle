@@ -21,21 +21,22 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class OAuthProviderTest extends TestCase
 {
     public function testSupportsOAuthToken()
     {
-        $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
-        $resourceOwnerMapMock->expects($this->once())
-            ->method('hasResourceOwnerByName')
-            ->with($this->equalTo('owner'))
-            ->willReturn(true);
-
-        $oauthProvider = new OAuthProvider($this->getOAuthAwareUserProviderMock(), $resourceOwnerMapMock, $this->getUserCheckerMock(), $this->getTokenStorageMock());
+        $oauthProvider = new OAuthProvider(
+            $this->getOAuthAwareUserProviderMock(),
+            $this->getResourceOwnerMap(['owner' => '/fake']),
+            $this->getUserCheckerMock(),
+            $this->getTokenStorageMock()
+        );
 
         $token = new OAuthToken('');
         $token->setResourceOwnerName('owner');
@@ -61,15 +62,15 @@ class OAuthProviderTest extends TestCase
             ->with($expectedToken)
             ->willReturn($this->getUserResponseMock());
 
-        $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
-        $resourceOwnerMapMock->expects($this->once())
-            ->method('getResourceOwnerByName')
-            ->with($this->equalTo('github'))
+        $serviceLocator = $this->createMock(ServiceLocator::class);
+        $serviceLocator->method('get')
+            ->with('github')
             ->willReturn($resourceOwnerMock);
-        $resourceOwnerMapMock->expects($this->once())
-            ->method('hasResourceOwnerByName')
-            ->with($this->equalTo('github'))
-            ->willReturn(true);
+
+        $resourceOwnerMapMock = $this->getResourceOwnerMap(
+            ['github' => '/fake'],
+            $serviceLocator
+        );
 
         $userMock = $this->getUserMock();
         $userMock->expects($this->once())
@@ -126,15 +127,15 @@ class OAuthProviderTest extends TestCase
             ->with($expectedToken)
             ->willReturn($this->getUserResponseMock());
 
-        $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
-        $resourceOwnerMapMock->expects($this->once())
-            ->method('getResourceOwnerByName')
-            ->with($this->equalTo('github'))
+        $serviceLocator = $this->createMock(ServiceLocator::class);
+        $serviceLocator->method('get')
+            ->with('github')
             ->willReturn($resourceOwnerMock);
-        $resourceOwnerMapMock->expects($this->once())
-            ->method('hasResourceOwnerByName')
-            ->with($this->equalTo('github'))
-            ->willReturn(true);
+
+        $resourceOwnerMapMock = $this->getResourceOwnerMap(
+            ['github' => '/fake'],
+            $serviceLocator
+        );
 
         $userProviderMock = $this->getOAuthAwareUserProviderMock();
         $userProviderMock->expects($this->once())
@@ -192,15 +193,15 @@ class OAuthProviderTest extends TestCase
             ->with($refreshedToken)
             ->willReturn($this->getUserResponseMock());
 
-        $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
-        $resourceOwnerMapMock->expects($this->once())
-            ->method('getResourceOwnerByName')
-            ->with($this->equalTo('github'))
+        $serviceLocator = $this->createMock(ServiceLocator::class);
+        $serviceLocator->method('get')
+            ->with('github')
             ->willReturn($resourceOwnerMock);
-        $resourceOwnerMapMock->expects($this->once())
-            ->method('hasResourceOwnerByName')
-            ->with($this->equalTo('github'))
-            ->willReturn(true);
+
+        $resourceOwnerMapMock = $this->getResourceOwnerMap(
+            ['github' => '/fake'],
+            $serviceLocator
+        );
 
         $userMock = $this->getUserMock();
         $userMock->expects($this->exactly(2))
@@ -258,9 +259,16 @@ class OAuthProviderTest extends TestCase
         return $this->createMock(OAuthAwareUserProviderInterface::class);
     }
 
-    protected function getResourceOwnerMapMock()
-    {
-        return $this->createMock(ResourceOwnerMap::class);
+    protected function getResourceOwnerMap(
+        array $resources = [],
+        $serviceLocator = null
+    ) {
+        return new ResourceOwnerMap(
+            $this->createMock(HttpUtils::class),
+            $resources,
+            $resources,
+            $serviceLocator ?: $this->createMock(ServiceLocator::class)
+        );
     }
 
     protected function getOAuthTokenMock()

@@ -12,6 +12,8 @@
 namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -20,54 +22,29 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Http\HttpUtils;
 
 class RedirectToServiceControllerTest extends TestCase
 {
-    /**
-     * @var MockObject&OAuthUtils
-     */
-    private $oAuthUtils;
-
-    /**
-     * @var MockObject&DomainWhitelist
-     */
-    private $domainsWhiteList;
-
     /**
      * @var MockObject&SessionInterface
      */
     private $session;
 
-    /**
-     * @var Request
-     */
-    private $request;
+    private Request $request;
 
-    /**
-     * @var array
-     */
-    private $firewallNames = ['default'];
+    private array $firewallNames = ['default'];
 
-    /**
-     * @var string
-     */
-    private $targetPathParameter = 'target_path';
+    private string $targetPathParameter = 'target_path';
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->oAuthUtils = $this->createMock(OAuthUtils::class);
-        $this->domainsWhiteList = $this->createMock(DomainWhitelist::class);
-
         $this->session = $this->createMock(SessionInterface::class);
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
-
-        $this->oAuthUtils->expects($this->any())
-            ->method('getAuthorizationUrl')
-            ->willReturn('http://domain.com/oauth/v2/auth')
-        ;
     }
 
     public function test()
@@ -76,26 +53,19 @@ class RedirectToServiceControllerTest extends TestCase
 
         $response = $controller->redirectToServiceAction($this->request, 'facebook');
 
-        $this->assertEquals('http://domain.com/oauth/v2/auth', $response->getTargetUrl());
+        $this->assertEquals('https://domain.com/oauth/v2/auth', $response->getTargetUrl());
     }
 
     public function testTargetPathParameter()
     {
-        $this->request->attributes->set($this->targetPathParameter, '/target/path');
+        $this->request->attributes->set($this->targetPathParameter, 'https://domain.com/target/path');
 
         $this->session->expects($this->once())
             ->method('set')
-            ->with('_security.default.target_path', '/target/path')
+            ->with('_security.default.target_path', 'https://domain.com/target/path')
         ;
 
         $controller = $this->createController();
-
-        $this->domainsWhiteList->expects($this->once())
-            ->method('isValidTargetUrl')
-            ->with('/target/path')
-            ->willReturn(true)
-        ;
-
         $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
@@ -109,7 +79,6 @@ class RedirectToServiceControllerTest extends TestCase
         ;
 
         $controller = $this->createController(false, true);
-
         $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
@@ -123,7 +92,6 @@ class RedirectToServiceControllerTest extends TestCase
         ;
 
         $controller = $this->createController(true, false);
-
         $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
@@ -131,22 +99,15 @@ class RedirectToServiceControllerTest extends TestCase
     {
         $this->expectException(NotFoundHttpException::class);
 
-        $this->oAuthUtils->expects($this->once())
-            ->method('getAuthorizationUrl')
-            ->with(
-                $this->isInstanceOf(Request::class),
-                'unknown'
-            )
-            ->will($this->throwException(new \RuntimeException()))
-        ;
-
         $controller = $this->createController();
-
         $controller->redirectToServiceAction($this->request, 'unknown');
     }
 
     public function testThrowAccessDeniedExceptionForNonWhitelistedTargetPath()
     {
+        $this->expectException(AccessDeniedHttpException::class);
+        $this->expectExceptionMessage('Not allowed to redirect to /malicious/target/path');
+
         $this->request->attributes->set($this->targetPathParameter, '/malicious/target/path');
 
         $this->session->expects($this->never())
@@ -155,21 +116,38 @@ class RedirectToServiceControllerTest extends TestCase
         ;
 
         $controller = $this->createController();
-
-        $this->domainsWhiteList->expects($this->once())
-            ->method('isValidTargetUrl')
-            ->with('/malicious/target/path')
-            ->willReturn(false)
-        ;
-
-        $this->expectException(AccessDeniedHttpException::class);
-        $this->expectExceptionMessage('Not allowed to redirect to /malicious/target/path');
-
         $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
     private function createController(bool $failedUseReferer = false, bool $useReferer = false): RedirectToServiceController
     {
-        return new RedirectToServiceController($this->oAuthUtils, $this->domainsWhiteList, $this->firewallNames, $this->targetPathParameter, $failedUseReferer, $useReferer);
+        $resourceOwner = $this->createMock(ResourceOwnerInterface::class);
+        $resourceOwner->method('getAuthorizationUrl')
+            ->willReturn('https://domain.com/oauth/v2/auth');
+
+        $ownerMap = $this->createMock(ResourceOwnerMapInterface::class);
+        $ownerMap->method('getResourceOwnerByName')
+            ->with('facebook')
+            ->willReturn($resourceOwner);
+        $ownerMap->method('getResourceOwnerCheckPath')
+            ->withAnyParameters()
+            ->willReturn('https://domain.com/oauth/v2/auth');
+
+        $utils = new OAuthUtils(
+            $this->createMock(HttpUtils::class),
+            $this->createMock(AuthorizationCheckerInterface::class),
+            true,
+            'IS_AUTHENTICATED_REMEMBERED'
+        );
+        $utils->addResourceOwnerMap($ownerMap);
+
+        return new RedirectToServiceController(
+            $utils,
+            new DomainWhitelist(['domain.com']),
+            $this->firewallNames,
+            $this->targetPathParameter,
+            $failedUseReferer,
+            $useReferer
+        );
     }
 }

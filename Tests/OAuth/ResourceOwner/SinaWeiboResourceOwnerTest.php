@@ -26,7 +26,7 @@ class SinaWeiboResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
     "profile_image_url": "http://tp1.sinaimg.cn/1404376560/50/0/1"
 }
 json;
-    protected $paths = [
+    protected array $paths = [
         'identifier' => 'id',
         'nickname' => 'screen_name',
         'realname' => 'screen_name',
