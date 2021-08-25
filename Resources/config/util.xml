@@ -9,6 +9,8 @@
             <argument>%hwi_oauth.target_path_domains_whitelist%</argument>
         </service>
 
-        <service id="hwi_oauth.http_client" class="Symfony\Contracts\HttpClient\HttpClientInterface" />
+        <service id="hwi_oauth.http_client" class="Symfony\Contracts\HttpClient\HttpClientInterface">
+            <factory class="Symfony\Component\HttpClient\HttpClient" method="create" />
+        </service>
     </services>
 </container>
