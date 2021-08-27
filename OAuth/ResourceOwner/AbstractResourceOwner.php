@@ -270,6 +270,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         $options = ['headers' => $headers];
         $options['headers'] += ['User-Agent' => 'HWIOAuthBundle (https://github.com/hwi/HWIOAuthBundle)'];
         if (\is_string($content)) {
+            $options['body'] = $content;
             if (!isset($options['headers']['Content-Length'])) {
                 $options['headers'] += ['Content-Length' => (string) \strlen($content)];
             }
