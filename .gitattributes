@@ -5,4 +5,3 @@
 /phpstan.neon export-ignore
 /phpunit.xml.dist export-ignore
 /Resources/doc export-ignore
-/Tests export-ignore
