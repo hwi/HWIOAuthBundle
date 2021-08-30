@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\KeycloakResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-class KeycloakResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class KeycloakResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $options = [
       'base_url' => 'http://keycloak.example.com/auth',

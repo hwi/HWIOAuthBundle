@@ -12,11 +12,12 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DeezerResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
 /**
  * @author Kieu Anh Tuan <passkey1510@gmail.com>
  */
-class DeezerResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class DeezerResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = DeezerResourceOwner::class;
     protected $userResponse = <<<json

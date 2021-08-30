@@ -13,8 +13,9 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SensioConnectResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\SensioConnectUserResponse;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = SensioConnectResourceOwner::class;
 

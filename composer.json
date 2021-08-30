@@ -145,12 +145,14 @@
             "HWI\\Bundle\\OAuthBundle\\": ""
         },
         "exclude-from-classmap": [
+            "/Test/",
             "/Tests/"
         ]
     },
 
     "autoload-dev": {
         "psr-4": {
+            "HWI\\Bundle\\OAuthBundle\\Test\\": "Test/",
             "HWI\\Bundle\\OAuthBundle\\Tests\\": "Tests/"
         }
     },

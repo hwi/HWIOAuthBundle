@@ -12,13 +12,14 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StravaResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
 /**
  * StravaResourceOwnerTest.
  *
  * @author Artem Genvald <genvaldartem@gmail.com>
  */
-class StravaResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class StravaResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = StravaResourceOwner::class;
     /**
