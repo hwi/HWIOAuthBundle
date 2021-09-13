@@ -12,8 +12,8 @@
 namespace HWI\Bundle\OAuthBundle\Templating\Helper;
 
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Templating\Helper\Helper;
 
 /**
