@@ -65,7 +65,7 @@ final class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             $response->setData($content);
 
             return $response;
-        } catch (TransportExceptionInterface | JsonException $e) {
+        } catch (TransportExceptionInterface|JsonException $e) {
             throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
         }
     }

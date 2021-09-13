@@ -60,7 +60,7 @@ final class MailRuResourceOwner extends GenericOAuth2ResourceOwner
             $response->setOAuthToken(new OAuthToken($accessToken));
 
             return $response;
-        } catch (TransportExceptionInterface | JsonException $e) {
+        } catch (TransportExceptionInterface|JsonException $e) {
             throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
         }
     }
