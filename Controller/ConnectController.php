@@ -202,7 +202,7 @@ final class ConnectController extends AbstractController
             $session->start();
         }
 
-        $key = $request->query->get('key', time());
+        $key = $request->query->get('key', (string) time());
 
         $accessToken = null;
         if ($resourceOwner->handles($request)) {
