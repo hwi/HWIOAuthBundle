@@ -4,8 +4,6 @@ framework:
     router:
         utf8: true
         resource: "%kernel.project_dir%/../App/routing.yml"
-    session:
-        storage_id: session.storage.mock_file
     translator: ~
     form:
         enabled: true

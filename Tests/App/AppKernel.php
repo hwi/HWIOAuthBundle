@@ -48,6 +48,21 @@ class AppKernel extends Kernel
     {
         parent::prepareContainer($container);
 
+        // With Symfony 5.3+, session settings were changed
+        if (Kernel::VERSION_ID >= 50300) {
+            $container->loadFromExtension('framework', [
+                'session' => [
+                    'storage_factory_id' => 'session.storage.factory.mock_file',
+                ],
+            ]);
+        } else {
+            $container->loadFromExtension('framework', [
+                'session' => [
+                    'storage_id' => 'session.storage.mock_file',
+                ],
+            ]);
+        }
+
         if (method_exists(Security::class, 'getUser') && !class_exists(UserValueResolver::class)) {
             $container->loadFromExtension('security', [
                 'firewalls' => [
