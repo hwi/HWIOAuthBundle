@@ -86,7 +86,8 @@ class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'infos_url' => 'https://api.vk.com/method/users.get',
             'use_authorization_to_get_token' => false,
 
-            'api_version' => '5.73',
+            // Based on: https://vk.com/dev/constant_version_updates
+            'api_version' => '5.131',
 
             'scope' => 'email',
 
