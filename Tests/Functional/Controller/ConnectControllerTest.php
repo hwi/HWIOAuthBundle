@@ -18,17 +18,16 @@ use Doctrine\ORM\Tools\SchemaTool;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Tests\App\AppKernel;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
+use HWI\Bundle\OAuthBundle\Tests\Functional\AuthenticationHelperTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
-use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class ConnectControllerTest extends WebTestCase
 {
+    use AuthenticationHelperTrait;
+
     protected function setUp(): void
     {
         static::$class = AppKernel::class;
@@ -61,10 +60,10 @@ final class ConnectControllerTest extends WebTestCase
         $exception->setResourceOwnerName('google');
         $exception->setToken(new CustomOAuthToken());
 
-        $session = $this->getSession();
+        $session = $this->getSession($client);
         $session->set('_hwi_oauth.registration_error.'.$key, $exception);
 
-        $this->createDatabase();
+        $this->createDatabase($client);
 
         $crawler = $client->request('GET', '/connect/registration/'.$key);
 
@@ -104,15 +103,15 @@ final class ConnectControllerTest extends WebTestCase
         $client->disableReboot();
         $client->getContainer()->set('hwi_oauth.http_client', $httpClient);
 
-        $this->createDatabase();
+        $this->createDatabase($client);
 
-        $session = $this->getSession();
-        $key = 1;
-        $session->set('_hwi_oauth.connect_confirmation.'.$key, ['access_token' => 'valid-access-token']);
+        $session = $this->getSession($client);
+        $session->set('_hwi_oauth.connect_confirmation.1', ['access_token' => 'valid-access-token']);
+
         $this->logIn($client, $session);
 
         $crawler = $client->request('GET', '/connect/service/google', [
-            'key' => $key,
+            'key' => '1',
         ]);
 
         $response = $client->getResponse();
@@ -129,41 +128,13 @@ final class ConnectControllerTest extends WebTestCase
         $this->assertSame('Successfully connected the account "foo"!', $crawler->filter('h3')->text(), $response->getContent());
     }
 
-    private function logIn(KernelBrowser $client, SessionInterface $session): void
-    {
-        $firewallContext = 'hwi_context';
-        $token = new CustomOAuthToken();
-        $session->set('_security_'.$firewallContext, serialize($token));
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $client->getCookieJar()->set($cookie);
-    }
-
-    private function createDatabase(): void
+    private function createDatabase(KernelBrowser $client): void
     {
         /** @var EntityManagerInterface $entityManager */
-        $entityManager = self::$container->get('doctrine.orm.entity_manager');
+        $entityManager = $client->getContainer()->get('doctrine.orm.entity_manager');
 
         $metadata = $entityManager->getMetadataFactory()->getAllMetadata();
         $schemaTool = new SchemaTool($entityManager);
         $schemaTool->updateSchema($metadata);
-    }
-
-    private function getSession(): SessionInterface
-    {
-        /** @var RequestStack $requestStack */
-        $requestStack = self::$container->get('request_stack');
-
-        $session = null;
-        if (method_exists($requestStack, 'getSession')) {
-            try {
-                $session = $requestStack->getSession();
-            } catch (SessionNotFoundException $e) {
-                // Ignore & fallback to service
-            }
-        } elseif ((null !== $request = $requestStack->getCurrentRequest()) && $request->hasSession()) {
-            $session = $request->getSession();
-        }
-
-        return $session ?: self::$container->get('session');
     }
 }

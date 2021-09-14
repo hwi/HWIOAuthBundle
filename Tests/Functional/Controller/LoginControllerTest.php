@@ -14,19 +14,18 @@ declare(strict_types=1);
 namespace HWI\Bundle\OAuthBundle\Tests\Functional\Controller;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
+use HWI\Bundle\OAuthBundle\Tests\Functional\AuthenticationHelperTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class LoginControllerTest extends WebTestCase
 {
+    use AuthenticationHelperTrait;
+
     public function testLoginPage(): void
     {
         $client = static::createClient();
@@ -44,7 +43,7 @@ final class LoginControllerTest extends WebTestCase
     {
         $client = static::createClient();
 
-        $session = $this->getSession();
+        $session = $this->getSession($client);
         $session->set(Security::AUTHENTICATION_ERROR, new AccountNotLinkedException());
 
         $client->request('GET', '/login_hwi/');
@@ -62,10 +61,12 @@ final class LoginControllerTest extends WebTestCase
         $client = static::createClient();
         $client->getContainer()->set('hwi_oauth.http_client', $httpClient);
 
-        $session = $client->getContainer()->get('session');
+        $session = $this->getSession($client);
 
         $this->logIn($client, $session);
-        $exception = new UsernameNotFoundException();
+
+        $exception = $this->createUserNotFoundException();
+
         $session->set(Security::AUTHENTICATION_ERROR, $exception);
 
         $crawler = $client->request('GET', '/login_hwi/');
@@ -76,33 +77,12 @@ final class LoginControllerTest extends WebTestCase
         $this->assertSame($exception->getMessageKey(), $crawler->filter('span')->text(), $response->getContent());
     }
 
-    private function logIn($client, SessionInterface $session): void
+    private function createUserNotFoundException()
     {
-        $firewallContext = 'hwi_context';
-
-        $token = new CustomOAuthToken();
-        $session->set('_security_'.$firewallContext, serialize($token));
-
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $client->getCookieJar()->set($cookie);
-    }
-
-    private function getSession(): SessionInterface
-    {
-        /** @var RequestStack $requestStack */
-        $requestStack = self::$container->get('request_stack');
-
-        $session = null;
-        if (method_exists($requestStack, 'getSession')) {
-            try {
-                $session = $requestStack->getSession();
-            } catch (SessionNotFoundException $e) {
-                // Ignore & fallback to service
-            }
-        } elseif ((null !== $request = $requestStack->getCurrentRequest()) && $request->hasSession()) {
-            $session = $request->getSession();
+        if (class_exists(UserNotFoundException::class)) {
+            return new UserNotFoundException();
         }
 
-        return $session ?: self::$container->get('session');
+        return new UsernameNotFoundException();
     }
 }
