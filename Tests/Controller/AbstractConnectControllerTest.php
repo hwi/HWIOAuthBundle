@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\Controller\ConnectController;
+use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
@@ -99,6 +100,11 @@ abstract class AbstractConnectControllerTest extends TestCase
      */
     protected $session;
 
+    /**
+     * @var RegistrationFormHandlerInterface&MockObject
+     */
+    protected $registrationFormHandler;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -117,6 +123,12 @@ abstract class AbstractConnectControllerTest extends TestCase
 
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
         $this->container->set('security.authorization_checker', $this->authorizationChecker);
+
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->accountConnector = $this->createMock(AccountConnectorInterface::class);
+        $this->userChecker = $this->createMock(UserCheckerInterface::class);
+
+        $this->registrationFormHandler = $this->createMock(RegistrationFormHandlerInterface::class);
 
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
         $this->container->set('security.token_storage', $this->tokenStorage);
@@ -143,9 +155,6 @@ abstract class AbstractConnectControllerTest extends TestCase
             ->willReturn($this->resourceOwner);
         $this->container->set('hwi_oauth.resource_ownermap.default', $this->resourceOwnerMap);
 
-        $this->accountConnector = $this->createMock(AccountConnectorInterface::class);
-        $this->container->set('hwi_oauth.account.connector', $this->accountConnector);
-
         $this->oAuthUtils = new OAuthUtils(
             $this->createMock(HttpUtils::class),
             $this->createMock(AuthorizationCheckerInterface::class),
@@ -155,12 +164,6 @@ abstract class AbstractConnectControllerTest extends TestCase
 
         $this->resourceOwnerMapLocator = new ResourceOwnerMapLocator();
         $this->resourceOwnerMapLocator->add('default', $this->resourceOwnerMap);
-
-        $this->userChecker = $this->createMock(UserCheckerInterface::class);
-        $this->container->set('hwi_oauth.user_checker', $this->userChecker);
-
-        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
-        $this->container->set('event_dispatcher', $this->eventDispatcher);
 
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
         $this->container->set('form.factory', $this->formFactory);
@@ -197,6 +200,11 @@ abstract class AbstractConnectControllerTest extends TestCase
             $this->oAuthUtils,
             $this->resourceOwnerMapLocator,
             $this->createMock(RequestStack::class),
+            $this->eventDispatcher,
+            $this->tokenStorage,
+            $this->accountConnector,
+            $this->userChecker,
+            $this->registrationFormHandler,
             $connectEnabled,
             'IS_AUTHENTICATED_REMEMBERED',
             true,

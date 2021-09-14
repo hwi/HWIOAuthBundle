@@ -6,9 +6,14 @@
 
     <services>
         <service id="HWI\Bundle\OAuthBundle\Controller\ConnectController" public="true">
-            <argument type="service" id="hwi_oauth.security.oauth_utils" />
-            <argument type="service" id="hwi_oauth.resource_ownermap_locator" />
-            <argument type="service" id="request_stack" />
+            <argument key="$oauthUtils" type="service" id="hwi_oauth.security.oauth_utils" />
+            <argument key="$resourceOwnerMapLocator" type="service" id="hwi_oauth.resource_ownermap_locator" />
+            <argument key="$requestStack" type="service" id="request_stack" />
+            <argument key="$dispatcher" type="service" id="event_dispatcher" />
+            <argument key="$tokenStorage" type="service" id="security.token_storage" />
+            <argument key="$accountConnector" type="service" id="hwi_oauth.account.connector" />
+            <argument key="$formHandler" type="service" id="hwi_oauth.registration.form.handler" />
+            <argument key="$userChecker" type="service" id="hwi_oauth.user_checker" />
             <argument key="$enableConnect">%hwi_oauth.connect%</argument>
             <argument key="$grantRule">%hwi_oauth.grant_rule%</argument>
             <argument key="$failedUseReferer">%hwi_oauth.failed_use_referer%</argument>

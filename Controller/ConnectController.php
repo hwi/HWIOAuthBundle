@@ -38,6 +38,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Contracts\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
@@ -49,6 +50,11 @@ final class ConnectController extends AbstractController
     private OAuthUtils $oauthUtils;
     private ResourceOwnerMapLocator $resourceOwnerMapLocator;
     private RequestStack $requestStack;
+    private EventDispatcherInterface $dispatcher;
+    private TokenStorageInterface $tokenStorage;
+    private AccountConnectorInterface $accountConnector;
+    private UserCheckerInterface $userChecker;
+    private RegistrationFormHandlerInterface $formHandler;
     private bool $enableConnect;
     private string $grantRule;
     private bool $failedUseReferer;
@@ -64,6 +70,11 @@ final class ConnectController extends AbstractController
         OAuthUtils $oauthUtils,
         ResourceOwnerMapLocator $resourceOwnerMapLocator,
         RequestStack $requestStack,
+        EventDispatcherInterface $dispatcher,
+        TokenStorageInterface $tokenStorage,
+        AccountConnectorInterface $accountConnector,
+        UserCheckerInterface $userChecker,
+        RegistrationFormHandlerInterface $formHandler,
         bool $enableConnect,
         string $grantRule,
         bool $failedUseReferer,
@@ -82,6 +93,11 @@ final class ConnectController extends AbstractController
         $this->enableConnectConfirmation = $enableConnectConfirmation;
         $this->firewallNames = $firewallNames;
         $this->registrationForm = $registrationForm;
+        $this->dispatcher = $dispatcher;
+        $this->accountConnector = $accountConnector;
+        $this->tokenStorage = $tokenStorage;
+        $this->userChecker = $userChecker;
+        $this->formHandler = $formHandler;
     }
 
     /**
@@ -126,15 +142,11 @@ final class ConnectController extends AbstractController
 
         $form = $this->createForm($this->registrationForm);
 
-        /** @var RegistrationFormHandlerInterface $formHandler */
-        $formHandler = $this->get('hwi_oauth.registration.form.handler');
-        if ($formHandler->process($request, $form, $userInformation)) {
+        if ($this->formHandler->process($request, $form, $userInformation)) {
             $event = new FormEvent($form, $request);
             $this->dispatch($event, HWIOAuthEvents::REGISTRATION_SUCCESS);
 
-            /** @var AccountConnectorInterface $connector */
-            $connector = $this->get('hwi_oauth.account.connector');
-            $connector->connect($form->getData(), $userInformation);
+            $this->accountConnector->connect($form->getData(), $userInformation);
 
             // Authenticate the user
             $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getAccessToken());
@@ -285,10 +297,8 @@ final class ConnectController extends AbstractController
     private function authenticateUser(Request $request, UserInterface $user, string $resourceOwnerName, $accessToken, bool $fakeLogin = true): void
     {
         try {
-            /** @var UserCheckerInterface $userChecker */
-            $userChecker = $this->get('hwi_oauth.user_checker');
-            $userChecker->checkPreAuth($user);
-            $userChecker->checkPostAuth($user);
+            $this->userChecker->checkPreAuth($user);
+            $this->userChecker->checkPostAuth($user);
         } catch (AccountStatusException $e) {
             // Don't authenticate locked, disabled or expired users
             return;
@@ -299,9 +309,7 @@ final class ConnectController extends AbstractController
         $token->setUser($user);
         $token->setAuthenticated(true);
 
-        /** @var TokenStorageInterface $tokenStorage */
-        $tokenStorage = $this->get('security.token_storage');
-        $tokenStorage->setToken($token);
+        $this->tokenStorage->setToken($token);
 
         if ($fakeLogin) {
             // Since we're "faking" normal login, we need to throw our INTERACTIVE_LOGIN event manually
@@ -335,11 +343,8 @@ final class ConnectController extends AbstractController
      */
     private function getConfirmationResponse(Request $request, array $accessToken, string $service): Response
     {
-        /** @var TokenStorageInterface $tokenStorage */
-        $tokenStorage = $this->get('security.token_storage');
-
         /** @var OAuthToken $currentToken */
-        $currentToken = $tokenStorage->getToken();
+        $currentToken = $this->tokenStorage->getToken();
         /** @var UserInterface $currentUser */
         $currentUser = $currentToken->getUser();
 
@@ -349,9 +354,7 @@ final class ConnectController extends AbstractController
         $event = new GetResponseUserEvent($currentUser, $request);
         $this->dispatch($event, HWIOAuthEvents::CONNECT_CONFIRMED);
 
-        /** @var AccountConnectorInterface $connector */
-        $connector = $this->get('hwi_oauth.account.connector');
-        $connector->connect($currentUser, $userInformation);
+        $this->accountConnector->connect($currentUser, $userInformation);
 
         if ($currentToken instanceof OAuthToken) {
             // Update user token with new details
@@ -385,7 +388,7 @@ final class ConnectController extends AbstractController
      */
     private function dispatch($event, string $eventName = null): void
     {
-        $this->get('event_dispatcher')->dispatch($event, $eventName);
+        $this->dispatcher->dispatch($event, $eventName);
     }
 
     private function getSession(): ?SessionInterface

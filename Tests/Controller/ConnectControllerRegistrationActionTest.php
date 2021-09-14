@@ -14,7 +14,6 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 use HWI\Bundle\OAuthBundle\Event\FilterUserResponseEvent;
 use HWI\Bundle\OAuthBundle\Event\FormEvent;
 use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
-use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use Symfony\Component\Form\Form;
@@ -88,13 +87,11 @@ final class ConnectControllerRegistrationActionTest extends AbstractConnectContr
 
         $this->makeRegistrationForm();
 
-        $registrationFormHandler = $this->createMock(RegistrationFormHandlerInterface::class);
-        $registrationFormHandler->expects($this->once())
+        $this->registrationFormHandler->expects($this->once())
             ->method('process')
             ->withAnyParameters()
             ->willReturn(false)
         ;
-        $this->container->set('hwi_oauth.registration.form.handler', $registrationFormHandler);
 
         $this->eventDispatcher->expects($this->once())
             ->method('dispatch')
@@ -123,13 +120,11 @@ final class ConnectControllerRegistrationActionTest extends AbstractConnectContr
 
         $this->makeRegistrationForm();
 
-        $registrationFormHandler = $this->createMock(RegistrationFormHandlerInterface::class);
-        $registrationFormHandler->expects($this->once())
+        $this->registrationFormHandler->expects($this->once())
             ->method('process')
             ->withAnyParameters()
             ->willReturn(true)
         ;
-        $this->container->set('hwi_oauth.registration.form.handler', $registrationFormHandler);
 
         $this->accountConnector->expects($this->once())
             ->method('connect')
