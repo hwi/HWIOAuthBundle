@@ -1,5 +1,8 @@
 Changelog
 =========
+## 1.4.3 (2021-xx-xx)
+* Bugfix: Fixed `VkontakteResourceOwner` option: `api_version` to not point to deprecated one,
+
 ## 1.4.2 (2021-08-09)
 * Bugfix: remove `@final` declaration from `OAuthFactory` & `FOSUBUserProvider`,
 * Maintain: added `.gitattributes` to reduce amount of code in archives,
