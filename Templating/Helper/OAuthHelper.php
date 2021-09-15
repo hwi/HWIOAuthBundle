@@ -87,7 +87,7 @@ class OAuthHelper extends Helper
      */
     private function getMainRequest()
     {
-        if (\is_callable([$this->requestStack, 'getMainRequest'])) {
+        if (method_exists($this->requestStack, 'getMainRequest')) {
             return $this->requestStack->getMainRequest(); // Symfony 5.3+
         }
 
