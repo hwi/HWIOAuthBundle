@@ -1,5 +1,8 @@
 Changelog
 =========
+## 1.4.3
+* Fix: getMasterRequest is deprecated since Symfony 5.3, use getMainRequest if exists
+
 ## 1.4.2 (2021-08-09)
 * Bugfix: remove `@final` declaration from `OAuthFactory` & `FOSUBUserProvider`,
 * Maintain: added `.gitattributes` to reduce amount of code in archives,
