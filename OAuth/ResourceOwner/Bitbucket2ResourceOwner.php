@@ -36,13 +36,18 @@ final class Bitbucket2ResourceOwner extends GenericOAuth2ResourceOwner
     {
         $response = parent::getUserInformation($accessToken, $extraParameters);
         $responseData = $response->getData();
-
+        if (isset($responseData['error']['message'])) {
+            if (strpos($responseData['error']['message'], 'Access token expired') !== false) {
+                $accessToken = $this->refreshAccessToken($accessToken['refresh_token']);
+            }
+            $response = parent::getUserInformation($accessToken, $extraParameters);
+            $responseData = $response->getData();
+        }
         // fetch the email addresses linked to the account
         if (empty($responseData['email'])) {
             $content = $this->httpRequest($this->normalizeUrl($this->options['emails_url']), null, ['Authorization' => 'Bearer '.$accessToken['access_token']]);
-            if (isset($accessToken['refresh_token']) && !isset($this->getResponseContent($content)['values'])) {
-                $refreshTokenResponse = $this->refreshAccessToken($accessToken['refresh_token']);
-                $content = $this->httpRequest($this->normalizeUrl($this->options['emails_url']), null, ['Authorization' => 'Bearer '.$refreshTokenResponse['access_token']]);
+            if ($content->getStatusCode() >= 400) {
+                $content = $this->httpRequest($this->normalizeUrl($this->options['emails_url']), null, ['Authorization' => 'Bearer '.$accessToken['access_token']]);
             }
             foreach ($this->getResponseContent($content)['values'] as $email) {
                 // we only need the primary email address
@@ -50,7 +55,6 @@ final class Bitbucket2ResourceOwner extends GenericOAuth2ResourceOwner
                     $responseData['email'] = $email['email'];
                 }
             }
-
             $response->setData($responseData);
         }
 
