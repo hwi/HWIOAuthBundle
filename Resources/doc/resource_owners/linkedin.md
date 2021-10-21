@@ -1,7 +1,7 @@
 Step 2x: Setup Linkedin
 =======================
 First you will have to register your application on Linkedin. Check out the
-documentation for more information: https://developer.linkedin.com/documents/authentication.
+documentation for more information: https://docs.microsoft.com/en-us/linkedin/shared/authentication/authentication.
 
 Next configure a resource owner of type `linkedin` with appropriate `client_id`,
 `client_secret` and `scope`.
