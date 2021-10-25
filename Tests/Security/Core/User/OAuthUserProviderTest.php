@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\User;
 
 class OAuthUserProviderTest extends TestCase
@@ -53,10 +54,15 @@ class OAuthUserProviderTest extends TestCase
 
     public function testRefreshUserUnsupportedClass()
     {
-        $this->expectException(\Symfony\Component\Security\Core\Exception\UnsupportedUserException::class);
-        $this->expectExceptionMessage('Unsupported user class "Symfony\\Component\\Security\\Core\\User\\User"');
+        // BC Layer to be dropped when Symfony >= 5.3 will be required
+        if (class_exists(InMemoryUser::class)) {
+            $user = new InMemoryUser('asm89', 'foo');
+        } else {
+            $user = new User('asm89', 'foo');
+        }
 
-        $user = new User('asm89', 'foo');
+        $this->expectException(\Symfony\Component\Security\Core\Exception\UnsupportedUserException::class);
+        $this->expectExceptionMessage(sprintf('Unsupported user class "%s"', \get_class($user)));
 
         $this->provider->refreshUser($user);
     }

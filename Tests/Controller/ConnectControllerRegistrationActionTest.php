@@ -69,6 +69,9 @@ class ConnectControllerRegistrationActionTest extends AbstractConnectControllerT
         $controller->registrationAction($this->request, $key);
     }
 
+    /**
+     * @group legacy
+     */
     public function testFailedProcess()
     {
         $key = time();

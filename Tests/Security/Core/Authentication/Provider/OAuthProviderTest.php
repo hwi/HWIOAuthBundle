@@ -26,6 +26,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class OAuthProviderTest extends TestCase
 {
+    /**
+     * @group legacy
+     */
     public function testSupportsOAuthToken()
     {
         $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
