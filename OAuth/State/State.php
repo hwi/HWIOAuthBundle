@@ -52,6 +52,18 @@ final class State implements StateInterface
         }
     }
 
+    public function __serialize(): array
+    {
+        return [
+            'values' => $this->values,
+        ];
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->values = $data['values'];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -128,13 +140,13 @@ final class State implements StateInterface
     }
 
     /**
-     * @param string $queryParameter The state query parameter string
+     * @param string|null $queryParameter The state query parameter string
      *
      * @return array<string,string>|null
      */
     private function parseStringParameter(?string $queryParameter = null): ?array
     {
-        $urlDecoded = urldecode($queryParameter);
+        $urlDecoded = $queryParameter ? urldecode($queryParameter) : '';
         $values = json_decode(base64_decode($urlDecoded), true);
 
         if (null === $values && '' !== $urlDecoded) {
