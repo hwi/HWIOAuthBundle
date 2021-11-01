@@ -86,7 +86,36 @@ class OAuthAuthenticatorTest extends TestCase
             'oauth_token_secret' => 'secret',
         ];
         $userResponseMock = $this->getUserResponseMock();
-        $userMock = $this->getUserMock();
+        $userMock = new class() implements UserInterface {
+            public function getUserIdentifier(): string
+            {
+                return 'username';
+            }
+
+            public function getUsername(): string
+            {
+                return $this->getUserIdentifier();
+            }
+
+            public function getRoles(): array
+            {
+                return ['ROLE_USER'];
+            }
+
+            public function eraseCredentials(): void
+            {
+            }
+
+            public function getPassword(): ?string
+            {
+                return null;
+            }
+
+            public function getSalt(): ?string
+            {
+                return null;
+            }
+        };
         $resourceOwnerName = 'github';
 
         $resourceOwnerMapMock->expects($this->once())
@@ -126,14 +155,6 @@ class OAuthAuthenticatorTest extends TestCase
         $resourceOwnerMock->expects($this->atLeastOnce())
             ->method('getName')
             ->willReturn($resourceOwnerName);
-
-        $userMock
-            ->method('getUsername')
-            ->willReturn('username');
-
-        $userMock->expects($this->once())
-            ->method('getRoles')
-            ->willReturn(['ROLE_USER']);
 
         $authenticator = new OAuthAuthenticator(
             $httpUtilsMock,
