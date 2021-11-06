@@ -143,7 +143,7 @@ final class HWIOAuthExtension extends Extension
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getAlias()
     {

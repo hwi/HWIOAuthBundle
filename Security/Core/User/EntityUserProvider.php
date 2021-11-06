@@ -60,7 +60,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
      * @param ManagerRegistry $registry    manager registry
      * @param string          $class       user entity class to load
      * @param array           $properties  Mapping of resource owners to properties
-     * @param string          $managerName Optional name of the entity manager to use
+     * @param string|null     $managerName Optional name of the entity manager to use
      */
     public function __construct(ManagerRegistry $registry, $class, array $properties, $managerName = null)
     {
@@ -69,9 +69,6 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
         $this->properties = array_merge($this->properties, $properties);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         $user = $this->findUser(['username' => $identifier]);
@@ -87,7 +84,9 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $username
+     *
+     * @return UserInterface
      */
     public function loadUserByUsername($username)
     {
@@ -103,7 +102,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     }
 
     /**
-     * {@inheritdoc}
+     * @return UserInterface
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
@@ -125,7 +124,7 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     }
 
     /**
-     * {@inheritdoc}
+     * @return UserInterface
      */
     public function refreshUser(UserInterface $user)
     {
@@ -149,7 +148,9 @@ class EntityUserProvider implements UserProviderInterface, OAuthAwareUserProvide
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $class
+     *
+     * @return bool
      */
     public function supportsClass($class)
     {

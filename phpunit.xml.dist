@@ -14,8 +14,8 @@
     </coverage>
 
     <php>
-        <!-- Allowing 4 deprecations related to changes in Symfony Security 5.3+ -->
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=3"/>
+        <!-- Allowing 14 deprecations related to changes in Symfony AbstractController 5.4+ -->
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=14"/>
         <env name="KERNEL_CLASS" value="HWI\Bundle\OAuthBundle\Tests\App\AppKernel"/>
     </php>
 

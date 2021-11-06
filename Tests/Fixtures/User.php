@@ -17,31 +17,49 @@ class User implements UserInterface
 {
     private $githubId;
 
+    /**
+     * @return string
+     */
     public function getId()
     {
         return '1';
     }
 
+    /**
+     * @return string
+     */
     public function getUserIdentifier()
     {
         return 'foo';
     }
 
+    /**
+     * @return string
+     */
     public function getUsername()
     {
         return 'foo';
     }
 
+    /**
+     * @return string[]
+     */
     public function getRoles()
     {
         return ['ROLE_USER'];
     }
 
+    /**
+     * @return string|null
+     */
     public function getPassword()
     {
         return 'secret';
     }
 
+    /**
+     * @return string|null
+     */
     public function getSalt()
     {
         return 'my_salt';
