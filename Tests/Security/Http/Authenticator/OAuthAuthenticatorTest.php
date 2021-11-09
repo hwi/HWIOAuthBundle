@@ -173,7 +173,7 @@ class OAuthAuthenticatorTest extends TestCase
         $this->assertInstanceOf(OAuthToken::class, $token);
         $this->assertEquals($resourceOwnerName, $token->getResourceOwnerName());
         $this->assertSame($userMock, $token->getUser());
-        $this->assertTrue($token->isAuthenticated());
+        $this->assertInstanceOf(UserInterface::class, $token->getUser());
         $this->assertEquals('refresh_token', $token->getRefreshToken());
     }
 

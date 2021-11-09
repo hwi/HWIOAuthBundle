@@ -19,10 +19,10 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 class OAuthProviderTest extends TestCase
 {
@@ -73,27 +73,24 @@ class OAuthProviderTest extends TestCase
             ->with($this->equalTo('github'))
             ->willReturn(true);
 
-        $userMock = $this->getUserMock();
-        $userMock->expects($this->once())
-            ->method('getRoles')
-            ->willReturn(['ROLE_TEST']);
+        $user = new User();
 
         $userProviderMock = $this->getOAuthAwareUserProviderMock();
         $userProviderMock->expects($this->once())
             ->method('loadUserByOAuthUserResponse')
-            ->willReturn($userMock);
+            ->willReturn($user);
 
         $userCheckerMock = $this->getUserCheckerMock();
         $userCheckerMock->expects($this->once())
             ->method('checkPostAuth')
-            ->with($userMock);
+            ->with($user);
 
         $tokenStorageMock = $this->getTokenStorageMock();
 
         $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock, $tokenStorageMock);
 
         $token = $oauthProvider->authenticate($oauthToken);
-        $this->assertTrue($token->isAuthenticated());
+        $this->assertNotNull($token->getUser());
         $this->assertInstanceOf(OAuthToken::class, $token);
 
         $this->assertEquals($expectedToken, $token->getRawToken());
@@ -101,12 +98,12 @@ class OAuthProviderTest extends TestCase
         $this->assertEquals($expectedToken['refresh_token'], $token->getRefreshToken());
         $this->assertEquals($expectedToken['expires_in'], $token->getExpiresIn());
         $this->assertEquals($expectedToken['oauth_token_secret'], $token->getTokenSecret());
-        $this->assertEquals($userMock, $token->getUser());
+        $this->assertEquals($user, $token->getUser());
         $this->assertEquals('github', $token->getResourceOwnerName());
 
         $roles = $token->getRoleNames();
         $this->assertCount(1, $roles);
-        $this->assertEquals('ROLE_TEST', $roles[0]);
+        $this->assertEquals('ROLE_USER', $roles[0]);
     }
 
     public function testOAuthAwareExceptionGetsInfo()
@@ -203,35 +200,31 @@ class OAuthProviderTest extends TestCase
             ->with($this->equalTo('github'))
             ->willReturn(true);
 
-        $userMock = $this->getUserMock();
-        $userMock->expects($this->exactly(2))
-            ->method('getRoles')
-            ->willReturn(['ROLE_TEST']);
+        $user = new User();
 
         $userProviderMock = $this->getOAuthAwareUserProviderMock();
         $userProviderMock->expects($this->once())
             ->method('loadUserByOAuthUserResponse')
-            ->willReturn($userMock);
+            ->willReturn($user);
 
         $userCheckerMock = $this->getUserCheckerMock();
         $userCheckerMock->expects($this->once())
             ->method('checkPostAuth')
-            ->with($userMock);
+            ->with($user);
 
         $tokenStorageMock = $this->getTokenStorageMock();
 
         $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock, $tokenStorageMock);
 
-        $oauthToken = new OAuthToken($refreshedToken);
-        $oauthToken->setAuthenticated($authenticated);
+        $oauthToken = new OAuthToken($refreshedToken, $user->getRoles());
         $oauthToken->setResourceOwnerName('github');
         $oauthToken->setRefreshToken($expiredToken['refresh_token']);
         $oauthToken->setExpiresIn(30);
         $oauthToken->setCreatedAt(time() - 3600);
-        $oauthToken->setUser($userMock);
+        $oauthToken->setUser($user);
 
         $token = $oauthProvider->authenticate($oauthToken);
-        $this->assertTrue($token->isAuthenticated());
+        $this->assertNotNull($token->getUser());
         $this->assertInstanceOf(OAuthToken::class, $token);
 
         $this->assertEquals($refreshedToken, $token->getRawToken());
@@ -239,12 +232,12 @@ class OAuthProviderTest extends TestCase
         $this->assertEquals($refreshedToken['refresh_token'], $token->getRefreshToken());
         $this->assertEquals($refreshedToken['expires_in'], $token->getExpiresIn());
         $this->assertEquals($refreshedToken['oauth_token_secret'], $token->getTokenSecret());
-        $this->assertEquals($userMock, $token->getUser());
+        $this->assertEquals($user, $token->getUser());
         $this->assertEquals('github', $token->getResourceOwnerName());
 
         $roles = $token->getRoleNames();
         $this->assertCount(1, $roles);
-        $this->assertEquals('ROLE_TEST', $roles[0]);
+        $this->assertEquals('ROLE_USER', $roles[0]);
     }
 
     public function provideAuthenticationData(): iterable
@@ -281,11 +274,6 @@ class OAuthProviderTest extends TestCase
     protected function getUserCheckerMock()
     {
         return $this->createMock(UserCheckerInterface::class);
-    }
-
-    protected function getUserMock()
-    {
-        return $this->createMock(UserInterface::class);
     }
 
     protected function getTokenStorageMock()

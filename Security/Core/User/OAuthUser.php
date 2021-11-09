@@ -34,7 +34,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getUserIdentifier()
     {
@@ -42,7 +42,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return array<int, string>
      */
     public function getRoles()
     {
@@ -50,7 +50,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|null
      */
     public function getPassword()
     {
@@ -58,7 +58,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string|null
      */
     public function getSalt()
     {
@@ -66,7 +66,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     public function getUsername()
     {
@@ -74,7 +74,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function eraseCredentials()
     {
@@ -82,7 +82,7 @@ class OAuthUser implements UserInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function equals(UserInterface $user)
     {

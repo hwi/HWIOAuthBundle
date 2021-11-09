@@ -184,12 +184,16 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         );
     }
 
+    public function createToken(PassportInterface $passport, string $firewallName): TokenInterface
+    {
+        return $this->createAuthenticatedToken($passport, $firewallName);
+    }
+
     public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
     {
         $token = new OAuthToken($this->rawToken, $passport->getUser()->getRoles());
         $token->setResourceOwnerName($this->resourceOwnerName);
         $token->setUser($passport->getUser());
-        $token->setAuthenticated(true);
         $token->setRefreshToken($this->refreshToken);
         $token->setCreatedAt($this->createdAt);
 

@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token;
 
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**
@@ -67,7 +68,13 @@ abstract class AbstractOAuthToken extends AbstractToken
 
         $this->setRawToken($accessToken);
 
-        parent::setAuthenticated(\count($roles) > 0);
+        // Workaround for: Method "AbstractToken::setAuthenticated()" is deprecated
+        if (Kernel::VERSION_ID > 50399) {
+            // @phpstan-ignore-next-line
+            parent::setAuthenticated(\count($roles) > 0, false);
+        } else {
+            parent::setAuthenticated(\count($roles) > 0);
+        }
     }
 
     public function __serialize(): array
@@ -107,14 +114,6 @@ abstract class AbstractOAuthToken extends AbstractToken
         } else {
             parent::unserialize(serialize($parent));
         }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getCredentials()
-    {
-        return '';
     }
 
     /**
