@@ -210,6 +210,52 @@ class GenericOAuth1ResourceOwnerTest extends ResourceOwnerTestCase
         );
     }
 
+    public function testGetAccessTokenHtmlResponse(): void
+    {
+        $request = new Request(['oauth_verifier' => 'code', 'oauth_token' => 'token']);
+
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('oauth_token=token&oauth_token_secret=secret', 'text/html;charset=utf-8'),
+            ]
+        );
+
+        $this->storage->expects($this->once())
+            ->method('fetch')
+            ->with($resourceOwner, 'token')
+            ->willReturn(['oauth_token' => 'token2', 'oauth_token_secret' => 'secret2']);
+
+        $this->assertEquals(
+            ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'],
+            $resourceOwner->getAccessToken($request, 'http://redirect.to/')
+        );
+    }
+
+    public function testGetAccessTokenUrlEncodedResponse(): void
+    {
+        $request = new Request(['oauth_verifier' => 'code', 'oauth_token' => 'token']);
+
+        $resourceOwner = $this->createResourceOwner(
+            [],
+            [],
+            [
+                $this->createMockResponse('oauth_token=token&oauth_token_secret=secret', 'application/x-www-form-urlencoded'),
+            ]
+        );
+
+        $this->storage->expects($this->once())
+            ->method('fetch')
+            ->with($resourceOwner, 'token')
+            ->willReturn(['oauth_token' => 'token2', 'oauth_token_secret' => 'secret2']);
+
+        $this->assertEquals(
+            ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'],
+            $resourceOwner->getAccessToken($request, 'http://redirect.to/')
+        );
+    }
+
     public function testGetAccessTokenJsonResponse(): void
     {
         $resourceOwner = $this->createResourceOwner(
