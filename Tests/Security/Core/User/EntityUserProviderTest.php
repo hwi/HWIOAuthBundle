@@ -30,7 +30,7 @@ final class EntityUserProviderTest extends TestCase
         if (!class_exists(EntityManager::class)) {
             $this->markTestSkipped('The Doctrine ORM is not available');
         }
-        if (!class_exists(ManagerRegistry::class)) {
+        if (!interface_exists(ManagerRegistry::class)) {
             $this->markTestSkipped('The Doctrine ORM is too old');
         }
     }
