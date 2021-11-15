@@ -232,6 +232,11 @@ json;
             'text/plain',
         ];
 
+        yield 'html text with charset' => [
+            'access_token=code',
+            'text/html;charset=utf-8',
+        ];
+
         yield 'json' => [
             '{"access_token": "code"}',
             'application/json',

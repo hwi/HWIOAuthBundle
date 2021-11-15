@@ -290,17 +290,12 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
 
     protected function getResponseContent(ResponseInterface $rawResponse): array
     {
-        $contentTypes = $rawResponse->getHeaders(false)['content-type'] ?? [];
-        if (\in_array('text/plain', $contentTypes, true)) {
-            parse_str($rawResponse->getContent(false), $response);
-
-            return $response;
-        }
-
         try {
             return $rawResponse->toArray(false);
         } catch (JsonException $e) {
-            return [];
+            parse_str($rawResponse->getContent(false), $response);
+
+            return $response;
         }
     }
 
