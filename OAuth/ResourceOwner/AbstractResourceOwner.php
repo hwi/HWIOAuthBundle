@@ -273,9 +273,8 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
             if (!isset($options['headers']['Content-Length'])) {
                 $options['headers'] += ['Content-Length' => (string) \strlen($content)];
             }
-        } elseif (\is_array($content)) {
-            $options['body'] = $content;
         }
+        $options['body'] = $content;
 
         try {
             return $this->httpClient->request(
