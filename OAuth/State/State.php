@@ -52,6 +52,16 @@ final class State implements StateInterface
         }
     }
 
+    public function __serialize(): array
+    {
+        return $this->values;
+    }
+
+    public function __unserialize(array $data): void
+    {
+        $this->values = $data;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -117,25 +127,20 @@ final class State implements StateInterface
         return '' !== $encoded ? $encoded : null;
     }
 
-    public function serialize(): ?string
-    {
-        return serialize($this->values);
-    }
-
-    public function unserialize($serialized): void
-    {
-        $this->values = unserialize($serialized);
-    }
-
     /**
-     * @param string $queryParameter The state query parameter string
+     * @param string|null $queryParameter The state query parameter string
      *
      * @return array<string,string>|null
      */
     private function parseStringParameter(?string $queryParameter = null): ?array
     {
-        $urlDecoded = urldecode($queryParameter);
-        $values = json_decode(base64_decode($urlDecoded), true);
+        $urlDecoded = $queryParameter ? urldecode($queryParameter) : '';
+
+        try {
+            $values = json_decode(base64_decode($urlDecoded), true, 512, \JSON_THROW_ON_ERROR);
+        } catch (\JsonException $e) {
+            $values = null;
+        }
 
         if (null === $values && '' !== $urlDecoded) {
             $values[self::DEFAULT_KEY] = $urlDecoded;
@@ -149,16 +154,11 @@ final class State implements StateInterface
      */
     private function encodeValues(): string
     {
-        return base64_encode(json_encode($this->values));
-    }
-
-    /**
-     * Checks if a given key is set in the values array,
-     * and if it's the only key present.
-     */
-    private function isOnlyExistentKey(string $key): bool
-    {
-        return isset($this->values[$key]) && 1 === \count($this->values);
+        try {
+            return base64_encode(json_encode($this->values, \JSON_THROW_ON_ERROR));
+        } catch (\JsonException $e) {
+            return '';
+        }
     }
 
     private function isAssociatedArray(?array $array): bool
