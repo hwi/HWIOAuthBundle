@@ -209,7 +209,7 @@ abstract class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         }
 
         if (!$this->options['realm']) {
-            array_unshift($parameters, 'realm="'.rawurlencode($this->options['realm']).'"');
+            array_unshift($parameters, 'realm="'.rawurlencode($this->options['realm'] ?? '').'"');
         }
 
         $headers['Authorization'] = 'OAuth '.implode(', ', $parameters);
