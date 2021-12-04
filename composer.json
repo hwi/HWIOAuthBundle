@@ -116,8 +116,8 @@
         "phpunit/phpunit":              "^9.5.5",
         "friendsofphp/php-cs-fixer":    "^3.0",
         "symfony/monolog-bundle":       "^3.4",
-        "phpstan/phpstan":              "^0.12.91",
-        "phpstan/phpstan-symfony":      "^0.12.41",
+        "phpstan/phpstan":              "^1.2",
+        "phpstan/phpstan-symfony":      "^1.0",
         "phpstan/extension-installer":  "^1.1"
     },
 
