@@ -53,6 +53,7 @@ json;
         'nickname' => 'id',
         'realname' => 'display_name',
         'email' => 'email',
+        'profilepicture' => 'images.0.url',
     ];
 
     public function testGetUserInformation(): void
@@ -72,6 +73,9 @@ json;
 
         $this->assertEquals('wizzler', $userResponse->getUsername());
         $this->assertEquals('wizzler', $userResponse->getNickname());
+        $this->assertEquals('JM Wizzler', $userResponse->getRealName());
+        $this->assertEquals('email@example.com', $userResponse->getEmail());
+        $this->assertEquals('https://fbcdn-profile-a.akamaihd.net/hprofile-ak-frc3/t1.0-1/1970403_10152215092574354_1798272330_n.jpg', $userResponse->getProfilePicture());
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());

@@ -30,6 +30,7 @@ final class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
         'nickname' => 'id',
         'realname' => 'display_name',
         'email' => 'email',
+        'profilepicture' => 'images.0.url',
     ];
 
     /**
