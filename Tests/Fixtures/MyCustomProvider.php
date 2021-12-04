@@ -18,27 +18,27 @@ use Symfony\Component\HttpFoundation\Request;
 
 final class MyCustomProvider implements ResourceOwnerInterface
 {
-    public function getUserInformation(array $accessToken, array $extraParameters = [])
+    public function getUserInformation(array $accessToken, array $extraParameters = []): CustomUserResponse
     {
         return new CustomUserResponse();
     }
 
-    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = []): string
     {
         return '';
     }
 
-    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = []): array
     {
         return [];
     }
 
-    public function isCsrfTokenValid($csrfToken)
+    public function isCsrfTokenValid($csrfToken): bool
     {
         return false;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'custom_provider';
     }
@@ -47,20 +47,20 @@ final class MyCustomProvider implements ResourceOwnerInterface
     {
     }
 
-    public function handles(Request $request)
+    public function handles(Request $request): bool
     {
         return false;
     }
 
-    public function setName($name)
+    public function setName($name): void
     {
     }
 
-    public function addPaths(array $paths)
+    public function addPaths(array $paths): void
     {
     }
 
-    public function refreshAccessToken($refreshToken, array $extraParameters = [])
+    public function refreshAccessToken($refreshToken, array $extraParameters = []): void
     {
     }
 
@@ -73,7 +73,7 @@ final class MyCustomProvider implements ResourceOwnerInterface
     {
     }
 
-    public function storeState(StateInterface $state = null)
+    public function storeState(StateInterface $state = null): void
     {
     }
 }
