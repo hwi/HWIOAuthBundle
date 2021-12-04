@@ -52,12 +52,14 @@ class AppKernel extends Kernel
         if (Kernel::VERSION_ID >= 50300) {
             $container->loadFromExtension('framework', [
                 'session' => [
+                    'enabled' => true,
                     'storage_factory_id' => 'session.storage.factory.mock_file',
                 ],
             ]);
         } else {
             $container->loadFromExtension('framework', [
                 'session' => [
+                    'enabled' => true,
                     'storage_id' => 'session.storage.mock_file',
                 ],
             ]);

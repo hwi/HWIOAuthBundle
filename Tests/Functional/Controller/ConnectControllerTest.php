@@ -23,6 +23,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class ConnectControllerTest extends WebTestCase
 {
@@ -51,7 +52,7 @@ final class ConnectControllerTest extends WebTestCase
             }
         );
 
-        $client = static::createClient();
+        $client = self::createClient();
         $client->disableReboot();
         $client->getContainer()->set('hwi_oauth.http_client', $httpClient);
 
@@ -60,7 +61,8 @@ final class ConnectControllerTest extends WebTestCase
         $exception->setResourceOwnerName('google');
         $exception->setToken(new CustomOAuthToken());
 
-        $session = $this->getSession($client);
+        /** @var SessionInterface $session */
+        $session = $client->getContainer()->get('session');
         $session->set('_hwi_oauth.registration_error.'.$key, $exception);
 
         $this->createDatabase($client);
@@ -99,13 +101,14 @@ final class ConnectControllerTest extends WebTestCase
             }
         );
 
-        $client = static::createClient();
+        $client = self::createClient();
         $client->disableReboot();
         $client->getContainer()->set('hwi_oauth.http_client', $httpClient);
 
         $this->createDatabase($client);
 
-        $session = $this->getSession($client);
+        /** @var SessionInterface $session */
+        $session = $client->getContainer()->get('session');
         $session->set('_hwi_oauth.connect_confirmation.1', ['access_token' => 'valid-access-token']);
 
         $this->logIn($client, $session);

@@ -17,6 +17,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Tests\Functional\AuthenticationHelperTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\Security;
@@ -28,7 +29,7 @@ final class LoginControllerTest extends WebTestCase
 
     public function testLoginPage(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
         $client->getContainer()->set('hwi_oauth.http_client', $this->createMock(HttpClientInterface::class));
 
         $crawler = $client->request('GET', '/login_hwi/');
@@ -41,9 +42,10 @@ final class LoginControllerTest extends WebTestCase
 
     public function testRedirectingToRegistrationFormWithError(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
 
-        $session = $this->getSession($client);
+        /** @var SessionInterface $session */
+        $session = $client->getContainer()->get('session');
         $session->set(Security::AUTHENTICATION_ERROR, new AccountNotLinkedException());
 
         $client->request('GET', '/login_hwi/');
@@ -58,10 +60,11 @@ final class LoginControllerTest extends WebTestCase
     {
         $httpClient = new MockHttpClient();
 
-        $client = static::createClient();
+        $client = self::createClient();
         $client->getContainer()->set('hwi_oauth.http_client', $httpClient);
 
-        $session = $this->getSession($client);
+        /** @var SessionInterface $session */
+        $session = $client->getContainer()->get('session');
 
         $this->logIn($client, $session);
 
