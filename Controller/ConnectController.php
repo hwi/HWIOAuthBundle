@@ -307,7 +307,11 @@ final class ConnectController extends AbstractController
         $token = new OAuthToken($accessToken, $user->getRoles());
         $token->setResourceOwnerName($resourceOwnerName);
         $token->setUser($user);
-        $token->setAuthenticated(true);
+
+        // @deprecated since Symfony 5.4
+        if (method_exists($token, 'setAuthenticated')) {
+            $token->setAuthenticated(true);
+        }
 
         $this->tokenStorage->setToken($token);
 
@@ -359,7 +363,6 @@ final class ConnectController extends AbstractController
         if ($currentToken instanceof OAuthToken) {
             // Update user token with new details
             $newToken =
-                \is_array($accessToken) &&
                 (isset($accessToken['access_token']) || isset($accessToken['oauth_token'])) ?
                     $accessToken : $currentToken->getRawToken();
 
