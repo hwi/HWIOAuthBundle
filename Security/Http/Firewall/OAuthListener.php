@@ -35,12 +35,12 @@ class OAuthListener extends AbstractAuthenticationListener
      */
     private array $checkPaths;
 
-    public function setResourceOwnerMap(ResourceOwnerMapInterface $resourceOwnerMap)
+    public function setResourceOwnerMap(ResourceOwnerMapInterface $resourceOwnerMap): void
     {
         $this->resourceOwnerMap = $resourceOwnerMap;
     }
 
-    public function setCheckPaths(array $checkPaths)
+    public function setCheckPaths(array $checkPaths): void
     {
         $this->checkPaths = $checkPaths;
     }
@@ -48,7 +48,7 @@ class OAuthListener extends AbstractAuthenticationListener
     /**
      * {@inheritdoc}
      */
-    public function requiresAuthentication(Request $request)
+    public function requiresAuthentication(Request $request): bool
     {
         // Check if the route matches one of the check paths
         foreach ($this->checkPaths as $checkPath) {

@@ -39,55 +39,21 @@ use Symfony\Component\Security\Http\HttpUtils;
  */
 final class OAuthAuthenticator implements AuthenticatorInterface
 {
-    /**
-     * @var HttpUtils
-     */
-    private $httpUtils;
-
-    /**
-     * @var OAuthAwareUserProviderInterface
-     */
-    private $userProvider;
-
-    /**
-     * @var ResourceOwnerMapInterface
-     */
-    private $resourceOwnerMap;
+    private HttpUtils $httpUtils;
+    private OAuthAwareUserProviderInterface $userProvider;
+    private ResourceOwnerMapInterface $resourceOwnerMap;
+    private AuthenticationSuccessHandlerInterface $successHandler;
+    private AuthenticationFailureHandlerInterface $failureHandler;
 
     /**
      * @var string[]
      */
-    private $checkPaths;
+    private array $checkPaths;
 
-    /**
-     * @var AuthenticationSuccessHandlerInterface
-     */
-    private $successHandler;
-
-    /**
-     * @var AuthenticationFailureHandlerInterface
-     */
-    private $failureHandler;
-
-    /**
-     * @var mixed[]|null
-     */
-    private $rawToken;
-
-    /**
-     * @var string|null
-     */
-    private $resourceOwnerName;
-
-    /**
-     * @var string|null
-     */
-    private $refreshToken;
-
-    /**
-     * @var int|null
-     */
-    private $createdAt;
+    private ?array $rawToken = null;
+    private ?string $resourceOwnerName = null;
+    private ?string $refreshToken = null;
+    private ?int $createdAt = null;
 
     public function __construct(
         HttpUtils $httpUtils,

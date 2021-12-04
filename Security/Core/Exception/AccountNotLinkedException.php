@@ -63,9 +63,6 @@ if (class_exists(UserNotFoundException::class)) {
             return $token->getAccessToken();
         }
 
-        /**
-         * @return array
-         */
         public function getRawToken(): array
         {
             /** @var AbstractOAuthToken $token */
@@ -171,9 +168,6 @@ if (class_exists(UserNotFoundException::class)) {
             return $token->getAccessToken();
         }
 
-        /**
-         * @return array
-         */
         public function getRawToken(): array
         {
             /** @var AbstractOAuthToken $token */

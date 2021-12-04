@@ -44,7 +44,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    public function getKey()
+    public function getKey(): string
     {
         return 'oauth';
     }
@@ -52,7 +52,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    public function getPosition()
+    public function getPosition(): string
     {
         return 'http';
     }
@@ -64,7 +64,7 @@ class OAuthFactory extends AbstractFactory
      * @param string           $id        Firewall id
      * @param array            $config    Configuration
      */
-    protected function createResourceOwnerMap(ContainerBuilder $container, $id, array $config)
+    protected function createResourceOwnerMap(ContainerBuilder $container, string $id, array $config): void
     {
         $resourceOwnersMap = [];
         foreach ($config['resource_owners'] as $name => $checkPath) {
@@ -81,12 +81,8 @@ class OAuthFactory extends AbstractFactory
 
     /**
      * Gets a reference to the resource owner map.
-     *
-     * @param string $id
-     *
-     * @return Reference
      */
-    protected function getResourceOwnerMapReference($id)
+    protected function getResourceOwnerMapReference(string $id): Reference
     {
         return new Reference('hwi_oauth.resource_ownermap.'.$id);
     }
@@ -94,7 +90,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createAuthProvider(ContainerBuilder $container, $id, $config, $userProviderId)
+    protected function createAuthProvider(ContainerBuilder $container, string $id, array $config, string $userProviderId): string
     {
         $providerId = 'hwi_oauth.authentication.provider.oauth.'.$id;
 
@@ -111,7 +107,7 @@ class OAuthFactory extends AbstractFactory
         return $providerId;
     }
 
-    protected function createOAuthAwareUserProvider(ContainerBuilder $container, $id, $config)
+    protected function createOAuthAwareUserProvider(ContainerBuilder $container, $id, $config): Reference
     {
         $serviceId = 'hwi_oauth.user.provider.entity.'.$id;
 
@@ -142,7 +138,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createEntryPoint($container, $id, $config, $defaultEntryPoint)
+    protected function createEntryPoint($container, $id, $config, ?string $defaultEntryPointId): ?string
     {
         $entryPointId = 'hwi_oauth.authentication.entry_point.oauth.'.$id;
 
@@ -158,7 +154,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createListener($container, $id, $config, $userProvider)
+    protected function createListener(ContainerBuilder $container, string $id, array $config, string $userProvider): string
     {
         $listenerId = parent::createListener($container, $id, $config, $userProvider);
 
@@ -176,12 +172,12 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function getListenerId()
+    protected function getListenerId(): string
     {
         return 'hwi_oauth.authentication.listener.oauth';
     }
 
-    private function addOAuthProviderConfiguration(ArrayNodeDefinition $node)
+    private function addOAuthProviderConfiguration(ArrayNodeDefinition $node): void
     {
         $builder = $node->children();
         $builder
@@ -213,7 +209,7 @@ class OAuthFactory extends AbstractFactory
         ;
     }
 
-    private function addResourceOwnersConfiguration(ArrayNodeDefinition $node)
+    private function addResourceOwnersConfiguration(ArrayNodeDefinition $node): void
     {
         $builder = $node->children();
         $builder
