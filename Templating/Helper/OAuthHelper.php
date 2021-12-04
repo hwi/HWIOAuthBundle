@@ -47,7 +47,13 @@ final class OAuthHelper extends Helper
      */
     public function getLoginUrl($name)
     {
-        return $this->oauthUtils->getLoginUrl($this->requestStack->getMasterRequest(), $name);
+        if (method_exists($this->requestStack, 'getMainRequest')) {
+            $request = $this->requestStack->getMainRequest();
+        } else {
+            $request = $this->requestStack->getMasterRequest();
+        }
+
+        return $this->oauthUtils->getLoginUrl($request, $name);
     }
 
     /**
@@ -59,7 +65,13 @@ final class OAuthHelper extends Helper
      */
     public function getAuthorizationUrl($name, $redirectUrl = null, array $extraParameters = [])
     {
-        return $this->oauthUtils->getAuthorizationUrl($this->requestStack->getMasterRequest(), $name, $redirectUrl, $extraParameters);
+        if (method_exists($this->requestStack, 'getMainRequest')) {
+            $request = $this->requestStack->getMainRequest();
+        } else {
+            $request = $this->requestStack->getMasterRequest();
+        }
+
+        return $this->oauthUtils->getAuthorizationUrl($request, $name, $redirectUrl, $extraParameters);
     }
 
     /**

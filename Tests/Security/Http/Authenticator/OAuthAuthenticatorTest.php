@@ -24,6 +24,8 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\InMemoryUser;
+use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
@@ -87,7 +89,7 @@ final class OAuthAuthenticatorTest extends TestCase
             'oauth_token_secret' => 'secret',
         ];
         $userResponseMock = $this->getUserResponseMock();
-        $userMock = $this->getUserMock();
+        $user = $this->createUser();
         $resourceOwnerName = 'github';
 
         $httpUtilsMock->expects($this->once())
@@ -134,19 +136,11 @@ final class OAuthAuthenticatorTest extends TestCase
         $userProviderMock->expects($this->once())
             ->method('loadUserByOAuthUserResponse')
             ->with($userResponseMock)
-            ->willReturn($userMock);
+            ->willReturn($user);
 
         $resourceOwnerMock->expects($this->atLeastOnce())
             ->method('getName')
             ->willReturn($resourceOwnerName);
-
-        $userMock
-            ->method('getUsername')
-            ->willReturn('username');
-
-        $userMock->expects($this->once())
-            ->method('getRoles')
-            ->willReturn(['ROLE_USER']);
 
         $authenticator = new OAuthAuthenticator(
             $httpUtilsMock,
@@ -159,16 +153,16 @@ final class OAuthAuthenticatorTest extends TestCase
 
         $passport = $authenticator->authenticate($request);
         $this->assertInstanceOf(SelfValidatingPassport::class, $passport);
-        $this->assertSame($userMock, $passport->getUser());
+        $this->assertEquals($user, $passport->getUser());
 
         /** @var AbstractOAuthToken $token */
         $token = $authenticator->createAuthenticatedToken($passport, 'main');
         $this->assertInstanceOf(OAuthToken::class, $token);
         $this->assertEquals($resourceOwnerName, $token->getResourceOwnerName());
-        $this->assertSame($userMock, $token->getUser());
+        $this->assertEquals($user, $token->getUser());
         $this->assertEquals('refresh_token', $token->getRefreshToken());
 
-        // @deprecated since Symfony 5.4
+        // required for compatibility with Symfony 5.4
         if (method_exists($token, 'setAuthenticated')) {
             $this->assertTrue($token->isAuthenticated());
         }
@@ -273,11 +267,15 @@ final class OAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return UserInterface&MockObject
+     * @return User|InMemoryUser
      */
-    private function getUserMock(): UserInterface
+    private function createUser(): UserInterface
     {
-        return $this->createMock(UserInterface::class);
+        if (class_exists(User::class)) {
+            return new User('asm89', 'foo', ['ROLE_USER']);
+        }
+
+        return new InMemoryUser('asm89', 'foo', ['ROLE_USER']);
     }
 
     /**

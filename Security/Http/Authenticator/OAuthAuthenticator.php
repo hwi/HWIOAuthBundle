@@ -30,7 +30,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerI
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -152,9 +151,9 @@ final class OAuthAuthenticator implements AuthenticatorInterface
     }
 
     /**
-     * @param Passport $passport
+     * @param Passport|SelfValidatingPassport $passport
      */
-    public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
+    public function createAuthenticatedToken($passport, string $firewallName): TokenInterface
     {
         $token = $this->createToken($passport, $firewallName);
 
@@ -184,9 +183,9 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         $token->setRefreshToken($this->refreshToken);
         $token->setCreatedAt($this->createdAt);
 
-        // @deprecated since Symfony 5.4
+        // required for compatibility with Symfony 5.4
         if (method_exists($token, 'setAuthenticated')) {
-            $token->setAuthenticated(true);
+            $token->setAuthenticated(true, false);
         }
 
         return $token;

@@ -53,14 +53,16 @@ final class OAuthUserProviderTest extends TestCase
 
     public function testRefreshUserUnsupportedClass(): void
     {
-        $this->expectException(UnsupportedUserException::class);
-        $this->expectExceptionMessage('Unsupported user class "Symfony\\Component\\Security\\Core\\User\\User"');
-
         if (class_exists(User::class)) {
             $user = new User('asm89', 'foo');
+            $message = 'Unsupported user class "Symfony\\Component\\Security\\Core\\User\\User"';
         } else {
             $user = new InMemoryUser('asm89', 'foo');
+            $message = 'Unsupported user class "Symfony\\Component\\Security\\Core\\User\\InMemoryUser"';
         }
+
+        $this->expectException(UnsupportedUserException::class);
+        $this->expectExceptionMessage($message);
 
         $this->provider->refreshUser($user);
     }

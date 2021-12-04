@@ -50,14 +50,14 @@ class AppKernel extends Kernel
 
         // With Symfony 5.3+, session settings were changed
         if (Kernel::VERSION_ID >= 50300) {
-            $container->loadFromExtension('framework', [
+            $container->prependExtensionConfig('framework', [
                 'session' => [
                     'enabled' => true,
                     'storage_factory_id' => 'session.storage.factory.mock_file',
                 ],
             ]);
         } else {
-            $container->loadFromExtension('framework', [
+            $container->prependExtensionConfig('framework', [
                 'session' => [
                     'enabled' => true,
                     'storage_id' => 'session.storage.mock_file',
@@ -65,18 +65,50 @@ class AppKernel extends Kernel
             ]);
         }
 
-        if (method_exists(Security::class, 'getUser') && !class_exists(UserValueResolver::class)) {
-            $container->loadFromExtension('security', [
-                'firewalls' => [
-                    'login_area' => [
-                        'logout_on_user_change' => true,
-                    ],
-                    'main' => [
-                        'logout_on_user_change' => true,
-                    ],
+        $security = [
+            'encoders' => [
+                \HWI\Bundle\OAuthBundle\Tests\Fixtures\User::class => 'plaintext',
+            ],
+            'firewalls' => [
+                'login_area' => [
+                    'pattern' => '^/(login$|connect|login_hwi)',
+                    'context' => 'hwi_context',
+                    'anonymous' => true,
                 ],
-            ]);
+                'main' => [
+                    'pattern' => '^/',
+                    'oauth' => [
+                        'resource_owners' => [
+                            'google' => '/check-login/google',
+                        ],
+                        'login_path' => '/login',
+                        'use_forward' => false,
+                        'failure_path' => '/login',
+                        'oauth_user_provider' => [
+                            'service' => UserProvider::class,
+                        ],
+                        'provider' => UserProvider::class,
+                    ],
+                    'context' => 'hwi_context',
+                ],
+            ],
+        ];
+
+        if (!class_exists(User::class)) {
+            unset($security['firewalls']['login_area']['anonymous']);
+
+            $security['password_hashers'] = $security['encoders'];
+            unset($security['encoders']);
+
+            $security['enable_authenticator_manager'] = true;
         }
+
+        if (method_exists(Security::class, 'getUser') && !class_exists(UserValueResolver::class)) {
+            $security['firewalls']['login_area'] = ['logout_on_user_change' => true];
+            $security['firewalls']['main'] = ['logout_on_user_change' => true];
+        }
+
+        $container->prependExtensionConfig('security', $security);
     }
 
     public function getCacheDir(): string

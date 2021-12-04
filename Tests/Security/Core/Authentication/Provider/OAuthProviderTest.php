@@ -22,6 +22,7 @@ use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -29,6 +30,13 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 final class OAuthProviderTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        if (!class_exists(AuthenticationProviderInterface::class)) {
+            $this->markTestSkipped('Legacy test for Symfony <5.4');
+        }
+    }
+
     public function testSupportsOAuthToken(): void
     {
         $oauthProvider = new OAuthProvider(
@@ -234,9 +242,9 @@ final class OAuthProviderTest extends TestCase
         $oauthToken->setCreatedAt(time() - 3600);
         $oauthToken->setUser($userMock);
 
-        // @deprecated since Symfony 5.4
+        // required for compatibility with Symfony 5.4
         if (method_exists($oauthToken, 'setAuthenticated')) {
-            $oauthToken->setAuthenticated($authenticated);
+            $oauthToken->setAuthenticated($authenticated, false);
         }
 
         /** @var AbstractOAuthToken $token */

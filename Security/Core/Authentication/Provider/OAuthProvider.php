@@ -137,8 +137,9 @@ final class OAuthProvider implements AuthenticationProviderInterface
         $token->setUser($user);
         $token->setCreatedAt($oldToken->isExpired() ? time() : $oldToken->getCreatedAt());
 
+        // required for compatibility with Symfony 5.4
         if (method_exists($token, 'setAuthenticated')) {
-            $token->setAuthenticated(true);
+            $token->setAuthenticated(true, false);
         }
 
         // Don't use old data if newer was already set

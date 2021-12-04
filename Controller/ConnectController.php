@@ -308,9 +308,9 @@ final class ConnectController extends AbstractController
         $token->setResourceOwnerName($resourceOwnerName);
         $token->setUser($user);
 
-        // @deprecated since Symfony 5.4
+        // required for compatibility with Symfony 5.4
         if (method_exists($token, 'setAuthenticated')) {
-            $token->setAuthenticated(true);
+            $token->setAuthenticated(true, false);
         }
 
         $this->tokenStorage->setToken($token);

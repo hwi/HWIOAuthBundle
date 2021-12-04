@@ -20,10 +20,29 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 trait AuthenticationHelperTrait
 {
+    protected function getSession(KernelBrowser $client): SessionInterface
+    {
+        if ($client->getContainer()->has('session')) {
+            /** @var SessionInterface $session */
+            $session = $client->getContainer()->get('session');
+        } else {
+            $session = $client->getContainer()->get('session.factory')->createSession();
+        }
+
+        return $session;
+    }
+
+    protected function saveSession(KernelBrowser $client, SessionInterface $session): void
+    {
+        $session->save();
+
+        $client->getCookieJar()->set(new Cookie($session->getName(), $session->getId()));
+    }
+
     protected function logIn(KernelBrowser $client, SessionInterface $session): void
     {
         $session->set('_security_hwi_context', serialize(new CustomOAuthToken()));
 
-        $client->getCookieJar()->set(new Cookie($session->getName(), $session->getId()));
+        $this->saveSession($client, $session);
     }
 }
