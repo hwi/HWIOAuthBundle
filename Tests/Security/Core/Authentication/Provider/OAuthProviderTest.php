@@ -152,7 +152,7 @@ final class OAuthProviderTest extends TestCase
             $oauthProvider->authenticate($oauthToken);
 
             $this->fail('Exception was not thrown.');
-        } catch (OAuthAwareException $e) {
+        } catch (OAuthAwareExceptionInterface $e) {
             $this->assertTrue(true, 'Exception was thrown.');
             $this->assertInstanceOf(OAuthAwareExceptionInterface::class, $e);
             $this->assertEquals('github', $e->getResourceOwnerName());
