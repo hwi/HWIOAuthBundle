@@ -93,8 +93,13 @@ final class OAuthProviderTest extends TestCase
 
         /** @var AbstractOAuthToken $token */
         $token = $oauthProvider->authenticate($oauthToken);
-        $this->assertTrue($token->isAuthenticated());
+
         $this->assertInstanceOf(OAuthToken::class, $token);
+
+        // @deprecated since Symfony 5.4
+        if (method_exists($token, 'isAuthenticated')) {
+            $this->assertTrue($token->isAuthenticated());
+        }
 
         $this->assertEquals($expectedToken, $token->getRawToken());
         $this->assertEquals($expectedToken['access_token'], $token->getAccessToken());
@@ -223,17 +228,26 @@ final class OAuthProviderTest extends TestCase
         $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock, $tokenStorageMock);
 
         $oauthToken = new OAuthToken($refreshedToken);
-        $oauthToken->setAuthenticated($authenticated);
         $oauthToken->setResourceOwnerName('github');
         $oauthToken->setRefreshToken($expiredToken['refresh_token']);
         $oauthToken->setExpiresIn(30);
         $oauthToken->setCreatedAt(time() - 3600);
         $oauthToken->setUser($userMock);
 
+        // @deprecated since Symfony 5.4
+        if (method_exists($oauthToken, 'setAuthenticated')) {
+            $oauthToken->setAuthenticated($authenticated);
+        }
+
         /** @var AbstractOAuthToken $token */
         $token = $oauthProvider->authenticate($oauthToken);
-        $this->assertTrue($token->isAuthenticated());
+
         $this->assertInstanceOf(OAuthToken::class, $token);
+
+        // @deprecated since Symfony 5.4
+        if (method_exists($token, 'isAuthenticated')) {
+            $this->assertTrue($token->isAuthenticated());
+        }
 
         $this->assertEquals($refreshedToken, $token->getRawToken());
         $this->assertEquals($refreshedToken['access_token'], $token->getAccessToken());

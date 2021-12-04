@@ -42,11 +42,6 @@ final class OAuthTokenTest extends TestCase
         $this->assertEquals('github', $token->getResourceOwnerName());
     }
 
-    public function testIsAuthenticated(): void
-    {
-        $this->assertTrue($this->token->isAuthenticated());
-    }
-
     public function testGetSetResourceOwnerName(): void
     {
         $this->assertEquals('github', $this->token->getResourceOwnerName());

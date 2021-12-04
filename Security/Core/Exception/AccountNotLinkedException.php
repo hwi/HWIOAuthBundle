@@ -13,111 +13,222 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Exception;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
-final class AccountNotLinkedException extends UsernameNotFoundException implements OAuthAwareExceptionInterface
-{
-    protected ?string $resourceOwnerName = null;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __serialize(): array
+if (class_exists(UserNotFoundException::class)) {
+    final class AccountNotLinkedException extends UserNotFoundException implements OAuthAwareExceptionInterface
     {
-        return [
-            $this->resourceOwnerName,
-            parent::__serialize(),
-        ];
+        private ?string $resourceOwnerName = null;
+
+        /**
+         * {@inheritdoc}
+         */
+        public function __serialize(): array
+        {
+            return [
+                $this->resourceOwnerName,
+                parent::__serialize(),
+            ];
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function __unserialize(array $data): void
+        {
+            [
+                $this->resourceOwnerName,
+                $parentData
+            ] = $data;
+
+            parent::__unserialize($parentData);
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function getMessageKey(): string
+        {
+            return 'Account could not be linked correctly.';
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function getAccessToken(): string
+        {
+            /** @var AbstractOAuthToken $token */
+            $token = $this->getToken();
+
+            return $token->getAccessToken();
+        }
+
+        /**
+         * @return array
+         */
+        public function getRawToken(): array
+        {
+            /** @var AbstractOAuthToken $token */
+            $token = $this->getToken();
+
+            return $token->getRawToken();
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function getRefreshToken(): ?string
+        {
+            /** @var AbstractOAuthToken $token */
+            $token = $this->getToken();
+
+            return $token->getRefreshToken();
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function getExpiresIn(): ?int
+        {
+            /** @var AbstractOAuthToken $token */
+            $token = $this->getToken();
+
+            return $token->getExpiresIn();
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function getTokenSecret(): ?string
+        {
+            /** @var AbstractOAuthToken $token */
+            $token = $this->getToken();
+
+            return $token->getTokenSecret();
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function getResourceOwnerName(): ?string
+        {
+            return $this->resourceOwnerName;
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function setResourceOwnerName($resourceOwnerName): void
+        {
+            $this->resourceOwnerName = $resourceOwnerName;
+        }
     }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function __unserialize(array $data): void
+} else {
+    final class AccountNotLinkedException extends UsernameNotFoundException implements OAuthAwareExceptionInterface
     {
-        [
-            $this->resourceOwnerName,
-            $parentData
-        ] = $data;
+        private ?string $resourceOwnerName = null;
 
-        parent::__unserialize($parentData);
-    }
+        /**
+         * {@inheritdoc}
+         */
+        public function __serialize(): array
+        {
+            return [
+                $this->resourceOwnerName,
+                parent::__serialize(),
+            ];
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getMessageKey()
-    {
-        return 'Account could not be linked correctly.';
-    }
+        /**
+         * {@inheritdoc}
+         */
+        public function __unserialize(array $data): void
+        {
+            [
+                $this->resourceOwnerName,
+                $parentData
+            ] = $data;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getAccessToken()
-    {
-        /** @var AbstractOAuthToken $token */
-        $token = $this->getToken();
+            parent::__unserialize($parentData);
+        }
 
-        return $token->getAccessToken();
-    }
+        /**
+         * {@inheritdoc}
+         */
+        public function getMessageKey(): string
+        {
+            return 'Account could not be linked correctly.';
+        }
 
-    /**
-     * @return array
-     */
-    public function getRawToken()
-    {
-        /** @var AbstractOAuthToken $token */
-        $token = $this->getToken();
+        /**
+         * {@inheritdoc}
+         */
+        public function getAccessToken(): string
+        {
+            /** @var AbstractOAuthToken $token */
+            $token = $this->getToken();
 
-        return $token->getRawToken();
-    }
+            return $token->getAccessToken();
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getRefreshToken()
-    {
-        /** @var AbstractOAuthToken $token */
-        $token = $this->getToken();
+        /**
+         * @return array
+         */
+        public function getRawToken(): array
+        {
+            /** @var AbstractOAuthToken $token */
+            $token = $this->getToken();
 
-        return $token->getRefreshToken();
-    }
+            return $token->getRawToken();
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getExpiresIn()
-    {
-        /** @var AbstractOAuthToken $token */
-        $token = $this->getToken();
+        /**
+         * {@inheritdoc}
+         */
+        public function getRefreshToken(): ?string
+        {
+            /** @var AbstractOAuthToken $token */
+            $token = $this->getToken();
 
-        return $token->getExpiresIn();
-    }
+            return $token->getRefreshToken();
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getTokenSecret()
-    {
-        /** @var AbstractOAuthToken $token */
-        $token = $this->getToken();
+        /**
+         * {@inheritdoc}
+         */
+        public function getExpiresIn(): ?int
+        {
+            /** @var AbstractOAuthToken $token */
+            $token = $this->getToken();
 
-        return $token->getTokenSecret();
-    }
+            return $token->getExpiresIn();
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getResourceOwnerName()
-    {
-        return $this->resourceOwnerName;
-    }
+        /**
+         * {@inheritdoc}
+         */
+        public function getTokenSecret(): ?string
+        {
+            /** @var AbstractOAuthToken $token */
+            $token = $this->getToken();
 
-    /**
-     * {@inheritdoc}
-     */
-    public function setResourceOwnerName($resourceOwnerName)
-    {
-        $this->resourceOwnerName = $resourceOwnerName;
+            return $token->getTokenSecret();
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function getResourceOwnerName(): ?string
+        {
+            return $this->resourceOwnerName;
+        }
+
+        /**
+         * {@inheritdoc}
+         */
+        public function setResourceOwnerName($resourceOwnerName): void
+        {
+            $this->resourceOwnerName = $resourceOwnerName;
+        }
     }
 }
