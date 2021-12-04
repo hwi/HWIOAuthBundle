@@ -30,15 +30,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class OAuthProvider implements AuthenticationProviderInterface
 {
     private ResourceOwnerMapInterface $resourceOwnerMap;
-
     private OAuthAwareUserProviderInterface $userProvider;
-
     private UserCheckerInterface $userChecker;
-
     private TokenStorageInterface $tokenStorage;
 
-    public function __construct(OAuthAwareUserProviderInterface $userProvider, ResourceOwnerMapInterface $resourceOwnerMap, UserCheckerInterface $userChecker, TokenStorageInterface $tokenStorage)
-    {
+    public function __construct(
+        OAuthAwareUserProviderInterface $userProvider,
+        ResourceOwnerMapInterface $resourceOwnerMap,
+        UserCheckerInterface $userChecker,
+        TokenStorageInterface $tokenStorage
+    ) {
         $this->userProvider = $userProvider;
         $this->resourceOwnerMap = $resourceOwnerMap;
         $this->userChecker = $userChecker;
@@ -134,8 +135,11 @@ final class OAuthProvider implements AuthenticationProviderInterface
         $token = new OAuthToken($data, $user->getRoles());
         $token->setResourceOwnerName($oldToken->getResourceOwnerName());
         $token->setUser($user);
-        $token->setAuthenticated(true);
         $token->setCreatedAt($oldToken->isExpired() ? time() : $oldToken->getCreatedAt());
+
+        if (method_exists($token, 'setAuthenticated')) {
+            $token->setAuthenticated(true);
+        }
 
         // Don't use old data if newer was already set
         if (!$token->getRefreshToken()) {

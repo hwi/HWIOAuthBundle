@@ -22,13 +22,15 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Alexander <iam.asm89@gmail.com>
+ *
+ * @deprecated
  */
-class OAuthFactory extends AbstractFactory
+final class OAuthFactory extends AbstractFactory
 {
     /**
      * @param ArrayNodeDefinition $node
      */
-    public function addConfiguration(NodeDefinition $node)
+    public function addConfiguration(NodeDefinition $node): void
     {
         parent::addConfiguration($node);
 
@@ -58,28 +60,6 @@ class OAuthFactory extends AbstractFactory
     }
 
     /**
-     * Creates a resource owner map for the given configuration.
-     *
-     * @param ContainerBuilder $container Container to build for
-     * @param string           $id        Firewall id
-     * @param array            $config    Configuration
-     */
-    protected function createResourceOwnerMap(ContainerBuilder $container, string $id, array $config): void
-    {
-        $resourceOwnersMap = [];
-        foreach ($config['resource_owners'] as $name => $checkPath) {
-            $resourceOwnersMap[$name] = $checkPath;
-        }
-        $container->setParameter('hwi_oauth.resource_ownermap.configured.'.$id, $resourceOwnersMap);
-
-        $container
-            ->setDefinition($this->getResourceOwnerMapReference($id), new ChildDefinition('hwi_oauth.abstract_resource_ownermap'))
-            ->replaceArgument('$resourceOwners', new Parameter('hwi_oauth.resource_ownermap.configured.'.$id))
-            ->setPublic(true)
-        ;
-    }
-
-    /**
      * Gets a reference to the resource owner map.
      */
     protected function getResourceOwnerMapReference(string $id): Reference
@@ -90,7 +70,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createAuthProvider(ContainerBuilder $container, string $id, array $config, string $userProviderId): string
+    protected function createAuthProvider(ContainerBuilder $container, $id, $config, $userProviderId): string
     {
         $providerId = 'hwi_oauth.authentication.provider.oauth.'.$id;
 
@@ -138,7 +118,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createEntryPoint($container, $id, $config, ?string $defaultEntryPointId): ?string
+    protected function createEntryPoint($container, $id, $config, $defaultEntryPointId): ?string
     {
         $entryPointId = 'hwi_oauth.authentication.entry_point.oauth.'.$id;
 
@@ -154,7 +134,7 @@ class OAuthFactory extends AbstractFactory
     /**
      * {@inheritdoc}
      */
-    protected function createListener(ContainerBuilder $container, string $id, array $config, string $userProvider): string
+    protected function createListener($container, $id, $config, $userProvider): string
     {
         $listenerId = parent::createListener($container, $id, $config, $userProvider);
 
@@ -175,6 +155,28 @@ class OAuthFactory extends AbstractFactory
     protected function getListenerId(): string
     {
         return 'hwi_oauth.authentication.listener.oauth';
+    }
+
+    /**
+     * Creates a resource owner map for the given configuration.
+     *
+     * @param ContainerBuilder $container Container to build for
+     * @param string           $id        Firewall id
+     * @param array            $config    Configuration
+     */
+    private function createResourceOwnerMap(ContainerBuilder $container, string $id, array $config): void
+    {
+        $resourceOwnersMap = [];
+        foreach ($config['resource_owners'] as $name => $checkPath) {
+            $resourceOwnersMap[$name] = $checkPath;
+        }
+        $container->setParameter('hwi_oauth.resource_ownermap.configured.'.$id, $resourceOwnersMap);
+
+        $container
+            ->setDefinition($this->getResourceOwnerMapReference($id), new ChildDefinition('hwi_oauth.abstract_resource_ownermap'))
+            ->replaceArgument('$resourceOwners', new Parameter('hwi_oauth.resource_ownermap.configured.'.$id))
+            ->setPublic(true)
+        ;
     }
 
     private function addOAuthProviderConfiguration(ArrayNodeDefinition $node): void

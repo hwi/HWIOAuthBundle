@@ -9,7 +9,7 @@
         Hey there, welcome to this bundle's DIC configuration !
 
         Did you know that most of these services definition
-        are modified by the OAuthFactory? Or setup in the Extension?
+        are modified by the OAuthAuthenticatorFactory? Or setup in the Extension?
 
         Cheers!
         -->
