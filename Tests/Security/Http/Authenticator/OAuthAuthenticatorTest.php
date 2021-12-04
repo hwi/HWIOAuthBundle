@@ -29,7 +29,6 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
@@ -158,7 +157,6 @@ final class OAuthAuthenticatorTest extends TestCase
             $this->getAuthenticationFailureHandlerMock()
         );
 
-        /** @var UserPassportInterface $passport */
         $passport = $authenticator->authenticate($request);
         $this->assertInstanceOf(SelfValidatingPassport::class, $passport);
         $this->assertSame($userMock, $passport->getUser());
@@ -168,8 +166,12 @@ final class OAuthAuthenticatorTest extends TestCase
         $this->assertInstanceOf(OAuthToken::class, $token);
         $this->assertEquals($resourceOwnerName, $token->getResourceOwnerName());
         $this->assertSame($userMock, $token->getUser());
-        $this->assertTrue($token->isAuthenticated());
         $this->assertEquals('refresh_token', $token->getRefreshToken());
+
+        // @deprecated since Symfony 5.4
+        if (method_exists($token, 'setAuthenticated')) {
+            $this->assertTrue($token->isAuthenticated());
+        }
     }
 
     public function testOnAuthenticationSuccess(): void

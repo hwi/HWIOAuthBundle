@@ -29,9 +29,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
@@ -120,7 +120,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface
      * @throws AuthenticationException
      * @throws LazyResponseException
      */
-    public function authenticate(Request $request): PassportInterface
+    public function authenticate(Request $request): Passport
     {
         [$resourceOwner, $checkPath] = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
 
@@ -186,16 +186,11 @@ final class OAuthAuthenticator implements AuthenticatorInterface
     }
 
     /**
-     * @param UserPassportInterface $passport
+     * @param Passport $passport
      */
     public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
     {
-        $token = new OAuthToken($this->rawToken, $passport->getUser()->getRoles());
-        $token->setResourceOwnerName($this->resourceOwnerName);
-        $token->setUser($passport->getUser());
-        $token->setAuthenticated(true);
-        $token->setRefreshToken($this->refreshToken);
-        $token->setCreatedAt($this->createdAt);
+        $token = $this->createToken($passport, $firewallName);
 
         $this->rawToken = null;
         $this->resourceOwnerName = null;
@@ -213,6 +208,22 @@ final class OAuthAuthenticator implements AuthenticatorInterface
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         return $this->failureHandler->onAuthenticationFailure($request, $exception);
+    }
+
+    public function createToken(Passport $passport, string $firewallName): TokenInterface
+    {
+        $token = new OAuthToken($this->rawToken, $passport->getUser()->getRoles());
+        $token->setResourceOwnerName($this->resourceOwnerName);
+        $token->setUser($passport->getUser());
+        $token->setRefreshToken($this->refreshToken);
+        $token->setCreatedAt($this->createdAt);
+
+        // @deprecated since Symfony 5.4
+        if (method_exists($token, 'setAuthenticated')) {
+            $token->setAuthenticated(true);
+        }
+
+        return $token;
     }
 
     private function refreshToken(OAuthToken $expiredToken, ResourceOwnerInterface $resourceOwner): OAuthToken
