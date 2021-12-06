@@ -154,12 +154,9 @@ final class ConnectControllerRegistrationActionTest extends AbstractConnectContr
             ->method('getData')
             ->willReturn(new User());
 
-        $formFactory = $this->createMock(FormFactoryInterface::class);
-        $formFactory->expects($this->once())
+        $this->formFactory = $this->createMock(FormFactoryInterface::class);
+        $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($registrationForm);
-
-        $this->container->set('form.factory', $formFactory);
-        $this->container->set('hwi_oauth.registration.form', $registrationForm);
     }
 }

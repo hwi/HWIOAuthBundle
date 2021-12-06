@@ -14,6 +14,10 @@
             <argument key="$accountConnector" type="service" id="hwi_oauth.account.connector" />
             <argument key="$formHandler" type="service" id="hwi_oauth.registration.form.handler" />
             <argument key="$userChecker" type="service" id="hwi_oauth.user_checker" />
+            <argument key="$authorizationChecker" type="service" id="security.authorization_checker" />
+            <argument key="$formFactory" type="service" id="form.factory" />
+            <argument key="$twig" type="service" id="twig" />
+            <argument key="$router" type="service" id="router" />
             <argument key="$enableConnect">%hwi_oauth.connect%</argument>
             <argument key="$grantRule">%hwi_oauth.grant_rule%</argument>
             <argument key="$failedUseReferer">%hwi_oauth.failed_use_referer%</argument>
@@ -21,12 +25,6 @@
             <argument key="$enableConnectConfirmation">%hwi_oauth.connect.confirmation%</argument>
             <argument key="$firewallNames">%hwi_oauth.firewall_names%</argument>
             <argument key="$registrationForm">%hwi_oauth.connect.registration_form%</argument>
-
-            <call method="setContainer">
-                <argument type="service" id="service_container" />
-            </call>
-
-            <tag name="container.service_subscriber" />
         </service>
 
         <service id="HWI\Bundle\OAuthBundle\Controller\LoginController" public="true">

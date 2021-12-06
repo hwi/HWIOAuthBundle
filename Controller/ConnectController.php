@@ -22,15 +22,18 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\Event as DeprecatedEvent;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\Exception\AccountStatusException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
@@ -39,13 +42,14 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 use Symfony\Contracts\EventDispatcher\Event;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Twig\Environment;
 
 /**
  * @author Alexander <iam.asm89@gmail.com>
  *
  * @internal
  */
-final class ConnectController extends AbstractController
+final class ConnectController
 {
     private OAuthUtils $oauthUtils;
     private ResourceOwnerMapLocator $resourceOwnerMapLocator;
@@ -55,6 +59,10 @@ final class ConnectController extends AbstractController
     private AccountConnectorInterface $accountConnector;
     private UserCheckerInterface $userChecker;
     private RegistrationFormHandlerInterface $formHandler;
+    private AuthorizationCheckerInterface $authorizationChecker;
+    private FormFactoryInterface $formFactory;
+    private Environment $twig;
+    private RouterInterface $router;
     private bool $enableConnect;
     private string $grantRule;
     private bool $failedUseReferer;
@@ -75,6 +83,10 @@ final class ConnectController extends AbstractController
         AccountConnectorInterface $accountConnector,
         UserCheckerInterface $userChecker,
         RegistrationFormHandlerInterface $formHandler,
+        AuthorizationCheckerInterface $authorizationChecker,
+        FormFactoryInterface $formFactory,
+        Environment $twig,
+        RouterInterface $router,
         bool $enableConnect,
         string $grantRule,
         bool $failedUseReferer,
@@ -98,6 +110,10 @@ final class ConnectController extends AbstractController
         $this->tokenStorage = $tokenStorage;
         $this->userChecker = $userChecker;
         $this->formHandler = $formHandler;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->formFactory = $formFactory;
+        $this->twig = $twig;
+        $this->router = $router;
     }
 
     /**
@@ -116,7 +132,7 @@ final class ConnectController extends AbstractController
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->isGranted($this->grantRule);
+        $hasUser = $this->authorizationChecker->isGranted($this->grantRule);
         if ($hasUser) {
             throw new AccessDeniedException('Cannot connect already registered account.');
         }
@@ -140,7 +156,7 @@ final class ConnectController extends AbstractController
             ->getUserInformation($error->getRawToken())
         ;
 
-        $form = $this->createForm($this->registrationForm);
+        $form = $this->formFactory->create($this->registrationForm);
 
         if ($this->formHandler->process($request, $form, $userInformation)) {
             $event = new FormEvent($form, $request);
@@ -153,11 +169,11 @@ final class ConnectController extends AbstractController
 
             if (null === $response = $event->getResponse()) {
                 if ($targetPath = $this->getTargetPath($session)) {
-                    $response = $this->redirect($targetPath);
+                    $response = new RedirectResponse($targetPath);
                 } else {
-                    $response = $this->render('@HWIOAuth/Connect/registration_success.html.twig', [
+                    $response = new Response($this->twig->render('@HWIOAuth/Connect/registration_success.html.twig', [
                         'userInformation' => $userInformation,
-                    ]);
+                    ]));
                 }
             }
 
@@ -179,11 +195,11 @@ final class ConnectController extends AbstractController
             return $response;
         }
 
-        return $this->render('@HWIOAuth/Connect/registration.html.twig', [
+        return new Response($this->twig->render('@HWIOAuth/Connect/registration.html.twig', [
             'key' => $key,
             'form' => $form->createView(),
             'userInformation' => $userInformation,
-        ]);
+        ]));
     }
 
     /**
@@ -201,7 +217,7 @@ final class ConnectController extends AbstractController
             throw new NotFoundHttpException();
         }
 
-        $hasUser = $this->isGranted($this->grantRule);
+        $hasUser = $this->authorizationChecker->isGranted($this->grantRule);
         if (!$hasUser) {
             throw new AccessDeniedException('Cannot connect an account.');
         }
@@ -234,10 +250,10 @@ final class ConnectController extends AbstractController
         // Redirect to the login path if the token is empty (Eg. User cancelled auth)
         if (null === $accessToken) {
             if ($this->failedUseReferer && $targetPath = $this->getTargetPath($session)) {
-                return $this->redirect($targetPath);
+                return new RedirectResponse($targetPath);
             }
 
-            return $this->redirectToRoute($this->failedAuthPath);
+            return new RedirectResponse($this->router->generate($this->failedAuthPath));
         }
 
         // Show confirmation page?
@@ -245,14 +261,17 @@ final class ConnectController extends AbstractController
             return $this->getConfirmationResponse($request, $accessToken, $service);
         }
 
-        $form = $this->createForm(FormType::class);
+        $form = $this->formFactory->create();
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->getConfirmationResponse($request, $accessToken, $service);
         }
 
-        $event = new GetResponseUserEvent($this->getUser(), $request);
+        /** @var TokenInterface $token */
+        $token = $this->tokenStorage->getToken();
+
+        $event = new GetResponseUserEvent($token->getUser(), $request);
 
         $this->dispatch($event, HWIOAuthEvents::CONNECT_INITIALIZE);
 
@@ -260,12 +279,12 @@ final class ConnectController extends AbstractController
             return $response;
         }
 
-        return $this->render('@HWIOAuth/Connect/connect_confirm.html.twig', [
+        return new Response($this->twig->render('@HWIOAuth/Connect/connect_confirm.html.twig', [
             'key' => $key,
             'service' => $service,
             'form' => $form->createView(),
             'userInformation' => $resourceOwner->getUserInformation($accessToken),
-        ]);
+        ]));
     }
 
     /**
@@ -371,12 +390,12 @@ final class ConnectController extends AbstractController
 
         if (null === $response = $event->getResponse()) {
             if ($targetPath = $this->getTargetPath($request->getSession())) {
-                $response = $this->redirect($targetPath);
+                $response = new RedirectResponse($targetPath);
             } else {
-                $response = $this->render('@HWIOAuth/Connect/connect_success.html.twig', [
+                $response = new Response($this->twig->render('@HWIOAuth/Connect/connect_success.html.twig', [
                     'userInformation' => $userInformation,
                     'service' => $service,
-                ]);
+                ]));
             }
         }
 
