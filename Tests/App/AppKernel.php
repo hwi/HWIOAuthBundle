@@ -42,6 +42,12 @@ class AppKernel extends Kernel
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
         $loader->load(__DIR__.'/config.yml');
+
+        if (Kernel::VERSION_ID >= 60000) {
+            $loader->load(__DIR__.'/security_v6.yaml');
+        } else {
+            $loader->load(__DIR__.'/security_v4.yaml');
+        }
     }
 
     public function prepareContainer(ContainerBuilder $container): void
@@ -65,50 +71,18 @@ class AppKernel extends Kernel
             ]);
         }
 
-        $security = [
-            'encoders' => [
-                \HWI\Bundle\OAuthBundle\Tests\Fixtures\User::class => 'plaintext',
-            ],
-            'firewalls' => [
-                'login_area' => [
-                    'pattern' => '^/(login$|connect|login_hwi)',
-                    'context' => 'hwi_context',
-                    'anonymous' => true,
-                ],
-                'main' => [
-                    'pattern' => '^/',
-                    'oauth' => [
-                        'resource_owners' => [
-                            'google' => '/check-login/google',
-                        ],
-                        'login_path' => '/login',
-                        'use_forward' => false,
-                        'failure_path' => '/login',
-                        'oauth_user_provider' => [
-                            'service' => UserProvider::class,
-                        ],
-                        'provider' => UserProvider::class,
-                    ],
-                    'context' => 'hwi_context',
-                ],
-            ],
-        ];
-
-        if (!class_exists(User::class)) {
-            unset($security['firewalls']['login_area']['anonymous']);
-
-            $security['password_hashers'] = $security['encoders'];
-            unset($security['encoders']);
-
-            $security['enable_authenticator_manager'] = true;
-        }
-
         if (method_exists(Security::class, 'getUser') && !class_exists(UserValueResolver::class)) {
-            $security['firewalls']['login_area'] = ['logout_on_user_change' => true];
-            $security['firewalls']['main'] = ['logout_on_user_change' => true];
+            $container->loadFromExtension('security', [
+                'firewalls' => [
+                    'login_area' => [
+                        'logout_on_user_change' => true,
+                    ],
+                    'main' => [
+                        'logout_on_user_change' => true,
+                    ],
+                ],
+            ]);
         }
-
-        $container->prependExtensionConfig('security', $security);
     }
 
     public function getCacheDir(): string

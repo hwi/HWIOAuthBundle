@@ -39,7 +39,7 @@ class HWIOAuthBundle extends Bundle
 
         // Symfony < 5.4 BC layer
         if (interface_exists(AuthenticationProviderInterface::class)) {
-            $extension->addSecurityListenerFactory(new OAuthFactory());
+            $extension->addSecurityListenerFactory(new OAuthFactory()); // @phpstan-ignore-this-line Symfony < 5.4 BC layer
         } else {
             $extension->addAuthenticatorFactory(new OAuthAuthenticatorFactory());
         }

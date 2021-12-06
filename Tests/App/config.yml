@@ -16,14 +16,6 @@ monolog:
             path:  "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
 
-security:
-    providers:
-        HWI\Bundle\OAuthBundle\Tests\App\UserProvider:
-            id: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
-
-    access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-
 services:
     _defaults:
         autowire: true
