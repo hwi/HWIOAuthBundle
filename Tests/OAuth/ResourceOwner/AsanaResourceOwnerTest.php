@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AsanaResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-class AsanaResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class AsanaResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = AsanaResourceOwner::class;
     protected $userResponse = <<<json

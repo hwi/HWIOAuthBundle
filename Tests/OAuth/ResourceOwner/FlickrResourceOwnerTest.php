@@ -12,9 +12,10 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\FlickrResourceOwner;
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth1ResourceOwnerTestCase;
 
-class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = FlickrResourceOwner::class;
     protected $paths = [

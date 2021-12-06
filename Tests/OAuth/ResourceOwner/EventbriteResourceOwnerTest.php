@@ -13,8 +13,9 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\EventbriteResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-class EventbriteResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class EventbriteResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = EventbriteResourceOwner::class;
     protected $userResponse = <<<json

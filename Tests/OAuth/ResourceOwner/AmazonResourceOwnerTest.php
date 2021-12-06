@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AmazonResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-class AmazonResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class AmazonResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = AmazonResourceOwner::class;
     protected $userResponse = <<<json

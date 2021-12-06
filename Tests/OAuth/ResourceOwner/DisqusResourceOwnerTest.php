@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\DisqusResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-class DisqusResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class DisqusResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = DisqusResourceOwner::class;
     protected $userResponse = <<<json

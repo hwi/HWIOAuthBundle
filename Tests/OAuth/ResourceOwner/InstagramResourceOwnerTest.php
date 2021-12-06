@@ -12,9 +12,10 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\InstagramResourceOwner;
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class InstagramResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = InstagramResourceOwner::class;
     protected $userResponse = <<<json

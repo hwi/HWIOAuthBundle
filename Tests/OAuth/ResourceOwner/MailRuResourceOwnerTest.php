@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\MailRuResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-class MailRuResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class MailRuResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = MailRuResourceOwner::class;
     protected $userResponse = <<<json

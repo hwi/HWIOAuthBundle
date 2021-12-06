@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\BitbucketResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth1ResourceOwnerTestCase;
 
-class BitbucketResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class BitbucketResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = BitbucketResourceOwner::class;
     protected $userResponse = <<<json

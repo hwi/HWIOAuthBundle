@@ -12,13 +12,14 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\PaypalResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
 /**
  * Class PaypalResourceOwnerTest.
  *
  * @author Berny Cantos <be@rny.cc>
  */
-class PaypalResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class PaypalResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = PaypalResourceOwner::class;
     protected $userResponse = <<<json

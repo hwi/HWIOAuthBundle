@@ -9,16 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
+namespace HWI\Bundle\OAuthBundle\Test\Fixtures;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 
 /**
- * CustomUserResponse.
- *
  * @author Alexander <iam.asm89@gmail.com>
  */
-class CustomUserResponse extends AbstractUserResponse
+final class CustomUserResponse extends AbstractUserResponse
 {
     public function getUsername()
     {

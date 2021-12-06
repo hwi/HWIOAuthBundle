@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TrelloResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth1ResourceOwnerTestCase;
 
-class TrelloResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class TrelloResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = TrelloResourceOwner::class;
     protected $userResponse = <<<json

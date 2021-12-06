@@ -14,9 +14,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use Http\Client\Exception\TransferException;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SinaWeiboResourceOwner;
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-class SinaWeiboResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class SinaWeiboResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = SinaWeiboResourceOwner::class;
     protected $userResponse = <<<json

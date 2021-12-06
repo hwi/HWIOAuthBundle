@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ThirtySevenSignalsResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-class ThirtySevenSignalsResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class ThirtySevenSignalsResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = ThirtySevenSignalsResourceOwner::class;
     protected $userResponse = <<<json

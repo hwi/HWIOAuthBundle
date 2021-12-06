@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
+namespace HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner;
 
 use Http\Client\Common\HttpMethodsClient;
 use Http\Client\HttpClient;

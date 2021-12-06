@@ -12,9 +12,10 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YoutubeResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class YoutubeResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class YoutubeResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected $resourceOwnerClass = YoutubeResourceOwner::class;
     protected $userResponse = <<<json
