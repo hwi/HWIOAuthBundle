@@ -31,12 +31,13 @@ use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * @author Vadim Borodavko <vadim.borodavko@gmail.com>
  */
-final class OAuthAuthenticator implements AuthenticatorInterface
+final class OAuthAuthenticator implements AuthenticatorInterface, AuthenticationEntryPointInterface
 {
     private HttpUtils $httpUtils;
     private OAuthAwareUserProviderInterface $userProvider;
@@ -53,6 +54,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface
     private ?string $resourceOwnerName = null;
     private ?string $refreshToken = null;
     private ?int $createdAt = null;
+    private array $options;
 
     public function __construct(
         HttpUtils $httpUtils,
@@ -60,7 +62,8 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         ResourceOwnerMapInterface $resourceOwnerMap,
         array $checkPaths,
         AuthenticationSuccessHandlerInterface $successHandler,
-        AuthenticationFailureHandlerInterface $failureHandler
+        AuthenticationFailureHandlerInterface $failureHandler,
+        array $options
     ) {
         $this->failureHandler = $failureHandler;
         $this->successHandler = $successHandler;
@@ -68,6 +71,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         $this->resourceOwnerMap = $resourceOwnerMap;
         $this->userProvider = $userProvider;
         $this->httpUtils = $httpUtils;
+        $this->options = $options;
     }
 
     public function supports(Request $request): bool
@@ -79,6 +83,11 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         }
 
         return false;
+    }
+
+    public function start(Request $request, AuthenticationException $authException = null): Response
+    {
+        return new RedirectResponse($this->httpUtils->generateUri($request, $this->options['login_path']));
     }
 
     /**
@@ -170,7 +179,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         return $this->successHandler->onAuthenticationSuccess($request, $token);
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         return $this->failureHandler->onAuthenticationFailure($request, $exception);
     }

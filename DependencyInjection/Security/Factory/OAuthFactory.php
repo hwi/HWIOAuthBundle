@@ -59,6 +59,23 @@ final class OAuthFactory extends AbstractFactory
         return 'http';
     }
 
+    public function getPriority(): int
+    {
+        return 1;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function createAuthenticator(
+        ContainerBuilder $container,
+        string $firewallName,
+        array $config,
+        string $userProviderId
+    ): string {
+        throw new \RuntimeException('Deprecated "OAuthFactory" cannot create new Symfony Authenticator!');
+    }
+
     /**
      * Gets a reference to the resource owner map.
      */

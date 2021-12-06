@@ -67,6 +67,7 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
             ->addArgument($config['resource_owners'])
             ->addArgument(new Reference($this->createAuthenticationSuccessHandler($container, $firewallName, $config)))
             ->addArgument(new Reference($this->createAuthenticationFailureHandler($container, $firewallName, $config)))
+            ->addArgument(array_intersect_key($config, $this->options))
         ;
 
         return $authenticatorId;

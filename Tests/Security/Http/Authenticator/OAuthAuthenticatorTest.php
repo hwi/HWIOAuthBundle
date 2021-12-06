@@ -68,7 +68,8 @@ final class OAuthAuthenticatorTest extends TestCase
             $this->getResourceOwnerMap(),
             ['/a', '/b'],
             $this->getAuthenticationSuccessHandlerMock(),
-            $this->getAuthenticationFailureHandlerMock()
+            $this->getAuthenticationFailureHandlerMock(),
+            []
         );
 
         $this->assertTrue($authenticator->supports($request));
@@ -148,7 +149,8 @@ final class OAuthAuthenticatorTest extends TestCase
             $resourceOwnerMap,
             [],
             $this->getAuthenticationSuccessHandlerMock(),
-            $this->getAuthenticationFailureHandlerMock()
+            $this->getAuthenticationFailureHandlerMock(),
+            []
         );
 
         $passport = $authenticator->authenticate($request);
@@ -187,7 +189,8 @@ final class OAuthAuthenticatorTest extends TestCase
             $this->getResourceOwnerMap(),
             [],
             $successHandlerMock,
-            $this->getAuthenticationFailureHandlerMock()
+            $this->getAuthenticationFailureHandlerMock(),
+            []
         );
 
         $this->assertSame($response, $authenticator->onAuthenticationSuccess($request, $token, 'main'));
@@ -212,7 +215,8 @@ final class OAuthAuthenticatorTest extends TestCase
             $this->getResourceOwnerMap(),
             [],
             $this->getAuthenticationSuccessHandlerMock(),
-            $failureHandlerMock
+            $failureHandlerMock,
+            []
         );
 
         $this->assertSame($response, $authenticator->onAuthenticationFailure($request, $exception));
