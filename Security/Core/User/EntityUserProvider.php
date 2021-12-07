@@ -54,9 +54,6 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         $this->properties = array_merge($this->properties, $properties);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         $user = $this->findUser(['username' => $identifier]);
@@ -72,7 +69,9 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $username
+     *
+     * @return UserInterface
      */
     public function loadUserByUsername($username)
     {
@@ -88,7 +87,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
     }
 
     /**
-     * {@inheritdoc}
+     * @return UserInterface
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
@@ -110,7 +109,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
     }
 
     /**
-     * {@inheritdoc}
+     * @return UserInterface
      */
     public function refreshUser(UserInterface $user)
     {
@@ -134,7 +133,9 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $class
+     *
+     * @return bool
      */
     public function supportsClass($class)
     {

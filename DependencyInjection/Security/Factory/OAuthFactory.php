@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
@@ -99,6 +100,9 @@ class OAuthFactory extends AbstractFactory
         $providerId = 'hwi_oauth.authentication.provider.oauth.'.$id;
 
         $this->createResourceOwnerMap($container, $id, $config);
+
+        $container
+            ->register('hwi_oauth.authentication.provider.oauth', OAuthProvider::class);
 
         $container
             ->setDefinition($providerId, new ChildDefinition('hwi_oauth.authentication.provider.oauth'))

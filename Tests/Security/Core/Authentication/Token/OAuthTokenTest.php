@@ -13,7 +13,9 @@ namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\Authentication\Token;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class OAuthTokenTest extends TestCase
 {
@@ -23,6 +25,7 @@ final class OAuthTokenTest extends TestCase
     {
         $this->token = new OAuthToken('access_token', ['ROLE_TEST']);
         $this->token->setResourceOwnerName('github');
+        $this->token->setUser(new User());
     }
 
     public function testGets(): void
@@ -44,7 +47,7 @@ final class OAuthTokenTest extends TestCase
 
     public function testIsAuthenticated(): void
     {
-        $this->assertTrue($this->token->isAuthenticated());
+        $this->assertInstanceOf(UserInterface::class, $this->token->getUser());
     }
 
     public function testGetSetResourceOwnerName(): void

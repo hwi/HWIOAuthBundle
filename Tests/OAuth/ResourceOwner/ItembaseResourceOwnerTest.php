@@ -12,11 +12,12 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\ItembaseResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
 /**
  * @author Thomas Bretzke <tb@itembase.biz>
  */
-final class ItembaseResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class ItembaseResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected string $resourceOwnerClass = ItembaseResourceOwner::class;
     protected string $userResponse = <<<json

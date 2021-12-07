@@ -13,4 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token;
 
 class OAuthToken extends AbstractOAuthToken
 {
+    /**
+     * @return mixed|void
+     */
+    public function getCredentials()
+    {
+    }
 }

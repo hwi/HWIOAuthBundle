@@ -54,12 +54,14 @@ final class State implements StateInterface
 
     public function __serialize(): array
     {
-        return $this->values;
+        return [
+            'values' => $this->values,
+        ];
     }
 
     public function __unserialize(array $data): void
     {
-        $this->values = $data;
+        $this->values = $data['values'];
     }
 
     /**

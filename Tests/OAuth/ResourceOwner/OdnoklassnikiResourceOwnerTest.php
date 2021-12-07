@@ -13,9 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\OdnoklassnikiResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 use Symfony\Component\Security\Http\HttpUtils;
 
-final class OdnoklassnikiResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class OdnoklassnikiResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected string $resourceOwnerClass = OdnoklassnikiResourceOwner::class;
     protected string $userResponse = <<<json

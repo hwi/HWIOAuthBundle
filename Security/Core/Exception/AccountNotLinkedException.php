@@ -45,7 +45,7 @@ final class AccountNotLinkedException extends UsernameNotFoundException implemen
     /**
      * {@inheritdoc}
      */
-    public function getMessageKey()
+    public function getMessageKey(): string
     {
         return 'Account could not be linked correctly.';
     }

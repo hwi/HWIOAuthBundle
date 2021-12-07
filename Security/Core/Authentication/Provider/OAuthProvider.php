@@ -68,7 +68,7 @@ final class OAuthProvider implements AuthenticationProviderInterface
 
         // If token is authenticated, re-create it to reload user details
         /** @var OAuthToken $token */
-        if ($token->isAuthenticated() && !$token->isExpired()) {
+        if (null !== $token->getUser() && !$token->isExpired()) {
             /** @var UserInterface $user */
             $user = $token->getUser();
 
@@ -134,7 +134,6 @@ final class OAuthProvider implements AuthenticationProviderInterface
         $token = new OAuthToken($data, $user->getRoles());
         $token->setResourceOwnerName($oldToken->getResourceOwnerName());
         $token->setUser($user);
-        $token->setAuthenticated(true);
         $token->setCreatedAt($oldToken->isExpired() ? time() : $oldToken->getCreatedAt());
 
         // Don't use old data if newer was already set

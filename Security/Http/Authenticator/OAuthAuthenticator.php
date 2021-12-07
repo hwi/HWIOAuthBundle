@@ -185,6 +185,11 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         );
     }
 
+    public function createToken(PassportInterface $passport, string $firewallName): TokenInterface
+    {
+        return $this->createAuthenticatedToken($passport, $firewallName);
+    }
+
     /**
      * @param UserPassportInterface $passport
      */

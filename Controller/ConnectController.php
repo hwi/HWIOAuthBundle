@@ -297,7 +297,6 @@ final class ConnectController extends AbstractController
         $token = new OAuthToken($accessToken, $user->getRoles());
         $token->setResourceOwnerName($resourceOwnerName);
         $token->setUser($user);
-        $token->setAuthenticated(true);
 
         /** @var TokenStorageInterface $tokenStorage */
         $tokenStorage = $this->get('security.token_storage');
