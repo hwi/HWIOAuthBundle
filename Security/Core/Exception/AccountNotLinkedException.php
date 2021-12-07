@@ -50,7 +50,7 @@ class AccountNotLinkedException extends UsernameNotFoundException implements OAu
     /**
      * {@inheritdoc}
      */
-    public function getMessageKey()
+    public function getMessageKey(): string
     {
         return 'Account could not be linked correctly.';
     }
