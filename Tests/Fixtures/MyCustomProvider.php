@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
+use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 final class MyCustomProvider implements ResourceOwnerInterface

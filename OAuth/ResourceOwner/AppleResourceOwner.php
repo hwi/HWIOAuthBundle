@@ -52,7 +52,7 @@ final class AppleResourceOwner extends GenericOAuth2ResourceOwner
         }
 
         $jwt = self::jwtDecode($accessToken['id_token']);
-        $data = json_decode(base64_decode($jwt), true);
+        $data = $jwt ? json_decode(base64_decode($jwt), true) : [];
 
         if (isset($accessToken['firstName'], $accessToken['lastName'])) {
             $data['firstName'] = $accessToken['firstName'];

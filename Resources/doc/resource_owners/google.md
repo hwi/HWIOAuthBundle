@@ -40,25 +40,6 @@ hwi_oauth:
                 access_type:     offline
 ```
 
-In case you want to [insert moments](https://developers.google.com/+/api/latest/moments/insert) you will need [`request_visible_actions`](https://developers.google.com/+/web/app-activities/#writing_an_app_activity_using_the_google_apis_client_libraries)
-for each activity you're planning to use.
-As an example consider following:
-```yaml
-# app/config/config.yml
-hwi_oauth:
-    resource_owners:
-        any_name:
-            type:                google
-            client_id:           <client_id>
-            client_secret:       <client_secret>
-            scope:               "https://www.googleapis.com/auth/plus.login"
-            options:
-                request_visible_actions: "http://schemas.google.com/AddActivity http://schemas.google.com/CommentActivity"
-```
-
-In option `request_visible_actions` there are listed activity types that will be used while inserting as type for Google Moments API.
-Please also note that you need to add additional scope `https://www.googleapis.com/auth/plus.login`, to be able use the that API.
-
 When you're done. Continue by configuring the security layer or go back to
 setup more resource owners.
 

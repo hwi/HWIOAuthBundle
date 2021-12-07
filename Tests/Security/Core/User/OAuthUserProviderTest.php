@@ -34,6 +34,7 @@ final class OAuthUserProviderTest extends TestCase
             $user = $this->provider->loadUserByUsername('asm89');
 
             $this->assertInstanceOf(OAuthUser::class, $user);
+            // @phpstan-ignore-next-line Symfony < 5.4 BC layer
             $this->assertEquals('asm89', $user->getUsername());
         } else {
             $user = $this->provider->loadUserByIdentifier('asm89');
@@ -89,6 +90,7 @@ final class OAuthUserProviderTest extends TestCase
         $this->assertInstanceOf(OAuthUser::class, $user);
 
         if (method_exists($this->provider, 'loadUserByUsername')) {
+            // @phpstan-ignore-next-line Symfony < 5.4 BC layer
             $this->assertEquals('asm89', $user->getUsername());
         } else {
             $this->assertEquals('asm89', $user->getUserIdentifier());

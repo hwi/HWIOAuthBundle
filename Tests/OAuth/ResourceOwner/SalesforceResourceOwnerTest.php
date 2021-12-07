@@ -14,8 +14,9 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\SalesforceResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-final class SalesforceResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class SalesforceResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected string $resourceOwnerClass = SalesforceResourceOwner::class;
     protected string $userResponse = <<<json

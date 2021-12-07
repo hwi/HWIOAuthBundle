@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\TwitterResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth1ResourceOwnerTestCase;
 
-final class TwitterResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class TwitterResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
 {
     protected string $resourceOwnerClass = TwitterResourceOwner::class;
     protected string $userResponse = <<<json

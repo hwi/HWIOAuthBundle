@@ -21,16 +21,15 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  */
 final class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         return new OAuthUser($identifier);
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $username
+     *
+     * @return UserInterface
      */
     public function loadUserByUsername($username)
     {
@@ -38,7 +37,7 @@ final class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserPr
     }
 
     /**
-     * {@inheritdoc}
+     * @return UserInterface
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
@@ -46,7 +45,7 @@ final class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserPr
     }
 
     /**
-     * {@inheritdoc}
+     * @return UserInterface
      */
     public function refreshUser(UserInterface $user)
     {
@@ -54,11 +53,16 @@ final class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserPr
             throw new UnsupportedUserException(sprintf('Unsupported user class "%s"', \get_class($user)));
         }
 
-        return $this->loadUserByUsername($user->getUsername());
+        // @phpstan-ignore-next-line Symfony <5.4 BC layer
+        $username = method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername();
+
+        return $this->loadUserByUsername($username);
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $class
+     *
+     * @return bool
      */
     public function supportsClass($class)
     {

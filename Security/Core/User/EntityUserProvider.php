@@ -54,9 +54,6 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         $this->properties = array_merge($this->properties, $properties);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
         $user = $this->findUser(['username' => $identifier]);
@@ -72,7 +69,9 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $username
+     *
+     * @return UserInterface
      */
     public function loadUserByUsername($username)
     {
@@ -85,7 +84,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
     }
 
     /**
-     * {@inheritdoc}
+     * @return UserInterface
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response)
     {
@@ -104,7 +103,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
     }
 
     /**
-     * {@inheritdoc}
+     * @return UserInterface
      */
     public function refreshUser(UserInterface $user)
     {
@@ -115,7 +114,9 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         }
 
         $userId = $accessor->getValue($user, $identifier);
-        $username = $user->getUsername();
+
+        // @phpstan-ignore-next-line Symfony <5.4 BC layer
+        $username = method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername();
 
         if (null === $user = $this->findUser([$identifier => $userId])) {
             throw $this->createUserNotFoundException($username, sprintf('User with ID "%d" could not be reloaded.', $userId));
@@ -125,7 +126,9 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $class
+     *
+     * @return bool
      */
     public function supportsClass($class)
     {
@@ -147,9 +150,13 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
             $exception = new UserNotFoundException($message);
             $exception->setUserIdentifier($username);
         } else {
+            if (!class_exists(UsernameNotFoundException::class)) {
+                throw new \RuntimeException('Unsupported Symfony version used!');
+            }
+
             $exception = new UsernameNotFoundException($message);
             if (method_exists($exception, 'setUsername')) {
-                $exception->setUsername($username);
+                $exception->setUsername($username); // @phpstan-ignore-this-line Symfony <5.4 BC layer
             }
         }
 

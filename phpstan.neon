@@ -3,7 +3,17 @@ parameters:
     paths:
         - .
     excludePaths:
+        # Symfony <5.4 BC layer
+        - DependencyInjection/Security/Factory/OAuthFactory.php
+        - Security/Core/Authentication/Provider/OAuthProvider.php
+        - Security/Core/Exception/AccountNotLinkedException.php
+        - Security/Core/User/OAuthAwareUserProviderInterface.php
+        - Security/Http/Firewall/OAuthListener.php
+        - Tests/Security/Core/Authentication/Provider/OAuthProviderTest.php
+
         - vendor/*
+    # Symfony <5.4 BC layer
+    reportUnmatchedIgnoredErrors: false
     ignoreErrors:
         - '#Parameter \$event of method HWI\\Bundle\\OAuthBundle\\Controller\\ConnectController::dispatch\(\) has invalid type Symfony\\Component\\EventDispatcher\\Event.#'
         - '#Parameter \#2 \$array of function implode expects array<string>, array<int, array\|string\|null> given.#'

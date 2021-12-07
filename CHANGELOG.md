@@ -23,6 +23,13 @@ Changelog
 * Added support for PHP 8.1,
 * Added support for Symfony 5.6,
 
+## 1.4.3 (2021-12-07)
+* Bugfix: Fixed support for PHP 8.1,
+* Bugfix: Fixed support for Symfony 5.4, 
+* Bugfix: Fixed `VkontakteResourceOwner` option: `api_version` to not point to deprecated one,
+* Bugfix: `RequestStack::getMasterRequest()` is deprecated since Symfony 5.3, use `RequestStack::getMainRequest()` if exists,
+* Maintain: Added `GenericOAuth1ResourceOwnerTestCase`, `GenericOAuth2ResourceOwnerTestCase` & `ResourceOwnerTestCase` test case classes for easier unit testing custom resource owners
+
 ## 1.4.2 (2021-08-09)
 * Bugfix: remove `@final` declaration from `OAuthFactory` & `FOSUBUserProvider`,
 * Maintain: added `.gitattributes` to reduce amount of code in archives,

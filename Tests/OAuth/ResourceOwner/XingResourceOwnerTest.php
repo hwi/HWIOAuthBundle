@@ -12,8 +12,9 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\XingResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth1ResourceOwnerTestCase;
 
-final class XingResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class XingResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
 {
     protected string $resourceOwnerClass = XingResourceOwner::class;
     protected string $userResponse = <<<json

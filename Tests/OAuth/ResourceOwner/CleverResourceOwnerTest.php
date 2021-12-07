@@ -12,11 +12,12 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\CleverResourceOwner;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
 /**
  * @author Matt Farmer <work@mattfarmer.net>
  */
-final class CleverResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class CleverResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected string $resourceOwnerClass = CleverResourceOwner::class;
 }

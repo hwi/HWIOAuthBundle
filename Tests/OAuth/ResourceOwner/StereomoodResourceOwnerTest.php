@@ -12,9 +12,10 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\StereomoodResourceOwner;
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth1ResourceOwnerTestCase;
 
-final class StereomoodResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class StereomoodResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
 {
     protected string $resourceOwnerClass = StereomoodResourceOwner::class;
     protected string $userResponse = <<<json

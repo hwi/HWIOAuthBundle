@@ -152,6 +152,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         return new SelfValidatingPassport(
             class_exists(UserBadge::class)
                 ? new UserBadge(
+                    // @phpstan-ignore-next-line Symfony <5.4 BC layer
                     method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername(),
                     static function () use ($user) { return $user; }
                 )

@@ -13,10 +13,11 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\JiraResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth1ResourceOwnerTestCase;
 use Symfony\Component\Security\Http\HttpUtils;
 
-final class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTest
+final class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
 {
     protected string $resourceOwnerClass = JiraResourceOwner::class;
     protected string $userResponse = '{"name": "asm89", "displayName": "Alexander"}';

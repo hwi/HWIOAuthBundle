@@ -205,7 +205,7 @@ abstract class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     protected function httpRequest($url, $content = null, array $headers = [], $method = null, array $parameters = [])
     {
         foreach ($parameters as $key => $value) {
-            $parameters[$key] = $key.'="'.rawurlencode($value).'"';
+            $parameters[$key] = $key.'="'.rawurlencode($value ?: '').'"';
         }
 
         if (!$this->options['realm']) {

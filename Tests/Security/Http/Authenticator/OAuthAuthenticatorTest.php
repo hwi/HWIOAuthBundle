@@ -165,7 +165,7 @@ final class OAuthAuthenticatorTest extends TestCase
         $this->assertEquals('refresh_token', $token->getRefreshToken());
 
         // required for compatibility with Symfony 5.4
-        if (method_exists($token, 'setAuthenticated')) {
+        if (method_exists($token, 'isAuthenticated')) {
             $this->assertTrue($token->isAuthenticated());
         }
     }
@@ -270,12 +270,10 @@ final class OAuthAuthenticatorTest extends TestCase
         return $this->createMock(UserResponseInterface::class);
     }
 
-    /**
-     * @return User|InMemoryUser
-     */
     private function createUser(): UserInterface
     {
         if (class_exists(User::class)) {
+            // @phpstan-ignore-next-line Symfony < 5.4 BC layer
             return new User('asm89', 'foo', ['ROLE_USER']);
         }
 

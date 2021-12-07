@@ -13,9 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GitHubResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTest
+final class GitHubResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected string $resourceOwnerClass = GitHubResourceOwner::class;
     protected string $userResponse = <<<json
