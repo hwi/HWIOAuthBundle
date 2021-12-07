@@ -78,7 +78,6 @@ jobs:
             stability: 'stable'
           - php: '8.0'
             symfony-require: '5.4.*'
-            stability: 'dev'
             dependencies: 'highest'
       fail-fast: false
     steps:
