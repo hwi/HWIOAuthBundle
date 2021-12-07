@@ -79,6 +79,7 @@ final class OAuthHelper extends Helper
             return $this->requestStack->getMainRequest(); // Symfony 5.3+
         }
 
+        // @phpstan-ignore-next-line
         return $this->requestStack->getMasterRequest();
     }
 }

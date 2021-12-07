@@ -166,8 +166,8 @@ json;
             ->willReturn(serialize(new State(['state' => 'some-state'])));
 
         $state = $resourceOwner->getState();
-        self::assertEquals($state->get('initial_state_param_1'), 'value');
-        self::assertEquals($state->get('state'), 'some-state');
+        self::assertEquals('value', $state->get('initial_state_param_1'));
+        self::assertEquals('some-state', $state->get('state'));
     }
 
     public function testGetStateWithoutStoredValues(): void
@@ -207,7 +207,7 @@ json;
     /**
      * @dataProvider provideAccessTokenData
      */
-    public function testGetAccessToken(string $response, string $contentType)
+    public function testGetAccessToken(string $response, string $contentType): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -293,7 +293,7 @@ json;
     /**
      * @dataProvider provideRefreshToken
      */
-    public function testRefreshAccessToken($response, $contentType)
+    public function testRefreshAccessToken($response, $contentType): void
     {
         $resourceOwner = $this->createResourceOwner(
             [],
@@ -320,7 +320,7 @@ json;
     /**
      * @dataProvider provideInvalidRefreshToken
      */
-    public function testRefreshAccessTokenInvalid(string $response, string $exceptionClass)
+    public function testRefreshAccessTokenInvalid(string $response, string $exceptionClass): void
     {
         $this->expectException($exceptionClass);
 

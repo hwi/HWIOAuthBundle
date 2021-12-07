@@ -62,7 +62,7 @@ final class RegistrationFormType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'registration';
     }

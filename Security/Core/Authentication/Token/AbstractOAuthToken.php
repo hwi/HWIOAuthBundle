@@ -69,7 +69,7 @@ abstract class AbstractOAuthToken extends AbstractToken
 
         // required for compatibility with Symfony 5.4
         if (method_exists($this, 'setAuthenticated')) {
-            parent::setAuthenticated(\count($roles) > 0, false);
+            $this->setAuthenticated(\count($roles) > 0, false);
         }
     }
 

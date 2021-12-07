@@ -13,9 +13,9 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\YahooResourceOwner;
 use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
-use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth1ResourceOwnerTestCase;
+use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 
-final class YahooResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
+final class YahooResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected string $resourceOwnerClass = YahooResourceOwner::class;
     protected string $userResponse = <<<json

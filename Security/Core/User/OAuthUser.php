@@ -25,9 +25,6 @@ final class OAuthUser implements UserInterface
         $this->username = $username;
     }
 
-    /**
-     * @return string
-     */
     public function getUserIdentifier(): string
     {
         return $this->username;
@@ -41,43 +38,31 @@ final class OAuthUser implements UserInterface
         return ['ROLE_USER', 'ROLE_OAUTH_USER'];
     }
 
-    /**
-     * @return string|null
-     */
     public function getPassword(): ?string
     {
         return null;
     }
 
-    /**
-     * @return string|null
-     */
     public function getSalt(): ?string
     {
         return null;
     }
 
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return $this->getUserIdentifier();
     }
 
-    /**
-     * @return bool
-     */
     public function eraseCredentials(): bool
     {
         return true;
     }
 
-    /**
-     * @return bool
-     */
     public function equals(UserInterface $user): bool
     {
-        return $user->getUsername() === $this->username;
+        // @phpstan-ignore-next-line Symfony <5.4 BC layer
+        $username = method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername();
+
+        return $username === $this->username;
     }
 }

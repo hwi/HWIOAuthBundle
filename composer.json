@@ -129,7 +129,7 @@
     "scripts": {
         "csfixer": "vendor/bin/php-cs-fixer fix --verbose --dry-run",
         "csfixer-fix": "vendor/bin/php-cs-fixer fix --verbose",
-        "phpunit": "vendor/bin/phpunit",
+        "phpunit": "vendor/bin/phpunit --generate-baseline",
         "phpstan": "vendor/bin/phpstan"
     },
 

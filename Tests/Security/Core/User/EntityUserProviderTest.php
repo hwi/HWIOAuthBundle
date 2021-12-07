@@ -51,12 +51,7 @@ final class EntityUserProviderTest extends TestCase
 
     public function testLoadUserByUsernameThrowsExceptionWhenUserIsNull(): void
     {
-        if (class_exists(UserNotFoundException::class)) {
-            $this->expectException(UserNotFoundException::class);
-        } else {
-            $this->expectException(UsernameNotFoundException::class);
-        }
-
+        $this->assertUserNotFoundException();
         $this->expectExceptionMessage("User 'asm89' not found.");
 
         $provider = $this->createEntityUserProvider();
@@ -74,12 +69,7 @@ final class EntityUserProviderTest extends TestCase
 
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenUserIsNull(): void
     {
-        if (class_exists(UserNotFoundException::class)) {
-            $this->expectException(UserNotFoundException::class);
-        } else {
-            $this->expectException(UsernameNotFoundException::class);
-        }
-
+        $this->assertUserNotFoundException();
         $this->expectExceptionMessage("User 'asm89' not found.");
 
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
@@ -102,12 +92,7 @@ final class EntityUserProviderTest extends TestCase
 
     public function testRefreshUserThrowsExceptionWhenUserIsNull(): void
     {
-        if (class_exists(UserNotFoundException::class)) {
-            $this->expectException(UserNotFoundException::class);
-        } else {
-            $this->expectException(UsernameNotFoundException::class);
-        }
-
+        $this->assertUserNotFoundException();
         $this->expectExceptionMessage('User with ID "1" could not be reloaded.');
 
         $provider = $this->createEntityUserProvider();
@@ -196,5 +181,19 @@ final class EntityUserProviderTest extends TestCase
         }
 
         return $responseMock;
+    }
+
+    private function assertUserNotFoundException(): void
+    {
+        if (class_exists(UserNotFoundException::class)) {
+            $this->expectException(UserNotFoundException::class);
+        } else {
+            if (!class_exists(UsernameNotFoundException::class)) {
+                $this->markTestSkipped('Requires Symfony <5.4');
+            }
+
+            // @phpstan-ignore-next-line Symfony <5.4 BC layer
+            $this->expectException(UsernameNotFoundException::class);
+        }
     }
 }

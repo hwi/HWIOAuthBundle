@@ -11,7 +11,7 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner;
+namespace HWI\Bundle\OAuthBundle\Test\Fixtures\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
 

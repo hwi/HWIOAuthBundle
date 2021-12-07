@@ -53,7 +53,10 @@ final class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserPr
             throw new UnsupportedUserException(sprintf('Unsupported user class "%s"', \get_class($user)));
         }
 
-        return $this->loadUserByUsername($user->getUsername());
+        // @phpstan-ignore-next-line Symfony <5.4 BC layer
+        $username = method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername();
+
+        return $this->loadUserByUsername($username);
     }
 
     /**
