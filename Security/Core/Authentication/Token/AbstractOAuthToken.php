@@ -70,10 +70,9 @@ abstract class AbstractOAuthToken extends AbstractToken
 
         // Workaround for: Method "AbstractToken::setAuthenticated()" is deprecated
         if (Kernel::VERSION_ID > 50399) {
-            // @phpstan-ignore-next-line
-            parent::setAuthenticated(\count($roles) > 0, false);
+            $this->setAuthenticated(\count($roles) > 0, false);
         } else {
-            parent::setAuthenticated(\count($roles) > 0);
+            $this->setAuthenticated(\count($roles) > 0);
         }
     }
 
