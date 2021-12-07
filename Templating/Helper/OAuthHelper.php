@@ -68,15 +68,12 @@ final class OAuthHelper extends Helper
      *
      * @return string The helper name
      */
-    public function getName()
+    public function getName(): string
     {
         return 'hwi_oauth';
     }
 
-    /**
-     * @return Request|null
-     */
-    private function getMainRequest()
+    private function getMainRequest(): ?Request
     {
         if (method_exists($this->requestStack, 'getMainRequest')) {
             return $this->requestStack->getMainRequest(); // Symfony 5.3+

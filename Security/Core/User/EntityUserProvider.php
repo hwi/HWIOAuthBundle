@@ -77,10 +77,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
     {
         $user = $this->findUser(['username' => $username]);
         if (!$user) {
-            $exception = new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
-            $exception->setUsername($username);
-
-            throw $exception;
+            throw $this->createUserNotFoundException($username, sprintf("User '%s' not found.", $username));
         }
 
         return $user;
@@ -99,10 +96,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
 
         $username = $response->getUsername();
         if (null === $user = $this->findUser([$this->properties[$resourceOwnerName] => $username])) {
-            $exception = new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
-            $exception->setUsername($username);
-
-            throw $exception;
+            throw $this->createUserNotFoundException($username, sprintf("User '%s' not found.", $username));
         }
 
         return $user;
@@ -123,10 +117,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         $username = $user->getUsername();
 
         if (null === $user = $this->findUser([$identifier => $userId])) {
-            $exception = new UsernameNotFoundException(sprintf('User with ID "%d" could not be reloaded.', $userId));
-            $exception->setUsername($username);
-
-            throw $exception;
+            throw $this->createUserNotFoundException($username, sprintf('User with ID "%d" could not be reloaded.', $userId));
         }
 
         return $user;
@@ -142,15 +133,27 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         return $class === $this->class || is_subclass_of($class, $this->class);
     }
 
-    /**
-     * @return UserInterface|null
-     */
-    private function findUser(array $criteria)
+    private function findUser(array $criteria): ?UserInterface
     {
         if (null === $this->repository) {
             $this->repository = $this->em->getRepository($this->class);
         }
 
         return $this->repository->findOneBy($criteria);
+    }
+
+    private function createUserNotFoundException(string $username, string $message)
+    {
+        if (class_exists(UserNotFoundException::class)) {
+            $exception = new UserNotFoundException($message);
+            $exception->setUserIdentifier($username);
+        } else {
+            $exception = new UsernameNotFoundException($message);
+            if (method_exists($exception, 'setUsername')) {
+                $exception->setUsername($username);
+            }
+        }
+
+        return $exception;
     }
 }

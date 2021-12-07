@@ -15,33 +15,32 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUser;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\User;
 
 final class OAuthUserProviderTest extends TestCase
 {
-    /**
-     * @var OAuthUserProvider
-     */
-    private $provider;
+    private OAuthUserProvider $provider;
 
     protected function setUp(): void
     {
         $this->provider = new OAuthUserProvider();
     }
 
-    public function testLoadUserByUsername(): void
+    public function testLoadUserByUsernameOrIdentifier(): void
     {
-        $user = $this->provider->loadUserByUsername('asm89');
-        $this->assertInstanceOf(OAuthUser::class, $user);
-        $this->assertEquals('asm89', $user->getUsername());
-    }
+        if (method_exists($this->provider, 'loadUserByUsername')) {
+            $user = $this->provider->loadUserByUsername('asm89');
 
-    public function testLoadUserByIdentifier(): void
-    {
-        $user = $this->provider->loadUserByIdentifier('asm89');
-        $this->assertInstanceOf(OAuthUser::class, $user);
-        $this->assertEquals('asm89', $user->getUserIdentifier());
+            $this->assertInstanceOf(OAuthUser::class, $user);
+            $this->assertEquals('asm89', $user->getUsername());
+        } else {
+            $user = $this->provider->loadUserByIdentifier('asm89');
+
+            $this->assertInstanceOf(OAuthUser::class, $user);
+            $this->assertEquals('asm89', $user->getUserIdentifier());
+        }
     }
 
     public function testRefreshUser(): void
@@ -54,15 +53,16 @@ final class OAuthUserProviderTest extends TestCase
 
     public function testRefreshUserUnsupportedClass(): void
     {
-        // BC Layer to be dropped when Symfony >= 5.3 will be required
-        if (class_exists(InMemoryUser::class)) {
-            $user = new InMemoryUser('asm89', 'foo');
-        } else {
+        if (class_exists(User::class)) {
             $user = new User('asm89', 'foo');
+            $message = 'Unsupported user class "Symfony\\Component\\Security\\Core\\User\\User"';
+        } else {
+            $user = new InMemoryUser('asm89', 'foo');
+            $message = 'Unsupported user class "Symfony\\Component\\Security\\Core\\User\\InMemoryUser"';
         }
 
-        $this->expectException(\Symfony\Component\Security\Core\Exception\UnsupportedUserException::class);
-        $this->expectExceptionMessage(sprintf('Unsupported user class "%s"', \get_class($user)));
+        $this->expectException(UnsupportedUserException::class);
+        $this->expectExceptionMessage($message);
 
         $this->provider->refreshUser($user);
     }
@@ -87,6 +87,11 @@ final class OAuthUserProviderTest extends TestCase
 
         $user = $this->provider->loadUserByOAuthUserResponse($responseMock);
         $this->assertInstanceOf(OAuthUser::class, $user);
-        $this->assertEquals('asm89', $user->getUsername());
+
+        if (method_exists($this->provider, 'loadUserByUsername')) {
+            $this->assertEquals('asm89', $user->getUsername());
+        } else {
+            $this->assertEquals('asm89', $user->getUserIdentifier());
+        }
     }
 }

@@ -1,0 +1,27 @@
+security:
+  password_hashers:
+    HWI\Bundle\OAuthBundle\Tests\Fixtures\User: sha512
+
+  providers:
+    HWI\Bundle\OAuthBundle\Tests\App\UserProvider:
+      id: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+
+  enable_authenticator_manager: true
+
+  firewalls:
+    main:
+      pattern: ^/
+      oauth:
+        resource_owners:
+          google: "/check-login/google"
+        login_path: /login
+        use_forward: false
+        failure_path: /login
+        oauth_user_provider:
+          service: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+        provider: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+      context: hwi_context
+
+  access_control:
+    - { path: '^/(login$|connect|login_hwi)', roles: PUBLIC_ACCESS }
+    - { path: ^/, roles: ROLE_USER }

@@ -15,51 +15,51 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 final class User implements UserInterface
 {
-    private $plainPassword;
-    private $username = 'foo';
-    private $email;
-    private $githubId;
+    private ?string $plainPassword = null;
+    private string $username = 'foo';
+    private ?string $email = null;
+    private ?string $githubId = null;
 
-    public function getId()
+    public function getId(): string
     {
         return '1';
     }
 
-    public function getUserIdentifier()
+    public function getUserIdentifier(): string
     {
         return 'foo';
     }
 
-    public function setUsername($username)
+    public function setUsername($username): void
     {
         $this->username = $username;
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
         return ['ROLE_USER'];
     }
 
-    public function getPassword()
+    public function getPassword(): string
     {
         return 'secret';
     }
 
-    public function getSalt()
+    public function getSalt(): string
     {
         return 'my_salt';
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
     }
 
-    public function getPlainPassword()
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
@@ -69,7 +69,7 @@ final class User implements UserInterface
         $this->plainPassword = $plainPassword;
     }
 
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -79,12 +79,12 @@ final class User implements UserInterface
         $this->email = $email;
     }
 
-    public function getGithubId()
+    public function getGithubId(): ?string
     {
         return $this->githubId;
     }
 
-    public function setGithubId($githubId)
+    public function setGithubId($githubId): void
     {
         $this->githubId = $githubId;
     }

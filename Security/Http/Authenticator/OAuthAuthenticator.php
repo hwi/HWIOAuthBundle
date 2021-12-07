@@ -29,65 +29,32 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerI
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
-use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface;
+use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
  * @author Vadim Borodavko <vadim.borodavko@gmail.com>
  */
-final class OAuthAuthenticator implements AuthenticatorInterface
+final class OAuthAuthenticator implements AuthenticatorInterface, AuthenticationEntryPointInterface
 {
-    /**
-     * @var HttpUtils
-     */
-    private $httpUtils;
-
-    /**
-     * @var OAuthAwareUserProviderInterface
-     */
-    private $userProvider;
-
-    /**
-     * @var ResourceOwnerMapInterface
-     */
-    private $resourceOwnerMap;
+    private HttpUtils $httpUtils;
+    private OAuthAwareUserProviderInterface $userProvider;
+    private ResourceOwnerMapInterface $resourceOwnerMap;
+    private AuthenticationSuccessHandlerInterface $successHandler;
+    private AuthenticationFailureHandlerInterface $failureHandler;
 
     /**
      * @var string[]
      */
-    private $checkPaths;
+    private array $checkPaths;
 
-    /**
-     * @var AuthenticationSuccessHandlerInterface
-     */
-    private $successHandler;
-
-    /**
-     * @var AuthenticationFailureHandlerInterface
-     */
-    private $failureHandler;
-
-    /**
-     * @var mixed[]|null
-     */
-    private $rawToken;
-
-    /**
-     * @var string|null
-     */
-    private $resourceOwnerName;
-
-    /**
-     * @var string|null
-     */
-    private $refreshToken;
-
-    /**
-     * @var int|null
-     */
-    private $createdAt;
+    private ?array $rawToken = null;
+    private ?string $resourceOwnerName = null;
+    private ?string $refreshToken = null;
+    private ?int $createdAt = null;
+    private array $options;
 
     public function __construct(
         HttpUtils $httpUtils,
@@ -95,7 +62,8 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         ResourceOwnerMapInterface $resourceOwnerMap,
         array $checkPaths,
         AuthenticationSuccessHandlerInterface $successHandler,
-        AuthenticationFailureHandlerInterface $failureHandler
+        AuthenticationFailureHandlerInterface $failureHandler,
+        array $options
     ) {
         $this->failureHandler = $failureHandler;
         $this->successHandler = $successHandler;
@@ -103,6 +71,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         $this->resourceOwnerMap = $resourceOwnerMap;
         $this->userProvider = $userProvider;
         $this->httpUtils = $httpUtils;
+        $this->options = $options;
     }
 
     public function supports(Request $request): bool
@@ -116,11 +85,16 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         return false;
     }
 
+    public function start(Request $request, AuthenticationException $authException = null): Response
+    {
+        return new RedirectResponse($this->httpUtils->generateUri($request, $this->options['login_path']));
+    }
+
     /**
      * @throws AuthenticationException
      * @throws LazyResponseException
      */
-    public function authenticate(Request $request): PassportInterface
+    public function authenticate(Request $request): Passport
     {
         [$resourceOwner, $checkPath] = $this->resourceOwnerMap->getResourceOwnerByRequest($request);
 
@@ -191,16 +165,11 @@ final class OAuthAuthenticator implements AuthenticatorInterface
     }
 
     /**
-     * @param UserPassportInterface $passport
+     * @param Passport|SelfValidatingPassport $passport
      */
-    public function createAuthenticatedToken(PassportInterface $passport, string $firewallName): TokenInterface
+    public function createAuthenticatedToken($passport, string $firewallName): TokenInterface
     {
-        $token = new OAuthToken($this->rawToken, $passport->getUser()->getRoles());
-        $token->setResourceOwnerName($this->resourceOwnerName);
-        $token->setUser($passport->getUser());
-        $token->setAuthenticated(true);
-        $token->setRefreshToken($this->refreshToken);
-        $token->setCreatedAt($this->createdAt);
+        $token = $this->createToken($passport, $firewallName);
 
         $this->rawToken = null;
         $this->resourceOwnerName = null;
@@ -215,9 +184,25 @@ final class OAuthAuthenticator implements AuthenticatorInterface
         return $this->successHandler->onAuthenticationSuccess($request, $token);
     }
 
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         return $this->failureHandler->onAuthenticationFailure($request, $exception);
+    }
+
+    public function createToken(Passport $passport, string $firewallName): TokenInterface
+    {
+        $token = new OAuthToken($this->rawToken, $passport->getUser()->getRoles());
+        $token->setResourceOwnerName($this->resourceOwnerName);
+        $token->setUser($passport->getUser());
+        $token->setRefreshToken($this->refreshToken);
+        $token->setCreatedAt($this->createdAt);
+
+        // required for compatibility with Symfony 5.4
+        if (method_exists($token, 'setAuthenticated')) {
+            $token->setAuthenticated(true, false);
+        }
+
+        return $token;
     }
 
     private function refreshToken(OAuthToken $expiredToken, ResourceOwnerInterface $resourceOwner): OAuthToken

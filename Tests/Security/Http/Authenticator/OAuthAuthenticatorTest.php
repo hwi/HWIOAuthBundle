@@ -24,12 +24,13 @@ use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\User\InMemoryUser;
+use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
-use Symfony\Component\Security\Http\Authenticator\Passport\UserPassportInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
 /**
@@ -67,7 +68,8 @@ final class OAuthAuthenticatorTest extends TestCase
             $this->getResourceOwnerMap(),
             ['/a', '/b'],
             $this->getAuthenticationSuccessHandlerMock(),
-            $this->getAuthenticationFailureHandlerMock()
+            $this->getAuthenticationFailureHandlerMock(),
+            []
         );
 
         $this->assertTrue($authenticator->supports($request));
@@ -88,36 +90,7 @@ final class OAuthAuthenticatorTest extends TestCase
             'oauth_token_secret' => 'secret',
         ];
         $userResponseMock = $this->getUserResponseMock();
-        $userMock = new class() implements UserInterface {
-            public function getUserIdentifier(): string
-            {
-                return 'username';
-            }
-
-            public function getUsername(): string
-            {
-                return $this->getUserIdentifier();
-            }
-
-            public function getRoles(): array
-            {
-                return ['ROLE_USER'];
-            }
-
-            public function eraseCredentials(): void
-            {
-            }
-
-            public function getPassword(): ?string
-            {
-                return null;
-            }
-
-            public function getSalt(): ?string
-            {
-                return null;
-            }
-        };
+        $user = $this->createUser();
         $resourceOwnerName = 'github';
 
         $httpUtilsMock->expects($this->once())
@@ -164,7 +137,7 @@ final class OAuthAuthenticatorTest extends TestCase
         $userProviderMock->expects($this->once())
             ->method('loadUserByOAuthUserResponse')
             ->with($userResponseMock)
-            ->willReturn($userMock);
+            ->willReturn($user);
 
         $resourceOwnerMock->expects($this->atLeastOnce())
             ->method('getName')
@@ -176,21 +149,25 @@ final class OAuthAuthenticatorTest extends TestCase
             $resourceOwnerMap,
             [],
             $this->getAuthenticationSuccessHandlerMock(),
-            $this->getAuthenticationFailureHandlerMock()
+            $this->getAuthenticationFailureHandlerMock(),
+            []
         );
 
-        /** @var UserPassportInterface $passport */
         $passport = $authenticator->authenticate($request);
         $this->assertInstanceOf(SelfValidatingPassport::class, $passport);
-        $this->assertSame($userMock, $passport->getUser());
+        $this->assertEquals($user, $passport->getUser());
 
         /** @var AbstractOAuthToken $token */
         $token = $authenticator->createAuthenticatedToken($passport, 'main');
         $this->assertInstanceOf(OAuthToken::class, $token);
         $this->assertEquals($resourceOwnerName, $token->getResourceOwnerName());
-        $this->assertSame($userMock, $token->getUser());
-        $this->assertInstanceOf(UserInterface::class, $token->getUser());
+        $this->assertEquals($user, $token->getUser());
         $this->assertEquals('refresh_token', $token->getRefreshToken());
+
+        // required for compatibility with Symfony 5.4
+        if (method_exists($token, 'setAuthenticated')) {
+            $this->assertTrue($token->isAuthenticated());
+        }
     }
 
     public function testOnAuthenticationSuccess(): void
@@ -212,7 +189,8 @@ final class OAuthAuthenticatorTest extends TestCase
             $this->getResourceOwnerMap(),
             [],
             $successHandlerMock,
-            $this->getAuthenticationFailureHandlerMock()
+            $this->getAuthenticationFailureHandlerMock(),
+            []
         );
 
         $this->assertSame($response, $authenticator->onAuthenticationSuccess($request, $token, 'main'));
@@ -237,7 +215,8 @@ final class OAuthAuthenticatorTest extends TestCase
             $this->getResourceOwnerMap(),
             [],
             $this->getAuthenticationSuccessHandlerMock(),
-            $failureHandlerMock
+            $failureHandlerMock,
+            []
         );
 
         $this->assertSame($response, $authenticator->onAuthenticationFailure($request, $exception));
@@ -292,11 +271,15 @@ final class OAuthAuthenticatorTest extends TestCase
     }
 
     /**
-     * @return UserInterface&MockObject
+     * @return User|InMemoryUser
      */
-    private function getUserMock(): UserInterface
+    private function createUser(): UserInterface
     {
-        return $this->createMock(UserInterface::class);
+        if (class_exists(User::class)) {
+            return new User('asm89', 'foo', ['ROLE_USER']);
+        }
+
+        return new InMemoryUser('asm89', 'foo', ['ROLE_USER']);
     }
 
     /**

@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token;
 
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**
@@ -68,9 +67,9 @@ abstract class AbstractOAuthToken extends AbstractToken
 
         $this->setRawToken($accessToken);
 
-        // Workaround for: Method "AbstractToken::setAuthenticated()" is deprecated
+        // required for compatibility with Symfony 5.4
         if (method_exists($this, 'setAuthenticated')) {
-            $this->setAuthenticated(\count($roles) > 0, false);
+            parent::setAuthenticated(\count($roles) > 0, false);
         }
     }
 
