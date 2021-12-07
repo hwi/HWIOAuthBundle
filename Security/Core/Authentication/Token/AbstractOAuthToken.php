@@ -69,10 +69,8 @@ abstract class AbstractOAuthToken extends AbstractToken
         $this->setRawToken($accessToken);
 
         // Workaround for: Method "AbstractToken::setAuthenticated()" is deprecated
-        if (Kernel::VERSION_ID > 50399) {
+        if (method_exists($this, 'setAuthenticated')) {
             $this->setAuthenticated(\count($roles) > 0, false);
-        } else {
-            $this->setAuthenticated(\count($roles) > 0);
         }
     }
 

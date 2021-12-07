@@ -11,8 +11,10 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
+namespace HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner;
 
-final class OAuth1ResourceOwnerStub extends \HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
+
+final class OAuth1ResourceOwnerStub extends GenericOAuth1ResourceOwner
 {
 }

@@ -18,27 +18,27 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
  */
 final class CustomUserResponse extends AbstractUserResponse
 {
-    public function getUsername()
+    public function getUsername(): string
     {
         return 'foo666';
     }
 
-    public function getNickname()
+    public function getNickname(): string
     {
         return 'foo';
     }
 
-    public function getFirstName()
+    public function getFirstName(): string
     {
         return 'foo';
     }
 
-    public function getLastName()
+    public function getLastName(): string
     {
         return 'BAR';
     }
 
-    public function getRealName()
+    public function getRealName(): string
     {
         return 'foo';
     }
