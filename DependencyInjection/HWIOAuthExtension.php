@@ -142,10 +142,7 @@ final class HWIOAuthExtension extends Extension
         $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
     }
 
-    /**
-     * @return string
-     */
-    public function getAlias()
+    public function getAlias(): string
     {
         return 'hwi_oauth';
     }
