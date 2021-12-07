@@ -44,7 +44,7 @@ abstract class ResourceOwnerTestCase extends TestCase
     protected function createMockResponse(?string $response, ?string $contentType = null, ?int $httpCode = null): MockResponse
     {
         return new MockResponse(
-            $response,
+            $response ?: '',
             [
                 'http_code' => $httpCode ?: 200,
                 'response_headers' => [

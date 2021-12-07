@@ -67,7 +67,10 @@ abstract class AbstractOAuthToken extends AbstractToken
 
         $this->setRawToken($accessToken);
 
-        parent::setAuthenticated(\count($roles) > 0);
+        // required for compatibility with Symfony 5.4
+        if (method_exists($this, 'setAuthenticated')) {
+            parent::setAuthenticated(\count($roles) > 0, false);
+        }
     }
 
     public function __serialize(): array

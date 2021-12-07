@@ -2,6 +2,7 @@ Changelog
 =========
 ## 2.0.0 (2021-xx-xx)
 * BC Break: Dropped PHP 7.3 support,
+* BC Break: Dropped support for Symfony: >=5.1 & <5.4,
 * BC Break: `OAuthExtension` is now a lazy Twig extension using a Runtime,
 * BC Break: removed support for `FOSUserBundle`,
 * BC Break: changed `process()` argument for `Form/RegistrationFormHandlerInterface`, from `Form $form` to `FormInterface $form`,
@@ -19,6 +20,8 @@ Changelog
 * BC Break: changed `__construct()` argument for `OAuth/ResourceOwner/AbstractResourceOwner`, from `HttpMethodsClient $httpClient` to `HttpClientInterface $httpClient`,
 * BC Break: replaced `php-http/httplug-bundle` with `symfony/http-client`
 * BC Break: removed `hwi_oauth.http` configuration
+* Added support for PHP 8.1,
+* Added support for Symfony 5.6,
 
 ## 1.4.2 (2021-08-09)
 * Bugfix: remove `@final` declaration from `OAuthFactory` & `FOSUBUserProvider`,

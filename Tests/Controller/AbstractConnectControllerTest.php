@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 
 use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\Controller\ConnectController;
+use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
@@ -23,8 +24,6 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomUserResponse;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,13 +34,12 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 abstract class AbstractConnectControllerTest extends TestCase
 {
     protected ResourceOwnerMapLocator $resourceOwnerMapLocator;
     protected Request $request;
-    protected Container $container;
     protected OAuthUtils $oAuthUtils;
 
     /**
@@ -55,7 +53,7 @@ abstract class AbstractConnectControllerTest extends TestCase
     protected $tokenStorage;
 
     /**
-     * @var MockObject&EngineInterface
+     * @var MockObject&Environment
      */
     protected $twig;
 
@@ -99,37 +97,29 @@ abstract class AbstractConnectControllerTest extends TestCase
      */
     protected $session;
 
+    /**
+     * @var RegistrationFormHandlerInterface&MockObject
+     */
+    protected $registrationFormHandler;
+
     protected function setUp(): void
     {
         parent::setUp();
 
-        $bag = new EnvPlaceholderParameterBag(
-            [
-                'hwi_oauth.connect' => true,
-                'hwi_oauth.firewall_names' => ['default'],
-                'hwi_oauth.connect.confirmation' => true,
-                'hwi_oauth.grant_rule' => 'IS_AUTHENTICATED_REMEMBERED',
-            ]
-        );
-
-        $this->container = new Container($bag);
-        $this->container->set('parameter_bag', $bag);
-
         $this->authorizationChecker = $this->createMock(AuthorizationCheckerInterface::class);
-        $this->container->set('security.authorization_checker', $this->authorizationChecker);
-
+        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
+        $this->accountConnector = $this->createMock(AccountConnectorInterface::class);
+        $this->userChecker = $this->createMock(UserCheckerInterface::class);
+        $this->registrationFormHandler = $this->createMock(RegistrationFormHandlerInterface::class);
         $this->tokenStorage = $this->createMock(TokenStorageInterface::class);
-        $this->container->set('security.token_storage', $this->tokenStorage);
 
-        $this->twig = $this->createMock(EngineInterface::class);
+        $this->twig = $this->createMock(Environment::class);
         $this->twig->expects($this->any())
             ->method('render')
             ->willReturn('')
         ;
-        $this->container->set('twig', $this->twig);
 
         $this->router = $this->createMock(RouterInterface::class);
-        $this->container->set('router', $this->router);
 
         $this->resourceOwner = $this->createMock(ResourceOwnerInterface::class);
         $this->resourceOwner->expects($this->any())
@@ -141,10 +131,6 @@ abstract class AbstractConnectControllerTest extends TestCase
             ->method('getResourceOwnerByName')
             ->with('facebook')
             ->willReturn($this->resourceOwner);
-        $this->container->set('hwi_oauth.resource_ownermap.default', $this->resourceOwnerMap);
-
-        $this->accountConnector = $this->createMock(AccountConnectorInterface::class);
-        $this->container->set('hwi_oauth.account.connector', $this->accountConnector);
 
         $this->oAuthUtils = new OAuthUtils(
             $this->createMock(HttpUtils::class),
@@ -156,14 +142,7 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->resourceOwnerMapLocator = new ResourceOwnerMapLocator();
         $this->resourceOwnerMapLocator->add('default', $this->resourceOwnerMap);
 
-        $this->userChecker = $this->createMock(UserCheckerInterface::class);
-        $this->container->set('hwi_oauth.user_checker', $this->userChecker);
-
-        $this->eventDispatcher = $this->createMock(EventDispatcherInterface::class);
-        $this->container->set('event_dispatcher', $this->eventDispatcher);
-
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
-        $this->container->set('form.factory', $this->formFactory);
 
         $this->session = $this->createMock(SessionInterface::class);
         $this->request = Request::create('/');
@@ -193,10 +172,19 @@ abstract class AbstractConnectControllerTest extends TestCase
         bool $confirmConnect = true,
         array $firewallNames = ['default']
     ): ConnectController {
-        $controller = new ConnectController(
+        return new ConnectController(
             $this->oAuthUtils,
             $this->resourceOwnerMapLocator,
             $this->createMock(RequestStack::class),
+            $this->eventDispatcher,
+            $this->tokenStorage,
+            $this->accountConnector,
+            $this->userChecker,
+            $this->registrationFormHandler,
+            $this->authorizationChecker,
+            $this->formFactory,
+            $this->twig,
+            $this->router,
             $connectEnabled,
             'IS_AUTHENTICATED_REMEMBERED',
             true,
@@ -205,8 +193,5 @@ abstract class AbstractConnectControllerTest extends TestCase
             $firewallNames,
             RegistrationFormType::class
         );
-        $controller->setContainer($this->container);
-
-        return $controller;
     }
 }

@@ -293,7 +293,7 @@ final class OAuthUtilsTest extends TestCase
 
         if (!$hasUser && !$hasOneRedirectUrl) {
             $utils->method('checkRequestPath')
-                ->willReturn('/login/check-instagram');
+                ->willReturn(true);
         }
 
         $ownerMap = new ResourceOwnerMap(

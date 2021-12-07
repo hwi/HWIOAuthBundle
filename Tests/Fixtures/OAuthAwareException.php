@@ -16,25 +16,17 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 /**
- * OAuthAwareException.
- *
  * @author Alexander <iam.asm89@gmail.com>
  */
 final class OAuthAwareException extends \Exception implements OAuthAwareExceptionInterface
 {
-    /**
-     * @var OAuthToken
-     */
-    protected $token;
-    /**
-     * @var string
-     */
-    protected $resourceOwnerName;
+    private OAuthToken $token;
+    private string $resourceOwnerName;
 
     /**
      * {@inheritdoc}
      */
-    public function getAccessToken()
+    public function getAccessToken(): string
     {
         return $this->token->getAccessToken();
     }
@@ -42,7 +34,7 @@ final class OAuthAwareException extends \Exception implements OAuthAwareExceptio
     /**
      * {@inheritdoc}
      */
-    public function getRefreshToken()
+    public function getRefreshToken(): ?string
     {
         return $this->token->getRefreshToken();
     }
@@ -50,7 +42,7 @@ final class OAuthAwareException extends \Exception implements OAuthAwareExceptio
     /**
      * {@inheritdoc}
      */
-    public function getExpiresIn()
+    public function getExpiresIn(): ?int
     {
         return $this->token->getExpiresIn();
     }
@@ -58,7 +50,7 @@ final class OAuthAwareException extends \Exception implements OAuthAwareExceptio
     /**
      * {@inheritdoc}
      */
-    public function getRawToken()
+    public function getRawToken(): array
     {
         return $this->token->getRawToken();
     }
@@ -66,7 +58,7 @@ final class OAuthAwareException extends \Exception implements OAuthAwareExceptio
     /**
      * {@inheritdoc}
      */
-    public function getTokenSecret()
+    public function getTokenSecret(): ?string
     {
         return $this->token->getTokenSecret();
     }
@@ -74,7 +66,7 @@ final class OAuthAwareException extends \Exception implements OAuthAwareExceptio
     /**
      * {@inheritdoc}
      */
-    public function getResourceOwnerName()
+    public function getResourceOwnerName(): string
     {
         return $this->resourceOwnerName;
     }
@@ -82,7 +74,7 @@ final class OAuthAwareException extends \Exception implements OAuthAwareExceptio
     /**
      * {@inheritdoc}
      */
-    public function setResourceOwnerName($resourceOwnerName)
+    public function setResourceOwnerName($resourceOwnerName): void
     {
         $this->resourceOwnerName = $resourceOwnerName;
     }
@@ -92,7 +84,7 @@ final class OAuthAwareException extends \Exception implements OAuthAwareExceptio
      *
      * {@inheritdoc}
      */
-    public function setToken(TokenInterface $token)
+    public function setToken(TokenInterface $token): void
     {
         $this->token = $token;
     }

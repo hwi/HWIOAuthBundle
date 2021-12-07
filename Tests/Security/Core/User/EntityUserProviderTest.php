@@ -51,16 +51,16 @@ final class EntityUserProviderTest extends TestCase
 
     public function testLoadUserByUsernameThrowsExceptionWhenUserIsNull(): void
     {
-        $provider = $this->createEntityUserProvider();
-
-        try {
-            $provider->loadUserByUsername('asm89');
-
-            $this->fail('Failed asserting exception');
-        } catch (UsernameNotFoundException $e) {
-            $this->assertSame("User 'asm89' not found.", $e->getMessage());
-            $this->assertSame('asm89', method_exists($e, 'getUserIdentifier') ? $e->getUserIdentifier() : $e->getUsername());
+        if (class_exists(UserNotFoundException::class)) {
+            $this->expectException(UserNotFoundException::class);
+        } else {
+            $this->expectException(UsernameNotFoundException::class);
         }
+
+        $this->expectExceptionMessage("User 'asm89' not found.");
+
+        $provider = $this->createEntityUserProvider();
+        $provider->loadUserByUsername('asm89');
     }
 
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured(): void
@@ -74,18 +74,18 @@ final class EntityUserProviderTest extends TestCase
 
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenUserIsNull(): void
     {
+        if (class_exists(UserNotFoundException::class)) {
+            $this->expectException(UserNotFoundException::class);
+        } else {
+            $this->expectException(UsernameNotFoundException::class);
+        }
+
+        $this->expectExceptionMessage("User 'asm89' not found.");
+
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');
 
         $provider = $this->createEntityUserProvider();
-
-        try {
-            $provider->loadUserByOAuthUserResponse($userResponseMock);
-
-            $this->fail('Failed asserting exception');
-        } catch (UsernameNotFoundException $e) {
-            $this->assertSame("User 'asm89' not found.", $e->getMessage());
-            $this->assertSame('asm89', method_exists($e, 'getUserIdentifier') ? $e->getUserIdentifier() : $e->getUsername());
-        }
+        $provider->loadUserByOAuthUserResponse($userResponseMock);
     }
 
     public function testLoadUserByOAuthUserResponse(): void
@@ -102,20 +102,19 @@ final class EntityUserProviderTest extends TestCase
 
     public function testRefreshUserThrowsExceptionWhenUserIsNull(): void
     {
-        $provider = $this->createEntityUserProvider();
-        $user = new User();
-
-        try {
-            $provider->refreshUser($user);
-
-            $this->fail('Failed asserting exception');
-        } catch (UsernameNotFoundException $e) {
-            $this->assertSame('User with ID "1" could not be reloaded.', $e->getMessage());
-            $this->assertSame('foo', method_exists($e, 'getUserIdentifier') ? $e->getUserIdentifier() : $e->getUsername());
+        if (class_exists(UserNotFoundException::class)) {
+            $this->expectException(UserNotFoundException::class);
+        } else {
+            $this->expectException(UsernameNotFoundException::class);
         }
+
+        $this->expectExceptionMessage('User with ID "1" could not be reloaded.');
+
+        $provider = $this->createEntityUserProvider();
+        $provider->refreshUser(new User());
     }
 
-    public function createManagerRegistryMock($user = null)
+    private function createManagerRegistryMock($user = null)
     {
         $registryMock = $this->createMock(ManagerRegistry::class);
 
@@ -127,7 +126,7 @@ final class EntityUserProviderTest extends TestCase
         return $registryMock;
     }
 
-    public function createRepositoryMock($user = null)
+    private function createRepositoryMock($user = null)
     {
         $mock = $this->createMock(ObjectRepository::class);
 
@@ -141,7 +140,7 @@ final class EntityUserProviderTest extends TestCase
         return $mock;
     }
 
-    protected function createEntityUserProvider($user = null): EntityUserProvider
+    private function createEntityUserProvider($user = null): EntityUserProvider
     {
         return new EntityUserProvider(
             $this->createManagerRegistryMock($user),
@@ -152,7 +151,7 @@ final class EntityUserProviderTest extends TestCase
         );
     }
 
-    protected function createResourceOwnerMock($resourceOwnerName = null)
+    private function createResourceOwnerMock($resourceOwnerName = null)
     {
         $resourceOwnerMock = $this->createMock(ResourceOwnerInterface::class);
 
@@ -166,7 +165,7 @@ final class EntityUserProviderTest extends TestCase
         return $resourceOwnerMock;
     }
 
-    protected function createEntityManagerMock($user = null)
+    private function createEntityManagerMock($user = null)
     {
         $emMock = $this->createMock(ObjectManager::class);
 
@@ -178,7 +177,7 @@ final class EntityUserProviderTest extends TestCase
         return $emMock;
     }
 
-    protected function createUserResponseMock($username = null, $resourceOwnerName = null)
+    private function createUserResponseMock($username = null, $resourceOwnerName = null)
     {
         $responseMock = $this->createMock(UserResponseInterface::class);
 

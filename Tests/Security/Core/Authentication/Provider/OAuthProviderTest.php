@@ -22,6 +22,7 @@ use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -29,6 +30,13 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 final class OAuthProviderTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        if (!class_exists(AuthenticationProviderInterface::class)) {
+            $this->markTestSkipped('Legacy test for Symfony <5.4');
+        }
+    }
+
     public function testSupportsOAuthToken(): void
     {
         $oauthProvider = new OAuthProvider(
@@ -93,8 +101,13 @@ final class OAuthProviderTest extends TestCase
 
         /** @var AbstractOAuthToken $token */
         $token = $oauthProvider->authenticate($oauthToken);
-        $this->assertTrue($token->isAuthenticated());
+
         $this->assertInstanceOf(OAuthToken::class, $token);
+
+        // @deprecated since Symfony 5.4
+        if (method_exists($token, 'isAuthenticated')) {
+            $this->assertTrue($token->isAuthenticated());
+        }
 
         $this->assertEquals($expectedToken, $token->getRawToken());
         $this->assertEquals($expectedToken['access_token'], $token->getAccessToken());
@@ -223,17 +236,26 @@ final class OAuthProviderTest extends TestCase
         $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock, $tokenStorageMock);
 
         $oauthToken = new OAuthToken($refreshedToken);
-        $oauthToken->setAuthenticated($authenticated);
         $oauthToken->setResourceOwnerName('github');
         $oauthToken->setRefreshToken($expiredToken['refresh_token']);
         $oauthToken->setExpiresIn(30);
         $oauthToken->setCreatedAt(time() - 3600);
         $oauthToken->setUser($userMock);
 
+        // required for compatibility with Symfony 5.4
+        if (method_exists($oauthToken, 'setAuthenticated')) {
+            $oauthToken->setAuthenticated($authenticated, false);
+        }
+
         /** @var AbstractOAuthToken $token */
         $token = $oauthProvider->authenticate($oauthToken);
-        $this->assertTrue($token->isAuthenticated());
+
         $this->assertInstanceOf(OAuthToken::class, $token);
+
+        // @deprecated since Symfony 5.4
+        if (method_exists($token, 'isAuthenticated')) {
+            $this->assertTrue($token->isAuthenticated());
+        }
 
         $this->assertEquals($refreshedToken, $token->getRawToken());
         $this->assertEquals($refreshedToken['access_token'], $token->getAccessToken());

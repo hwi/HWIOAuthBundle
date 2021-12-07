@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace HWI\Bundle\OAuthBundle\Tests\Functional;
 
+use HWI\Bundle\OAuthBundle\Tests\App\AppKernel;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
@@ -20,9 +21,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class IntegrationTest extends WebTestCase
 {
+    public static function getKernelClass(): string
+    {
+        return AppKernel::class;
+    }
+
     public function testRequestRedirect(): void
     {
         $client = static::createClient();
+        $client->disableReboot();
+        $client->getContainer()->set('hwi_oauth.http_client', new MockHttpClient());
         $client->request('GET', '/');
 
         $response = $client->getResponse();
@@ -36,9 +44,6 @@ final class IntegrationTest extends WebTestCase
         $response = $client->getResponse();
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(200, $response->getStatusCode(), 'No landing, got redirect to '.$response->headers->get('Location'));
-
-        $client->disableReboot();
-        $client->getContainer()->set('hwi_oauth.http_client', new MockHttpClient());
 
         $client->click($crawler->selectLink('Login')->link());
 

@@ -1,11 +1,9 @@
 framework:
-    secret: secret
     test: ~
+    secret: secret
     router:
         utf8: true
         resource: "%kernel.project_dir%/../App/routing.yml"
-    session:
-        storage_id: session.storage.mock_file
     translator: ~
     form:
         enabled: true
@@ -17,34 +15,6 @@ monolog:
             type:  stream
             path:  "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
-
-security:
-    encoders:
-        HWI\Bundle\OAuthBundle\Tests\Fixtures\User: sha512
-
-    providers:
-        HWI\Bundle\OAuthBundle\Tests\App\UserProvider:
-            id: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
-
-    firewalls:
-        login_area:
-            pattern: ^/(login$|connect|login_hwi)
-            anonymous: true
-            context: hwi_context
-        main:
-            pattern: ^/
-            oauth:
-                resource_owners:
-                    google: "/check-login/google"
-                login_path: /login
-                use_forward: false
-                failure_path: /login
-                oauth_user_provider:
-                    service: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
-                provider: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
-            context: hwi_context
-    access_control:
-        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
 services:
     _defaults:
