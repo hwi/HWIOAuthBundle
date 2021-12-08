@@ -113,6 +113,14 @@ abstract class AbstractOAuthToken extends AbstractToken
     }
 
     /**
+     * @return mixed|void
+     */
+    public function getCredentials()
+    {
+        return '';
+    }
+
+    /**
      * @param string $accessToken The OAuth access token
      */
     public function setAccessToken($accessToken)
