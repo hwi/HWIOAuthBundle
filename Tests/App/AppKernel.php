@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Security\Http\Controller\UserValueResolver;
 
-class AppKernel extends Kernel
+final class AppKernel extends Kernel
 {
     public function registerBundles(): array
     {
@@ -41,12 +41,12 @@ class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        $loader->load(__DIR__.'/config.yml');
+        $loader->load(__DIR__.'/config/config.yaml');
 
-        if (Kernel::VERSION_ID >= 60000) {
-            $loader->load(__DIR__.'/security_v6.yaml');
+        if (Kernel::VERSION_ID >= 50400) {
+            $loader->load(__DIR__.'/config/security_v5.yaml');
         } else {
-            $loader->load(__DIR__.'/security_v4.yaml');
+            $loader->load(__DIR__.'/config/security_v4.yaml');
         }
     }
 

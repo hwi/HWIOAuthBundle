@@ -3,7 +3,7 @@ framework:
     secret: secret
     router:
         utf8: true
-        resource: "%kernel.project_dir%/../App/routing.yml"
+        resource: "%kernel.project_dir%/../App/config/routing.yaml"
     translator: ~
     form:
         enabled: true
