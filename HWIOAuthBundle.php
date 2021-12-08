@@ -37,11 +37,14 @@ class HWIOAuthBundle extends Bundle
         /** @var SecurityExtension $extension */
         $extension = $container->getExtension('security');
 
-        if (interface_exists(AuthenticationProviderInterface::class)) {
-            // @phpstan-ignore-next-line Symfony < 5.4 BC layer
+        if (method_exists($extension, 'addAuthenticatorFactory')) {
+            $extension->addAuthenticatorFactory(new OAuthAuthenticatorFactory());
+        } elseif (interface_exists(AuthenticationProviderInterface::class)) {
+            // @phpstan-ignore-next-line Symfony 4.4 BC layer
             $extension->addSecurityListenerFactory(new OAuthFactory());
         } else {
-            $extension->addAuthenticatorFactory(new OAuthAuthenticatorFactory());
+            // @phpstan-ignore-next-line Symfony < 5.4 BC layer
+            $extension->addSecurityListenerFactory(new OAuthAuthenticatorFactory());
         }
 
         $container->addCompilerPass(new ResourceOwnerMapCompilerPass());
