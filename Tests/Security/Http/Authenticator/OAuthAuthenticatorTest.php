@@ -23,6 +23,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\User;
@@ -69,6 +70,7 @@ final class OAuthAuthenticatorTest extends TestCase
             ['/a', '/b'],
             $this->getAuthenticationSuccessHandlerMock(),
             $this->getAuthenticationFailureHandlerMock(),
+            $this->createMock(HttpKernelInterface::class),
             []
         );
 
@@ -150,6 +152,7 @@ final class OAuthAuthenticatorTest extends TestCase
             [],
             $this->getAuthenticationSuccessHandlerMock(),
             $this->getAuthenticationFailureHandlerMock(),
+            $this->createMock(HttpKernelInterface::class),
             []
         );
 
@@ -190,6 +193,7 @@ final class OAuthAuthenticatorTest extends TestCase
             [],
             $successHandlerMock,
             $this->getAuthenticationFailureHandlerMock(),
+            $this->createMock(HttpKernelInterface::class),
             []
         );
 
@@ -216,6 +220,7 @@ final class OAuthAuthenticatorTest extends TestCase
             [],
             $this->getAuthenticationSuccessHandlerMock(),
             $failureHandlerMock,
+            $this->createMock(HttpKernelInterface::class),
             []
         );
 

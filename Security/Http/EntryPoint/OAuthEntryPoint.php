@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security\Http\EntryPoint;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
@@ -43,7 +44,7 @@ final class OAuthEntryPoint implements AuthenticationEntryPointInterface
     /**
      * {@inheritdoc}
      */
-    public function start(Request $request, AuthenticationException $authException = null)
+    public function start(Request $request, AuthenticationException $authException = null): Response
     {
         if ($this->useForward) {
             $subRequest = $this->httpUtils->createRequest($request, $this->loginPath);
