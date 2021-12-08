@@ -20,6 +20,7 @@ use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Exception\AuthenticationServiceException;
@@ -44,6 +45,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
     private ResourceOwnerMapInterface $resourceOwnerMap;
     private AuthenticationSuccessHandlerInterface $successHandler;
     private AuthenticationFailureHandlerInterface $failureHandler;
+    private HttpKernelInterface $httpKernel;
 
     /**
      * @var string[]
@@ -63,6 +65,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         array $checkPaths,
         AuthenticationSuccessHandlerInterface $successHandler,
         AuthenticationFailureHandlerInterface $failureHandler,
+        HttpKernelInterface $kernel,
         array $options
     ) {
         $this->failureHandler = $failureHandler;
@@ -71,6 +74,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         $this->resourceOwnerMap = $resourceOwnerMap;
         $this->userProvider = $userProvider;
         $this->httpUtils = $httpUtils;
+        $this->httpKernel = $kernel;
         $this->options = $options;
     }
 
@@ -87,6 +91,21 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
 
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
+        if ($this->options['use_forward'] ?? false) {
+            $subRequest = $this->httpUtils->createRequest($request, $this->options['login_path']);
+
+            /** @var \ArrayIterator $iterator */
+            $iterator = $request->query->getIterator();
+            $subRequest->query->add($iterator->getArrayCopy());
+
+            $response = $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+            if (200 === $response->getStatusCode()) {
+                $response->headers->set('X-Status-Code', '401');
+            }
+
+            return $response;
+        }
+
         return new RedirectResponse($this->httpUtils->generateUri($request, $this->options['login_path']));
     }
 

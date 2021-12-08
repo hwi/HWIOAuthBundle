@@ -43,8 +43,14 @@ final class AppKernel extends Kernel
     {
         $loader->load(__DIR__.'/config/config.yaml');
 
-        if (Kernel::VERSION_ID >= 50400) {
-            $loader->load(__DIR__.'/config/security_v5.yaml');
+        if (Kernel::VERSION_ID >= 60000) {
+            $loader->load(__DIR__.'/config/security_v6.yaml');
+        } elseif (Kernel::VERSION_ID >= 50100 && Kernel::VERSION_ID < 59999) {
+            if (0 === (int) getenv('USE_NEW_SYMFONY_SECURITY')) {
+                $loader->load(__DIR__.'/config/security_v5_bc.yaml');
+            } else {
+                $loader->load(__DIR__.'/config/security_v5.yaml');
+            }
         } else {
             $loader->load(__DIR__.'/config/security_v4.yaml');
         }
