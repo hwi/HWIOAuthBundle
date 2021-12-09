@@ -95,8 +95,6 @@ final class HWIOAuthExtension extends Extension
         }
 
         $this->createConnectIntegration($container, $config);
-
-        $container->setAlias('hwi_oauth.user_checker', new Alias('security.user_checker', true));
     }
 
     /**
@@ -161,31 +159,16 @@ final class HWIOAuthExtension extends Extension
      */
     private function createConnectIntegration(ContainerBuilder $container, array $config): void
     {
-        $container->setParameter('hwi_oauth.connect.confirmation', false);
-        $container->setParameter('hwi_oauth.connect.registration_form', null);
+        $container->setParameter('hwi_oauth.connect', isset($config['connect']));
+        $container->setParameter('hwi_oauth.connect.confirmation', $config['connect']['confirmation'] ?? false);
+        $container->setParameter('hwi_oauth.connect.registration_form', $config['connect']['registration_form'] ?? null);
 
-        if (!isset($config['connect'])) {
-            $container->setParameter('hwi_oauth.connect', false);
-
-            return;
+        if (isset($config['connect']['account_connector'])) {
+            $container->setAlias('hwi_oauth.account.connector', new Alias($config['connect']['account_connector'], true));
         }
 
-        $container->setParameter('hwi_oauth.connect', true);
-
-        foreach ($config['connect'] as $key => $serviceId) {
-            if ('confirmation' === $key) {
-                $container->setParameter('hwi_oauth.connect.confirmation', $config['connect']['confirmation']);
-
-                continue;
-            }
-
-            if ('registration_form' === $key) {
-                $container->setParameter('hwi_oauth.connect.registration_form', $config['connect']['registration_form']);
-
-                continue;
-            }
-
-            $container->setAlias('hwi_oauth.'.str_replace('_', '.', $key), new Alias($serviceId, true));
+        if (isset($config['connect']['registration_form_handler'])) {
+            $container->setAlias('hwi_oauth.registration.form.handler', new Alias($config['connect']['registration_form_handler'], true));
         }
     }
 }

@@ -5,26 +5,27 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="hwi_oauth.user_checker" alias="security.user_checker" public="true" />
+
         <service id="HWI\Bundle\OAuthBundle\Controller\ConnectController" public="true">
             <argument key="$oauthUtils" type="service" id="hwi_oauth.security.oauth_utils" />
             <argument key="$resourceOwnerMapLocator" type="service" id="hwi_oauth.resource_ownermap_locator" />
             <argument key="$requestStack" type="service" id="request_stack" />
             <argument key="$dispatcher" type="service" id="event_dispatcher" />
             <argument key="$tokenStorage" type="service" id="security.token_storage" />
-            <argument key="$accountConnector" type="service" id="hwi_oauth.account.connector" />
-            <argument key="$formHandler" type="service" id="hwi_oauth.registration.form.handler" />
             <argument key="$userChecker" type="service" id="hwi_oauth.user_checker" />
             <argument key="$authorizationChecker" type="service" id="security.authorization_checker" />
             <argument key="$formFactory" type="service" id="form.factory" />
             <argument key="$twig" type="service" id="twig" />
             <argument key="$router" type="service" id="router" />
-            <argument key="$enableConnect">%hwi_oauth.connect%</argument>
             <argument key="$grantRule">%hwi_oauth.grant_rule%</argument>
             <argument key="$failedUseReferer">%hwi_oauth.failed_use_referer%</argument>
             <argument key="$failedAuthPath">%hwi_oauth.failed_auth_path%</argument>
             <argument key="$enableConnectConfirmation">%hwi_oauth.connect.confirmation%</argument>
             <argument key="$firewallNames">%hwi_oauth.firewall_names%</argument>
             <argument key="$registrationForm">%hwi_oauth.connect.registration_form%</argument>
+            <argument key="$accountConnector" type="service" id="hwi_oauth.account.connector" on-invalid="null" />
+            <argument key="$formHandler" type="service" id="hwi_oauth.registration.form.handler" on-invalid="null" />
         </service>
 
         <service id="HWI\Bundle\OAuthBundle\Controller\LoginController" public="true">

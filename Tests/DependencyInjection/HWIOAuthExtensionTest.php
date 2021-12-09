@@ -360,7 +360,6 @@ final class HWIOAuthExtensionTest extends TestCase
         $this->assertParameter('hwi_oauth_connect', 'hwi_oauth.failed_auth_path');
         $this->assertParameter(['any_name' => 'any_name', 'some_service' => 'some_service'], 'hwi_oauth.resource_owners');
 
-        $this->assertParameter(false, 'hwi_oauth.connect');
         $this->assertParameter(false, 'hwi_oauth.connect.confirmation');
 
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
@@ -637,9 +636,8 @@ http_client:
 
 templating_engine: "php"
 EOF;
-        $parser = new Parser();
 
-        return $parser->parse($yaml);
+        return (new Parser())->parse($yaml);
     }
 
     private function assertAlias(string $value, string $key): void

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the HWIOAuthBundle package.
  *
@@ -25,7 +27,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-class RedirectToServiceControllerTest extends TestCase
+final class RedirectToServiceControllerTest extends TestCase
 {
     /**
      * @var MockObject&SessionInterface
@@ -47,13 +49,13 @@ class RedirectToServiceControllerTest extends TestCase
         $this->request->setSession($this->session);
     }
 
-    public function test()
+    public function testTargetUrlIsCorrect(): void
     {
         $controller = $this->createController();
 
         $response = $controller->redirectToServiceAction($this->request, 'facebook');
 
-        $this->assertEquals('https://domain.com/oauth/v2/auth', $response->getTargetUrl());
+        $this->assertSame('https://domain.com/oauth/v2/auth', $response->getTargetUrl());
     }
 
     public function testTargetPathParameter(): void
@@ -91,7 +93,7 @@ class RedirectToServiceControllerTest extends TestCase
             ->with('_security.default.failed_target_path', 'https://google.com')
         ;
 
-        $controller = $this->createController(true, false);
+        $controller = $this->createController(true);
         $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
