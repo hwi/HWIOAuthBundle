@@ -18,6 +18,8 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\OAuthAuthenticator;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
@@ -101,7 +103,7 @@ final class OAuthAuthenticatorTest extends TestCase
             ->willReturn(true);
 
         $serviceLocator = $this->createMock(ServiceLocator::class);
-        $serviceLocator->expects($this->once())
+        $serviceLocator->expects($this->exactly(2))
             ->method('get')
             ->with($resourceOwnerName)
             ->willReturn($resourceOwnerMock);
@@ -200,6 +202,137 @@ final class OAuthAuthenticatorTest extends TestCase
         $this->assertSame($response, $authenticator->onAuthenticationSuccess($request, $token, 'main'));
     }
 
+    public function testRecreateToken()
+    {
+        $authenticator = new OAuthAuthenticator(
+            $this->getHttpUtilsMock(),
+            $this->getOAuthAwareUserProviderMock(),
+            $this->getResourceOwnerMap(),
+            ['/a', '/b'],
+            $this->getAuthenticationSuccessHandlerMock(),
+            $this->getAuthenticationFailureHandlerMock(),
+            $this->createMock(HttpKernelInterface::class),
+            []
+        );
+
+        $token = new CustomOAuthToken([
+            'refresh_token' => 'refresh token data',
+            'expires' => 666,
+            'oauth_token_secret' => 'oauth secret',
+        ]);
+        $this->assertFalse($token->isExpired());
+        $user = $token->getUser();
+        $token->setResourceOwnerName('keycloak');
+        $token->setCreatedAt(10);
+        $token->setAttribute('attr a', 'attr a');
+
+        $newToken = $authenticator->recreateToken($token);
+
+        $this->assertInstanceOf(CustomOAuthToken::class, $newToken);
+        $this->assertNotSame($token, $newToken);
+        $this->assertSame($user, $newToken->getUser());
+        $this->assertEquals('keycloak', $newToken->getResourceOwnerName());
+        $this->assertEquals('access_token_data', $newToken->getAccessToken());
+        $this->assertEquals('refresh token data', $newToken->getRefreshToken());
+        $this->assertEquals(10, $newToken->getCreatedAt());
+        $this->assertEquals(666, $newToken->getExpiresIn());
+        $this->assertEquals('oauth secret', $newToken->getTokenSecret());
+        $this->assertTrue($newToken->hasAttribute('attr a'));
+        $this->assertEquals('attr a', $newToken->getAttribute('attr a'));
+        $this->assertFalse($newToken->hasAttribute('non exists attr'));
+    }
+
+    public function testRefreshTokenExpiredAndNotContainsRefreshToken()
+    {
+        $resourceOwnerName = 'keycloak';
+
+        $resourceOwnerMock = $this->getResourceOwnerMock();
+        $resourceOwnerMock->expects($this->never())
+            ->method('getUserInformation');
+
+        $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
+        $resourceOwnerMapMock->expects($this->once())
+            ->method('getResourceOwnerByName')
+            ->willReturn($resourceOwnerMock);
+
+        $authenticator = new OAuthAuthenticator(
+            $this->getHttpUtilsMock(),
+            $this->getOAuthAwareUserProviderMock(),
+            $resourceOwnerMapMock,
+            ['/a', '/b'],
+            $this->getAuthenticationSuccessHandlerMock(),
+            $this->getAuthenticationFailureHandlerMock(),
+            $this->createMock(HttpKernelInterface::class),
+            []
+        );
+
+        $token = new CustomOAuthToken([
+            'expires' => 666,
+        ]);
+        $token->setResourceOwnerName($resourceOwnerName);
+        $token->setCreatedAt(10); // expire it
+
+        $newToken = $authenticator->refreshToken($token);
+        $this->assertSame($newToken, $token, 'Token missing refresh token data will not be refreshed if it already contains an user');
+    }
+
+    public function testRefreshTokenExpired()
+    {
+        $resourceOwnerName = 'keycloak';
+
+        $userProviderMock = $this->getOAuthAwareUserProviderMock();
+        $userProviderMock->expects($this->once())
+            ->method('loadUserByOAuthUserResponse')
+            ->willReturn($this->createUser());
+
+        $resourceOwnerMock = $this->getResourceOwnerMock();
+        $resourceOwnerMock->expects($this->once())
+            ->method('refreshAccessToken')
+            ->willReturn([
+                'access_token' => 'access_token',
+                'refresh_token' => 'refresh_token',
+                'expires_in' => '666',
+                'oauth_token_secret' => 'secret',
+            ]);
+        $resourceOwnerMock->expects($this->once())
+            ->method('getUserInformation')
+            ->willReturn($this->getUserResponseMock());
+
+        $resourceOwnerMapMock = $this->getResourceOwnerMapMock();
+        $resourceOwnerMapMock->expects($this->once())
+            ->method('getResourceOwnerByName')->willReturn($resourceOwnerMock);
+
+        $authenticator = new OAuthAuthenticator(
+            $this->getHttpUtilsMock(),
+            $userProviderMock,
+            $resourceOwnerMapMock,
+            ['/a', '/b'],
+            $this->getAuthenticationSuccessHandlerMock(),
+            $this->getAuthenticationFailureHandlerMock(),
+            $this->createMock(HttpKernelInterface::class),
+            []
+        );
+
+        $token = new CustomOAuthToken([
+            'expires' => 666,
+            'refresh_token' => 'refresh token data',
+        ]);
+        $token->setResourceOwnerName($resourceOwnerName);
+        $token->setCreatedAt(10); // expire it
+        $user = $token->getUser();
+
+        $token->setAttribute('non_persistent_key', 'some non persistent value');
+        $token->setAttribute('persistent_key', 'some persistent value');
+
+        $newToken = $authenticator->refreshToken($token);
+        $this->assertNotSame($newToken, $token);
+        $this->assertNotSame($newToken->getUser(), $user); // in real live may be rather the same
+
+        $this->assertFalse($newToken->hasAttribute('non_persistent_key'));
+        $this->assertTrue($newToken->hasAttribute('persistent_key'));
+        $this->assertEquals('some persistent value', $newToken->getAttribute('persistent_key'));
+    }
+
     public function testOnAuthenticationFailure(): void
     {
         $request = Request::create('/auth');
@@ -257,6 +390,14 @@ final class OAuthAuthenticatorTest extends TestCase
     private function getAuthenticationFailureHandlerMock(): AuthenticationFailureHandlerInterface
     {
         return $this->createMock(AuthenticationFailureHandlerInterface::class);
+    }
+
+    /**
+     * @return ResourceOwnerMapInterface&MockObject
+     */
+    private function getResourceOwnerMapMock(): ResourceOwnerMapInterface
+    {
+        return $this->createMock(ResourceOwnerMapInterface::class);
     }
 
     /**
