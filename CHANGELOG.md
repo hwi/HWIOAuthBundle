@@ -32,6 +32,9 @@ Changelog
 * Added support for PHP 8.1,
 * Added support for Symfony 5.6,
 
+## 1.4.5 (2021-12-08)
+* Bugfix: Fixed: BC break by restoring wrongly moved `AbstractOAuthToken::getCredentials()` method,
+
 ## 1.4.3 (2021-12-07)
 * Bugfix: Fixed support for PHP 8.1,
 * Bugfix: Fixed support for Symfony 5.4, 
