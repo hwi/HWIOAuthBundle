@@ -1,6 +1,6 @@
 Changelog
 =========
-## 2.0.0-alpha (2021-12-10)
+## 2.0.0-BETA1 (2021-12-10)
 * BC Break: Dropped PHP 7.3 support,
 * BC Break: Dropped support for Symfony: >=5.1 & <5.4,
 * BC Break: `OAuthExtension` is now a lazy Twig extension using a Runtime,
