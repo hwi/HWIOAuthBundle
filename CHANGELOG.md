@@ -1,6 +1,6 @@
 Changelog
 =========
-## 2.0.0 (2021-xx-xx)
+## 2.0.0-alpha (2021-12-10)
 * BC Break: Dropped PHP 7.3 support,
 * BC Break: Dropped support for Symfony: >=5.1 & <5.4,
 * BC Break: `OAuthExtension` is now a lazy Twig extension using a Runtime,
@@ -24,6 +24,11 @@ Changelog
   - bundle code moved to: `src/`,
   - tests moved to: `tests/`,
   - docs moved from `Resources/doc` into: `docs/`,
+* BC Break: routes provided by bundle now have `methods` requirements:
+  - `hwi_oauth_connect_service`: `GET` & `POST`,
+  - `hwi_oauth_connect_registration`: `GET` & `POST`,
+  - `hwi_oauth_connect`: `GET`,
+  - `hwi_oauth_service_redirect`: `GET`,
 * Added support for PHP 8.1,
 * Added support for Symfony 5.6,
 
