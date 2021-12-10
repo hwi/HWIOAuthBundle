@@ -56,14 +56,13 @@ final class ConnectController
     private RequestStack $requestStack;
     private EventDispatcherInterface $dispatcher;
     private TokenStorageInterface $tokenStorage;
-    private AccountConnectorInterface $accountConnector;
     private UserCheckerInterface $userChecker;
-    private RegistrationFormHandlerInterface $formHandler;
     private AuthorizationCheckerInterface $authorizationChecker;
     private FormFactoryInterface $formFactory;
     private Environment $twig;
     private RouterInterface $router;
-    private bool $enableConnect;
+    private ?AccountConnectorInterface $accountConnector;
+    private ?RegistrationFormHandlerInterface $formHandler;
     private string $grantRule;
     private bool $failedUseReferer;
     private string $failedAuthPath;
@@ -80,25 +79,23 @@ final class ConnectController
         RequestStack $requestStack,
         EventDispatcherInterface $dispatcher,
         TokenStorageInterface $tokenStorage,
-        AccountConnectorInterface $accountConnector,
         UserCheckerInterface $userChecker,
-        RegistrationFormHandlerInterface $formHandler,
         AuthorizationCheckerInterface $authorizationChecker,
         FormFactoryInterface $formFactory,
         Environment $twig,
         RouterInterface $router,
-        bool $enableConnect,
         string $grantRule,
         bool $failedUseReferer,
         string $failedAuthPath,
         bool $enableConnectConfirmation,
         array $firewallNames,
-        string $registrationForm
+        string $registrationForm,
+        ?AccountConnectorInterface $accountConnector,
+        ?RegistrationFormHandlerInterface $formHandler
     ) {
         $this->oauthUtils = $oauthUtils;
         $this->resourceOwnerMapLocator = $resourceOwnerMapLocator;
         $this->requestStack = $requestStack;
-        $this->enableConnect = $enableConnect;
         $this->grantRule = $grantRule;
         $this->failedUseReferer = $failedUseReferer;
         $this->failedAuthPath = $failedAuthPath;
@@ -128,7 +125,7 @@ final class ConnectController
      */
     public function registrationAction(Request $request, string $key): Response
     {
-        if (!$this->enableConnect) {
+        if (!$this->accountConnector || !$this->formHandler) {
             throw new NotFoundHttpException();
         }
 
@@ -213,7 +210,7 @@ final class ConnectController
      */
     public function connectServiceAction(Request $request, string $service): Response
     {
-        if (!$this->enableConnect) {
+        if (!$this->accountConnector || !$this->formHandler) {
             throw new NotFoundHttpException();
         }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the HWIOAuthBundle package.
  *
@@ -178,20 +180,19 @@ abstract class AbstractConnectControllerTest extends TestCase
             $this->createMock(RequestStack::class),
             $this->eventDispatcher,
             $this->tokenStorage,
-            $this->accountConnector,
             $this->userChecker,
-            $this->registrationFormHandler,
             $this->authorizationChecker,
             $this->formFactory,
             $this->twig,
             $this->router,
-            $connectEnabled,
             'IS_AUTHENTICATED_REMEMBERED',
             true,
             'fake_route',
             $confirmConnect,
             $firewallNames,
-            RegistrationFormType::class
+            RegistrationFormType::class,
+            $connectEnabled ? $this->accountConnector : null,
+            $connectEnabled ? $this->registrationFormHandler : null
         );
     }
 }
