@@ -8,7 +8,7 @@ Next configure a resource owner of type `disqus` with appropriate
 please check the [documentation](http://disqus.com/api/docs/permissions/).
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

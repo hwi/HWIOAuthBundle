@@ -9,7 +9,7 @@ Example of values for scope: `r_liteprofile`, `r_emailaddress`
 as described by [Linkedin API](https://docs.microsoft.com/en-us/linkedin/shared/authentication/authorization-code-flow?context=linkedin/context#step-2-request-an-authorization-code)
 
 ```yaml
-# app/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

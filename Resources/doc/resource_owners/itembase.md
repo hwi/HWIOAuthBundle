@@ -9,7 +9,7 @@ Configure a resource owner of type `itembase` with appropriate `client_id`,
 [the documentation](http://itembase.github.io/#1.-select-the-scope-of-your-client-application)).
 
 ```yaml
-# app/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

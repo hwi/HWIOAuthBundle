@@ -2,8 +2,7 @@ Internals: Reference configuration
 ==================================
 
 ```yaml
-# app/config/config.yml
-
+# config/packages/hwi_oauth.yaml
 hwi_oauth:
     # configuration of oauth resource owners to use
     resource_owners:
@@ -92,7 +91,7 @@ hwi_oauth:
     connect: ~
 #        confirmation: true # should show confirmation page or not
 #        registration_form_handler: my_registration_form_handler
-#        registration_form: my_registration_form
+#        registration_form: App\Form\RegisterForm
 #        account_connector: my_link_provider # can be the same as your user provider
 
     # allows to change rule that is used for authentication checks
@@ -100,8 +99,8 @@ hwi_oauth:
 
 ```
 
-``` yaml
-# app/config/security.yml
+```yaml
+# config/packages/security.yaml
 security:
     providers:
         fos_userbundle:
@@ -109,29 +108,26 @@ security:
 
     firewalls:
         main:
-            pattern:    ^/
+            pattern: ^/
             form_login:
                 provider: fos_userbundle
                 login_path: /connect/
                 check_path: /login/login_check
-            anonymous:    true
             oauth:
                 resource_owners:
                     github:             "/login/check-github"
                     google:             "/login/check-google"
                     facebook:           "/login/check-facebook"
                     my_custom_provider: "/login/check-custom"
-                login_path:        /connect
-                failure_path:      /connect
+                login_path:   /connect
+                failure_path: /connect
 
-                # FOSUB integration
                 oauth_user_provider:
-                    service: hwi_oauth.user.provider.fosub_bridge
+                    service: hwi_oauth.user.provider.user_provider
 ```
 
 ```yaml
-# app/config/routing.yml
-
+# config/routing.yaml
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
     prefix:   /connect

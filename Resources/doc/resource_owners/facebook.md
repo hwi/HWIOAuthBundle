@@ -8,7 +8,7 @@ Next configure a resource owner of type `facebook` with appropriate
 for the available scopes.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:
@@ -27,7 +27,7 @@ Facebook documentation:
 - https://developers.facebook.com/docs/reference/javascript/FB.login/
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

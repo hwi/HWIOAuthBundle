@@ -8,7 +8,7 @@ __Note__: When authorizing your request `perms` parameter is appended to relevan
 Please, refer to [documentation](http://www.flickr.com/services/api/auth.oauth.html) for more information.
 
 ``` yaml
-# app/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

@@ -13,7 +13,7 @@ Example `scope` values include:
 They are to be space delimited. Refer to the [Google documentation](https://developers.google.com/accounts/docs/OAuth2Login#scope-param) for more information.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:
@@ -28,7 +28,7 @@ If you want to use [offline access](https://developers.google.com/accounts/docs/
 `access_type: offline` to your configuration.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

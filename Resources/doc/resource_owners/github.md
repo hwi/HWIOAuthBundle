@@ -8,7 +8,7 @@ Next configure a resource owner of type `github` with appropriate
 check official Github documentation: https://developer.github.com/v3/oauth/#scopes
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

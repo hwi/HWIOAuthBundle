@@ -39,7 +39,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 
-class YourResourceOwner extends GenericOAuth2ResourceOwner
+final class YourResourceOwner extends GenericOAuth2ResourceOwner
 {
     // Your resource owner code here.
 }
@@ -52,9 +52,9 @@ resource_owners:
     your_provider:
         type:           oauth2
         class:          'Your\Namespace\YourResourceOwner'
-        client_id:      %oauth.your_provider.client_id%
-        client_secret:  %oauth.your_provider.client_secret%
-        scope:          %oauth.your_provider.scope%
+        client_id:      '%oauth.your_provider.client_id%'
+        client_secret:  '%oauth.your_provider.client_secret%'
+        scope:          '%oauth.your_provider.scope%'
 ```
 
 That's all folks!

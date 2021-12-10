@@ -9,7 +9,7 @@ Example `scope` values include:
 * `name`
 * `email`
 ``` yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

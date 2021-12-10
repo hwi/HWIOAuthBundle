@@ -8,7 +8,7 @@ Next configure a resource owner of type `gitlab` with appropriate
 
 Using `read_user` scope:
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:
@@ -20,7 +20,7 @@ hwi_oauth:
 
 Using `openid` scope:
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

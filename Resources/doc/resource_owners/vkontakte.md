@@ -8,7 +8,7 @@ Next configure a resource owner of type `vkontakte` with appropriate
 for the available [scopes](https://vk.com/dev/permissions).
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

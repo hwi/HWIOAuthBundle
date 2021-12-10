@@ -8,7 +8,7 @@ Next configure a resource owner of type `windows_live` with appropriate
 documentation for the available scopes.
 
 ```yaml
-# app/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:
