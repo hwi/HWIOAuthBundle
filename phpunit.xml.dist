@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./Tests/bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./tests/bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
 
     <coverage>
         <include>
-            <directory>./</directory>
+            <directory>./src/</directory>
         </include>
         <exclude>
-            <directory>./Resources</directory>
-            <directory>./Tests</directory>
-            <directory>./vendor</directory>
+            <directory>./src/Resources</directory>
         </exclude>
     </coverage>
 
@@ -21,7 +19,7 @@
 
     <testsuites>
         <testsuite name="HWIOAuthBundle test suite">
-            <directory suffix="Test.php">./Tests</directory>
+            <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
 

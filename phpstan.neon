@@ -1,15 +1,16 @@
 parameters:
     level: 5
     paths:
-        - .
+        - src/
+        - tests/
     excludePaths:
         # Symfony <5.4 BC layer
-        - DependencyInjection/Security/Factory/OAuthFactory.php
-        - Security/Core/Authentication/Provider/OAuthProvider.php
-        - Security/Core/Exception/AccountNotLinkedException.php
-        - Security/Core/User/OAuthAwareUserProviderInterface.php
-        - Security/Http/Firewall/OAuthListener.php
-        - Tests/Security/Core/Authentication/Provider/OAuthProviderTest.php
+        - src/DependencyInjection/Security/Factory/OAuthFactory.php
+        - src/Security/Core/Authentication/Provider/OAuthProvider.php
+        - src/Security/Core/Exception/AccountNotLinkedException.php
+        - src/Security/Core/User/OAuthAwareUserProviderInterface.php
+        - src/Security/Http/Firewall/OAuthListener.php
+        - tests/Security/Core/Authentication/Provider/OAuthProviderTest.php
 
         - vendor/*
     # Symfony <5.4 BC layer

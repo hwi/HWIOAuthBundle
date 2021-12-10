@@ -141,18 +141,14 @@
 
     "autoload": {
         "psr-4": {
-            "HWI\\Bundle\\OAuthBundle\\": ""
-        },
-        "exclude-from-classmap": [
-            "/Test/",
-            "/Tests/"
-        ]
+            "HWI\\Bundle\\OAuthBundle\\": "src/"
+        }
     },
 
     "autoload-dev": {
         "psr-4": {
-            "HWI\\Bundle\\OAuthBundle\\Test\\": "Test/",
-            "HWI\\Bundle\\OAuthBundle\\Tests\\": "Tests/"
+            "HWI\\Bundle\\OAuthBundle\\Test\\": "src/Test/",
+            "HWI\\Bundle\\OAuthBundle\\Tests\\": "tests/"
         }
     },
 
