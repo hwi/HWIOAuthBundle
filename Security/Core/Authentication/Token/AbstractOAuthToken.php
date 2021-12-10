@@ -112,6 +112,10 @@ abstract class AbstractOAuthToken extends AbstractToken
         }
     }
 
+    public function copyPersistentDataFrom(self $token): void
+    {
+    }
+
     /**
      * @return mixed|void
      */
