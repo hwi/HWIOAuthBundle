@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
 
-    <route id="hwi_oauth_service_redirect" path="/{service}">
+    <route id="hwi_oauth_service_redirect" path="/{service}" methods="GET">
         <default key="_controller">HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController::redirectToServiceAction</default>
     </route>
 </routes>
