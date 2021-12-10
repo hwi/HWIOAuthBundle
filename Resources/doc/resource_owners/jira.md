@@ -10,7 +10,7 @@ Next configure a resource owner of type `jira` with appropriate
 The Client Secret should either be a path to the private key pem file.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

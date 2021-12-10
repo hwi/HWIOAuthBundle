@@ -7,7 +7,7 @@ Next configure a resource owner of type `mailru` with appropriate
 `client_id`, `client_secret` and `scope` (optional).
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

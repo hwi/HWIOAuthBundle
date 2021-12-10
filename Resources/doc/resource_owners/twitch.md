@@ -6,7 +6,7 @@ documentation for more information: https://github.com/justintv/Twitch-API.
 Next configure a resource owner of type `twitch` with appropriate `client_id` and `client_secret`.
 
 ```yaml
-# app/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

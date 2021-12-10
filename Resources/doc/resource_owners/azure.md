@@ -10,7 +10,7 @@ Next configure a resource owner of type `azure` with appropriate `client_id`,
 should target (`common` by default)
 
 ```yaml
-# app/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

@@ -8,7 +8,7 @@ Next configure a resource owner of type `toshl` with appropriate
 for the available scopes.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

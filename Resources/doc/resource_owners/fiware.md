@@ -16,7 +16,7 @@ The `base_url` for the FI-WARE Lab Cloud is "https://account.lab.fiware.org".
 If you are using the FI-WARE Lab Cloud you will have to increase the timeout for the http_client from 5 to at least 15 seconds.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 hwi_oauth:
     resource_owners:
         any_name:

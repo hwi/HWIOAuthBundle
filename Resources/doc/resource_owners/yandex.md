@@ -6,7 +6,7 @@ Next configure a resource owner of type `yandex` with appropriate `client_id` an
 You don't need a scope, because it's a value you set while register your app.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

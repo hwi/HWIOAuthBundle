@@ -5,7 +5,7 @@ First you will have to register your application in Stereomood's ["Api Apps Regi
 Next configure a resource owner of type `stereomood` with appropriate `client_id` and `client_secret`.
 
 ```yaml
-# app/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

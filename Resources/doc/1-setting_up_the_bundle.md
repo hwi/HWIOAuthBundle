@@ -32,7 +32,7 @@ public function registerBundles()
 Import the `redirect.xml` and `login.xml` routing files in your own routing file.
 
 ```yaml
-# app/config/routing.yml
+# config/routing.yaml
 hwi_oauth_redirect:
     resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
     prefix:   /connect

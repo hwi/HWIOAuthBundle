@@ -9,7 +9,7 @@ Next configure a resource owner of type `twitter` with appropriate
 `client_id`, `client_secret`.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:
@@ -26,7 +26,7 @@ Twitter documentation:
 - https://developer.twitter.com/en/docs/accounts-and-users/manage-account-settings/api-reference/get-account-verify_credentials
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

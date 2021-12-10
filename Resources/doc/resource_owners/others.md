@@ -6,7 +6,7 @@ resource owner:
 
 #### OAuth2
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:
@@ -29,7 +29,7 @@ hwi_oauth:
 #### OAuth1.0a
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

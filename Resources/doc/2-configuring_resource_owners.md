@@ -5,14 +5,10 @@ use in your application. These resource owners will be used in the oauth
 firewall. The bundle ships several pre-configured resource owners that need
 only a little configuration.
 
-If you use a recent version of Symfony, the configuration has automatically been generated
-in `config/packages/hwi_oauth.yaml`.
-
-Otherwise, to make this bundle work you need to add the following to your `app/config/config.yml`:
+Otherwise, to make this bundle work you need to add the following to your `config/packages/hwi_oauth.yaml`:
 
 ```yaml
-# app/config/config.yml
-
+# config/packages/hwi_oauth.yaml
 hwi_oauth:
     # list of names of the firewalls in which this bundle is active, this setting MUST be set
     firewall_names: [main]
@@ -22,13 +18,13 @@ hwi_oauth:
     # redirect the user to /my/destination after facebook authenticates them.  If this is not
     # set then the user will be redirected to the original resource that they requested, or
     # the base address if no resource was requested.  This is similar to the behaviour of
-    # [target_path_parameter for form login](http://symfony.com/doc/2.0/cookbook/security/form_login.html).
+    # [target_path_parameter for form login](https://symfony.com/doc/5.4/security/form_login.html).
     # target_path_parameter: _destination
 
     # an optional setting to use the HTTP REFERER header to be used in case no
     # previous URL was stored in the session (i.e. no resource was requested).
     # This is similar to the behaviour of
-    # [using the referring URL for form login](http://symfony.com/doc/2.0/cookbook/security/form_login.html#using-the-referring-url).
+    # [using the referring URL for form login](https://symfony.com/doc/5.4/security/form_login.html#using-the-referring-url).
     # use_referer: true
 
     # here you will add one (or more) configurations for resource owners
@@ -100,7 +96,7 @@ Other types of state can be configured under the `state` key, either as a single
 also be passed directly in the `state` query parameter of your request, provided they don't override the configured keys
 and are json and base64 encoded, as can be seen in `OAuth/State/State`.
 ```yaml
-# app/config/config.yml
+# config/package/hwi_oauth.yaml
 hwi_oauth:
     resource_owners:
         any_name:

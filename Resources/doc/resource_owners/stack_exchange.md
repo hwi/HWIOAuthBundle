@@ -8,7 +8,7 @@ Next configure a resource owner of type `stack_exchange` with appropriate
 for the [available scopes](https://api.stackexchange.com/docs/authentication#scope).
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

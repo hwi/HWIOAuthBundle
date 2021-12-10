@@ -8,7 +8,7 @@ Next configure a resource owner of type `eve` with appropriate
 for the available scopes.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:
@@ -21,7 +21,7 @@ hwi_oauth:
 Optionally, for authenticating to EVE online test servers, you can override endpoint settings:
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 hwi_oauth:
     resource_owners:
         any_name:

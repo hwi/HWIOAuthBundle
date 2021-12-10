@@ -1,14 +1,12 @@
 Bonus: Facebook Connect
 =======================
-This guide bases on Symfony 2.1+ and the [AcmeDemoBundle](https://github.com/symfony/symfony-standard/tree/2.2).
 
 ## Configuration
 
 ### Configuration of the Resource Owner
 
 ```yaml
-# app/config/config.yml
-
+# config/packages/hwi_oauth.yaml
 hwi_oauth:
     firewall_names: [main]
     resource_owners:
@@ -41,7 +39,7 @@ facebook_login:
 ### Configuration of the Security Layer
 
 ```yaml
-# app/config/security.yml
+# config/packages/security.yaml
 
 firewalls:
     # ...
@@ -55,16 +53,17 @@ firewalls:
             oauth_user_provider:
                 service: hwi_oauth.user.provider.entity
 
-        # Turn on anonymous for testings need.
-        anonymous: ~
+    access_control:
+      # Turn on anonymous for testings need.
+      - { path: ^/login, roles: PUBLIC_ACCESS }
 ```
 
 ## Adding the Facebook Login Button
 
 The following example bases also on the Facebook ["Login with Javascript SDK"](https://developers.facebook.com/docs/howtos/login/getting-started/) guide.
 
-```html+jinja
-# src/Acme/DemoBundle/Resources/views/Secured/hello.html.twig
+```jinja
+# templates/Secured/hello.html.twig
 
 {% block content %}
     <div id="fb-root"></div>

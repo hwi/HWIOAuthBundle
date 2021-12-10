@@ -18,11 +18,41 @@ In the firewall configuration you will need to configure a login path for the
 resource owners you configured in [step 2](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/2-configuring_resource_owners.md).
 Additionally you will need to point the oauth firewall to the appropriate service to use for loading users:
 
+In Symfony 5.4 or 6.0+, use:
 ```yaml
-# app/config/security.yml
+# config/packages/security.yaml
+security:
+    enable_authenticator_manager: true
+
+    firewalls:
+        main:
+            pattern: ^/
+            oauth:
+                resource_owners:
+                    facebook:           "/login/check-facebook"
+                    google:             "/login/check-google"
+                    my_custom_provider: "/login/check-custom"
+                    my_github:          "/login/check-github"
+                login_path:   /login
+                use_forward:  false
+                failure_path: /login
+
+                oauth_user_provider:
+                    service: my.oauth_aware.user_provider.service
+                provider: my.oauth_aware.user_provider.service
+
+    access_control:
+        - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/, roles: ROLE_USER } // force login
+```
+
+If you use Symfony <5.4:
+```yaml
+# config/packages/security.yaml
 security:
     firewalls:
         main:
+            pattern: ^/
             anonymous: ~
             oauth:
                 resource_owners:
@@ -30,26 +60,15 @@ security:
                     google:             "/login/check-google"
                     my_custom_provider: "/login/check-custom"
                     my_github:          "/login/check-github"
-                login_path:        /login
-                use_forward:       false
-                failure_path:      /login
+                login_path:   /login
+                use_forward:  false
+                failure_path: /login
 
                 oauth_user_provider:
                     service: my.oauth_aware.user_provider.service
 
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-```
-
-
-Configure `FOSUBUserProvider` service:
-```yaml
-# app/config/services.yml
-my.oauth_aware.user_provider.service:
-    class: HWI\Bundle\OAuthBundle\Security\Core\User\FOSUBUserProvider
-    arguments:
-        - '@fos_user.user_manager'
-        - ['pass properties as array']
 ```
 
 The paths configured at the `resource_owners` section should be defined in your routing.

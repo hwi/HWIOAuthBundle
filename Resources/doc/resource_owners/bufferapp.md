@@ -7,7 +7,7 @@ Next configure a resource owner of type `bufferapp` with appropriate
 `client_id` and `client_secret`. Refer to the BufferApp to more information.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

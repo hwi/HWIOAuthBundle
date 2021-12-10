@@ -15,8 +15,7 @@ But enough theory, here is example how to fetch user email & picture while using
 > HWIOAuthBundle and at least the Facebook resource owner.
 
 ```yaml
-# app/config/config.yml
-
+# config/packages/hwi_oauth.yaml
 hwi_oauth:
     firewall_names: [main]
     resource_owners:
@@ -49,7 +48,7 @@ for user that is being authenticated, to do this you will need to overwrite defa
 as described below:
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 hwi_oauth:
    firewall_names: [main]
    resource_owners:
@@ -77,7 +76,7 @@ Our path api is so flexible that you can merge individual fields returned in res
 owner into one! Check how this could look:
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 hwi_oauth:
    firewall_names: [main]
    resource_owners:

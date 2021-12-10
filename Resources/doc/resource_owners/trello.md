@@ -7,7 +7,7 @@ Next configure a resource owner of type `trello` with appropriate
 `client_id`, `client_secret`, `application`, `scopes` and `expiration`.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

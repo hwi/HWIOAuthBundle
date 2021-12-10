@@ -5,7 +5,7 @@ First, create your client application in Keycloak, and set 'Access type' to 'con
 Your Keycloak-URL should look like https://myfancykeycloak.example.com/auth. This is your base URL. Authorization-, token- and userinfo-URLS are derived automatically. If for some reason they do not conform with default Keycloak behavior, they can also be set manually.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:

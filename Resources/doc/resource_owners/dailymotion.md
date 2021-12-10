@@ -9,7 +9,7 @@ Next configure a resource owner of type `dailymotion` with appropriate
 `client_id`, `client_secret`.
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:
@@ -22,7 +22,7 @@ hwi_oauth:
 Optionally you can tune how dialog is displaying by changing [`display`](http://www.dailymotion.com/doc/api/authentication.html#dialog-form-factors) option:
 
 ```yaml
-# app/config/config.yml
+# config/packages/hwi_oauth.yaml
 
 hwi_oauth:
     resource_owners:
