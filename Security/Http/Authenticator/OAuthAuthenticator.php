@@ -30,6 +30,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -89,9 +90,8 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         if ($this->options['use_forward'] ?? false) {
             $subRequest = $this->httpUtils->createRequest($request, $this->options['login_path']);
 
-            /** @var \ArrayIterator $iterator */
             $iterator = $request->query->getIterator();
-            $subRequest->query->add($iterator->getArrayCopy());
+            $subRequest->query->add(iterator_to_array($iterator));
 
             $response = $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             if (200 === $response->getStatusCode()) {
@@ -139,7 +139,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         $token = new OAuthToken($accessToken);
         $token->setResourceOwnerName($resourceOwner->getName());
 
-        return new SelfValidatedOAuthPassport($this->refreshToken($token));
+        return new SelfValidatedOAuthPassport($this->refreshToken($token), [new RememberMeBadge()]);
     }
 
     /**
@@ -155,6 +155,9 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
     public function refreshToken(OAuthToken $token): OAuthToken
     {
         $resourceOwner = $this->resourceOwnerMap->getResourceOwnerByName($token->getResourceOwnerName());
+        if (!$resourceOwner) {
+            throw new AuthenticationServiceException('Unknown resource owner set on token: '.$token->getResourceOwnerName());
+        }
 
         if ($token->isExpired()) {
             $expiredToken = $token;
