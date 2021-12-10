@@ -15,8 +15,8 @@ The HWIOAuthBundle also ships with three default implementations:
 ### B) Configure the oauth firewall
 
 In the firewall configuration you will need to configure a login path for the
-resource owners you configured in [step 2](https://github.com/hwi/HWIOAuthBundle/blob/master/Resources/doc/2-configuring_resource_owners.md).
-Additionally you will need to point the oauth firewall to the appropriate service to use for loading users:
+resource owners you configured in [step 2](../docs/2-configuring_resource_owners.md).
+Additionally, you will need to point the oauth firewall to the appropriate service to use for loading users:
 
 In Symfony 5.4 or 6.0+, use:
 ```yaml

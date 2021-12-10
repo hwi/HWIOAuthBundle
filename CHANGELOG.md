@@ -19,7 +19,11 @@ Changelog
 * BC Break: Removed `setName()` method from `OAuth/ResourceOwnerInterface`,
 * BC Break: changed `__construct()` argument for `OAuth/ResourceOwner/AbstractResourceOwner`, from `HttpMethodsClient $httpClient` to `HttpClientInterface $httpClient`,
 * BC Break: replaced `php-http/httplug-bundle` with `symfony/http-client`
-* BC Break: removed `hwi_oauth.http` configuration
+* BC Break: removed `hwi_oauth.http` configuration,
+* BC Break: reworked bundles structure to match Symfony best practices:
+  - bundle code moved to: `src/`,
+  - tests moved to: `tests/`,
+  - docs moved from `Resources/doc` into: `docs/`,
 * Added support for PHP 8.1,
 * Added support for Symfony 5.6,
 
