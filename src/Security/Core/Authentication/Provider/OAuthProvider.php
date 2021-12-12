@@ -29,8 +29,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 final class OAuthProvider implements AuthenticationProviderInterface
 {
-    private ResourceOwnerMapInterface $resourceOwnerMap;
     private OAuthAwareUserProviderInterface $userProvider;
+    private ResourceOwnerMapInterface $resourceOwnerMap;
     private UserCheckerInterface $userChecker;
     private TokenStorageInterface $tokenStorage;
 
@@ -125,14 +125,20 @@ final class OAuthProvider implements AuthenticationProviderInterface
     }
 
     /**
+     * @template T of OAuthToken
+     *
      * @param string|array $data
+     * @param T            $oldToken
+     *
+     * @returns T
      */
     private function createOAuthToken(
         $data,
         OAuthToken $oldToken,
         UserInterface $user
     ): OAuthToken {
-        $token = new OAuthToken($data, $user->getRoles());
+        $tokenClass = \get_class($oldToken);
+        $token = new $tokenClass($data, $user->getRoles());
         $token->setResourceOwnerName($oldToken->getResourceOwnerName());
         $token->setUser($user);
         $token->setCreatedAt($oldToken->isExpired() ? time() : $oldToken->getCreatedAt());
@@ -146,6 +152,10 @@ final class OAuthProvider implements AuthenticationProviderInterface
         if (!$token->getRefreshToken()) {
             $token->setRefreshToken($oldToken->getRefreshToken());
         }
+
+        $token->setAttributes($oldToken->getAttributes());
+
+        $token->copyPersistentDataFrom($oldToken);
 
         return $token;
     }
