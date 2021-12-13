@@ -19,6 +19,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use PHPUnit\Framework\TestCase;
@@ -35,8 +36,8 @@ final class OAuthProviderTest extends TestCase
 {
     protected function setUp(): void
     {
-        if (!class_exists(AuthenticationProviderInterface::class)) {
-            $this->markTestSkipped('Legacy test for Symfony <5.4');
+        if (!interface_exists(AuthenticationProviderInterface::class)) {
+            $this->markTestSkipped('Legacy test for Symfony <6.0');
         }
     }
 
@@ -236,7 +237,7 @@ final class OAuthProviderTest extends TestCase
 
         $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock, $tokenStorageMock);
 
-        $oauthToken = new OAuthToken($refreshedToken);
+        $oauthToken = new CustomOAuthToken($refreshedToken);
         $oauthToken->setResourceOwnerName('github');
         $oauthToken->setRefreshToken($expiredToken['refresh_token']);
         $oauthToken->setExpiresIn(30);
@@ -251,7 +252,7 @@ final class OAuthProviderTest extends TestCase
         /** @var AbstractOAuthToken $token */
         $token = $oauthProvider->authenticate($oauthToken);
 
-        $this->assertInstanceOf(OAuthToken::class, $token);
+        $this->assertInstanceOf(CustomOAuthToken::class, $token);
 
         // @deprecated since Symfony 5.4
         if (method_exists($token, 'isAuthenticated')) {
