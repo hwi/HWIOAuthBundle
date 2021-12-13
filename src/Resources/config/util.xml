@@ -11,6 +11,7 @@
 
         <service id="hwi_oauth.http_client" class="Symfony\Contracts\HttpClient\HttpClientInterface">
             <factory class="Symfony\Component\HttpClient\HttpClient" method="create" />
+            <tag name="http_client.client" />
         </service>
     </services>
 </container>
