@@ -19,7 +19,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
-use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use PHPUnit\Framework\TestCase;
@@ -185,7 +184,7 @@ final class OAuthProviderTest extends TestCase
     /**
      * @dataProvider provideAuthenticationData
      */
-    public function testTokenRefreshesWhenExpired(bool $authenticated): void
+    public function testTokenRefreshesWhenExpired(bool $authenticated, bool $userKnown): void
     {
         $expiredToken = [
             'access_token' => 'access_token',
@@ -237,12 +236,14 @@ final class OAuthProviderTest extends TestCase
 
         $oauthProvider = new OAuthProvider($userProviderMock, $resourceOwnerMapMock, $userCheckerMock, $tokenStorageMock);
 
-        $oauthToken = new CustomOAuthToken($refreshedToken);
+        $oauthToken = new OAuthToken($refreshedToken);
         $oauthToken->setResourceOwnerName('github');
         $oauthToken->setRefreshToken($expiredToken['refresh_token']);
         $oauthToken->setExpiresIn(30);
         $oauthToken->setCreatedAt(time() - 3600);
-        $oauthToken->setUser($user);
+        if ($userKnown) {
+            $oauthToken->setUser($user);
+        }
 
         // required for compatibility with Symfony 5.4
         if (method_exists($oauthToken, 'setAuthenticated')) {
@@ -252,7 +253,7 @@ final class OAuthProviderTest extends TestCase
         /** @var AbstractOAuthToken $token */
         $token = $oauthProvider->authenticate($oauthToken);
 
-        $this->assertInstanceOf(CustomOAuthToken::class, $token);
+        $this->assertInstanceOf(OAuthToken::class, $token);
 
         // @deprecated since Symfony 5.4
         if (method_exists($token, 'isAuthenticated')) {
@@ -274,8 +275,9 @@ final class OAuthProviderTest extends TestCase
 
     public function provideAuthenticationData(): iterable
     {
-        yield 'authenticated' => [true];
-        yield 'not authenticated' => [false];
+        yield 'authenticated, user known' => [true, true];
+        yield 'not authenticated, user known' => [false, true];
+        yield 'not authenticated, user unknown' => [false, false];
     }
 
     protected function getOAuthAwareUserProviderMock()

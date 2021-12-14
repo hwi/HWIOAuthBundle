@@ -135,12 +135,16 @@ final class OAuthProvider implements AuthenticationProviderInterface
     private function createOAuthToken(
         $data,
         OAuthToken $oldToken,
-        UserInterface $user
+        ?UserInterface $user
     ): OAuthToken {
         $tokenClass = \get_class($oldToken);
-        $token = new $tokenClass($data, $user->getRoles());
+        if (null !== $user) {
+            $token = new $tokenClass($data, $user->getRoles());
+            $token->setUser($user);
+        } else {
+            $token = new $tokenClass($data);
+        }
         $token->setResourceOwnerName($oldToken->getResourceOwnerName());
-        $token->setUser($user);
         $token->setCreatedAt($oldToken->isExpired() ? time() : $oldToken->getCreatedAt());
 
         // required for compatibility with Symfony 5.4
