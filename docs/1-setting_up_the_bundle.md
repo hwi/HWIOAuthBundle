@@ -29,20 +29,20 @@ public function registerBundles()
 
 ### C) Import the routing
 
-Import the `redirect.xml` and `login.xml` routing files in your own routing file.
+Import the `redirect.php` and `login.php` routing files in your own routing file.
 
 ```yaml
 # config/routing.yaml
 hwi_oauth_redirect:
-    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.php"
     prefix:   /connect
 
 hwi_oauth_connect:
-    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.php"
     prefix:   /connect
 
 hwi_oauth_login:
-    resource: "@HWIOAuthBundle/Resources/config/routing/login.xml"
+    resource: "@HWIOAuthBundle/Resources/config/routing/login.php"
     prefix:   /login
 ```
 
