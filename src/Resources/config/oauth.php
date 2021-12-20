@@ -18,6 +18,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider;
 use HWI\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint;
+use HWI\Bundle\OAuthBundle\Security\Http\Firewall\AbstractRefreshAccessTokenListener;
 use HWI\Bundle\OAuthBundle\Security\Http\Firewall\OAuthListener;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 
@@ -40,6 +41,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set('hwi_oauth.user.provider.entity', EntityUserProvider::class)
         ->args([service('doctrine')]);
+
+    $services->set('hwi_oauth.context_listener.abstract_token_refresher', AbstractRefreshAccessTokenListener::class)
+        ->abstract()
+        ->arg(0, \function_exists(__NAMESPACE__.'\abstract_arg')
+            ? abstract_arg('OAuthAuthenticator or AuthenticationProviderInterface')
+            : null // Symfony 4.4
+        )
+        ->call('setTokenStorage', [service('security.token_storage')]);
 
     // Session storage
     $services->set('hwi_oauth.storage.session', SessionStorage::class)

@@ -31,7 +31,7 @@ final class IntegrationTest extends WebTestCase
         $client = static::createClient();
         $client->disableReboot();
         $client->getContainer()->set('hwi_oauth.http_client', new MockHttpClient());
-        $client->request('GET', '/');
+        $client->request('GET', '/private');
 
         $response = $client->getResponse();
 
