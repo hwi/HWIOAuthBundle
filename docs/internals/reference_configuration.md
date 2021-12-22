@@ -129,7 +129,7 @@ security:
 ```yaml
 # config/routing.yaml
 hwi_oauth_redirect:
-    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.php"
     prefix:   /connect
 
 facebook_login:

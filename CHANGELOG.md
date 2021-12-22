@@ -1,5 +1,8 @@
 Changelog
 =========
+## 2.0.0-BETA2 (202x-xx-xx)
+* Changed config files from `*.xml` to `*.php` (services and routes). Xml routing configs `connect.xml`, `login.xml` and `redirect.xml` are steel present but deprecated. Please use `*.php` variants in your includes instead.
+
 ## 2.0.0-BETA1 (2021-12-10)
 * BC Break: Dropped PHP 7.3 support,
 * BC Break: Dropped support for Symfony: >=5.1 & <5.4,

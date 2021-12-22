@@ -9,6 +9,19 @@
  * file that was distributed with this source code.
  */
 
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+
+// BC symfony 4.4
+class_exists(ContainerConfigurator::class);
+
+if (!\function_exists(__NAMESPACE__.'\\service')) {
+    function service($class): ReferenceConfigurator
+    {
+        /* @phpstan-ignore-next-line function ref not found */
+        return ref($class);
+    }
+}
+
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
@@ -22,7 +35,7 @@ use Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Exception\OutOfBoundsException;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -46,13 +59,13 @@ final class HWIOAuthExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
-        $loader->load('controller.xml');
-        $loader->load('oauth.xml');
-        $loader->load('resource_owners.xml');
-        $loader->load('templating.xml');
-        $loader->load('twig.xml');
-        $loader->load('util.xml');
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config/'));
+        $loader->load('controller.php');
+        $loader->load('oauth.php');
+        $loader->load('resource_owners.php');
+        $loader->load('templating.php');
+        $loader->load('twig.php');
+        $loader->load('util.php');
 
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);

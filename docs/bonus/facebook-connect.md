@@ -29,7 +29,7 @@ services:
 # app/config/routing.yml
 
 hwi_oauth_redirect:
-    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.php"
     prefix:   /demo/secured/connect
 
 facebook_login:
