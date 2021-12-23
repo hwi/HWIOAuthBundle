@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle;
 
+use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\RefreshOAuthTokenCompilerPass;
 use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\ResourceOwnerMapCompilerPass;
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthAuthenticatorFactory;
@@ -42,6 +43,7 @@ class HWIOAuthBundle extends Bundle
         } elseif (interface_exists(AuthenticationProviderInterface::class)) {
             // @phpstan-ignore-next-line Symfony 4.4 BC layer
             $extension->addSecurityListenerFactory(new OAuthFactory());
+            $container->addCompilerPass(new RefreshOAuthTokenCompilerPass());
         } else {
             // @phpstan-ignore-next-line Symfony < 5.4 BC layer
             $extension->addSecurityListenerFactory(new OAuthAuthenticatorFactory());

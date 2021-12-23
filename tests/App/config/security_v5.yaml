@@ -24,4 +24,5 @@ security:
 
   access_control:
     - { path: '^/(login$|connect|login_hwi)', roles: PUBLIC_ACCESS }
-    - { path: ^/, roles: ROLE_USER }
+    - { path: ^/private, roles: ROLE_USER }
+    - { path: ^/, roles: PUBLIC_ACCESS }

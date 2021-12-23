@@ -170,6 +170,14 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
+    public function shouldRefreshOnExpire()
+    {
+        return $this->options['refresh_on_expire'] ?? false;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function doGetTokenRequest($url, array $parameters = [])
     {
         $headers = [];
@@ -225,9 +233,11 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'use_commas_in_scope' => false,
             'use_bearer_authorization' => true,
             'use_authorization_to_get_token' => true,
+            'refresh_on_expire' => false,
         ]);
 
         $resolver->setDefined('revoke_token_url');
+        $resolver->setAllowedValues('refresh_on_expire', [true, false]);
 
         // Unfortunately some resource owners break the spec by using commas instead
         // of spaces to separate scopes (Disqus, Facebook, Github, Vkontante)

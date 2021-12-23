@@ -32,4 +32,9 @@ final class HomeController
     {
         return new Response('Hello, this is the homepage');
     }
+
+    public function privatePage(): Response
+    {
+        return new Response('Hello, this is some private homepage');
+    }
 }

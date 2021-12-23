@@ -95,6 +95,10 @@ This will be round-tripped to your application in the `state` parameter.
 Other types of state can be configured under the `state` key, either as a single string or key/value pairs. State can
 also be passed directly in the `state` query parameter of your request, provided they don't override the configured keys
 and are json and base64 encoded, as can be seen in `OAuth/State/State`.
+
+### Auto refreshing of expired access tokens
+This option is experimental and can be enabled for `GenericOAuth2ResourceOwner` with option `refresh_on_expire: true`
+
 ```yaml
 # config/package/hwi_oauth.yaml
 hwi_oauth:
@@ -105,6 +109,7 @@ hwi_oauth:
             client_secret:       <client_secret>
             options:
                 csrf: true
+                refresh_on_expire: true
                 state: 
                   some: parameter
                   some-other: parameter

@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider;
+use HWI\Bundle\OAuthBundle\Security\Http\Firewall\RefreshAccessTokenListenerOld;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
@@ -105,6 +106,8 @@ final class OAuthFactory extends AbstractFactory
             ->addArgument(new Reference('security.token_storage'))
         ;
 
+        $this->createRefreshTokenListeners($container, $providerId, $id);
+
         return $providerId;
     }
 
@@ -168,6 +171,18 @@ final class OAuthFactory extends AbstractFactory
         ;
 
         return $listenerId;
+    }
+
+    protected function createRefreshTokenListeners(ContainerBuilder $container, string $providerId, string $id): void
+    {
+        $listenerId = 'hwi_oauth.context_listener.token_refresher.'.$id;
+
+        $listenerDef = $container->setDefinition($listenerId, new ChildDefinition('hwi_oauth.context_listener.abstract_token_refresher'));
+
+        $listenerDef
+            ->addMethodCall('setResourceOwnerMap', [$this->getResourceOwnerMapReference($id)])
+            ->setClass(RefreshAccessTokenListenerOld::class)
+            ->replaceArgument(0, new Reference($providerId));
     }
 
     /**

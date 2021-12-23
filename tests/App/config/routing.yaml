@@ -14,6 +14,10 @@ home:
     path:  /
     defaults: { _controller: 'HWI\Bundle\OAuthBundle\Tests\App\Controller\HomeController::index' }
 
+private_page:
+    path:  /private
+    defaults: { _controller: 'HWI\Bundle\OAuthBundle\Tests\App\Controller\HomeController::privatePage' }
+
 login_landing:
     path:  /login
     defaults: { _controller: 'HWI\Bundle\OAuthBundle\Tests\App\Controller\HomeController::login' }

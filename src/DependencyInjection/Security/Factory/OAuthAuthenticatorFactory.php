@@ -12,8 +12,11 @@
 namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\OAuthAuthenticator;
+use HWI\Bundle\OAuthBundle\Security\Http\Firewall\RefreshAccessTokenListener;
+use HWI\Bundle\OAuthBundle\Security\Http\Firewall\RefreshAccessTokenListenerOld;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AuthenticatorFactoryInterface;
+use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\FirewallListenerFactoryInterface;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\NodeDefinition;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -26,7 +29,7 @@ use Symfony\Component\DependencyInjection\Reference;
  * @author Alexander <iam.asm89@gmail.com>
  * @author Vadim Borodavko <vadim.borodavko@gmail.com>
  */
-final class OAuthAuthenticatorFactory extends AbstractFactory implements AuthenticatorFactoryInterface
+final class OAuthAuthenticatorFactory extends AbstractFactory implements AuthenticatorFactoryInterface, FirewallListenerFactoryInterface
 {
     /**
      * @param ArrayNodeDefinition $node
@@ -72,6 +75,32 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
         ;
 
         return $authenticatorId;
+    }
+
+    public function createListeners(ContainerBuilder $container, string $firewallName, array $config): array
+    {
+        $authenticatorId = 'security.authenticator.oauth.'.$firewallName;
+        $providerId = 'hwi_oauth.authentication.provider.oauth.'.$firewallName;
+
+        $listenerId = 'hwi_oauth.context_listener.token_refresher.'.$firewallName;
+
+        $listenerDef = $container->setDefinition($listenerId, new ChildDefinition('hwi_oauth.context_listener.abstract_token_refresher'));
+
+        $listenerDef->addMethodCall('setResourceOwnerMap', [$this->getResourceOwnerMapReference($firewallName)]);
+
+        if ($container->hasDefinition($authenticatorId)) {
+            // new auth manager
+            $listenerDef
+                ->setClass(RefreshAccessTokenListener::class)
+                ->replaceArgument(0, new Reference($authenticatorId));
+        } else {
+            // old auth manager
+            $listenerDef
+                ->setClass(RefreshAccessTokenListenerOld::class)
+                ->replaceArgument(0, new Reference($providerId));
+        }
+
+        return [$listenerId];
     }
 
     public function getPriority(): int

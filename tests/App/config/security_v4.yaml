@@ -13,6 +13,7 @@ security:
       context: hwi_context
     main:
       pattern: ^/
+      anonymous: true
       oauth:
         resource_owners:
           google: "/check-login/google"
@@ -25,4 +26,4 @@ security:
       context: hwi_context
 
   access_control:
-    - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/private, roles: ROLE_USER }
