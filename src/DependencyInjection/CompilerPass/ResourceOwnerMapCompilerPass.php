@@ -28,7 +28,7 @@ final class ResourceOwnerMapCompilerPass implements CompilerPassInterface
         $def = $container->getDefinition('hwi_oauth.resource_ownermap_locator');
 
         foreach ($container->getParameter('hwi_oauth.firewall_names') as $firewallId) {
-            $def->addMethodCall('add', [$firewallId, new Reference('hwi_oauth.resource_ownermap.'.$firewallId)]);
+            $def->addMethodCall('set', [$firewallId, new Reference('hwi_oauth.resource_ownermap.'.$firewallId)]);
         }
     }
 }

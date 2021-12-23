@@ -67,12 +67,8 @@ final class ConnectController
     private bool $failedUseReferer;
     private string $failedAuthPath;
     private bool $enableConnectConfirmation;
-    private array $firewallNames;
     private string $registrationForm;
 
-    /**
-     * @param string[] $firewallNames
-     */
     public function __construct(
         OAuthUtils $oauthUtils,
         ResourceOwnerMapLocator $resourceOwnerMapLocator,
@@ -88,7 +84,6 @@ final class ConnectController
         bool $failedUseReferer,
         string $failedAuthPath,
         bool $enableConnectConfirmation,
-        array $firewallNames,
         string $registrationForm,
         ?AccountConnectorInterface $accountConnector,
         ?RegistrationFormHandlerInterface $formHandler
@@ -100,7 +95,6 @@ final class ConnectController
         $this->failedUseReferer = $failedUseReferer;
         $this->failedAuthPath = $failedAuthPath;
         $this->enableConnectConfirmation = $enableConnectConfirmation;
-        $this->firewallNames = $firewallNames;
         $this->registrationForm = $registrationForm;
         $this->dispatcher = $dispatcher;
         $this->accountConnector = $accountConnector;
@@ -291,12 +285,7 @@ final class ConnectController
      */
     private function getResourceOwnerByName(string $name): ResourceOwnerInterface
     {
-        foreach ($this->firewallNames as $firewall) {
-            if (!$this->resourceOwnerMapLocator->has($firewall)) {
-                continue;
-            }
-
-            $ownerMap = $this->resourceOwnerMapLocator->get($firewall);
+        foreach ($this->resourceOwnerMapLocator->getResourceOwnerMaps() as $ownerMap) {
             if ($resourceOwner = $ownerMap->getResourceOwnerByName($name)) {
                 return $resourceOwner;
             }
@@ -346,8 +335,8 @@ final class ConnectController
             return null;
         }
 
-        foreach ($this->firewallNames as $providerKey) {
-            $sessionKey = '_security.'.$providerKey.'.target_path';
+        foreach ($this->resourceOwnerMapLocator->getFirewallNames() as $firewallName) {
+            $sessionKey = '_security.'.$firewallName.'.target_path';
             if ($session->has($sessionKey)) {
                 return $session->get($sessionKey);
             }
