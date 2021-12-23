@@ -16,6 +16,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Controller;
 use HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -35,8 +36,6 @@ final class RedirectToServiceControllerTest extends TestCase
     private $session;
 
     private Request $request;
-
-    private array $firewallNames = ['default'];
 
     private string $targetPathParameter = 'target_path';
 
@@ -135,6 +134,9 @@ final class RedirectToServiceControllerTest extends TestCase
             ->withAnyParameters()
             ->willReturn('https://domain.com/oauth/v2/auth');
 
+        $resourceOwnerMapLocator = new ResourceOwnerMapLocator();
+        $resourceOwnerMapLocator->set('default', $ownerMap);
+
         $utils = new OAuthUtils(
             $this->createMock(HttpUtils::class),
             $this->createMock(AuthorizationCheckerInterface::class),
@@ -146,7 +148,7 @@ final class RedirectToServiceControllerTest extends TestCase
         return new RedirectToServiceController(
             $utils,
             new DomainWhitelist(['domain.com']),
-            $this->firewallNames,
+            $resourceOwnerMapLocator,
             $this->targetPathParameter,
             $failedUseReferer,
             $useReferer

@@ -1,6 +1,7 @@
 Changelog
 =========
 ## 2.0.0-BETA2 (202x-xx-xx)
+* Enhancement: (@internal) Removed/replaced redundant argument `$firewallNames` from controllers. If controller class was copied and replaced, adapt list of arguments: In controller use `$resourceOwnerMapLocator->getFirewallNames()`.
 * Changed config files from `*.xml` to `*.php` (services and routes). Xml routing configs `connect.xml`, `login.xml` and `redirect.xml` are steel present but deprecated. Please use `*.php` variants in your includes instead.
 
 ## 2.0.0-BETA1 (2021-12-10)

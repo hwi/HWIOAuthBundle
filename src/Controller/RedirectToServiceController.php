@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller;
 
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
 use RuntimeException;
@@ -29,7 +30,7 @@ final class RedirectToServiceController
 {
     private OAuthUtils $oauthUtils;
     private DomainWhitelist $domainWhitelist;
-    private array $firewallNames;
+    private ResourceOwnerMapLocator $resourceOwnerMapLocator;
     private ?string $targetPathParameter = null;
     private bool $failedUseReferer;
     private bool $useReferer;
@@ -37,14 +38,14 @@ final class RedirectToServiceController
     public function __construct(
         OAuthUtils $oauthUtils,
         DomainWhitelist $domainWhitelist,
-        array $firewallNames,
+        ResourceOwnerMapLocator $resourceOwnerMapLocator,
         ?string $targetPathParameter,
         bool $failedUseReferer,
         bool $useReferer
     ) {
         $this->oauthUtils = $oauthUtils;
         $this->domainWhitelist = $domainWhitelist;
-        $this->firewallNames = $firewallNames;
+        $this->resourceOwnerMapLocator = $resourceOwnerMapLocator;
         $this->targetPathParameter = $targetPathParameter;
         $this->failedUseReferer = $failedUseReferer;
         $this->useReferer = $useReferer;
@@ -76,9 +77,9 @@ final class RedirectToServiceController
 
         $param = $this->targetPathParameter;
 
-        foreach ($this->firewallNames as $providerKey) {
-            $sessionKey = '_security.'.$providerKey.'.target_path';
-            $sessionKeyFailure = '_security.'.$providerKey.'.failed_target_path';
+        foreach ($this->resourceOwnerMapLocator->getFirewallNames() as $firewallName) {
+            $sessionKey = '_security.'.$firewallName.'.target_path';
+            $sessionKeyFailure = '_security.'.$firewallName.'.failed_target_path';
 
             if (!empty($param) && $targetUrl = $request->get($param)) {
                 if (!$this->domainWhitelist->isValidTargetUrl($targetUrl)) {

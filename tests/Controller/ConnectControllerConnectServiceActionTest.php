@@ -46,7 +46,7 @@ final class ConnectControllerConnectServiceActionTest extends AbstractConnectCon
 
         $this->mockAuthorizationCheck();
 
-        $controller = $this->createConnectController(true, true, []);
+        $controller = $this->createConnectController(true, true);
         $controller->connectServiceAction($this->request, 'unknown');
     }
 

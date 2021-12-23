@@ -36,7 +36,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->arg('$failedUseReferer', '%hwi_oauth.failed_use_referer%')
         ->arg('$failedAuthPath', '%hwi_oauth.failed_auth_path%')
         ->arg('$enableConnectConfirmation', '%hwi_oauth.connect.confirmation%')
-        ->arg('$firewallNames', '%hwi_oauth.firewall_names%')
         ->arg('$registrationForm', '%hwi_oauth.connect.registration_form%')
         ->arg('$accountConnector', service('hwi_oauth.account.connector')->nullOnInvalid())
         ->arg('$formHandler', service('hwi_oauth.registration.form.handler')->nullOnInvalid());
@@ -58,7 +57,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service('hwi_oauth.security.oauth_utils'),
             service('hwi_oauth.util.domain_whitelist'),
-            '%hwi_oauth.firewall_names%',
+            service('hwi_oauth.resource_ownermap_locator'),
             '%hwi_oauth.target_path_parameter%',
             '%hwi_oauth.failed_use_referer%',
             '%hwi_oauth.use_referer%',

@@ -17,22 +17,38 @@ namespace HWI\Bundle\OAuthBundle\Security\Http;
 final class ResourceOwnerMapLocator
 {
     /**
-     * @var array
+     * @var array<string, ResourceOwnerMapInterface>
      */
-    private $resourceOwnerMaps = [];
+    private array $resourceOwnerMaps = [];
 
-    public function add(string $firewallId, ResourceOwnerMapInterface $resourceOwnerMap): void
+    public function set(string $firewallName, ResourceOwnerMapInterface $resourceOwnerMap): void
     {
-        $this->resourceOwnerMaps[$firewallId] = $resourceOwnerMap;
+        $this->resourceOwnerMaps[$firewallName] = $resourceOwnerMap;
     }
 
-    public function has(string $firewallId): bool
+    public function has(string $firewallName): bool
     {
-        return isset($this->resourceOwnerMaps[$firewallId]);
+        return isset($this->resourceOwnerMaps[$firewallName]);
     }
 
-    public function get(string $firewallId): ResourceOwnerMapInterface
+    public function get(string $firewallName): ResourceOwnerMapInterface
     {
-        return $this->resourceOwnerMaps[$firewallId];
+        return $this->resourceOwnerMaps[$firewallName];
+    }
+
+    /**
+     * @return array<string, ResourceOwnerMapInterface>
+     */
+    public function getResourceOwnerMaps(): array
+    {
+        return $this->resourceOwnerMaps;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getFirewallNames(): array
+    {
+        return array_keys($this->resourceOwnerMaps);
     }
 }

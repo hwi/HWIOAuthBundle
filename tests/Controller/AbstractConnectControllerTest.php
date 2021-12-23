@@ -131,8 +131,9 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->resourceOwnerMap = $this->createMock(ResourceOwnerMapInterface::class);
         $this->resourceOwnerMap->expects($this->any())
             ->method('getResourceOwnerByName')
-            ->with('facebook')
-            ->willReturn($this->resourceOwner);
+            ->willReturnCallback(function ($owner) {
+                return 'facebook' === $owner ? $this->resourceOwner : null;
+            });
 
         $this->oAuthUtils = new OAuthUtils(
             $this->createMock(HttpUtils::class),
@@ -142,7 +143,7 @@ abstract class AbstractConnectControllerTest extends TestCase
         );
 
         $this->resourceOwnerMapLocator = new ResourceOwnerMapLocator();
-        $this->resourceOwnerMapLocator->add('default', $this->resourceOwnerMap);
+        $this->resourceOwnerMapLocator->set('default', $this->resourceOwnerMap);
 
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
 
@@ -171,8 +172,7 @@ abstract class AbstractConnectControllerTest extends TestCase
 
     protected function createConnectController(
         bool $connectEnabled = true,
-        bool $confirmConnect = true,
-        array $firewallNames = ['default']
+        bool $confirmConnect = true
     ): ConnectController {
         return new ConnectController(
             $this->oAuthUtils,
@@ -189,7 +189,6 @@ abstract class AbstractConnectControllerTest extends TestCase
             true,
             'fake_route',
             $confirmConnect,
-            $firewallNames,
             RegistrationFormType::class,
             $connectEnabled ? $this->accountConnector : null,
             $connectEnabled ? $this->registrationFormHandler : null
