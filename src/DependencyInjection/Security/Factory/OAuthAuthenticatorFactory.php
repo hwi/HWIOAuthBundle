@@ -63,7 +63,7 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
             ->addArgument(
                 $this->createOAuthAwareUserProvider($container, $firewallName, $config['oauth_user_provider'])
             )
-            ->addArgument($this->getResourceOwnerMapReference($firewallName))
+            ->addArgument($this->createResourceOwnerMapReference($firewallName))
             ->addArgument($config['resource_owners'])
             ->addArgument(new Reference($this->createAuthenticationSuccessHandler($container, $firewallName, $config)))
             ->addArgument(new Reference($this->createAuthenticationFailureHandler($container, $firewallName, $config)))
@@ -96,14 +96,6 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
     }
 
     /**
-     * Gets a reference to the resource owner map.
-     */
-    protected function getResourceOwnerMapReference(string $id): Reference
-    {
-        return new Reference('hwi_oauth.resource_ownermap.'.$id);
-    }
-
-    /**
      * {@inheritdoc}
      */
     protected function createAuthProvider(ContainerBuilder $container, string $id, array $config, string $userProviderId): string
@@ -115,7 +107,7 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
         $container
             ->setDefinition($providerId, new ChildDefinition('hwi_oauth.authentication.provider.oauth'))
             ->addArgument($this->createOAuthAwareUserProvider($container, $id, $config['oauth_user_provider']))
-            ->addArgument($this->getResourceOwnerMapReference($id))
+            ->addArgument($this->createResourceOwnerMapReference($id))
             ->addArgument(new Reference('hwi_oauth.user_checker'))
             ->addArgument(new Reference('security.token_storage'))
         ;
@@ -139,9 +131,6 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
         return $entryPointId;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function createListener(ContainerBuilder $container, string $id, array $config, string $userProvider): string
     {
         // @phpstan-ignore-next-line Symfony <5.4 BC layer
@@ -151,7 +140,7 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
 
         $container
             ->getDefinition($listenerId)
-            ->addMethodCall('setResourceOwnerMap', [$this->getResourceOwnerMapReference($id)])
+            ->addMethodCall('setResourceOwnerMap', [$this->createResourceOwnerMapReference($id)])
             ->addMethodCall('setCheckPaths', [$checkPaths])
         ;
 
@@ -167,23 +156,30 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
     }
 
     /**
-     * Creates a resource owner map for the given configuration.
-     *
-     * @param ContainerBuilder $container Container to build for
-     * @param string           $id        Firewall id
-     * @param array            $config    Configuration
+     * Gets a reference to the resource owner map.
      */
-    private function createResourceOwnerMap(ContainerBuilder $container, string $id, array $config): void
+    private function createResourceOwnerMapReference(string $firewallName): Reference
+    {
+        return new Reference('hwi_oauth.resource_ownermap.'.$firewallName);
+    }
+
+    /**
+     * Creates a resource owner map for the given configuration.
+     */
+    private function createResourceOwnerMap(ContainerBuilder $container, string $firewallName, array $config): void
     {
         $resourceOwnersMap = [];
         foreach ($config['resource_owners'] as $name => $checkPath) {
             $resourceOwnersMap[$name] = $checkPath;
         }
-        $container->setParameter('hwi_oauth.resource_ownermap.configured.'.$id, $resourceOwnersMap);
+        $container->setParameter('hwi_oauth.resource_ownermap.configured.'.$firewallName, $resourceOwnersMap);
 
         $container
-            ->setDefinition($this->getResourceOwnerMapReference($id), new ChildDefinition('hwi_oauth.abstract_resource_ownermap'))
-            ->replaceArgument('$resourceOwners', new Parameter('hwi_oauth.resource_ownermap.configured.'.$id))
+            ->setDefinition(
+                $this->createResourceOwnerMapReference($firewallName),
+                new ChildDefinition('hwi_oauth.abstract_resource_ownermap')
+            )
+            ->replaceArgument('$resourceOwners', new Parameter('hwi_oauth.resource_ownermap.configured.'.$firewallName))
             ->setPublic(true)
         ;
     }

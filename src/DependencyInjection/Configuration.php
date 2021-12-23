@@ -26,9 +26,9 @@ final class Configuration implements ConfigurationInterface
      * Array of supported resource owners, indentation is intentional to easily notice
      * which resource is of which type.
      *
-     * @var array
+     * @var array<string, array<int, string>>
      */
-    private static $resourceOwners = [
+    private static array $resourceOwners = [
         'oauth2' => [
             'amazon',
             'apple',
@@ -100,19 +100,15 @@ final class Configuration implements ConfigurationInterface
 
     /**
      * Return the type (OAuth1 or OAuth2) of given resource owner.
-     *
-     * @param string $resourceOwner
-     *
-     * @return string
      */
-    public static function getResourceOwnerType($resourceOwner)
+    public static function getResourceOwnerType(string $resourceOwner): string
     {
         $resourceOwner = strtolower($resourceOwner);
         if ('oauth1' === $resourceOwner || 'oauth2' === $resourceOwner) {
             return $resourceOwner;
         }
 
-        if (\in_array($resourceOwner, static::$resourceOwners['oauth1'], true)) {
+        if (\in_array($resourceOwner, self::$resourceOwners['oauth1'], true)) {
             return 'oauth1';
         }
 
@@ -121,31 +117,25 @@ final class Configuration implements ConfigurationInterface
 
     /**
      * Checks that given resource owner is supported by this bundle.
-     *
-     * @param string $resourceOwner
-     *
-     * @return bool
      */
-    public static function isResourceOwnerSupported($resourceOwner)
+    public static function isResourceOwnerSupported(string $resourceOwner): bool
     {
         $resourceOwner = strtolower($resourceOwner);
         if ('oauth1' === $resourceOwner || 'oauth2' === $resourceOwner) {
             return true;
         }
 
-        if (\in_array($resourceOwner, static::$resourceOwners['oauth1'], true)) {
+        if (\in_array($resourceOwner, self::$resourceOwners['oauth1'], true)) {
             return true;
         }
 
-        return \in_array($resourceOwner, static::$resourceOwners['oauth2'], true);
+        return \in_array($resourceOwner, self::$resourceOwners['oauth2'], true);
     }
 
     /**
      * Generates the configuration tree builder.
-     *
-     * @return TreeBuilder $builder The tree builder
      */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $builder = new TreeBuilder('hwi_oauth');
 

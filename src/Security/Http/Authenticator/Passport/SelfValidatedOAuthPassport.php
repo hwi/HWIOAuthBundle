@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPasspor
 /**
  * SelfValidatingPassport contained OAuthToken.
  */
-class SelfValidatedOAuthPassport extends SelfValidatingPassport
+final class SelfValidatedOAuthPassport extends SelfValidatingPassport
 {
     private OAuthToken $token;
 

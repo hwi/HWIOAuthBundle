@@ -22,40 +22,13 @@ use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
  */
 abstract class AbstractOAuthToken extends AbstractToken
 {
-    /**
-     * @var string
-     */
-    private $accessToken;
-
-    /**
-     * @var array
-     */
-    private $rawToken;
-
-    /**
-     * @var string
-     */
-    private $refreshToken;
-
-    /**
-     * @var int
-     */
-    private $expiresIn;
-
-    /**
-     * @var int
-     */
-    private $createdAt;
-
-    /**
-     * @var string
-     */
-    private $tokenSecret;
-
-    /**
-     * @var string
-     */
-    private $resourceOwnerName;
+    private string $accessToken;
+    private array $rawToken;
+    private ?int $expiresIn = null;
+    private ?int $createdAt = null;
+    private string $resourceOwnerName;
+    private ?string $tokenSecret = null;
+    private ?string $refreshToken = null;
 
     /**
      * @param string|array $accessToken The OAuth access token

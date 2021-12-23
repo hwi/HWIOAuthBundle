@@ -23,7 +23,7 @@ final class ResourceOwnerMapCompilerPass implements CompilerPassInterface
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $def = $container->getDefinition('hwi_oauth.resource_ownermap_locator');
 

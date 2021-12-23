@@ -37,15 +37,13 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
     /**
      * @var array<string, string>
      */
-    private $properties = [
+    private array $properties = [
         'identifier' => 'id',
     ];
 
     /**
-     * @param ManagerRegistry $registry    manager registry
-     * @param string          $class       user entity class to load
-     * @param array           $properties  Mapping of resource owners to properties
-     * @param string|null     $managerName Optional name of the entity manager to use
+     * @param string                $class      User entity class to load
+     * @param array<string, string> $properties Mapping of resource owners to properties
      */
     public function __construct(ManagerRegistry $registry, string $class, array $properties, ?string $managerName = null)
     {
@@ -69,6 +67,8 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
     }
 
     /**
+     * Symfony <5.4 BC layer.
+     *
      * @param string $username
      *
      * @return UserInterface
@@ -83,10 +83,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         return $user;
     }
 
-    /**
-     * @return UserInterface
-     */
-    public function loadUserByOAuthUserResponse(UserResponseInterface $response)
+    public function loadUserByOAuthUserResponse(UserResponseInterface $response): ?UserInterface
     {
         $resourceOwnerName = $response->getResourceOwner()->getName();
 
@@ -102,10 +99,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         return $user;
     }
 
-    /**
-     * @return UserInterface
-     */
-    public function refreshUser(UserInterface $user)
+    public function refreshUser(UserInterface $user): ?UserInterface
     {
         $accessor = PropertyAccess::createPropertyAccessor();
         $identifier = $this->properties['identifier'];
@@ -125,12 +119,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         return $user;
     }
 
-    /**
-     * @param string $class
-     *
-     * @return bool
-     */
-    public function supportsClass($class)
+    public function supportsClass($class): bool
     {
         return $class === $this->class || is_subclass_of($class, $this->class);
     }
@@ -144,6 +133,9 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         return $this->repository->findOneBy($criteria);
     }
 
+    /**
+     * @return UsernameNotFoundException|UserNotFoundException
+     */
     private function createUserNotFoundException(string $username, string $message)
     {
         if (class_exists(UserNotFoundException::class)) {

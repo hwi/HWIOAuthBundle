@@ -135,8 +135,12 @@ abstract class AbstractConnectControllerTest extends TestCase
                 return 'facebook' === $owner ? $this->resourceOwner : null;
             });
 
+        $httpUtils = $this->createMock(HttpUtils::class);
+        $httpUtils->method('generateUri')
+            ->willReturn('https://fake-url');
+
         $this->oAuthUtils = new OAuthUtils(
-            $this->createMock(HttpUtils::class),
+            $httpUtils,
             $this->createMock(AuthorizationCheckerInterface::class),
             true,
             'IS_AUTHENTICATED_REMEMBERED'

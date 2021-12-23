@@ -27,6 +27,7 @@ final class CustomOAuthToken extends OAuthToken
             ]
         );
 
+        $this->setResourceOwnerName('fake');
         $this->setUser(new User());
     }
 
