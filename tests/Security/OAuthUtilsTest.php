@@ -170,11 +170,8 @@ final class OAuthUtilsTest extends TestCase
 
     /**
      * @dataProvider provideValidData
-     *
-     * @param string $signature
-     * @param string $url
      */
-    public function testSignatureIsGeneratedCorrectly($signature, $url)
+    public function testSignatureIsGeneratedCorrectly(string $signature, string $url): void
     {
         // Parameters from http://oauth.net/core/1.0a/#anchor46
         $parameters = [
@@ -194,10 +191,8 @@ final class OAuthUtilsTest extends TestCase
 
     /**
      * @dataProvider provideInvalidData
-     *
-     * @param array $parameters
      */
-    public function testThrowsExceptionIfRequiredParameterIsMissing($parameters)
+    public function testThrowsExceptionIfRequiredParameterIsMissing(array $parameters): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -244,23 +239,23 @@ final class OAuthUtilsTest extends TestCase
         );
     }
 
-    public function provideValidData(): array
+    public function provideValidData(): iterable
     {
-        return [
-            ['iflJZCKxEsZ58FFDyCysxfLbuKM=', 'http://photos.example.net/photos'],
-            ['tR3+Ty81lMeYAr/Fid0kMTYa/WM=', 'http://photos.example.net/photos?file=vacation.jpg&size=original'],
-        ];
+        yield 'simple' => ['iflJZCKxEsZ58FFDyCysxfLbuKM=', 'http://photos.example.net/photos'];
+        yield 'with additional data' => ['tR3+Ty81lMeYAr/Fid0kMTYa/WM=', 'http://photos.example.net/photos?file=vacation.jpg&size=original'];
     }
 
-    public function provideInvalidData(): array
+    public function provideInvalidData(): iterable
     {
-        return [
-            ['oauth_timestamp' => '', 'oauth_nonce' => '', 'oauth_version' => '', 'oauth_signature_method' => ''],
-            ['oauth_consumer_key' => '', 'oauth_nonce' => '', 'oauth_version' => '', 'oauth_signature_method' => ''],
-            ['oauth_consumer_key' => '', 'oauth_timestamp' => '', 'oauth_version' => '', 'oauth_signature_method' => ''],
-            ['oauth_consumer_key' => '', 'oauth_timestamp' => '', 'oauth_nonce' => '', 'oauth_signature_method' => ''],
-            ['oauth_consumer_key' => '', 'oauth_timestamp' => '', 'oauth_nonce' => '', 'oauth_version' => ''],
-        ];
+        yield 'missing "oauth_consumer_key"' => [['oauth_timestamp' => '', 'oauth_nonce' => '', 'oauth_version' => '', 'oauth_signature_method' => '']];
+
+        yield 'missing "oauth_timestamp"' => [['oauth_consumer_key' => '', 'oauth_nonce' => '', 'oauth_version' => '', 'oauth_signature_method' => '']];
+
+        yield 'missing "oauth_nonce"' => [['oauth_consumer_key' => '', 'oauth_timestamp' => '', 'oauth_version' => '', 'oauth_signature_method' => '']];
+
+        yield 'missing "oauth_version"' => [['oauth_consumer_key' => '', 'oauth_timestamp' => '', 'oauth_nonce' => '', 'oauth_signature_method' => '']];
+
+        yield 'missing "oauth_signature_method"' => [['oauth_consumer_key' => '', 'oauth_timestamp' => '', 'oauth_nonce' => '', 'oauth_version' => '']];
     }
 
     private function getRequest(string $url): Request

@@ -30,9 +30,7 @@ final class OAuthUtils
     public const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
 
     private bool $connect;
-
     private string $grantRule;
-
     private HttpUtils $httpUtils;
 
     /**
@@ -54,7 +52,7 @@ final class OAuthUtils
         $this->grantRule = $grantRule;
     }
 
-    public function addResourceOwnerMap(ResourceOwnerMapInterface $ownerMap)
+    public function addResourceOwnerMap(ResourceOwnerMapInterface $ownerMap): void
     {
         $this->ownerMaps[] = $ownerMap;
     }
@@ -73,14 +71,7 @@ final class OAuthUtils
         return array_keys($resourceOwners);
     }
 
-    /**
-     * @param string $name
-     * @param string $redirectUrl     Optional
-     * @param array  $extraParameters Optional
-     *
-     * @return string
-     */
-    public function getAuthorizationUrl(Request $request, $name, $redirectUrl = null, array $extraParameters = [])
+    public function getAuthorizationUrl(Request $request, string $name, ?string $redirectUrl = null, array $extraParameters = []): string
     {
         $resourceOwner = $this->getResourceOwner($name);
 
@@ -99,10 +90,7 @@ final class OAuthUtils
         return $resourceOwner->getAuthorizationUrl($redirectUrl, $extraParameters);
     }
 
-    /**
-     * @return string
-     */
-    public function getServiceAuthUrl(Request $request, ResourceOwnerInterface $resourceOwner)
+    public function getServiceAuthUrl(Request $request, ResourceOwnerInterface $resourceOwner): string
     {
         if ($resourceOwner->getOption('auth_with_one_url')) {
             return $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($resourceOwner->getName()));
@@ -116,12 +104,7 @@ final class OAuthUtils
         return $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service');
     }
 
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
-    public function getLoginUrl(Request $request, $name)
+    public function getLoginUrl(Request $request, string $name): string
     {
         // Just to check that this resource owner exists
         $this->getResourceOwner($name);
@@ -148,12 +131,16 @@ final class OAuthUtils
      * @param string $tokenSecret     Optional token secret to use with signing
      * @param string $signatureMethod Optional signature method used to sign token
      *
-     * @return string
-     *
      * @throws \RuntimeException
      */
-    public static function signRequest($method, $url, $parameters, $clientSecret, $tokenSecret = '', $signatureMethod = self::SIGNATURE_METHOD_HMAC)
-    {
+    public static function signRequest(
+        string $method,
+        string $url,
+        array $parameters,
+        string $clientSecret,
+        string $tokenSecret = '',
+        string $signatureMethod = self::SIGNATURE_METHOD_HMAC
+    ): string {
         // Validate required parameters
         foreach (['oauth_consumer_key', 'oauth_timestamp', 'oauth_nonce', 'oauth_version', 'oauth_signature_method'] as $parameter) {
             if (!isset($parameters[$parameter])) {
@@ -224,7 +211,9 @@ final class OAuthUtils
                 $signature = false;
 
                 openssl_sign($baseString, $signature, $privateKey);
-                openssl_free_key($privateKey);
+                if (\PHP_VERSION_ID < 80000) {
+                    openssl_free_key($privateKey);
+                }
                 break;
 
             case self::SIGNATURE_METHOD_PLAINTEXT:
@@ -238,14 +227,7 @@ final class OAuthUtils
         return base64_encode($signature);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return ResourceOwnerInterface
-     *
-     * @throws \RuntimeException
-     */
-    private function getResourceOwner($name)
+    private function getResourceOwner(string $name): ResourceOwnerInterface
     {
         foreach ($this->ownerMaps as $ownerMap) {
             $resourceOwner = $ownerMap->getResourceOwnerByName($name);
@@ -257,12 +239,7 @@ final class OAuthUtils
         throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
     }
 
-    /**
-     * @param string $name
-     *
-     * @return string|null
-     */
-    private function getResourceOwnerCheckPath($name)
+    private function getResourceOwnerCheckPath(string $name): ?string
     {
         foreach ($this->ownerMaps as $ownerMap) {
             if ($potentialResourceOwnerCheckPath = $ownerMap->getResourceOwnerCheckPath($name)) {

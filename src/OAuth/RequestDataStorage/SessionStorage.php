@@ -70,13 +70,8 @@ final class SessionStorage implements RequestDataStorageInterface
 
     /**
      * Key to for fetching or saving a token.
-     *
-     * @param string $key
-     * @param string $type
-     *
-     * @return string
      */
-    private function generateKey(ResourceOwnerInterface $resourceOwner, $key, $type)
+    private function generateKey(ResourceOwnerInterface $resourceOwner, string $key, string $type): string
     {
         return sprintf('_hwi_oauth.%s.%s.%s.%s', $resourceOwner->getName(), $resourceOwner->getOption('client_id'), $type, $key);
     }

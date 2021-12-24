@@ -88,9 +88,6 @@ final class State implements StateInterface
         return $this->values[$key];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function has(string $key): bool
     {
         return \array_key_exists($key, $this->values);
