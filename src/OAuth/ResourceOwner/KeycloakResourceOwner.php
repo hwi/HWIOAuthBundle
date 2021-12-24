@@ -19,6 +19,16 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
 {
+    protected array $paths = [
+        'identifier' => 'sub',
+        'nickname' => 'preferred_username',
+        'firstname' => 'given_name',
+        'lastname' => 'family_name',
+        'realname' => 'name',
+        'email' => 'email',
+        'profilepicture' => 'picture',
+    ];
+
     public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
         return parent::getAuthorizationUrl($redirectUri, array_merge([
