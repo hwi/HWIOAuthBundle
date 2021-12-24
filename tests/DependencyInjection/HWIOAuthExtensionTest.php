@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\DependencyInjection;
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\MyCustomProvider;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -24,6 +25,8 @@ use Symfony\Component\Yaml\Parser;
  */
 final class HWIOAuthExtensionTest extends TestCase
 {
+    use ExpectDeprecationTrait;
+
     protected ContainerBuilder $containerBuilder;
 
     protected function setUp(): void
@@ -38,13 +41,16 @@ final class HWIOAuthExtensionTest extends TestCase
         unset($this->containerBuilder);
     }
 
-    public function testConfigurationThrowsExceptionUnlessFirewallNameSet(): void
+    /**
+     * @group legacy
+     */
+    public function testConfigurationTriggersDeprecatedNoticeIfFirewallNamesSet(): void
     {
-        $this->expectException(InvalidConfigurationException::class);
-
         $loader = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
-        unset($config['firewall_names']);
+        $config['firewall_names'] = ['main'];
+
+        $this->expectDeprecation('Since hwi/oauth-bundle 2.0: option "hwi_oauth.firewall_names" is deprecated. Firewall names are collected automatically.');
 
         $loader->load([$config], $this->containerBuilder);
     }
@@ -353,7 +359,11 @@ final class HWIOAuthExtensionTest extends TestCase
     {
         $this->createEmptyConfiguration();
 
-        $this->assertParameter(['main'], 'hwi_oauth.firewall_names');
+        $this->assertFalse(
+            $this->containerBuilder->hasParameter('hwi_oauth.firewall_names'),
+            'hwi_oauth.firewall_names is not set'
+        );
+
         $this->assertParameter(null, 'hwi_oauth.target_path_parameter');
         $this->assertParameter(false, 'hwi_oauth.use_referer');
         $this->assertParameter(false, 'hwi_oauth.failed_use_referer');
@@ -540,7 +550,6 @@ final class HWIOAuthExtensionTest extends TestCase
     protected function getEmptyConfig(): array
     {
         $yaml = <<<EOF
-firewall_names: [main]
 resource_owners:
     any_name:
         type:                github
@@ -557,8 +566,6 @@ EOF;
     protected function getFullConfig(): array
     {
         $yaml = <<<EOF
-firewall_names: [main]
-
 resource_owners:
     github:
         type:                github

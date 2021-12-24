@@ -10,9 +10,6 @@ Otherwise, to make this bundle work you need to add the following to your `confi
 ```yaml
 # config/packages/hwi_oauth.yaml
 hwi_oauth:
-    # list of names of the firewalls in which this bundle is active, this setting MUST be set
-    firewall_names: [main]
-
     # an optional setting to configure a query string parameter which can be used to redirect
     # the user after authentication, e.g. /connect/facebook?_destination=/my/destination will
     # redirect the user to /my/destination after facebook authenticates them.  If this is not

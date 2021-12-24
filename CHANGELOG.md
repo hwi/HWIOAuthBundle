@@ -1,6 +1,7 @@
 Changelog
 =========
 ## 2.0.0-BETA2 (202x-xx-xx)
+* Deprecated: configuration parameter `firewall_names`, firewalls are now computed automatically - all firewalls that have defined `oauth` authenticator/provider will be collected. 
 * Added: Ability to automatically refresh expired access tokens (only for derived from `GenericOAuth2ResourceOwner` resource owners), if option `refresh_on_expire` set to `true`.
 * Enhancement: (@internal) Removed/replaced redundant argument `$firewallNames` from controllers. If controller class was copied and replaced, adapt list of arguments: In controller use `$resourceOwnerMapLocator->getFirewallNames()`.
 * Changed config files from `*.xml` to `*.php` (services and routes). Xml routing configs `connect.xml`, `login.xml` and `redirect.xml` are steel present but deprecated. Please use `*.php` variants in your includes instead.

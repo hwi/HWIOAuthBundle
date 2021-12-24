@@ -47,6 +47,16 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 final class HWIOAuthExtension extends Extension
 {
     /**
+     * @var \ArrayIterator<string, true>
+     */
+    private \ArrayIterator $firewallNames;
+
+    public function __construct()
+    {
+        $this->firewallNames = new \ArrayIterator();
+    }
+
+    /**
      * {@inheritdoc}
      *
      * @throws \Exception
@@ -69,12 +79,6 @@ final class HWIOAuthExtension extends Extension
 
         $processor = new Processor();
         $config = $processor->processConfiguration(new Configuration(), $configs);
-
-        // set current firewall
-        if (empty($config['firewall_names'])) {
-            throw new InvalidConfigurationException('The child node "firewall_names" at path "hwi_oauth" must be configured.');
-        }
-        $container->setParameter('hwi_oauth.firewall_names', $config['firewall_names']);
 
         // set target path parameter
         $container->setParameter('hwi_oauth.target_path_parameter', $config['target_path_parameter']);
@@ -101,11 +105,6 @@ final class HWIOAuthExtension extends Extension
             $this->createResourceOwnerService($container, $name, $options);
         }
         $container->setParameter('hwi_oauth.resource_owners', $resourceOwners);
-
-        $oauthUtils = $container->getDefinition('hwi_oauth.security.oauth_utils');
-        foreach ($config['firewall_names'] as $firewallName) {
-            $oauthUtils->addMethodCall('addResourceOwnerMap', [new Reference('hwi_oauth.resource_ownermap.'.$firewallName)]);
-        }
 
         $this->createConnectIntegration($container, $config);
     }
@@ -162,6 +161,11 @@ final class HWIOAuthExtension extends Extension
     public function getAlias(): string
     {
         return 'hwi_oauth';
+    }
+
+    public function getFirewallNames(): \ArrayIterator
+    {
+        return $this->firewallNames;
     }
 
     /**
