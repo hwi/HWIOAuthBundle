@@ -86,7 +86,7 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
 
         $listenerDef = $container->setDefinition($listenerId, new ChildDefinition('hwi_oauth.context_listener.abstract_token_refresher'));
 
-        $listenerDef->addMethodCall('setResourceOwnerMap', [$this->getResourceOwnerMapReference($firewallName)]);
+        $listenerDef->addMethodCall('setResourceOwnerMap', [$this->createResourceOwnerMapReference($firewallName)]);
 
         if ($container->hasDefinition($authenticatorId)) {
             // new auth manager

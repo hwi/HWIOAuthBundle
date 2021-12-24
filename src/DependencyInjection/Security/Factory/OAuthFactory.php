@@ -172,7 +172,7 @@ final class OAuthFactory extends AbstractFactory
         $listenerDef = $container->setDefinition($listenerId, new ChildDefinition('hwi_oauth.context_listener.abstract_token_refresher'));
 
         $listenerDef
-            ->addMethodCall('setResourceOwnerMap', [$this->getResourceOwnerMapReference($id)])
+            ->addMethodCall('setResourceOwnerMap', [$this->createResourceOwnerMapReference($id)])
             ->setClass(RefreshAccessTokenListenerOld::class)
             ->replaceArgument(0, new Reference($providerId));
     }
