@@ -122,6 +122,13 @@
         "phpstan/extension-installer":  "^1.1"
     },
 
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "phpstan/extension-installer": true
+        }
+    },
+
     "conflict": {
         "twig/twig":                    "<1.43|>=2.0,<2.13"
     },
