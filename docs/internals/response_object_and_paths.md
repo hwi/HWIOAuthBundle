@@ -17,7 +17,6 @@ But enough theory, here is example how to fetch user email & picture while using
 ```yaml
 # config/packages/hwi_oauth.yaml
 hwi_oauth:
-    firewall_names: [main]
     resource_owners:
         facebook:
             type:          facebook
@@ -50,7 +49,6 @@ as described below:
 ```yaml
 # config/packages/hwi_oauth.yaml
 hwi_oauth:
-   firewall_names: [main]
    resource_owners:
        linkedin:
            type:          linkedin
@@ -78,7 +76,6 @@ owner into one! Check how this could look:
 ```yaml
 # config/packages/hwi_oauth.yaml
 hwi_oauth:
-   firewall_names: [main]
    resource_owners:
        linkedin:
            type:          vkontakte

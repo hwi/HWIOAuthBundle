@@ -48,7 +48,6 @@ hwi_oauth:
         account_connector: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
         registration_form_handler: HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormHandler
         registration_form: HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType
-    firewall_names: [main]
     resource_owners:
         google:
             type:                google

@@ -13,7 +13,6 @@ namespace HWI\Bundle\OAuthBundle;
 
 use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\RefreshOAuthTokenCompilerPass;
 use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\ResourceOwnerMapCompilerPass;
-use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthAuthenticatorFactory;
 use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
@@ -38,15 +37,17 @@ class HWIOAuthBundle extends Bundle
         /** @var SecurityExtension $extension */
         $extension = $container->getExtension('security');
 
+        $firewallNames = $this->extension->getFirewallNames();
+
         if (method_exists($extension, 'addAuthenticatorFactory')) {
-            $extension->addAuthenticatorFactory(new OAuthAuthenticatorFactory());
+            $extension->addAuthenticatorFactory(new OAuthAuthenticatorFactory($firewallNames));
         } elseif (interface_exists(AuthenticationProviderInterface::class)) {
             // @phpstan-ignore-next-line Symfony 4.4 BC layer
-            $extension->addSecurityListenerFactory(new OAuthFactory());
+            $extension->addSecurityListenerFactory(new OAuthFactory($firewallNames));
             $container->addCompilerPass(new RefreshOAuthTokenCompilerPass());
         } else {
             // @phpstan-ignore-next-line Symfony < 5.4 BC layer
-            $extension->addSecurityListenerFactory(new OAuthAuthenticatorFactory());
+            $extension->addSecurityListenerFactory(new OAuthAuthenticatorFactory($firewallNames));
         }
 
         $container->addCompilerPass(new ResourceOwnerMapCompilerPass());
@@ -59,6 +60,6 @@ class HWIOAuthBundle extends Bundle
     {
         // return the right extension instead of "auto-registering" it. Now the
         // alias can be hwi_oauth instead of hwi_o_auth.
-        return $this->extension ?: new HWIOAuthExtension();
+        return $this->extension ?: $this->extension = $this->createContainerExtension();
     }
 }

@@ -8,7 +8,6 @@ Bonus: Facebook Connect
 ```yaml
 # config/packages/hwi_oauth.yaml
 hwi_oauth:
-    firewall_names: [main]
     resource_owners:
         facebook:
             type:          facebook
