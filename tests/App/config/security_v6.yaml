@@ -10,10 +10,12 @@ security:
 
   firewalls:
     main:
+      lazy: true
       pattern: ^/
       oauth:
         resource_owners:
-          google: "/check-login/google"
+          google: '/check-login/google'
+          yahoo:  '/check-login/yahoo'
         login_path: /login
         use_forward: false
         failure_path: /login
