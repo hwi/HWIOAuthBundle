@@ -24,3 +24,6 @@ login_landing:
 
 google_login:
     path: /check-login/google
+
+yahoo_login:
+    path: /check-login/yahoo

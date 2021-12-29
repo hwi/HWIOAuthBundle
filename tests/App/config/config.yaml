@@ -53,7 +53,14 @@ hwi_oauth:
             type:                google
             client_id:           'google_client_id'
             client_secret:       'google_client_secret'
-            scope:               "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+            scope:               'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
+        yahoo:
+            type:          yahoo
+            client_id:     'yahoo_client_id'
+            client_secret: 'yahoo_client_secret'
+            scope:         'scope=mail-r sdct-r'
+            options:
+                refresh_on_expire: true
 
 twig:
     strict_variables: '%kernel.debug%'

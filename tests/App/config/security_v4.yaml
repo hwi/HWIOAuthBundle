@@ -9,14 +9,15 @@ security:
   firewalls:
     login_area:
       pattern: ^/(login$|connect|login_hwi)
-      anonymous: true
+      anonymous: lazy
       context: hwi_context
     main:
       pattern: ^/
-      anonymous: true
+      anonymous: lazy
       oauth:
         resource_owners:
-          google: "/check-login/google"
+          google: '/check-login/google'
+          yahoo:  '/check-login/yahoo'
         login_path: /login
         use_forward: false
         failure_path: /login

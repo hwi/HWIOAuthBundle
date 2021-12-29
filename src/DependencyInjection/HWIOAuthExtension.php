@@ -51,6 +51,8 @@ final class HWIOAuthExtension extends Extension
      */
     private \ArrayIterator $firewallNames;
 
+    private bool $refreshTokenListenerEnabled = false;
+
     public function __construct()
     {
         $this->firewallNames = new \ArrayIterator();
@@ -103,6 +105,10 @@ final class HWIOAuthExtension extends Extension
         foreach ($config['resource_owners'] as $name => $options) {
             $resourceOwners[$name] = $name;
             $this->createResourceOwnerService($container, $name, $options);
+
+            if (!$this->refreshTokenListenerEnabled) {
+                $this->refreshTokenListenerEnabled = $options['options']['refresh_on_expire'] ?? false;
+            }
         }
         $container->setParameter('hwi_oauth.resource_owners', $resourceOwners);
 
@@ -166,6 +172,11 @@ final class HWIOAuthExtension extends Extension
     public function getFirewallNames(): \ArrayIterator
     {
         return $this->firewallNames;
+    }
+
+    public function isRefreshTokenListenerEnabled(): bool
+    {
+        return $this->refreshTokenListenerEnabled;
     }
 
     /**

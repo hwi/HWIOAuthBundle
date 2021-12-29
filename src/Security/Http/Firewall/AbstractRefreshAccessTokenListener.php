@@ -26,6 +26,8 @@ abstract class AbstractRefreshAccessTokenListener extends AbstractListener
 
     protected ResourceOwnerMap $resourceOwnerMap;
 
+    protected bool $enabled = false;
+
     public function setTokenStorage(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
@@ -36,9 +38,14 @@ abstract class AbstractRefreshAccessTokenListener extends AbstractListener
         $this->resourceOwnerMap = $resourceOwnerMap;
     }
 
+    public function enable(bool $enabled = true)
+    {
+        $this->enabled = $enabled;
+    }
+
     public function supports(Request $request): ?bool
     {
-        return null;
+        return $this->enabled;
     }
 
     public function authenticate(RequestEvent $event)
