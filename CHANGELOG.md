@@ -7,6 +7,7 @@ Changelog
 * Enhancement: (@internal) Removed/replaced redundant argument `$firewallNames` from controllers. If controller class was copied and replaced, adapt list of arguments: In controller use `$resourceOwnerMapLocator->getFirewallNames()`.
 * Changed config files from `*.xml` to `*.php` (services and routes). Xml routing configs `connect.xml`, `login.xml` and `redirect.xml` are steel present but deprecated. Please use `*.php` variants in your includes instead.
 * Bugfix: RefreshTokenListener can not be lazy. If current firewall is lazy (or anonymous: lazy) then current auth token is often initializing on `kernel.response`. In this case new access token will not be stored in session. Therefore the expired token will be refreshed on each request.
+* Bugfix: Fixed Authorization Header in CleverResourceOwner::doGetRequest.
 
 ## 2.0.0-BETA1 (2021-12-10)
 * BC Break: Dropped PHP 7.3 support,
