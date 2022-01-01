@@ -18,6 +18,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\OptionsResolver\Exception\AccessException;
@@ -168,6 +169,14 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         }
 
         $this->storage->save($this, $state, 'state');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTokenClass(): string
+    {
+        return $this->options['token_class'] ?? OAuthToken::class;
     }
 
     /**
@@ -338,6 +347,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
             'csrf' => false,
             'user_response_class' => PathUserResponse::class,
             'auth_with_one_url' => false,
+            'token_class' => null,
         ]);
 
         $resolver->setAllowedValues('csrf', [true, false]);

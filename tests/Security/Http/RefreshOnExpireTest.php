@@ -76,7 +76,8 @@ class RefreshOnExpireTest extends WebTestCase
         $this->resourceOwnerMock->expects($this->once())
             ->method('refreshAccessToken')
             ->willReturn([
-               'expires' => 666, // expired
+               'access_token' => 'access_token',
+               'expires' => 666,
                'refresh_token' => 'refresh_token',
            ]);
 
@@ -179,7 +180,7 @@ class RefreshOnExpireTest extends WebTestCase
     {
         $session = $this->getSession($this->client);
 
-        $token = new CustomOAuthToken($tokenData);
+        $token = CustomOAuthToken::createLoggedIn($tokenData);
         $token->setResourceOwnerName('google');
         if (method_exists($token, 'setAuthenticated')) {
             $token->setAuthenticated(true, false);

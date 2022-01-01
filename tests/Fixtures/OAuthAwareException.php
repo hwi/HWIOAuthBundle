@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
@@ -20,7 +20,7 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
  */
 final class OAuthAwareException extends \Exception implements OAuthAwareExceptionInterface
 {
-    private OAuthToken $token;
+    private AbstractOAuthToken $token;
     private string $resourceOwnerName;
 
     /**
@@ -80,7 +80,7 @@ final class OAuthAwareException extends \Exception implements OAuthAwareExceptio
     }
 
     /**
-     * @param OAuthToken $token
+     * @param AbstractOAuthToken $token
      *
      * {@inheritdoc}
      */

@@ -11,7 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\OAuthAuthenticator;
 
 class RefreshAccessTokenListener extends AbstractRefreshAccessTokenListener
@@ -25,13 +25,13 @@ class RefreshAccessTokenListener extends AbstractRefreshAccessTokenListener
     }
 
     /**
-     * @template T of OAuthToken
+     * @template T of AbstractOAuthToken
      *
      * @param T $token
      *
      * @return T
      */
-    protected function refreshToken(OAuthToken $token): OAuthToken
+    protected function refreshToken(AbstractOAuthToken $token): AbstractOAuthToken
     {
         return $this->oAuthAuthenticator->refreshToken($token);
     }

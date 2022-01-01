@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Tests\DependencyInjection;
 
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\MyCustomProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
@@ -375,6 +376,29 @@ final class HWIOAuthExtensionTest extends TestCase
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
+    public function testCreateResourceOwnerInvalidTokenClass(): void
+    {
+        $this->expectException(InvalidConfigurationException::class);
+        $this->expectExceptionMessage('Invalid configuration for path "hwi_oauth.resource_owners.any_name.token_class"');
+
+        $config = $this->getEmptyConfig();
+        $config['resource_owners']['any_name']['token_class'] = \stdClass::class;
+
+        $loader = new HWIOAuthExtension();
+        $loader->load([$config], $this->containerBuilder);
+    }
+
+    public function testCreateResourceOwnerValidTokenClass(): void
+    {
+        $config = $this->getEmptyConfig();
+        $config['resource_owners']['any_name']['token_class'] = CustomOAuthToken::class;
+
+        $loader = new HWIOAuthExtension();
+        $loader->load([$config], $this->containerBuilder);
+
+        $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
+    }
+
     public function provideInvalidData(): array
     {
         return [
@@ -588,6 +612,7 @@ resource_owners:
         client_id:           client_id
         client_secret:       client_secret
         scope:               ""
+        token_class:         HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
         paths:
             nickname:        [email, id]
 

@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -62,7 +61,8 @@ final class AppleResourceOwner extends GenericOAuth2ResourceOwner
         $response = $this->getUserResponse();
         $response->setData(json_encode($data));
         $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
+        $tokenClass = $this->getTokenClass();
+        $response->setOAuthToken(new $tokenClass($accessToken));
 
         return $response;
     }

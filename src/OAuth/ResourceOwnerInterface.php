@@ -47,6 +47,13 @@ interface ResourceOwnerInterface
     public function getAuthorizationUrl($redirectUri, array $extraParameters = []);
 
     /**
+     * Gets oauth token class for this resource owner.
+     *
+     * @return class-string of AbstractOAuthToken
+     */
+    public function getTokenClass(): string;
+
+    /**
      * Retrieve an access token for a given code.
      *
      * @param HttpRequest $request         The request object where is going to extract the code from

@@ -55,6 +55,7 @@ resource_owners:
         client_id:      '%oauth.your_provider.client_id%'
         client_secret:  '%oauth.your_provider.client_secret%'
         scope:          '%oauth.your_provider.scope%'
+        token_class:    ~ # default is OAuthToken
 ```
 
 That's all folks!

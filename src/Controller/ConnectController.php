@@ -18,7 +18,7 @@ use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
 use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
@@ -309,7 +309,9 @@ final class ConnectController
             return;
         }
 
-        $token = new OAuthToken($accessToken, $user->getRoles());
+        $resourceOwner = $this->getResourceOwnerByName($resourceOwnerName);
+        $tokenClass = $resourceOwner->getTokenClass();
+        $token = new $tokenClass($accessToken, $user->getRoles());
         $token->setResourceOwnerName($resourceOwnerName);
         $token->setUser($user);
 
@@ -352,7 +354,7 @@ final class ConnectController
      */
     private function getConfirmationResponse(Request $request, array $accessToken, string $service): Response
     {
-        /** @var OAuthToken $currentToken */
+        /** @var AbstractOAuthToken $currentToken */
         $currentToken = $this->tokenStorage->getToken();
         /** @var UserInterface $currentUser */
         $currentUser = $currentToken->getUser();
@@ -365,7 +367,7 @@ final class ConnectController
 
         $this->accountConnector->connect($currentUser, $userInformation);
 
-        if ($currentToken instanceof OAuthToken) {
+        if ($currentToken instanceof AbstractOAuthToken) {
             // Update user token with new details
             $newToken =
                 (isset($accessToken['access_token']) || isset($accessToken['oauth_token'])) ?

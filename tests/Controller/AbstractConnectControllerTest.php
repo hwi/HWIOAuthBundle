@@ -17,6 +17,7 @@ use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\Controller\ConnectController;
 use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
@@ -128,6 +129,10 @@ abstract class AbstractConnectControllerTest extends TestCase
             ->method('getUserInformation')
             ->willReturn(new CustomUserResponse())
         ;
+        $this->resourceOwner->expects($this->any())
+            ->method('getTokenClass')
+            ->willReturn(OAuthToken::class)
+        ;
         $this->resourceOwnerMap = $this->createMock(ResourceOwnerMapInterface::class);
         $this->resourceOwnerMap->expects($this->any())
             ->method('getResourceOwnerByName')
@@ -160,7 +165,7 @@ abstract class AbstractConnectControllerTest extends TestCase
     {
         $accountNotLinked = new AccountNotLinkedException();
         $accountNotLinked->setResourceOwnerName('facebook');
-        $accountNotLinked->setToken(new CustomOAuthToken());
+        $accountNotLinked->setToken(CustomOAuthToken::createLoggedIn());
 
         return $accountNotLinked;
     }

@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
@@ -51,7 +51,7 @@ final class OAuthProvider implements AuthenticationProviderInterface
      */
     public function supports(TokenInterface $token): bool
     {
-        if (!$token instanceof OAuthToken) {
+        if (!$token instanceof AbstractOAuthToken) {
             return false;
         }
 
@@ -68,7 +68,7 @@ final class OAuthProvider implements AuthenticationProviderInterface
         }
 
         // If token is authenticated, re-create it to reload user details
-        /** @var OAuthToken $token */
+        /** @var AbstractOAuthToken $token */
         if (!$token->isExpired() && null !== $token->getUser()) {
             /** @var UserInterface $user */
             $user = $token->getUser();
@@ -102,9 +102,9 @@ final class OAuthProvider implements AuthenticationProviderInterface
     }
 
     /**
-     * @param OAuthToken $expiredToken
+     * @param AbstractOAuthToken $expiredToken
      */
-    private function refreshToken(TokenInterface $expiredToken, ResourceOwnerInterface $resourceOwner): OAuthToken
+    private function refreshToken(TokenInterface $expiredToken, ResourceOwnerInterface $resourceOwner): AbstractOAuthToken
     {
         if (!$expiredToken->getRefreshToken()) {
             return $expiredToken;
@@ -125,7 +125,7 @@ final class OAuthProvider implements AuthenticationProviderInterface
     }
 
     /**
-     * @template T of OAuthToken
+     * @template T of AbstractOAuthToken
      *
      * @param string|array $data
      * @param T            $oldToken
@@ -134,9 +134,9 @@ final class OAuthProvider implements AuthenticationProviderInterface
      */
     private function createOAuthToken(
         $data,
-        OAuthToken $oldToken,
+        AbstractOAuthToken $oldToken,
         ?UserInterface $user
-    ): OAuthToken {
+    ): AbstractOAuthToken {
         $tokenClass = \get_class($oldToken);
         if (null !== $user) {
             $token = new $tokenClass($data, $user->getRoles());

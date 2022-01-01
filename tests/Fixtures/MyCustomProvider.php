@@ -29,6 +29,11 @@ final class MyCustomProvider implements ResourceOwnerInterface
         return '';
     }
 
+    public function getTokenClass(): string
+    {
+        return CustomOAuthToken::class;
+    }
+
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = []): array
     {
         return [];

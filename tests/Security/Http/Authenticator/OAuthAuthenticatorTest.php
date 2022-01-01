@@ -129,6 +129,10 @@ final class OAuthAuthenticatorTest extends TestCase
             ->willReturn(Request::create($checkUri));
 
         $resourceOwnerMock->expects($this->once())
+            ->method('getTokenClass')
+            ->willReturn(CustomOAuthToken::class);
+
+        $resourceOwnerMock->expects($this->once())
             ->method('getAccessToken')
             ->with($request, $checkUri)
             ->willReturn($accessToken);
@@ -215,7 +219,7 @@ final class OAuthAuthenticatorTest extends TestCase
             []
         );
 
-        $token = new CustomOAuthToken([
+        $token = CustomOAuthToken::createLoggedIn([
             'refresh_token' => 'refresh token data',
             'expires' => 666,
             'oauth_token_secret' => 'oauth secret',
@@ -266,7 +270,7 @@ final class OAuthAuthenticatorTest extends TestCase
             []
         );
 
-        $token = new CustomOAuthToken([
+        $token = CustomOAuthToken::createLoggedIn([
             'expires' => 666,
         ]);
         $token->setResourceOwnerName($resourceOwnerName);
@@ -313,7 +317,7 @@ final class OAuthAuthenticatorTest extends TestCase
             []
         );
 
-        $token = new CustomOAuthToken([
+        $token = CustomOAuthToken::createLoggedIn([
             'expires' => 666,
             'refresh_token' => 'refresh token data',
         ]);

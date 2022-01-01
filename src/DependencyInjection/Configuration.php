@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -252,6 +253,18 @@ final class Configuration implements ConfigurationInterface
                                         return empty($v);
                                     })
                                     ->thenUnset()
+                                ->end()
+                            ->end()
+                            ->scalarNode('token_class')
+                                ->validate()
+                                    ->ifNull()
+                                    ->thenUnset()
+                                ->end()
+                                ->validate()
+                                    ->ifTrue(static function ($className) {
+                                        return !is_subclass_of($className, AbstractOAuthToken::class, true);
+                                    })
+                                    ->thenInvalid('Token class should be extended from HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken, %s given.')
                                 ->end()
                             ->end()
                             ->scalarNode('service')

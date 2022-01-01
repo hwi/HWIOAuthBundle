@@ -1,6 +1,7 @@
 Changelog
 =========
 ## 2.0.0-BETA2 (202x-xx-xx)
+* Enhancement: Fully customizable OAuth token class (resource owner's optional option `token_class`). it should only be extended from AbstractOAuthToken. Default is `OAuthToken`.
 * Enhancement: Refresh token listener is disabled by default and will only be enabled if at least one resource owner has option `refresh_on_expure` set to `true`
 * Deprecated: configuration parameter `firewall_names`, firewalls are now computed automatically - all firewalls that have defined `oauth` authenticator/provider will be collected. 
 * Added: Ability to automatically refresh expired access tokens (only for derived from `GenericOAuth2ResourceOwner` resource owners), if option `refresh_on_expire` set to `true`.

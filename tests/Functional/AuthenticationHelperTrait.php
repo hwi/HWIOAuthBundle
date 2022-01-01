@@ -41,7 +41,7 @@ trait AuthenticationHelperTrait
 
     protected function logIn(KernelBrowser $client, SessionInterface $session): void
     {
-        $session->set('_security_hwi_context', serialize(new CustomOAuthToken()));
+        $session->set('_security_hwi_context', serialize(CustomOAuthToken::createLoggedIn()));
 
         $this->saveSession($client, $session);
     }

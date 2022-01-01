@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Http\Authenticator;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\Passport\SelfValidatedOAuthPassport;
@@ -136,7 +136,8 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
             $this->httpUtils->createRequest($request, $checkPath)->getUri()
         );
 
-        $token = new OAuthToken($accessToken);
+        $tokenClass = $resourceOwner->getTokenClass();
+        $token = new $tokenClass($accessToken);
         $token->setResourceOwnerName($resourceOwner->getName());
 
         return new SelfValidatedOAuthPassport($this->refreshToken($token), [new RememberMeBadge()]);
@@ -146,13 +147,13 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
      * This function can be used for refreshing an expired token
      * or for custom "password grant" authenticator, if site owner also owns oauth instance.
      *
-     * @template T of OAuthToken
+     * @template T of AbstractOAuthToken
      *
      * @param T $token
      *
      * @return T
      */
-    public function refreshToken(OAuthToken $token): OAuthToken
+    public function refreshToken(AbstractOAuthToken $token): AbstractOAuthToken
     {
         $resourceOwner = $this->resourceOwnerMap->getResourceOwnerByName($token->getResourceOwnerName());
         if (!$resourceOwner) {
@@ -197,14 +198,14 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
     }
 
     /**
-     * @template T of OAuthToken
+     * @template T of AbstractOAuthToken
      *
      * @param T              $token
      * @param ?UserInterface $user
      *
      * @return T
      */
-    public function recreateToken(OAuthToken $token, ?UserInterface $user = null): OAuthToken
+    public function recreateToken(AbstractOAuthToken $token, ?UserInterface $user = null): AbstractOAuthToken
     {
         $user = $user instanceof UserInterface ? $user : $token->getUser();
 

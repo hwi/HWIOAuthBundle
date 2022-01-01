@@ -15,6 +15,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\Functional\Controller;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Tests\App\AppKernel;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
@@ -53,7 +54,7 @@ final class ConnectControllerTest extends WebTestCase
         $key = 1;
         $exception = new AccountNotLinkedException();
         $exception->setResourceOwnerName('google');
-        $exception->setToken(new CustomOAuthToken());
+        $exception->setToken(CustomOAuthToken::createLoggedIn());
 
         $session = $this->getSession($client);
         $session->set('_hwi_oauth.registration_error.'.$key, $exception);
@@ -83,7 +84,17 @@ final class ConnectControllerTest extends WebTestCase
         $this->assertSame('Successfully registered and connected the account "foo"!', $crawler->filter('h3')->text(), $response->getContent());
     }
 
-    public function testConnectService(): void
+    public function provideConnectServiceData(): iterable
+    {
+        yield 'google' => ['google', CustomOAuthToken::class];
+
+        yield 'yahoo' => ['yahoo', OAuthToken::class];
+    }
+
+    /**
+     * @dataProvider provideConnectServiceData
+     */
+    public function testConnectService(string $resourceOwnerName, string $oAuthTokenClass): void
     {
         $httpClient = new MockHttpClient(
             function ($method, $url, $options) {
@@ -109,7 +120,7 @@ final class ConnectControllerTest extends WebTestCase
 
         $this->logIn($client, $session);
 
-        $crawler = $client->request('GET', '/connect/service/google', [
+        $crawler = $client->request('GET', '/connect/service/'.$resourceOwnerName, [
             'key' => '1',
         ]);
 
@@ -125,6 +136,12 @@ final class ConnectControllerTest extends WebTestCase
 
         $this->assertSame(200, $response->getStatusCode(), $response->getContent());
         $this->assertSame('Successfully connected the account "foo"!', $crawler->filter('h3')->text(), $response->getContent());
+
+        $securityContext = $session->get('_security_hwi_context');
+        $this->assertNotNull($securityContext);
+        $token = unserialize($securityContext);
+
+        $this->assertInstanceOf($oAuthTokenClass, $token);
     }
 
     private function createDatabase(KernelBrowser $client): void

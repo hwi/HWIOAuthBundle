@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Security\Core\Authentication\Token;
 
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
@@ -18,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 final class OAuthTokenTest extends TestCase
 {
-    private OAuthToken $token;
+    private AbstractOAuthToken $token;
 
     protected function setUp(): void
     {

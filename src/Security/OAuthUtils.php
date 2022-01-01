@@ -29,16 +29,15 @@ final class OAuthUtils
     public const SIGNATURE_METHOD_RSA = 'RSA-SHA1';
     public const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
 
+    private HttpUtils $httpUtils;
+    private AuthorizationCheckerInterface $authorizationChecker;
     private bool $connect;
     private string $grantRule;
-    private HttpUtils $httpUtils;
 
     /**
      * @var ResourceOwnerMapInterface[]
      */
     private array $ownerMaps = [];
-
-    private AuthorizationCheckerInterface $authorizationChecker;
 
     public function __construct(
         HttpUtils $httpUtils,

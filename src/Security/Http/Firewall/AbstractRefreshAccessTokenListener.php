@@ -12,7 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\AbstractOAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
@@ -54,7 +54,7 @@ abstract class AbstractRefreshAccessTokenListener extends AbstractListener
             return;
         }
 
-        if (!$token instanceof OAuthToken) {
+        if (!$token instanceof AbstractOAuthToken) {
             return;
         }
 
@@ -90,11 +90,11 @@ abstract class AbstractRefreshAccessTokenListener extends AbstractListener
     }
 
     /**
-     * @template T of OAuthToken
+     * @template T of AbstractOAuthToken
      *
      * @param T $token
      *
      * @return T
      */
-    abstract protected function refreshToken(OAuthToken $token): OAuthToken;
+    abstract protected function refreshToken(AbstractOAuthToken $token): AbstractOAuthToken;
 }

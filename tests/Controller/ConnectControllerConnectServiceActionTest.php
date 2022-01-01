@@ -66,7 +66,7 @@ final class ConnectControllerConnectServiceActionTest extends AbstractConnectCon
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
-            ->willReturn(new CustomOAuthToken())
+            ->willReturn(CustomOAuthToken::createLoggedIn())
         ;
 
         $form = $this->createMock(FormInterface::class);
@@ -114,7 +114,7 @@ final class ConnectControllerConnectServiceActionTest extends AbstractConnectCon
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
-            ->willReturn(new CustomOAuthToken())
+            ->willReturn(CustomOAuthToken::createLoggedIn())
         ;
 
         $this->eventDispatcher->expects($this->exactly(2))
@@ -149,7 +149,7 @@ final class ConnectControllerConnectServiceActionTest extends AbstractConnectCon
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
-            ->willReturn(new CustomOAuthToken())
+            ->willReturn(CustomOAuthToken::createLoggedIn())
         ;
 
         $this->eventDispatcher->expects($this->exactly(2))
@@ -188,7 +188,7 @@ final class ConnectControllerConnectServiceActionTest extends AbstractConnectCon
 
         $this->tokenStorage->expects($this->once())
             ->method('getToken')
-            ->willReturn(new CustomOAuthToken())
+            ->willReturn(CustomOAuthToken::createLoggedIn())
         ;
 
         $form = $this->createMock(FormInterface::class);

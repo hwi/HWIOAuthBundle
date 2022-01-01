@@ -54,6 +54,7 @@ hwi_oauth:
             client_id:           'google_client_id'
             client_secret:       'google_client_secret'
             scope:               'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
+            token_class:         'HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken'
         yahoo:
             type:          yahoo
             client_id:     'yahoo_client_id'

@@ -13,7 +13,6 @@ namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -94,7 +93,8 @@ class OAuthListener extends AbstractAuthenticationListener
             $this->httpUtils->createRequest($request, $checkPath)->getUri()
         );
 
-        $token = new OAuthToken($accessToken);
+        $tokenClass = $resourceOwner->getTokenClass();
+        $token = new $tokenClass($accessToken);
         $token->setResourceOwnerName($resourceOwner->getName());
 
         return $this->authenticationManager->authenticate($token);

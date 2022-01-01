@@ -16,9 +16,9 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 
 final class CustomOAuthToken extends OAuthToken
 {
-    public function __construct(array $accessToken = [])
+    public static function createLoggedIn(array $accessToken = []): self
     {
-        parent::__construct(
+        $token = new self(
             $accessToken + [
                 'access_token' => 'access_token_data',
             ],
@@ -27,8 +27,10 @@ final class CustomOAuthToken extends OAuthToken
             ]
         );
 
-        $this->setResourceOwnerName('fake');
-        $this->setUser(new User());
+        $token->setResourceOwnerName('fake');
+        $token->setUser(new User());
+
+        return $token;
     }
 
     public function copyPersistentDataFrom(AbstractOAuthToken $token): void

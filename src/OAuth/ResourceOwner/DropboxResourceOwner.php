@@ -13,7 +13,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -63,7 +62,8 @@ final class DropboxResourceOwner extends GenericOAuth2ResourceOwner
             $response = $this->getUserResponse();
             $response->setData($content->toArray(false));
             $response->setResourceOwner($this);
-            $response->setOAuthToken(new OAuthToken($accessToken));
+            $tokenClass = $this->getTokenClass();
+            $response->setOAuthToken(new $tokenClass($accessToken));
 
             return $response;
         } catch (TransportExceptionInterface|JsonException $e) {

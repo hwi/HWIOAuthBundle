@@ -12,7 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Helper\NonceGenerator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use Symfony\Component\OptionsResolver\Options;
@@ -78,7 +77,8 @@ final class JiraResourceOwner extends GenericOAuth1ResourceOwner
             $response = $this->getUserResponse();
             $response->setData($content->getContent(false));
             $response->setResourceOwner($this);
-            $response->setOAuthToken(new OAuthToken($accessToken));
+            $tokenClass = $this->getTokenClass();
+            $response->setOAuthToken(new $tokenClass($accessToken));
 
             return $response;
         } catch (TransportExceptionInterface $e) {

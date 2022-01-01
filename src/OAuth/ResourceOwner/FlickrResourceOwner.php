@@ -11,7 +11,6 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -50,7 +49,8 @@ final class FlickrResourceOwner extends GenericOAuth1ResourceOwner
         $response = $this->getUserResponse();
         $response->setData($accessToken);
         $response->setResourceOwner($this);
-        $response->setOAuthToken(new OAuthToken($accessToken));
+        $tokenClass = $this->getTokenClass();
+        $response->setOAuthToken(new $tokenClass($accessToken));
 
         return $response;
     }
