@@ -18,6 +18,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 
 final class QQResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'qq';
+
     /**
      * {@inheritdoc}
      */

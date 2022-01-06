@@ -24,6 +24,8 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
  */
 abstract class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 {
+    public const TYPE = null; // it must be null
+
     /**
      * {@inheritdoc}
      */

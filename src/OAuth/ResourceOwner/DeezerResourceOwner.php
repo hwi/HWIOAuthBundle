@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class DeezerResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'deezer';
+
     /**
      * {@inheritdoc}
      */

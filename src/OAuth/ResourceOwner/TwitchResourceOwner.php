@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class TwitchResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'twitch';
+
     /**
      * {@inheritdoc}
      */

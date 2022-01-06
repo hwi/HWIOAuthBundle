@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle;
 
 use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\EnableRefreshOAuthTokenListenerCompilerPass;
 use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\RefreshOAuthTokenCompilerPass;
-use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\ResourceOwnerMapCompilerPass;
+use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\ResourceOwnerCompilerPass;
 use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthAuthenticatorFactory;
 use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
@@ -51,7 +51,7 @@ class HWIOAuthBundle extends Bundle
             $extension->addSecurityListenerFactory(new OAuthAuthenticatorFactory($firewallNames));
         }
 
-        $container->addCompilerPass(new ResourceOwnerMapCompilerPass());
+        $container->addCompilerPass(new ResourceOwnerCompilerPass());
         $container->addCompilerPass(new EnableRefreshOAuthTokenListenerCompilerPass());
     }
 

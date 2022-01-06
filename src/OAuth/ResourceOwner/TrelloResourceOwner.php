@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class TrelloResourceOwner extends GenericOAuth1ResourceOwner
 {
+    public const TYPE = 'trello';
+
     /**
      * {@inheritdoc}
      */

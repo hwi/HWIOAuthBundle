@@ -23,6 +23,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 final class DropboxResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'dropbox';
+
     /**
      * {@inheritdoc}
      */

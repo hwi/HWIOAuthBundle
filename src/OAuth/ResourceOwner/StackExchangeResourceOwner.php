@@ -22,6 +22,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 final class StackExchangeResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'stack_exchange';
+
     /**
      * {@inheritdoc}
      */

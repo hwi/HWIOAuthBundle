@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class EventbriteResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'eventbrite';
+
     /**
      * {@inheritdoc}
      */

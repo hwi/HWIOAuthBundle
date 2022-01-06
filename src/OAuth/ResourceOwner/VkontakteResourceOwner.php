@@ -25,6 +25,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 final class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'vkontakte';
+
     /**
      * {@inheritdoc}
      */

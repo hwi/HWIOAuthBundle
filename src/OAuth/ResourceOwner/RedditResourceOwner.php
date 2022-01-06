@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class RedditResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'reddit';
+
     /**
      * {@inheritdoc}
      */

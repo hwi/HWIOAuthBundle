@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class GitHubResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'github';
+
     /**
      * {@inheritdoc}
      */

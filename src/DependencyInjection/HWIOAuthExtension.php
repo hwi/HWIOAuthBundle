@@ -59,6 +59,11 @@ final class HWIOAuthExtension extends Extension
         $this->firewallNames = new \ArrayIterator();
     }
 
+    public function getConfiguration(array $config, ContainerBuilder $container): Configuration
+    {
+        return new Configuration();
+    }
+
     /**
      * {@inheritdoc}
      *
@@ -79,8 +84,13 @@ final class HWIOAuthExtension extends Extension
         $loader->load('twig.php');
         $loader->load('util.php');
 
+        $container->registerForAutoconfiguration(ResourceOwnerInterface::class)
+            ->addTag('hwi_oauth.resource_owner');
+
         $processor = new Processor();
-        $config = $processor->processConfiguration(new Configuration(), $configs);
+        $configuration = $this->getConfiguration($configs, $container);
+
+        $config = $processor->processConfiguration($configuration, $configs);
 
         // set target path parameter
         $container->setParameter('hwi_oauth.target_path_parameter', $config['target_path_parameter']);
@@ -138,20 +148,17 @@ final class HWIOAuthExtension extends Extension
             return new Reference($options['service']);
         }
 
-        $type = $options['type'];
-        unset($options['type']);
-
         // handle external resource owners with given class
         if (isset($options['class'])) {
-            if (!is_subclass_of($options['class'], ResourceOwnerInterface::class)) {
+            if (!is_subclass_of($options['class'], ResourceOwnerInterface::class, true)) {
                 throw new InvalidConfigurationException(sprintf('Class "%s" must implement interface "HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface".', $options['class']));
             }
 
             $definition = new Definition($options['class']);
-            unset($options['class']);
         } else {
-            $definition = new Definition("%hwi_oauth.resource_owner.$type.class%");
+            $definition = new Definition("%hwi_oauth.resource_owner.{$options['type']}.class%");
         }
+        unset($options['class'], $options['type']);
 
         $definition->setArgument('$httpClient', new Reference('hwi_oauth.http_client'));
         $definition->setArgument('$httpUtils', new Reference('security.http_utils'));

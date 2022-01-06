@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class PaypalResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'paypal';
+
     /**
      * {@inheritdoc}
      */

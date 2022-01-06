@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class StravaResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'strava';
+
     /**
      * {@inheritdoc}
      */

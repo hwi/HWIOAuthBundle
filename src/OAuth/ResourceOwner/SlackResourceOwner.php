@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class SlackResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'slack';
+
     /**
      * {@inheritdoc}
      */

@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class JawboneResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'jawbone';
+
     /**
      * {@inheritdoc}
      */

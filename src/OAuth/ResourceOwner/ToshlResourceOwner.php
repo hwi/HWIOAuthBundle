@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class ToshlResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'toshl';
+
     /**
      * {@inheritdoc}
      */
@@ -35,7 +37,6 @@ final class ToshlResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function revokeToken($token)
     {
-        /* @var $response \Psr\Http\Message\ResponseInterface */
         $response = $this->httpRequest(
             $this->options['revoke_token_url'],
             null,

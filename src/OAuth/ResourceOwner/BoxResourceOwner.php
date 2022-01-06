@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class BoxResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'box';
+
     /**
      * {@inheritdoc}
      */

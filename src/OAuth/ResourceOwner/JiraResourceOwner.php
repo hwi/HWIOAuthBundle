@@ -24,6 +24,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 final class JiraResourceOwner extends GenericOAuth1ResourceOwner
 {
+    public const TYPE = 'jira';
+
     /**
      * {@inheritdoc}
      */

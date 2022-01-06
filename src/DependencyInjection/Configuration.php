@@ -11,10 +11,14 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use Symfony\Component\Config\Definition\BaseNode;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Configuration for the extension.
@@ -24,96 +28,39 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 final class Configuration implements ConfigurationInterface
 {
     /**
-     * Array of supported resource owners, indentation is intentional to easily notice
-     * which resource is of which type.
+     * type => ResourceOwner mapping for hwi_oauth.resource_owner.*.class parameters.
      *
-     * @var array<string, array<int, string>>
+     * @var array<string, class-string<GenericOAuth1ResourceOwner|GenericOAuth2ResourceOwner|ResourceOwnerInterface>>
      */
-    private static array $resourceOwners = [
-        'oauth2' => [
-            'amazon',
-            'apple',
-            'asana',
-            'auth0',
-            'azure',
-            'bitbucket2',
-            'bitly',
-            'box',
-            'bufferapp',
-            'clever',
-            'dailymotion',
-            'deviantart',
-            'deezer',
-            'disqus',
-            'eve_online',
-            'eventbrite',
-            'facebook',
-            'fiware',
-            'foursquare',
-            'genius',
-            'github',
-            'gitlab',
-            'google',
-            'youtube',
-            'hubic',
-            'instagram',
-            'jawbone',
-            'keycloak',
-            'linkedin',
-            'mailru',
-            'odnoklassniki',
-            'office365',
-            'paypal',
-            'qq',
-            'reddit',
-            'runkeeper',
-            'salesforce',
-            'sensio_connect',
-            'sina_weibo',
-            'slack',
-            'spotify',
-            'soundcloud',
-            'stack_exchange',
-            'strava',
-            'toshl',
-            'trakt',
-            'twitch',
-            'vkontakte',
-            'windows_live',
-            'wordpress',
-            'yandex',
-            '37signals',
-            'itembase',
-        ],
-        'oauth1' => [
-            'bitbucket',
-            'discogs',
-            'dropbox',
-            'flickr',
-            'jira',
-            'stereomood',
-            'trello',
-            'twitter',
-            'xing',
-            'yahoo',
-        ],
-    ];
+    private static array $resourceOwnerTypesClassMap = [];
 
     /**
-     * Return the type (OAuth1 or OAuth2) of given resource owner.
+     * Array of supported resource owners.
+     *
+     * @var array<string, string>
      */
-    public static function getResourceOwnerType(string $resourceOwner): string
+    private static array $resourceOwnerTypes = [];
+
+    public function __construct()
+    {
+        if ([] === self::$resourceOwnerTypes) {
+            self::loadResourceOwners();
+        }
+    }
+
+    public static function getResourceOwnerTypesClassMap(): array
+    {
+        return self::$resourceOwnerTypesClassMap;
+    }
+
+    /**
+     * Return the type (oauth1 or oauth2) of given resource owner.
+     */
+    public static function getResourceOwnerType(string $resourceOwner): ?string
     {
         $resourceOwner = strtolower($resourceOwner);
-        if ('oauth1' === $resourceOwner || 'oauth2' === $resourceOwner) {
-            return $resourceOwner;
-        }
 
-        if (\in_array($resourceOwner, self::$resourceOwners['oauth1'], true)) {
-            return 'oauth1';
-        }
-
-        return 'oauth2';
+        return self::$resourceOwnerTypes[$resourceOwner] ?? null;
     }
 
     /**
@@ -121,16 +68,34 @@ final class Configuration implements ConfigurationInterface
      */
     public static function isResourceOwnerSupported(string $resourceOwner): bool
     {
-        $resourceOwner = strtolower($resourceOwner);
-        if ('oauth1' === $resourceOwner || 'oauth2' === $resourceOwner) {
-            return true;
+        return isset(self::$resourceOwnerTypes[strtolower($resourceOwner)]);
+    }
+
+    public static function registerResourceOwner(string $resourceOwnerClass): void
+    {
+        $reflection = new \ReflectionClass($resourceOwnerClass);
+        if (!$reflection->implementsInterface(ResourceOwnerInterface::class)) {
+            throw new \LogicException('Resource owner class should implement "ResourceOwnerInterface", or extended class "GenericOAuth1ResourceOwner"/"GenericOAuth2ResourceOwner".');
         }
 
-        if (\in_array($resourceOwner, self::$resourceOwners['oauth1'], true)) {
-            return true;
+        $type = \defined("$resourceOwnerClass::TYPE") ? $resourceOwnerClass::TYPE : null;
+        if (null === $type) {
+            if (preg_match('~(?P<resource_owner>[^\\\\]+)ResourceOwner$~', $resourceOwnerClass, $m)) {
+                $type = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $m['resource_owner']));
+            } else {
+                throw new \LogicException(sprintf('Resource owner class either should have "TYPE" const defined or end with "ResourceOwner" so that type can be calculated by converting its class name without suffix to "snake_case". Given class name is "%s"', $resourceOwnerClass));
+            }
         }
 
-        return \in_array($resourceOwner, self::$resourceOwners['oauth2'], true);
+        $oAuth = 'unknown';
+        if ($reflection->isSubclassOf(GenericOAuth2ResourceOwner::class)) {
+            $oAuth = 'oauth2';
+        } elseif ($reflection->isSubclassOf(GenericOAuth1ResourceOwner::class)) {
+            $oAuth = 'oauth1';
+        }
+
+        self::$resourceOwnerTypes[$type] = $oAuth;
+        self::$resourceOwnerTypesClassMap[$type] = $resourceOwnerClass;
     }
 
     /**
@@ -252,12 +217,8 @@ final class Configuration implements ConfigurationInterface
                                 ->end()
                             ->end()
                             ->scalarNode('type')
-                                ->validate()
-                                    ->ifTrue(function ($type) {
-                                        return !self::isResourceOwnerSupported($type);
-                                    })
-                                    ->thenInvalid('Unknown resource owner type "%s".')
-                                ->end()
+                                // will be validated in ResourceOwnerCompilerPass, other apps can register own resource
+                                // owner maps later with tag hei_oauth.resource_owner
                                 ->validate()
                                     ->ifEmpty()
                                     ->thenUnset()
@@ -305,15 +266,29 @@ final class Configuration implements ConfigurationInterface
                                 }
 
                                 // for each type at least these have to be set
-                                foreach (['type', 'client_id', 'client_secret'] as $child) {
+                                foreach (['client_id', 'client_secret'] as $child) {
                                     if (!isset($c[$child])) {
                                         return true;
                                     }
                                 }
 
+                                if (!isset($c['type']) && !isset($c['class'])) {
+                                    return true;
+                                }
+
                                 return false;
                             })
-                            ->thenInvalid("You should set at least the 'type', 'client_id' and the 'client_secret' of a resource owner.")
+                            ->thenInvalid("You should set at least the 'type' or 'class' with 'client_id' and the 'client_secret' of a resource owner.")
+                        ->end()
+                        ->validate()
+                            ->ifTrue(function ($c) {
+                                return isset($c['type'], $c['class']);
+                            })
+                            ->then(function ($c) {
+                                trigger_deprecation('hwi/oauth-bundle', '2.0', 'No need to set both "type" and "class" for resource owner.');
+
+                                return $c;
+                            })
                         ->end()
                         ->validate()
                             ->ifTrue(function ($c) {
@@ -383,13 +358,13 @@ final class Configuration implements ConfigurationInterface
                         ->end()
                         ->validate()
                             ->ifTrue(function ($c) {
-                                if (!isset($c['class'])) {
-                                    return false;
-                                }
-
-                                return 'oauth2' !== $c['type'] && 'oauth1' !== $c['type'];
+                                return isset($c['class']);
                             })
-                            ->thenInvalid("If you're setting a 'class', you must provide a 'oauth1' or 'oauth2' type")
+                            ->then(function ($c) {
+                                self::registerResourceOwner($c['class']);
+
+                                return $c;
+                            })
                         ->end()
                     ->end()
                 ->end()
@@ -411,6 +386,27 @@ final class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
+    }
+
+    private static function loadResourceOwners(): void
+    {
+        $files = (new Finder())
+            ->in(__DIR__.'/../OAuth/ResourceOwner')
+            ->name('~^(.+)ResourceOwner\.php$~')
+            ->files();
+
+        foreach ($files as $f) {
+            if (false === strpos($f->getFilename(), 'ResourceOwner')) {
+                continue;
+            }
+
+            // Skip known abstract classes
+            if (\in_array($f->getFilename(), ['AbstractResourceOwner.php', 'GenericOAuth1ResourceOwner.php', 'GenericOAuth2ResourceOwner.php'], true)) {
+                continue;
+            }
+
+            self::registerResourceOwner('HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\\'.str_replace('.php', '', $f->getFilename()));
+        }
     }
 
     /**

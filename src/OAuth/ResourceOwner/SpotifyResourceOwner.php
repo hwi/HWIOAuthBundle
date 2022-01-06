@@ -22,6 +22,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 final class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'spotify';
+
     /**
      * {@inheritdoc}
      */

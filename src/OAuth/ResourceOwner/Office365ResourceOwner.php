@@ -16,6 +16,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class Office365ResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'office365';
+
     protected array $paths = [
         'identifier' => 'id',
         'email' => 'mail',

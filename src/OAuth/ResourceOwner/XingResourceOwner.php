@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class XingResourceOwner extends GenericOAuth1ResourceOwner
 {
+    public const TYPE = 'xing';
+
     /**
      * {@inheritdoc}
      */

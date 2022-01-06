@@ -19,6 +19,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 final class SinaWeiboResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'sina_weibo';
+
     /**
      * {@inheritdoc}
      */

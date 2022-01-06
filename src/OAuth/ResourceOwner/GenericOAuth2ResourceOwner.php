@@ -28,6 +28,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 {
+    public const TYPE = null; // it must be null
+
     /**
      * {@inheritdoc}
      */

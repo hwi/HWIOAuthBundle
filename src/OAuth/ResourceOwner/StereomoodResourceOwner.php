@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class StereomoodResourceOwner extends GenericOAuth1ResourceOwner
 {
+    public const TYPE = 'stereomood';
+
     protected array $paths = [
         'identifier' => 'oauth_token',
         'nickname' => 'oauth_token',

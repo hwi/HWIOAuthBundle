@@ -20,6 +20,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'linkedin';
+
     /**
      * {@inheritdoc}
      */
