@@ -92,8 +92,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->abstract()
         ->arg('$httpUtils', service('security.http_utils'))
         ->arg('$possibleResourceOwners', '%hwi_oauth.resource_owners%')
-        ->arg('$resourceOwners', [])
-        ->arg('$locator', tagged_locator('hwi_oauth.resource_owner', 'resource-name', 'getDefaultResourceNameName', 'getDefaultResourceNamePriority'));
+        ->arg('$resourceOwners', []);
 
     $services->set('hwi_oauth.resource_ownermap_locator', ResourceOwnerMapLocator::class);
 };

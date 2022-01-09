@@ -29,6 +29,7 @@ use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Alias;
+use Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Exception\BadMethodCallException;
@@ -102,15 +103,20 @@ final class HWIOAuthExtension extends Extension
 
         // setup services for all configured resource owners
         $resourceOwners = [];
+        $resourceOwnerReferenceMap = [];
         foreach ($config['resource_owners'] as $name => $options) {
             $resourceOwners[$name] = $name;
-            $this->createResourceOwnerService($container, $name, $options);
+            $resourceOwnerReferenceMap[$name] = $this->createResourceOwnerService($container, $name, $options);
 
             if (!$this->refreshTokenListenerEnabled) {
                 $this->refreshTokenListenerEnabled = $options['options']['refresh_on_expire'] ?? false;
             }
         }
         $container->setParameter('hwi_oauth.resource_owners', $resourceOwners);
+        $container->setAlias(
+            'hwi_oauth.resource_owners.locator',
+            (string) ServiceLocatorTagPass::register($container, $resourceOwnerReferenceMap)
+        );
 
         $this->createConnectIntegration($container, $config);
     }
@@ -126,14 +132,11 @@ final class HWIOAuthExtension extends Extension
      * @throws BadMethodCallException
      * @throws InvalidArgumentException
      */
-    public function createResourceOwnerService(ContainerBuilder $container, string $name, array $options): void
+    public function createResourceOwnerService(ContainerBuilder $container, string $name, array $options): Reference
     {
         // alias services
         if (isset($options['service'])) {
-            // set the appropriate name for aliased services, compiler pass depends on it
-            $container->setAlias('hwi_oauth.resource_owner.'.$name, new Alias($options['service'], true));
-
-            return;
+            return new Reference($options['service']);
         }
 
         $type = $options['type'];
@@ -156,9 +159,10 @@ final class HWIOAuthExtension extends Extension
         $definition->setArgument('$options', $options);
         $definition->setArgument('$name', $name);
         $definition->setArgument('$storage', new Reference('hwi_oauth.storage.session'));
-        $definition->addTag('hwi_oauth.resource_owner', ['resource-name' => $name]);
 
         $container->setDefinition('hwi_oauth.resource_owner.'.$name, $definition);
+
+        return new Reference('hwi_oauth.resource_owner.'.$name);
     }
 
     /**
