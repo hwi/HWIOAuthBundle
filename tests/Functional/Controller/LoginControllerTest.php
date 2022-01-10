@@ -36,7 +36,9 @@ final class LoginControllerTest extends WebTestCase
         $response = $client->getResponse();
 
         $this->assertSame(200, $response->getStatusCode(), $response->getContent());
-        $this->assertSame('google', $crawler->filter('a')->text(), $response->getContent());
+        $this->assertSame('google', $crawler->filter('a:nth-child(1)')->text(), $response->getContent());
+        $this->assertSame('yahoo', $crawler->filter('a:nth-child(3)')->text(), $response->getContent());
+        $this->assertSame('custom', $crawler->filter('a:nth-child(5)')->text(), $response->getContent());
     }
 
     public function testRedirectingToRegistrationFormWithError(): void

@@ -27,3 +27,6 @@ google_login:
 
 yahoo_login:
     path: /check-login/yahoo
+
+custom_login:
+    path: /check-login/custom

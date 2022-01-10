@@ -16,6 +16,7 @@ security:
         resource_owners:
           google: '/check-login/google'
           yahoo:  '/check-login/yahoo'
+          custom:  '/check-login/custom'
         login_path:  /login
         use_forward: false
         failure_path: /login
