@@ -3,7 +3,7 @@
     "type":        "symfony-bundle",
     "homepage":    "https://github.com/hwi/HWIOAuthBundle",
     "license":     "MIT",
-    "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
+    "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony.",
     "keywords":    [
         "authentication",
         "firewall",
