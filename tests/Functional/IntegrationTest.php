@@ -14,10 +14,12 @@ declare(strict_types=1);
 namespace HWI\Bundle\OAuthBundle\Tests\Functional;
 
 use HWI\Bundle\OAuthBundle\Tests\App\AppKernel;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomEventListener;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\SecurityEvents;
 
 final class IntegrationTest extends WebTestCase
 {
@@ -85,7 +87,20 @@ final class IntegrationTest extends WebTestCase
 
         $client = static::createClient();
         $client->disableReboot();
-        $client->getContainer()->set('hwi_oauth.http_client', $httpClient);
+        $container = $client->getContainer();
+        $container->set('hwi_oauth.http_client', $httpClient);
+
+        $interactiveLoginListener = $this->createMock(CustomEventListener::class);
+        $interactiveLoginListener->expects($this->once())->method('handle');
+        // We attach our custom listener to prove InteractiveLoginEvent fired correctly.
+        // 'security.event_dispatcher.main' Dispatcher is used for Symfony 5.4 and 6.0 under php ^8.0 and ^8.1
+        // and 'event_dispatcher' for all 4.4 and 5.4 under ^7.4
+        foreach (['security.event_dispatcher.main', 'event_dispatcher'] as $dispatcherId) {
+            if ($container->has($dispatcherId)) {
+                $container->get($dispatcherId)
+                    ->addListener(SecurityEvents::INTERACTIVE_LOGIN, [$interactiveLoginListener, 'handle']);
+            }
+        }
 
         $client->request('GET', $redirectLoginFromService);
 

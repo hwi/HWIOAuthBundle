@@ -30,6 +30,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
+use Symfony\Component\Security\Http\Authenticator\InteractiveAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
@@ -38,7 +39,7 @@ use Symfony\Component\Security\Http\HttpUtils;
 /**
  * @author Vadim Borodavko <vadim.borodavko@gmail.com>
  */
-final class OAuthAuthenticator implements AuthenticatorInterface, AuthenticationEntryPointInterface
+final class OAuthAuthenticator implements AuthenticatorInterface, AuthenticationEntryPointInterface, InteractiveAuthenticatorInterface
 {
     private HttpUtils $httpUtils;
     private OAuthAwareUserProviderInterface $userProvider;
@@ -260,6 +261,11 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         return $this->failureHandler->onAuthenticationFailure($request, $exception);
+    }
+
+    public function isInteractive(): bool
+    {
+        return true;
     }
 
     private function extractCsrfTokenFromState(?string $stateParameter): ?string
