@@ -297,6 +297,9 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('use_authorization_to_get_token')
                                 ->validate()
                                     ->ifTrue(function ($v) {
+                                        if (false === $v) {
+                                            return false;
+                                        }
                                         return empty($v);
                                     })
                                     ->thenUnset()
