@@ -117,25 +117,27 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
             throw new AuthenticationException('No resource owner match the request.');
         }
 
-        if (!$resourceOwner->handles($request)) {
-            throw new AuthenticationException('No oauth code in the request.');
+        if (!$accessToken = $request->get('access_token')) {
+            if (!$resourceOwner->handles($request)) {
+                throw new AuthenticationException('No oauth code in the request.');
+            }
+
+            // If resource owner supports only one url authentication, call redirect
+            if ($request->query->has('authenticated') && $resourceOwner->getOption('auth_with_one_url')) {
+                $request->attributes->set('service', $resourceOwner->getName());
+
+                throw new LazyResponseException(new RedirectResponse(sprintf('%s?code=%s&authenticated=true', $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service'), $request->query->get('code'))));
+            }
+
+            $resourceOwner->isCsrfTokenValid(
+                $this->extractCsrfTokenFromState($request->get('state'))
+            );
+
+            $accessToken = $resourceOwner->getAccessToken(
+                $request,
+                $this->httpUtils->createRequest($request, $checkPath)->getUri()
+            );
         }
-
-        // If resource owner supports only one url authentication, call redirect
-        if ($request->query->has('authenticated') && $resourceOwner->getOption('auth_with_one_url')) {
-            $request->attributes->set('service', $resourceOwner->getName());
-
-            throw new LazyResponseException(new RedirectResponse(sprintf('%s?code=%s&authenticated=true', $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service'), $request->query->get('code'))));
-        }
-
-        $resourceOwner->isCsrfTokenValid(
-            $this->extractCsrfTokenFromState($request->get('state'))
-        );
-
-        $accessToken = $resourceOwner->getAccessToken(
-            $request,
-            $this->httpUtils->createRequest($request, $checkPath)->getUri()
-        );
 
         $token = new OAuthToken($accessToken);
         $token->setResourceOwnerName($resourceOwner->getName());
