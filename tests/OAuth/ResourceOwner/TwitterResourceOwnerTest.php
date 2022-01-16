@@ -59,7 +59,7 @@ json;
         $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'user_id' => '1', 'screen_name' => 'bar'];
         $userResponse = $resourceOwner->getUserInformation($accessToken);
 
-        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('1', $userResponse->getUserIdentifier());
         $this->assertEquals('bar', $userResponse->getNickname());
         $this->assertEquals($accessToken['oauth_token'], $userResponse->getAccessToken());
         $this->assertEquals($accessToken['oauth_token_secret'], $userResponse->getTokenSecret());

@@ -148,7 +148,7 @@ key,
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token', 'id_token' => '.'.base64_encode($this->userResponse)]);
 
         $this->assertInstanceOf($class, $userResponse);
-        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo666', $userResponse->getUserIdentifier());
         $this->assertEquals('foo', $userResponse->getNickname());
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertEquals('foo', $userResponse->getFirstName());
@@ -179,7 +179,7 @@ key,
             'lastName' => 'User',
         ]);
 
-        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('1', $userResponse->getUserIdentifier());
         $this->assertEquals('localhost@gmail.com', $userResponse->getEmail());
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertEquals('Test', $userResponse->getFirstName());
@@ -188,7 +188,7 @@ key,
         $this->assertNull($userResponse->getExpiresIn());
 
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token', 'id_token' => $token]);
-        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('1', $userResponse->getUserIdentifier());
         $this->assertEquals('localhost@gmail.com', $userResponse->getEmail());
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getFirstName());

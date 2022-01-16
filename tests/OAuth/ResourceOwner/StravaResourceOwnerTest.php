@@ -55,7 +55,7 @@ json;
 
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
-        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('1', $userResponse->getUserIdentifier());
         $this->assertEquals('Foo Bar', $userResponse->getRealName());
         $this->assertEquals('http://www.gravatar.com/avatar/default', $userResponse->getProfilePicture());
         $this->assertEquals('foo@acme.com', $userResponse->getEmail());

@@ -78,7 +78,7 @@ json;
          */
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
-        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('1', $userResponse->getUserIdentifier());
         $this->assertEquals('example@website.com', $userResponse->getNickname());
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertEquals('John', $userResponse->getFirstName());

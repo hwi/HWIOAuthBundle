@@ -61,7 +61,7 @@ json;
             'id_token' => '.'.base64_encode($this->userResponse),
         ]);
 
-        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('1', $userResponse->getUserIdentifier());
         $this->assertEquals('Dummy Tester', $userResponse->getRealName());
         $this->assertEquals('Dummy', $userResponse->getFirstName());
         $this->assertEquals('Tester', $userResponse->getLastName());
@@ -90,7 +90,7 @@ json;
         ]);
 
         $this->assertInstanceOf($class, $userResponse);
-        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo666', $userResponse->getUserIdentifier());
         $this->assertEquals('foo', $userResponse->getNickname());
         $this->assertEquals('foo', $userResponse->getFirstName());
         $this->assertEquals('BAR', $userResponse->getLastName());

@@ -46,7 +46,7 @@ final class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
         ];
         $userResponse = $resourceOwner->getUserInformation($accessToken);
 
-        $this->assertEquals('15362483@N08', $userResponse->getUsername());
+        $this->assertEquals('15362483@N08', $userResponse->getUserIdentifier());
         $this->assertEquals('lakiboy83', $userResponse->getNickname());
         $this->assertEquals('Dmitri Lakachuskis', $userResponse->getRealName());
         $this->assertEquals($accessToken['oauth_token'], $userResponse->getAccessToken());
@@ -90,7 +90,7 @@ final class FlickrResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
         $userResponse = $resourceOwner->getUserInformation(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']);
 
         $this->assertInstanceOf($class, $userResponse);
-        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo666', $userResponse->getUserIdentifier());
         $this->assertEquals('foo', $userResponse->getNickname());
     }
 }

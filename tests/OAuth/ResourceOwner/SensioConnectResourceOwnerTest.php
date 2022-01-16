@@ -46,7 +46,7 @@ final class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTes
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertInstanceOf($class, $userResponse);
-        $this->assertEquals('aa5e22b0-6189-4113-9c68-91d4a3c32b7c', $userResponse->getUsername());
+        $this->assertEquals('aa5e22b0-6189-4113-9c68-91d4a3c32b7c', $userResponse->getUserIdentifier());
         $this->assertEquals('bar', $userResponse->getNickname());
         $this->assertEquals('Fake Guy', $userResponse->getRealName());
         $this->assertEquals('fake@email.com', $userResponse->getEmail());
