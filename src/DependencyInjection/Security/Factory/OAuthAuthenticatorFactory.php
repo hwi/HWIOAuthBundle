@@ -133,6 +133,11 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
         return 'http';
     }
 
+    public function getFirewallNames(): \ArrayIterator
+    {
+        return $this->firewallNames;
+    }
+
     /**
      * {@inheritdoc}
      */

@@ -73,6 +73,11 @@ final class OAuthFactory extends AbstractFactory
         return 1;
     }
 
+    public function getFirewallNames(): \ArrayIterator
+    {
+        return $this->firewallNames;
+    }
+
     /**
      * {@inheritDoc}
      */
