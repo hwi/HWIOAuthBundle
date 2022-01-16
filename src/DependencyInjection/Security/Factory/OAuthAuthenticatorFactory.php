@@ -31,13 +31,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class OAuthAuthenticatorFactory extends AbstractFactory implements AuthenticatorFactoryInterface, FirewallListenerFactoryInterface
 {
-    private \ArrayIterator $firewallNames;
-
-    public function __construct(\ArrayIterator $firewallNames)
-    {
-        $this->firewallNames = $firewallNames;
-    }
-
     /**
      * @param ArrayNodeDefinition $node
      */
@@ -80,8 +73,6 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
             ->addArgument(new Reference('http_kernel'))
             ->addArgument(array_intersect_key($config, $this->options))
         ;
-
-        $this->firewallNames[$firewallName] = true;
 
         return $authenticatorId;
     }
@@ -149,8 +140,6 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
             ->addArgument(new Reference('hwi_oauth.user_checker'))
             ->addArgument(new Reference('security.token_storage'))
         ;
-
-        $this->firewallNames[$id] = true;
 
         return $providerId;
     }

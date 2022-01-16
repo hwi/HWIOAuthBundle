@@ -29,13 +29,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class OAuthFactory extends AbstractFactory
 {
-    private \ArrayIterator $firewallNames;
-
-    public function __construct(\ArrayIterator $firewallNames)
-    {
-        $this->firewallNames = $firewallNames;
-    }
-
     /**
      * @param ArrayNodeDefinition $node
      */
@@ -106,8 +99,6 @@ final class OAuthFactory extends AbstractFactory
         ;
 
         $this->createRefreshTokenListeners($container, $providerId, $id);
-
-        $this->firewallNames[$id] = true;
 
         return $providerId;
     }
