@@ -119,7 +119,8 @@
         "symfony/monolog-bundle":       "^3.4",
         "phpstan/phpstan":              "^1.2",
         "phpstan/phpstan-symfony":      "^1.0",
-        "phpstan/extension-installer":  "^1.1"
+        "phpstan/extension-installer":  "^1.1",
+        "firebase/php-jwt":             "^5.5"
     },
 
     "config": {
@@ -142,6 +143,7 @@
 
     "suggest": {
         "doctrine/doctrine-bundle":     "to use Doctrine user provider",
+        "firebase/php-jwt":             "to use JWT utility functions",
         "symfony/property-access":      "to use FOSUB integration with this bundle",
         "symfony/twig-bundle":          "to use the Twig hwi_oauth_* functions"
     },
