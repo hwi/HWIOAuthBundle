@@ -20,8 +20,8 @@ use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $parameters = $containerConfigurator->parameters();
 
-    $parameters->set('hwi_oauth.resource_owner.oauth1.class', RO\GenericOAuth1ResourceOwner::class);
-    $parameters->set('hwi_oauth.resource_owner.oauth2.class', RO\GenericOAuth2ResourceOwner::class);
+    $parameters->set('hwi_oauth.resource_owner.oauth1.class', RO\OAuth1ResourceOwner::class);
+    $parameters->set('hwi_oauth.resource_owner.oauth2.class', RO\OAuth2ResourceOwner::class);
     $parameters->set('hwi_oauth.resource_owner.amazon.class', RO\AmazonResourceOwner::class);
     $parameters->set('hwi_oauth.resource_owner.apple.class', RO\AppleResourceOwner::class);
     $parameters->set('hwi_oauth.resource_owner.asana.class', RO\AsanaResourceOwner::class);
