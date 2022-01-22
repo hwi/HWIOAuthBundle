@@ -20,7 +20,7 @@ final class GetResponseUserEvent extends UserEvent
 {
     private ?Response $response = null;
 
-    public function setResponse(Response $response)
+    public function setResponse(Response $response): void
     {
         $this->response = $response;
     }

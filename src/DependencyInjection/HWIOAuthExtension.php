@@ -76,7 +76,6 @@ final class HWIOAuthExtension extends Extension
         $loader->load('controller.php');
         $loader->load('oauth.php');
         $loader->load('resource_owners.php');
-        $loader->load('templating.php');
         $loader->load('twig.php');
         $loader->load('util.php');
 
