@@ -23,6 +23,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('twig.extension');
 
     $services->set('hwi_oauth.twig.extension.oauth.runtime', OAuthRuntime::class)
-        ->args([service('hwi_oauth.templating.helper.oauth')])
+        ->args([
+            service('hwi_oauth.security.oauth_utils'),
+            service('request_stack'),
+        ])
         ->tag('twig.runtime');
 };
