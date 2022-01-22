@@ -204,7 +204,7 @@ final class ConnectController
      */
     public function connectServiceAction(Request $request, string $service): Response
     {
-        if (!$this->accountConnector || !$this->formHandler) {
+        if (!$this->accountConnector) {
             throw new NotFoundHttpException();
         }
 
