@@ -2,6 +2,7 @@ Changelog
 =========
 ## 2.0.0-BETA3 (2022-xx-xx)
 * BC Break: Class `Templating\Helper\OAuthHelper` was merged into `Twig\Extension\OAuthRuntime`,
+* Bugfix: Added `OAuth1ResourceOwner` & `OAuth2ResourceOwner` to cover case of implementing custom oauth resource owners,
 
 ## 2.0.0-BETA2 (2022-01-16)
 * Deprecated: configuration parameter `firewall_names`, firewalls are now computed automatically - all firewalls that have defined `oauth` authenticator/provider will be collected,
