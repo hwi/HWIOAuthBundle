@@ -11,19 +11,24 @@
 
 namespace HWI\Bundle\OAuthBundle\Twig\Extension;
 
-use HWI\Bundle\OAuthBundle\Templating\Helper\OAuthHelper;
+use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\RuntimeExtensionInterface;
 
+/**
+ * @author Alexander <iam.asm89@gmail.com>
+ * @author Joseph Bielawski <stloyd@gmail.com>
+ */
 final class OAuthRuntime implements RuntimeExtensionInterface
 {
-    /**
-     * @var OAuthHelper
-     */
-    private $helper;
+    private OAuthUtils $oauthUtils;
+    private RequestStack $requestStack;
 
-    public function __construct(OAuthHelper $helper)
+    public function __construct(OAuthUtils $oauthUtils, RequestStack $requestStack)
     {
-        $this->helper = $helper;
+        $this->oauthUtils = $oauthUtils;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -31,16 +36,26 @@ final class OAuthRuntime implements RuntimeExtensionInterface
      */
     public function getResourceOwners(): array
     {
-        return $this->helper->getResourceOwners();
+        return $this->oauthUtils->getResourceOwners();
     }
 
     public function getLoginUrl(string $name): string
     {
-        return $this->helper->getLoginUrl($name);
+        return $this->oauthUtils->getLoginUrl($this->getMainRequest(), $name);
     }
 
     public function getAuthorizationUrl(string $name, ?string $redirectUrl = null, array $extraParameters = []): string
     {
-        return $this->helper->getAuthorizationUrl($name, $redirectUrl, $extraParameters);
+        return $this->oauthUtils->getAuthorizationUrl($this->getMainRequest(), $name, $redirectUrl, $extraParameters);
+    }
+
+    private function getMainRequest(): ?Request
+    {
+        if (method_exists($this->requestStack, 'getMainRequest')) {
+            return $this->requestStack->getMainRequest(); // Symfony 5.3+
+        }
+
+        // @phpstan-ignore-next-line
+        return $this->requestStack->getMasterRequest();
     }
 }
