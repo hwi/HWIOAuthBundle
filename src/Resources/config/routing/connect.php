@@ -11,15 +11,16 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-use HWI\Bundle\OAuthBundle\Controller\ConnectController;
+use HWI\Bundle\OAuthBundle\Controller\Connect\ConnectController;
+use HWI\Bundle\OAuthBundle\Controller\Connect\RegisterController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
-return function (RoutingConfigurator $routes) {
+return static function (RoutingConfigurator $routes) {
     $routes->add('hwi_oauth_connect_service', '/service/{service}')
         ->controller([ConnectController::class, 'connectServiceAction'])
         ->methods(['GET', 'POST']);
 
     $routes->add('hwi_oauth_connect_registration', '/registration/{key}')
-        ->controller([ConnectController::class, 'registrationAction'])
+        ->controller([RegisterController::class, 'registrationAction'])
         ->methods(['GET', 'POST']);
 };

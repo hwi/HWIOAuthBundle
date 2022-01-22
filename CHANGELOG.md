@@ -1,5 +1,8 @@
 Changelog
 =========
+## 2.0.0-BETA3 (2022-xx-xx)
+* Enhancement: Class `ConnectController` was split into two smaller ones, `Connect\ConnectController` & `Connect\RegisterController`,
+
 ## 2.0.0-BETA2 (2022-01-16)
 * Deprecated: configuration parameter `firewall_names`, firewalls are now computed automatically - all firewalls that have defined `oauth` authenticator/provider will be collected,
 * Added: Ability to automatically refresh expired access tokens (only for derived from `GenericOAuth2ResourceOwner` resource owners), if option `refresh_on_expire` set to `true`,

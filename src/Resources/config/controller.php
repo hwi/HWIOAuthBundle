@@ -13,7 +13,8 @@ declare(strict_types=1);
 
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
-use HWI\Bundle\OAuthBundle\Controller\ConnectController;
+use HWI\Bundle\OAuthBundle\Controller\Connect\ConnectController;
+use HWI\Bundle\OAuthBundle\Controller\Connect\RegisterController;
 use HWI\Bundle\OAuthBundle\Controller\LoginController;
 use HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController;
 
@@ -36,6 +37,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->arg('$failedUseReferer', '%hwi_oauth.failed_use_referer%')
         ->arg('$failedAuthPath', '%hwi_oauth.failed_auth_path%')
         ->arg('$enableConnectConfirmation', '%hwi_oauth.connect.confirmation%')
+        ->arg('$accountConnector', service('hwi_oauth.account.connector')->nullOnInvalid());
+
+    $services->set(RegisterController::class)
+        ->public()
+        ->arg('$resourceOwnerMapLocator', service('hwi_oauth.resource_ownermap_locator'))
+        ->arg('$requestStack', service('request_stack'))
+        ->arg('$dispatcher', service('event_dispatcher'))
+        ->arg('$tokenStorage', service('security.token_storage'))
+        ->arg('$userChecker', service('hwi_oauth.user_checker'))
+        ->arg('$authorizationChecker', service('security.authorization_checker'))
+        ->arg('$formFactory', service('form.factory'))
+        ->arg('$twig', service('twig'))
+        ->arg('$grantRule', '%hwi_oauth.grant_rule%')
         ->arg('$registrationForm', '%hwi_oauth.connect.registration_form%')
         ->arg('$accountConnector', service('hwi_oauth.account.connector')->nullOnInvalid())
         ->arg('$formHandler', service('hwi_oauth.registration.form.handler')->nullOnInvalid());

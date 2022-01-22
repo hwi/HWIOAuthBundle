@@ -31,7 +31,7 @@ final class RedirectToServiceController
     private OAuthUtils $oauthUtils;
     private DomainWhitelist $domainWhitelist;
     private ResourceOwnerMapLocator $resourceOwnerMapLocator;
-    private ?string $targetPathParameter = null;
+    private ?string $targetPathParameter;
     private bool $failedUseReferer;
     private bool $useReferer;
 

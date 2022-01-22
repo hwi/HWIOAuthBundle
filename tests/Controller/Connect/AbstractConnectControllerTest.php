@@ -11,10 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace HWI\Bundle\OAuthBundle\Tests\Controller;
+namespace HWI\Bundle\OAuthBundle\Tests\Controller\Connect;
 
 use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
-use HWI\Bundle\OAuthBundle\Controller\ConnectController;
 use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
@@ -22,14 +21,12 @@ use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
-use HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -172,30 +169,5 @@ abstract class AbstractConnectControllerTest extends TestCase
             ->with('IS_AUTHENTICATED_REMEMBERED')
             ->willReturn($granted)
         ;
-    }
-
-    protected function createConnectController(
-        bool $connectEnabled = true,
-        bool $confirmConnect = true
-    ): ConnectController {
-        return new ConnectController(
-            $this->oAuthUtils,
-            $this->resourceOwnerMapLocator,
-            $this->createMock(RequestStack::class),
-            $this->eventDispatcher,
-            $this->tokenStorage,
-            $this->userChecker,
-            $this->authorizationChecker,
-            $this->formFactory,
-            $this->twig,
-            $this->router,
-            'IS_AUTHENTICATED_REMEMBERED',
-            true,
-            'fake_route',
-            $confirmConnect,
-            RegistrationFormType::class,
-            $connectEnabled ? $this->accountConnector : null,
-            $connectEnabled ? $this->registrationFormHandler : null
-        );
     }
 }
