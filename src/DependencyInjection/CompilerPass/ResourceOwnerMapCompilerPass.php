@@ -42,7 +42,7 @@ final class ResourceOwnerMapCompilerPass implements CompilerPassInterface
             $resourceOwnerMapRef = new Reference($resourceOwnerMapId);
 
             $locatorDef->addMethodCall('set', [$firewallName, $resourceOwnerMapRef]);
-            $oauthUtilsDef->addMethodCall('addResourceOwnerMap', [$resourceOwnerMapRef]);
+            $oauthUtilsDef->addMethodCall('addResourceOwnerMap', [$firewallName, $resourceOwnerMapRef]);
         }
     }
 }

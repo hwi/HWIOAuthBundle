@@ -30,3 +30,18 @@ yahoo_login:
 
 custom_login:
     path: /check-login/custom
+
+app_api_service_redirect:
+  path: /api/connect/{service}
+  defaults:
+    _controller: 'HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController::redirectToServiceAction'
+    methods: GET
+
+api_google_login:
+  path: /api/check-login/google
+
+api_yahoo_login:
+  path: /api/check-login/yahoo
+
+api_custom_login:
+  path: /api/check-login/custom

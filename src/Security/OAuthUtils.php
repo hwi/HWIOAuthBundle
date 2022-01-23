@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
+use Symfony\Bundle\SecurityBundle\Security\FirewallMap;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -32,29 +33,31 @@ final class OAuthUtils
     private bool $connect;
     private string $grantRule;
     private HttpUtils $httpUtils;
+    private AuthorizationCheckerInterface $authorizationChecker;
+    private FirewallMap $firewallMap;
 
     /**
-     * @var ResourceOwnerMapInterface[]
+     * @var array<string, ResourceOwnerMapInterface>
      */
     private array $ownerMaps = [];
-
-    private AuthorizationCheckerInterface $authorizationChecker;
 
     public function __construct(
         HttpUtils $httpUtils,
         AuthorizationCheckerInterface $authorizationChecker,
+        FirewallMap $firewallMap,
         bool $connect,
         string $grantRule
     ) {
         $this->httpUtils = $httpUtils;
         $this->authorizationChecker = $authorizationChecker;
+        $this->firewallMap = $firewallMap;
         $this->connect = $connect;
         $this->grantRule = $grantRule;
     }
 
-    public function addResourceOwnerMap(ResourceOwnerMapInterface $ownerMap): void
+    public function addResourceOwnerMap($firewallName, ResourceOwnerMapInterface $ownerMap): void
     {
-        $this->ownerMaps[] = $ownerMap;
+        $this->ownerMaps[$firewallName] = $ownerMap;
     }
 
     /**
@@ -77,7 +80,8 @@ final class OAuthUtils
 
         if (null === $redirectUrl) {
             if (!$this->connect || !$this->authorizationChecker->isGranted($this->grantRule)) {
-                $redirectUrl = $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($name));
+                $firewallName = $this->getCurrentFirewallName($request);
+                $redirectUrl = $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($name, $firewallName));
             } else {
                 $redirectUrl = $this->getServiceAuthUrl($request, $resourceOwner);
             }
@@ -93,7 +97,9 @@ final class OAuthUtils
     public function getServiceAuthUrl(Request $request, ResourceOwnerInterface $resourceOwner): string
     {
         if ($resourceOwner->getOption('auth_with_one_url')) {
-            return $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($resourceOwner->getName()));
+            $firewallName = $this->getCurrentFirewallName($request);
+
+            return $this->httpUtils->generateUri($request, $this->getResourceOwnerCheckPath($resourceOwner->getName(), $firewallName));
         }
 
         $request->attributes->set('service', $resourceOwner->getName());
@@ -239,15 +245,31 @@ final class OAuthUtils
         throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
     }
 
-    private function getResourceOwnerCheckPath(string $name): ?string
+    private function getCurrentFirewallName(Request $request): ?string
     {
-        foreach ($this->ownerMaps as $ownerMap) {
+        $firewallConfig = $this->firewallMap->getFirewallConfig($request);
+
+        return null === $firewallConfig ? null : $firewallConfig->getName();
+    }
+
+    private function getResourceOwnerCheckPath(string $name, ?string $firewallName = null): ?string
+    {
+        $resourceOwnerMaps = $this->ownerMaps;
+
+        // if 'oauth' for firewall defined search only in corresponding resourceOwnerMao
+        if (null !== $firewallName && isset($this->ownerMaps[$firewallName])) {
+            $resourceOwnerMaps = [$this->ownerMaps[$firewallName]];
+        }
+
+        // otherwise get the latest potential checked (basically from main firewall)
+        $resourceOwnerCheckPath = null;
+        foreach ($resourceOwnerMaps as $ownerMap) {
             if ($potentialResourceOwnerCheckPath = $ownerMap->getResourceOwnerCheckPath($name)) {
-                return $potentialResourceOwnerCheckPath;
+                $resourceOwnerCheckPath = $potentialResourceOwnerCheckPath;
             }
         }
 
-        return null;
+        return $resourceOwnerCheckPath;
     }
 
     /**

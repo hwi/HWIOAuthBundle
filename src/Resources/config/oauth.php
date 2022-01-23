@@ -58,6 +58,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service('security.http_utils'),
             service('security.authorization_checker'),
+            service('security.firewall.map'),
             '%hwi_oauth.connect%',
             '%hwi_oauth.grant_rule%',
         ]);
