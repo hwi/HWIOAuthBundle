@@ -2,6 +2,7 @@ Changelog
 =========
 ## 2.0.0-BETA3 (2022-xx-xx)
 * BC Break: Class `Templating\Helper\OAuthHelper` was merged into `Twig\Extension\OAuthRuntime`,
+* Enhancement: Class `ConnectController` was split into two smaller ones, `Connect\ConnectController` & `Connect\RegisterController`,
 * Bugfix: Added `OAuth1ResourceOwner` & `OAuth2ResourceOwner` to cover case of implementing custom oauth resource owners,
 
 ## 2.0.0-BETA2 (2022-01-16)

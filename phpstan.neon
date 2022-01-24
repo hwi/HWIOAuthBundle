@@ -16,6 +16,6 @@ parameters:
     # Symfony <5.4 BC layer
     reportUnmatchedIgnoredErrors: false
     ignoreErrors:
-        - '#Parameter \$event of method HWI\\Bundle\\OAuthBundle\\Controller\\ConnectController::dispatch\(\) has invalid type Symfony\\Component\\EventDispatcher\\Event.#'
+        - '#Parameter \$event of method HWI\\Bundle\\OAuthBundle\\Controller\\Connect\\AbstractController::dispatch\(\) has invalid type Symfony\\Component\\EventDispatcher\\Event.#'
         - '#Parameter \#2 \$array of function implode expects array<string>, array<int, array\|string\|null> given.#'
         - '#PHPDoc type DOMNode of property HWI\\Bundle\\OAuthBundle\\OAuth\\Response\\SensioConnectUserResponse::\$data is not covariant with PHPDoc type array of overridden property HWI\\Bundle\\OAuthBundle\\OAuth\\Response\\AbstractUserResponse::\$data#'
