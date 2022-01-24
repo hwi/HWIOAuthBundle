@@ -17,6 +17,8 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 /**
  * @author Alexander <iam.asm89@gmail.com>
  * @author Joseph Bielawski <stloyd@gmail.com>
+ *
+ * @method string getUserIdentifier() Get the unique user identifier.
  */
 interface UserResponseInterface extends ResponseInterface
 {
@@ -26,9 +28,11 @@ interface UserResponseInterface extends ResponseInterface
      * Note that this is not always common known "username" because of implementation
      * in Symfony framework. For more details follow link below.
      *
-     * @see https://github.com/symfony/symfony/blob/2.7/src/Symfony/Component/Security/Core/User/UserProviderInterface.php#L20-L28
+     * @see https://github.com/symfony/symfony/blob/4.4/src/Symfony/Component/Security/Core/User/UserProviderInterface.php#L20-L28
      *
-     * @return string
+     * @return string|null
+     *
+     * @deprecated Please use getUserIdentifier
      */
     public function getUsername();
 

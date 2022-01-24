@@ -21,7 +21,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 class PathUserResponse extends AbstractUserResponse
 {
     /**
-     * @var array
+     * @var array<string, int|string|null>
      */
     protected $paths = [
         'identifier' => null,
@@ -36,9 +36,27 @@ class PathUserResponse extends AbstractUserResponse
     /**
      * {@inheritdoc}
      */
+    public function getUserIdentifier(): string
+    {
+        $value = $this->getValueForPath('identifier');
+        if (null === $value) {
+            throw new \InvalidArgumentException('User identifier was not found in response.');
+        }
+
+        return (string) $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUsername()
     {
-        return $this->getValueForPath('identifier');
+        try {
+            return $this->getUserIdentifier();
+        } catch (\InvalidArgumentException $e) {
+            // @phpstan-ignore-next-line BC compatibility
+            return null;
+        }
     }
 
     /**

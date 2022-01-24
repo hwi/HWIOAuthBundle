@@ -20,24 +20,39 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 final class SensioConnectUserResponse extends AbstractUserResponse
 {
     /**
-     * @var \DOMXpath
-     */
-    protected $xpath;
-
-    /**
      * @var \DOMNode
      */
     protected $data;
+    /**
+     * @var \DOMXpath|null
+     */
+    private $xpath;
 
     /**
      * {@inheritdoc}
      */
-    public function getUsername()
+    public function getUserIdentifier(): string
     {
         /** @var \DOMAttr $attribute */
         $attribute = $this->data->attributes->getNamedItem('id');
+        if (null === $attribute->value) {
+            throw new \InvalidArgumentException('User identifier was not found in response.');
+        }
 
         return $attribute->value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUsername(): ?string
+    {
+        try {
+            return $this->getUserIdentifier();
+        } catch (\InvalidArgumentException $e) {
+            // @phpstan-ignore-next-line BC compatibility
+            return null;
+        }
     }
 
     /**
@@ -63,7 +78,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     /**
      * {@inheritdoc}
      */
-    public function getFirstName()
+    public function getFirstName(): ?string
     {
         return null;
     }
@@ -71,7 +86,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     /**
      * {@inheritdoc}
      */
-    public function getLastName()
+    public function getLastName(): ?string
     {
         return null;
     }
@@ -79,7 +94,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     /**
      * {@inheritdoc}
      */
-    public function getRealName()
+    public function getRealName(): ?string
     {
         return $this->getNodeValue('./foaf:name', $this->data);
     }
@@ -87,7 +102,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     /**
      * {@inheritdoc}
      */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->getNodeValue('./foaf:mbox', $this->data);
     }
@@ -95,7 +110,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     /**
      * {@inheritdoc}
      */
-    public function getProfilePicture()
+    public function getProfilePicture(): ?string
     {
         return $this->getNodeValue('./atom:link[@rel="foaf:depiction"]', $this->data, 'link');
     }
@@ -103,7 +118,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     /**
      * {@inheritdoc}
      */
-    public function setData($data)
+    public function setData($data): void
     {
         $dom = new \DOMDocument();
         try {
@@ -129,12 +144,9 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     }
 
     /**
-     * @param string $query
-     * @param string $nodeType
-     *
      * @return mixed|null
      */
-    protected function getNodeValue($query, \DOMNode $element, $nodeType = 'normal')
+    private function getNodeValue(string $query, \DOMNode $element, string $nodeType = 'normal')
     {
         $nodeList = $this->xpath->query($query, $element);
         if ($nodeList && $nodeList->length > 0) {
@@ -158,9 +170,9 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     }
 
     /**
-     * @param string $value
+     * @return bool|string|null
      */
-    protected function sanitizeValue($value)
+    private function sanitizeValue(string $value)
     {
         if ('true' === $value) {
             return true;

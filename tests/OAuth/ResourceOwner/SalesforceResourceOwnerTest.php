@@ -54,7 +54,7 @@ json;
             ['access_token' => 'token', 'id' => 'https://login.salesforce.com/services/oauth2/someuser']
         );
 
-        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('1', $userResponse->getUserIdentifier());
         $this->assertEquals('bar', $userResponse->getNickname());
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertEquals('url', $userResponse->getProfilePicture());

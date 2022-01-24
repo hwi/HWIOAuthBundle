@@ -79,7 +79,7 @@ json;
         $userResponse = $resourceOwner->getUserInformation($this->tokenData);
 
         $this->assertInstanceOf($class, $userResponse);
-        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo666', $userResponse->getUserIdentifier());
         $this->assertEquals('foo', $userResponse->getNickname());
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
@@ -100,7 +100,7 @@ json;
         /** @var AbstractUserResponse */
         $userResponse = $resourceOwner->getUserInformation($this->tokenData);
 
-        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('1', $userResponse->getUserIdentifier());
         $this->assertEquals('bar', $userResponse->getNickname());
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());

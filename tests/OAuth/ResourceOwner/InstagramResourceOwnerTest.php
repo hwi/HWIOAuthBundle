@@ -45,7 +45,7 @@ json;
 
         $this->assertInstanceOf($class, $userResponse);
         $this->assertEquals('token', $userResponse->getAccessToken());
-        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo666', $userResponse->getUserIdentifier());
         $this->assertEquals('foo', $userResponse->getNickname());
     }
 }

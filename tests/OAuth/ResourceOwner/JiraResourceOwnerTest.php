@@ -41,7 +41,7 @@ final class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
         $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'];
         $userResponse = $resourceOwner->getUserInformation($accessToken);
 
-        $this->assertEquals('asm89', $userResponse->getUsername());
+        $this->assertEquals('asm89', $userResponse->getUserIdentifier());
         $this->assertEquals('asm89', $userResponse->getNickname());
         $this->assertEquals($accessToken['oauth_token'], $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
@@ -64,7 +64,7 @@ final class JiraResourceOwnerTest extends GenericOAuth1ResourceOwnerTestCase
         $userResponse = $resourceOwner->getUserInformation(['oauth_token' => 'token', 'oauth_token_secret' => 'secret']);
 
         $this->assertInstanceOf($class, $userResponse);
-        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo666', $userResponse->getUserIdentifier());
         $this->assertEquals('foo', $userResponse->getNickname());
     }
 
