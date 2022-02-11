@@ -24,7 +24,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
      */
     protected $data;
     /**
-     * @var \DOMXpath|null
+     * @var \DOMXPath|null
      */
     private $xpath;
 
@@ -129,7 +129,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
             throw new AuthenticationException('Could not retrieve valid user info.');
         }
 
-        $this->xpath = new \DOMXpath($dom);
+        $this->xpath = new \DOMXPath($dom);
 
         $nodes = $this->xpath->evaluate('/api/root');
         $user = $this->xpath->query('./foaf:Person', $nodes->item(0));
