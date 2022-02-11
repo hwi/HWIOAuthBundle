@@ -190,41 +190,31 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('base_url')->end()
                             ->scalarNode('access_token_url')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('authorization_url')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('request_token_url')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('revoke_token_url')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('infos_url')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
@@ -232,41 +222,31 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('client_secret')->cannotBeEmpty()->end()
                             ->scalarNode('realm')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('scope')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('user_response_class')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('service')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('class')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
@@ -278,17 +258,13 @@ final class Configuration implements ConfigurationInterface
                                     ->thenInvalid('Unknown resource owner type "%s".')
                                 ->end()
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('use_authorization_to_get_token')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
