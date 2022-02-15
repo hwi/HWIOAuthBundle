@@ -137,7 +137,7 @@
         "symfony/error-handler":        "^6.0",
         "symfony/http-foundation":      "^6.0",
         "symfony/http-kernel":          "^6.0",
-	"symfony/password-hasher":      "^6.0",
+        "symfony/password-hasher":      "^6.0",
         "symfony/property-info":        "^6.0",
         "symfony/security-core":        "^6.0",
         "symfony/security-http":        "^6.0",
