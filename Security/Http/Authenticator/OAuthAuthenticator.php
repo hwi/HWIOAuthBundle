@@ -28,6 +28,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
@@ -180,7 +181,8 @@ final class OAuthAuthenticator implements AuthenticatorInterface
                     method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername(),
                     static function () use ($user) { return $user; }
                 )
-                : $user
+                : $user,
+            [new RememberMeBadge()]
         );
     }
 
