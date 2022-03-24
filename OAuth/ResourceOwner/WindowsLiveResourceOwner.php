@@ -39,6 +39,9 @@ class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
      */
     protected function doGetTokenRequest($url, array $parameters = [])
     {
+        $parameters['client_id'] = $this->options['client_id'];
+        $parameters['client_secret'] = $this->options['client_secret'];
+
         return parent::httpRequest($url, http_build_query($parameters, '', '&'));
     }
 
