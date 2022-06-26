@@ -21,7 +21,7 @@ All the installation instructions are located in the documentation, check it for
 The bulk of the documentation is stored in the `Resources/doc/index.md`
 file in this bundle. Read the documentation for version:
 
-- [**1.4**](https://github.com/hwi/HWIOAuthBundle/blob/1.4/docs/index.md)
+- [**1.4**](https://github.com/hwi/HWIOAuthBundle/blob/1.4/Resources/doc/index.md)
 
 This bundle contains support for 58 different providers:
 
