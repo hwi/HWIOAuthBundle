@@ -146,7 +146,7 @@ final class AppleResourceOwner extends GenericOAuth2ResourceOwner
 
     private static function jwtDecode(string $idToken)
     {
-        //// from http://stackoverflow.com/a/28748285/624544
+        // from http://stackoverflow.com/a/28748285/624544
         [, $jwt] = explode('.', $idToken, 3);
 
         // if the token was urlencoded, do some fixes to ensure that it is valid base64 encoded
