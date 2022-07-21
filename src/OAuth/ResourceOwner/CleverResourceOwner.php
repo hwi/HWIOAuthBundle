@@ -53,13 +53,12 @@ final class CleverResourceOwner extends GenericOAuth2ResourceOwner
     protected function doGetTokenRequest($url, array $parameters = [])
     {
         $authPreHash = $this->options['client_id'].':'.$this->options['client_secret'];
-        $authHeader = 'Authorization: Basic '.base64_encode($authPreHash);
 
         return $this->httpRequest(
             $url,
             http_build_query($parameters, '', '&'),
             [
-                $authHeader,
+                'Authorization' => 'Basic '.base64_encode($authPreHash),
             ]
         );
     }
