@@ -9,6 +9,22 @@ security:
   enable_authenticator_manager: true
 
   firewalls:
+    api:
+      pattern: ^/api/
+      stateless: true
+      oauth:
+        resource_owners:
+          google: '/api/check-login/google'
+          yahoo:  '/api/check-login/yahoo'
+          custom: '/api/check-login/custom'
+        login_path: /api/login
+        check_path: /api/check-login
+        use_forward: false
+        failure_path: /api/login
+        oauth_user_provider:
+          service: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+        provider: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+      context: hwi_context
     main:
       lazy: true
       pattern: ^/

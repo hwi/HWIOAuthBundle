@@ -11,6 +11,23 @@ security:
       pattern: ^/(login$|connect|login_hwi)
       anonymous: lazy
       context: hwi_context
+    api:
+      pattern: ^/api/
+      anonymous: lazy
+      stateless: true
+      oauth:
+        resource_owners:
+          google: '/api/check-login/google'
+          yahoo:  '/api/check-login/yahoo'
+          custom: '/api/check-login/custom'
+        login_path: /api/login
+        check_path: /api/check-login
+        use_forward: false
+        failure_path: /api/login
+        oauth_user_provider:
+          service: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+        provider: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
+      context: hwi_context
     main:
       pattern: ^/
       anonymous: lazy

@@ -21,6 +21,8 @@ use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\SecurityBundle\Security\FirewallConfig;
+use Symfony\Bundle\SecurityBundle\Security\FirewallMap;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -120,6 +122,19 @@ final class RedirectToServiceControllerTest extends TestCase
         $controller->redirectToServiceAction($this->request, 'facebook');
     }
 
+    protected function createFirewallMapMock(): FirewallMap
+    {
+        $firewallMap = $this->createMock(FirewallMap::class);
+
+        $firewallMap
+            ->expects($this->any())
+            ->method('getFirewallConfig')
+            ->willReturn(new FirewallConfig('main', '/path/a'))
+        ;
+
+        return $firewallMap;
+    }
+
     private function createController(bool $failedUseReferer = false, bool $useReferer = false): RedirectToServiceController
     {
         $resourceOwner = $this->createMock(ResourceOwnerInterface::class);
@@ -140,10 +155,11 @@ final class RedirectToServiceControllerTest extends TestCase
         $utils = new OAuthUtils(
             $this->createMock(HttpUtils::class),
             $this->createMock(AuthorizationCheckerInterface::class),
+            $this->createFirewallMapMock(),
             true,
             'IS_AUTHENTICATED_REMEMBERED'
         );
-        $utils->addResourceOwnerMap($ownerMap);
+        $utils->addResourceOwnerMap('main', $ownerMap);
 
         return new RedirectToServiceController(
             $utils,

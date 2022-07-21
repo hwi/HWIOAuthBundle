@@ -24,6 +24,8 @@ use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\SecurityBundle\Security\FirewallConfig;
+use Symfony\Bundle\SecurityBundle\Security\FirewallMap;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -139,6 +141,7 @@ abstract class AbstractConnectControllerTest extends TestCase
         $this->oAuthUtils = new OAuthUtils(
             $httpUtils,
             $this->createMock(AuthorizationCheckerInterface::class),
+            $this->createFirewallMapMock(),
             true,
             'IS_AUTHENTICATED_REMEMBERED'
         );
@@ -169,5 +172,18 @@ abstract class AbstractConnectControllerTest extends TestCase
             ->with('IS_AUTHENTICATED_REMEMBERED')
             ->willReturn($granted)
         ;
+    }
+
+    protected function createFirewallMapMock(): FirewallMap
+    {
+        $firewallMap = $this->createMock(FirewallMap::class);
+
+        $firewallMap
+            ->expects($this->any())
+            ->method('getFirewallConfig')
+            ->willReturn(new FirewallConfig('main', '/path/a'))
+        ;
+
+        return $firewallMap;
     }
 }
