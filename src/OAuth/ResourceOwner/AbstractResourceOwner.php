@@ -295,6 +295,8 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
             parse_str($rawResponse->getContent(false), $response);
 
             return $response;
+        } catch (TransportExceptionInterface $e) {
+            throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
         }
     }
 
