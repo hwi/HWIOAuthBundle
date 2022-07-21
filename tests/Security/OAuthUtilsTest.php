@@ -315,7 +315,7 @@ final class OAuthUtilsTest extends TestCase
         $urlGenerator
             ->expects($this->any())
             ->method('generate')
-            ->willReturn(($generatedUrl))
+            ->willReturn($generatedUrl)
         ;
 
         return new HttpUtils($urlGenerator);

@@ -3,7 +3,7 @@
     "type":        "symfony-bundle",
     "homepage":    "https://github.com/hwi/HWIOAuthBundle",
     "license":     "MIT",
-    "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony2.",
+    "description": "Support for authenticating users using both OAuth1.0a and OAuth2 in Symfony.",
     "keywords":    [
         "authentication",
         "firewall",
@@ -94,32 +94,33 @@
 
     "require": {
         "php":                            "^7.4 || ^8.0",
-        "symfony/framework-bundle":       "^4.4.20 || ^5.4 || ^6.0",
-        "symfony/security-bundle":        "^4.4 || ^5.4 || ^6.0",
-        "symfony/options-resolver":       "^4.4 || ^5.4 || ^6.0",
-        "symfony/form":                   "^4.4 || ^5.4 || ^6.0",
-        "symfony/templating":             "^4.4 || ^5.4 || ^6.0",
-        "symfony/http-client":            "^4.4 || ^5.4 || ^6.0"
+        "symfony/framework-bundle":       "^4.4.20 || ^5.4 || ^6.1",
+        "symfony/security-bundle":        "^4.4 || ^5.4 || ^6.1",
+        "symfony/options-resolver":       "^4.4 || ^5.4 || ^6.1",
+        "symfony/form":                   "^4.4 || ^5.4 || ^6.1",
+        "symfony/templating":             "^4.4 || ^5.4 || ^6.1",
+        "symfony/http-client":            "^4.4 || ^5.4 || ^6.1"
     },
 
     "require-dev": {
         "doctrine/doctrine-bundle":     "^2.4",
         "doctrine/orm":                 "^2.9",
-        "symfony/browser-kit":          "^4.4.20 || ^5.4 || ^6.0",
-        "symfony/css-selector":         "^4.4 || ^5.4 || ^6.0",
-        "symfony/phpunit-bridge":       "^5.4 || ^6.0",
-        "symfony/property-access":      "^4.4 || ^5.4 || ^6.0",
-        "symfony/validator":            "^4.4 || ^5.4 || ^6.0",
-        "symfony/twig-bundle":          "^4.4 || ^5.4 || ^6.0",
-        "symfony/stopwatch":            "^5.4 || ^6.0",
-        "symfony/translation":          "^4.4 || ^5.4 || ^6.0",
-        "symfony/yaml":                 "^4.4 || ^5.4 || ^6.0",
+        "symfony/browser-kit":          "^4.4.20 || ^5.4 || ^6.1",
+        "symfony/css-selector":         "^4.4 || ^5.4 || ^6.1",
+        "symfony/phpunit-bridge":       "^5.4 || ^6.1",
+        "symfony/property-access":      "^4.4 || ^5.4 || ^6.1",
+        "symfony/validator":            "^4.4 || ^5.4 || ^6.1",
+        "symfony/twig-bundle":          "^4.4 || ^5.4 || ^6.1",
+        "symfony/stopwatch":            "^5.4 || ^6.1",
+        "symfony/translation":          "^4.4 || ^5.4 || ^6.1",
+        "symfony/yaml":                 "^4.4 || ^5.4 || ^6.1",
         "phpunit/phpunit":              "^9.5.12",
         "friendsofphp/php-cs-fixer":    "^3.2",
         "symfony/monolog-bundle":       "^3.4",
         "phpstan/phpstan":              "^1.2",
         "phpstan/phpstan-symfony":      "^1.0",
-        "phpstan/extension-installer":  "^1.1"
+        "phpstan/extension-installer":  "^1.1",
+        "firebase/php-jwt":             "^5.5"
     },
 
     "config": {
@@ -142,6 +143,7 @@
 
     "suggest": {
         "doctrine/doctrine-bundle":     "to use Doctrine user provider",
+        "firebase/php-jwt":             "to use JWT utility functions",
         "symfony/property-access":      "to use FOSUB integration with this bundle",
         "symfony/twig-bundle":          "to use the Twig hwi_oauth_* functions"
     },

@@ -51,7 +51,7 @@ json;
         $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret', 'access_token' => 'token'];
         $userResponse = $resourceOwner->getUserInformation($accessToken);
 
-        $this->assertEquals('georges', $userResponse->getUsername());
+        $this->assertEquals('georges', $userResponse->getUserIdentifier());
         $this->assertEquals('georges', $userResponse->getNickname());
         $this->assertEquals('Georges ABITBOL', $userResponse->getRealName());
         $this->assertEquals('http://path/to/image', $userResponse->getProfilePicture());

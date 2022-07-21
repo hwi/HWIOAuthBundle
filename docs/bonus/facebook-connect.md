@@ -115,7 +115,7 @@ The following example bases also on the Facebook ["Login with Javascript SDK"](h
     </p>
 
     {# Bonus: Show all available login link in HWIOAuthBundle #}
-    {% render(controller('HWI\\Bundle\\OAuthBundle\\Controller\\ConnectController::connectAction')) %}
+    {% render(controller('HWI\\Bundle\\OAuthBundle\\Controller\\Connect\\ConnectController::connectAction')) %}
 {% endblock %}
 ```
 

@@ -9,17 +9,19 @@
  * file that was distributed with this source code.
  */
 
-namespace HWI\Bundle\OAuthBundle\Tests\Controller;
+namespace HWI\Bundle\OAuthBundle\Tests\Controller\Connect;
 
+use HWI\Bundle\OAuthBundle\Controller\Connect\ConnectController;
 use HWI\Bundle\OAuthBundle\Event\FilterUserResponseEvent;
 use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-final class ConnectControllerConnectServiceActionTest extends AbstractConnectControllerTest
+final class ConnectControllerTest extends AbstractConnectControllerTest
 {
     public function testNotEnabled(): void
     {
@@ -46,7 +48,7 @@ final class ConnectControllerConnectServiceActionTest extends AbstractConnectCon
 
         $this->mockAuthorizationCheck();
 
-        $controller = $this->createConnectController(true, true);
+        $controller = $this->createConnectController();
         $controller->connectServiceAction($this->request, 'unknown');
     }
 
@@ -204,5 +206,28 @@ final class ConnectControllerConnectServiceActionTest extends AbstractConnectCon
 
         $controller = $this->createConnectController();
         $controller->connectServiceAction($this->request, 'facebook');
+    }
+
+    private function createConnectController(
+        bool $connectEnabled = true,
+        bool $confirmConnect = true
+    ): ConnectController {
+        return new ConnectController(
+            $this->oAuthUtils,
+            $this->resourceOwnerMapLocator,
+            $this->createMock(RequestStack::class),
+            $this->eventDispatcher,
+            $this->tokenStorage,
+            $this->userChecker,
+            $this->authorizationChecker,
+            $this->formFactory,
+            $this->twig,
+            $this->router,
+            'IS_AUTHENTICATED_REMEMBERED',
+            true,
+            'fake_route',
+            $confirmConnect,
+            $connectEnabled ? $this->accountConnector : null
+        );
     }
 }

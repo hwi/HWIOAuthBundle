@@ -72,7 +72,7 @@ json;
          */
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
-        $this->assertEquals('wizzler', $userResponse->getUsername());
+        $this->assertEquals('wizzler', $userResponse->getUserIdentifier());
         $this->assertEquals('wizzler', $userResponse->getNickname());
         $this->assertEquals('JM Wizzler', $userResponse->getRealName());
         $this->assertEquals('email@example.com', $userResponse->getEmail());
@@ -99,7 +99,7 @@ json;
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
         $this->assertInstanceOf($class, $userResponse);
-        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo666', $userResponse->getUserIdentifier());
         $this->assertEquals('foo', $userResponse->getNickname());
         $this->assertEquals('token', $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());

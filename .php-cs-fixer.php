@@ -30,6 +30,7 @@ return (new PhpCsFixer\Config())
             'allow_mixed' => true,
             'allow_unused_params' => false,
         ],
+        'phpdoc_types_order' => false,
     ))
     ->setRiskyAllowed(true)
     ->setFinder(

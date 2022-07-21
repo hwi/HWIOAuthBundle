@@ -57,9 +57,9 @@ final class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
 
         $normalizer = function (Options $options, $value) {
             return str_replace(
-              '{keycloak_url}',
-              $options['base_url'].'/realms/'.$options['realm'].'/protocol/'.$options['protocol'],
-              $value
+                '{keycloak_url}',
+                $options['base_url'].'/realms/'.$options['realm'].'/protocol/'.$options['protocol'],
+                $value
             );
         };
 

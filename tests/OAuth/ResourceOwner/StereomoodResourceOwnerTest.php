@@ -44,7 +44,7 @@ json;
         );
         $userResponse = $resourceOwner->getUserInformation($accessToken);
 
-        $this->assertEquals('token', $userResponse->getUsername());
+        $this->assertEquals('token', $userResponse->getUserIdentifier());
         $this->assertEquals('token', $userResponse->getNickname());
         $this->assertEquals($accessToken['oauth_token'], $userResponse->getAccessToken());
         $this->assertEquals($accessToken['oauth_token_secret'], $userResponse->getTokenSecret());
@@ -65,7 +65,7 @@ json;
         $userResponse = $resourceOwner->getUserInformation($accessToken);
 
         $this->assertInstanceOf($class, $userResponse);
-        $this->assertEquals('foo666', $userResponse->getUsername());
+        $this->assertEquals('foo666', $userResponse->getUserIdentifier());
         $this->assertEquals('foo', $userResponse->getNickname());
         $this->assertEquals('token', $userResponse->getAccessToken());
     }

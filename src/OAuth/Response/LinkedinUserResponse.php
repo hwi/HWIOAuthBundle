@@ -16,7 +16,7 @@ final class LinkedinUserResponse extends PathUserResponse
     /**
      * {@inheritdoc}
      */
-    public function getFirstName()
+    public function getFirstName(): ?string
     {
         return $this->getPreferredLocaleValue('firstname');
     }
@@ -24,7 +24,7 @@ final class LinkedinUserResponse extends PathUserResponse
     /**
      * {@inheritdoc}
      */
-    public function getLastName()
+    public function getLastName(): ?string
     {
         return $this->getPreferredLocaleValue('lastname');
     }
@@ -32,7 +32,7 @@ final class LinkedinUserResponse extends PathUserResponse
     /**
      * {@inheritdoc}
      */
-    public function getProfilePicture()
+    public function getProfilePicture(): ?string
     {
         // https://docs.microsoft.com/en-us/linkedin/shared/references/v2/profile/profile-picture
         /** @var array<string, string|array<string, array<int, array<string, mixed>>>> $profilePicture */
@@ -45,14 +45,14 @@ final class LinkedinUserResponse extends PathUserResponse
             return null;
         }
 
-        $publicElements = array_filter($profilePicture['displayImage~']['elements'], function ($element) {
+        $publicElements = array_filter($profilePicture['displayImage~']['elements'], static function ($element) {
             return 'PUBLIC' === $element['authorizationMethod'];
         });
         if (0 === \count($publicElements)) {
             return null;
         }
 
-        // the last images seems to always be the one with the best quality so we take this one
+        // the last images seems to always be the one with the best quality, so we take this one
         $element = array_values(\array_slice($publicElements, -1))[0];
 
         return $element['identifiers'][0]['identifier'];
@@ -61,12 +61,10 @@ final class LinkedinUserResponse extends PathUserResponse
     /**
      * Helper to extract the preferred locale value from MultiLocaleString
      * https://docs.microsoft.com/en-us/linkedin/shared/references/v2/object-types#multilocalestring.
-     *
-     * @param string $path
      */
-    protected function getPreferredLocaleValue($path)
+    private function getPreferredLocaleValue(string $path): ?string
     {
-        /** @var array<string, array<string, string>> $multiLocaleString */
+        /** @var array<string, array<string, string|null>> $multiLocaleString */
         $multiLocaleString = $this->getValueForPath($path);
 
         $locale = '';

@@ -44,7 +44,7 @@ json;
         $accessToken = ['oauth_token' => 'token', 'oauth_token_secret' => 'secret'];
         $userResponse = $resourceOwner->getUserInformation($accessToken);
 
-        $this->assertEquals('1', $userResponse->getUsername());
+        $this->assertEquals('1', $userResponse->getUserIdentifier());
         $this->assertEquals('1', $userResponse->getNickname());
         $this->assertEquals('bar', $userResponse->getRealName());
         $this->assertEquals($accessToken['oauth_token'], $userResponse->getAccessToken());

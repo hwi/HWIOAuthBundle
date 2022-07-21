@@ -16,8 +16,10 @@ use HWI\Bundle\OAuthBundle\Tests\Fixtures\MyCustomProvider;
 use PHPUnit\Framework\TestCase;
 use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
+use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Yaml\Parser;
 
 /**
@@ -464,10 +466,26 @@ final class HWIOAuthExtensionTest extends TestCase
         ];
     }
 
+    public function testRegistersResourceOwnerServiceLocator(): void
+    {
+        $this->createEmptyConfiguration();
+
+        $this->assertTrue($this->containerBuilder->hasAlias('hwi_oauth.resource_owners.locator'));
+        $locatorDefinition = $this->containerBuilder->findDefinition('hwi_oauth.resource_owners.locator');
+
+        $this->assertEquals(
+            [
+                'any_name' => new ServiceClosureArgument(new Reference('hwi_oauth.resource_owner.any_name')),
+                'some_service' => new ServiceClosureArgument(new Reference('hwi_oauth.abstract_resource_owner.generic')),
+            ],
+            $locatorDefinition->getArgument(0)
+        );
+    }
+
     public function testCreateResourceOwnerService(): void
     {
         $extension = new HWIOAuthExtension();
-        $extension->createResourceOwnerService($this->containerBuilder, 'my_github', [
+        $reference = $extension->createResourceOwnerService($this->containerBuilder, 'my_github', [
             'type' => 'github',
             'client_id' => '42',
             'client_secret' => 'foo',
@@ -475,6 +493,8 @@ final class HWIOAuthExtensionTest extends TestCase
 
         /** @var array<string, ChildDefinition> $definitions */
         $definitions = $this->containerBuilder->getDefinitions();
+
+        $this->assertSame('hwi_oauth.resource_owner.my_github', (string) $reference);
 
         $this->assertArrayHasKey('hwi_oauth.resource_owner.my_github', $definitions);
         $this->assertEquals('%hwi_oauth.resource_owner.github.class%', $definitions['hwi_oauth.resource_owner.my_github']->getClass());
@@ -488,13 +508,11 @@ final class HWIOAuthExtensionTest extends TestCase
     public function testCreateResourceOwnerServiceWithService(): void
     {
         $extension = new HWIOAuthExtension();
-        $extension->createResourceOwnerService($this->containerBuilder, 'external_ressource_owner', [
+        $reference = $extension->createResourceOwnerService($this->containerBuilder, 'external_ressource_owner', [
             'service' => 'my.service',
         ]);
 
-        $aliases = $this->containerBuilder->getAliases();
-        $this->assertArrayHasKey('hwi_oauth.resource_owner.external_ressource_owner', $aliases);
-        $this->assertEquals('my.service', $aliases['hwi_oauth.resource_owner.external_ressource_owner']);
+        $this->assertSame('my.service', (string) $reference);
     }
 
     public function testCreateResourceOwnerServiceWithWrongClass(): void
@@ -540,13 +558,6 @@ final class HWIOAuthExtensionTest extends TestCase
         $loader->load([$config], $this->containerBuilder);
     }
 
-    protected function createFullConfiguration(): void
-    {
-        $config = $this->getFullConfig();
-        $loader = new HWIOAuthExtension();
-        $loader->load([$config], $this->containerBuilder);
-    }
-
     protected function getEmptyConfig(): array
     {
         $yaml = <<<EOF
@@ -561,90 +572,6 @@ EOF;
         $parser = new Parser();
 
         return $parser->parse($yaml);
-    }
-
-    protected function getFullConfig(): array
-    {
-        $yaml = <<<EOF
-resource_owners:
-    github:
-        type:                github
-        client_id:           client_id
-        client_secret:       client_secret
-        scope:               ""
-
-    google:
-        type:                google
-        client_id:           client_id
-        client_secret:       client_secret
-        scope:               ""
-        user_response_class: \Our\Custom\Response\Class
-        paths:
-            email:          email
-            profilepicture: picture
-
-    facebook:
-        type:                facebook
-        client_id:           client_id
-        client_secret:       client_secret
-        scope:               ""
-        paths:
-            nickname:        [email, id]
-
-    my_custom_oauth2:
-        type:                oauth2
-        client_id:           client_id
-        client_secret:       client_secret
-        access_token_url:    https://path.to/oauth/v2/token
-        authorization_url:   https://path.to/oauth/v2/authorize
-        infos_url:           https://path.to/api/user
-        scope:               ""
-        user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\AdvancedPathUserResponse
-        paths:
-            identifier: id
-            nickname:   username
-            realname:   username
-            email:      email
-
-    my_custom_oauth1:
-        type:                oauth1
-        client_id:           client_id
-        client_secret:       client_secret
-        request_token_url:   https://path.to/oauth/v1/requestToken
-        access_token_url:    https://path.to/oauth/v1/token
-        authorization_url:   https://path.to/oauth/v1/authorize
-        infos_url:           https://path.to/api/user
-        realm:               ""
-        user_response_class: HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse
-        paths:
-            identifier: id
-            nickname:   username
-            realname:   username
-
-fosub:
-    username_iterations: 30
-
-    properties:
-        github: githubId
-        google: googleId
-        facebook: facebookId
-        my_custom_provider: customId
-
-connect:
-    registration_form_handler: my_registration_form_handler
-    registration_form: my_registration_form
-    account_connector: my_link_provider
-
-http_client:
-    timeout:       5
-    verify_peer:   true
-    ignore_errors: true
-    max_redirects: 5
-
-templating_engine: "php"
-EOF;
-
-        return (new Parser())->parse($yaml);
     }
 
     private function assertAlias(string $value, string $key): void

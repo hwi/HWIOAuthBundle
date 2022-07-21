@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\BaseNode;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -146,7 +147,7 @@ final class Configuration implements ConfigurationInterface
             ->fixXmlConfig('firewall_name')
             ->children()
                 ->arrayNode('firewall_names')
-                    ->setDeprecated('hwi/oauth-bundle', '2.0', 'option "%path%.%node%" is deprecated. Firewall names are collected automatically.')
+                    ->setDeprecated(...$this->getDeprecationParams())
                     ->defaultValue([])
                     ->prototype('scalar')->end()
                 ->end()
@@ -190,41 +191,31 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('base_url')->end()
                             ->scalarNode('access_token_url')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('authorization_url')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('request_token_url')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('revoke_token_url')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('infos_url')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
@@ -232,41 +223,31 @@ final class Configuration implements ConfigurationInterface
                             ->scalarNode('client_secret')->cannotBeEmpty()->end()
                             ->scalarNode('realm')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('scope')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('user_response_class')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('service')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('class')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
@@ -278,17 +259,13 @@ final class Configuration implements ConfigurationInterface
                                     ->thenInvalid('Unknown resource owner type "%s".')
                                 ->end()
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
                             ->scalarNode('use_authorization_to_get_token')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
-                                        return empty($v);
-                                    })
+                                    ->ifEmpty()
                                     ->thenUnset()
                                 ->end()
                             ->end()
@@ -434,5 +411,28 @@ final class Configuration implements ConfigurationInterface
                 ->end()
             ->end()
         ;
+    }
+
+    /**
+     * Returns the correct deprecation params as an array for setDeprecated().
+     *
+     * symfony/config v5.1 introduces a deprecation notice when calling
+     * setDeprecated() with less than 3 args and the getDeprecation() method was
+     * introduced at the same time. By checking if getDeprecation() exists,
+     * we can determine the correct param count to use when calling setDeprecated().
+     *
+     * @return string[]
+     */
+    private function getDeprecationParams(): array
+    {
+        if (method_exists(BaseNode::class, 'getDeprecation')) {
+            return [
+                'hwi/oauth-bundle',
+                '2.0',
+                'option "%path%.%node%" is deprecated. Firewall names are collected automatically.',
+            ];
+        }
+
+        return ['Since hwi/oauth-bundle 2.0: option "hwi_oauth.firewall_names" is deprecated. Firewall names are collected automatically.'];
     }
 }

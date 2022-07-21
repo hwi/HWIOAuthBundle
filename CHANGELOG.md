@@ -1,13 +1,21 @@
 Changelog
 =========
-## 2.0.0-BETA2 (202x-xx-xx)
-* Enhancement: Refresh token listener is disabled by default and will only be enabled if at least one resource owner has option `refresh_on_expure` set to `true`
-* Deprecated: configuration parameter `firewall_names`, firewalls are now computed automatically - all firewalls that have defined `oauth` authenticator/provider will be collected. 
-* Added: Ability to automatically refresh expired access tokens (only for derived from `GenericOAuth2ResourceOwner` resource owners), if option `refresh_on_expire` set to `true`.
-* Enhancement: (@internal) Removed/replaced redundant argument `$firewallNames` from controllers. If controller class was copied and replaced, adapt list of arguments: In controller use `$resourceOwnerMapLocator->getFirewallNames()`.
-* Changed config files from `*.xml` to `*.php` (services and routes). Xml routing configs `connect.xml`, `login.xml` and `redirect.xml` are steel present but deprecated. Please use `*.php` variants in your includes instead.
-* Bugfix: RefreshTokenListener can not be lazy. If current firewall is lazy (or anonymous: lazy) then current auth token is often initializing on `kernel.response`. In this case new access token will not be stored in session. Therefore the expired token will be refreshed on each request.
-* Bugfix: Fixed Authorization Header in CleverResourceOwner::doGetRequest.
+## 2.0.0-BETA3 (2022-xx-xx)
+* BC Break: Dropped support for Symfony: ~6.0,
+* BC Break: Class `Templating\Helper\OAuthHelper` was merged into `Twig\Extension\OAuthRuntime`,
+* Deprecated: method `UserResponseInterface::getUsername()` was deprecated in favour of `UserResponseInterface::getUserIdentifier()` to match changes in Symfony Security component,
+* Enhancement: Class `ConnectController` was split into two smaller ones, `Connect\ConnectController` & `Connect\RegisterController`,
+* Bugfix: Added `OAuth1ResourceOwner` & `OAuth2ResourceOwner` to cover case of implementing custom oauth resource owners,
+* Bugfix: Fixed Authorization Header in `CleverResourceOwner::doGetRequest`.
+
+## 2.0.0-BETA2 (2022-01-16)
+* Deprecated: configuration parameter `firewall_names`, firewalls are now computed automatically - all firewalls that have defined `oauth` authenticator/provider will be collected,
+* Added: Ability to automatically refresh expired access tokens (only for derived from `GenericOAuth2ResourceOwner` resource owners), if option `refresh_on_expire` set to `true`,
+* Enhancement: Refresh token listener is disabled by default and will only be enabled if at least one resource owner has option `refresh_on_expure` set to `true`,
+* Enhancement: (`@internal`) Removed/replaced redundant argument `$firewallNames` from controllers. If controller class was copied and replaced, adapt list of arguments: In controller use `$resourceOwnerMapLocator->getFirewallNames()`,
+* Bugfix: `RefreshTokenListener` cannot be lazy. If current firewall is lazy (or anonymous: lazy) then current auth token is often initializing on `kernel.response`. In this case new access token will not be stored in session. Therefore, the expired token will be refreshed on each request,
+* Bugfix: `InteractiveLoginEvent` will be triggered also for `OAuthAuthenticator`,
+* Maintain: Changed config files from `*.xml` to `*.php` (services and routes). Xml routing configs `connect.xml`, `login.xml` and `redirect.xml` are steel present but deprecated. Please use `*.php` variants in your includes instead.
 
 ## 2.0.0-BETA1 (2021-12-10)
 * BC Break: Dropped PHP 7.3 support,

@@ -67,6 +67,9 @@ final class EntityUserProviderTest extends TestCase
         $provider->loadUserByOAuthUserResponse($this->createUserResponseMock(null, 'not_configured'));
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenUserIsNull(): void
     {
         $this->assertUserNotFoundException();
@@ -78,6 +81,9 @@ final class EntityUserProviderTest extends TestCase
         $provider->loadUserByOAuthUserResponse($userResponseMock);
     }
 
+    /**
+     * @group legacy
+     */
     public function testLoadUserByOAuthUserResponse(): void
     {
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');

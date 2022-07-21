@@ -46,7 +46,7 @@ json;
          */
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
-        $this->assertEquals('kouiskas', $userResponse->getUsername());
+        $this->assertEquals('kouiskas', $userResponse->getUserIdentifier());
         $this->assertEquals('kouiskas', $userResponse->getNickname());
         $this->assertNull($userResponse->getRealName());
         $this->assertEquals('http://a.deviantart.net/avatars/k/o/kouiskas.png?15', $userResponse->getProfilePicture());

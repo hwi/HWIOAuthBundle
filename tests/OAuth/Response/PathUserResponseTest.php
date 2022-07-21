@@ -88,6 +88,28 @@ final class PathUserResponseTest extends TestCase
         $this->assertEquals($paths, $responseObject->getPaths());
     }
 
+    public function testGetUserIdentifier(): void
+    {
+        $paths = ['identifier' => 'id'];
+
+        $this->responseObject->setPaths($paths);
+        $this->responseObject->setData(json_encode(['id' => 666]));
+
+        $this->assertEquals('666', $this->responseObject->getUserIdentifier());
+    }
+
+    public function testGetUserIdentifierWithoutResponseThrowsException(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('User identifier was not found in response.');
+
+        $this->responseObject->setPaths(['identifier' => 'id']);
+        $this->assertNull($this->responseObject->getUserIdentifier());
+    }
+
+    /**
+     * @group legacy
+     */
     public function testGetUsername(): void
     {
         $paths = ['identifier' => 'id'];
@@ -95,9 +117,12 @@ final class PathUserResponseTest extends TestCase
         $this->responseObject->setPaths($paths);
         $this->responseObject->setData(json_encode(['id' => 666]));
 
-        $this->assertEquals(666, $this->responseObject->getUsername());
+        $this->assertEquals('666', $this->responseObject->getUsername());
     }
 
+    /**
+     * @group legacy
+     */
     public function testGetUsernameWithoutResponseReturnsNull(): void
     {
         $this->responseObject->setPaths(['identifier' => 'id']);

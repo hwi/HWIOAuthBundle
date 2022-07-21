@@ -91,7 +91,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
             throw new \RuntimeException(sprintf("No property defined for entity for resource owner '%s'.", $resourceOwnerName));
         }
 
-        $username = $response->getUsername();
+        $username = method_exists($response, 'getUserIdentifier') ? $response->getUserIdentifier() : $response->getUsername();
         if (null === $user = $this->findUser([$this->properties[$resourceOwnerName] => $username])) {
             throw $this->createUserNotFoundException($username, sprintf("User '%s' not found.", $username));
         }

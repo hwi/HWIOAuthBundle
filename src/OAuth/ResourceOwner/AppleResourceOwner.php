@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use Firebase\JWT\JWT;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,6 +20,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
  * @author Josip Letica <leticajosip.09@gmail.com>
+ * @author Sébastien Alfaiate <seb33300@hotmail.com>
  */
 final class AppleResourceOwner extends GenericOAuth2ResourceOwner
 {
@@ -78,7 +80,7 @@ final class AppleResourceOwner extends GenericOAuth2ResourceOwner
             'code' => $request->request->get('code'),
             'grant_type' => 'authorization_code',
             'client_id' => $this->options['client_id'],
-            'client_secret' => $this->options['client_secret'],
+            'client_secret' => $this->getClientSecret(),
             'redirect_uri' => $redirectUri,
         ], $extraParameters);
 
@@ -136,12 +138,15 @@ final class AppleResourceOwner extends GenericOAuth2ResourceOwner
             'scope' => 'name email',
             'appsecret_proof' => false,
             'response_mode' => 'form_post',
+            'auth_key' => null,
+            'key_id' => null,
+            'team_id' => null,
         ]);
     }
 
     private static function jwtDecode(string $idToken)
     {
-        //// from http://stackoverflow.com/a/28748285/624544
+        // from http://stackoverflow.com/a/28748285/624544
         [, $jwt] = explode('.', $idToken, 3);
 
         // if the token was urlencoded, do some fixes to ensure that it is valid base64 encoded
@@ -160,5 +165,30 @@ final class AppleResourceOwner extends GenericOAuth2ResourceOwner
         }
 
         return $jwt;
+    }
+
+    private function getClientSecret(): string
+    {
+        if ('auto' !== $this->options['client_secret']) {
+            return $this->options['client_secret'];
+        }
+
+        if (!isset($this->options['auth_key'], $this->options['key_id'], $this->options['team_id'])) {
+            throw new \InvalidArgumentException('Options "auth_key", "key_id" and "team_id" must be defined to use automatic "client_secret" generation.');
+        }
+
+        if (!class_exists(JWT::class)) {
+            throw new \RuntimeException('PHP-JWT library is required to use automatic "client_secret" generation. Please try "composer require firebase/php-jwt".');
+        }
+
+        $playload = [
+            'iss' => $this->options['team_id'],
+            'iat' => time(),
+            'exp' => time() + 600,
+            'aud' => 'https://appleid.apple.com',
+            'sub' => $this->options['client_id'],
+        ];
+
+        return JWT::encode($playload, $this->options['auth_key'], 'ES256', $this->options['key_id']);
     }
 }

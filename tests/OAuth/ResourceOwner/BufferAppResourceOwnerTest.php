@@ -47,7 +47,7 @@ json;
          */
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
-        $this->assertEquals('4f0c0a06512f7ef214000000', $userResponse->getUsername());
+        $this->assertEquals('4f0c0a06512f7ef214000000', $userResponse->getUserIdentifier());
         $this->assertEquals('4f0c0a06512f7ef214000000', $userResponse->getNickname());
         $this->assertEquals('4f0c0a06512f7ef214000000', $userResponse->getRealName());
         $this->assertNull($userResponse->getEmail());

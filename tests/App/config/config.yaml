@@ -34,6 +34,19 @@ services:
         class: Symfony\Contracts\HttpClient\HttpClientInterface
         public: true
 
+    app.custom_resource_owner:
+        class: HWI\Bundle\OAuthBundle\Tests\App\ResourceOwner\CustomResourceOwner
+        arguments:
+            $options: {
+                access_token_url: 'http://custom/token',
+                authorization_url: 'http://custom/auth',
+                infos_url: 'http://custom/info',
+                client_id: 'client_id',
+                client_secret: 'client_secret',
+            }
+            $name: 'custom'
+            $storage: '@hwi_oauth.storage.session'
+
 doctrine:
     dbal:
         driver: pdo_sqlite
@@ -61,6 +74,8 @@ hwi_oauth:
             scope:         'scope=mail-r sdct-r'
             options:
                 refresh_on_expire: true
+        custom:
+            service: 'app.custom_resource_owner'
 
 twig:
     strict_variables: '%kernel.debug%'

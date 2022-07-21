@@ -9,21 +9,24 @@
  * file that was distributed with this source code.
  */
 
-namespace HWI\Bundle\OAuthBundle\Tests\Controller;
+namespace HWI\Bundle\OAuthBundle\Tests\Controller\Connect;
 
+use HWI\Bundle\OAuthBundle\Controller\Connect\RegisterController;
 use HWI\Bundle\OAuthBundle\Event\FilterUserResponseEvent;
 use HWI\Bundle\OAuthBundle\Event\FormEvent;
 use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
+use HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
-final class ConnectControllerRegistrationActionTest extends AbstractConnectControllerTest
+final class RegistrationControllerTest extends AbstractConnectControllerTest
 {
     public function testNotEnabled(): void
     {
@@ -161,5 +164,24 @@ final class ConnectControllerRegistrationActionTest extends AbstractConnectContr
         $this->formFactory->expects($this->once())
             ->method('create')
             ->willReturn($registrationForm);
+    }
+
+    private function createConnectController(
+        bool $connectEnabled = true
+    ): RegisterController {
+        return new RegisterController(
+            $this->resourceOwnerMapLocator,
+            $this->createMock(RequestStack::class),
+            $this->eventDispatcher,
+            $this->tokenStorage,
+            $this->userChecker,
+            $this->authorizationChecker,
+            $this->formFactory,
+            $this->twig,
+            'IS_AUTHENTICATED_REMEMBERED',
+            RegistrationFormType::class,
+            $connectEnabled ? $this->accountConnector : null,
+            $connectEnabled ? $this->registrationFormHandler : null
+        );
     }
 }
