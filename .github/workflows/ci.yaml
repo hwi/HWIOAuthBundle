@@ -69,13 +69,13 @@ jobs:
           - php: '8.0'
             symfony-version: ^5.4
           - php: '8.0'
-            symfony-version: ^6.0
+            symfony-version: ^6.1
           - php: '8.1'
             symfony-version: ^4.4
           - php: '8.1'
             symfony-version: ^5.4
           - php: '8.1'
-            symfony-version: ^6.0
+            symfony-version: ^6.1
       fail-fast: false
 
     steps:
