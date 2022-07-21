@@ -105,6 +105,7 @@ jobs:
 
       - name: Update project dependencies
         run: |
+          composer global config --no-plugins allow-plugins.symfony/flex true
           composer global require --no-progress --no-scripts --no-plugins symfony/flex
           composer update --no-interaction --no-progress --ansi
 
