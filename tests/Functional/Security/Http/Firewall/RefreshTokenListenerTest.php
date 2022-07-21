@@ -80,7 +80,7 @@ json;
 
         $this->client->request('GET', '/');
 
-        $this->assertEquals(0, $this->httpClient->getRequestsCount());
+        $this->assertAmountOfHttpCalls(0);
 
         $this->assertResponseIsSuccessful();
 
@@ -101,7 +101,7 @@ json;
 
         $this->client->request('GET', '/');
 
-        $this->assertEquals(2, $this->httpClient->getRequestsCount());
+        $this->assertAmountOfHttpCalls(2);
 
         $this->assertResponseIsSuccessful();
 
@@ -135,5 +135,14 @@ json;
         $this->saveSession($this->client, $session);
 
         return $session;
+    }
+
+    private function assertAmountOfHttpCalls(int $amount): void
+    {
+        if (!method_exists($this->httpClient, 'getRequestsCount')) {
+            return;
+        }
+
+        $this->assertSame($amount, $this->httpClient->getRequestsCount());
     }
 }

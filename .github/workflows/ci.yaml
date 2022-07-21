@@ -51,7 +51,7 @@ jobs:
         run: composer phpstan
 
   phpunit:
-    name: PHPUnit (PHP ${{ matrix.php }} + ${{ matrix.symfony-version}})
+    name: PHPUnit (PHP ${{ matrix.php }} + ${{ matrix.symfony-version }})
     runs-on: ubuntu-latest
     timeout-minutes: 20
     strategy:
@@ -92,21 +92,16 @@ jobs:
           extensions: intl, bcmath, curl, openssl, mbstring
           ini-values: memory_limit=-1
 
-      - name: "Install dependencies with Composer"
-        uses: "ramsey/composer-install@v1"
-        with:
-          path: ${{ steps.composercache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Update Symfony version
-        if: matrix.symfony-version != ''
-        run: composer require --no-update "symfony/framework-bundle:${{ matrix.symfony-version }}"
-
       - name: Update project dependencies
         run: |
-          composer global require --no-progress --no-scripts --no-plugins symfony/flex
-          composer update --no-interaction --no-progress --ansi
+          composer global config --no-plugins allow-plugins.symfony/flex true
+          composer global require symfony/flex --no-progress --no-scripts --no-plugins
+          composer config extra.symfony.require "${{ matrix.symfony-version }}"
+
+      - name: Install dependencies with Composer
+        uses: "ramsey/composer-install@v2"
+        with:
+          custom-cache-key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
 
       - name: Run PHPUnit tests
         env:
