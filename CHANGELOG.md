@@ -6,7 +6,8 @@ Changelog
 * Deprecated: method `UserResponseInterface::getUsername()` was deprecated in favour of `UserResponseInterface::getUserIdentifier()` to match changes in Symfony Security component,
 * Enhancement: Class `ConnectController` was split into two smaller ones, `Connect\ConnectController` & `Connect\RegisterController`,
 * Bugfix: Added `OAuth1ResourceOwner` & `OAuth2ResourceOwner` to cover case of implementing custom oauth resource owners,
-* Bugfix: Fixed Authorization Header in `CleverResourceOwner::doGetRequest`.
+* Bugfix: Fixed Authorization Header in `CleverResourceOwner::doGetRequest`,
+* Bugfix: Catch also the `TransportExceptionInterface` in `AbstractResourceOwner::getResponseContent()` method,
 
 ## 2.0.0-BETA2 (2022-01-16)
 * Deprecated: configuration parameter `firewall_names`, firewalls are now computed automatically - all firewalls that have defined `oauth` authenticator/provider will be collected,
