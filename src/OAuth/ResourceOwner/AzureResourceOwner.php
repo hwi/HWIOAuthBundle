@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class AzureResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'azure';
+
     /**
      * {@inheritdoc}
      */

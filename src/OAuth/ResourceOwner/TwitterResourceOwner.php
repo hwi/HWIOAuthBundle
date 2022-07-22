@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class TwitterResourceOwner extends GenericOAuth1ResourceOwner
 {
+    public const TYPE = 'twitter';
+
     /**
      * {@inheritdoc}
      */

@@ -24,6 +24,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class AppleResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'apple';
+
     /**
      * {@inheritdoc}
      */

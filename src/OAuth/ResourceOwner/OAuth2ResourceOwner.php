@@ -13,4 +13,5 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 final class OAuth2ResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'oauth2';
 }

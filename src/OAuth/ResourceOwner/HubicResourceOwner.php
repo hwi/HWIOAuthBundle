@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class HubicResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'hubic';
+
     /**
      * {@inheritdoc}
      */

@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class CleverResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'clever';
+
     /**
      * {@inheritdoc}
      */

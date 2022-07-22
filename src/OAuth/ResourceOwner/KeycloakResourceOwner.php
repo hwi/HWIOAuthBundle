@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'keycloak';
+
     protected array $paths = [
         'identifier' => 'sub',
         'nickname' => 'preferred_username',

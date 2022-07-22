@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class YandexResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'yandex';
+
     /**
      * {@inheritdoc}
      */

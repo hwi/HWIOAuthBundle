@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'auth0';
+
     /**
      * {@inheritdoc}
      */

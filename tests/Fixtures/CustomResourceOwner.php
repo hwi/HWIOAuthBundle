@@ -17,7 +17,7 @@ use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
 use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-final class MyCustomProvider implements ResourceOwnerInterface
+class CustomResourceOwner implements ResourceOwnerInterface
 {
     public function getUserInformation(array $accessToken, array $extraParameters = []): CustomUserResponse
     {

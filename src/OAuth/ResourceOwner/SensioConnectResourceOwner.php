@@ -23,6 +23,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 final class SensioConnectResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'sensio_connect';
+
     /**
      * {@inheritdoc}
      */

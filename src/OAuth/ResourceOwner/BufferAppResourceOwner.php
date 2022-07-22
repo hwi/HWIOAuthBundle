@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class BufferAppResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'bufferapp';
+
     /**
      * {@inheritdoc}
      */

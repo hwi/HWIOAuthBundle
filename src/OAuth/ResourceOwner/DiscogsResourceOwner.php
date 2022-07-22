@@ -15,6 +15,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class DiscogsResourceOwner extends GenericOAuth1ResourceOwner
 {
+    public const TYPE = 'discogs';
+
     /**
      * {@inheritdoc}
      */

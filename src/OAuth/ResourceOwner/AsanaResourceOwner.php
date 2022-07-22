@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class AsanaResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'asana';
+
     /**
      * {@inheritdoc}
      */

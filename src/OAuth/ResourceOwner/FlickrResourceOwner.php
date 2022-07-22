@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class FlickrResourceOwner extends GenericOAuth1ResourceOwner
 {
+    public const TYPE = 'flickr';
+
     /**
      * {@inheritdoc}
      */

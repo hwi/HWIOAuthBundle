@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class AmazonResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'amazon';
+
     /**
      * {@inheritdoc}
      */

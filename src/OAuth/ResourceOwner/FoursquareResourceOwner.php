@@ -19,6 +19,8 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
  */
 final class FoursquareResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'foursquare';
+
     /**
      * {@inheritdoc}
      */

@@ -19,6 +19,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'salesforce';
+
     /**
      * {@inheritdoc}
      */

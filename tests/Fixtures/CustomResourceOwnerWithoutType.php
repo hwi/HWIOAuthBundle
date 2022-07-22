@@ -9,9 +9,8 @@
  * file that was distributed with this source code.
  */
 
-namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
+namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 
-final class OAuth1ResourceOwner extends GenericOAuth1ResourceOwner
+class CustomResourceOwnerWithoutType extends CustomResourceOwner
 {
-    public const TYPE = 'oauth1';
 }

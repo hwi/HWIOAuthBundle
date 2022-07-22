@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class WindowsLiveResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'windows_live';
+
     /**
      * {@inheritdoc}
      */

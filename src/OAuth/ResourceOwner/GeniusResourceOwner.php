@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class GeniusResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'genius';
+
     /**
      * {@inheritdoc}
      */

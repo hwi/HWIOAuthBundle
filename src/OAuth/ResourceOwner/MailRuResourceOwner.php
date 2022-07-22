@@ -22,6 +22,8 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
  */
 final class MailRuResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'mailru';
+
     /**
      * {@inheritdoc}
      */

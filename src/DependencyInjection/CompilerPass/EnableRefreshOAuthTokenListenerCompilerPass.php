@@ -17,16 +17,17 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 final class EnableRefreshOAuthTokenListenerCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         /** @var HWIOAuthExtension $extension */
         $extension = $container->getExtension('hwi_oauth');
+        if (!$extension->isRefreshTokenListenerEnabled()) {
+            return;
+        }
 
-        if ($extension->isRefreshTokenListenerEnabled()) {
-            foreach ($extension->getFirewallNames() as $firewallName => $_) {
-                $container->getDefinition('hwi_oauth.context_listener.token_refresher.'.$firewallName)
-                    ->addMethodCall('enable');
-            }
+        foreach ($extension->getFirewallNames() as $firewallName => $_) {
+            $container->findDefinition('hwi_oauth.context_listener.token_refresher.'.$firewallName)
+                ->addMethodCall('enable');
         }
     }
 }

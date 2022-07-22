@@ -21,6 +21,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class InstagramResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'instagram';
+
     /**
      * {@inheritdoc}
      */

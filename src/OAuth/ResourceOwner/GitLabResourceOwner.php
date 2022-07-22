@@ -18,6 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class GitLabResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'gitlab';
+
     /**
      * {@inheritdoc}
      */

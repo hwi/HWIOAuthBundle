@@ -24,6 +24,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 final class FiwareResourceOwner extends GenericOAuth2ResourceOwner
 {
+    public const TYPE = 'fiware';
+
     /**
      * {@inheritdoc}
      */

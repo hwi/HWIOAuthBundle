@@ -3,7 +3,9 @@ Changelog
 ## 2.0.0-BETA3 (2022-xx-xx)
 * BC Break: Dropped support for Symfony: ~6.0,
 * BC Break: Class `Templating\Helper\OAuthHelper` was merged into `Twig\Extension\OAuthRuntime`,
+* BC Break: When resource owner class doesn't define `TYPE` constant or is `null`, then key will be calculated by converting its class name without `ResourceOwner` suffix to `snake_case`, if neither is felt, then `\LogicException` will be thrown,
 * Deprecated: method `UserResponseInterface::getUsername()` was deprecated in favour of `UserResponseInterface::getUserIdentifier()` to match changes in Symfony Security component,
+* Enhancement: `@internal` resourceOwner oauth types in Configuration are calculated automatically by scandir. All classes extended from `GenericOAuth[X]ResourceOwner` get `oauth[X]` type. If class only implements ResourceOwnerInterface then its oauth type is `unknown`. ResourceOwner key (parameter `type` in configs) should have defined ResourceOwner::TYPE constant. Each user defined custom ResourceOwner class that implemented `ResourceOwnerInterface` will be registered automatically. If `autoconfigure` option is disabled user have to add the tag `hwi_oauth.resource_owner` to the service definition,
 * Enhancement: Class `ConnectController` was split into two smaller ones, `Connect\ConnectController` & `Connect\RegisterController`,
 * Bugfix: Added `OAuth1ResourceOwner` & `OAuth2ResourceOwner` to cover case of implementing custom oauth resource owners,
 * Bugfix: Fixed Authorization Header in `CleverResourceOwner::doGetRequest`,
