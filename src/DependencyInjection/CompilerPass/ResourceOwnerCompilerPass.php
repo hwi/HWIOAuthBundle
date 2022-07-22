@@ -70,6 +70,10 @@ final class ResourceOwnerCompilerPass implements CompilerPassInterface
                 return;
             }
 
+            if (!($match['type'] ?? null)) {
+                continue;
+            }
+
             if (!Configuration::isResourceOwnerSupported($match['type'])) {
                 $e = new \InvalidArgumentException(sprintf('Unknown resource owner type "%s"', $match['type']));
 

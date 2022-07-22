@@ -80,8 +80,8 @@ final class Configuration implements ConfigurationInterface
 
         $type = \defined("$resourceOwnerClass::TYPE") ? $resourceOwnerClass::TYPE : null;
         if (null === $type) {
-            if (preg_match('~(?P<resource_owner>[^\\\\]+)ResourceOwner$~', $resourceOwnerClass, $m)) {
-                $type = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $m['resource_owner']));
+            if (preg_match('~(?P<resource_owner>[^\\\\]+)ResourceOwner$~', $resourceOwnerClass, $match)) {
+                $type = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $match['resource_owner']));
             } else {
                 throw new \LogicException(sprintf('Resource owner class either should have "TYPE" const defined or end with "ResourceOwner" so that type can be calculated by converting its class name without suffix to "snake_case". Given class name is "%s"', $resourceOwnerClass));
             }

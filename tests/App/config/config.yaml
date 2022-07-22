@@ -34,8 +34,8 @@ services:
         class: Symfony\Contracts\HttpClient\HttpClientInterface
         public: true
 
-    app.custom_resource_owner:
-        class: HWI\Bundle\OAuthBundle\Tests\App\ResourceOwner\CustomResourceOwner
+    app.oauth2_resource_owner:
+        class: HWI\Bundle\OAuthBundle\Tests\App\ResourceOwner\OAuth2ResourceOwner
         arguments:
             $options: {
                 access_token_url: 'http://custom/token',
@@ -74,8 +74,18 @@ hwi_oauth:
             scope:         'scope=mail-r sdct-r'
             options:
                 refresh_on_expire: true
-        custom:
-            service: 'app.custom_resource_owner'
+        oauth2:
+            service: 'app.oauth2_resource_owner'
+        oauth1:
+            type: oauth1
+            class: 'HWI\Bundle\OAuthBundle\Tests\App\ResourceOwner\OAuth1ResourceOwner'
+            client_id: "fake_client_id"
+            client_secret: "fake_client_secret"
+            options:
+                access_token_url: 'http://custom/token'
+                authorization_url: 'http://custom/auth'
+                infos_url: 'http://custom/info'
+                request_token_url: 'http://custom/request-token'
 
 twig:
     strict_variables: '%kernel.debug%'

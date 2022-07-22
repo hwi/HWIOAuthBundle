@@ -16,7 +16,8 @@ security:
         resource_owners:
           google: '/api/check-login/google'
           yahoo:  '/api/check-login/yahoo'
-          custom: '/api/check-login/custom'
+          oauth1: '/api/check-login/oauth1'
+          oauth2: '/api/check-login/oauth2'
         login_path: /api/login
         check_path: /api/check-login
         use_forward: false
@@ -32,7 +33,8 @@ security:
         resource_owners:
           google: '/check-login/google'
           yahoo:  '/check-login/yahoo'
-          custom:  '/check-login/custom'
+          oauth1: '/check-login/oauth1'
+          oauth2: '/check-login/oauth2'
         login_path:  /login
         use_forward: false
         failure_path: /login

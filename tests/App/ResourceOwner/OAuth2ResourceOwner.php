@@ -13,6 +13,6 @@ namespace HWI\Bundle\OAuthBundle\Tests\App\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 
-class CustomResourceOwner extends GenericOAuth2ResourceOwner
+final class OAuth2ResourceOwner extends GenericOAuth2ResourceOwner
 {
 }
