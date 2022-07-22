@@ -82,10 +82,15 @@ hwi_oauth:
             client_id: "fake_client_id"
             client_secret: "fake_client_secret"
             options:
-                access_token_url: 'http://custom/token'
-                authorization_url: 'http://custom/auth'
-                infos_url: 'http://custom/info'
-                request_token_url: 'http://custom/request-token'
+                access_token_url: 'http://localhost/token'
+                authorization_url: 'http://localhost/auth'
+                infos_url: 'http://localhost/info'
+                request_token_url: 'http://localhost/request-token'
+        custom:
+            class: 'HWI\Bundle\OAuthBundle\Tests\App\ResourceOwner\CustomResourceOwner'
+            client_id: "fake_client_id"
+            client_secret: "fake_client_secret"
+            base_url: "http://localhost/"
 
 twig:
     strict_variables: '%kernel.debug%'
