@@ -23,6 +23,7 @@ security:
           yahoo:  '/api/check-login/yahoo'
           oauth1: '/api/check-login/oauth1'
           oauth2: '/api/check-login/oauth2'
+          custom: '/api/check-login/custom'
         login_path: /api/login
         check_path: /api/check-login
         use_forward: false
@@ -40,6 +41,7 @@ security:
           yahoo:  '/check-login/yahoo'
           oauth1: '/check-login/oauth1'
           oauth2: '/check-login/oauth2'
+          custom: '/check-login/custom'
         login_path: /login
         use_forward: false
         failure_path: /login
