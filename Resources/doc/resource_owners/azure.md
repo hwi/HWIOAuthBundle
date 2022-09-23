@@ -6,8 +6,12 @@ Just follow the steps as described here: https://docs.microsoft.com/en-us/azure/
 More details on the Azure and OAuth can be found here https://docs.microsoft.com/en-us/azure/active-directory/develop/active-directory-v2-protocols
 
 Next configure a resource owner of type `azure` with appropriate `client_id`,
-`client_secret`. You can also specify which `application` it
-should target (`common` by default)
+`client_secret` and `scope`. You can also specify which `application` it
+should target (`common` by default).
+
+NB: `scope` can have the special value `".default"`, as per the documentation:
+https://learn.microsoft.com/en-us/azure/active-directory/develop/v2-permissions-and-consent#the-default-scope. But you should set a more precise value. 
+
 
 ```yaml
 # app/config.yml
@@ -18,6 +22,7 @@ hwi_oauth:
             type:          azure
             client_id:     <client_id>
             client_secret: <client_secret>
+            scope:         <scope>
 
             options:
                 application: common
