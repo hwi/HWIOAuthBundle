@@ -74,6 +74,8 @@ jobs:
             symfony-version: ^5.4
           - php: '8.1'
             symfony-version: ^6.1
+          - php: '8.2'
+            symfony-version: ^6.1
       fail-fast: false
 
     steps:
