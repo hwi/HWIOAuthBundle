@@ -30,9 +30,9 @@ interface ResourceOwnerInterface
      * @param array $accessToken     The access token
      * @param array $extraParameters An array of parameters to add to the url
      *
-     * @throws HttpTransportException
-     *
      * @return UserResponseInterface the wrapped response interface
+     *
+     * @throws HttpTransportException
      */
     public function getUserInformation(array $accessToken, array $extraParameters = []);
 
@@ -53,9 +53,9 @@ interface ResourceOwnerInterface
      * @param string      $redirectUri     The uri to redirect the client back to
      * @param array       $extraParameters An array of parameters to add to the url
      *
-     * @throws HttpTransportException
-     *
      * @return array The access token
+     *
+     * @throws HttpTransportException
      */
     public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = []);
 

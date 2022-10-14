@@ -177,12 +177,12 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param mixed       $redirectUri     The uri to redirect the client back to
      * @param array       $extraParameters An array of parameters to add to the url
      *
-     * @throws AuthenticationException If an OAuth error occurred or no access token is found
-     * @throws HttpTransportException
-     *
      * @return array array containing the access token and it's 'expires_in' value,
      *               along with any other parameters returned from the authentication
      *               provider
+     *
+     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     * @throws HttpTransportException
      */
     abstract public function getAccessToken(HttpRequest $request, $redirectUri, array $extraParameters = []);
 
@@ -192,12 +192,12 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param string $refreshToken    Refresh token
      * @param array  $extraParameters An array of parameters to add to the url
      *
-     * @throws AuthenticationException If an OAuth error occurred or no access token is found
-     * @throws HttpTransportException
-     *
      * @return array array containing the access token and it's 'expires_in' value,
      *               along with any other parameters returned from the authentication
      *               provider
+     *
+     * @throws AuthenticationException If an OAuth error occurred or no access token is found
+     * @throws HttpTransportException
      */
     public function refreshAccessToken($refreshToken, array $extraParameters = [])
     {
@@ -209,10 +209,10 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      *
      * @param string $token the token (access token or a refresh token) that should be revoked
      *
+     * @return bool returns True if the revocation was successful, otherwise False
+     *
      * @throws AuthenticationException If an OAuth error occurred
      * @throws HttpTransportException
-     *
-     * @return bool returns True if the revocation was successful, otherwise False
      */
     public function revokeToken($token)
     {
@@ -257,9 +257,9 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @param array        $headers The headers of the request
      * @param string       $method  The HTTP method to use
      *
-     * @throws HttpTransportException
-     *
      * @return ResponseInterface The response content
+     *
+     * @throws HttpTransportException
      */
     protected function httpRequest($url, $content = null, array $headers = [], $method = null)
     {
@@ -303,18 +303,18 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * @param string $url
      *
-     * @throws HttpTransportException
-     *
      * @return ResponseInterface
+     *
+     * @throws HttpTransportException
      */
     abstract protected function doGetTokenRequest($url, array $parameters = []);
 
     /**
      * @param string $url
      *
-     * @throws HttpTransportException
-     *
      * @return ResponseInterface
+     *
+     * @throws HttpTransportException
      */
     abstract protected function doGetUserInformationRequest($url, array $parameters = []);
 
