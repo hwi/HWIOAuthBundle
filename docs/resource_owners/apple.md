@@ -1,7 +1,7 @@
 Step 2x: Setup Apple
 =====================
 First you will have to register your application on Apple Developers website. Check out the
-documentation for more information: https://help.apple.com/developer-account/?lang=en#/devde676e696
+documentation for more information: https://developer.apple.com/documentation/sign_in_with_apple/configuring_your_environment_for_sign_in_with_apple
 
 Next configure a resource owner of type `apple` with appropriate
 `client_id`, `client_secret` and `scope`.
