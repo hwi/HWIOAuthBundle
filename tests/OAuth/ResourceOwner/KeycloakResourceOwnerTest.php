@@ -34,4 +34,16 @@ final class KeycloakResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
     protected array $authorizationUrlParams = ['approval_prompt' => 'auto'];
 
     protected string $resourceOwnerClass = KeycloakResourceOwner::class;
+
+
+
+    public function testIdpHint(): void
+    {
+        $resourceOwner = $this->createResourceOwner(['idp_hint' => 'myhint']);
+
+        $this->assertStringContainsString(
+          'kc_idp_hint=myhint',
+          $resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
+    }
 }

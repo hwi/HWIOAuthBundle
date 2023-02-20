@@ -15,6 +15,8 @@ hwi_oauth:
             realm:               <realm_name>
             client_id:           <client_id>
             client_secret:       <client_secret>
+            options:
+                idp_hint:        <auth_hint_idp>
 ```
 
 When you're done. Continue by configuring the security layer or go back to
