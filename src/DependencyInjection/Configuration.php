@@ -218,7 +218,7 @@ final class Configuration implements ConfigurationInterface
                             ->end()
                             ->scalarNode('type')
                                 // will be validated in ResourceOwnerCompilerPass, other apps can register own resource
-                                // owner maps later with tag hei_oauth.resource_owner
+                                // owner maps later with tag hwi_oauth.resource_owner
                                 ->validate()
                                     ->ifEmpty()
                                     ->thenUnset()
