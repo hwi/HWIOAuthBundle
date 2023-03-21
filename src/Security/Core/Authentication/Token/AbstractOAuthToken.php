@@ -55,7 +55,7 @@ abstract class AbstractOAuthToken extends AbstractToken
             $this->expiresIn,
             $this->createdAt,
             $this->resourceOwnerName,
-            \is_callable('parent::__serialize') ? parent::__serialize() : unserialize(parent::serialize()),
+            \is_callable(parent::class.'::__serialize') ? parent::__serialize() : unserialize(parent::serialize()),
         ];
     }
 
@@ -78,7 +78,7 @@ abstract class AbstractOAuthToken extends AbstractToken
             $this->tokenSecret = $this->rawToken['oauth_token_secret'];
         }
 
-        if (\is_callable('parent::__serialize')) {
+        if (\is_callable(parent::class.'::__serialize')) {
             parent::__unserialize($parent);
         } else {
             parent::unserialize(serialize($parent));
