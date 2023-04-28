@@ -1,7 +1,7 @@
 Changelog
 =========
 ## 2.0.0-BETA3 (2022-xx-xx)
-* BC Break: Dropped support for Symfony: ~6.0,
+* BC Break: Dropped support for Symfony: 6.0.*,
 * BC Break: Class `Templating\Helper\OAuthHelper` was merged into `Twig\Extension\OAuthRuntime`,
 * BC Break: When resource owner class doesn't define `TYPE` constant or is `null`, then key will be calculated by converting its class name without `ResourceOwner` suffix to `snake_case`, if neither is felt, then `\LogicException` will be thrown,
 * Deprecated: method `UserResponseInterface::getUsername()` was deprecated in favour of `UserResponseInterface::getUserIdentifier()` to match changes in Symfony Security component,
