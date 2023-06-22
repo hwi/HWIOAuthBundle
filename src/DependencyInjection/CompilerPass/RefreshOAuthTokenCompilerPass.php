@@ -27,7 +27,7 @@ final class RefreshOAuthTokenCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         foreach ($container->getDefinitions() as $listenerId => $listenerDef) {
-            if (0 !== strpos($listenerId, 'hwi_oauth.context_listener.token_refresher.')) {
+            if (!str_starts_with($listenerId, 'hwi_oauth.context_listener.token_refresher.')) {
                 continue;
             }
 
@@ -46,7 +46,7 @@ final class RefreshOAuthTokenCompilerPass implements CompilerPassInterface
             $listenerRefs = $listenerIter->getValues();
             // add listener after security.context_listener.X
             foreach ($listenerRefs as $pos => $posValue) {
-                if (0 === strpos($posValue, 'security.context_listener.')) {
+                if (str_starts_with($posValue, 'security.context_listener.')) {
                     array_splice($listenerRefs, $pos + 1, 0, [new Reference($listenerId)]);
                     break;
                 }
