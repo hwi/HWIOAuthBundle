@@ -35,8 +35,6 @@ final class KeycloakResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 
     protected string $resourceOwnerClass = KeycloakResourceOwner::class;
 
-
-
     public function testIdpHint(): void
     {
         $resourceOwner = $this->createResourceOwner(['idp_hint' => 'myhint']);
