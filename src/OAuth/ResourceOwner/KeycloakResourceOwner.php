@@ -35,6 +35,7 @@ final class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
     {
         return parent::getAuthorizationUrl($redirectUri, array_merge([
           'approval_prompt' => $this->getOption('approval_prompt'),
+          'kc_idp_hint' => $this->getOption('idp_hint'),
         ], $extraParameters));
     }
 
@@ -50,6 +51,7 @@ final class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
           'authorization_url' => '{keycloak_url}/auth',
           'access_token_url' => '{keycloak_url}/token',
           'infos_url' => '{keycloak_url}/userinfo',
+          'idp_hint' => null,
         ]);
 
         $resolver->setRequired([
