@@ -99,7 +99,6 @@
         "symfony/security-bundle":        "^4.4 || ^5.4 || ^6.1",
         "symfony/options-resolver":       "^4.4 || ^5.4 || ^6.1",
         "symfony/form":                   "^4.4 || ^5.4 || ^6.1",
-        "symfony/templating":             "^4.4 || ^5.4 || ^6.1",
         "symfony/http-client":            "^4.4 || ^5.4 || ^6.1"
     },
 
