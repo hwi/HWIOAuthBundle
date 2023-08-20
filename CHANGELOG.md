@@ -12,6 +12,7 @@ Changelog
 * Bugfix: Catch also the `TransportExceptionInterface` in `AbstractResourceOwner::getResponseContent()` method,
 * Bugfix: Current matched Firewall is respected during generation of resource owner check path links,
 * Bugfix: Prevent fatal error in `OAuthUserProvider::loadUserByOAuthUserResponse()` when `nickname` is not available in OAuth response,
+* Bugfix: Use newer version of `firebase/php-jwt` library,
 * Chore: Removed not used Symfony Templating component
 
 ## 2.0.0-BETA2 (2022-01-16)

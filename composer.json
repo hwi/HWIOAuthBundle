@@ -120,7 +120,7 @@
         "phpstan/phpstan":              "^1.2",
         "phpstan/phpstan-symfony":      "^1.0",
         "phpstan/extension-installer":  "^1.1",
-        "firebase/php-jwt":             "^5.5"
+        "firebase/php-jwt":             "^6.8"
     },
 
     "config": {

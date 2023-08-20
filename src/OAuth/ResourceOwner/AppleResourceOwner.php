@@ -183,7 +183,7 @@ final class AppleResourceOwner extends GenericOAuth2ResourceOwner
             throw new \RuntimeException('PHP-JWT library is required to use automatic "client_secret" generation. Please try "composer require firebase/php-jwt".');
         }
 
-        $playload = [
+        $payload = [
             'iss' => $this->options['team_id'],
             'iat' => time(),
             'exp' => time() + 600,
@@ -191,6 +191,6 @@ final class AppleResourceOwner extends GenericOAuth2ResourceOwner
             'sub' => $this->options['client_id'],
         ];
 
-        return JWT::encode($playload, $this->options['auth_key'], 'ES256', $this->options['key_id']);
+        return JWT::encode($payload, $this->options['auth_key'], 'ES256', $this->options['key_id']);
     }
 }
