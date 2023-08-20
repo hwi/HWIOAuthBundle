@@ -13,7 +13,6 @@ namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\OAuthAuthenticator;
 use HWI\Bundle\OAuthBundle\Security\Http\Firewall\RefreshAccessTokenListener;
-use HWI\Bundle\OAuthBundle\Security\Http\Firewall\RefreshAccessTokenListenerOld;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AbstractFactory;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\AuthenticatorFactoryInterface;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\Security\Factory\FirewallListenerFactoryInterface;
@@ -96,18 +95,9 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
         $listenerDef = $container->setDefinition($listenerId, new ChildDefinition('hwi_oauth.context_listener.abstract_token_refresher'));
 
         $listenerDef->addMethodCall('setResourceOwnerMap', [$this->createResourceOwnerMapReference($firewallName)]);
-
-        if ($container->hasDefinition($authenticatorId)) {
-            // new auth manager
-            $listenerDef
-                ->setClass(RefreshAccessTokenListener::class)
-                ->replaceArgument(0, new Reference($authenticatorId));
-        } else {
-            // old auth manager
-            $listenerDef
-                ->setClass(RefreshAccessTokenListenerOld::class)
-                ->replaceArgument(0, new Reference($providerId));
-        }
+        $listenerDef
+            ->setClass(RefreshAccessTokenListener::class)
+            ->replaceArgument(0, new Reference($authenticatorId));
 
         return [$listenerId];
     }

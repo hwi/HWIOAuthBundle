@@ -282,7 +282,7 @@ final class HWIOAuthExtensionTest extends TestCase
     }
 
     /**
-     * @legacy
+     * @group legacy
      */
     public function testConfigurationPassValidOAuth1WithClass(): void
     {
@@ -312,7 +312,7 @@ final class HWIOAuthExtensionTest extends TestCase
     }
 
     /**
-     * @legacy
+     * @group legacy
      */
     public function testConfigurationPassValidOAuth2WithClassOnly(): void
     {
@@ -333,7 +333,7 @@ final class HWIOAuthExtensionTest extends TestCase
     }
 
     /**
-     * @legacy
+     * @group legacy
      */
     public function testConfigurationPassValidOAuth2WithPathsAndClass(): void
     {

@@ -17,7 +17,6 @@ use Doctrine\Persistence\ObjectRepository;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
@@ -57,10 +56,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         $user = $this->findUser(['username' => $identifier]);
 
         if (!$user) {
-            $exception = new UserNotFoundException(sprintf("User '%s' not found.", $identifier));
-            $exception->setUserIdentifier($identifier);
-
-            throw $exception;
+            throw $this->createUserNotFoundException($identifier, sprintf("User '%s' not found.", $identifier));
         }
 
         return $user;
@@ -75,12 +71,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
      */
     public function loadUserByUsername($username)
     {
-        $user = $this->findUser(['username' => $username]);
-        if (!$user) {
-            throw $this->createUserNotFoundException($username, sprintf("User '%s' not found.", $username));
-        }
-
-        return $user;
+        return $this->loadUserByIdentifier($username);
     }
 
     public function loadUserByOAuthUserResponse(UserResponseInterface $response): ?UserInterface
@@ -109,11 +100,10 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
 
         $userId = $accessor->getValue($user, $identifier);
 
-        // @phpstan-ignore-next-line Symfony <5.4 BC layer
-        $username = method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername();
+        $userIdentifier = $user->getUserIdentifier();
 
         if (null === $user = $this->findUser([$identifier => $userId])) {
-            throw $this->createUserNotFoundException($username, sprintf('User with ID "%d" could not be reloaded.', $userId));
+            throw $this->createUserNotFoundException($userIdentifier, sprintf('User with ID "%d" could not be reloaded.', $userId));
         }
 
         return $user;
@@ -133,24 +123,10 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         return $this->repository->findOneBy($criteria);
     }
 
-    /**
-     * @return UsernameNotFoundException|UserNotFoundException
-     */
-    private function createUserNotFoundException(string $username, string $message)
+    private function createUserNotFoundException(string $identifier, string $message): UserNotFoundException
     {
-        if (class_exists(UserNotFoundException::class)) {
-            $exception = new UserNotFoundException($message);
-            $exception->setUserIdentifier($username);
-        } else {
-            if (!class_exists(UsernameNotFoundException::class)) {
-                throw new \RuntimeException('Unsupported Symfony version used!');
-            }
-
-            $exception = new UsernameNotFoundException($message);
-            if (method_exists($exception, 'setUsername')) {
-                $exception->setUsername($username); // @phpstan-ignore-this-line Symfony <5.4 BC layer
-            }
-        }
+        $exception = new UserNotFoundException($message);
+        $exception->setUserIdentifier($identifier);
 
         return $exception;
     }

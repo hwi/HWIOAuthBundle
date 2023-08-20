@@ -95,7 +95,7 @@ final class PathUserResponseTest extends TestCase
         $this->responseObject->setPaths($paths);
         $this->responseObject->setData(json_encode(['id' => 666]));
 
-        $this->assertEquals('666', $this->responseObject->getUserIdentifier());
+        $this->assertEquals('666', $this->responseObject->getUsername());
     }
 
     public function testGetUserIdentifierWithoutResponseThrowsException(): void
@@ -126,7 +126,7 @@ final class PathUserResponseTest extends TestCase
     public function testGetUsernameWithoutResponseReturnsNull(): void
     {
         $this->responseObject->setPaths(['identifier' => 'id']);
-        $this->assertNull($this->responseObject->getUsername());
+        $this->assertNull($this->responseObject->getUserIdentifier());
     }
 
     public function testGetNickname(): void

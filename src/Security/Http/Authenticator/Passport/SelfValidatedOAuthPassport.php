@@ -36,7 +36,7 @@ final class SelfValidatedOAuthPassport extends SelfValidatingPassport
 
         $userBadge = class_exists(UserBadge::class)
             ? new UserBadge(
-                method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername(),
+                $user->getUserIdentifier(),
                 static function () use ($user) { return $user; }
             )
             : $user;

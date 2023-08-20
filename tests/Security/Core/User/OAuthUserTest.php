@@ -40,10 +40,10 @@ final class OAuthUserTest extends TestCase
 
     public function testGetUsername(): void
     {
-        $this->assertEquals('asm89', $this->user->getUsername());
+        $this->assertEquals('asm89', $this->user->getUserIdentifier());
 
         $user = new OAuthUser('other');
-        $this->assertEquals('other', $user->getUsername());
+        $this->assertEquals('other', $user->getUserIdentifier());
     }
 
     public function testEraseCredentials(): void

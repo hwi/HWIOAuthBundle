@@ -49,15 +49,6 @@ final class EntityUserProviderTest extends TestCase
         $provider->loadUserByIdentifier('asm89');
     }
 
-    public function testLoadUserByUsernameThrowsExceptionWhenUserIsNull(): void
-    {
-        $this->assertUserNotFoundException();
-        $this->expectExceptionMessage("User 'asm89' not found.");
-
-        $provider = $this->createEntityUserProvider();
-        $provider->loadUserByUsername('asm89');
-    }
-
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured(): void
     {
         $this->expectException(\RuntimeException::class);
