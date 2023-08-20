@@ -43,7 +43,7 @@ abstract class ResourceOwnerTestCase extends TestCase
     /** @var class-string */
     protected string $resourceOwnerClass;
 
-    protected function createMockResponse(?string $response, ?string $contentType = null, ?int $httpCode = null): MockResponse
+    protected function createMockResponse(?string $response, string $contentType = null, int $httpCode = null): MockResponse
     {
         return new MockResponse(
             $response ?: '',

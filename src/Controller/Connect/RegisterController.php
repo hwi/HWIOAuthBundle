@@ -29,6 +29,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment;
 
@@ -122,10 +123,13 @@ final class RegisterController extends AbstractController
             $event = new FormEvent($form, $request);
             $this->dispatch($event, HWIOAuthEvents::REGISTRATION_SUCCESS);
 
-            $this->accountConnector->connect($form->getData(), $userInformation);
+            /** @var UserInterface $user */
+            $user = $form->getData();
+
+            $this->accountConnector->connect($user, $userInformation);
 
             // Authenticate the user
-            $this->authenticateUser($request, $form->getData(), $error->getResourceOwnerName(), $error->getAccessToken());
+            $this->authenticateUser($request, $user, $error->getResourceOwnerName(), $error->getAccessToken());
 
             if (null === $response = $event->getResponse()) {
                 if ($targetPath = $this->getTargetPath($session)) {
@@ -137,7 +141,7 @@ final class RegisterController extends AbstractController
                 }
             }
 
-            $event = new FilterUserResponseEvent($form->getData(), $request, $response);
+            $event = new FilterUserResponseEvent($user, $request, $response);
             $this->dispatch($event, HWIOAuthEvents::REGISTRATION_COMPLETED);
 
             return $event->getResponse();
@@ -148,7 +152,10 @@ final class RegisterController extends AbstractController
             $session->set('_hwi_oauth.registration_error.'.$key, $error);
         }
 
-        $event = new GetResponseUserEvent($form->getData(), $request);
+        /** @var UserInterface $user */
+        $user = $form->getData();
+
+        $event = new GetResponseUserEvent($user, $request);
         $this->dispatch($event, HWIOAuthEvents::REGISTRATION_INITIALIZE);
 
         if ($response = $event->getResponse()) {

@@ -13,7 +13,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\State;
 
 use HWI\Bundle\OAuthBundle\OAuth\Exception\StateRetrievalException;
 use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
-use InvalidArgumentException;
 use Symfony\Component\Config\Definition\Exception\DuplicateKeyException;
 
 final class State implements StateInterface
@@ -30,7 +29,7 @@ final class State implements StateInterface
      * @param string|array<string,string>|null $parameters The state parameter as a string or assoc array
      * @param bool                             $keepCsrf   Whether to keep the CSRF token in the state or not
      *
-     * @throws InvalidArgumentException
+     * @throws \InvalidArgumentException
      */
     public function __construct($parameters, bool $keepCsrf = true)
     {
@@ -40,7 +39,7 @@ final class State implements StateInterface
 
         if (null !== $parameters) {
             if (!$this->isAssociatedArray($parameters)) {
-                throw new InvalidArgumentException('Constructor argument should be a non-empty, associative array');
+                throw new \InvalidArgumentException('Constructor argument should be a non-empty, associative array');
             }
 
             foreach ($parameters as $key => $value) {
@@ -131,7 +130,7 @@ final class State implements StateInterface
      *
      * @return array<string,string>|null
      */
-    private function parseStringParameter(?string $queryParameter = null): ?array
+    private function parseStringParameter(string $queryParameter = null): ?array
     {
         $urlDecoded = $queryParameter ? urldecode($queryParameter) : '';
 

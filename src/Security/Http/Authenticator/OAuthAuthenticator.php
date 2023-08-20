@@ -205,7 +205,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
      *
      * @return T
      */
-    public function recreateToken(OAuthToken $token, ?UserInterface $user = null): OAuthToken
+    public function recreateToken(OAuthToken $token, UserInterface $user = null): OAuthToken
     {
         $user = $user instanceof UserInterface ? $user : $token->getUser();
 
