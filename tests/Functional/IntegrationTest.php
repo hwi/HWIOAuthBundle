@@ -149,6 +149,7 @@ final class IntegrationTest extends WebTestCase
 
     public function testRequestCheckApi(): void
     {
+        // @phpstan-ignore-next-line
         if (Kernel::MAJOR_VERSION >= 6) {
             $this->markTestSkipped('Skipped due to bug in Symfony Security component: https://github.com/symfony/symfony/issues/51319');
         }

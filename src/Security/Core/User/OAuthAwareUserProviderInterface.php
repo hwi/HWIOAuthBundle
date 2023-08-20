@@ -12,7 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -28,7 +27,7 @@ interface OAuthAwareUserProviderInterface
      *
      * @return UserInterface
      *
-     * @throws UsernameNotFoundException|UserNotFoundException if the user is not found
+     * @throws UserNotFoundException if the user is not found
      */
     public function loadUserByOAuthUserResponse(UserResponseInterface $response);
 }
