@@ -19,6 +19,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Http\SecurityEvents;
 
 final class IntegrationTest extends WebTestCase
@@ -148,6 +149,10 @@ final class IntegrationTest extends WebTestCase
 
     public function testRequestCheckApi(): void
     {
+        if (Kernel::MAJOR_VERSION === 6) {
+            $this->markTestSkipped('Skipped due to bug in Symfony Security component: https://github.com/symfony/symfony/issues/51319');
+        }
+
         $redirectLoginFromService = 'http://localhost/api/check-login/google?'
             .http_build_query([
                 'code' => 'sOmeRand0m-code',
