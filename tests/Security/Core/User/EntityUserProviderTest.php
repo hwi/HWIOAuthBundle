@@ -44,7 +44,7 @@ final class EntityUserProviderTest extends TestCase
         $provider = $this->createEntityUserProvider();
 
         $this->expectException(UserNotFoundException::class);
-        $this->expectDeprecationMessage('User \'asm89\' not found.');
+        $this->expectExceptionMessage('User \'asm89\' not found.');
 
         $provider->loadUserByIdentifier('asm89');
     }
