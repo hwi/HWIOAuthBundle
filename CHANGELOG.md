@@ -11,7 +11,8 @@ Changelog
 * Bugfix: Fixed Authorization Header in `CleverResourceOwner::doGetRequest`,
 * Bugfix: Catch also the `TransportExceptionInterface` in `AbstractResourceOwner::getResponseContent()` method,
 * Bugfix: Current matched Firewall is respected during generation of resource owner check path links,
-* Bugfix: Prevent fatal error in `OAuthUserProvider::loadUserByOAuthUserResponse()` when `nickname` is not available in OAuth response.
+* Bugfix: Prevent fatal error in `OAuthUserProvider::loadUserByOAuthUserResponse()` when `nickname` is not available in OAuth response,
+* Chore: Removed not used Symfony Templating component
 
 ## 2.0.0-BETA2 (2022-01-16)
 * Deprecated: configuration parameter `firewall_names`, firewalls are now computed automatically - all firewalls that have defined `oauth` authenticator/provider will be collected,
