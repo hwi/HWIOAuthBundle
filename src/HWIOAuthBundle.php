@@ -12,15 +12,12 @@
 namespace HWI\Bundle\OAuthBundle;
 
 use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\EnableRefreshOAuthTokenListenerCompilerPass;
-use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\RefreshOAuthTokenCompilerPass;
 use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\ResourceOwnerCompilerPass;
 use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthAuthenticatorFactory;
-use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthFactory;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
-use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
 
 /**
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
@@ -42,13 +39,11 @@ class HWIOAuthBundle extends Bundle
 
         if (method_exists($extension, 'addAuthenticatorFactory')) {
             $extension->addAuthenticatorFactory(new OAuthAuthenticatorFactory($firewallNames));
-        } elseif (interface_exists(AuthenticationProviderInterface::class)) {
-            // @phpstan-ignore-next-line Symfony 4.4 BC layer
-            $extension->addSecurityListenerFactory(new OAuthFactory($firewallNames));
-            $container->addCompilerPass(new RefreshOAuthTokenCompilerPass());
-        } else {
-            // @phpstan-ignore-next-line Symfony < 5.4 BC layer
+        } elseif (method_exists($extension, 'addSecurityListenerFactory')) {
+            // Symfony < 5.4 BC layer
             $extension->addSecurityListenerFactory(new OAuthAuthenticatorFactory($firewallNames));
+        } else {
+            throw new \RuntimeException('Unsupported Symfony Security component version');
         }
 
         $container->addCompilerPass(new ResourceOwnerCompilerPass());

@@ -9,19 +9,6 @@
  * file that was distributed with this source code.
  */
 
-namespace Symfony\Component\DependencyInjection\Loader\Configurator;
-
-// BC symfony 4.4
-class_exists(ContainerConfigurator::class);
-
-if (!\function_exists(__NAMESPACE__.'\\service')) {
-    function service($class): ReferenceConfigurator
-    {
-        /* @phpstan-ignore-next-line function ref not found */
-        return ref($class);
-    }
-}
-
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
