@@ -436,7 +436,7 @@ json;
         array $options = [],
         array $paths = [],
         array $responses = [],
-        ?StateInterface $state = null
+        StateInterface $state = null
     ): GenericOAuth2ResourceOwner {
         /** @var GenericOAuth2ResourceOwner $resourceOwner */
         $resourceOwner = parent::createResourceOwner($options, $paths, $responses);

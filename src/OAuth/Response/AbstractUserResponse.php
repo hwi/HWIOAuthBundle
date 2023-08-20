@@ -13,7 +13,6 @@ namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use JsonException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -127,7 +126,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
 
         try {
             $this->data = json_decode($data, true, 512, \JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
+        } catch (\JsonException $exception) {
             throw new AuthenticationException('Response is not a valid JSON code.');
         }
     }

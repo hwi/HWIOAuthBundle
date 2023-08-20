@@ -243,7 +243,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     {
         $normalizedUrl = $url;
         if (!empty($parameters)) {
-            $normalizedUrl .= (false !== strpos($url, '?') ? '&' : '?').http_build_query($parameters, '', '&');
+            $normalizedUrl .= (str_contains($url, '?') ? '&' : '?').http_build_query($parameters, '', '&');
         }
 
         return $normalizedUrl;

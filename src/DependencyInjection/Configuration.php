@@ -396,7 +396,7 @@ final class Configuration implements ConfigurationInterface
             ->files();
 
         foreach ($files as $f) {
-            if (false === strpos($f->getFilename(), 'ResourceOwner')) {
+            if (!str_contains($f->getFilename(), 'ResourceOwner')) {
                 continue;
             }
 

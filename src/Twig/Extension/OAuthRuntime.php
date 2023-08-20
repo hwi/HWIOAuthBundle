@@ -44,7 +44,7 @@ final class OAuthRuntime implements RuntimeExtensionInterface
         return $this->oauthUtils->getLoginUrl($this->getMainRequest(), $name);
     }
 
-    public function getAuthorizationUrl(string $name, ?string $redirectUrl = null, array $extraParameters = []): string
+    public function getAuthorizationUrl(string $name, string $redirectUrl = null, array $extraParameters = []): string
     {
         return $this->oauthUtils->getAuthorizationUrl($this->getMainRequest(), $name, $redirectUrl, $extraParameters);
     }
