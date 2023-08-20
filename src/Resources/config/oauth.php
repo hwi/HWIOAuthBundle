@@ -44,10 +44,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set('hwi_oauth.context_listener.abstract_token_refresher', AbstractRefreshAccessTokenListener::class)
         ->abstract()
-        ->arg(0, \function_exists(__NAMESPACE__.'\abstract_arg')
-            ? abstract_arg('OAuthAuthenticator or AuthenticationProviderInterface')
-            : null // Symfony 4.4
-        )
+        ->arg(0, abstract_arg('OAuthAuthenticator or AuthenticationProviderInterface'))
         ->call('setTokenStorage', [service('security.token_storage')]);
 
     // Session storage
