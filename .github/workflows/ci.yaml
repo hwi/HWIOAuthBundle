@@ -84,7 +84,7 @@ jobs:
           php-version: "${{ matrix.php }}"
           tools: pecl, composer
           extensions: intl, bcmath, curl, openssl, mbstring
-          ini-values: memory_limit=-1, session.save_path=/tmp
+          ini-values: memory_limit=-1
 
       - name: Update project dependencies
         run: |
