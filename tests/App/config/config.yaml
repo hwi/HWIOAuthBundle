@@ -79,7 +79,6 @@ hwi_oauth:
         oauth2:
             service: 'app.oauth2_resource_owner'
         oauth1:
-            type: oauth1
             class: 'HWI\Bundle\OAuthBundle\Tests\App\ResourceOwner\OAuth1ResourceOwner'
             client_id: "fake_client_id"
             client_secret: "fake_client_secret"
