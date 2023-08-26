@@ -16,10 +16,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\Functional\Controller;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Tests\Functional\AuthenticationHelperTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpClient\MockHttpClient;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Security as DeprecatedSecurity;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class LoginControllerTest extends WebTestCase
@@ -48,7 +48,7 @@ final class LoginControllerTest extends WebTestCase
         $client = self::createClient();
 
         $session = $this->getSession($client);
-        $session->set(Security::AUTHENTICATION_ERROR, new AccountNotLinkedException());
+        $session->set($this->getSecurityErrorKey(), new AccountNotLinkedException());
 
         $this->saveSession($client, $session);
 
@@ -67,10 +67,10 @@ final class LoginControllerTest extends WebTestCase
         $client = self::createClient();
         $client->getContainer()->set('hwi_oauth.http_client', $httpClient);
 
-        $exception = $this->createUserNotFoundException();
+        $exception = new UserNotFoundException();
 
         $session = $this->getSession($client);
-        $session->set(Security::AUTHENTICATION_ERROR, $exception);
+        $session->set($this->getSecurityErrorKey(), $exception);
 
         $this->logIn($client, $session);
 
@@ -82,12 +82,8 @@ final class LoginControllerTest extends WebTestCase
         $this->assertSame($exception->getMessageKey(), $crawler->filter('span')->text(), $response->getContent());
     }
 
-    private function createUserNotFoundException()
+    private function getSecurityErrorKey(): string
     {
-        if (class_exists(UserNotFoundException::class)) {
-            return new UserNotFoundException();
-        }
-
-        return new UsernameNotFoundException();
+        return class_exists(Security::class) ? Security::AUTHENTICATION_ERROR : DeprecatedSecurity::AUTHENTICATION_ERROR;
     }
 }
