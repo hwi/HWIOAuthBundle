@@ -155,6 +155,10 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
      */
     public function refreshToken(OAuthToken $token): OAuthToken
     {
+        if (!$token->isExpired() && null !== $token->getUser()) {
+            return $this->recreateToken($token, $token->getUser());
+        }
+
         $resourceOwner = $this->resourceOwnerMap->getResourceOwnerByName($token->getResourceOwnerName());
         if (!$resourceOwner) {
             throw new AuthenticationServiceException('Unknown resource owner set on token: '.$token->getResourceOwnerName());
