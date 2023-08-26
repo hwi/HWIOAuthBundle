@@ -19,7 +19,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Security\Http\SecurityEvents;
 
 final class IntegrationTest extends WebTestCase
@@ -31,7 +30,7 @@ final class IntegrationTest extends WebTestCase
 
     public function testRequestRedirect(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
         $client->disableReboot();
         $client->getContainer()->set('hwi_oauth.http_client', new MockHttpClient());
         $client->request('GET', '/private');
@@ -66,7 +65,7 @@ final class IntegrationTest extends WebTestCase
 
     public function testRequestRedirectApi(): void
     {
-        $client = static::createClient();
+        $client = self::createClient();
         $client->disableReboot();
         $client->getContainer()->set('hwi_oauth.http_client', new MockHttpClient());
         $client->request('GET', '/private');
@@ -121,7 +120,7 @@ final class IntegrationTest extends WebTestCase
             }
         );
 
-        $client = static::createClient();
+        $client = self::createClient();
         $client->disableReboot();
         $container = $client->getContainer();
         $container->set('hwi_oauth.http_client', $httpClient);
@@ -149,11 +148,6 @@ final class IntegrationTest extends WebTestCase
 
     public function testRequestCheckApi(): void
     {
-        // @phpstan-ignore-next-line
-        if (Kernel::MAJOR_VERSION >= 6) {
-            $this->markTestSkipped('Skipped due to bug in Symfony Security component: https://github.com/symfony/symfony/issues/51319');
-        }
-
         $redirectLoginFromService = 'http://localhost/api/check-login/google?'
             .http_build_query([
                 'code' => 'sOmeRand0m-code',
@@ -174,7 +168,7 @@ final class IntegrationTest extends WebTestCase
             }
         );
 
-        $client = static::createClient();
+        $client = self::createClient();
         $client->disableReboot();
         $container = $client->getContainer();
         $container->set('hwi_oauth.http_client', $httpClient);
