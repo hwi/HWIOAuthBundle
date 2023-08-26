@@ -62,20 +62,6 @@ final class AppKernel extends Kernel
                 'storage_factory_id' => 'session.storage.factory.mock_file',
             ],
         ]);
-
-        // Symfony 5.4, requires additional configuration
-        if (Kernel::VERSION_ID >= 50100 && Kernel::VERSION_ID < 59999) {
-            $container->loadFromExtension('security', [
-                'firewalls' => [
-                    'login_area' => [
-                        'logout_on_user_change' => true,
-                    ],
-                    'main' => [
-                        'logout_on_user_change' => true,
-                    ],
-                ],
-            ]);
-        }
     }
 
     public function getCacheDir(): string
