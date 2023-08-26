@@ -6,8 +6,6 @@ security:
     HWI\Bundle\OAuthBundle\Tests\App\UserProvider:
       id: HWI\Bundle\OAuthBundle\Tests\App\UserProvider
 
-  enable_authenticator_manager: true
-
   firewalls:
     api:
       pattern: ^/api/
