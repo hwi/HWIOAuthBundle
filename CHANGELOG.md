@@ -2,6 +2,7 @@ Changelog
 =========
 ## 2.0.0 (2023-xx-xx)
 * Bugfix: Prevent refreshing non-expired tokens
+* Bugfix: Remove deprecations reported by Symfony 6.x
 
 ## 2.0.0-BETA3 (2023-08-20)
 * BC Break: Dropped support for Symfony: 6.0.*,
