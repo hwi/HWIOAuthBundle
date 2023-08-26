@@ -22,8 +22,6 @@ use Symfony\Bundle\TwigBundle\TwigBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
-use Symfony\Component\Security\Core\Security;
-use Symfony\Component\Security\Http\Controller\UserValueResolver;
 
 final class AppKernel extends Kernel
 {
@@ -58,24 +56,15 @@ final class AppKernel extends Kernel
     {
         parent::prepareContainer($container);
 
-        // With Symfony 5.3+, session settings were changed
-        if (Kernel::VERSION_ID >= 50300) {
-            $container->prependExtensionConfig('framework', [
-                'session' => [
-                    'enabled' => true,
-                    'storage_factory_id' => 'session.storage.factory.mock_file',
-                ],
-            ]);
-        } else {
-            $container->prependExtensionConfig('framework', [
-                'session' => [
-                    'enabled' => true,
-                    'storage_id' => 'session.storage.mock_file',
-                ],
-            ]);
-        }
+        $container->prependExtensionConfig('framework', [
+            'session' => [
+                'enabled' => true,
+                'storage_factory_id' => 'session.storage.factory.mock_file',
+            ],
+        ]);
 
-        if (method_exists(Security::class, 'getUser') && !class_exists(UserValueResolver::class)) {
+        // Symfony 5.4, requires additional configuration
+        if (Kernel::VERSION_ID >= 50100 && Kernel::VERSION_ID < 59999) {
             $container->loadFromExtension('security', [
                 'firewalls' => [
                     'login_area' => [
