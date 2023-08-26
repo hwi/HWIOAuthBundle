@@ -53,16 +53,12 @@ final class OAuthUser implements UserInterface
         return $this->getUserIdentifier();
     }
 
-    public function eraseCredentials(): bool
+    public function eraseCredentials(): void
     {
-        return true;
     }
 
     public function equals(UserInterface $user): bool
     {
-        // @phpstan-ignore-next-line Symfony <5.4 BC layer
-        $username = method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername();
-
-        return $username === $this->username;
+        return $user->getUserIdentifier() === $this->username;
     }
 }

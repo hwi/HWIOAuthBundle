@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\Controller\LoginController;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -23,7 +24,7 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Component\Security\Core\Security as DeprecatedSecurity;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Twig\Environment;
 
@@ -119,7 +120,7 @@ final class LoginControllerTest extends TestCase
     {
         $this->request->attributes = new ParameterBag(
             [
-                Security::AUTHENTICATION_ERROR => new AccountNotLinkedException(),
+                $this->getSecurityErrorKey() => new AccountNotLinkedException(),
             ]
         );
 
@@ -144,7 +145,7 @@ final class LoginControllerTest extends TestCase
 
         $this->request->attributes = new ParameterBag(
             [
-                Security::AUTHENTICATION_ERROR => $authenticationException,
+                $this->getSecurityErrorKey() => $authenticationException,
             ]
         );
 
@@ -164,7 +165,7 @@ final class LoginControllerTest extends TestCase
 
         $this->session->expects($this->once())
             ->method('has')
-            ->with(Security::AUTHENTICATION_ERROR)
+            ->with($this->getSecurityErrorKey())
             ->willReturn(true)
         ;
 
@@ -172,7 +173,7 @@ final class LoginControllerTest extends TestCase
 
         $this->session->expects($this->once())
             ->method('get')
-            ->with(Security::AUTHENTICATION_ERROR)
+            ->with($this->getSecurityErrorKey())
             ->willReturn($authenticationException)
         ;
 
@@ -206,5 +207,10 @@ final class LoginControllerTest extends TestCase
             true,
             'IS_AUTHENTICATED_REMEMBERED'
         );
+    }
+
+    private function getSecurityErrorKey(): string
+    {
+        return class_exists(Security::class) ? Security::AUTHENTICATION_ERROR : DeprecatedSecurity::AUTHENTICATION_ERROR;
     }
 }

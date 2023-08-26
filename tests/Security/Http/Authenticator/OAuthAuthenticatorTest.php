@@ -28,7 +28,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\User\InMemoryUser;
-use Symfony\Component\Security\Core\User\User;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
@@ -168,11 +167,6 @@ final class OAuthAuthenticatorTest extends TestCase
         $this->assertEquals($resourceOwnerName, $token->getResourceOwnerName());
         $this->assertEquals($user, $token->getUser());
         $this->assertEquals('refresh_token', $token->getRefreshToken());
-
-        // required for compatibility with Symfony 5.4
-        if (method_exists($token, 'isAuthenticated')) {
-            $this->assertTrue($token->isAuthenticated());
-        }
     }
 
     public function testOnAuthenticationSuccess(): void
@@ -418,11 +412,6 @@ final class OAuthAuthenticatorTest extends TestCase
 
     private function createUser(): UserInterface
     {
-        if (class_exists(User::class)) {
-            // @phpstan-ignore-next-line Symfony < 5.4 BC layer
-            return new User('asm89', 'foo', ['ROLE_USER']);
-        }
-
         return new InMemoryUser('asm89', 'foo', ['ROLE_USER']);
     }
 

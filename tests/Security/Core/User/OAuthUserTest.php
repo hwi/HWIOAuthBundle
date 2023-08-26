@@ -46,11 +46,6 @@ final class OAuthUserTest extends TestCase
         $this->assertEquals('other', $user->getUsername());
     }
 
-    public function testEraseCredentials(): void
-    {
-        $this->assertTrue($this->user->eraseCredentials());
-    }
-
     public function testEquals(): void
     {
         $otherUser = new OAuthUser('other');
