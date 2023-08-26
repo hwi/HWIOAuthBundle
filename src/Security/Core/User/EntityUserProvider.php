@@ -90,7 +90,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         return $user;
     }
 
-    public function refreshUser(UserInterface $user): ?UserInterface
+    public function refreshUser(UserInterface $user): UserInterface
     {
         $accessor = PropertyAccess::createPropertyAccessor();
         $identifier = $this->properties['identifier'];
@@ -100,8 +100,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
 
         $userId = $accessor->getValue($user, $identifier);
 
-        // @phpstan-ignore-next-line Symfony <5.4 BC layer
-        $username = method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername();
+        $username = $user->getUserIdentifier();
 
         if (null === $user = $this->findUser([$identifier => $userId])) {
             throw $this->createUserNotFoundException($username, sprintf('User with ID "%d" could not be reloaded.', $userId));
