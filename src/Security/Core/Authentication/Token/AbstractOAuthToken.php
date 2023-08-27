@@ -26,7 +26,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     private array $rawToken;
     private ?int $expiresIn = null;
     private ?int $createdAt = null;
-    private string $resourceOwnerName;
+    private ?string $resourceOwnerName = null;
     private ?string $tokenSecret = null;
     private ?string $refreshToken = null;
 
@@ -251,7 +251,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     /**
      * Get the resource owner name.
      *
-     * @return string
+     * @return string|null
      */
     public function getResourceOwnerName()
     {
