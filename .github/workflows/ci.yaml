@@ -70,6 +70,8 @@ jobs:
             symfony-version: '^6.3'
           - php: '8.2'
             symfony-version: '^6.3'
+          - php: '8.3'
+            symfony-version: '^6.3'
       fail-fast: false
 
     steps:
