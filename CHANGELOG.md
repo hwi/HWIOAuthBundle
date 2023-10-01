@@ -1,6 +1,6 @@
 Changelog
 =========
-## 2.0.0 (2023-xx-xx)
+## 2.0.0 (2023-10-01)
 * Bugfix: Prevent refreshing non-expired tokens
 * Bugfix: Remove deprecations reported by Symfony 6.x
 * Bugfix: Prevent fatal error when token doesn't have resource owner name set
