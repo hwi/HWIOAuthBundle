@@ -1,7 +1,7 @@
 HWIOAuthBundle
 ==============
 
-[![Build Status](https://github.com/hwi/HWIOAuthBundle/workflows/CI/badge.svg?branch=1.4)](https://github.com/hwi/HWIOAuthBundle/actions?query=workflow%3ACI) [![Latest Stable Version](https://poser.pugx.org/hwi/oauth-bundle/v/stable.svg)](https://packagist.org/packages/hwi/oauth-bundle) [![Total Downloads](https://poser.pugx.org/hwi/oauth-bundle/downloads.svg)](https://packagist.org/packages/hwi/oauth-bundle) [![License](https://poser.pugx.org/hwi/oauth-bundle/license.svg)](https://packagist.org/packages/hwi/oauth-bundle)
+[![Build Status](https://github.com/hwi/HWIOAuthBundle/actions/workflows/ci.yaml/badge.svg?branch=master)](https://github.com/hwi/HWIOAuthBundle/actions/workflows/ci.yaml) [![Latest Stable Version](https://poser.pugx.org/hwi/oauth-bundle/v/stable.svg)](https://packagist.org/packages/hwi/oauth-bundle) [![Total Downloads](https://poser.pugx.org/hwi/oauth-bundle/downloads.svg)](https://packagist.org/packages/hwi/oauth-bundle) [![License](https://poser.pugx.org/hwi/oauth-bundle/license.svg)](https://packagist.org/packages/hwi/oauth-bundle)
 
 The HWIOAuthBundle adds support for authenticating users via OAuth1.0a or OAuth2 in Symfony.
 
