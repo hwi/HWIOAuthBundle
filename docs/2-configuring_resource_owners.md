@@ -62,6 +62,7 @@ hwi_oauth:
 - [Linkedin](resource_owners/linkedin.md)
 - [Mail.ru](resource_owners/mailru.md)
 - [Odnoklassniki](resource_owners/odnoklassniki.md)
+- [Passage](resource_owners/passage.md)
 - [PayPal](resource_owners/paypal.md)
 - [QQ](resource_owners/qq.md)
 - [Reddit](resource_owners/reddit.md)
