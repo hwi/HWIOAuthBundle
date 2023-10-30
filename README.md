@@ -61,6 +61,7 @@ This bundle contains support for 58 different providers:
 * Mail.ru
 * Odnoklassniki,
 * Office365,
+* Passage,
 * PayPal,
 * QQ,
 * RunKeeper,
