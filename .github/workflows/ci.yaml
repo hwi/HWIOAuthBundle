@@ -2,7 +2,14 @@ name: CI
 
 on:
   push:
+    branches:
+      - master
   pull_request:
+
+# See https://stackoverflow.com/a/72408109
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   php-cs-fixer:
