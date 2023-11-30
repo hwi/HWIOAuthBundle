@@ -21,7 +21,7 @@ use Symfony\Component\Security\Core\Exception\LazyResponseException;
 /**
  * @author zorn-v
  */
-class TelegramResourceOwner extends GenericOAuth2ResourceOwner
+final class TelegramResourceOwner extends GenericOAuth2ResourceOwner
 {
     public const TYPE = 'telegram';
 
