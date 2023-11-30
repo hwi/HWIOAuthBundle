@@ -37,7 +37,7 @@ final class TelegramResourceOwner extends GenericOAuth2ResourceOwner
 
     public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
     {
-        list($botId) = explode(':', $this->options['client_secret']);
+        [$botId] = explode(':', $this->options['client_secret']);
         $parameters = array_merge([
             'bot_id' => $botId,
             'origin' => $redirectUri,
@@ -59,7 +59,7 @@ final class TelegramResourceOwner extends GenericOAuth2ResourceOwner
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
     {
         $token = $request->query->get('code', '');
-        $token = str_pad(strtr($token, '-_', '+/'), strlen($token) % 4, '=', STR_PAD_RIGHT);
+        $token = str_pad(strtr($token, '-_', '+/'), \strlen($token) % 4, '=', \STR_PAD_RIGHT);
         $authData = json_decode(base64_decode($token), true);
         if (empty($authData['hash'])) {
             throw new AuthenticationException('Invalid Telegram auth data');

@@ -56,20 +56,6 @@ final class TelegramResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
         $resourceOwner->handles($request);
     }
 
-    private function getAuthToken(array $authData, string $secret)
-    {
-        ksort($authData);
-        $dataStr = '';
-        foreach ($authData as $k => $v) {
-            $dataStr .= sprintf("\n%s=%s", $k, $v);
-        }
-        $dataStr = substr($dataStr, 1);
-        $secretKey = hash('sha256', $secret, true);
-        $authData['hash'] = hash_hmac('sha256', $dataStr, $secretKey);
-
-        return base64_encode(json_encode($authData));
-    }
-
     public function testGetAccessToken(string $response = '', string $contentType = ''): void
     {
         $resourceOwner = $this->createResourceOwner(
@@ -188,5 +174,19 @@ final class TelegramResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
         $this->assertEquals($this->tokenData['access_token'], $userResponse->getAccessToken());
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
+    }
+
+    private function getAuthToken(array $authData, string $secret)
+    {
+        ksort($authData);
+        $dataStr = '';
+        foreach ($authData as $k => $v) {
+            $dataStr .= sprintf("\n%s=%s", $k, $v);
+        }
+        $dataStr = substr($dataStr, 1);
+        $secretKey = hash('sha256', $secret, true);
+        $authData['hash'] = hash_hmac('sha256', $dataStr, $secretKey);
+
+        return base64_encode(json_encode($authData));
     }
 }
