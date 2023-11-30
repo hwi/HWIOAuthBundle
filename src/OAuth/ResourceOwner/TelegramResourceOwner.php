@@ -83,7 +83,7 @@ final class TelegramResourceOwner extends GenericOAuth2ResourceOwner
             throw new AuthenticationException('Telegram auth data check failed');
         }
 
-        return $token;
+        return ['access_token' => $token];
     }
 
     public function getUserInformation(array $accessToken, array $extraParameters = [])

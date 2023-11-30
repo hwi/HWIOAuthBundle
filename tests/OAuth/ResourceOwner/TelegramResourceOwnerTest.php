@@ -71,7 +71,7 @@ final class TelegramResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
         $request = new Request(['code' => $token]);
 
         $this->assertEquals(
-            $token,
+            ['access_token' => $token],
             $resourceOwner->getAccessToken($request, 'http://redirect.to/')
         );
     }
