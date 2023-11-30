@@ -53,6 +53,7 @@ final class TelegramResourceOwner extends GenericOAuth2ResourceOwner
             $js = '<script>location.href = "?code=" + new URLSearchParams(location.hash.substring(1)).get("tgAuthResult")</script>';
             throw new LazyResponseException(new Response($js));
         }
+
         return true;
     }
 

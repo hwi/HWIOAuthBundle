@@ -142,7 +142,6 @@ final class TelegramResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 
     public function testInvalidOptionValueThrowsException(): void
     {
-
     }
 
     public function testGetUserInformationFailure(): void
