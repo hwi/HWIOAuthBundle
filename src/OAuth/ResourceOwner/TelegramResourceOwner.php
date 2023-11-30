@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
+use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -90,6 +91,7 @@ final class TelegramResourceOwner extends GenericOAuth2ResourceOwner
         $response = $this->getUserResponse();
         $response->setData($data);
         $response->setResourceOwner($this);
+        $response->setOAuthToken(new OAuthToken($accessToken));
 
         return $response;
     }
