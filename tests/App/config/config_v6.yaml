@@ -10,7 +10,12 @@ framework:
     csrf_protection: ~
     session:
         handler_id: 'session.handler.native'
+        cookie_secure: auto
+        cookie_samesite: lax
     http_method_override: false
+    handle_all_throwables: true
+    php_errors:
+        log: false
 
 monolog:
     handlers:
@@ -57,6 +62,7 @@ doctrine:
     orm:
         auto_generate_proxy_classes: '%kernel.debug%'
         auto_mapping: true
+        enable_lazy_ghost_objects: true
 
 hwi_oauth:
     connect:

@@ -20,6 +20,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\Security as DeprecatedSecurity;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class LoginControllerTest extends WebTestCase
@@ -84,6 +85,12 @@ final class LoginControllerTest extends WebTestCase
 
     private function getSecurityErrorKey(): string
     {
+        // Symfony 6.4+ compatibility
+        if (class_exists(SecurityRequestAttributes::class)) {
+            return SecurityRequestAttributes::AUTHENTICATION_ERROR;
+        }
+
+        // Symfony 5.4 & <6.4 compatibility
         return class_exists(Security::class) ? Security::AUTHENTICATION_ERROR : DeprecatedSecurity::AUTHENTICATION_ERROR;
     }
 }
