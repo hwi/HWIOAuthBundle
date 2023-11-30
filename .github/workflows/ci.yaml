@@ -7,7 +7,7 @@ on:
 jobs:
   php-cs-fixer:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     env:
       PHP_CS_FIXER_FUTURE_MODE: '1'
     steps:
@@ -29,7 +29,7 @@ jobs:
 
   phpstan:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -53,7 +53,7 @@ jobs:
   phpunit:
     name: PHPUnit (PHP ${{ matrix.php }} + ${{ matrix.symfony-version }})
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     strategy:
       matrix:
         include:
@@ -65,13 +65,15 @@ jobs:
           - php: '8.0'
             symfony-version: '^5.4'
           - php: '8.1'
-            symfony-version: '^5.4'
-          - php: '8.1'
             symfony-version: '^6.3'
           - php: '8.2'
             symfony-version: '^6.3'
+          - php: '8.2'
+            symfony-version: '^7.0'
           - php: '8.3'
             symfony-version: '^6.3'
+          - php: '8.3'
+            symfony-version: '^7.0'
       fail-fast: false
 
     steps:
@@ -108,7 +110,7 @@ jobs:
 
       - name: Upload test artifacts
         if: always()
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v3
         with:
           name: phpunit-logs-php${{ matrix.php }}
           path: build/logs/phpunit
