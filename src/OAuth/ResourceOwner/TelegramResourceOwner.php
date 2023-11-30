@@ -57,7 +57,7 @@ final class TelegramResourceOwner extends GenericOAuth2ResourceOwner
 
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
     {
-        $token = $request->query->get('code');
+        $token = $request->query->get('code', '');
         $token = str_pad(strtr($token, '-_', '+/'), strlen($token) % 4, '=', STR_PAD_RIGHT);
         $authData = json_decode(base64_decode($token), true);
         if (empty($authData['hash'])) {
@@ -70,8 +70,11 @@ final class TelegramResourceOwner extends GenericOAuth2ResourceOwner
         $checkHash = $authData['hash'];
         unset($authData['hash']);
         ksort($authData);
-        array_walk($authData, function (&$value, $key) {$value = $key.'='.$value;});
-        $dataCheckStr = implode("\n", $authData);
+        $dataCheckStr = '';
+        foreach ($authData as $k => $v) {
+            $dataCheckStr .= sprintf("\n%s=%s", $k, $v);
+        }
+        $dataCheckStr = substr($dataCheckStr, 1);
         $secretKey = hash('sha256', $botToken, true);
         $hash = hash_hmac('sha256', $dataCheckStr, $secretKey);
         if ($hash !== $checkHash) {
