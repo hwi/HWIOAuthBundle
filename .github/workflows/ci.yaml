@@ -52,7 +52,11 @@ jobs:
           tools: composer
 
       - name: Update project dependencies
-        run: composer update --no-interaction --no-progress --ansi
+        run: |
+          composer global config --no-plugins allow-plugins.symfony/flex true
+          composer global require symfony/flex --no-progress --no-scripts --no-plugins
+          composer config extra.symfony.require "5.4"
+          composer update --no-interaction --no-progress --ansi
 
       - name: Run phpstan
         run: composer phpstan
