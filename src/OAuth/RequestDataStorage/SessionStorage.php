@@ -98,7 +98,7 @@ final class SessionStorage implements RequestDataStorageInterface
         if (\is_array($value)) {
             $storageKey = reset($value);
         } elseif (\is_object($value)) {
-            $storageKey = \get_class($value);
+            $storageKey = $value::class;
         } else {
             $storageKey = $value;
         }

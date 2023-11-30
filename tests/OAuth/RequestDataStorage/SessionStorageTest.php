@@ -146,7 +146,7 @@ class SessionStorageTest extends TestCase
             ->method('remove')
             ->with($key);
 
-        $data = $this->storage->fetch($this->resourceOwner, \get_class($class), 'state');
+        $data = $this->storage->fetch($this->resourceOwner, $class::class, 'state');
         self::assertEquals(serialize($class), $data);
     }
 }

@@ -137,7 +137,7 @@ final class OAuthProvider implements AuthenticationProviderInterface
         OAuthToken $oldToken,
         ?UserInterface $user
     ): OAuthToken {
-        $tokenClass = \get_class($oldToken);
+        $tokenClass = $oldToken::class;
         if (null !== $user) {
             $token = new $tokenClass($data, $user->getRoles());
             $token->setUser($user);
