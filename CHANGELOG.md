@@ -1,5 +1,11 @@
 Changelog
 =========
+## 2.1.0 (2023-11-30)
+* BC Break: Dropped support for Symfony: `>6.0, <6.3`,
+* Added: New Passage resource owner,
+* Bugfix: Remove deprecations reported by Symfony 6.4,
+* Chore: Added support for Symfony 7,
+
 ## 2.0.0 (2023-10-01)
 * Bugfix: Prevent refreshing non-expired tokens
 * Bugfix: Remove deprecations reported by Symfony 6.x
