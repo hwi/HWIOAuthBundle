@@ -49,7 +49,7 @@ class TelegramResourceOwner extends GenericOAuth2ResourceOwner
     public function handles(Request $request)
     {
         if (!$request->query->has('code')) {
-            $js = sprintf('<script>location.href = "?code=" + new URLSearchParams(location.hash.substring(1)).get("tgAuthResult")</script>');
+            $js = '<script>location.href = "?code=" + new URLSearchParams(location.hash.substring(1)).get("tgAuthResult")</script>';
             throw new LazyResponseException(new Response($js));
         }
         return true;
@@ -58,11 +58,14 @@ class TelegramResourceOwner extends GenericOAuth2ResourceOwner
     public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
     {
         $token = $request->query->get('code');
-        $data = json_decode(base64_decode($token), true);
-        if (!$data) {
-            throw new AuthenticationException('Missing Telegram data');
+        $token = str_pad(strtr($token, '-_', '+/'), strlen($token) % 4, '=', STR_PAD_RIGHT);
+        $authData = json_decode(base64_decode($token), true);
+        if (empty($authData['hash'])) {
+            throw new AuthenticationException('Invalid Telegram auth data');
         }
-        $authData = $data;
+        if (empty($authData['auth_date']) || (time() - $authData['auth_date']) > 300) {
+            throw new AuthenticationException('Telegram auth data expired');
+        }
         $botToken = $this->options['client_secret'];
         $checkHash = $authData['hash'];
         unset($authData['hash']);
@@ -73,9 +76,6 @@ class TelegramResourceOwner extends GenericOAuth2ResourceOwner
         $hash = hash_hmac('sha256', $dataCheckStr, $secretKey);
         if ($hash !== $checkHash) {
             throw new AuthenticationException('Telegram auth data check failed');
-        }
-        if (empty($data['auth_date']) || (time() - $data['auth_date']) > 300) {
-            throw new AuthenticationException('Telegram auth data expired');
         }
 
         return $token;
