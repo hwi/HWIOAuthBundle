@@ -26,6 +26,7 @@ use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundE
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Security as DeprecatedSecurity;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Twig\Environment;
 
 final class LoginControllerTest extends TestCase
@@ -211,6 +212,12 @@ final class LoginControllerTest extends TestCase
 
     private function getSecurityErrorKey(): string
     {
+        // Symfony 6.4+ compatibility
+        if (class_exists(SecurityRequestAttributes::class)) {
+            return SecurityRequestAttributes::AUTHENTICATION_ERROR;
+        }
+
+        // Symfony 5.4 & <6.4 compatibility
         return class_exists(Security::class) ? Security::AUTHENTICATION_ERROR : DeprecatedSecurity::AUTHENTICATION_ERROR;
     }
 }
