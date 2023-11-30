@@ -1,5 +1,8 @@
 Changelog
 =========
+## 2.2.0 (202x-xx-xx)
+* BC Break: Dropped support for PHP 7.4 & 8.0,
+
 ## 2.1.0 (2023-11-30)
 * BC Break: Dropped support for Symfony: `>6.0, <6.3`,
 * Added: New Passage resource owner,
