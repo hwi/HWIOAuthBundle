@@ -441,7 +441,7 @@ json;
         /** @var GenericOAuth2ResourceOwner $resourceOwner */
         $resourceOwner = parent::createResourceOwner($options, $paths, $responses);
 
-        $reflection = new \ReflectionClass(\get_class($resourceOwner));
+        $reflection = new \ReflectionClass($resourceOwner::class);
         $stateProperty = $reflection->getProperty('state');
         $stateProperty->setAccessible(true);
         $stateProperty->setValue($resourceOwner, $state ?: new State($this->state));

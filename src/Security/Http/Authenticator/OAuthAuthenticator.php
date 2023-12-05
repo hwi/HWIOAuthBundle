@@ -167,7 +167,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         if ($token->isExpired()) {
             $expiredToken = $token;
             if ($refreshToken = $expiredToken->getRefreshToken()) {
-                $tokenClass = \get_class($expiredToken);
+                $tokenClass = $expiredToken::class;
                 $token = new $tokenClass($resourceOwner->refreshAccessToken($refreshToken));
                 $token->setResourceOwnerName($expiredToken->getResourceOwnerName());
                 if (!$token->getRefreshToken()) {
@@ -213,7 +213,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
     {
         $user = $user instanceof UserInterface ? $user : $token->getUser();
 
-        $tokenClass = \get_class($token);
+        $tokenClass = $token::class;
         if ($user) {
             $newToken = new $tokenClass(
                 $token->getRawToken(),
@@ -254,7 +254,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
             return $passport->getToken();
         }
 
-        throw new \LogicException(sprintf('The first argument of "%s" must be instance of "%s", "%s" provided.', __METHOD__, SelfValidatedOAuthPassport::class, \get_class($passport)));
+        throw new \LogicException(sprintf('The first argument of "%s" must be instance of "%s", "%s" provided.', __METHOD__, SelfValidatedOAuthPassport::class, $passport::class));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

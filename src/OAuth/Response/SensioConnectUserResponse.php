@@ -23,19 +23,17 @@ final class SensioConnectUserResponse extends AbstractUserResponse
      * @var \DOMNode
      */
     protected $data;
-    /**
-     * @var \DOMXPath|null
-     */
-    private $xpath;
+
+    private ?\DOMXPath $xpath;
 
     /**
      * {@inheritdoc}
      */
     public function getUserIdentifier(): string
     {
-        /** @var \DOMAttr $attribute */
+        /** @var \DOMAttr|null $attribute */
         $attribute = $this->data->attributes->getNamedItem('id');
-        if (null === $attribute->value) {
+        if (null === $attribute) {
             throw new \InvalidArgumentException('User identifier was not found in response.');
         }
 
