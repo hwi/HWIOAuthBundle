@@ -231,6 +231,7 @@ final class Configuration implements ConfigurationInterface
                                         if (false === $v) {
                                             return false;
                                         }
+
                                         return empty($v);
                                     })
                                     ->thenUnset()
