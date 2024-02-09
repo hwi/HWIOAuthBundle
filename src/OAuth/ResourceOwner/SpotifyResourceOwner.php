@@ -38,7 +38,7 @@ final class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken = null, array $extraParameters = [])
+    public function getUserInformation(?array $accessToken = null, array $extraParameters = [])
     {
         $url = $this->normalizeUrl($this->options['infos_url'], [
             'access_token' => $accessToken['access_token'],

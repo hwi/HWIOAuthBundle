@@ -108,7 +108,7 @@ interface ResourceOwnerInterface
 
     public function getState(): StateInterface;
 
-    public function storeState(StateInterface $state = null);
+    public function storeState(?StateInterface $state = null);
 
     public function addStateParameter(string $key, string $value): void;
 }

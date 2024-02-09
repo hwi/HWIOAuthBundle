@@ -168,7 +168,7 @@ abstract class AbstractController
     /**
      * @param Event|DeprecatedEvent $event
      */
-    protected function dispatch($event, string $eventName = null): void
+    protected function dispatch($event, ?string $eventName = null): void
     {
         $this->dispatcher->dispatch($event, $eventName);
     }

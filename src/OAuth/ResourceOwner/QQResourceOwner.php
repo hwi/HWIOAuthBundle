@@ -46,7 +46,7 @@ final class QQResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(array $accessToken = null, array $extraParameters = [])
+    public function getUserInformation(?array $accessToken = null, array $extraParameters = [])
     {
         $openid = $extraParameters['openid'] ?? $this->requestUserIdentifier($accessToken);
 
@@ -90,7 +90,7 @@ final class QQResourceOwner extends GenericOAuth2ResourceOwner
         ]);
     }
 
-    private function requestUserIdentifier(array $accessToken = null)
+    private function requestUserIdentifier(?array $accessToken = null)
     {
         $url = $this->normalizeUrl($this->options['me_url'], [
             'access_token' => $accessToken['access_token'],

@@ -130,7 +130,7 @@ final class State implements StateInterface
      *
      * @return array<string,string>|null
      */
-    private function parseStringParameter(string $queryParameter = null): ?array
+    private function parseStringParameter(?string $queryParameter = null): ?array
     {
         $urlDecoded = $queryParameter ? urldecode($queryParameter) : '';
 

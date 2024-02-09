@@ -74,7 +74,7 @@ class CustomResourceOwner implements ResourceOwnerInterface
     {
     }
 
-    public function storeState(StateInterface $state = null): void
+    public function storeState(?StateInterface $state = null): void
     {
     }
 }

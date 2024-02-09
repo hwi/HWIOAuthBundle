@@ -44,7 +44,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
      * @param string                $class      User entity class to load
      * @param array<string, string> $properties Mapping of resource owners to properties
      */
-    public function __construct(ManagerRegistry $registry, string $class, array $properties, string $managerName = null)
+    public function __construct(ManagerRegistry $registry, string $class, array $properties, ?string $managerName = null)
     {
         $this->em = $registry->getManager($managerName);
         $this->class = $class;

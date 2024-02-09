@@ -17,7 +17,7 @@ final class HttpTransportException extends AuthenticationException
 {
     private string $ownerName;
 
-    public function __construct(string $message, string $ownerName, int $code = 0, \Throwable $previous = null)
+    public function __construct(string $message, string $ownerName, int $code = 0, ?\Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
         $this->ownerName = $ownerName;

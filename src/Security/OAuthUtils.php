@@ -74,7 +74,7 @@ final class OAuthUtils
         return array_keys($resourceOwners);
     }
 
-    public function getAuthorizationUrl(Request $request, string $name, string $redirectUrl = null, array $extraParameters = []): string
+    public function getAuthorizationUrl(Request $request, string $name, ?string $redirectUrl = null, array $extraParameters = []): string
     {
         $resourceOwner = $this->getResourceOwner($name);
 
@@ -252,7 +252,7 @@ final class OAuthUtils
         return null === $firewallConfig ? null : $firewallConfig->getName();
     }
 
-    private function getResourceOwnerCheckPath(string $name, string $firewallName = null): ?string
+    private function getResourceOwnerCheckPath(string $name, ?string $firewallName = null): ?string
     {
         $resourceOwnerMaps = $this->ownerMaps;
 
