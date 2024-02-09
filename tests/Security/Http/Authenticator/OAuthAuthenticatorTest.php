@@ -31,7 +31,6 @@ use Symfony\Component\Security\Core\User\InMemoryUser;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
-use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -40,14 +39,6 @@ use Symfony\Component\Security\Http\HttpUtils;
  */
 final class OAuthAuthenticatorTest extends TestCase
 {
-    protected function setUp(): void
-    {
-        // Symfony < 5.1 BC layer.
-        if (!interface_exists(AuthenticatorInterface::class)) {
-            $this->markTestSkipped('Symfony new Authenticator-based security system is not available.');
-        }
-    }
-
     public function testSupports(): void
     {
         $httpUtilsMock = $this->getHttpUtilsMock();
@@ -162,7 +153,7 @@ final class OAuthAuthenticatorTest extends TestCase
         $this->assertEquals($user, $passport->getUser());
 
         /** @var AbstractOAuthToken $token */
-        $token = $authenticator->createAuthenticatedToken($passport, 'main');
+        $token = $authenticator->createToken($passport, 'main');
         $this->assertInstanceOf(OAuthToken::class, $token);
         $this->assertEquals($resourceOwnerName, $token->getResourceOwnerName());
         $this->assertEquals($user, $token->getUser());
