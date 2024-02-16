@@ -26,25 +26,16 @@ use Symfony\Component\Security\Http\HttpUtils;
  */
 final class ResourceOwnerMap implements ResourceOwnerMapInterface
 {
-    private HttpUtils $httpUtils;
-    private array $resourceOwners;
-    private array $possibleResourceOwners;
-    private ServiceLocator $locator;
-
     /**
      * @param array<string, string> $possibleResourceOwners array with possible resource owners names
      * @param array<string, string> $resourceOwners         array with configured resource owners
      */
     public function __construct(
-        HttpUtils $httpUtils,
-        array $possibleResourceOwners,
-        array $resourceOwners,
-        ServiceLocator $locator
+        private readonly HttpUtils $httpUtils,
+        private readonly array $possibleResourceOwners,
+        private readonly array $resourceOwners,
+        private readonly ServiceLocator $locator
     ) {
-        $this->httpUtils = $httpUtils;
-        $this->possibleResourceOwners = $possibleResourceOwners;
-        $this->resourceOwners = $resourceOwners;
-        $this->locator = $locator;
     }
 
     /**

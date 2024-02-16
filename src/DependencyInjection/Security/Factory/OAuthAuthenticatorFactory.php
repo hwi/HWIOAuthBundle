@@ -31,11 +31,8 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class OAuthAuthenticatorFactory extends AbstractFactory implements AuthenticatorFactoryInterface, FirewallListenerFactoryInterface
 {
-    private \ArrayIterator $firewallNames;
-
-    public function __construct(\ArrayIterator $firewallNames)
+    public function __construct(private \ArrayIterator $firewallNames)
     {
-        $this->firewallNames = $firewallNames;
     }
 
     /**

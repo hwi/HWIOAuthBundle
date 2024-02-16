@@ -28,17 +28,12 @@ use Symfony\Component\Security\Http\HttpUtils;
  */
 final class OAuthEntryPoint implements AuthenticationEntryPointInterface
 {
-    private HttpKernelInterface $httpKernel;
-    private HttpUtils $httpUtils;
-    private string $loginPath;
-    private bool $useForward;
-
-    public function __construct(HttpKernelInterface $kernel, HttpUtils $httpUtils, string $loginPath, bool $useForward = false)
-    {
-        $this->httpKernel = $kernel;
-        $this->httpUtils = $httpUtils;
-        $this->loginPath = $loginPath;
-        $this->useForward = $useForward;
+    public function __construct(
+        private readonly HttpKernelInterface $kernel,
+        private readonly HttpUtils $httpUtils,
+        private readonly string $loginPath,
+        private readonly bool $useForward = false
+    ) {
     }
 
     /**
@@ -53,7 +48,7 @@ final class OAuthEntryPoint implements AuthenticationEntryPointInterface
             $iterator = $request->query->getIterator();
             $subRequest->query->add($iterator->getArrayCopy());
 
-            $response = $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+            $response = $this->kernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             if (200 === $response->getStatusCode()) {
                 $response->headers->set('X-Status-Code', '401');
             }

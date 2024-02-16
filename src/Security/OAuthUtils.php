@@ -30,29 +30,18 @@ final class OAuthUtils
     public const SIGNATURE_METHOD_RSA = 'RSA-SHA1';
     public const SIGNATURE_METHOD_PLAINTEXT = 'PLAINTEXT';
 
-    private bool $connect;
-    private string $grantRule;
-    private HttpUtils $httpUtils;
-    private AuthorizationCheckerInterface $authorizationChecker;
-    private FirewallMap $firewallMap;
-
     /**
      * @var array<string, ResourceOwnerMapInterface>
      */
     private array $ownerMaps = [];
 
     public function __construct(
-        HttpUtils $httpUtils,
-        AuthorizationCheckerInterface $authorizationChecker,
-        FirewallMap $firewallMap,
-        bool $connect,
-        string $grantRule
+        private readonly HttpUtils $httpUtils,
+        private readonly AuthorizationCheckerInterface $authorizationChecker,
+        private readonly FirewallMap $firewallMap,
+        private readonly bool $connect,
+        private readonly string $grantRule
     ) {
-        $this->httpUtils = $httpUtils;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->firewallMap = $firewallMap;
-        $this->connect = $connect;
-        $this->grantRule = $grantRule;
     }
 
     public function addResourceOwnerMap($firewallName, ResourceOwnerMapInterface $ownerMap): void
@@ -217,9 +206,7 @@ final class OAuthUtils
                 $signature = false;
 
                 openssl_sign($baseString, $signature, $privateKey);
-                if (\PHP_VERSION_ID < 80000) {
-                    openssl_free_key($privateKey);
-                }
+
                 break;
 
             case self::SIGNATURE_METHOD_PLAINTEXT:
@@ -276,7 +263,7 @@ final class OAuthUtils
      * @param string|array<string, string>|null $queryParameter The query parameter to parse and add to the State
      * @param ResourceOwnerInterface            $resourceOwner  The resource owner holding the state to be added to
      */
-    private function addQueryParameterToState($queryParameter, ResourceOwnerInterface $resourceOwner): void
+    private function addQueryParameterToState(array|string|null $queryParameter, ResourceOwnerInterface $resourceOwner): void
     {
         if (null === $queryParameter) {
             return;

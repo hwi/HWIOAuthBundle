@@ -16,9 +16,13 @@ use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProvid
 
 class RefreshAccessTokenListenerOld extends RefreshAccessTokenListener
 {
+    /**
+     * @phpstan-ignore-next-line
+     */
     private AuthenticationProviderInterface $oAuthProvider;
 
     public function __construct(
+        /* @phpstan-ignore-next-line */
         AuthenticationProviderInterface $oAuthProvider
     ) {
         $this->oAuthProvider = $oAuthProvider;

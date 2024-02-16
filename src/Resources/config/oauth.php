@@ -17,6 +17,7 @@ use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage\SessionStorage;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider;
+use HWI\Bundle\OAuthBundle\Security\Http\Authentication\AuthenticationFailureHandler;
 use HWI\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint;
 use HWI\Bundle\OAuthBundle\Security\Http\Firewall\AbstractRefreshAccessTokenListener;
 use HWI\Bundle\OAuthBundle\Security\Http\Firewall\OAuthListener;
@@ -59,4 +60,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             '%hwi_oauth.connect%',
             '%hwi_oauth.grant_rule%',
         ]);
+
+    $services->set('hwi_oauth.authentication.failure_handler', AuthenticationFailureHandler::class)
+        ->arg('$connect', '%hwi_oauth.connect%');
 };
