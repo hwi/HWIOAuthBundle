@@ -16,7 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
-use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\Passport\SelfValidatedOAuthPassport;
+use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\Passport\Badge\OAuthTokenBadge;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,7 +32,9 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerI
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\InteractiveAuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\UserBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
+use Symfony\Component\Security\Http\Authenticator\Passport\SelfValidatingPassport;
 use Symfony\Component\Security\Http\EntryPoint\AuthenticationEntryPointInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
@@ -139,8 +141,18 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
 
         $token = new OAuthToken($accessToken);
         $token->setResourceOwnerName($resourceOwner->getName());
+        $token = $this->refreshToken($token);
 
-        return new SelfValidatedOAuthPassport($this->refreshToken($token), [new RememberMeBadge()]);
+        $user = $token->getUser();
+
+        $userBadge = class_exists(UserBadge::class)
+            ? new UserBadge(
+                $user ? method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername() : null,
+                static function () use ($user) { return $user; }
+            )
+            : $user;
+
+        return new SelfValidatingPassport($userBadge, [new RememberMeBadge(), new OAuthTokenBadge($token)]);
     }
 
     /**
@@ -246,15 +258,16 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
     }
 
     /**
-     * @param Passport|SelfValidatedOAuthPassport $passport
+     * @param Passport $passport
      */
     public function createAuthenticatedToken($passport, string $firewallName): TokenInterface
     {
-        if ($passport instanceof SelfValidatedOAuthPassport) {
-            return $passport->getToken();
+        $badge = $passport->getBadge(OAuthTokenBadge::class);
+        if ($badge instanceof OAuthTokenBadge) {
+            return $badge->getToken();
         }
 
-        throw new \LogicException(sprintf('The first argument of "%s" must be instance of "%s", "%s" provided.', __METHOD__, SelfValidatedOAuthPassport::class, $passport::class));
+        throw new \LogicException(sprintf('Given passport must contain instance of "%s".', OAuthTokenBadge::class));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
