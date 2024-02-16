@@ -129,7 +129,7 @@ final class RegisterController extends AbstractController
             $this->accountConnector->connect($user, $userInformation);
 
             // Authenticate the user
-            $this->authenticateUser($request, $user, $error->getResourceOwnerName(), $error->getAccessToken());
+            $this->authenticateUser($request, $user, $error->getResourceOwnerName(), $error->getRawToken());
 
             if (null === $response = $event->getResponse()) {
                 if ($targetPath = $this->getTargetPath($session)) {
