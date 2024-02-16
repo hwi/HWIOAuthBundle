@@ -62,5 +62,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     $services->set('hwi_oauth.authentication.failure_handler', AuthenticationFailureHandler::class)
-        ->arg('$connect', '%hwi_oauth.connect%');
+        ->args([
+            service('request_stack'),
+            service('router'),
+            service('twig'),
+            '%hwi_oauth.connect%',
+        ]);
 };
