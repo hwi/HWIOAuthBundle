@@ -43,38 +43,19 @@ use Symfony\Component\Security\Http\HttpUtils;
  */
 final class OAuthAuthenticator implements AuthenticatorInterface, AuthenticationEntryPointInterface, InteractiveAuthenticatorInterface
 {
-    private HttpUtils $httpUtils;
-    private OAuthAwareUserProviderInterface $userProvider;
-    private ResourceOwnerMapInterface $resourceOwnerMap;
-    private AuthenticationSuccessHandlerInterface $successHandler;
-    private AuthenticationFailureHandlerInterface $failureHandler;
-    private HttpKernelInterface $httpKernel;
-
     /**
-     * @var string[]
+     * @param string[] $checkPaths
      */
-    private array $checkPaths;
-
-    private array $options;
-
     public function __construct(
-        HttpUtils $httpUtils,
-        OAuthAwareUserProviderInterface $userProvider,
-        ResourceOwnerMapInterface $resourceOwnerMap,
-        array $checkPaths,
-        AuthenticationSuccessHandlerInterface $successHandler,
-        AuthenticationFailureHandlerInterface $failureHandler,
-        HttpKernelInterface $kernel,
-        array $options
+        private readonly HttpUtils $httpUtils,
+        private readonly OAuthAwareUserProviderInterface $userProvider,
+        private readonly ResourceOwnerMapInterface $resourceOwnerMap,
+        private readonly array $checkPaths,
+        private readonly AuthenticationSuccessHandlerInterface $successHandler,
+        private readonly AuthenticationFailureHandlerInterface $failureHandler,
+        private readonly HttpKernelInterface $kernel,
+        private readonly array $options
     ) {
-        $this->failureHandler = $failureHandler;
-        $this->successHandler = $successHandler;
-        $this->checkPaths = $checkPaths;
-        $this->resourceOwnerMap = $resourceOwnerMap;
-        $this->userProvider = $userProvider;
-        $this->httpUtils = $httpUtils;
-        $this->httpKernel = $kernel;
-        $this->options = $options;
     }
 
     public function supports(Request $request): bool
@@ -96,7 +77,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
             $iterator = $request->query->getIterator();
             $subRequest->query->add(iterator_to_array($iterator));
 
-            $response = $this->httpKernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
+            $response = $this->kernel->handle($subRequest, HttpKernelInterface::SUB_REQUEST);
             if (200 === $response->getStatusCode()) {
                 $response->headers->set('X-Status-Code', '401');
             }

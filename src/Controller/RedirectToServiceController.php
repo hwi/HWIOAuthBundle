@@ -27,27 +27,14 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 final class RedirectToServiceController
 {
-    private OAuthUtils $oauthUtils;
-    private DomainWhitelist $domainWhitelist;
-    private ResourceOwnerMapLocator $resourceOwnerMapLocator;
-    private ?string $targetPathParameter;
-    private bool $failedUseReferer;
-    private bool $useReferer;
-
     public function __construct(
-        OAuthUtils $oauthUtils,
-        DomainWhitelist $domainWhitelist,
-        ResourceOwnerMapLocator $resourceOwnerMapLocator,
-        ?string $targetPathParameter,
-        bool $failedUseReferer,
-        bool $useReferer
+        private readonly OAuthUtils $oauthUtils,
+        private readonly DomainWhitelist $domainWhitelist,
+        private readonly ResourceOwnerMapLocator $resourceOwnerMapLocator,
+        private readonly ?string $targetPathParameter,
+        private readonly bool $failedUseReferer,
+        private readonly bool $useReferer
     ) {
-        $this->oauthUtils = $oauthUtils;
-        $this->domainWhitelist = $domainWhitelist;
-        $this->resourceOwnerMapLocator = $resourceOwnerMapLocator;
-        $this->targetPathParameter = $targetPathParameter;
-        $this->failedUseReferer = $failedUseReferer;
-        $this->useReferer = $useReferer;
     }
 
     /**

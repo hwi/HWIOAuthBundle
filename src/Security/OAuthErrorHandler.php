@@ -19,9 +19,9 @@ final class OAuthErrorHandler
     /**
      * "translated" OAuth errors to human readable format.
      *
-     * @var array
+     * @var array<string, string>
      */
-    private static $translatedOAuthErrors = [
+    private static array $translatedOAuthErrors = [
         'access_denied' => 'You have refused access for this site.',
         'authorization_expired' => 'Authorization expired.',
         'bad_verification_code' => 'Bad verification code.',
@@ -36,7 +36,7 @@ final class OAuthErrorHandler
     /**
      * @throws AuthenticationException
      */
-    public static function handleOAuthError(Request $request)
+    public static function handleOAuthError(Request $request): void
     {
         $error = null;
 
@@ -61,11 +61,7 @@ final class OAuthErrorHandler
         }
 
         if (null !== $error) {
-            if (isset(static::$translatedOAuthErrors[$error])) {
-                $error = static::$translatedOAuthErrors[$error];
-            } else {
-                $error = sprintf('Unknown OAuth error: "%s".', $error);
-            }
+            $error = self::$translatedOAuthErrors[$error] ?? sprintf('Unknown OAuth error: "%s".', $error);
 
             throw new AuthenticationException($error);
         }

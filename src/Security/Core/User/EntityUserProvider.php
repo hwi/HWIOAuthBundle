@@ -15,6 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -125,7 +126,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
 
     private function createUserNotFoundException(string $username, string $message): UserNotFoundException
     {
-        $exception = new UserNotFoundException($message);
+        $exception = new AccountNotLinkedException($message);
         $exception->setUserIdentifier($username);
 
         return $exception;

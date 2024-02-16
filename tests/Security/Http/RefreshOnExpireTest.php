@@ -181,6 +181,7 @@ class RefreshOnExpireTest extends WebTestCase
 
         $token = new CustomOAuthToken($tokenData);
         $token->setResourceOwnerName('google');
+        /* @phpstan-ignore-next-line */
         if (method_exists($token, 'setAuthenticated')) {
             $token->setAuthenticated(true, false);
         }
