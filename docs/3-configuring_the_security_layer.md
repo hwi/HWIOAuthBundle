@@ -39,7 +39,6 @@ security:
 
                 oauth_user_provider:
                     service: my.oauth_aware.user_provider.service
-                provider: my.oauth_aware.user_provider.service
 
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
