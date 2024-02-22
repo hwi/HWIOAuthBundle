@@ -4,7 +4,16 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - '**.md'
   pull_request:
+    paths:
+      - '.github/workflows/**'
+      - 'src/**'
+      - 'tests/**'
+      - 'phpstan.neon'
+      - 'phpunit.xml.dist'
+      - 'composer.json'
 
 # See https://stackoverflow.com/a/72408109
 concurrency:
