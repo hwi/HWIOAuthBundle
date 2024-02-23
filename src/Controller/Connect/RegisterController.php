@@ -44,7 +44,7 @@ final class RegisterController extends AbstractController
     private FormFactoryInterface $formFactory;
     private ?RegistrationFormHandlerInterface $formHandler;
     private string $grantRule;
-    private string $registrationForm;
+    private ?string $registrationForm;
 
     public function __construct(
         ResourceOwnerMapLocator $resourceOwnerMapLocator,
@@ -56,7 +56,7 @@ final class RegisterController extends AbstractController
         FormFactoryInterface $formFactory,
         Environment $twig,
         string $grantRule,
-        string $registrationForm,
+        ?string $registrationForm,
         ?AccountConnectorInterface $accountConnector,
         ?RegistrationFormHandlerInterface $formHandler
     ) {
@@ -110,6 +110,10 @@ final class RegisterController extends AbstractController
 
         if (!$error instanceof AccountNotLinkedException) {
             throw new \RuntimeException('Cannot register an account.', 0, $error instanceof \Exception ? $error : null);
+        }
+
+        if (!$this->registrationForm) {
+            throw new \InvalidArgumentException('Registration form class must be set.');
         }
 
         $userInformation = $this
