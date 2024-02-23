@@ -99,7 +99,9 @@
         "symfony/security-bundle":        "^5.4 || ^6.3 || ^7.0",
         "symfony/options-resolver":       "^5.4 || ^6.3 || ^7.0",
         "symfony/form":                   "^5.4 || ^6.3 || ^7.0",
-        "symfony/http-client":            "^5.4 || ^6.3 || ^7.0"
+        "symfony/http-client":            "^5.4 || ^6.3 || ^7.0",
+        "symfony/routing":                "^5.4 || ^6.3 || ^7.0",
+        "symfony/twig-bundle":            "^5.4 || ^6.3 || ^7.0"
     },
 
     "require-dev": {
@@ -110,7 +112,6 @@
         "symfony/phpunit-bridge":       "^5.4 || ^6.3 || ^7.0",
         "symfony/property-access":      "^5.4 || ^6.3 || ^7.0",
         "symfony/validator":            "^5.4 || ^6.3 || ^7.0",
-        "symfony/twig-bundle":          "^5.4 || ^6.3 || ^7.0",
         "symfony/stopwatch":            "^5.4 || ^6.3 || ^7.0",
         "symfony/translation":          "^5.4 || ^6.3 || ^7.0",
         "symfony/yaml":                 "^5.4 || ^6.3 || ^7.0",
