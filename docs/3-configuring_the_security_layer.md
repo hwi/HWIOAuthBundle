@@ -3,14 +3,31 @@ Step 3: Configuring the security layer
 
 ### A) Have a user provider that implements `OAuthAwareUserProviderInterface`
 
-The bundle needs a service that is able to load users based on the user
-response of the oauth endpoint. If you have a custom service it should
-implement the interface: `HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface`.
+The bundle needs a service that is able to load users based on the user response of the oauth endpoint.
 
 The HWIOAuthBundle also ships with two default implementations:
 
-- `OAuthUserProvider` (service name: `hwi_oauth.user.provider`) - doesn't persist users
-- `EntityUserProvider` (service name: `hwi_oauth.user.provider.entity`) - loads users from a database
+1. `HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider` (service name: `hwi_oauth.user.provider`) - doesn't persist users,
+2. `HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider` (service name: `hwi_oauth.user.provider.entity`) - loads users from a database.
+
+The `$properties` variable expects array of strings, where key is name of the resource owner (defined in `config/packages/security.yaml`, see below),
+and value is property name on the entity (i.e. `App\Entity\User`).
+
+This provider requires additional configuration:
+```yaml
+# config/services.yaml
+services:
+    hwi_oauth.user.provider.entity:
+        class: HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider
+        arguments:
+            $class: App\Entity\User
+            $properties:
+                'facebook': 'facebook'
+                'google': 'google'
+                'my_custom_provider': 'myCustomProvider'
+```
+
+3. Implement the interface: `HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface` in custom user provider,
 
 ### B) Configure the oauth firewall
 
