@@ -41,7 +41,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set('hwi_oauth.user.provider', OAuthUserProvider::class);
 
     $services->set('hwi_oauth.user.provider.entity', EntityUserProvider::class)
-        ->args([service('doctrine')]);
+        ->args([
+            service('doctrine'),
+            abstract_arg('User entity class name'),
+            abstract_arg('an array of properties, where key is resource owner name & value is property name in User entity'),
+        ]);
 
     $services->set('hwi_oauth.context_listener.abstract_token_refresher', AbstractRefreshAccessTokenListener::class)
         ->abstract()
