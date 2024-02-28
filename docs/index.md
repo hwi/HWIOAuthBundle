@@ -6,6 +6,7 @@ Getting Started With HWIOAuthBundle
 1. [Setting up the bundle](1-setting_up_the_bundle.md)
 2. [Configuring resource owners (Facebook, GitHub, Google, Windows Live) and others](2-configuring_resource_owners.md)
 3. [Configuring the security layer](3-configuring_the_security_layer.md)
+4. [Configuring the connect (register) layer](4-configuring_the_connect.md)
 
 ## Bonus:
 
