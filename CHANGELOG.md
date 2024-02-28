@@ -1,7 +1,15 @@
 Changelog
 =========
-## 2.2.0 (202x-xx-xx)
+## 2.2.0 (2024-02-28)
 * BC Break: Dropped support for PHP 7.4 & 8.0,
+* Added: Telegram resource owner,
+* Bugfix: Allow `use_authorization_to_get_token` to be configured to `false` for generic OAuth2,
+* Bugfix: Update API version for Facebook to latest available
+* Bugfix: Replace custom authenticator passport with custom badge usage,
+* Bugfix: Fix registration of failure handler,
+* Bugfix: Don't miss refresh token in registration controller,
+* Bugfix: Allow `null` as `$registrationForm` in `RegisterController`,
+* Bugfix: Fix connect functionality with authentication managers,
 
 ## 2.1.0 (2023-11-30)
 * BC Break: Dropped support for Symfony: `>6.0, <6.3`,
