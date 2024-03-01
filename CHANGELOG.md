@@ -1,5 +1,8 @@
 Changelog
 =========
+## 2.2.1 (2024-03-xx)
+* Bugfix: Prevent overwriting `failure_path` in `AuthenticationFailureHandler` when connect functionality is not enabled
+
 ## 2.2.0 (2024-02-28)
 * BC Break: Dropped support for PHP 7.4 & 8.0,
 * Added: Telegram resource owner,
