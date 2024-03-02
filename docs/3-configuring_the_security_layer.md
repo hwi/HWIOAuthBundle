@@ -59,6 +59,7 @@ security:
 
     access_control:
         - { path: ^/login, roles: PUBLIC_ACCESS }
+        - { path: ^/connect, roles: PUBLIC_ACCESS }
         - { path: ^/, roles: ROLE_USER } // force login
 ```
 
