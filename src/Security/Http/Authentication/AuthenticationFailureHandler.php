@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace HWI\Bundle\OAuthBundle\Security\Http\Authentication;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,12 +21,13 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
+use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Component\Security\Http\ParameterBagUtils;
 
 final class AuthenticationFailureHandler implements AuthenticationFailureHandlerInterface
 {
     private array $defaultOptions = [
-        'failure_path' => 'hwi_oauth_connect_registration',
+        'failure_path' => null,
         'failure_forward' => false,
         'login_path' => '/login',
         'failure_path_parameter' => '_failure_path',
@@ -36,8 +36,11 @@ final class AuthenticationFailureHandler implements AuthenticationFailureHandler
     public function __construct(
         private readonly RequestStack $requestStack,
         private readonly RouterInterface $router,
+        private readonly HttpUtils $httpUtils,
         private readonly bool $connect,
+        array $options = [],
     ) {
+        $this->setOptions($options);
     }
 
     public function setOptions(array $options): void
@@ -58,7 +61,7 @@ final class AuthenticationFailureHandler implements AuthenticationFailureHandler
         $options['failure_path'] ??= $options['login_path'];
 
         $error = $exception->getPrevious();
-
+        $key = null;
         if ($this->connect && $error instanceof AccountNotLinkedException) {
             $key = time();
             $session = $request->hasSession() ? $request->getSession() : $this->getSession();
@@ -69,29 +72,17 @@ final class AuthenticationFailureHandler implements AuthenticationFailureHandler
 
                 $session->set('_hwi_oauth.registration_error.'.$key, $error);
             }
-
-            if ('/' === $options['failure_path'][0]) {
-                $failurePath = $request->getUriForPath($options['failure_path'][0]);
-            } else {
-                $failurePath = $this->router->generate($options['failure_path'], ['key' => $key]);
-            }
-
-            return new RedirectResponse($failurePath);
         }
 
-        if ($error instanceof AuthenticationException) {
-            $error = $error->getMessageKey();
+        if (null !== $key) {
+            $failurePath = $this->router->generate($options['failure_path'], ['key' => $key]);
+        } elseif ('/' === $options['failure_path'][0]) {
+            $failurePath = $options['failure_path'];
         } else {
-            $error = $exception->getMessageKey();
+            $failurePath = $this->router->generate($options['failure_path']);
         }
 
-        if ('/' === $options['login_path'][0]) {
-            $loginPath = $request->getUriForPath($options['login_path'][0]);
-        } else {
-            $loginPath = $this->router->generate($options['login_path'], ['error' => $error]);
-        }
-
-        return new RedirectResponse($loginPath);
+        return $this->httpUtils->createRedirectResponse($request, $failurePath);
     }
 
     private function getSession(): ?SessionInterface

@@ -21,8 +21,10 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\Routing\Matcher\UrlMatcherInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\HttpUtils;
 
 final class AuthenticationFailureHandlerTest extends TestCase
 {
@@ -35,6 +37,7 @@ final class AuthenticationFailureHandlerTest extends TestCase
         $handler = new AuthenticationFailureHandler(
             $requestStack,
             $router = $this->createMock(RouterInterface::class),
+            new HttpUtils($router, $this->createMock(UrlMatcherInterface::class)),
             false
         );
 
@@ -56,13 +59,14 @@ final class AuthenticationFailureHandlerTest extends TestCase
         $handler = new AuthenticationFailureHandler(
             $requestStack,
             $router = $this->createMock(RouterInterface::class),
+            new HttpUtils($router, $this->createMock(UrlMatcherInterface::class)),
             false,
         );
         $handler->setOptions(['login_path' => 'route_name']);
 
         $router->expects($this->once())
             ->method('generate')
-            ->with('route_name', ['error' => 'An authentication exception occurred.'], 1)
+            ->with('route_name', [], 1)
             ->willReturn('/path');
 
         $this->assertInstanceOf(
@@ -80,6 +84,7 @@ final class AuthenticationFailureHandlerTest extends TestCase
         $handler = new AuthenticationFailureHandler(
             $requestStack,
             $router = $this->createMock(RouterInterface::class),
+            new HttpUtils($router, $this->createMock(UrlMatcherInterface::class)),
             false
         );
 
@@ -101,6 +106,7 @@ final class AuthenticationFailureHandlerTest extends TestCase
         $handler = new AuthenticationFailureHandler(
             $requestStack,
             $router = $this->createMock(RouterInterface::class),
+            new HttpUtils($router, $this->createMock(UrlMatcherInterface::class)),
             true
         );
 
@@ -124,7 +130,9 @@ final class AuthenticationFailureHandlerTest extends TestCase
         $handler = new AuthenticationFailureHandler(
             $requestStack,
             $router = $this->createMock(RouterInterface::class),
-            true
+            new HttpUtils($router, $this->createMock(UrlMatcherInterface::class)),
+            true,
+            ['failure_path' => 'hwi_oauth_connect_registration']
         );
 
         $router->expects($this->once())

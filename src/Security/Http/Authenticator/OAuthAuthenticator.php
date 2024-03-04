@@ -128,6 +128,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
 
         $userBadge = class_exists(UserBadge::class)
             ? new UserBadge(
+                /* @phpstan-ignore-next-line */
                 $user ? method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername() : null,
                 static function () use ($user) { return $user; }
             )
