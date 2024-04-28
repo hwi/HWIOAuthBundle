@@ -18,6 +18,9 @@ And implement it:
 ```php
 namespace App\Security;
 
+use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
+use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+
 final class OAuthConnector implements AccountConnectorInterface
 {
     public function __construct(
