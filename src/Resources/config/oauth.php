@@ -69,6 +69,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service('request_stack'),
             service('router'),
+            service('security.http_utils'),
             '%hwi_oauth.connect%',
         ]);
 };
