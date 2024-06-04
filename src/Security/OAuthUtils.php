@@ -77,7 +77,7 @@ final class OAuthUtils
         }
 
         if ($request->query->has('state')) {
-            $this->addQueryParameterToState($request->query->get('state'), $resourceOwner);
+            $this->addQueryParameterToState($request->query->all()['state'] ?? [], $resourceOwner);
         }
 
         return $resourceOwner->getAuthorizationUrl($redirectUrl, $extraParameters);
@@ -93,7 +93,7 @@ final class OAuthUtils
 
         $request->attributes->set('service', $resourceOwner->getName());
         if ($request->query->has('state')) {
-            $this->addQueryParameterToState($request->query->get('state'), $resourceOwner);
+            $this->addQueryParameterToState($request->query->all()['state'] ?? [], $resourceOwner);
         }
 
         return $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service');
