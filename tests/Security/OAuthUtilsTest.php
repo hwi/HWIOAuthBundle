@@ -67,15 +67,12 @@ final class OAuthUtilsTest extends TestCase
         );
     }
 
-    public function testGetAuthorizationUrlWithStateQueryParameters(): void
+    /**
+     * @dataProvider provideAuthorizationUrlsWithState
+     */
+    public function testGetAuthorizationUrlWithStateQueryParameters(string $url, string $urlWithState, string $redirect): void
     {
-        $parameters = ['foo' => 'bar', 'foobar' => 'foobaz'];
-        $state = new State($parameters);
-
-        $url = 'http://localhost:8080/login/check-instagram';
-        $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
-
-        $request = $this->getRequest($url.'?state='.$state->encode());
+        $request = $this->getRequest($urlWithState);
         $resource = $this->getMockBuilder(ResourceOwnerInterface::class)->getMock();
 
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAuthorizationChecker(false, $this->grantRule), $this->createFirewallMapMock(), true, $this->grantRule);
@@ -131,14 +128,12 @@ final class OAuthUtilsTest extends TestCase
         $this->assertNull($request->attributes->get('service'));
     }
 
-    public function testGetServiceAuthUrlWithStateQueryParameters(): void
+    /**
+     * @dataProvider provideServiceAuthUrlsWithState
+     */
+    public function testGetServiceAuthUrlWithStateQueryParameters(string $url, string $expectedResult): void
     {
-        $parameters = ['foo' => 'bar', 'foobar' => 'foobaz'];
-        $state = new State($parameters);
-
-        $url = 'http://localhost:8080/service/instagram';
-
-        $request = $this->getRequest($url.'?state='.$state->encode());
+        $request = $this->getRequest($url);
         $resource = $this->getMockBuilder(ResourceOwnerInterface::class)->getMock();
         $resource
             ->expects($this->any())
@@ -166,7 +161,7 @@ final class OAuthUtilsTest extends TestCase
             ->withConsecutive(['foo', 'bar'], ['foobar', 'foobaz']);
 
         $this->assertEquals(
-            $url,
+            $expectedResult,
             $utils->getServiceAuthUrl($request, $resource)
         );
     }
@@ -259,6 +254,41 @@ final class OAuthUtilsTest extends TestCase
         yield 'missing "oauth_version"' => [['oauth_consumer_key' => '', 'oauth_timestamp' => '', 'oauth_nonce' => '', 'oauth_signature_method' => '']];
 
         yield 'missing "oauth_signature_method"' => [['oauth_consumer_key' => '', 'oauth_timestamp' => '', 'oauth_nonce' => '', 'oauth_version' => '']];
+    }
+
+    public function provideServiceAuthUrlsWithState(): iterable
+    {
+        $parameters = ['foo' => 'bar', 'foobar' => 'foobaz'];
+        $state = new State($parameters);
+
+        $url = 'http://localhost:8080/service/instagram';
+
+        yield 'state as an encoded string' => [$url.'?state='.$state->encode(), $url];
+
+        $stateAsArray = [];
+        foreach ($parameters as $key => $value) {
+            $stateAsArray[] = sprintf('state[%s]=%s', $key, rawurlencode($value));
+        }
+
+        yield 'state as an array' => [$url.'?'.implode('&', $stateAsArray), $url];
+    }
+
+    public function provideAuthorizationUrlsWithState(): iterable
+    {
+        $parameters = ['foo' => 'bar', 'foobar' => 'foobaz'];
+        $state = new State($parameters);
+
+        $url = 'http://localhost:8080/login/check-instagram';
+        $redirect = 'https://api.instagram.com/oauth/authorize?redirect='.rawurlencode($url);
+
+        yield 'state as an encoded string' => [$url, $url.'?state='.$state->encode(), $redirect];
+
+        $stateAsArray = [];
+        foreach ($parameters as $key => $value) {
+            $stateAsArray[] = sprintf('state[%s]=%s', $key, rawurlencode($value));
+        }
+
+        yield 'state as an array' => [$url, $url.'?'.implode('&', $stateAsArray), $redirect];
     }
 
     private function getRequest(string $url): Request
