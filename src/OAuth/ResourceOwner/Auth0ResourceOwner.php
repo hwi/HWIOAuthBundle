@@ -55,6 +55,11 @@ final class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
             'auth0_client' => $auth0Client,
         ]);
 
+        $resolver->setDefined([
+            'organization',
+            'audience',
+        ]);
+
         $resolver->setRequired([
             'base_url',
         ]);
@@ -78,5 +83,21 @@ final class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
         }
 
         return parent::httpRequest($url, $content, $headers, $method);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = []): string
+    {
+        if (!empty($this->options['organization'])) {
+            $extraParameters['organization'] = $this->options['organization'];
+        }
+
+        if (!empty($this->options['audience'])) {
+            $extraParameters['audience'] = $this->options['audience'];
+        }
+
+        return parent::getAuthorizationUrl($redirectUri, $extraParameters);
     }
 }
