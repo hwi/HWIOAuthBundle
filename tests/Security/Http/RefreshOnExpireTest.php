@@ -76,9 +76,9 @@ class RefreshOnExpireTest extends WebTestCase
         $this->resourceOwnerMock->expects($this->once())
             ->method('refreshAccessToken')
             ->willReturn([
-               'expires' => 666, // expired
-               'refresh_token' => 'refresh_token',
-           ]);
+                'expires' => 666, // expired
+                'refresh_token' => 'refresh_token',
+            ]);
 
         $this->resourceOwnerMock->expects($this->once())
             ->method('getUserInformation')

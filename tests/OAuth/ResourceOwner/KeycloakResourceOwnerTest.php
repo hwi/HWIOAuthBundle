@@ -17,16 +17,16 @@ use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTe
 final class KeycloakResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
     protected array $options = [
-      'base_url' => 'http://keycloak.example.com/auth',
-      'realm' => 'example',
-      'client_id' => 'clientid',
-      'client_secret' => 'clientsecret',
+        'base_url' => 'http://keycloak.example.com/auth',
+        'realm' => 'example',
+        'client_id' => 'clientid',
+        'client_secret' => 'clientsecret',
 
-      'authorization_url' => 'http://keycloak.example.com/auth/realms/example/protocol/openid-connect/auth',
-      'access_token_url' => 'http://keycloak.example.com/auth/realms/example/protocol/openid-connect/token',
-      'infos_url' => 'http://keycloak.example.com/auth/realms/example/protocol/openid-connect/userinfo',
+        'authorization_url' => 'http://keycloak.example.com/auth/realms/example/protocol/openid-connect/auth',
+        'access_token_url' => 'http://keycloak.example.com/auth/realms/example/protocol/openid-connect/token',
+        'infos_url' => 'http://keycloak.example.com/auth/realms/example/protocol/openid-connect/userinfo',
 
-      'attr_name' => 'access_token',
+        'attr_name' => 'access_token',
     ];
 
     protected string $authorizationUrlBasePart = 'http://keycloak.example.com/auth/realms/example/protocol/openid-connect/auth?response_type=code&client_id=clientid&scope=openid+email';
