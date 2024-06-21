@@ -36,10 +36,10 @@ final class CustomResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults(
             [
-               'authorization_url' => '{base_url}/authorize',
-               'access_token_url' => '{base_url}/oauth/token',
-               'infos_url' => '{base_url}/userinfo',
-           ]
+                'authorization_url' => '{base_url}/authorize',
+                'access_token_url' => '{base_url}/oauth/token',
+                'infos_url' => '{base_url}/userinfo',
+            ]
         );
 
         $resolver->setRequired(['base_url']);

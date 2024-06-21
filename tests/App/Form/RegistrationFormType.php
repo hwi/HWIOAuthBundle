@@ -53,8 +53,8 @@ final class RegistrationFormType extends AbstractType
     {
         $resolver->setDefaults(
             [
-               'data_class' => User::class,
-               'csrf_token_id' => 'registration',
+                'data_class' => User::class,
+                'csrf_token_id' => 'registration',
             ]
         );
     }
