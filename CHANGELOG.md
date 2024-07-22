@@ -80,7 +80,7 @@ Changelog
   - `hwi_oauth_connect`: `GET`,
   - `hwi_oauth_service_redirect`: `GET`,
 * Added support for PHP 8.1,
-* Added support for Symfony 5.6,
+* Added support for Symfony 6,
 
 ## 1.4.5 (2021-12-08)
 * Bugfix: Fixed: BC break by restoring wrongly moved `AbstractOAuthToken::getCredentials()` method,
