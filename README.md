@@ -55,7 +55,8 @@ This bundle contains support for 58 different providers:
 * JIRA,
 * Keycloak,
 * LinkedIn,
-* Mail.ru
+* Mail.ru,
+* Microsoft,
 * Odnoklassniki,
 * Office365,
 * Passage,
