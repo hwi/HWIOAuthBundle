@@ -38,8 +38,20 @@ final class AzureResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function configure()
     {
-        $this->options['access_token_url'] = sprintf($this->options['access_token_url'], $this->options['application']);
-        $this->options['authorization_url'] = sprintf($this->options['authorization_url'], $this->options['application']);
+        $this->options['access_token_url'] = \sprintf($this->options['access_token_url'], $this->options['application']);
+        $this->options['authorization_url'] = \sprintf($this->options['authorization_url'], $this->options['application']);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
+    {
+        $url = parent::getAuthorizationUrl($redirectUri, array_merge([
+            'prompt' => $this->options['prompt'],
+        ], $extraParameters));
+
+        return $url;
     }
 
     /**
@@ -89,6 +101,12 @@ final class AzureResourceOwner extends GenericOAuth2ResourceOwner
             'application' => 'common',
             'api_version' => 'v1.0',
             'csrf' => true,
+            'prompt' => null,
         ]);
+
+        $resolver
+            // @link https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth2-auth-code-flow
+            ->setAllowedValues('prompt', [null, 'login', 'none', 'consent', 'select_account'])
+        ;
     }
 }
