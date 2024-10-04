@@ -71,6 +71,7 @@ This bundle contains support for 58 different providers:
 * Stack Exchange,
 * Stereomood,
 * Strava,
+* Télégram,
 * Toshl,
 * Trakt,
 * Trello,
