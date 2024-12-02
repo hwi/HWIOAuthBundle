@@ -13,16 +13,15 @@ namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\OAuthAuthenticator;
-use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 
 class RefreshAccessTokenListener extends AbstractRefreshAccessTokenListener
 {
-    private AuthenticatorInterface $authenticator;
+    private OAuthAuthenticator $oAuthAuthenticator;
 
     public function __construct(
-        AuthenticatorInterface $authenticator
+        OAuthAuthenticator $oAuthAuthenticator
     ) {
-        $this->authenticator = $authenticator;
+        $this->oAuthAuthenticator = $oAuthAuthenticator;
     }
 
     /**
@@ -34,6 +33,6 @@ class RefreshAccessTokenListener extends AbstractRefreshAccessTokenListener
      */
     protected function refreshToken(OAuthToken $token): OAuthToken
     {
-        return $this->authenticator->refreshToken($token);
+        return $this->oAuthAuthenticator->refreshToken($token);
     }
 }
