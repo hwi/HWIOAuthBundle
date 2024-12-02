@@ -1,6 +1,7 @@
 Changelog
 =========
-## 2.2.1 (2024-12-xx)
+## 2.3.0 (2024-12-xx)
+* BC Break: Dropped support for Symfony: `6.3` and `7.0`,
 * Bugfix: Prevent overwriting `failure_path` in `AuthenticationFailureHandler` when connect functionality is not enabled,
 * Bugfix: Prevent overwriting `failure_handler` in security configuration if set,
 * Bugfix: Type hint `AuthenticatorInterface` instead of `OAuthAuthenticator` in `RefreshAccessTokenListener`,
