@@ -93,6 +93,8 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
             'code' => $request->query->get('code'),
             'grant_type' => 'authorization_code',
             'redirect_uri' => $redirectUri,
+            'client_id' => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
         ], $extraParameters);
 
         $response = $this->doGetTokenRequest($this->options['access_token_url'], $parameters);
