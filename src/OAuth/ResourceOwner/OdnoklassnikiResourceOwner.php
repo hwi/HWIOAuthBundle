@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use Symfony\Component\HttpClient\Exception\JsonException;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -36,6 +37,19 @@ final class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
         'firstname' => 'first_name',
         'lastname' => 'last_name',
     ];
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getAccessToken(Request $request, $redirectUri, array $extraParameters = [])
+    {
+        $extraParameters = array_merge([
+            'client_id' => $this->options['client_id'],
+            'client_secret' => $this->options['client_secret'],
+        ], $extraParameters);
+
+        return parent::getAccessToken($request, $redirectUri, $extraParameters);
+    }
 
     /**
      * {@inheritdoc}
