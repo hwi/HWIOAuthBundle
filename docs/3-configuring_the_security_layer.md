@@ -91,7 +91,7 @@ security:
 The paths configured at the `resource_owners` section should be defined in your routing.
 
 ```yaml
-# app/config/routing.yml
+# config/routes/hwi_oauth_routing.yaml
 facebook_login:
     path: /login/check-facebook
 
