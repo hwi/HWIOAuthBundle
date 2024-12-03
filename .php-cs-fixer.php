@@ -31,6 +31,11 @@ return (new PhpCsFixer\Config())
             'allow_unused_params' => false,
         ],
         'phpdoc_types_order' => false,
+        'global_namespace_import' => [
+            'import_classes'   => true,
+            'import_constants' => null,
+            'import_functions' => null,
+        ],
     ))
     ->setRiskyAllowed(true)
     ->setFinder(
