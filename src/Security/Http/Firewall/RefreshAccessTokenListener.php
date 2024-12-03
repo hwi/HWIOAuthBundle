@@ -47,6 +47,6 @@ class RefreshAccessTokenListener extends AbstractRefreshAccessTokenListener
             }
         }
 
-        throw new \RuntimeException('Unsupported authenticator, expecting OAuthAuthenticator, got ' . get_debug_type($this->authenticator));
+        throw new \RuntimeException('Unsupported authenticator, expecting OAuthAuthenticator, got ' . get_class($this->authenticator));
     }
 }
