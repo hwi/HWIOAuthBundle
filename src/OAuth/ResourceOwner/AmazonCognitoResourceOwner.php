@@ -35,11 +35,10 @@ final class AmazonCognitoResourceOwner extends GenericOAuth2ResourceOwner
         parent::configureOptions($resolver);
 
         $resolver->setDefaults([
-            'authorization_url'   => '{base_url}/oauth2/authorize',
-            'access_token_url'    => '{base_url}/oauth2/token',
-            'revoke_token_url'    => '{base_url}/oauth2/revoke',
-            'infos_url'           => '{base_url}/oauth2/userInfo',
-            'use_commas_in_scope' => true,
+            'authorization_url' => '{base_url}/oauth2/authorize',
+            'access_token_url'  => '{base_url}/oauth2/token',
+            'revoke_token_url'  => '{base_url}/oauth2/revoke',
+            'infos_url'         => '{base_url}/oauth2/userInfo'
         ]);
 
         $resolver->setRequired([
