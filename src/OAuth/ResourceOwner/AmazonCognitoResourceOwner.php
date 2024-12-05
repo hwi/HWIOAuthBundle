@@ -43,7 +43,6 @@ final class AmazonCognitoResourceOwner extends GenericOAuth2ResourceOwner
         ]);
 
         $resolver->setRequired([
-            'pool_id',
             'region',
             'domain',
         ]);
