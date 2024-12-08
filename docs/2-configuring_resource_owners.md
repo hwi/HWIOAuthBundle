@@ -33,6 +33,7 @@ hwi_oauth:
 - [37signals](resource_owners/37signals.md)
 - [Asana](resource_owners/asana.md)
 - [Amazon](resource_owners/amazon.md)
+- [Amazon Cognito](resource_owners/amazon_cognito.md)
 - [Apple](resource_owners/apple.md)
 - [Auth0](resource_owners/auth0.md)
 - [Azure](resource_owners/azure.md)
