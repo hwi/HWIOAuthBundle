@@ -23,11 +23,11 @@ final class AmazonCognitoResourceOwner extends GenericOAuth2ResourceOwner
 
     protected array $paths = [
         'identifier' => 'sub',
-        'firstname'  => 'given_name',
-        'lastname'   => 'family_name',
-        'email'      => 'email',
-        'nickname'   => 'nickname',
-        'realname'   => 'name',
+        'firstname' => 'given_name',
+        'lastname' => 'family_name',
+        'email' => 'email',
+        'nickname' => 'nickname',
+        'realname' => 'name',
     ];
 
     protected function configureOptions(OptionsResolver $resolver)
@@ -36,9 +36,9 @@ final class AmazonCognitoResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->setDefaults([
             'authorization_url' => '{base_url}/oauth2/authorize',
-            'access_token_url'  => '{base_url}/oauth2/token',
-            'revoke_token_url'  => '{base_url}/oauth2/revoke',
-            'infos_url'         => '{base_url}/oauth2/userInfo'
+            'access_token_url' => '{base_url}/oauth2/token',
+            'revoke_token_url' => '{base_url}/oauth2/revoke',
+            'infos_url' => '{base_url}/oauth2/userInfo',
         ]);
 
         $resolver->setRequired([
@@ -47,7 +47,7 @@ final class AmazonCognitoResourceOwner extends GenericOAuth2ResourceOwner
         ]);
 
         $normalizer = function (Options $options, $value) {
-            $baseUrl = sprintf('https://%s.auth.%s.amazoncognito.com', $options['domain'], $options['region']);
+            $baseUrl = \sprintf('https://%s.auth.%s.amazoncognito.com', $options['domain'], $options['region']);
 
             return str_replace('{base_url}', $baseUrl, $value);
         };

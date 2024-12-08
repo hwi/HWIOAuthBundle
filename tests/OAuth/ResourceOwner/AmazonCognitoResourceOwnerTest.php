@@ -32,10 +32,14 @@ json;
         'realname' => 'name',
         'email' => 'email',
     ];
+
     public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
-            [],
+            [
+                'domain' => 'test.com',
+                'region' => 'us-east-1',
+            ],
             [],
             [
                 $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
