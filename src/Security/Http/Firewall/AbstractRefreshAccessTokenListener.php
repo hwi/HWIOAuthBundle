@@ -13,7 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
-use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
+use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -24,7 +24,7 @@ abstract class AbstractRefreshAccessTokenListener extends AbstractListener
 {
     protected TokenStorageInterface $tokenStorage;
 
-    protected ResourceOwnerMap $resourceOwnerMap;
+    protected ResourceOwnerMapInterface $resourceOwnerMap;
 
     protected bool $enabled = false;
 
@@ -33,7 +33,7 @@ abstract class AbstractRefreshAccessTokenListener extends AbstractListener
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function setResourceOwnerMap(ResourceOwnerMap $resourceOwnerMap)
+    public function setResourceOwnerMap(ResourceOwnerMapInterface $resourceOwnerMap)
     {
         $this->resourceOwnerMap = $resourceOwnerMap;
     }
