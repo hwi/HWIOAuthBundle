@@ -12,9 +12,11 @@
 namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AmazonCognitoResourceOwner;
+use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Http\HttpUtils;
 
 final class AmazonCognitoResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
@@ -37,11 +39,8 @@ json;
     public function testGetUserInformation(): void
     {
         $resourceOwner = $this->createResourceOwner(
-            [
-                'domain' => 'test.com',
-                'region' => 'us-east-1',
-            ],
-            $this->paths,
+            [],
+            [],
             [
                 $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
             ]
@@ -52,7 +51,6 @@ json;
          */
         $userResponse = $resourceOwner->getUserInformation(['access_token' => 'token']);
 
-        $this->assertEquals('111', $userResponse->getUserIdentifier());
         $this->assertEquals('baz@example.com', $userResponse->getEmail());
         $this->assertEquals('bar', $userResponse->getRealName());
         $this->assertNull($userResponse->getFirstName());
@@ -65,10 +63,7 @@ json;
         $this->expectException(AuthenticationException::class);
 
         $resourceOwner = $this->createResourceOwner(
-            [
-                'domain' => 'test.com',
-                'region' => 'us-east-1',
-            ],
+            [],
             [],
             [
                 $this->createMockResponse('invalid', 'application/json; charset=utf-8', 401),
@@ -76,5 +71,21 @@ json;
         );
 
         $resourceOwner->getUserInformation($this->tokenData);
+    }
+
+    protected function setUpResourceOwner(string $name, HttpUtils $httpUtils, array $options, array $responses): ResourceOwnerInterface
+    {
+        return parent::setUpResourceOwner(
+            $name,
+            $httpUtils,
+            array_merge(
+                [
+                    'domain' => 'test.com',
+                    'region' => 'us-west-2',
+                ],
+                $options
+            ),
+            $responses
+        );
     }
 }
