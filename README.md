@@ -25,7 +25,7 @@ file in this bundle. Read the documentation for version:
 This bundle contains support for 58 different providers:
 * 37signals,
 * Amazon,
-* Amazon Cognito
+* Amazon Cognito,
 * Apple,
 * Asana,
 * Auth0,
