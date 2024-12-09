@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AmazonCognitoResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 final class AmazonCognitoResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 {
@@ -40,7 +41,7 @@ json;
                 'domain' => 'test.com',
                 'region' => 'us-east-1',
             ],
-            [],
+            $this->paths,
             [
                 $this->createMockResponse($this->userResponse, 'application/json; charset=utf-8'),
             ]
@@ -64,7 +65,10 @@ json;
         $this->expectException(AuthenticationException::class);
 
         $resourceOwner = $this->createResourceOwner(
-            [],
+            [
+                'domain' => 'test.com',
+                'region' => 'us-east-1',
+            ],
             [],
             [
                 $this->createMockResponse('invalid', 'application/json; charset=utf-8', 401),
