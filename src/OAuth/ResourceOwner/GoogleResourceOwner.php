@@ -87,6 +87,7 @@ final class GoogleResourceOwner extends GenericOAuth2ResourceOwner
             'login_hint' => null,
             'prompt' => null,
             'request_visible_actions' => null,
+            'use_postmessage_redirect_uri' => false
         ]);
 
         $resolver
@@ -98,6 +99,20 @@ final class GoogleResourceOwner extends GenericOAuth2ResourceOwner
             ->setAllowedValues('display', ['page', 'popup', 'touch', 'wap', null])
             ->setAllowedValues('login_hint', ['email address', 'sub', null])
             ->setAllowedValues('prompt', ['consent', 'select_account', null])
+            ->setAllowedValues('use_postmessage_redirect_uri', [false, true])
+            ->set
         ;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function doGetTokenRequest($url, array $parameters = [])
+    {
+        if ($this->options['use_postmessage_redirect_uri']) {
+            $parameters['redirect_uri'] = 'postmessage';
+        }
+
+        return parent::doGetTokenRequest($url, $parameters);
     }
 }
