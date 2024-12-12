@@ -26,12 +26,12 @@ final class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
      * {@inheritdoc}
      */
     protected array $paths = [
-        'identifier' => 'id',
-        'nickname' => 'emailAddress',
-        'firstname' => 'firstName',
-        'lastname' => 'lastName',
-        'email' => 'emailAddress',
-        'profilepicture' => 'profilePicture',
+        'identifier' => 'sub',
+        'nickname' => 'email',
+        'firstname' => 'given_name',
+        'lastname' => 'family_name',
+        'email' => 'email',
+        'profilepicture' => 'picture',
     ];
 
     /**
@@ -40,22 +40,6 @@ final class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         $response = parent::getUserInformation($accessToken, $extraParameters);
-
-        $responseData = $response->getData();
-        // The user info returned by /me doesn't contain the email so we make an extra request to fetch it
-        $content = $this->httpRequest(
-            $this->normalizeUrl($this->options['email_url'], $extraParameters),
-            null,
-            ['Authorization' => 'Bearer '.$accessToken['access_token']]
-        );
-
-        $emailResponse = $this->getResponseContent($content);
-        if (isset($emailResponse['elements']) && \count($emailResponse['elements']) > 0) {
-            $responseData['emailAddress'] = $emailResponse['elements'][0]['handle~']['emailAddress'];
-        }
-        // errors not handled because I don't see any relevant thing to do with them
-
-        $response->setData($responseData);
 
         return $response;
     }
@@ -100,7 +84,7 @@ final class LinkedinResourceOwner extends GenericOAuth2ResourceOwner
             'scope' => 'r_liteprofile r_emailaddress',
             'authorization_url' => 'https://www.linkedin.com/oauth/v2/authorization',
             'access_token_url' => 'https://www.linkedin.com/oauth/v2/accessToken',
-            'infos_url' => 'https://api.linkedin.com/v2/me?projection=(id,firstName,lastName,profilePicture(displayImage~:playableStreams))',
+            'infos_url' => 'https://api.linkedin.com/v2/userinfo',
             'email_url' => 'https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))',
 
             'user_response_class' => LinkedinUserResponse::class,
