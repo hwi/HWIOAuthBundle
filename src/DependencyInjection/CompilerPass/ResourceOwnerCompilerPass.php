@@ -67,11 +67,11 @@ final class ResourceOwnerCompilerPass implements CompilerPassInterface
             $resourceOwnerClass = $definition->getClass();
 
             // Check whether a ResourceOwner class exists only if resource owner was set by its "options.type"
-            if (false === preg_match('~^%(?P<parameter>hwi_oauth.resource_owner.(?P<type>.+).class)%$~', $resourceOwnerClass, $match)) {
+            if (false === $result = preg_match('~^%(?P<parameter>hwi_oauth.resource_owner.(?P<type>.+).class)%$~', $resourceOwnerClass, $match)) {
                 return;
             }
 
-            if (!($match['type'] ?? null)) {
+            if (0 === $result || !$match['type']) {
                 continue;
             }
 

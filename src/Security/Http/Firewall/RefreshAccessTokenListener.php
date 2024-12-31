@@ -40,7 +40,7 @@ class RefreshAccessTokenListener extends AbstractRefreshAccessTokenListener
             return $this->authenticator->refreshToken($token);
         }
 
-        if ($this->authenticator instanceof TraceableAuthenticator) {
+        if ($this->authenticator instanceof TraceableAuthenticator && method_exists($this->authenticator, 'getAuthenticator')) {
             $authenticator = $this->authenticator->getAuthenticator();
 
             if ($authenticator instanceof OAuthAuthenticator) {
