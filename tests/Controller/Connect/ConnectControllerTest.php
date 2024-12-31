@@ -210,7 +210,7 @@ final class ConnectControllerTest extends AbstractConnectControllerTest
 
     private function createConnectController(
         bool $connectEnabled = true,
-        bool $confirmConnect = true
+        bool $confirmConnect = true,
     ): ConnectController {
         return new ConnectController(
             $this->oAuthUtils,

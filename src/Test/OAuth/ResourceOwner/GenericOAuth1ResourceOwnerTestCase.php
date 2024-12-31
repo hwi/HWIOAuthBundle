@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
 use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
+use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
@@ -358,7 +359,7 @@ abstract class GenericOAuth1ResourceOwnerTestCase extends ResourceOwnerTestCase
 
         $this->storage->expects($this->once())
             ->method('fetch')
-            ->willThrowException(new \InvalidArgumentException());
+            ->willThrowException(new InvalidArgumentException());
 
         $this->storage->expects($this->never())
             ->method('save');

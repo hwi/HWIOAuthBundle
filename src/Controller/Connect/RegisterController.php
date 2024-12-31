@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller\Connect;
 
+use Exception;
 use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\Event\FilterUserResponseEvent;
 use HWI\Bundle\OAuthBundle\Event\FormEvent;
@@ -19,6 +20,8 @@ use HWI\Bundle\OAuthBundle\Form\RegistrationFormHandlerInterface;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,7 +61,7 @@ final class RegisterController extends AbstractController
         string $grantRule,
         ?string $registrationForm,
         ?AccountConnectorInterface $accountConnector,
-        ?RegistrationFormHandlerInterface $formHandler
+        ?RegistrationFormHandlerInterface $formHandler,
     ) {
         parent::__construct(
             $resourceOwnerMapLocator,
@@ -85,7 +88,7 @@ final class RegisterController extends AbstractController
      *
      * @throws NotFoundHttpException if `connect` functionality was not enabled
      * @throws AccessDeniedException if any user is authenticated
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public function registrationAction(Request $request, string $key): Response
     {
@@ -109,11 +112,11 @@ final class RegisterController extends AbstractController
         }
 
         if (!$error instanceof AccountNotLinkedException) {
-            throw new \RuntimeException('Cannot register an account.', 0, $error instanceof \Exception ? $error : null);
+            throw new RuntimeException('Cannot register an account.', 0, $error instanceof Exception ? $error : null);
         }
 
         if (!$this->registrationForm) {
-            throw new \InvalidArgumentException('Registration form class must be set.');
+            throw new InvalidArgumentException('Registration form class must be set.');
         }
 
         $userInformation = $this

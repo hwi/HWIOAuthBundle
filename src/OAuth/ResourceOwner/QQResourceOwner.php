@@ -64,7 +64,7 @@ final class QQResourceOwner extends GenericOAuth2ResourceOwner
         if (isset($content['ret']) && 0 === $content['ret']) {
             $content['openid'] = $openid;
         } else {
-            throw new AuthenticationException(sprintf('OAuth error: %s', isset($content['ret']) ? $content['msg'] : 'invalid response'));
+            throw new AuthenticationException(\sprintf('OAuth error: %s', isset($content['ret']) ? $content['msg'] : 'invalid response'));
         }
 
         $response = $this->getUserResponse();

@@ -18,6 +18,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\Passport\Badge\OAuthTokenBadge;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
+use LogicException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,7 +55,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         private readonly AuthenticationSuccessHandlerInterface $successHandler,
         private readonly AuthenticationFailureHandlerInterface $failureHandler,
         private readonly HttpKernelInterface $kernel,
-        private readonly array $options
+        private readonly array $options,
     ) {
     }
 
@@ -108,7 +109,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         if ($request->query->has('authenticated') && $resourceOwner->getOption('auth_with_one_url')) {
             $request->attributes->set('service', $resourceOwner->getName());
 
-            throw new LazyResponseException(new RedirectResponse(sprintf('%s?code=%s&authenticated=true', $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service'), $request->query->get('code'))));
+            throw new LazyResponseException(new RedirectResponse(\sprintf('%s?code=%s&authenticated=true', $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service'), $request->query->get('code'))));
         }
 
         $resourceOwner->isCsrfTokenValid(
@@ -198,8 +199,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
     /**
      * @template T of OAuthToken
      *
-     * @param T              $token
-     * @param ?UserInterface $user
+     * @param T $token
      *
      * @return T
      */
@@ -249,7 +249,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
             return $badge->getToken();
         }
 
-        throw new \LogicException(sprintf('Given passport must contain instance of "%s".', OAuthTokenBadge::class));
+        throw new LogicException(\sprintf('Given passport must contain instance of "%s".', OAuthTokenBadge::class));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

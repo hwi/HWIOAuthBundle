@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\State;
 use HWI\Bundle\OAuthBundle\OAuth\Exception\StateRetrievalException;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\Security\Helper\NonceGenerator;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Exception\DuplicateKeyException;
 
@@ -75,7 +76,7 @@ final class StateTest extends TestCase
 
     public function testFromEncodedParameterWithInvalidFormat(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
 
         $values = ['some', 'indexed', 'array'];
 

@@ -417,7 +417,7 @@ final class OAuthAuthenticatorTest extends TestCase
     private function getResourceOwnerMap(
         array $resources = [],
         $httpUtils = null,
-        $serviceLocator = null
+        $serviceLocator = null,
     ): ResourceOwnerMap {
         return new ResourceOwnerMap(
             $httpUtils ?: $this->createMock(HttpUtils::class),

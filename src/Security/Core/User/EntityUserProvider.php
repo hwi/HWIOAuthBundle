@@ -16,6 +16,7 @@ use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use RuntimeException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -57,7 +58,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         $user = $this->findUser(['username' => $identifier]);
 
         if (!$user) {
-            throw $this->createUserNotFoundException($identifier, sprintf("User '%s' not found.", $identifier));
+            throw $this->createUserNotFoundException($identifier, \sprintf("User '%s' not found.", $identifier));
         }
 
         return $user;
@@ -80,12 +81,12 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         $resourceOwnerName = $response->getResourceOwner()->getName();
 
         if (!isset($this->properties[$resourceOwnerName])) {
-            throw new \RuntimeException(sprintf("No property defined for entity for resource owner '%s'.", $resourceOwnerName));
+            throw new RuntimeException(\sprintf("No property defined for entity for resource owner '%s'.", $resourceOwnerName));
         }
 
         $username = method_exists($response, 'getUserIdentifier') ? $response->getUserIdentifier() : $response->getUsername();
         if (null === $user = $this->findUser([$this->properties[$resourceOwnerName] => $username])) {
-            throw $this->createUserNotFoundException($username, sprintf("User '%s' not found.", $username));
+            throw $this->createUserNotFoundException($username, \sprintf("User '%s' not found.", $username));
         }
 
         return $user;
@@ -96,7 +97,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         $accessor = PropertyAccess::createPropertyAccessor();
         $identifier = $this->properties['identifier'];
         if (!$accessor->isReadable($user, $identifier) || !$this->supportsClass($user::class)) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
+            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
         $userId = $accessor->getValue($user, $identifier);
@@ -104,7 +105,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         $username = $user->getUserIdentifier();
 
         if (null === $user = $this->findUser([$identifier => $userId])) {
-            throw $this->createUserNotFoundException($username, sprintf('User with ID "%d" could not be reloaded.', $userId));
+            throw $this->createUserNotFoundException($username, \sprintf('User with ID "%d" could not be reloaded.', $userId));
         }
 
         return $user;

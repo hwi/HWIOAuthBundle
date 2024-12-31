@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 
+use InvalidArgumentException;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -38,14 +39,14 @@ final class AzureResourceOwner extends GenericOAuth2ResourceOwner
      */
     public function configure()
     {
-        $this->options['access_token_url'] = sprintf($this->options['access_token_url'], $this->options['application']);
-        $this->options['authorization_url'] = sprintf($this->options['authorization_url'], $this->options['application']);
+        $this->options['access_token_url'] = \sprintf($this->options['access_token_url'], $this->options['application']);
+        $this->options['authorization_url'] = \sprintf($this->options['authorization_url'], $this->options['application']);
     }
 
     /**
      * {@inheritdoc}
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
@@ -66,7 +67,7 @@ final class AzureResourceOwner extends GenericOAuth2ResourceOwner
                 break;
 
             default:
-                throw new \InvalidArgumentException('Invalid base64 format sent back');
+                throw new InvalidArgumentException('Invalid base64 format sent back');
         }
 
         $response = parent::getUserInformation($accessToken, $extraParameters);

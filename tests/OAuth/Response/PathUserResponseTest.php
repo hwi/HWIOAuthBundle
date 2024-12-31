@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\Response;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
 final class PathUserResponseTest extends TestCase
@@ -100,7 +101,7 @@ final class PathUserResponseTest extends TestCase
 
     public function testGetUserIdentifierWithoutResponseThrowsException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('User identifier was not found in response.');
 
         $this->responseObject->setPaths(['identifier' => 'id']);

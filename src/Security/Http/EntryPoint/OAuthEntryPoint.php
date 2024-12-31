@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Http\EntryPoint;
 
+use ArrayIterator;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
@@ -32,7 +33,7 @@ final class OAuthEntryPoint implements AuthenticationEntryPointInterface
         private readonly HttpKernelInterface $kernel,
         private readonly HttpUtils $httpUtils,
         private readonly string $loginPath,
-        private readonly bool $useForward = false
+        private readonly bool $useForward = false,
     ) {
     }
 
@@ -44,7 +45,7 @@ final class OAuthEntryPoint implements AuthenticationEntryPointInterface
         if ($this->useForward) {
             $subRequest = $this->httpUtils->createRequest($request, $this->loginPath);
 
-            /** @var \ArrayIterator $iterator */
+            /** @var ArrayIterator $iterator */
             $iterator = $request->query->getIterator();
             $subRequest->query->add($iterator->getArrayCopy());
 

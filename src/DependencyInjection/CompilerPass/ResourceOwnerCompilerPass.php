@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass;
 
 use HWI\Bundle\OAuthBundle\DependencyInjection\Configuration;
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
+use InvalidArgumentException;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -75,9 +76,9 @@ final class ResourceOwnerCompilerPass implements CompilerPassInterface
             }
 
             if (!Configuration::isResourceOwnerSupported($match['type'])) {
-                $e = new \InvalidArgumentException(sprintf('Unknown resource owner type "%s"', $match['type']));
+                $e = new InvalidArgumentException(\sprintf('Unknown resource owner type "%s"', $match['type']));
 
-                throw new InvalidConfigurationException(sprintf('Invalid configuration for path "hwi_oauth.resource_owners.%s.type": %s', $resourceOwnerName, $e->getMessage()), $e->getCode(), $e);
+                throw new InvalidConfigurationException(\sprintf('Invalid configuration for path "hwi_oauth.resource_owners.%s.type": %s', $resourceOwnerName, $e->getMessage()), $e->getCode(), $e);
             }
         }
     }

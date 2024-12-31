@@ -74,7 +74,7 @@ final class TelegramResourceOwner extends GenericOAuth2ResourceOwner
         ksort($authData);
         $dataCheckStr = '';
         foreach ($authData as $k => $v) {
-            $dataCheckStr .= sprintf("\n%s=%s", $k, $v);
+            $dataCheckStr .= \sprintf("\n%s=%s", $k, $v);
         }
         $dataCheckStr = substr($dataCheckStr, 1);
         $secretKey = hash('sha256', $botToken, true);

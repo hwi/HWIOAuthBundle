@@ -11,7 +11,10 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 
+use ArrayIterator;
+use Exception;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use RuntimeException;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
@@ -35,15 +38,15 @@ use Symfony\Component\DependencyInjection\Reference;
 final class HWIOAuthExtension extends Extension
 {
     /**
-     * @var \ArrayIterator<string, true>
+     * @var ArrayIterator<string, true>
      */
-    private \ArrayIterator $firewallNames;
+    private ArrayIterator $firewallNames;
 
     private bool $refreshTokenListenerEnabled = false;
 
     public function __construct()
     {
-        $this->firewallNames = new \ArrayIterator();
+        $this->firewallNames = new ArrayIterator();
     }
 
     public function getConfiguration(array $config, ContainerBuilder $container): Configuration
@@ -54,8 +57,8 @@ final class HWIOAuthExtension extends Extension
     /**
      * {@inheritdoc}
      *
-     * @throws \Exception
-     * @throws \RuntimeException
+     * @throws Exception
+     * @throws RuntimeException
      * @throws InvalidConfigurationException
      * @throws BadMethodCallException
      * @throws InvalidArgumentException
@@ -138,7 +141,7 @@ final class HWIOAuthExtension extends Extension
         // handle external resource owners with given class
         if (isset($options['class'])) {
             if (!is_subclass_of($options['class'], ResourceOwnerInterface::class, true)) {
-                throw new InvalidConfigurationException(sprintf('Class "%s" must implement interface "HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface".', $options['class']));
+                throw new InvalidConfigurationException(\sprintf('Class "%s" must implement interface "HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface".', $options['class']));
             }
 
             $definition = new Definition($options['class']);
@@ -166,7 +169,7 @@ final class HWIOAuthExtension extends Extension
         return 'hwi_oauth';
     }
 
-    public function getFirewallNames(): \ArrayIterator
+    public function getFirewallNames(): ArrayIterator
     {
         return $this->firewallNames;
     }

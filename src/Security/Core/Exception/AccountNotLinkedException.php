@@ -36,7 +36,7 @@ final class AccountNotLinkedException extends UserNotFoundException implements O
     {
         [
             $this->resourceOwnerName,
-            $parentData
+            $parentData,
         ] = $data;
 
         parent::__unserialize($parentData);

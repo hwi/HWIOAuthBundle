@@ -16,6 +16,7 @@ use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomResourceOwnerWithoutType;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
@@ -208,7 +209,7 @@ final class HWIOAuthExtensionTest extends TestCase
         $this->expectExceptionMessage('Invalid configuration for path "hwi_oauth.resource_owners.new_resourceowner": Resource owner class should implement "ResourceOwnerInterface", or extended class "GenericOAuth1ResourceOwner"/"GenericOAuth2ResourceOwner".');
 
         $config = $this->getEmptyConfig();
-        $config['resource_owners']['new_resourceowner']['class'] = \stdClass::class;
+        $config['resource_owners']['new_resourceowner']['class'] = stdClass::class;
         $config['resource_owners']['new_resourceowner']['client_id'] = 42;
         $config['resource_owners']['new_resourceowner']['client_secret'] = 'foo';
 
@@ -626,11 +627,11 @@ EOF;
 
     private function assertAlias(string $value, string $key): void
     {
-        $this->assertEquals($value, (string) $this->containerBuilder->getAlias($key), sprintf('%s alias is correct', $key));
+        $this->assertEquals($value, (string) $this->containerBuilder->getAlias($key), \sprintf('%s alias is correct', $key));
     }
 
     private function assertParameter($value, string $key): void
     {
-        $this->assertEquals($value, $this->containerBuilder->getParameter($key), sprintf('%s parameter is correct', $key));
+        $this->assertEquals($value, $this->containerBuilder->getParameter($key), \sprintf('%s parameter is correct', $key));
     }
 }

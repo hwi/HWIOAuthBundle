@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Controller\Connect;
 
+use Exception;
 use HWI\Bundle\OAuthBundle\Controller\Connect\RegisterController;
 use HWI\Bundle\OAuthBundle\Event\FilterUserResponseEvent;
 use HWI\Bundle\OAuthBundle\Event\FormEvent;
@@ -49,7 +50,7 @@ final class RegistrationControllerTest extends AbstractConnectControllerTest
 
     public function testCannotRegisterBadError(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('Cannot register an account.');
 
         $key = (string) time();
@@ -59,7 +60,7 @@ final class RegistrationControllerTest extends AbstractConnectControllerTest
         $this->session->expects($this->once())
             ->method('get')
             ->with('_hwi_oauth.registration_error.'.$key)
-            ->willReturn(new \Exception())
+            ->willReturn(new Exception())
         ;
 
         $this->session->expects($this->once())
@@ -167,7 +168,7 @@ final class RegistrationControllerTest extends AbstractConnectControllerTest
     }
 
     private function createConnectController(
-        bool $connectEnabled = true
+        bool $connectEnabled = true,
     ): RegisterController {
         return new RegisterController(
             $this->resourceOwnerMapLocator,

@@ -46,7 +46,7 @@ final class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserPr
     public function refreshUser(UserInterface $user): UserInterface
     {
         if (!$this->supportsClass($user::class)) {
-            throw new UnsupportedUserException(sprintf('Unsupported user class "%s"', $user::class));
+            throw new UnsupportedUserException(\sprintf('Unsupported user class "%s"', $user::class));
         }
 
         // @phpstan-ignore-next-line Symfony <5.4 BC layer

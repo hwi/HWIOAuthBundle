@@ -14,6 +14,8 @@ namespace HWI\Bundle\OAuthBundle\DependencyInjection;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth1ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\GenericOAuth2ResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use LogicException;
+use ReflectionClass;
 use Symfony\Component\Config\Definition\BaseNode;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -73,9 +75,9 @@ final class Configuration implements ConfigurationInterface
 
     public static function registerResourceOwner(string $resourceOwnerClass): void
     {
-        $reflection = new \ReflectionClass($resourceOwnerClass);
+        $reflection = new ReflectionClass($resourceOwnerClass);
         if (!$reflection->implementsInterface(ResourceOwnerInterface::class)) {
-            throw new \LogicException('Resource owner class should implement "ResourceOwnerInterface", or extended class "GenericOAuth1ResourceOwner"/"GenericOAuth2ResourceOwner".');
+            throw new LogicException('Resource owner class should implement "ResourceOwnerInterface", or extended class "GenericOAuth1ResourceOwner"/"GenericOAuth2ResourceOwner".');
         }
 
         $type = \defined("$resourceOwnerClass::TYPE") ? $resourceOwnerClass::TYPE : null;
@@ -83,7 +85,7 @@ final class Configuration implements ConfigurationInterface
             if (preg_match('~(?P<resource_owner>[^\\\\]+)ResourceOwner$~', $resourceOwnerClass, $match)) {
                 $type = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $match['resource_owner']));
             } else {
-                throw new \LogicException(sprintf('Resource owner class either should have "TYPE" const defined or end with "ResourceOwner" so that type can be calculated by converting its class name without suffix to "snake_case". Given class name is "%s"', $resourceOwnerClass));
+                throw new LogicException(\sprintf('Resource owner class either should have "TYPE" const defined or end with "ResourceOwner" so that type can be calculated by converting its class name without suffix to "snake_case". Given class name is "%s"', $resourceOwnerClass));
             }
         }
 

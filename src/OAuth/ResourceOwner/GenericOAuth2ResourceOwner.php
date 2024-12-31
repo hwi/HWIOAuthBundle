@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Helper\NonceGenerator;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
+use InvalidArgumentException;
 use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\OptionsResolver\Options;
@@ -166,7 +167,7 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 
         try {
             return null !== $this->storage->fetch($this, urldecode($csrfToken), 'csrf_state');
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new AuthenticationException('Given CSRF token is not valid.');
         }
     }
@@ -213,11 +214,11 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     protected function validateResponseContent($response)
     {
         if (isset($response['error_description'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error_description']));
+            throw new AuthenticationException(\sprintf('OAuth error: "%s"', $response['error_description']));
         }
 
         if (isset($response['error'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['error']['message'] ?? $response['error']));
+            throw new AuthenticationException(\sprintf('OAuth error: "%s"', $response['error']['message'] ?? $response['error']));
         }
 
         if (!isset($response['access_token'])) {
