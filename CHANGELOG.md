@@ -1,7 +1,8 @@
 Changelog
 =========
-## 2.3.0 (2024-12-xx)
+## 2.3.0 (2025-01-01)
 * BC Break: Dropped support for Symfony: `6.3` and `7.0`,
+* Added: `Amazon Cognito` resource owner,
 * Bugfix: Prevent overwriting `failure_path` in `AuthenticationFailureHandler` when connect functionality is not enabled,
 * Bugfix: Prevent overwriting `failure_handler` in security configuration if set,
 * Bugfix: Type hint `AuthenticatorInterface` instead of `OAuthAuthenticator` in `RefreshAccessTokenListener`,
