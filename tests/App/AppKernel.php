@@ -15,6 +15,7 @@ namespace HWI\Bundle\OAuthBundle\Tests\App;
 
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use HWI\Bundle\OAuthBundle\HWIOAuthBundle;
+use ReflectionClass;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\MonologBundle\MonologBundle;
 use Symfony\Bundle\SecurityBundle\SecurityBundle;
@@ -81,6 +82,6 @@ final class AppKernel extends Kernel
 
     protected function getBaseDir(): string
     {
-        return sys_get_temp_dir().'/hwioauth-bundle/'.(new \ReflectionClass($this))->getShortName().'/var/';
+        return sys_get_temp_dir().'/hwioauth-bundle/'.(new ReflectionClass($this))->getShortName().'/var/';
     }
 }

@@ -41,7 +41,7 @@ final class DropboxResourceOwner extends GenericOAuth2ResourceOwner
      * @return UserResponseInterface
      */
     public function getUserInformation(array $accessToken,
-        array $extraParameters = []
+        array $extraParameters = [],
     ) {
         if ($this->options['use_bearer_authorization']) {
             $content = $this->httpRequest(

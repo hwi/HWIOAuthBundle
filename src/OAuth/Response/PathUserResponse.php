@@ -11,6 +11,8 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
+use InvalidArgumentException;
+
 /**
  * Class parsing the properties by given path options.
  *
@@ -40,7 +42,7 @@ class PathUserResponse extends AbstractUserResponse
     {
         $value = $this->getValueForPath('identifier');
         if (null === $value) {
-            throw new \InvalidArgumentException('User identifier was not found in response.');
+            throw new InvalidArgumentException('User identifier was not found in response.');
         }
 
         return (string) $value;
@@ -53,7 +55,7 @@ class PathUserResponse extends AbstractUserResponse
     {
         try {
             return $this->getUserIdentifier();
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             // @phpstan-ignore-next-line BC compatibility
             return null;
         }

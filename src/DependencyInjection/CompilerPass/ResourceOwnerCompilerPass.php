@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass;
 
 use HWI\Bundle\OAuthBundle\DependencyInjection\Configuration;
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
+use InvalidArgumentException;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -66,18 +67,18 @@ final class ResourceOwnerCompilerPass implements CompilerPassInterface
             $resourceOwnerClass = $definition->getClass();
 
             // Check whether a ResourceOwner class exists only if resource owner was set by its "options.type"
-            if (false === preg_match('~^%(?P<parameter>hwi_oauth.resource_owner.(?P<type>.+).class)%$~', $resourceOwnerClass, $match)) {
+            if (false === $result = preg_match('~^%(?P<parameter>hwi_oauth.resource_owner.(?P<type>.+).class)%$~', $resourceOwnerClass, $match)) {
                 return;
             }
 
-            if (!($match['type'] ?? null)) {
+            if (0 === $result || !$match['type']) {
                 continue;
             }
 
             if (!Configuration::isResourceOwnerSupported($match['type'])) {
-                $e = new \InvalidArgumentException(sprintf('Unknown resource owner type "%s"', $match['type']));
+                $e = new InvalidArgumentException(\sprintf('Unknown resource owner type "%s"', $match['type']));
 
-                throw new InvalidConfigurationException(sprintf('Invalid configuration for path "hwi_oauth.resource_owners.%s.type": %s', $resourceOwnerName, $e->getMessage()), $e->getCode(), $e);
+                throw new InvalidConfigurationException(\sprintf('Invalid configuration for path "hwi_oauth.resource_owners.%s.type": %s', $resourceOwnerName, $e->getMessage()), $e->getCode(), $e);
             }
         }
     }

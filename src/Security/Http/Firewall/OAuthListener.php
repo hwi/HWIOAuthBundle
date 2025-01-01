@@ -82,7 +82,7 @@ class OAuthListener extends AbstractAuthenticationListener
         if ($request->query->has('authenticated') && $resourceOwner->getOption('auth_with_one_url')) {
             $request->attributes->set('service', $resourceOwner->getName());
 
-            return new RedirectResponse(sprintf('%s?code=%s&authenticated=true', $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service'), $request->query->get('code')));
+            return new RedirectResponse(\sprintf('%s?code=%s&authenticated=true', $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service'), $request->query->get('code')));
         }
 
         $resourceOwner->isCsrfTokenValid(

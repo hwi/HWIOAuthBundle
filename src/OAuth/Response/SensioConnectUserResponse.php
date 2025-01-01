@@ -11,6 +11,13 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Response;
 
+use DOMAttr;
+use DOMDocument;
+use DOMNode;
+use DOMXPath;
+use ErrorException;
+use Exception;
+use InvalidArgumentException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 /**
@@ -20,21 +27,21 @@ use Symfony\Component\Security\Core\Exception\AuthenticationException;
 final class SensioConnectUserResponse extends AbstractUserResponse
 {
     /**
-     * @var \DOMNode
+     * @var DOMNode
      */
     protected $data;
 
-    private ?\DOMXPath $xpath;
+    private ?DOMXPath $xpath;
 
     /**
      * {@inheritdoc}
      */
     public function getUserIdentifier(): string
     {
-        /** @var \DOMAttr|null $attribute */
+        /** @var DOMAttr|null $attribute */
         $attribute = $this->data->attributes->getNamedItem('id');
         if (null === $attribute) {
-            throw new \InvalidArgumentException('User identifier was not found in response.');
+            throw new InvalidArgumentException('User identifier was not found in response.');
         }
 
         return $attribute->value;
@@ -47,7 +54,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     {
         try {
             return $this->getUserIdentifier();
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             // @phpstan-ignore-next-line BC compatibility
             return null;
         }
@@ -61,7 +68,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
         $username = null;
         $accounts = $this->xpath->query('./foaf:account/foaf:OnlineAccount', $this->data);
         for ($i = 0; $i < $accounts->length; ++$i) {
-            /** @var \DOMNode $account */
+            /** @var DOMNode $account */
             $account = $accounts->item($i);
             if ('SensioLabs Connect' === $this->getNodeValue('./foaf:name', $account)) {
                 $username = $this->getNodeValue('foaf:accountName', $account);
@@ -118,16 +125,16 @@ final class SensioConnectUserResponse extends AbstractUserResponse
      */
     public function setData($data): void
     {
-        $dom = new \DOMDocument();
+        $dom = new DOMDocument();
         try {
             if (!$dom->loadXML($data)) {
-                throw new \ErrorException('Could not transform this xml to a \DOMDocument instance.');
+                throw new ErrorException('Could not transform this xml to a \DOMDocument instance.');
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new AuthenticationException('Could not retrieve valid user info.');
         }
 
-        $this->xpath = new \DOMXPath($dom);
+        $this->xpath = new DOMXPath($dom);
 
         $nodes = $this->xpath->evaluate('/api/root');
         $user = $this->xpath->query('./foaf:Person', $nodes->item(0));
@@ -135,7 +142,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
             throw new AuthenticationException('Could not retrieve user info.');
         }
 
-        /** @var \DOMNode $userElement */
+        /** @var DOMNode $userElement */
         $userElement = $user->item(0);
 
         $this->data = $userElement;
@@ -144,14 +151,14 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     /**
      * @return mixed|null
      */
-    private function getNodeValue(string $query, \DOMNode $element, string $nodeType = 'normal')
+    private function getNodeValue(string $query, DOMNode $element, string $nodeType = 'normal')
     {
         $nodeList = $this->xpath->query($query, $element);
         if ($nodeList && $nodeList->length > 0) {
             $node = $nodeList->item(0);
             switch ($nodeType) {
                 case 'link':
-                    /** @var \DOMAttr $attribute */
+                    /** @var DOMAttr $attribute */
                     $attribute = $node->attributes->getNamedItem('href');
                     $nodeValue = $attribute->value;
                     break;

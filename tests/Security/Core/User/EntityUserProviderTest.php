@@ -20,6 +20,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
@@ -60,7 +61,7 @@ final class EntityUserProviderTest extends TestCase
 
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('No property defined for entity for resource owner \'not_configured\'.');
 
         $provider = $this->createEntityUserProvider();

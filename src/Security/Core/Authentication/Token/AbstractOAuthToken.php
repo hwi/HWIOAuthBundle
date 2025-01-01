@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token;
 
+use InvalidArgumentException;
 use Symfony\Component\Security\Core\Authentication\Token\AbstractToken;
 
 /**
@@ -112,7 +113,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     /**
      * @param array|string $token The OAuth token
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      */
     public function setRawToken($token)
     {
@@ -122,7 +123,7 @@ abstract class AbstractOAuthToken extends AbstractToken
             } elseif (isset($token['oauth_token'])) {
                 $this->accessToken = $token['oauth_token'];
             } else {
-                throw new \InvalidArgumentException('Access token was not found.');
+                throw new InvalidArgumentException('Access token was not found.');
             }
 
             if (isset($token['refresh_token'])) {

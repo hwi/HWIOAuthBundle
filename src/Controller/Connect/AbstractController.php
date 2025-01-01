@@ -57,7 +57,7 @@ abstract class AbstractController
         TokenStorageInterface $tokenStorage,
         UserCheckerInterface $userChecker,
         Environment $twig,
-        ?AccountConnectorInterface $accountConnector
+        ?AccountConnectorInterface $accountConnector,
     ) {
         $this->resourceOwnerMapLocator = $resourceOwnerMapLocator;
         $this->requestStack = $requestStack;
@@ -81,7 +81,7 @@ abstract class AbstractController
             }
         }
 
-        throw new NotFoundHttpException(sprintf("No resource owner with name '%s'.", $name));
+        throw new NotFoundHttpException(\sprintf("No resource owner with name '%s'.", $name));
     }
 
     /**

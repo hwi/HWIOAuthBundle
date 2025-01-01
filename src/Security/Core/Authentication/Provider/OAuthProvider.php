@@ -38,7 +38,7 @@ final class OAuthProvider implements AuthenticationProviderInterface
         OAuthAwareUserProviderInterface $userProvider,
         ResourceOwnerMapInterface $resourceOwnerMap,
         UserCheckerInterface $userChecker,
-        TokenStorageInterface $tokenStorage
+        TokenStorageInterface $tokenStorage,
     ) {
         $this->userProvider = $userProvider;
         $this->resourceOwnerMap = $resourceOwnerMap;
@@ -135,7 +135,7 @@ final class OAuthProvider implements AuthenticationProviderInterface
     private function createOAuthToken(
         $data,
         OAuthToken $oldToken,
-        ?UserInterface $user
+        ?UserInterface $user,
     ): OAuthToken {
         $tokenClass = $oldToken::class;
         if (null !== $user) {

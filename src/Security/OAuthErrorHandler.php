@@ -61,7 +61,7 @@ final class OAuthErrorHandler
         }
 
         if (null !== $error) {
-            $error = self::$translatedOAuthErrors[$error] ?? sprintf('Unknown OAuth error: "%s".', $error);
+            $error = self::$translatedOAuthErrors[$error] ?? \sprintf('Unknown OAuth error: "%s".', $error);
 
             throw new AuthenticationException($error);
         }

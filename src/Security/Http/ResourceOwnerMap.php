@@ -34,7 +34,7 @@ final class ResourceOwnerMap implements ResourceOwnerMapInterface
         private readonly HttpUtils $httpUtils,
         private readonly array $possibleResourceOwners,
         private readonly array $resourceOwners,
-        private readonly ServiceLocator $locator
+        private readonly ServiceLocator $locator,
     ) {
     }
 

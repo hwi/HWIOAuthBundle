@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth;
 
 use HWI\Bundle\OAuthBundle\OAuth\Exception\HttpTransportException;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
@@ -84,7 +85,7 @@ interface ResourceOwnerInterface
      *
      * @return mixed The option value
      *
-     * @throws \InvalidArgumentException When the option does not exist
+     * @throws InvalidArgumentException When the option does not exist
      */
     public function getOption($name);
 

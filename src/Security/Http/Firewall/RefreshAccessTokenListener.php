@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\OAuthAuthenticator;
+use RuntimeException;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Debug\TraceableAuthenticator;
 
@@ -21,7 +22,7 @@ class RefreshAccessTokenListener extends AbstractRefreshAccessTokenListener
     private AuthenticatorInterface $authenticator;
 
     public function __construct(
-        AuthenticatorInterface $authenticator
+        AuthenticatorInterface $authenticator,
     ) {
         $this->authenticator = $authenticator;
     }
@@ -38,15 +39,15 @@ class RefreshAccessTokenListener extends AbstractRefreshAccessTokenListener
         if ($this->authenticator instanceof OAuthAuthenticator) {
             return $this->authenticator->refreshToken($token);
         }
-        
-        if ($this->authenticator instanceof TraceableAuthenticator) {
+
+        if ($this->authenticator instanceof TraceableAuthenticator && method_exists($this->authenticator, 'getAuthenticator')) {
             $authenticator = $this->authenticator->getAuthenticator();
-            
+
             if ($authenticator instanceof OAuthAuthenticator) {
                 return $authenticator->refreshToken($token);
             }
         }
 
-        throw new \RuntimeException('Unsupported authenticator, expecting OAuthAuthenticator, got ' . get_class($this->authenticator));
+        throw new RuntimeException('Unsupported authenticator, expecting OAuthAuthenticator, got '.\get_class($this->authenticator));
     }
 }

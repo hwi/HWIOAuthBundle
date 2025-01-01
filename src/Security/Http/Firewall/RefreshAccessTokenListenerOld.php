@@ -23,7 +23,7 @@ class RefreshAccessTokenListenerOld extends RefreshAccessTokenListener
 
     public function __construct(
         /* @phpstan-ignore-next-line */
-        AuthenticationProviderInterface $oAuthProvider
+        AuthenticationProviderInterface $oAuthProvider,
     ) {
         $this->oAuthProvider = $oAuthProvider;
     }

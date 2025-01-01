@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Security;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
+use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security\FirewallMap;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -40,7 +41,7 @@ final class OAuthUtils
         private readonly AuthorizationCheckerInterface $authorizationChecker,
         private readonly FirewallMap $firewallMap,
         private readonly bool $connect,
-        private readonly string $grantRule
+        private readonly string $grantRule,
     ) {
     }
 
@@ -126,7 +127,7 @@ final class OAuthUtils
      * @param string $tokenSecret     Optional token secret to use with signing
      * @param string $signatureMethod Optional signature method used to sign token
      *
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public static function signRequest(
         string $method,
@@ -134,12 +135,12 @@ final class OAuthUtils
         array $parameters,
         string $clientSecret,
         string $tokenSecret = '',
-        string $signatureMethod = self::SIGNATURE_METHOD_HMAC
+        string $signatureMethod = self::SIGNATURE_METHOD_HMAC,
     ): string {
         // Validate required parameters
         foreach (['oauth_consumer_key', 'oauth_timestamp', 'oauth_nonce', 'oauth_version', 'oauth_signature_method'] as $parameter) {
             if (!isset($parameters[$parameter])) {
-                throw new \RuntimeException(sprintf('Parameter "%s" must be set.', $parameter));
+                throw new RuntimeException(\sprintf('Parameter "%s" must be set.', $parameter));
             }
         }
 
@@ -165,7 +166,7 @@ final class OAuthUtils
 
         // Remove query params from URL
         // Ref: Spec: 9.1.2
-        $url = sprintf('%s://%s%s%s', $url['scheme'], $url['host'], $explicitPort ? ':'.$explicitPort : '', $url['path'] ?? '');
+        $url = \sprintf('%s://%s%s%s', $url['scheme'], $url['host'], $explicitPort ? ':'.$explicitPort : '', $url['path'] ?? '');
 
         // Parameters are sorted by name, using lexicographical byte value ordering.
         // Ref: Spec: 9.1.1 (1)
@@ -194,7 +195,7 @@ final class OAuthUtils
 
             case self::SIGNATURE_METHOD_RSA:
                 if (!\function_exists('openssl_pkey_get_private')) {
-                    throw new \RuntimeException('RSA-SHA1 signature method requires the OpenSSL extension.');
+                    throw new RuntimeException('RSA-SHA1 signature method requires the OpenSSL extension.');
                 }
 
                 if (str_starts_with($clientSecret, '-----BEGIN')) {
@@ -214,7 +215,7 @@ final class OAuthUtils
                 break;
 
             default:
-                throw new \RuntimeException(sprintf('Unknown signature method selected %s.', $signatureMethod));
+                throw new RuntimeException(\sprintf('Unknown signature method selected %s.', $signatureMethod));
         }
 
         return base64_encode($signature);
@@ -229,7 +230,7 @@ final class OAuthUtils
             }
         }
 
-        throw new \RuntimeException(sprintf("No resource owner with name '%s'.", $name));
+        throw new RuntimeException(\sprintf("No resource owner with name '%s'.", $name));
     }
 
     private function getCurrentFirewallName(Request $request): ?string

@@ -15,6 +15,8 @@ use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Helper\NonceGenerator;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -79,9 +81,9 @@ abstract class GenericOAuth1ResourceOwner extends AbstractResourceOwner
 
         try {
             if (null === $requestToken = $this->storage->fetch($this, $request->query->get('oauth_token'))) {
-                throw new \RuntimeException('No request token found in the storage.');
+                throw new RuntimeException('No request token found in the storage.');
             }
-        } catch (\InvalidArgumentException $e) {
+        } catch (InvalidArgumentException $e) {
             throw new AuthenticationException('Given token is not valid.');
         }
 
@@ -109,7 +111,7 @@ abstract class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $response = $this->getResponseContent($response);
 
         if (isset($response['oauth_problem'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
+            throw new AuthenticationException(\sprintf('OAuth error: "%s"', $response['oauth_problem']));
         }
 
         if (!isset($response['oauth_token'], $response['oauth_token_secret'])) {
@@ -167,7 +169,7 @@ abstract class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $response = $this->getResponseContent($apiResponse);
 
         if (isset($response['oauth_problem'])) {
-            throw new AuthenticationException(sprintf('OAuth error: "%s"', $response['oauth_problem']));
+            throw new AuthenticationException(\sprintf('OAuth error: "%s"', $response['oauth_problem']));
         }
 
         if (isset($response['oauth_callback_confirmed']) && 'true' !== $response['oauth_callback_confirmed']) {

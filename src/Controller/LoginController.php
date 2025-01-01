@@ -12,6 +12,7 @@
 namespace HWI\Bundle\OAuthBundle\Controller;
 
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
+use LogicException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -46,7 +47,7 @@ final class LoginController
         RequestStack $requestStack,
         Environment $twig,
         bool $connect,
-        string $grantRule
+        string $grantRule,
     ) {
         $this->authenticationUtils = $authenticationUtils;
         $this->router = $router;
@@ -61,7 +62,7 @@ final class LoginController
      * Action that handles the login 'form'. If connecting is enabled the
      * user will be redirected to the appropriate login urls or registration forms.
      *
-     * @throws \LogicException
+     * @throws LogicException
      */
     public function connectAction(Request $request): Response
     {

@@ -18,6 +18,7 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
+use InvalidArgumentException;
 use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\HttpFoundation\Request as HttpRequest;
 use Symfony\Component\OptionsResolver\Exception\AccessException;
@@ -28,6 +29,7 @@ use Symfony\Component\Security\Http\HttpUtils;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Throwable;
 
 /**
  * @author Geoffrey Bachelet <geoffrey.bachelet@gmail.com>
@@ -60,7 +62,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         HttpUtils $httpUtils,
         array $options,
         string $name,
-        RequestDataStorageInterface $storage
+        RequestDataStorageInterface $storage,
     ) {
         $this->httpClient = $httpClient;
         $this->httpUtils = $httpUtils;
@@ -109,7 +111,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     public function getOption($name)
     {
         if (!\array_key_exists($name, $this->options)) {
-            throw new \InvalidArgumentException(sprintf('Unknown option "%s"', $name));
+            throw new InvalidArgumentException(\sprintf('Unknown option "%s"', $name));
         }
 
         return $this->options[$name];
@@ -135,7 +137,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
         // lazy-loading for stored states
         try {
             $storedData = $this->storage->fetch($this, State::class, 'state');
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             $storedData = null;
         }
         if (null !== $storedData && false !== $storedState = unserialize($storedData)) {

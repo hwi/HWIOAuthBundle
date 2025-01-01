@@ -11,13 +11,15 @@
 
 namespace HWI\Bundle\OAuthBundle\OAuth\Exception;
 
-final class StateRetrievalException extends \InvalidArgumentException
+use InvalidArgumentException;
+
+final class StateRetrievalException extends InvalidArgumentException
 {
     /**
      * @param string $key The provided string key
      */
     public static function forKey(string $key): self
     {
-        return new static(sprintf('No value found in state for key [%s]', $key));
+        return new static(\sprintf('No value found in state for key [%s]', $key));
     }
 }

@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Controller;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,7 +34,7 @@ final class RedirectToServiceController
         private readonly ResourceOwnerMapLocator $resourceOwnerMapLocator,
         private readonly ?string $targetPathParameter,
         private readonly bool $failedUseReferer,
-        private readonly bool $useReferer
+        private readonly bool $useReferer,
     ) {
     }
 
@@ -44,7 +45,7 @@ final class RedirectToServiceController
     {
         try {
             $authorizationUrl = $this->oauthUtils->getAuthorizationUrl($request, $service);
-        } catch (\RuntimeException $e) {
+        } catch (RuntimeException $e) {
             throw new NotFoundHttpException($e->getMessage(), $e);
         }
 

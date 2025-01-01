@@ -19,6 +19,7 @@ use HWI\Bundle\OAuthBundle\Test\Fixtures\ResourceOwner\OAuth1ResourceOwnerStub;
 use HWI\Bundle\OAuthBundle\Test\Fixtures\ResourceOwner\OAuth2ResourceOwnerStub;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\Security\Http\HttpUtils;
@@ -88,11 +89,11 @@ abstract class ResourceOwnerTestCase extends TestCase
     protected function setUpResourceOwner(string $name, HttpUtils $httpUtils, array $options, array $responses): ResourceOwnerInterface
     {
         if (!$this->resourceOwnerClass) {
-            throw new \RuntimeException('Missing resource owner class declaration!');
+            throw new RuntimeException('Missing resource owner class declaration!');
         }
 
         if (!\in_array(ResourceOwnerInterface::class, class_implements($this->resourceOwnerClass), true)) {
-            throw new \RuntimeException('Class is not implementing "ResourceOwnerInterface"!');
+            throw new RuntimeException('Class is not implementing "ResourceOwnerInterface"!');
         }
 
         $resourceOwnerClass = $this->resourceOwnerClass;

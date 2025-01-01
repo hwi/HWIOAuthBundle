@@ -63,14 +63,14 @@ final class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
 
         if ($this->options['fields']) {
             $parameters['fields'] = $this->options['fields'];
-            $parameters['sig'] = md5(sprintf(
+            $parameters['sig'] = md5(\sprintf(
                 'application_key=%sfields=%smethod=users.getCurrentUser%s',
                 $this->options['application_key'],
                 $this->options['fields'],
                 md5($accessToken['access_token'].$this->options['client_secret'])
             ));
         } else {
-            $parameters['sig'] = md5(sprintf(
+            $parameters['sig'] = md5(\sprintf(
                 'application_key=%smethod=users.getCurrentUser%s',
                 $this->options['application_key'],
                 md5($accessToken['access_token'].$this->options['client_secret'])

@@ -19,3 +19,4 @@ parameters:
         - '#Parameter \$event of method HWI\\Bundle\\OAuthBundle\\Controller\\Connect\\AbstractController::dispatch\(\) has invalid type Symfony\\Component\\EventDispatcher\\Event.#'
         - '#Parameter \#2 \$array of function implode expects array<string>, array<int, array\|string\|null> given.#'
         - '#PHPDoc type DOMNode of property HWI\\Bundle\\OAuthBundle\\OAuth\\Response\\SensioConnectUserResponse::\$data is not covariant with PHPDoc type array of overridden property HWI\\Bundle\\OAuthBundle\\OAuth\\Response\\AbstractUserResponse::\$data#'
+        - '#Call to function method_exists\(\) with Symfony\\Component\\Security\\Http\\Authenticator\\Debug\\TraceableAuthenticator#'

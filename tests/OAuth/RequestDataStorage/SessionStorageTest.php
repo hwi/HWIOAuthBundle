@@ -13,8 +13,10 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\RequestDataStorage;
 
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage\SessionStorage;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use stdClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -59,7 +61,7 @@ class SessionStorageTest extends TestCase
 
     public function testSaveTokenWithoutOAuthTokenPassedThrowsException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Invalid request token.');
         $this->storage->save($this->resourceOwner, [], 'token');
     }
@@ -99,7 +101,7 @@ class SessionStorageTest extends TestCase
 
     public function testSaveObjectValue(): void
     {
-        $class = new \stdClass();
+        $class = new stdClass();
         $key = '_hwi_oauth.resource_owner_name.client_id.type.stdClass';
         $this->session
             ->expects(self::once())
@@ -111,7 +113,7 @@ class SessionStorageTest extends TestCase
 
     public function testFetchUnavailableKeyThrowsException(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('No data available in storage.');
         $this->storage->fetch($this->resourceOwner, 'not-existing-key', 'token');
     }
@@ -134,7 +136,7 @@ class SessionStorageTest extends TestCase
 
     public function testFetchOtherThenToken(): void
     {
-        $class = new \stdClass();
+        $class = new stdClass();
         $key = '_hwi_oauth.resource_owner_name.client_id.state.stdClass';
         $this->session
             ->expects(self::once())

@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwner\AppleResourceOwner;
 use HWI\Bundle\OAuthBundle\OAuth\Response\AbstractUserResponse;
 use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
 use HWI\Bundle\OAuthBundle\Test\OAuth\ResourceOwner\GenericOAuth2ResourceOwnerTestCase;
+use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
@@ -101,7 +102,7 @@ key,
 
         $request = new Request(['code' => 'somecode']);
 
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Options "auth_key", "key_id" and "team_id" must be defined to use automatic "client_secret" generation.');
 
         $resourceOwner->getAccessToken($request, 'http://redirect.to/');
@@ -199,7 +200,7 @@ key,
 
     public function testGetUserInformationFailure(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Undefined index id_token');
 
         $resourceOwner = $this->createResourceOwner(

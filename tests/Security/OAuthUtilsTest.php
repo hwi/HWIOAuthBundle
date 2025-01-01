@@ -16,6 +16,7 @@ use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security\FirewallConfig;
 use Symfony\Bundle\SecurityBundle\Security\FirewallMap;
 use Symfony\Component\DependencyInjection\ServiceLocator;
@@ -192,7 +193,7 @@ final class OAuthUtilsTest extends TestCase
      */
     public function testThrowsExceptionIfRequiredParameterIsMissing(array $parameters): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(RuntimeException::class);
 
         OAuthUtils::signRequest('GET', 'http://example.com', $parameters, 'client_secret');
     }
@@ -267,7 +268,7 @@ final class OAuthUtilsTest extends TestCase
 
         $stateAsArray = [];
         foreach ($parameters as $key => $value) {
-            $stateAsArray[] = sprintf('state[%s]=%s', $key, rawurlencode($value));
+            $stateAsArray[] = \sprintf('state[%s]=%s', $key, rawurlencode($value));
         }
 
         yield 'state as an array' => [$url.'?'.implode('&', $stateAsArray), $url];
@@ -285,7 +286,7 @@ final class OAuthUtilsTest extends TestCase
 
         $stateAsArray = [];
         foreach ($parameters as $key => $value) {
-            $stateAsArray[] = sprintf('state[%s]=%s', $key, rawurlencode($value));
+            $stateAsArray[] = \sprintf('state[%s]=%s', $key, rawurlencode($value));
         }
 
         yield 'state as an array' => [$url, $url.'?'.implode('&', $stateAsArray), $redirect];

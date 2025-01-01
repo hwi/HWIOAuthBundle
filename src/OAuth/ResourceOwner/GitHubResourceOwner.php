@@ -66,7 +66,7 @@ final class GitHubResourceOwner extends GenericOAuth2ResourceOwner
     public function revokeToken($token)
     {
         $response = $this->httpRequest(
-            sprintf($this->options['revoke_token_url'], $this->options['client_id']),
+            \sprintf($this->options['revoke_token_url'], $this->options['client_id']),
             json_encode(['access_token' => $token]),
             [
                 'Authorization' => 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret']),

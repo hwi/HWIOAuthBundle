@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Controller\Connect;
 
+use Exception;
 use HWI\Bundle\OAuthBundle\Connect\AccountConnectorInterface;
 use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
@@ -62,7 +63,7 @@ final class ConnectController extends AbstractController
         bool $failedUseReferer,
         string $failedAuthPath,
         bool $enableConnectConfirmation,
-        ?AccountConnectorInterface $accountConnector
+        ?AccountConnectorInterface $accountConnector,
     ) {
         parent::__construct(
             $resourceOwnerMapLocator,
@@ -89,7 +90,7 @@ final class ConnectController extends AbstractController
      *
      * @param string $service name of the resource owner to connect to
      *
-     * @throws \Exception
+     * @throws Exception
      * @throws NotFoundHttpException if `connect` functionality was not enabled
      * @throws AccessDeniedException if no user is authenticated
      */

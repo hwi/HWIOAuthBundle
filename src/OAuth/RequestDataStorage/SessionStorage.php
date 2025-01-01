@@ -13,6 +13,8 @@ namespace HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage;
 
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
+use InvalidArgumentException;
+use LogicException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -39,7 +41,7 @@ final class SessionStorage implements RequestDataStorageInterface
     {
         $key = $this->generateKey($resourceOwner, $key, $type);
         if (null === $data = $this->getSession()->get($key)) {
-            throw new \InvalidArgumentException('No data available in storage.');
+            throw new InvalidArgumentException('No data available in storage.');
         }
 
         // Request tokens are one time use only
@@ -57,7 +59,7 @@ final class SessionStorage implements RequestDataStorageInterface
     {
         if ('token' === $type) {
             if (!\is_array($value) || !isset($value['oauth_token'])) {
-                throw new \InvalidArgumentException('Invalid request token.');
+                throw new InvalidArgumentException('Invalid request token.');
             }
 
             $key = $this->generateKey($resourceOwner, $value['oauth_token'], 'token');
@@ -73,7 +75,7 @@ final class SessionStorage implements RequestDataStorageInterface
      */
     private function generateKey(ResourceOwnerInterface $resourceOwner, string $key, string $type): string
     {
-        return sprintf('_hwi_oauth.%s.%s.%s.%s', $resourceOwner->getName(), $resourceOwner->getOption('client_id'), $type, $key);
+        return \sprintf('_hwi_oauth.%s.%s.%s.%s', $resourceOwner->getName(), $resourceOwner->getOption('client_id'), $type, $key);
     }
 
     /**
@@ -116,6 +118,6 @@ final class SessionStorage implements RequestDataStorageInterface
             return $request->getSession();
         }
 
-        throw new \LogicException('There is currently no session available.');
+        throw new LogicException('There is currently no session available.');
     }
 }

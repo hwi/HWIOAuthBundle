@@ -14,6 +14,8 @@ namespace HWI\Bundle\OAuthBundle\OAuth\ResourceOwner;
 use Firebase\JWT\JWT;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\OAuthErrorHandler;
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -52,7 +54,7 @@ final class AppleResourceOwner extends GenericOAuth2ResourceOwner
     public function getUserInformation(array $accessToken, array $extraParameters = [])
     {
         if (!isset($accessToken['id_token'])) {
-            throw new \InvalidArgumentException('Undefined index id_token');
+            throw new InvalidArgumentException('Undefined index id_token');
         }
 
         $jwt = self::jwtDecode($accessToken['id_token']);
@@ -163,7 +165,7 @@ final class AppleResourceOwner extends GenericOAuth2ResourceOwner
                 $jwt .= '=';
                 break;
             default:
-                throw new \InvalidArgumentException('Invalid base64 format sent back');
+                throw new InvalidArgumentException('Invalid base64 format sent back');
         }
 
         return $jwt;
@@ -176,11 +178,11 @@ final class AppleResourceOwner extends GenericOAuth2ResourceOwner
         }
 
         if (!isset($this->options['auth_key'], $this->options['key_id'], $this->options['team_id'])) {
-            throw new \InvalidArgumentException('Options "auth_key", "key_id" and "team_id" must be defined to use automatic "client_secret" generation.');
+            throw new InvalidArgumentException('Options "auth_key", "key_id" and "team_id" must be defined to use automatic "client_secret" generation.');
         }
 
         if (!class_exists(JWT::class)) {
-            throw new \RuntimeException('PHP-JWT library is required to use automatic "client_secret" generation. Please try "composer require firebase/php-jwt".');
+            throw new RuntimeException('PHP-JWT library is required to use automatic "client_secret" generation. Please try "composer require firebase/php-jwt".');
         }
 
         $payload = [

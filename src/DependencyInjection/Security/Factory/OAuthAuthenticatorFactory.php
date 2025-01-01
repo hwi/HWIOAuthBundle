@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory;
 
+use ArrayIterator;
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\OAuthAuthenticator;
 use HWI\Bundle\OAuthBundle\Security\Http\Firewall\RefreshAccessTokenListener;
 use HWI\Bundle\OAuthBundle\Security\Http\Firewall\RefreshAccessTokenListenerOld;
@@ -31,7 +32,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 final class OAuthAuthenticatorFactory extends AbstractFactory implements AuthenticatorFactoryInterface, FirewallListenerFactoryInterface
 {
-    public function __construct(private \ArrayIterator $firewallNames)
+    public function __construct(private ArrayIterator $firewallNames)
     {
     }
 
@@ -58,7 +59,7 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
         ContainerBuilder $container,
         string $firewallName,
         array $config,
-        string $userProviderId
+        string $userProviderId,
     ): string {
         $authenticatorId = 'security.authenticator.oauth.'.$firewallName;
 
@@ -130,7 +131,7 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
         return 'http';
     }
 
-    public function getFirewallNames(): \ArrayIterator
+    public function getFirewallNames(): ArrayIterator
     {
         return $this->firewallNames;
     }

@@ -18,6 +18,8 @@ use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
 use HWI\Bundle\OAuthBundle\Security\Helper\NonceGenerator;
 use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
+use InvalidArgumentException;
+use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
@@ -176,7 +178,7 @@ json;
         $this->storage->expects($this->once())
             ->method('fetch')
             ->with($resourceOwner, State::class, 'state')
-            ->willThrowException(new \InvalidArgumentException('No data available in storage.'));
+            ->willThrowException(new InvalidArgumentException('No data available in storage.'));
 
         $state = $resourceOwner->getState();
         self::assertEmpty($state->getAll());
@@ -436,12 +438,12 @@ json;
         array $options = [],
         array $paths = [],
         array $responses = [],
-        ?StateInterface $state = null
+        ?StateInterface $state = null,
     ): GenericOAuth2ResourceOwner {
         /** @var GenericOAuth2ResourceOwner $resourceOwner */
         $resourceOwner = parent::createResourceOwner($options, $paths, $responses);
 
-        $reflection = new \ReflectionClass($resourceOwner::class);
+        $reflection = new ReflectionClass($resourceOwner::class);
         $stateProperty = $reflection->getProperty('state');
         $stateProperty->setAccessible(true);
         $stateProperty->setValue($resourceOwner, $state ?: new State($this->state));
