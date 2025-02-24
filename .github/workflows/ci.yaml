@@ -87,11 +87,15 @@ jobs:
           - php: '8.2'
             symfony-version: '^6.4'
           - php: '8.2'
-            symfony-version: '^7.1'
+            symfony-version: '^7.2'
           - php: '8.3'
             symfony-version: '^6.4'
           - php: '8.3'
-            symfony-version: '^7.1'
+            symfony-version: '^7.2'
+          - php: '8.4'
+            symfony-version: '^6.4'
+          - php: '8.4'
+            symfony-version: '^7.2'
       fail-fast: false
 
     steps:
