@@ -87,11 +87,15 @@ jobs:
           - php: '8.2'
             symfony-version: '^6.4'
           - php: '8.2'
-            symfony-version: '^7.1'
+            symfony-version: '^7.2'
           - php: '8.3'
             symfony-version: '^6.4'
           - php: '8.3'
-            symfony-version: '^7.1'
+            symfony-version: '^7.2'
+          - php: '8.4'
+            symfony-version: '^6.4'
+          - php: '8.4'
+            symfony-version: '^7.2'
       fail-fast: false
 
     steps:
@@ -128,7 +132,7 @@ jobs:
 
       - name: Upload test artifacts
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: phpunit-logs-php${{ matrix.php }}
           path: build/logs/phpunit
