@@ -105,4 +105,34 @@ json;
         $this->assertNull($userResponse->getRefreshToken());
         $this->assertNull($userResponse->getExpiresIn());
     }
+
+    public function testGetAuthorizationUrl(): void
+    {
+        $resourceOwner = $this->createResourceOwner();
+
+        $this->assertEquals(
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F',
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
+    }
+
+    public function testGetAuthorizationUrlWithDialog(): void
+    {
+        $resourceOwner = $this->createResourceOwner(['show_dialog' => 'true']);
+
+        $this->assertEquals(
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F&show_dialog=true',
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
+    }
+
+    public function testGetAuthorizationUrlWithoutDialog(): void
+    {
+        $resourceOwner = $this->createResourceOwner(['show_dialog' => 'false']);
+
+        $this->assertEquals(
+            $this->options['authorization_url'].'&response_type=code&client_id=clientid&state=eyJzdGF0ZSI6InJhbmRvbSJ9&redirect_uri=http%3A%2F%2Fredirect.to%2F&show_dialog=false',
+            $resourceOwner->getAuthorizationUrl('http://redirect.to/')
+        );
+    }
 }

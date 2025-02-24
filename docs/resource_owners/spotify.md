@@ -17,6 +17,21 @@ hwi_oauth:
             client_secret:       <client_secret>
 ```
 
+Optionally you can force the user to approve the app again if they've already done so with the [`show_dialog`](https://developer.spotify.com/documentation/web-api/tutorials/code-flow) option:
+
+```yaml
+# config/packages/hwi_oauth.yaml
+
+hwi_oauth:
+    resource_owners:
+        any_name:
+            type:                spotify
+            client_id:           <client_id>
+            client_secret:       <client_secret>
+            options:
+                show_dialog:     true # Can be false or true
+```
+
 When you're done. Continue by configuring the security layer or go back to
 setup more resource owners.
 

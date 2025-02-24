@@ -35,6 +35,11 @@ final class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
         'profilepicture' => 'images.0.url',
     ];
 
+    public function getAuthorizationUrl($redirectUri, array $extraParameters = [])
+    {
+        return parent::getAuthorizationUrl($redirectUri, array_merge(['show_dialog' => $this->options['show_dialog']], $extraParameters));
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -69,6 +74,10 @@ final class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
             'authorization_url' => 'https://accounts.spotify.com/authorize',
             'access_token_url' => 'https://accounts.spotify.com/api/token',
             'infos_url' => 'https://api.spotify.com/v1/me',
+            'show_dialog' => null,
         ]);
+
+        // @link https://developer.spotify.com/documentation/web-api/tutorials/code-flow
+        $resolver->setAllowedValues('show_dialog', ['true', 'false', null]);
     }
 }
