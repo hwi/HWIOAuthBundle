@@ -3,6 +3,7 @@ Changelog
 ## 2.4.x (2025-xx-xx)
 * Added: LinkedIn OpenID resource owner,
 * Added: `show_dialog` option to Spotify resource owner,
+* Use CSPRNG for generating nonce,
 
 ## 2.3.0 (2025-01-01)
 * BC Break: Dropped support for Symfony: `6.3` and `7.0`,
