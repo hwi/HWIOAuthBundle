@@ -19,6 +19,6 @@ final class NonceGenerator
 
     public static function generate(): string
     {
-        return md5(microtime(true).uniqid('', true));
+        return bin2hex(random_bytes(16));
     }
 }
