@@ -1,6 +1,7 @@
 Changelog
 =========
-## 2.4.x (2025-xx-xx)
+## 2.4.0 (2025-05-29)
+* Added PHP 8.4 test coverage,
 * Added: LinkedIn OpenID resource owner,
 * Added: `show_dialog` option to Spotify resource owner,
 * Use CSPRNG for generating nonce,
