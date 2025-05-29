@@ -133,8 +133,7 @@
     },
 
     "conflict": {
-        "symfony/security-bundle":      ">=6.0,<6.3.4",
-        "twig/twig":                    "<1.43|>=2.0,<2.13"
+        "twig/twig": "<1.43|>=2.0,<2.13"
     },
 
     "scripts": {
