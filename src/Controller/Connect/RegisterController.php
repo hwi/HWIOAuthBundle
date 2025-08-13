@@ -169,10 +169,13 @@ final class RegisterController extends AbstractController
             return $response;
         }
 
-        return new Response($this->twig->render('@HWIOAuth/Connect/registration.html.twig', [
-            'key' => $key,
-            'form' => $form->createView(),
-            'userInformation' => $userInformation,
-        ]));
+        return new Response(
+            $this->twig->render('@HWIOAuth/Connect/registration.html.twig', [
+                'key' => $key,
+                'form' => $form->createView(),
+                'userInformation' => $userInformation,
+            ]),
+            $form->isSubmitted() ? 422 : 200
+        );
     }
 }
