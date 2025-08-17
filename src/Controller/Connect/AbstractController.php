@@ -18,7 +18,6 @@ use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
-use Symfony\Component\EventDispatcher\Event as DeprecatedEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -103,11 +102,6 @@ abstract class AbstractController
         $token->setResourceOwnerName($resourceOwnerName);
         $token->setUser($user);
 
-        // required for compatibility with Symfony 5.4
-        if (method_exists($token, 'setAuthenticated')) {
-            $token->setAuthenticated(true, false);
-        }
-
         $this->tokenStorage->setToken($token);
 
         if ($fakeLogin) {
@@ -165,10 +159,7 @@ abstract class AbstractController
         return $event->getResponse();
     }
 
-    /**
-     * @param Event|DeprecatedEvent $event
-     */
-    protected function dispatch($event, ?string $eventName = null): void
+    protected function dispatch(Event $event, ?string $eventName = null): void
     {
         $this->dispatcher->dispatch($event, $eventName);
     }

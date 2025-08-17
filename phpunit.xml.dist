@@ -12,8 +12,7 @@
     </coverage>
 
     <php>
-        <!-- Allowing 14 deprecations related to changes in Symfony AbstractController 5.4+ -->
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=14"/>
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=5"/>
         <env name="KERNEL_CLASS" value="HWI\Bundle\OAuthBundle\Tests\App\AppKernel"/>
     </php>
 

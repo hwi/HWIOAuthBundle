@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Tests\Fixtures;
 
+use Deprecated;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 final class User implements UserInterface
@@ -55,6 +56,7 @@ final class User implements UserInterface
         return 'my_salt';
     }
 
+    #[Deprecated]
     public function eraseCredentials(): void
     {
     }

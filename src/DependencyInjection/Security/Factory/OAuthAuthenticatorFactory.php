@@ -190,22 +190,6 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
         return $entryPointId;
     }
 
-    protected function createListener(ContainerBuilder $container, string $id, array $config, string $userProvider): string
-    {
-        // @phpstan-ignore-next-line Symfony <5.4 BC layer
-        $listenerId = parent::createListener($container, $id, $config, $userProvider);
-
-        $checkPaths = $config['resource_owners'];
-
-        $container
-            ->getDefinition($listenerId)
-            ->addMethodCall('setResourceOwnerMap', [$this->createResourceOwnerMapReference($id)])
-            ->addMethodCall('setCheckPaths', [$checkPaths])
-        ;
-
-        return $listenerId;
-    }
-
     /**
      * {@inheritdoc}
      */

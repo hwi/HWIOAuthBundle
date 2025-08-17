@@ -27,17 +27,6 @@ final class OAuthUserProviderTest extends TestCase
         $this->provider = new OAuthUserProvider();
     }
 
-    /**
-     * @group legacy
-     */
-    public function testLoadUserByUsername(): void
-    {
-        $user = $this->provider->loadUserByUsername('asm89');
-
-        $this->assertInstanceOf(OAuthUser::class, $user);
-        $this->assertEquals('asm89', $user->getUserIdentifier());
-    }
-
     public function testLoadUserByUsernameOrIdentifier(): void
     {
         $user = $this->provider->loadUserByIdentifier('asm89');

@@ -26,18 +26,6 @@ final class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserPr
         return new OAuthUser($identifier);
     }
 
-    /**
-     * Symfony <5.4 BC layer.
-     *
-     * @param string $username
-     *
-     * @return UserInterface
-     */
-    public function loadUserByUsername($username)
-    {
-        return $this->loadUserByIdentifier($username);
-    }
-
     public function loadUserByOAuthUserResponse(UserResponseInterface $response): UserInterface
     {
         return $this->loadUserByIdentifier($response->getNickname() ?: $response->getUserIdentifier());
@@ -49,10 +37,7 @@ final class OAuthUserProvider implements UserProviderInterface, OAuthAwareUserPr
             throw new UnsupportedUserException(\sprintf('Unsupported user class "%s"', $user::class));
         }
 
-        // @phpstan-ignore-next-line Symfony <5.4 BC layer
-        $username = method_exists($user, 'getUserIdentifier') ? $user->getUserIdentifier() : $user->getUsername();
-
-        return $this->loadUserByUsername($username);
+        return $this->loadUserByIdentifier($user->getUserIdentifier());
     }
 
     public function supportsClass($class): bool

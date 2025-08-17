@@ -21,7 +21,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 final class EntityUserProviderTest extends TestCase
@@ -48,15 +47,6 @@ final class EntityUserProviderTest extends TestCase
         $this->expectExceptionMessage('User \'asm89\' not found.');
 
         $provider->loadUserByIdentifier('asm89');
-    }
-
-    public function testLoadUserByUsernameThrowsExceptionWhenUserIsNull(): void
-    {
-        $this->assertUserNotFoundException();
-        $this->expectExceptionMessage("User 'asm89' not found.");
-
-        $provider = $this->createEntityUserProvider();
-        $provider->loadUserByUsername('asm89');
     }
 
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenNoPropertyIsConfigured(): void
@@ -192,15 +182,6 @@ final class EntityUserProviderTest extends TestCase
 
     private function assertUserNotFoundException(): void
     {
-        if (class_exists(UserNotFoundException::class)) {
-            $this->expectException(UserNotFoundException::class);
-        } else {
-            if (!class_exists(UsernameNotFoundException::class)) {
-                $this->markTestSkipped('Requires Symfony <5.4');
-            }
-
-            // @phpstan-ignore-next-line Symfony <5.4 BC layer
-            $this->expectException(UsernameNotFoundException::class);
-        }
+        $this->expectException(UserNotFoundException::class);
     }
 }

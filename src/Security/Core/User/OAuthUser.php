@@ -11,6 +11,7 @@
 
 namespace HWI\Bundle\OAuthBundle\Security\Core\User;
 
+use Deprecated;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -53,6 +54,7 @@ final class OAuthUser implements UserInterface
         return $this->getUserIdentifier();
     }
 
+    #[Deprecated]
     public function eraseCredentials(): void
     {
     }
