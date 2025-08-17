@@ -37,7 +37,7 @@ use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 use Twig\Environment;
 
-abstract class AbstractConnectControllerTest extends TestCase
+abstract class AbstractConnectControllerTestCase extends TestCase
 {
     protected ResourceOwnerMapLocator $resourceOwnerMapLocator;
     protected Request $request;

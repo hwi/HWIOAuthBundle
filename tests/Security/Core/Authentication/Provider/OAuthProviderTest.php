@@ -21,6 +21,9 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\OAuthAwareException;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\Security\Core\Authentication\Provider\AuthenticationProviderInterface;
@@ -28,9 +31,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 use Symfony\Component\Security\Core\User\UserCheckerInterface;
 use Symfony\Component\Security\Http\HttpUtils;
 
-/**
- * @group legacy
- */
+#[IgnoreDeprecations]
+#[Group('legacy')]
 final class OAuthProviderTest extends TestCase
 {
     protected function setUp(): void
@@ -40,9 +42,6 @@ final class OAuthProviderTest extends TestCase
         }
     }
 
-    /**
-     * @group legacy
-     */
     public function testSupportsOAuthToken(): void
     {
         $oauthProvider = new OAuthProvider(
@@ -176,9 +175,7 @@ final class OAuthProviderTest extends TestCase
         }
     }
 
-    /**
-     * @dataProvider provideAuthenticationData
-     */
+    #[DataProvider('provideAuthenticationData')]
     public function testTokenRefreshesWhenExpired(bool $authenticated, bool $userKnown): void
     {
         $expiredToken = [
@@ -258,7 +255,7 @@ final class OAuthProviderTest extends TestCase
         $this->assertEquals('ROLE_USER', $roles[0]);
     }
 
-    public function provideAuthenticationData(): iterable
+    public static function provideAuthenticationData(): iterable
     {
         yield 'authenticated, user known' => [true, true];
         yield 'not authenticated, user known' => [false, true];

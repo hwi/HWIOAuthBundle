@@ -19,6 +19,8 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -58,9 +60,8 @@ final class EntityUserProviderTest extends TestCase
         $provider->loadUserByOAuthUserResponse($this->createUserResponseMock(null, 'not_configured'));
     }
 
-    /**
-     * @group legacy
-     */
+    #[IgnoreDeprecations]
+    #[Group('legacy')]
     public function testLoadUserByOAuthUserResponseThrowsExceptionWhenUserIsNull(): void
     {
         $this->assertUserNotFoundException();
@@ -72,9 +73,8 @@ final class EntityUserProviderTest extends TestCase
         $provider->loadUserByOAuthUserResponse($userResponseMock);
     }
 
-    /**
-     * @group legacy
-     */
+    #[IgnoreDeprecations]
+    #[Group('legacy')]
     public function testLoadUserByOAuthUserResponse(): void
     {
         $userResponseMock = $this->createUserResponseMock('asm89', 'github');

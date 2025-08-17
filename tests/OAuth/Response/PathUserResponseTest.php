@@ -14,6 +14,8 @@ namespace HWI\Bundle\OAuthBundle\Tests\OAuth\Response;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
 
 final class PathUserResponseTest extends TestCase
@@ -108,9 +110,8 @@ final class PathUserResponseTest extends TestCase
         $this->assertNull($this->responseObject->getUserIdentifier());
     }
 
-    /**
-     * @group legacy
-     */
+    #[IgnoreDeprecations]
+    #[Group('legacy')]
     public function testGetUsername(): void
     {
         $paths = ['identifier' => 'id'];
@@ -121,9 +122,8 @@ final class PathUserResponseTest extends TestCase
         $this->assertEquals('666', $this->responseObject->getUsername());
     }
 
-    /**
-     * @group legacy
-     */
+    #[IgnoreDeprecations]
+    #[Group('legacy')]
     public function testGetUsernameWithoutResponseReturnsNull(): void
     {
         $this->responseObject->setPaths(['identifier' => 'id']);

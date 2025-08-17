@@ -19,6 +19,8 @@ use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Tests\App\Form\RegistrationFormType;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -27,7 +29,7 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use Symfony\Component\Security\Http\SecurityEvents;
 
-final class RegistrationControllerTest extends AbstractConnectControllerTest
+final class RegistrationControllerTest extends AbstractConnectControllerTestCase
 {
     public function testNotEnabled(): void
     {
@@ -72,9 +74,8 @@ final class RegistrationControllerTest extends AbstractConnectControllerTest
         $controller->registrationAction($this->request, $key);
     }
 
-    /**
-     * @group legacy
-     */
+    #[IgnoreDeprecations]
+    #[Group('legacy')]
     public function testFailedProcess(): void
     {
         $key = (string) time();
@@ -137,13 +138,14 @@ final class RegistrationControllerTest extends AbstractConnectControllerTest
             ->method('connect')
         ;
 
+        $capturedDispatches = [];
         $this->eventDispatcher->expects($this->exactly(3))
             ->method('dispatch')
-            ->withConsecutive(
-                [$this->isInstanceOf(FormEvent::class), HWIOAuthEvents::REGISTRATION_SUCCESS],
-                [$this->isInstanceOf(InteractiveLoginEvent::class), SecurityEvents::INTERACTIVE_LOGIN],
-                [$this->isInstanceOf(FilterUserResponseEvent::class), HWIOAuthEvents::REGISTRATION_COMPLETED]
-            );
+            ->willReturnCallback(function ($event, $eventName) use (&$capturedDispatches) {
+                $capturedDispatches[] = [$event, $eventName];
+
+                return $event;
+            });
 
         $this->twig->expects($this->once())
             ->method('render')
@@ -152,6 +154,14 @@ final class RegistrationControllerTest extends AbstractConnectControllerTest
 
         $controller = $this->createConnectController();
         $controller->registrationAction($this->request, $key);
+
+        $this->assertCount(3, $capturedDispatches);
+        $this->assertInstanceOf(FormEvent::class, $capturedDispatches[0][0]);
+        $this->assertSame(HWIOAuthEvents::REGISTRATION_SUCCESS, $capturedDispatches[0][1]);
+        $this->assertInstanceOf(InteractiveLoginEvent::class, $capturedDispatches[1][0]);
+        $this->assertSame(SecurityEvents::INTERACTIVE_LOGIN, $capturedDispatches[1][1]);
+        $this->assertInstanceOf(FilterUserResponseEvent::class, $capturedDispatches[2][0]);
+        $this->assertSame(HWIOAuthEvents::REGISTRATION_COMPLETED, $capturedDispatches[2][1]);
     }
 
     private function makeRegistrationForm(): void

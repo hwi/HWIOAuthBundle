@@ -16,6 +16,8 @@ use HWI\Bundle\OAuthBundle\OAuth\Response\PathUserResponse;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use HWI\Bundle\OAuthBundle\Tests\Functional\AuthenticationHelperTrait;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -26,9 +28,8 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\HttpUtils;
 
-/**
- * @group legacy
- */
+#[IgnoreDeprecations]
+#[Group('legacy')]
 class RefreshOnExpireTest extends WebTestCase
 {
     use AuthenticationHelperTrait;

@@ -15,6 +15,7 @@ use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMap;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security\FirewallConfig;
@@ -68,9 +69,7 @@ final class OAuthUtilsTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider provideAuthorizationUrlsWithState
-     */
+    #[DataProvider('provideAuthorizationUrlsWithState')]
     public function testGetAuthorizationUrlWithStateQueryParameters(string $url, string $urlWithState, string $redirect): void
     {
         $request = $this->getRequest($urlWithState);
@@ -79,13 +78,21 @@ final class OAuthUtilsTest extends TestCase
         $utils = new OAuthUtils($this->getHttpUtils($url), $this->getAuthorizationChecker(false, $this->grantRule), $this->createFirewallMapMock(), true, $this->grantRule);
         $utils->addResourceOwnerMap('main', $this->getMap($url, $redirect, false, false, $resource));
 
+        $captured = [];
         $resource->expects($this->exactly(2))
             ->method('addStateParameter')
-            ->withConsecutive(['foo', 'bar'], ['foobar', 'foobaz']);
+            ->willReturnCallback(function ($key, $value) use (&$captured) {
+                $captured[] = [$key, $value];
+            });
 
         $this->assertEquals(
             $redirect,
             $utils->getAuthorizationUrl($request, 'instagram')
+        );
+
+        $this->assertSame(
+            [['foo', 'bar'], ['foobar', 'foobaz']],
+            $captured
         );
     }
 
@@ -129,9 +136,7 @@ final class OAuthUtilsTest extends TestCase
         $this->assertNull($request->attributes->get('service'));
     }
 
-    /**
-     * @dataProvider provideServiceAuthUrlsWithState
-     */
+    #[DataProvider('provideServiceAuthUrlsWithState')]
     public function testGetServiceAuthUrlWithStateQueryParameters(string $url, string $expectedResult): void
     {
         $request = $this->getRequest($url);
@@ -157,19 +162,25 @@ final class OAuthUtilsTest extends TestCase
         $utils = new OAuthUtils($this->getHttpUtils($url), $authorizationChecker, $this->createFirewallMapMock(), true, $this->grantRule);
         $utils->addResourceOwnerMap('main', $mapMock);
 
+        $captured = [];
         $resource->expects($this->exactly(2))
             ->method('addStateParameter')
-            ->withConsecutive(['foo', 'bar'], ['foobar', 'foobaz']);
+            ->willReturnCallback(function ($key, $value) use (&$captured) {
+                $captured[] = [$key, $value];
+            });
 
         $this->assertEquals(
             $expectedResult,
             $utils->getServiceAuthUrl($request, $resource)
         );
+
+        $this->assertSame(
+            [['foo', 'bar'], ['foobar', 'foobaz']],
+            $captured
+        );
     }
 
-    /**
-     * @dataProvider provideValidData
-     */
+    #[DataProvider('provideValidData')]
     public function testSignatureIsGeneratedCorrectly(string $signature, string $url): void
     {
         // Parameters from http://oauth.net/core/1.0a/#anchor46
@@ -188,9 +199,7 @@ final class OAuthUtilsTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider provideInvalidData
-     */
+    #[DataProvider('provideInvalidData')]
     public function testThrowsExceptionIfRequiredParameterIsMissing(array $parameters): void
     {
         $this->expectException(RuntimeException::class);
@@ -238,13 +247,13 @@ final class OAuthUtilsTest extends TestCase
         );
     }
 
-    public function provideValidData(): iterable
+    public static function provideValidData(): iterable
     {
         yield 'simple' => ['iflJZCKxEsZ58FFDyCysxfLbuKM=', 'http://photos.example.net/photos'];
         yield 'with additional data' => ['tR3+Ty81lMeYAr/Fid0kMTYa/WM=', 'http://photos.example.net/photos?file=vacation.jpg&size=original'];
     }
 
-    public function provideInvalidData(): iterable
+    public static function provideInvalidData(): iterable
     {
         yield 'missing "oauth_consumer_key"' => [['oauth_timestamp' => '', 'oauth_nonce' => '', 'oauth_version' => '', 'oauth_signature_method' => '']];
 
@@ -257,7 +266,7 @@ final class OAuthUtilsTest extends TestCase
         yield 'missing "oauth_signature_method"' => [['oauth_consumer_key' => '', 'oauth_timestamp' => '', 'oauth_nonce' => '', 'oauth_version' => '']];
     }
 
-    public function provideServiceAuthUrlsWithState(): iterable
+    public static function provideServiceAuthUrlsWithState(): iterable
     {
         $parameters = ['foo' => 'bar', 'foobar' => 'foobaz'];
         $state = new State($parameters);
@@ -274,7 +283,7 @@ final class OAuthUtilsTest extends TestCase
         yield 'state as an array' => [$url.'?'.implode('&', $stateAsArray), $url];
     }
 
-    public function provideAuthorizationUrlsWithState(): iterable
+    public static function provideAuthorizationUrlsWithState(): iterable
     {
         $parameters = ['foo' => 'bar', 'foobar' => 'foobaz'];
         $state = new State($parameters);

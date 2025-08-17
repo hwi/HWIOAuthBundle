@@ -55,7 +55,7 @@ final class SensioConnectResourceOwnerTest extends GenericOAuth2ResourceOwnerTes
 
     public function testCustomResponseClass(): void
     {
-        $this->markTestSkipped('SensioConnect already tests this approach');
+        $this->expectNotToPerformAssertions();
     }
 
     public function testGetUserInformationFailure(): void
