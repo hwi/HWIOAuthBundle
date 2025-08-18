@@ -64,18 +64,6 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         return $user;
     }
 
-    /**
-     * Symfony <5.4 BC layer.
-     *
-     * @param string $username
-     *
-     * @return UserInterface
-     */
-    public function loadUserByUsername($username)
-    {
-        return $this->loadUserByIdentifier($username);
-    }
-
     public function loadUserByOAuthUserResponse(UserResponseInterface $response): ?UserInterface
     {
         $resourceOwnerName = $response->getResourceOwner()->getName();

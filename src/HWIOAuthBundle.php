@@ -40,9 +40,6 @@ class HWIOAuthBundle extends Bundle
 
         if (method_exists($extension, 'addAuthenticatorFactory')) {
             $extension->addAuthenticatorFactory(new OAuthAuthenticatorFactory($firewallNames));
-        } elseif (method_exists($extension, 'addSecurityListenerFactory')) {
-            // Symfony < 5.4 BC layer
-            $extension->addSecurityListenerFactory(new OAuthAuthenticatorFactory($firewallNames));
         } else {
             throw new RuntimeException('Unsupported Symfony Security component version');
         }

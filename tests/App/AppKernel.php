@@ -40,17 +40,8 @@ final class AppKernel extends Kernel
 
     public function registerContainerConfiguration(LoaderInterface $loader): void
     {
-        if (Kernel::VERSION_ID >= 60000) {
-            $loader->load(__DIR__.'/config/config_v6.yaml');
-            $loader->load(__DIR__.'/config/security_v6.yaml');
-        } elseif (Kernel::VERSION_ID >= 50100 && Kernel::VERSION_ID < 59999) {
-            $loader->load(__DIR__.'/config/config_v5.yaml');
-            if (0 === (int) getenv('USE_NEW_SYMFONY_SECURITY')) {
-                $loader->load(__DIR__.'/config/security_v5_bc.yaml');
-            } else {
-                $loader->load(__DIR__.'/config/security_v5.yaml');
-            }
-        }
+        $loader->load(__DIR__.'/config/config_v6.yaml');
+        $loader->load(__DIR__.'/config/security_v6.yaml');
     }
 
     public function prepareContainer(ContainerBuilder $container): void

@@ -15,7 +15,6 @@ use HWI\Bundle\OAuthBundle\Controller\LoginController;
 use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -24,7 +23,6 @@ use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationCredentialsNotFoundException;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Security as DeprecatedSecurity;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Symfony\Component\Security\Http\SecurityRequestAttributes;
 use Twig\Environment;
@@ -212,12 +210,6 @@ final class LoginControllerTest extends TestCase
 
     private function getSecurityErrorKey(): string
     {
-        // Symfony 6.4+ compatibility
-        if (class_exists(SecurityRequestAttributes::class)) {
-            return SecurityRequestAttributes::AUTHENTICATION_ERROR;
-        }
-
-        // Symfony 5.4 & <6.4 compatibility
-        return class_exists(Security::class) ? Security::AUTHENTICATION_ERROR : DeprecatedSecurity::AUTHENTICATION_ERROR;
+        return SecurityRequestAttributes::AUTHENTICATION_ERROR;
     }
 }

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Symfony\Component\DependencyInjection\Loader\Configurator;
 
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage\SessionStorage;
-use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Provider\OAuthProvider;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider;
 use HWI\Bundle\OAuthBundle\Security\Http\Authentication\AuthenticationFailureHandler;
@@ -29,8 +28,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set('hwi_oauth.authentication.listener.oauth', OAuthListener::class)
         ->abstract()
         ->parent('security.authentication.listener.abstract');
-
-    $services->set('hwi_oauth.authentication.provider.oauth', OAuthProvider::class);
 
     $services->set('hwi_oauth.authentication.entry_point.oauth', OAuthEntryPoint::class)
         ->args([

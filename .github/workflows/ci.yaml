@@ -35,7 +35,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.3'
           extensions: curl, openssl, mbstring
           ini-values: memory_limit=-1
           tools: php-cs-fixer
@@ -55,7 +55,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
+          php-version: '8.3'
           extensions: curl, openssl, mbstring
           ini-values: memory_limit=-1
           tools: composer
@@ -64,7 +64,7 @@ jobs:
         run: |
           composer global config --no-plugins allow-plugins.symfony/flex true
           composer global require symfony/flex --no-progress --no-scripts --no-plugins
-          composer config extra.symfony.require "5.4"
+          composer config extra.symfony.require "6.4"
           composer update --no-interaction --no-progress --ansi
 
       - name: Run phpstan
@@ -77,25 +77,18 @@ jobs:
     strategy:
       matrix:
         include:
-          - php: '8.1'
-            symfony-version: '^5.4'
-            bc: true
-          - php: '8.1'
-            symfony-version: '^5.4'
-          - php: '8.1'
-            symfony-version: '^6.4'
-          - php: '8.2'
-            symfony-version: '^6.4'
-          - php: '8.2'
-            symfony-version: '^7.2'
           - php: '8.3'
             symfony-version: '^6.4'
           - php: '8.3'
-            symfony-version: '^7.2'
+            symfony-version: '^7.3'
+          - php: '8.3'
+            symfony-version: '^6.4'
+          - php: '8.3'
+            symfony-version: '^7.3'
           - php: '8.4'
             symfony-version: '^6.4'
           - php: '8.4'
-            symfony-version: '^7.2'
+            symfony-version: '^7.3'
       fail-fast: false
 
     steps:
@@ -124,8 +117,6 @@ jobs:
           custom-cache-key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
 
       - name: Run PHPUnit tests
-        env:
-          USE_NEW_SYMFONY_SECURITY: matrix.bc != 'true'
         run: |
           mkdir -p build/logs/phpunit
           vendor/bin/phpunit --log-junit build/logs/phpunit/junit.xml

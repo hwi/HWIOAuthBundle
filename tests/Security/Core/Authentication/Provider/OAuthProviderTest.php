@@ -240,11 +240,6 @@ final class OAuthProviderTest extends TestCase
             $oauthToken->setUser($user);
         }
 
-        // required for compatibility with Symfony 5.4
-        if (method_exists($oauthToken, 'setAuthenticated')) {
-            $oauthToken->setAuthenticated($authenticated, false);
-        }
-
         /** @var AbstractOAuthToken $token */
         $token = $oauthProvider->authenticate($oauthToken);
 
