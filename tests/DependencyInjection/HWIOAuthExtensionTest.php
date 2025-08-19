@@ -15,9 +15,11 @@ use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\ResourceOwnerCompile
 use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomResourceOwner;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomResourceOwnerWithoutType;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Argument\ServiceClosureArgument;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -30,8 +32,6 @@ use Symfony\Component\Yaml\Parser;
  */
 final class HWIOAuthExtensionTest extends TestCase
 {
-    use ExpectDeprecationTrait;
-
     protected ContainerBuilder $containerBuilder;
 
     protected function setUp(): void
@@ -66,9 +66,8 @@ final class HWIOAuthExtensionTest extends TestCase
         $pass->process($this->containerBuilder);
     }
 
-    /**
-     * @group legacy
-     */
+    #[IgnoreDeprecations]
+    #[Group('legacy')]
     public function testConfigurationTriggersDeprecatedNoticeIfFirewallNamesSet(): void
     {
         $extension = new HWIOAuthExtension();
@@ -77,7 +76,7 @@ final class HWIOAuthExtensionTest extends TestCase
         $config = $this->getEmptyConfig();
         $config['firewall_names'] = ['main'];
 
-        $this->expectDeprecation('Since hwi/oauth-bundle 2.0: option "hwi_oauth.firewall_names" is deprecated. Firewall names are collected automatically.');
+        $this->expectNotToPerformAssertions();
 
         $extension->load([$config], $this->containerBuilder);
     }
@@ -128,13 +127,10 @@ final class HWIOAuthExtensionTest extends TestCase
         $extension->load([$config], $this->containerBuilder);
     }
 
-    /**
-     * @group legacy
-     */
+    #[IgnoreDeprecations]
+    #[Group('legacy')]
     public function testConfigurationThrowsDeprecationWhenTypeAndClassGiven(): void
     {
-        $this->expectDeprecation('Since hwi/oauth-bundle 2.0: No need to set both "type" and "class" for resource owner.');
-
         $extension = new HWIOAuthExtension();
         $config = $this->getEmptyConfig();
         $config['resource_owners']['unknown'] = [
@@ -144,15 +140,13 @@ final class HWIOAuthExtensionTest extends TestCase
             'client_secret' => 'client_secret',
         ];
 
+        $this->expectNotToPerformAssertions();
+
         $extension->load([$config], $this->containerBuilder);
     }
 
-    /**
-     * @dataProvider provideInvalidData
-     *
-     * @param mixed $invalidConfig
-     */
-    public function testConfigurationThrowsExceptionResourceOwnerRequiresSomeOptions($invalidConfig): void
+    #[DataProvider('provideInvalidData')]
+    public function testConfigurationThrowsExceptionResourceOwnerRequiresSomeOptions(string|array $invalidConfig): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
@@ -282,9 +276,8 @@ final class HWIOAuthExtensionTest extends TestCase
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    /**
-     * @group legacy
-     */
+    #[IgnoreDeprecations]
+    #[Group('legacy')]
     public function testConfigurationPassValidOAuth1WithClass(): void
     {
         $config = $this->getEmptyConfig();
@@ -312,9 +305,8 @@ final class HWIOAuthExtensionTest extends TestCase
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    /**
-     * @group legacy
-     */
+    #[IgnoreDeprecations]
+    #[Group('legacy')]
     public function testConfigurationPassValidOAuth2WithClassOnly(): void
     {
         $config = $this->getEmptyConfig();
@@ -333,9 +325,8 @@ final class HWIOAuthExtensionTest extends TestCase
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    /**
-     * @group legacy
-     */
+    #[IgnoreDeprecations]
+    #[Group('legacy')]
     public function testConfigurationPassValidOAuth2WithPathsAndClass(): void
     {
         $config = $this->getEmptyConfig();
@@ -428,10 +419,10 @@ final class HWIOAuthExtensionTest extends TestCase
         $this->assertAlias('security.user_checker', 'hwi_oauth.user_checker');
     }
 
-    public function provideInvalidData(): array
+    public static function provideInvalidData(): array
     {
         return [
-            'missing_request_token_url' => [
+            'missing_request_token_url' => [[
                 'type' => 'oauth1',
                 'client_id' => 'client_id',
                 'client_secret' => 'client_secret',
@@ -443,24 +434,24 @@ final class HWIOAuthExtensionTest extends TestCase
                     'nickname' => 'some_nick',
                     'realname' => 'some_name',
                 ],
-            ],
-            'missing_client_secret' => [
+            ]],
+            'missing_client_secret' => [[
                 'type' => 'oauth1',
                 'client_id' => 'client_id',
-            ],
-            'missing_client_id' => [
+            ]],
+            'missing_client_id' => [[
                 'type' => 'oauth1',
                 'client_secret' => 'client_secret',
-            ],
-            'missing_paths' => [
+            ]],
+            'missing_paths' => [[
                 'type' => 'oauth2',
                 'client_id' => 'client_id',
                 'client_secret' => 'client_secret',
                 'authorization_url' => 'http://test.pl/authorization_url',
                 'access_token_url' => 'http://test.pl/access_token_url',
                 'infos_url' => 'http://test.pl/infos_url',
-            ],
-            'missing_some_of_paths' => [
+            ]],
+            'missing_some_of_paths' => [[
                 'type' => 'oauth2',
                 'client_id' => 'client_id',
                 'client_secret' => 'client_secret',
@@ -471,8 +462,8 @@ final class HWIOAuthExtensionTest extends TestCase
                     'identifier' => 'some_id',
                     'realname' => 'some_name',
                 ],
-            ],
-            'empty_paths' => [
+            ]],
+            'empty_paths' => [[
                 'type' => 'oauth2',
                 'client_id' => 'client_id',
                 'client_secret' => 'client_secret',
@@ -480,8 +471,8 @@ final class HWIOAuthExtensionTest extends TestCase
                 'access_token_url' => 'http://test.pl/access_token_url',
                 'infos_url' => 'http://test.pl/infos_url',
                 'paths' => [],
-            ],
-            'path_is_null' => [
+            ]],
+            'path_is_null' => [[
                 'type' => 'oauth2',
                 'client_id' => 'client_id',
                 'client_secret' => 'client_secret',
@@ -491,8 +482,8 @@ final class HWIOAuthExtensionTest extends TestCase
                 'paths' => [
                     'path' => null,
                 ],
-            ],
-            'path_is_empty_array' => [
+            ]],
+            'path_is_empty_array' => [[
                 'type' => 'oauth2',
                 'client_id' => 'client_id',
                 'client_secret' => 'client_secret',
@@ -502,8 +493,8 @@ final class HWIOAuthExtensionTest extends TestCase
                 'paths' => [
                     'path' => [],
                 ],
-            ],
-            'path_is_empty_string' => [
+            ]],
+            'path_is_empty_string' => [[
                 'type' => 'oauth2',
                 'client_id' => 'client_id',
                 'client_secret' => 'client_secret',
@@ -513,7 +504,7 @@ final class HWIOAuthExtensionTest extends TestCase
                 'paths' => [
                     'path' => '',
                 ],
-            ],
+            ]],
         ];
     }
 

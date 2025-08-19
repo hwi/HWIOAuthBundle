@@ -1,28 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="./tests/bootstrap.php"
+         colors="true"
+         cacheDirectory=".phpunit.cache"
+>
+  <php>
+    <env name="KERNEL_CLASS" value="HWI\Bundle\OAuthBundle\Tests\App\AppKernel"/>
+  </php>
 
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="./tests/bootstrap.php" colors="true" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <testsuites>
+    <testsuite name="HWIOAuthBundle test suite">
+      <directory>./tests</directory>
+    </testsuite>
+  </testsuites>
 
-    <coverage>
-        <include>
-            <directory>./src/</directory>
-        </include>
-        <exclude>
-            <directory>./src/Resources</directory>
-        </exclude>
-    </coverage>
-
-    <php>
-        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=5"/>
-        <env name="KERNEL_CLASS" value="HWI\Bundle\OAuthBundle\Tests\App\AppKernel"/>
-    </php>
-
-    <testsuites>
-        <testsuite name="HWIOAuthBundle test suite">
-            <directory suffix="Test.php">./tests</directory>
-        </testsuite>
-    </testsuites>
-
-    <listeners>
-        <listener class="Symfony\Bridge\PhpUnit\SymfonyTestsListener"/>
-    </listeners>
+  <source>
+    <include>
+      <directory>./src/</directory>
+    </include>
+    <exclude>
+      <directory>./src/Resources</directory>
+    </exclude>
+  </source>
 </phpunit>

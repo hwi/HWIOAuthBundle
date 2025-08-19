@@ -41,22 +41,10 @@ final class OAuthAuthenticatorTest extends TestCase
 {
     public function testSupports(): void
     {
-        $httpUtilsMock = $this->getHttpUtilsMock();
         $request = Request::create('/b');
 
-        $httpUtilsMock
-            ->method('checkRequestPath')
-            ->withConsecutive(
-                [$request, '/a'],
-                [$request, '/b']
-            )
-            ->willReturnOnConsecutiveCalls(
-                false,
-                true
-            );
-
         $authenticator = new OAuthAuthenticator(
-            $httpUtilsMock,
+            new HttpUtils(),
             $this->getOAuthAwareUserProviderMock(),
             $this->getResourceOwnerMap(),
             ['/a', '/b'],

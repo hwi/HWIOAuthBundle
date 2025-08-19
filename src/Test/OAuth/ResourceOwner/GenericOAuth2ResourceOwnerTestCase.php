@@ -19,6 +19,7 @@ use HWI\Bundle\OAuthBundle\OAuth\StateInterface;
 use HWI\Bundle\OAuthBundle\Security\Helper\NonceGenerator;
 use HWI\Bundle\OAuthBundle\Test\Fixtures\CustomUserResponse;
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use ReflectionClass;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
@@ -206,9 +207,7 @@ json;
         $this->state = $state->encode();
     }
 
-    /**
-     * @dataProvider provideAccessTokenData
-     */
+    #[DataProvider('provideAccessTokenData')]
     public function testGetAccessToken(string $response, string $contentType): void
     {
         $resourceOwner = $this->createResourceOwner(
@@ -227,7 +226,7 @@ json;
         );
     }
 
-    public function provideAccessTokenData(): iterable
+    public static function provideAccessTokenData(): iterable
     {
         yield 'plain text' => [
             'access_token=code',
@@ -292,9 +291,7 @@ json;
         $resourceOwner->getAccessToken($request, 'http://redirect.to/');
     }
 
-    /**
-     * @dataProvider provideRefreshToken
-     */
+    #[DataProvider('provideRefreshToken')]
     public function testRefreshAccessToken($response, $contentType): void
     {
         $resourceOwner = $this->createResourceOwner(
@@ -311,7 +308,7 @@ json;
         $this->assertEquals(3600, $accessToken['expires_in']);
     }
 
-    public function provideRefreshToken(): iterable
+    public static function provideRefreshToken(): iterable
     {
         yield 'correct token' => [
             '{"access_token": "bar", "expires_in": 3600}',
@@ -319,9 +316,7 @@ json;
         ];
     }
 
-    /**
-     * @dataProvider provideInvalidRefreshToken
-     */
+    #[DataProvider('provideInvalidRefreshToken')]
     public function testRefreshAccessTokenInvalid(string $response, string $exceptionClass): void
     {
         $this->expectException($exceptionClass);
@@ -336,7 +331,7 @@ json;
         $resourceOwner->refreshAccessToken('foo');
     }
 
-    public function provideInvalidRefreshToken(): iterable
+    public static function provideInvalidRefreshToken(): iterable
     {
         yield 'invalid' => [
             'invalid',
@@ -445,7 +440,6 @@ json;
 
         $reflection = new ReflectionClass($resourceOwner::class);
         $stateProperty = $reflection->getProperty('state');
-        $stateProperty->setAccessible(true);
         $stateProperty->setValue($resourceOwner, $state ?: new State($this->state));
 
         return $resourceOwner;

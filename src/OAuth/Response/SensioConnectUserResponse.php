@@ -127,7 +127,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     {
         $dom = new DOMDocument();
         try {
-            if (!$dom->loadXML($data)) {
+            if (!@$dom->loadXML($data)) {
                 throw new ErrorException('Could not transform this xml to a \DOMDocument instance.');
             }
         } catch (Exception $e) {

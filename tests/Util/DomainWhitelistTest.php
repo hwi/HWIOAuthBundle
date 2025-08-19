@@ -12,22 +12,22 @@
 namespace HWI\Bundle\OAuthBundle\Tests\Util;
 
 use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 final class DomainWhitelistTest extends TestCase
 {
     /**
-     * @dataProvider targetUrlProvider
-     *
      * @param array<int, string> $domainsWhitelistParameter
      */
+    #[DataProvider('targetUrlProvider')]
     public function testValidateTargetUrl(string $targetUrl, array $domainsWhitelistParameter, bool $isValidTargetUrl): void
     {
         $domainsWhitelist = new DomainWhitelist($domainsWhitelistParameter);
         $this->assertSame($isValidTargetUrl, $domainsWhitelist->isValidTargetUrl($targetUrl));
     }
 
-    public function targetUrlProvider(): array
+    public static function targetUrlProvider(): array
     {
         return [
             ['https://example.com/redirect', ['example.com'], true],

@@ -80,6 +80,6 @@ json;
 
     public function testCustomResponseClass(): void
     {
-        $this->markTestSkipped('SalesForce does not need this test.');
+        $this->expectNotToPerformAssertions();
     }
 }

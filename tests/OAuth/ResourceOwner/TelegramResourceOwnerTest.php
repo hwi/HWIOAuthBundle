@@ -112,12 +112,12 @@ final class TelegramResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 
     public function testRefreshAccessToken($response = '', $contentType = ''): void
     {
-        $this->markTestSkipped('There is no refresh tokens');
+        $this->expectNotToPerformAssertions();
     }
 
     public function testRefreshAccessTokenInvalid(string $response = '', string $exceptionClass = ''): void
     {
-        $this->markTestSkipped('There is no refresh tokens');
+        $this->expectNotToPerformAssertions();
     }
 
     public function testGetUserInformation(): void
@@ -142,16 +142,17 @@ final class TelegramResourceOwnerTest extends GenericOAuth2ResourceOwnerTestCase
 
     public function testInvalidOptionValueThrowsException(): void
     {
+        $this->expectNotToPerformAssertions();
     }
 
     public function testGetUserInformationFailure(): void
     {
-        $this->markTestSkipped('There is no extra http request for get user information');
+        $this->expectNotToPerformAssertions();
     }
 
     public function testGetAuthorizationUrlWithEnabledCsrf(): void
     {
-        $this->markTestSkipped('No CSRF is available for this Resource Owner.');
+        $this->expectNotToPerformAssertions();
     }
 
     public function testCustomResponseClass(): void

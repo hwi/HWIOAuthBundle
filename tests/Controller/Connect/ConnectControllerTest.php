@@ -21,7 +21,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-final class ConnectControllerTest extends AbstractConnectControllerTest
+final class ConnectControllerTest extends AbstractConnectControllerTestCase
 {
     public function testNotEnabled(): void
     {
@@ -119,12 +119,14 @@ final class ConnectControllerTest extends AbstractConnectControllerTest
             ->willReturn(new CustomOAuthToken())
         ;
 
+        $capturedDispatches = [];
         $this->eventDispatcher->expects($this->exactly(2))
             ->method('dispatch')
-            ->withConsecutive(
-                [$this->isInstanceOf(GetResponseUserEvent::class), HWIOAuthEvents::CONNECT_CONFIRMED],
-                [$this->isInstanceOf(FilterUserResponseEvent::class), HWIOAuthEvents::CONNECT_COMPLETED]
-            );
+            ->willReturnCallback(function ($event, $eventName) use (&$capturedDispatches) {
+                $capturedDispatches[] = [$event, $eventName];
+
+                return $event;
+            });
 
         $this->twig->expects($this->once())
             ->method('render')
@@ -133,6 +135,12 @@ final class ConnectControllerTest extends AbstractConnectControllerTest
 
         $controller = $this->createConnectController();
         $controller->connectServiceAction($this->request, 'facebook');
+
+        $this->assertCount(2, $capturedDispatches);
+        $this->assertInstanceOf(GetResponseUserEvent::class, $capturedDispatches[0][0]);
+        $this->assertSame(HWIOAuthEvents::CONNECT_CONFIRMED, $capturedDispatches[0][1]);
+        $this->assertInstanceOf(FilterUserResponseEvent::class, $capturedDispatches[1][0]);
+        $this->assertSame(HWIOAuthEvents::CONNECT_COMPLETED, $capturedDispatches[1][1]);
     }
 
     public function testConnectNoConfirmation(): void
@@ -154,12 +162,14 @@ final class ConnectControllerTest extends AbstractConnectControllerTest
             ->willReturn(new CustomOAuthToken())
         ;
 
+        $capturedDispatches = [];
         $this->eventDispatcher->expects($this->exactly(2))
             ->method('dispatch')
-            ->withConsecutive(
-                [$this->isInstanceOf(GetResponseUserEvent::class), HWIOAuthEvents::CONNECT_CONFIRMED],
-                [$this->isInstanceOf(FilterUserResponseEvent::class), HWIOAuthEvents::CONNECT_COMPLETED]
-            );
+            ->willReturnCallback(function ($event, $eventName) use (&$capturedDispatches) {
+                $capturedDispatches[] = [$event, $eventName];
+
+                return $event;
+            });
 
         $this->twig->expects($this->once())
             ->method('render')
@@ -168,6 +178,12 @@ final class ConnectControllerTest extends AbstractConnectControllerTest
 
         $controller = $this->createConnectController(true, false);
         $controller->connectServiceAction($this->request, 'facebook');
+
+        $this->assertCount(2, $capturedDispatches);
+        $this->assertInstanceOf(GetResponseUserEvent::class, $capturedDispatches[0][0]);
+        $this->assertSame(HWIOAuthEvents::CONNECT_CONFIRMED, $capturedDispatches[0][1]);
+        $this->assertInstanceOf(FilterUserResponseEvent::class, $capturedDispatches[1][0]);
+        $this->assertSame(HWIOAuthEvents::CONNECT_COMPLETED, $capturedDispatches[1][1]);
     }
 
     public function testResourceOwnerHandle(): void
