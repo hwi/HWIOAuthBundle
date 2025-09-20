@@ -21,7 +21,7 @@ hwi_oauth:
             scope:               "email openid" #needs to be enabled in cognito (profile, phone)
             options:
                 region: <pool_region>
-                domain: <pool_domain>
+                domain: <pool_domain> or <custom_domain> like https://yoursite.com 
 ```
 
 When you're done. Continue by configuring the security layer or go back to
