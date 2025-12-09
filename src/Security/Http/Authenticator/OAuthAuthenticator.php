@@ -112,8 +112,10 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
             throw new LazyResponseException(new RedirectResponse(\sprintf('%s?code=%s&authenticated=true', $this->httpUtils->generateUri($request, 'hwi_oauth_connect_service'), $request->query->get('code'))));
         }
 
+        $state = $request->attributes->get('state') ?? $request->query->get('state') ?? $request->request->get('state');
+
         $resourceOwner->isCsrfTokenValid(
-            $this->extractCsrfTokenFromState($request->get('state'))
+            $this->extractCsrfTokenFromState($state)
         );
 
         $accessToken = $resourceOwner->getAccessToken(
