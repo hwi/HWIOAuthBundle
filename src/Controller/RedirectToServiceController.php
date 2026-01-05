@@ -68,7 +68,7 @@ final class RedirectToServiceController
             $sessionKey = '_security.'.$firewallName.'.target_path';
             $sessionKeyFailure = '_security.'.$firewallName.'.failed_target_path';
 
-            if (!empty($param) && $targetUrl = $request->get($param)) {
+            if (!empty($param) && $targetUrl = $request->query->get($param)) {
                 if (!$this->domainWhitelist->isValidTargetUrl($targetUrl)) {
                     throw new AccessDeniedHttpException('Not allowed to redirect to '.$targetUrl);
                 }

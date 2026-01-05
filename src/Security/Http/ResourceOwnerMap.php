@@ -76,7 +76,7 @@ final class ResourceOwnerMap implements ResourceOwnerMapInterface
 
                 // save the round-tripped state to the resource owner
                 if (null !== $resourceOwner) {
-                    $resourceOwner->storeState(new State($request->get('state'), false));
+                    $resourceOwner->storeState(new State($request->query->get('state'), false));
                 }
 
                 return [$resourceOwner, $checkPath];

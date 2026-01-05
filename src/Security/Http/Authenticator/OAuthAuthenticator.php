@@ -113,7 +113,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         }
 
         $resourceOwner->isCsrfTokenValid(
-            $this->extractCsrfTokenFromState($request->get('state'))
+            $this->extractCsrfTokenFromState($request->query->get('state'))
         );
 
         $accessToken = $resourceOwner->getAccessToken(
