@@ -13,7 +13,7 @@ return (new PhpCsFixer\Config())
     ->setRules(array(
         '@Symfony' => true,
         '@Symfony:risky' => true,
-        '@PHP71Migration' => true,
+        '@PHP7x1Migration' => true,
         '@PHPUnit60Migration:risky' => true,
         'combine_consecutive_issets' => true,
         'combine_consecutive_unsets' => true,
