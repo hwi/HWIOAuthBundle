@@ -189,10 +189,12 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         if ($this->options['use_authorization_to_get_token']) {
             if ($this->options['client_secret']) {
                 $headers['Authorization'] = 'Basic '.base64_encode($this->options['client_id'].':'.$this->options['client_secret']);
+
+                unset($parameters['client_id'], $parameters['client_secret']);
             }
         } else {
-            $parameters['client_id'] = $this->options['client_id'];
-            $parameters['client_secret'] = $this->options['client_secret'];
+            $parameters['client_id'] = $parameters['client_id'] ?? $this->options['client_id'];
+            $parameters['client_secret'] = $parameters['client_secret'] ?? $this->options['client_secret'];
         }
 
         return $this->httpRequest($url, http_build_query($parameters, '', '&'), $headers);
