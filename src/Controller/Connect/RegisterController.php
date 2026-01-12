@@ -103,13 +103,13 @@ final class RegisterController extends AbstractController
 
         $error = null;
         $session = $request->hasSession() ? $request->getSession() : $this->getSession();
-        if ($session) {
-            if (!$session->isStarted()) {
-                $session->start();
-            }
-            $error = $session->get('_hwi_oauth.registration_error.'.$key);
-            $session->remove('_hwi_oauth.registration_error.'.$key);
+        if (!$session->isStarted()) {
+            $session->start();
         }
+
+        $error = $session->get('_hwi_oauth.registration_error.'.$key);
+
+        $session->remove('_hwi_oauth.registration_error.'.$key);
 
         if (!$error instanceof AccountNotLinkedException) {
             throw new RuntimeException('Cannot register an account.', 0, $error instanceof Exception ? $error : null);
@@ -154,10 +154,8 @@ final class RegisterController extends AbstractController
             return $event->getResponse();
         }
 
-        if ($session) {
-            // reset the error in the session
-            $session->set('_hwi_oauth.registration_error.'.$key, $error);
-        }
+        // reset the error in the session
+        $session->set('_hwi_oauth.registration_error.'.$key, $error);
 
         /** @var UserInterface $user */
         $user = $form->getData();

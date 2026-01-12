@@ -17,7 +17,6 @@ use HWI\Bundle\OAuthBundle\Event\GetResponseUserEvent;
 use HWI\Bundle\OAuthBundle\HWIOAuthEvents;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\CustomOAuthToken;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -231,7 +230,7 @@ final class ConnectControllerTest extends AbstractConnectControllerTestCase
         return new ConnectController(
             $this->oAuthUtils,
             $this->resourceOwnerMapLocator,
-            $this->createMock(RequestStack::class),
+            $this->requestStack,
             $this->eventDispatcher,
             $this->tokenStorage,
             $this->userChecker,

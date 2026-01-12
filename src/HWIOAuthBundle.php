@@ -13,8 +13,8 @@ namespace HWI\Bundle\OAuthBundle;
 
 use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\EnableRefreshOAuthTokenListenerCompilerPass;
 use HWI\Bundle\OAuthBundle\DependencyInjection\CompilerPass\ResourceOwnerCompilerPass;
+use HWI\Bundle\OAuthBundle\DependencyInjection\HWIOAuthExtension;
 use HWI\Bundle\OAuthBundle\DependencyInjection\Security\Factory\OAuthAuthenticatorFactory;
-use RuntimeException;
 use Symfony\Bundle\SecurityBundle\DependencyInjection\SecurityExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
@@ -33,16 +33,13 @@ class HWIOAuthBundle extends Bundle
     {
         parent::build($container);
 
+        /** @var HWIOAuthExtension $oAuthExtension */
+        $oAuthExtension = $this->extension;
+        $firewallNames = $oAuthExtension->getFirewallNames();
+
         /** @var SecurityExtension $extension */
         $extension = $container->getExtension('security');
-
-        $firewallNames = $this->extension->getFirewallNames();
-
-        if (method_exists($extension, 'addAuthenticatorFactory')) {
-            $extension->addAuthenticatorFactory(new OAuthAuthenticatorFactory($firewallNames));
-        } else {
-            throw new RuntimeException('Unsupported Symfony Security component version');
-        }
+        $extension->addAuthenticatorFactory(new OAuthAuthenticatorFactory($firewallNames));
 
         $container->addCompilerPass(new ResourceOwnerCompilerPass());
         $container->addCompilerPass(new EnableRefreshOAuthTokenListenerCompilerPass());

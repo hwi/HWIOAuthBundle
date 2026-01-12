@@ -14,9 +14,7 @@ namespace HWI\Bundle\OAuthBundle\OAuth\RequestDataStorage;
 use HWI\Bundle\OAuthBundle\OAuth\RequestDataStorageInterface;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use InvalidArgumentException;
-use LogicException;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
  * Request token storage implementation using the Symfony session.
@@ -40,13 +38,13 @@ final class SessionStorage implements RequestDataStorageInterface
     public function fetch(ResourceOwnerInterface $resourceOwner, $key, $type = 'token')
     {
         $key = $this->generateKey($resourceOwner, $key, $type);
-        if (null === $data = $this->getSession()->get($key)) {
+        if (null === $data = $this->requestStack->getSession()->get($key)) {
             throw new InvalidArgumentException('No data available in storage.');
         }
 
         // Request tokens are one time use only
         if (\in_array($type, ['token', 'csrf_state'], true)) {
-            $this->getSession()->remove($key);
+            $this->requestStack->getSession()->remove($key);
         }
 
         return $data;
@@ -67,7 +65,7 @@ final class SessionStorage implements RequestDataStorageInterface
             $key = $this->generateKey($resourceOwner, $this->getStorageKey($value), $type);
         }
 
-        $this->getSession()->set($key, $this->getStorageValue($value));
+        $this->requestStack->getSession()->set($key, $this->getStorageValue($value));
     }
 
     /**
@@ -106,18 +104,5 @@ final class SessionStorage implements RequestDataStorageInterface
         }
 
         return (string) $storageKey;
-    }
-
-    private function getSession(): SessionInterface
-    {
-        if (method_exists($this->requestStack, 'getSession')) {
-            return $this->requestStack->getSession();
-        }
-
-        if ((null !== $request = $this->requestStack->getCurrentRequest()) && $request->hasSession()) {
-            return $request->getSession();
-        }
-
-        throw new LogicException('There is currently no session available.');
     }
 }

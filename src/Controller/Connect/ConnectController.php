@@ -109,7 +109,7 @@ final class ConnectController extends AbstractController
         $resourceOwner = $this->getResourceOwnerByName($service);
 
         $session = $request->hasSession() ? $request->getSession() : $this->getSession();
-        if ($session && !$session->isStarted()) {
+        if (!$session->isStarted()) {
             $session->start();
         }
 
@@ -122,11 +122,9 @@ final class ConnectController extends AbstractController
                 $this->oauthUtils->getServiceAuthUrl($request, $resourceOwner)
             );
 
-            if ($session) {
-                // save in session
-                $session->set('_hwi_oauth.connect_confirmation.'.$key, $accessToken);
-            }
-        } elseif ($session) {
+            // save in session
+            $session->set('_hwi_oauth.connect_confirmation.'.$key, $accessToken);
+        } else {
             $accessToken = $session->get('_hwi_oauth.connect_confirmation.'.$key);
         }
 
