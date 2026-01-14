@@ -29,6 +29,7 @@ use Symfony\Bundle\SecurityBundle\Security\FirewallMap;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -40,6 +41,7 @@ use Twig\Environment;
 abstract class AbstractConnectControllerTestCase extends TestCase
 {
     protected ResourceOwnerMapLocator $resourceOwnerMapLocator;
+    protected RequestStack $requestStack;
     protected Request $request;
     protected OAuthUtils $oAuthUtils;
 
@@ -149,11 +151,15 @@ abstract class AbstractConnectControllerTestCase extends TestCase
         $this->resourceOwnerMapLocator = new ResourceOwnerMapLocator();
         $this->resourceOwnerMapLocator->set('default', $this->resourceOwnerMap);
 
-        $this->formFactory = $this->createMock(FormFactoryInterface::class);
-
         $this->session = $this->createMock(SessionInterface::class);
+
         $this->request = Request::create('/');
         $this->request->setSession($this->session);
+
+        $this->requestStack = $this->createMock(RequestStack::class);
+        $this->requestStack->push($this->request);
+
+        $this->formFactory = $this->createMock(FormFactoryInterface::class);
     }
 
     protected function createAccountNotLinkedException(): AccountNotLinkedException

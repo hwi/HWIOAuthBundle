@@ -64,7 +64,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         return $user;
     }
 
-    public function loadUserByOAuthUserResponse(UserResponseInterface $response): ?UserInterface
+    public function loadUserByOAuthUserResponse(UserResponseInterface $response): UserInterface
     {
         $resourceOwnerName = $response->getResourceOwner()->getName();
 
@@ -72,6 +72,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
             throw new RuntimeException(\sprintf("No property defined for entity for resource owner '%s'.", $resourceOwnerName));
         }
 
+        /** @phpstan-ignore function.alreadyNarrowedType */
         $username = method_exists($response, 'getUserIdentifier') ? $response->getUserIdentifier() : $response->getUsername();
         if (null === $user = $this->findUser([$this->properties[$resourceOwnerName] => $username])) {
             throw $this->createUserNotFoundException($username, \sprintf("User '%s' not found.", $username));

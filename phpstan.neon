@@ -4,9 +4,6 @@ parameters:
         - src/
         - tests/
     excludePaths:
-        # Symfony <5.4 BC layer
-        - src/DependencyInjection/Security/Factory/OAuthFactory.php
-        - src/Security/Core/Authentication/Provider/OAuthProvider.php
         - src/Security/Core/Exception/AccountNotLinkedException.php
         - src/Security/Core/User/OAuthAwareUserProviderInterface.php
         - src/Security/Http/Firewall/OAuthListener.php

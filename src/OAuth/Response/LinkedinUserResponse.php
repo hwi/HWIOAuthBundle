@@ -35,7 +35,7 @@ final class LinkedinUserResponse extends PathUserResponse
     public function getProfilePicture(): ?string
     {
         // https://docs.microsoft.com/en-us/linkedin/shared/references/v2/profile/profile-picture
-        /** @var array<string, string|array<string, array<int, array<string, mixed>>>> $profilePicture */
+        /** @var array<string, string|array<string, array<int, array<string, mixed>>>>|string|null $profilePicture */
         $profilePicture = $this->getValueForPath('profilepicture');
         if (
             !\is_array($profilePicture)
@@ -53,7 +53,7 @@ final class LinkedinUserResponse extends PathUserResponse
         }
 
         // the last images seems to always be the one with the best quality, so we take this one
-        $element = array_values(\array_slice($publicElements, -1))[0];
+        $element = \array_slice($publicElements, -1)[0];
 
         return $element['identifiers'][0]['identifier'];
     }
