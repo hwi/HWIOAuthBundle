@@ -149,7 +149,6 @@ final class Configuration implements ConfigurationInterface
 
     private function addResourceOwnersConfiguration(ArrayNodeDefinition $node): void
     {
-        /* @phpstan-ignore-next-line */
         $node
             ->fixXmlConfig('resource_owner')
             ->children()

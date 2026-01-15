@@ -19,15 +19,10 @@ use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthUserProvider;
 use HWI\Bundle\OAuthBundle\Security\Http\Authentication\AuthenticationFailureHandler;
 use HWI\Bundle\OAuthBundle\Security\Http\EntryPoint\OAuthEntryPoint;
 use HWI\Bundle\OAuthBundle\Security\Http\Firewall\AbstractRefreshAccessTokenListener;
-use HWI\Bundle\OAuthBundle\Security\Http\Firewall\OAuthListener;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
-
-    $services->set('hwi_oauth.authentication.listener.oauth', OAuthListener::class)
-        ->abstract()
-        ->parent('security.authentication.listener.abstract');
 
     $services->set('hwi_oauth.authentication.entry_point.oauth', OAuthEntryPoint::class)
         ->args([

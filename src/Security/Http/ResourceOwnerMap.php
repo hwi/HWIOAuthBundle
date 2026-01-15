@@ -13,6 +13,7 @@ namespace HWI\Bundle\OAuthBundle\Security\Http;
 
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\State\State;
+use HWI\Bundle\OAuthBundle\Util\Parameter;
 use Psr\Container\NotFoundExceptionInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,7 +77,7 @@ final class ResourceOwnerMap implements ResourceOwnerMapInterface
 
                 // save the round-tripped state to the resource owner
                 if (null !== $resourceOwner) {
-                    $resourceOwner->storeState(new State($request->get('state'), false));
+                    $resourceOwner->storeState(new State(Parameter::get($request, 'state'), false));
                 }
 
                 return [$resourceOwner, $checkPath];
