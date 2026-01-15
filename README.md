@@ -12,7 +12,7 @@ Installation
 
 All the installation instructions are located in the documentation, check it for a specific version:
 
-* [__2.x__](https://github.com/hwi/HWIOAuthBundle/blob/master/docs/1-setting_up_the_bundle.md) (current) - with support for Symfony: `^6.4` & `^7.4` (PHP: `^8.3`),
+* [__2.x__](https://github.com/hwi/HWIOAuthBundle/blob/master/docs/1-setting_up_the_bundle.md) (current) - with support for Symfony: `^6.4`, `^7.4` and `^8.0` (PHP: `^8.3`),
 
 Documentation
 -------------

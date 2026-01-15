@@ -14,6 +14,7 @@ namespace HWI\Bundle\OAuthBundle\Controller;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapLocator;
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
 use HWI\Bundle\OAuthBundle\Util\DomainWhitelist;
+use HWI\Bundle\OAuthBundle\Util\Parameter;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Exception\SessionNotFoundException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -68,7 +69,7 @@ final class RedirectToServiceController
             $sessionKey = '_security.'.$firewallName.'.target_path';
             $sessionKeyFailure = '_security.'.$firewallName.'.failed_target_path';
 
-            if (!empty($param) && $targetUrl = $request->get($param)) {
+            if (!empty($param) && $targetUrl = Parameter::get($request, $param)) {
                 if (!$this->domainWhitelist->isValidTargetUrl($targetUrl)) {
                     throw new AccessDeniedHttpException('Not allowed to redirect to '.$targetUrl);
                 }
