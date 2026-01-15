@@ -189,10 +189,6 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
             throw $e;
         }
 
-        if (!$user instanceof UserInterface) {
-            throw new AuthenticationServiceException('loadUserByOAuthUserResponse() must return a UserInterface.');
-        }
-
         return $this->recreateToken($token, $user);
     }
 
@@ -211,7 +207,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         if ($user) {
             $newToken = new $tokenClass(
                 $token->getRawToken(),
-                method_exists($user, 'getRoles') ? $user->getRoles() : []
+                $user->getRoles()
             );
             $newToken->setUser($user);
         } else {

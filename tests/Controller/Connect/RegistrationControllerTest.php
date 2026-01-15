@@ -23,7 +23,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -58,17 +57,6 @@ final class RegistrationControllerTest extends AbstractConnectControllerTestCase
         $key = (string) time();
 
         $this->mockAuthorizationCheck(false);
-
-        $this->session->expects($this->once())
-            ->method('get')
-            ->with('_hwi_oauth.registration_error.'.$key)
-            ->willReturn(new Exception())
-        ;
-
-        $this->session->expects($this->once())
-            ->method('remove')
-            ->with('_hwi_oauth.registration_error.'.$key)
-        ;
 
         $controller = $this->createConnectController();
         $controller->registrationAction($this->request, $key);
@@ -182,7 +170,7 @@ final class RegistrationControllerTest extends AbstractConnectControllerTestCase
     ): RegisterController {
         return new RegisterController(
             $this->resourceOwnerMapLocator,
-            $this->createMock(RequestStack::class),
+            $this->requestStack,
             $this->eventDispatcher,
             $this->tokenStorage,
             $this->userChecker,

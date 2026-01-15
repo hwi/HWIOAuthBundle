@@ -179,7 +179,7 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
     /**
      * {@inheritdoc}
      */
-    protected function createEntryPoint($container, $id, $config, ?string $defaultEntryPointId): ?string
+    protected function createEntryPoint($container, $id, $config, ?string $defaultEntryPointId): string
     {
         $entryPointId = 'hwi_oauth.authentication.entry_point.oauth.'.$id;
 

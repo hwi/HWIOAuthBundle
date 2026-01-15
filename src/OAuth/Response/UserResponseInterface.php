@@ -39,7 +39,7 @@ interface UserResponseInterface extends ResponseInterface
     /**
      * Get the username to display.
      *
-     * @return string
+     * @return string|null
      */
     public function getNickname();
 

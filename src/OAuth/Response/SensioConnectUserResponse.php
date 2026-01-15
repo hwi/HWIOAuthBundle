@@ -31,7 +31,7 @@ final class SensioConnectUserResponse extends AbstractUserResponse
      */
     protected $data;
 
-    private ?DOMXPath $xpath;
+    private DOMXPath $xpath;
 
     /**
      * {@inheritdoc}
@@ -50,14 +50,9 @@ final class SensioConnectUserResponse extends AbstractUserResponse
     /**
      * {@inheritdoc}
      */
-    public function getUsername(): ?string
+    public function getUsername(): string
     {
-        try {
-            return $this->getUserIdentifier();
-        } catch (InvalidArgumentException $e) {
-            // @phpstan-ignore-next-line BC compatibility
-            return null;
-        }
+        return $this->getUserIdentifier();
     }
 
     /**

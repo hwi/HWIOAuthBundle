@@ -167,7 +167,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getRefreshToken()
     {
@@ -184,7 +184,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getExpiresIn()
     {

@@ -120,7 +120,6 @@ abstract class AbstractController
      */
     protected function getConfirmationResponse(Request $request, array $accessToken, string $service): Response
     {
-        /** @var OAuthToken $currentToken */
         $currentToken = $this->tokenStorage->getToken();
         /** @var UserInterface $currentUser */
         $currentUser = $currentToken->getUser();
@@ -164,17 +163,9 @@ abstract class AbstractController
         $this->dispatcher->dispatch($event, $eventName);
     }
 
-    protected function getSession(): ?SessionInterface
+    protected function getSession(): SessionInterface
     {
-        if (method_exists($this->requestStack, 'getSession')) {
-            return $this->requestStack->getSession();
-        }
-
-        if ((null !== $request = $this->requestStack->getCurrentRequest()) && $request->hasSession()) {
-            return $request->getSession();
-        }
-
-        return null;
+        return $this->requestStack->getSession();
     }
 
     protected function getTargetPath(?SessionInterface $session): ?string

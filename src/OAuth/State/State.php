@@ -79,6 +79,8 @@ final class State implements StateInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @phpstan-ignore return.unusedType
      */
     public function get(string $key): ?string
     {

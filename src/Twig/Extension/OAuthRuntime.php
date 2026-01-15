@@ -12,7 +12,6 @@
 namespace HWI\Bundle\OAuthBundle\Twig\Extension;
 
 use HWI\Bundle\OAuthBundle\Security\OAuthUtils;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Twig\Extension\RuntimeExtensionInterface;
 
@@ -41,21 +40,11 @@ final class OAuthRuntime implements RuntimeExtensionInterface
 
     public function getLoginUrl(string $name): string
     {
-        return $this->oauthUtils->getLoginUrl($this->getMainRequest(), $name);
+        return $this->oauthUtils->getLoginUrl($this->requestStack->getMainRequest(), $name);
     }
 
     public function getAuthorizationUrl(string $name, ?string $redirectUrl = null, array $extraParameters = []): string
     {
-        return $this->oauthUtils->getAuthorizationUrl($this->getMainRequest(), $name, $redirectUrl, $extraParameters);
-    }
-
-    private function getMainRequest(): ?Request
-    {
-        if (method_exists($this->requestStack, 'getMainRequest')) {
-            return $this->requestStack->getMainRequest(); // Symfony 5.3+
-        }
-
-        // @phpstan-ignore-next-line
-        return $this->requestStack->getMasterRequest();
+        return $this->oauthUtils->getAuthorizationUrl($this->requestStack->getMainRequest(), $name, $redirectUrl, $extraParameters);
     }
 }

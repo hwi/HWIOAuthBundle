@@ -17,7 +17,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use stdClass;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
@@ -45,16 +44,8 @@ class SessionStorageTest extends TestCase
         $this->resourceOwner->method('getName')->willReturn('resource_owner_name');
         $this->resourceOwner->method('getOption')->with('client_id')->willReturn('client_id');
 
-        $request = $this->createMock(Request::class);
-        $request->method('hasSession')->willReturn(true);
-        $request->method('getSession')->willReturn($this->session);
-
         $requestStack = $this->createMock(RequestStack::class);
-        $requestStack->method('getCurrentRequest')->willReturn($request);
-
-        if (method_exists(RequestStack::class, 'getSession')) {
-            $requestStack->method('getSession')->willReturn($this->session);
-        }
+        $requestStack->method('getSession')->willReturn($this->session);
 
         $this->storage = new SessionStorage($requestStack);
     }

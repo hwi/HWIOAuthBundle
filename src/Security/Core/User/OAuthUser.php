@@ -39,11 +39,13 @@ final class OAuthUser implements UserInterface
         return ['ROLE_USER', 'ROLE_OAUTH_USER'];
     }
 
+    /** @phpstan-ignore-next-line */
     public function getPassword(): ?string
     {
         return null;
     }
 
+    /** @phpstan-ignore-next-line */
     public function getSalt(): ?string
     {
         return null;
