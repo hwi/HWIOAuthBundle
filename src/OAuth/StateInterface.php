@@ -29,7 +29,7 @@ interface StateInterface
     public function add(string $key, string $value);
 
     /**
-     * @return string The value set to this key
+     * @return string|null The value set to this key
      *
      * @throws StateRetrievalException
      */

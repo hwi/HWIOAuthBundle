@@ -69,8 +69,7 @@ abstract class ResourceOwnerTestCase extends TestCase
     {
         $this->storage = $this->createMock(RequestDataStorageInterface::class);
 
-        /** @var HttpUtils $httpUtils */
-        $httpUtils = $this->createMock(HttpUtils::class);
+        $httpUtils = new HttpUtils();
 
         $resourceOwner = $this->setUpResourceOwner(
             $this->prepareResourceOwnerName(),

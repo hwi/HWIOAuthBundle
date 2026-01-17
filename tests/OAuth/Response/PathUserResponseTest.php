@@ -107,7 +107,7 @@ final class PathUserResponseTest extends TestCase
         $this->expectExceptionMessage('User identifier was not found in response.');
 
         $this->responseObject->setPaths(['identifier' => 'id']);
-        $this->assertNull($this->responseObject->getUserIdentifier());
+        $this->responseObject->getUserIdentifier();
     }
 
     #[IgnoreDeprecations]
@@ -120,14 +120,6 @@ final class PathUserResponseTest extends TestCase
         $this->responseObject->setData(json_encode(['id' => 666]));
 
         $this->assertEquals('666', $this->responseObject->getUsername());
-    }
-
-    #[IgnoreDeprecations]
-    #[Group('legacy')]
-    public function testGetUsernameWithoutResponseReturnsNull(): void
-    {
-        $this->responseObject->setPaths(['identifier' => 'id']);
-        $this->assertNull($this->responseObject->getUsername());
     }
 
     public function testGetNickname(): void

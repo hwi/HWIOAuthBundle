@@ -18,6 +18,7 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\OAuthAwareExceptionInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\OAuthAwareUserProviderInterface;
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\Passport\Badge\OAuthTokenBadge;
 use HWI\Bundle\OAuthBundle\Security\Http\ResourceOwnerMapInterface;
+use HWI\Bundle\OAuthBundle\Util\Parameter;
 use LogicException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -113,7 +114,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         }
 
         $resourceOwner->isCsrfTokenValid(
-            $this->extractCsrfTokenFromState($request->get('state'))
+            $this->extractCsrfTokenFromState(Parameter::get($request, 'state'))
         );
 
         $accessToken = $resourceOwner->getAccessToken(
@@ -189,10 +190,6 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
             throw $e;
         }
 
-        if (!$user instanceof UserInterface) {
-            throw new AuthenticationServiceException('loadUserByOAuthUserResponse() must return a UserInterface.');
-        }
-
         return $this->recreateToken($token, $user);
     }
 
@@ -211,7 +208,7 @@ final class OAuthAuthenticator implements AuthenticatorInterface, Authentication
         if ($user) {
             $newToken = new $tokenClass(
                 $token->getRawToken(),
-                method_exists($user, 'getRoles') ? $user->getRoles() : []
+                $user->getRoles()
             );
             $newToken->setUser($user);
         } else {

@@ -17,7 +17,6 @@ use HWI\Bundle\OAuthBundle\Security\Core\Exception\AccountNotLinkedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
@@ -64,14 +63,12 @@ final class AuthenticationFailureHandler implements AuthenticationFailureHandler
         $key = null;
         if ($this->connect && $error instanceof AccountNotLinkedException) {
             $key = time();
-            $session = $request->hasSession() ? $request->getSession() : $this->getSession();
-            if ($session) {
-                if (!$session->isStarted()) {
-                    $session->start();
-                }
-
-                $session->set('_hwi_oauth.registration_error.'.$key, $error);
+            $session = $this->requestStack->getSession();
+            if (!$session->isStarted()) {
+                $session->start();
             }
+
+            $session->set('_hwi_oauth.registration_error.'.$key, $error);
         }
 
         if (null !== $key) {
@@ -83,18 +80,5 @@ final class AuthenticationFailureHandler implements AuthenticationFailureHandler
         }
 
         return $this->httpUtils->createRedirectResponse($request, $failurePath);
-    }
-
-    private function getSession(): ?SessionInterface
-    {
-        if (method_exists($this->requestStack, 'getSession')) {
-            return $this->requestStack->getSession();
-        }
-
-        if ((null !== $request = $this->requestStack->getCurrentRequest()) && $request->hasSession()) {
-            return $request->getSession();
-        }
-
-        return null;
     }
 }

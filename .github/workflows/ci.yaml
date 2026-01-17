@@ -24,8 +24,6 @@ jobs:
   php-cs-fixer:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    env:
-      PHP_CS_FIXER_FUTURE_MODE: '1'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -64,7 +62,6 @@ jobs:
         run: |
           composer global config --no-plugins allow-plugins.symfony/flex true
           composer global require symfony/flex --no-progress --no-scripts --no-plugins
-          composer config extra.symfony.require "6.4"
           composer update --no-interaction --no-progress --ansi
 
       - name: Run phpstan
@@ -80,15 +77,19 @@ jobs:
           - php: '8.3'
             symfony-version: '^6.4'
           - php: '8.3'
-            symfony-version: '^7.3'
-          - php: '8.3'
-            symfony-version: '^6.4'
-          - php: '8.3'
-            symfony-version: '^7.3'
+            symfony-version: '^7.4'
           - php: '8.4'
             symfony-version: '^6.4'
           - php: '8.4'
-            symfony-version: '^7.3'
+            symfony-version: '^7.4'
+          - php: '8.4'
+            symfony-version: '^8.0'
+          - php: '8.5'
+            symfony-version: '^6.4'
+          - php: '8.5'
+            symfony-version: '^7.4'
+          - php: '8.5'
+            symfony-version: '^8.0'
       fail-fast: false
 
     steps:
@@ -125,6 +126,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: phpunit-logs-php${{ matrix.php }}
+          name: phpunit-logs-php${{ matrix.php }}-symfony${{ matrix.symfony-version }}
           path: build/logs/phpunit
         continue-on-error: true

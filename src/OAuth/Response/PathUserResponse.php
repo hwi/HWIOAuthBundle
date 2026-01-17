@@ -53,12 +53,7 @@ class PathUserResponse extends AbstractUserResponse
      */
     public function getUsername()
     {
-        try {
-            return $this->getUserIdentifier();
-        } catch (InvalidArgumentException $e) {
-            // @phpstan-ignore-next-line BC compatibility
-            return null;
-        }
+        return $this->getUserIdentifier();
     }
 
     /**
@@ -163,7 +158,11 @@ class PathUserResponse extends AbstractUserResponse
 
             $value = [];
             foreach ($steps as $step) {
-                $value[] = $this->getValue($step, $data);
+                $val = $this->getValue($step, $data);
+
+                if (\is_string($val)) {
+                    $value[] = $val;
+                }
             }
 
             return trim(implode(' ', $value)) ?: null;

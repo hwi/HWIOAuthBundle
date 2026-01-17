@@ -139,10 +139,6 @@ json;
 
     private function assertAmountOfHttpCalls(int $amount): void
     {
-        if (!method_exists($this->httpClient, 'getRequestsCount')) {
-            return;
-        }
-
         $this->assertSame($amount, $this->httpClient->getRequestsCount());
     }
 }

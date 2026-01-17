@@ -60,9 +60,7 @@ doctrine:
         driver: pdo_sqlite
         url: 'sqlite:///:memory:'
     orm:
-        auto_generate_proxy_classes: '%kernel.debug%'
         auto_mapping: true
-        enable_lazy_ghost_objects: true
 
 hwi_oauth:
     connect:
@@ -102,6 +100,5 @@ hwi_oauth:
 
 twig:
     strict_variables: '%kernel.debug%'
-    exception_controller: ~
     paths:
         '%kernel.project_dir%/templates': 'Acme'
