@@ -94,7 +94,7 @@ final class EntityUserProvider implements UserProviderInterface, OAuthAwareUserP
         $username = $user->getUserIdentifier();
 
         if (null === $user = $this->findUser([$identifier => $userId])) {
-            throw $this->createUserNotFoundException($username, \sprintf('User with ID "%d" could not be reloaded.', $userId));
+            throw $this->createUserNotFoundException($username, \sprintf('User with ID "%s" could not be reloaded.', $userId));
         }
 
         return $user;
