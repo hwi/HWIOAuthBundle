@@ -14,7 +14,7 @@ declare(strict_types=1);
 use HWI\Bundle\OAuthBundle\Controller\LoginController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
-return function (RoutingConfigurator $routes) {
+return static function (RoutingConfigurator $routes) {
     $routes->add('hwi_oauth_connect', '/')
         ->controller([LoginController::class, 'connectAction'])
         ->methods(['GET']);
