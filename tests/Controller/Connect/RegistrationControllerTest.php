@@ -129,7 +129,7 @@ final class RegistrationControllerTest extends AbstractConnectControllerTestCase
         $capturedDispatches = [];
         $this->eventDispatcher->expects($this->exactly(3))
             ->method('dispatch')
-            ->willReturnCallback(function ($event, $eventName) use (&$capturedDispatches) {
+            ->willReturnCallback(static function ($event, $eventName) use (&$capturedDispatches) {
                 $capturedDispatches[] = [$event, $eventName];
 
                 return $event;
