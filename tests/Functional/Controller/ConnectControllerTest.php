@@ -36,7 +36,7 @@ final class ConnectControllerTest extends WebTestCase
     public function testRegistration(): void
     {
         $httpClient = new MockHttpClient(
-            function ($method, $url, $options) {
+            static function ($method, $url, $options) {
                 return new MockResponse(
                     '{"access_token":"valid-access-token"}',
                     [
@@ -86,7 +86,7 @@ final class ConnectControllerTest extends WebTestCase
     public function testConnectService(): void
     {
         $httpClient = new MockHttpClient(
-            function ($method, $url, $options) {
+            static function ($method, $url, $options) {
                 return new MockResponse(
                     '{"name":"foo"}',
                     [
