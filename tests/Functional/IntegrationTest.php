@@ -110,7 +110,7 @@ final class IntegrationTest extends WebTestCase
             ]);
 
         $httpClient = new MockHttpClient(
-            function ($method, $url, $options) {
+            static function ($method, $url, $options) {
                 return new MockResponse(
                     '{"access_token":"valid-access-token"}',
                     [
@@ -158,7 +158,7 @@ final class IntegrationTest extends WebTestCase
             ]);
 
         $httpClient = new MockHttpClient(
-            function ($method, $url, $options) {
+            static function ($method, $url, $options) {
                 return new MockResponse(
                     '{"access_token":"valid-access-token"}',
                     [
