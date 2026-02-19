@@ -14,7 +14,7 @@ declare(strict_types=1);
 use HWI\Bundle\OAuthBundle\Controller\RedirectToServiceController;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
-return function (RoutingConfigurator $routes) {
+return static function (RoutingConfigurator $routes) {
     $routes->add('hwi_oauth_service_redirect', '/{service}')
         ->controller([RedirectToServiceController::class, 'redirectToServiceAction'])
         ->methods(['GET']);
