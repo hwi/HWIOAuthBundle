@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the HWIOAuthBundle package.
  *
@@ -15,9 +17,11 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Persistence\ObjectRepository;
+use ErrorException;
 use HWI\Bundle\OAuthBundle\OAuth\ResourceOwnerInterface;
 use HWI\Bundle\OAuthBundle\OAuth\Response\UserResponseInterface;
 use HWI\Bundle\OAuthBundle\Security\Core\User\EntityUserProvider;
+use HWI\Bundle\OAuthBundle\Tests\Fixtures\StringIDUser;
 use HWI\Bundle\OAuthBundle\Tests\Fixtures\User;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\IgnoreDeprecations;
@@ -184,4 +188,33 @@ final class EntityUserProviderTest extends TestCase
     {
         $this->expectException(UserNotFoundException::class);
     }
+
+    public function testRefreshUserWorksWithUlid(): void
+    {
+        // Simulate `framework.php_errors.throw: true`
+        set_error_handler(static function (
+            int $severity,
+            string $message,
+            string $file,
+            int $line
+        ): never {
+            throw new ErrorException($message, 0, $severity, $file, $line);
+        });
+
+        try {
+            $this->assertUserNotFoundException();
+            $this->expectExceptionMessage('User with ID "6f5f78b2-005d-4eea-96c4-79044aaebb34" could not be reloaded.');
+
+            $provider = new EntityUserProvider(
+                $this->createManagerRegistryMock(),
+                StringIDUser::class,
+                []
+            );
+
+            $provider->refreshUser(new StringIDUser());
+        } finally {
+            restore_error_handler();
+        }
+    }
+
 }
