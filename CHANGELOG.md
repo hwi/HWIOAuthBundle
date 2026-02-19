@@ -4,7 +4,7 @@ Changelog
 * Added: PHP 8.5 test coverage,
 * Added: Support for Symfony 8.0,
 * Added: Handles absolute URL's in Amazon Cognito,
-* Bugfix: Fixed wrong HTTP status code in RegisterController,
+* Bugfix: Wrong HTTP status code in RegisterController,
 * BC Break: Dropped support for Symfony < 6.4,
 * BC Break: Dropped support for PHP < 8.3,
 
