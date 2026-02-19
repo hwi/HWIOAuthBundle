@@ -1,7 +1,15 @@
 Changelog
 =========
+## 2.5.0 (2026-xx-xx)
+* Added: PHP 8.5 test coverage,
+* Added: Support for Symfony 8.0,
+* Added: Handles absolute URL's in Amazon Cognito,
+* Bugfix: Fixed wrong HTTP status code in RegisterController,
+* BC Break: Dropped support for Symfony < 6.4,
+* BC Break: Dropped support for PHP < 8.3,
+
 ## 2.4.0 (2025-05-29)
-* Added PHP 8.4 test coverage,
+* Added: PHP 8.4 test coverage,
 * Added: LinkedIn OpenID resource owner,
 * Added: `show_dialog` option to Spotify resource owner,
 * Use CSPRNG for generating nonce,
