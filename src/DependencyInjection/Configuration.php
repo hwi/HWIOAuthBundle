@@ -132,7 +132,7 @@ final class Configuration implements ConfigurationInterface
                 ->scalarNode('grant_rule')
                     ->defaultValue('IS_AUTHENTICATED_REMEMBERED')
                     ->validate()
-                        ->ifTrue(function ($role) {
+                        ->ifTrue(static function ($role) {
                             return !('IS_AUTHENTICATED_REMEMBERED' === $role || 'IS_AUTHENTICATED_FULLY' === $role);
                         })
                         ->thenInvalid('Unknown grant role set "%s".')
@@ -231,7 +231,7 @@ final class Configuration implements ConfigurationInterface
                             ->end()
                             ->scalarNode('use_authorization_to_get_token')
                                 ->validate()
-                                    ->ifTrue(function ($v) {
+                                    ->ifTrue(static function ($v) {
                                         if (false === $v) {
                                             return false;
                                         }
@@ -245,7 +245,7 @@ final class Configuration implements ConfigurationInterface
                                 ->useAttributeAsKey('name')
                                 ->prototype('variable')
                                     ->validate()
-                                        ->ifTrue(function ($v) {
+                                        ->ifTrue(static function ($v) {
                                             if (null === $v) {
                                                 return true;
                                             }
@@ -270,7 +270,7 @@ final class Configuration implements ConfigurationInterface
                             ->end()
                         ->end()
                         ->validate()
-                            ->ifTrue(function ($c) {
+                            ->ifTrue(static function ($c) {
                                 // skip if this contains a service
                                 if (isset($c['service'])) {
                                     return false;
@@ -292,17 +292,17 @@ final class Configuration implements ConfigurationInterface
                             ->thenInvalid("You should set at least the 'type' or 'class' with 'client_id' and the 'client_secret' of a resource owner.")
                         ->end()
                         ->validate()
-                            ->ifTrue(function ($c) {
+                            ->ifTrue(static function ($c) {
                                 return isset($c['type'], $c['class']);
                             })
-                            ->then(function ($c) {
+                            ->then(static function ($c) {
                                 trigger_deprecation('hwi/oauth-bundle', '2.0', 'No need to set both "type" and "class" for resource owner.');
 
                                 return $c;
                             })
                         ->end()
                         ->validate()
-                            ->ifTrue(function ($c) {
+                            ->ifTrue(static function ($c) {
                                 // Skip if this contains a service or a class
                                 if (isset($c['service']) || isset($c['class'])) {
                                     return false;
@@ -330,7 +330,7 @@ final class Configuration implements ConfigurationInterface
                             ->thenInvalid("All parameters are mandatory for types 'oauth2' and 'oauth1'. Check if you're missing one of: 'access_token_url', 'authorization_url', 'infos_url' and 'request_token_url' for 'oauth1'.")
                         ->end()
                         ->validate()
-                            ->ifTrue(function ($c) {
+                            ->ifTrue(static function ($c) {
                                 // skip if this contains a service
                                 if (isset($c['service']) || isset($c['class'])) {
                                     return false;
@@ -357,7 +357,7 @@ final class Configuration implements ConfigurationInterface
                             ->thenInvalid("At least the 'identifier', 'nickname' and 'realname' paths should be configured for 'oauth2' and 'oauth1' types.")
                         ->end()
                         ->validate()
-                            ->ifTrue(function ($c) {
+                            ->ifTrue(static function ($c) {
                                 if (isset($c['service'])) {
                                     // ignore paths & options if none were set
                                     return 0 !== \count($c['paths']) || 0 !== \count($c['options']) || 3 < \count($c);
@@ -368,10 +368,10 @@ final class Configuration implements ConfigurationInterface
                             ->thenInvalid("If you're setting a 'service', no other arguments should be set.")
                         ->end()
                         ->validate()
-                            ->ifTrue(function ($c) {
+                            ->ifTrue(static function ($c) {
                                 return isset($c['class']);
                             })
-                            ->then(function ($c) {
+                            ->then(static function ($c) {
                                 self::registerResourceOwner($c['class']);
 
                                 return $c;
