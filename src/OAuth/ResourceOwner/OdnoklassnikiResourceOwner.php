@@ -109,7 +109,7 @@ final class OdnoklassnikiResourceOwner extends GenericOAuth2ResourceOwner
             'fields' => null,
         ]);
 
-        $fieldsNormalizer = function (Options $options, $value) {
+        $fieldsNormalizer = static function (Options $options, $value) {
             if (!$value) {
                 return null;
             }
