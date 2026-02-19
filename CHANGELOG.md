@@ -1,6 +1,6 @@
 Changelog
 =========
-## 2.5.0 (2026-xx-xx)
+## 2.5.0 (2026-02-19)
 * Added: PHP 8.5 test coverage,
 * Added: Support for Symfony 8.0,
 * Added: Handles absolute URL's in Amazon Cognito,
