@@ -47,7 +47,7 @@ final class PaypalResourceOwner extends GenericOAuth2ResourceOwner
 
         $resolver->addAllowedTypes('sandbox', 'bool');
 
-        $sandboxTransformation = function (Options $options, $value) {
+        $sandboxTransformation = static function (Options $options, $value) {
             if (!$options['sandbox']) {
                 return $value;
             }
