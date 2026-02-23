@@ -28,6 +28,8 @@ final class SensioConnectUserResponse extends AbstractUserResponse
 {
     /**
      * @var DOMNode
+     *
+     * @phpstan-ignore-next-line
      */
     protected $data;
 

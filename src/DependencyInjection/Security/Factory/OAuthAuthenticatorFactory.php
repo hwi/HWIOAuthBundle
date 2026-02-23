@@ -280,7 +280,7 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
                     ->scalarNode('oauth')->end()
                 ->end()
                 ->validate()
-                    ->ifTrue(function ($c) {
+                    ->ifTrue(static function ($c) {
                         return 1 !== \count($c) || !\in_array(key($c), ['oauth', 'orm', 'service'], true);
                     })
                     ->thenInvalid("You should configure (only) one of: 'oauth', 'orm', 'service'.")
@@ -299,7 +299,7 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
                     ->prototype('scalar')
                 ->end()
                 ->validate()
-                    ->ifTrue(function ($c) {
+                    ->ifTrue(static function ($c) {
                         $checkPaths = [];
                         foreach ($c as $checkPath) {
                             if (\in_array($checkPath, $checkPaths, true)) {

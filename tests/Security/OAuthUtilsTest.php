@@ -81,7 +81,7 @@ final class OAuthUtilsTest extends TestCase
         $captured = [];
         $resource->expects($this->exactly(2))
             ->method('addStateParameter')
-            ->willReturnCallback(function ($key, $value) use (&$captured) {
+            ->willReturnCallback(static function ($key, $value) use (&$captured) {
                 $captured[] = [$key, $value];
             });
 
@@ -165,7 +165,7 @@ final class OAuthUtilsTest extends TestCase
         $captured = [];
         $resource->expects($this->exactly(2))
             ->method('addStateParameter')
-            ->willReturnCallback(function ($key, $value) use (&$captured) {
+            ->willReturnCallback(static function ($key, $value) use (&$captured) {
                 $captured[] = [$key, $value];
             });
 

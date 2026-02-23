@@ -61,7 +61,7 @@ final class RedirectToServiceControllerTest extends TestCase
 
     public function testTargetPathParameter(): void
     {
-        $this->request->attributes->set($this->targetPathParameter, 'https://domain.com/target/path');
+        $this->request->query->set($this->targetPathParameter, 'https://domain.com/target/path');
 
         $this->session->expects($this->once())
             ->method('set')
@@ -111,7 +111,7 @@ final class RedirectToServiceControllerTest extends TestCase
         $this->expectException(AccessDeniedHttpException::class);
         $this->expectExceptionMessage('Not allowed to redirect to /malicious/target/path');
 
-        $this->request->attributes->set($this->targetPathParameter, '/malicious/target/path');
+        $this->request->query->set($this->targetPathParameter, '/malicious/target/path');
 
         $this->session->expects($this->never())
             ->method('set')

@@ -78,7 +78,7 @@ final class SalesforceResourceOwner extends GenericOAuth2ResourceOwner
             'format' => 'json',
         ]);
 
-        $sandboxTransformation = function (Options $options, $value) {
+        $sandboxTransformation = static function (Options $options, $value) {
             if (!$options['sandbox']) {
                 return $value;
             }

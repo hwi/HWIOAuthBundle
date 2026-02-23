@@ -246,7 +246,7 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
 
         // Unfortunately some resource owners break the spec by using commas instead
         // of spaces to separate scopes (Disqus, Facebook, Github, Vkontante)
-        $scopeNormalizer = function (Options $options, $value) {
+        $scopeNormalizer = static function (Options $options, $value) {
             if (!$value) {
                 return null;
             }

@@ -96,7 +96,7 @@ final class VkontakteResourceOwner extends GenericOAuth2ResourceOwner
             'name_case' => null,
         ]);
 
-        $fieldsNormalizer = function (Options $options, $value) {
+        $fieldsNormalizer = static function (Options $options, $value) {
             if (!$value) {
                 return null;
             }

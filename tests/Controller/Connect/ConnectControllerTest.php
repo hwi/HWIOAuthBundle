@@ -121,7 +121,7 @@ final class ConnectControllerTest extends AbstractConnectControllerTestCase
         $capturedDispatches = [];
         $this->eventDispatcher->expects($this->exactly(2))
             ->method('dispatch')
-            ->willReturnCallback(function ($event, $eventName) use (&$capturedDispatches) {
+            ->willReturnCallback(static function ($event, $eventName) use (&$capturedDispatches) {
                 $capturedDispatches[] = [$event, $eventName];
 
                 return $event;
@@ -164,7 +164,7 @@ final class ConnectControllerTest extends AbstractConnectControllerTestCase
         $capturedDispatches = [];
         $this->eventDispatcher->expects($this->exactly(2))
             ->method('dispatch')
-            ->willReturnCallback(function ($event, $eventName) use (&$capturedDispatches) {
+            ->willReturnCallback(static function ($event, $eventName) use (&$capturedDispatches) {
                 $capturedDispatches[] = [$event, $eventName];
 
                 return $event;

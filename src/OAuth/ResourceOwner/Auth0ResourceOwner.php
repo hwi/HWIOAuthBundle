@@ -80,7 +80,7 @@ final class Auth0ResourceOwner extends GenericOAuth2ResourceOwner
             'base_url',
         ]);
 
-        $normalizer = function (Options $options, $value) {
+        $normalizer = static function (Options $options, $value) {
             return str_replace('{base_url}', $options['base_url'], $value);
         };
 

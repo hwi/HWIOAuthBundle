@@ -46,7 +46,11 @@ final class AmazonCognitoResourceOwner extends GenericOAuth2ResourceOwner
             'domain',
         ]);
 
-        $normalizer = function (Options $options, $value) {
+        $normalizer = static function (Options $options, $value) {
+            if (str_starts_with($options['domain'], 'https://') || str_starts_with($options['domain'], 'http://')) {
+                return str_replace('{base_url}', $options['domain'], $value);
+            }
+
             $baseUrl = \sprintf('https://%s.auth.%s.amazoncognito.com', $options['domain'], $options['region']);
 
             return str_replace('{base_url}', $baseUrl, $value);

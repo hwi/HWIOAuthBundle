@@ -71,7 +71,7 @@ final class PassageResourceOwner extends GenericOAuth2ResourceOwner
             'sub_domain',
         ]);
 
-        $normalizer = function (Options $options, $value) {
+        $normalizer = static function (Options $options, $value) {
             return str_replace('{sub_domain}', $options['sub_domain'], $value);
         };
 
