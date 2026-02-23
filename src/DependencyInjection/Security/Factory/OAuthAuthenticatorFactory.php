@@ -139,15 +139,17 @@ final class OAuthAuthenticatorFactory extends AbstractFactory implements Authent
     protected function createAuthenticationFailureHandler(ContainerBuilder $container, string $id, array $config): string
     {
         $id = $this->getFailureHandlerId($id);
-        if ($container->has($id)) {
-            return $id;
-        }
-
         $options = array_intersect_key($config, $this->defaultFailureHandlerOptions);
 
-        $failureHandler = $container->setDefinition($id, new ChildDefinition('security.authentication.custom_failure_handler'));
-        $failureHandler->replaceArgument(0, new ChildDefinition('hwi_oauth.authentication.failure_handler'));
-        $failureHandler->replaceArgument(1, $options);
+        if (isset($config['failure_handler'])) {
+            $failureHandler = $container->setDefinition($id, new ChildDefinition('security.authentication.custom_failure_handler'));
+            $failureHandler->replaceArgument(0, new ChildDefinition($config['failure_handler']));
+            $failureHandler->replaceArgument(1, $options);
+        } else {
+            $failureHandler = $container->setDefinition($id, new ChildDefinition('security.authentication.custom_failure_handler'));
+            $failureHandler->replaceArgument(0, new ChildDefinition('hwi_oauth.authentication.failure_handler'));
+            $failureHandler->replaceArgument(1, $options);
+        }
 
         return $id;
     }
