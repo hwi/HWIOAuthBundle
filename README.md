@@ -22,7 +22,7 @@ file in this bundle. Read the documentation for version:
 
 * [__2.x__](https://github.com/hwi/HWIOAuthBundle/blob/master/docs/index.md)
 
-This bundle contains support for 58 different providers:
+This bundle contains support for 59 different providers:
 * 37signals,
 * Amazon,
 * Amazon Cognito,
@@ -39,6 +39,7 @@ This bundle contains support for 58 different providers:
 * Deezer,
 * DeviantArt,
 * Discogs,
+* Discord,
 * Disqus,
 * Dropbox,
 * EVE Online,

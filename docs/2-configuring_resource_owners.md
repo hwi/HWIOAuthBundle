@@ -43,6 +43,7 @@ hwi_oauth:
 - [Clever](resource_owners/clever.md)
 - [DeviantArt](resource_owners/deviantart.md)
 - [Discogs](resource_owners/discogs.md)
+- [Discord](resource_owners/discord.md)
 - [Disqus](resource_owners/disqus.md)
 - [Dropbox](resource_owners/dropbox.md)
 - [EVE Online](resource_owners/eve_online.md)
