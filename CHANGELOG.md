@@ -1,6 +1,7 @@
 Changelog
 =========
-## 2.5.1 (2026-xx-xx)
+## 2.6.0 (2026-xx-xx)
+* Added: Discord resource owner,
 * Bugfix: Correctly register `failure_handler` configuration,
 
 ## 2.5.0 (2026-02-19)
