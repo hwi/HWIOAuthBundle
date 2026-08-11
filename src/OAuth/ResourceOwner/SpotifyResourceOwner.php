@@ -43,29 +43,6 @@ final class SpotifyResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function getUserInformation(?array $accessToken = null, array $extraParameters = [])
-    {
-        $url = $this->normalizeUrl($this->options['infos_url'], [
-            'access_token' => $accessToken['access_token'],
-        ]);
-
-        try {
-            $content = $this->doGetUserInformationRequest($url);
-
-            $response = $this->getUserResponse();
-            $response->setData($content->toArray(false));
-            $response->setResourceOwner($this);
-            $response->setOAuthToken(new OAuthToken($accessToken));
-
-            return $response;
-        } catch (TransportExceptionInterface|JsonException $e) {
-            throw new HttpTransportException('Error while sending HTTP request', $this->getName(), $e->getCode(), $e);
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
