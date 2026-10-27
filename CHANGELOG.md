@@ -2,6 +2,7 @@ Changelog
 =========
 ## 2.6.0 (2026-xx-xx)
 * Added: Discord resource owner,
+* Added: Run `RefreshAccessTokenListener` after the context listener,
 * Bugfix: Correctly register `failure_handler` configuration,
 * Bugfix: Spotify disabled API calls with access_token in query parameters,
 
