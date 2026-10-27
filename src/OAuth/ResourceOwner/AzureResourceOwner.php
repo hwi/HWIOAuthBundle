@@ -37,7 +37,7 @@ final class AzureResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    public function configure()
+    public function configure(): void
     {
         $this->options['access_token_url'] = \sprintf($this->options['access_token_url'], $this->options['application']);
         $this->options['authorization_url'] = \sprintf($this->options['authorization_url'], $this->options['application']);
@@ -79,7 +79,7 @@ final class AzureResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
 

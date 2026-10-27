@@ -28,7 +28,7 @@ use Symfony\Component\Security\Http\HttpUtils;
 
 final class AuthenticationFailureHandlerTest extends TestCase
 {
-    public function testRedirectsToLoginPathWhenNotSet()
+    public function testRedirectsToLoginPathWhenNotSet(): void
     {
         $request = Request::create('/login');
         $requestStack = new RequestStack();
@@ -50,7 +50,7 @@ final class AuthenticationFailureHandlerTest extends TestCase
         );
     }
 
-    public function testRedirectsToLoginRoute()
+    public function testRedirectsToLoginRoute(): void
     {
         $request = Request::create('/login');
         $requestStack = new RequestStack();
@@ -75,7 +75,7 @@ final class AuthenticationFailureHandlerTest extends TestCase
         );
     }
 
-    public function testDoesNothingWhenConnectIsDisabled()
+    public function testDoesNothingWhenConnectIsDisabled(): void
     {
         $request = Request::create('/login');
         $requestStack = new RequestStack();
@@ -97,7 +97,7 @@ final class AuthenticationFailureHandlerTest extends TestCase
         );
     }
 
-    public function testDoesNothingWhenExceptionIsNotOAuthOne()
+    public function testDoesNothingWhenExceptionIsNotOAuthOne(): void
     {
         $request = Request::create('/login');
         $requestStack = new RequestStack();
@@ -119,7 +119,7 @@ final class AuthenticationFailureHandlerTest extends TestCase
         );
     }
 
-    public function testRedirectsToRegistrationPage()
+    public function testRedirectsToRegistrationPage(): void
     {
         $request = Request::create('/login');
         $request->setSession($this->createMock(SessionInterface::class));

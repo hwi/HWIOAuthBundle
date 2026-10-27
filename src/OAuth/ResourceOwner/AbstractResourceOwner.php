@@ -93,7 +93,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * Gives a chance for extending providers to customize stuff.
      */
-    public function configure()
+    public function configure(): void
     {
     }
 
@@ -120,7 +120,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
     /**
      * {@inheritdoc}
      */
-    public function addPaths(array $paths)
+    public function addPaths(array $paths): void
     {
         $this->paths = array_merge($this->paths, $paths);
     }
@@ -326,7 +326,7 @@ abstract class AbstractResourceOwner implements ResourceOwnerInterface
      * @throws AccessException
      * @throws UndefinedOptionsException
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired([
             'client_id',

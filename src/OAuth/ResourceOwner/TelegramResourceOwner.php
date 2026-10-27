@@ -97,7 +97,7 @@ final class TelegramResourceOwner extends GenericOAuth2ResourceOwner
         return $response;
     }
 
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setRequired([
             'client_id',

@@ -39,7 +39,7 @@ final class KeycloakResourceOwner extends GenericOAuth2ResourceOwner
         ], $extraParameters));
     }
 
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
 

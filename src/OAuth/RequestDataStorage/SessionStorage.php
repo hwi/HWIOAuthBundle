@@ -53,7 +53,7 @@ final class SessionStorage implements RequestDataStorageInterface
     /**
      * {@inheritdoc}
      */
-    public function save(ResourceOwnerInterface $resourceOwner, $value, $type = 'token')
+    public function save(ResourceOwnerInterface $resourceOwner, $value, $type = 'token'): void
     {
         if ('token' === $type) {
             if (!\is_array($value) || !isset($value['oauth_token'])) {
