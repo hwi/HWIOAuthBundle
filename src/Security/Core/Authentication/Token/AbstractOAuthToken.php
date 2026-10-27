@@ -97,7 +97,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     /**
      * @param string $accessToken The OAuth access token
      */
-    public function setAccessToken($accessToken): void
+    public function setAccessToken($accessToken)
     {
         $this->accessToken = $accessToken;
     }
@@ -115,7 +115,7 @@ abstract class AbstractOAuthToken extends AbstractToken
      *
      * @throws InvalidArgumentException
      */
-    public function setRawToken($token): void
+    public function setRawToken($token)
     {
         if (\is_array($token)) {
             if (isset($token['access_token'])) {
@@ -161,7 +161,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     /**
      * @param string $refreshToken The OAuth refresh token
      */
-    public function setRefreshToken($refreshToken): void
+    public function setRefreshToken($refreshToken)
     {
         $this->refreshToken = $refreshToken;
     }
@@ -177,7 +177,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     /**
      * @param int $expiresIn The duration in seconds of the access token lifetime
      */
-    public function setExpiresIn($expiresIn): void
+    public function setExpiresIn($expiresIn)
     {
         $this->createdAt = time();
         $this->expiresIn = $expiresIn;
@@ -194,7 +194,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     /**
      * @param int $createdAt The token creation date in seconds
      */
-    public function setCreatedAt($createdAt): void
+    public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
     }
@@ -222,7 +222,7 @@ abstract class AbstractOAuthToken extends AbstractToken
     /**
      * @param string $tokenSecret
      */
-    public function setTokenSecret($tokenSecret): void
+    public function setTokenSecret($tokenSecret)
     {
         $this->tokenSecret = $tokenSecret;
     }
@@ -264,8 +264,10 @@ abstract class AbstractOAuthToken extends AbstractToken
      *
      * @param string $resourceOwnerName
      */
-    public function setResourceOwnerName($resourceOwnerName): void
+    public function setResourceOwnerName($resourceOwnerName)
     {
         $this->resourceOwnerName = $resourceOwnerName;
     }
 }
+
+// @php-cs-fixer-ignore void_return (non-final: adding void would break subclasses)

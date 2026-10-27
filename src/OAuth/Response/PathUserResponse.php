@@ -117,7 +117,7 @@ class PathUserResponse extends AbstractUserResponse
     /**
      * Configure the paths.
      */
-    public function setPaths(array $paths): void
+    public function setPaths(array $paths)
     {
         $this->paths = array_merge($this->paths, $paths);
     }
@@ -188,3 +188,5 @@ class PathUserResponse extends AbstractUserResponse
         return $value;
     }
 }
+
+// @php-cs-fixer-ignore void_return (non-final: adding void would break subclasses)

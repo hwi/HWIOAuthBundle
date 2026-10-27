@@ -211,7 +211,7 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      *
      * @throws AuthenticationException If an OAuth error occurred or no access token is found
      */
-    protected function validateResponseContent($response): void
+    protected function validateResponseContent($response)
     {
         if (isset($response['error_description'])) {
             throw new AuthenticationException(\sprintf('OAuth error: "%s"', $response['error_description']));
@@ -229,7 +229,7 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function configureOptions(OptionsResolver $resolver): void
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
@@ -280,3 +280,5 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         $this->storage->save($this, $this->state->getCsrfToken(), 'csrf_state');
     }
 }
+
+// @php-cs-fixer-ignore void_return (non-final: adding void would break subclasses)
