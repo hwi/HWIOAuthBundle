@@ -2,10 +2,10 @@ Changelog
 =========
 ## 2.6.0 (2026-xx-xx)
 * Added: Discord resource owner,
-* Added: Run `RefreshAccessTokenListener` after the context listener,
+* Added: `RefreshAccessTokenListener` now runs after the context listener,
 * Bugfix: Correctly register `failure_handler` configuration,
-* Bugfix: Spotify disabled API calls with access_token in query parameters,
-* BC Break: Dropped support for Symfony 8.0 (minimum for Symfony 8 is now `8.1`),
+* Bugfix: Fix Spotify login, as Spotify no longer accepts the `access_token` in query parameters,
+* BC Break: Dropped support for Symfony 8.0,
 
 ## 2.5.0 (2026-02-19)
 * Added: PHP 8.5 test coverage,
