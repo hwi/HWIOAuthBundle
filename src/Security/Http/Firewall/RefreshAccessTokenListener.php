@@ -14,9 +14,12 @@ namespace HWI\Bundle\OAuthBundle\Security\Http\Firewall;
 use HWI\Bundle\OAuthBundle\Security\Core\Authentication\Token\OAuthToken;
 use HWI\Bundle\OAuthBundle\Security\Http\Authenticator\OAuthAuthenticator;
 use RuntimeException;
+use Symfony\Component\Security\Http\Attribute\FirewallListenerOrder;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Debug\TraceableAuthenticator;
+use Symfony\Component\Security\Http\Firewall\ContextListener;
 
+#[FirewallListenerOrder(after: ContextListener::class)]
 class RefreshAccessTokenListener extends AbstractRefreshAccessTokenListener
 {
     private AuthenticatorInterface $authenticator;
