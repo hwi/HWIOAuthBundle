@@ -175,7 +175,7 @@ final class OAuthAuthenticatorTest extends TestCase
         $this->assertSame($response, $authenticator->onAuthenticationSuccess($request, $token, 'main'));
     }
 
-    public function testRecreateToken()
+    public function testRecreateToken(): void
     {
         $authenticator = new OAuthAuthenticator(
             $this->getHttpUtilsMock(),
@@ -215,7 +215,7 @@ final class OAuthAuthenticatorTest extends TestCase
         $this->assertFalse($newToken->hasAttribute('non exists attr'));
     }
 
-    public function testRefreshTokenExpiredAndNotContainsRefreshToken()
+    public function testRefreshTokenExpiredAndNotContainsRefreshToken(): void
     {
         $resourceOwnerName = 'keycloak';
 
@@ -249,7 +249,7 @@ final class OAuthAuthenticatorTest extends TestCase
         $this->assertSame($newToken, $token, 'Token missing refresh token data will not be refreshed if it already contains an user');
     }
 
-    public function testRefreshTokenExpired()
+    public function testRefreshTokenExpired(): void
     {
         $resourceOwnerName = 'keycloak';
 

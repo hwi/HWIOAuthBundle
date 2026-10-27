@@ -87,7 +87,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function setOAuthToken(OAuthToken $token)
+    public function setOAuthToken(OAuthToken $token): void
     {
         $this->oAuthToken = $token;
     }
@@ -111,7 +111,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function setData($data)
+    public function setData($data): void
     {
         if (\is_array($data)) {
             $this->data = $data;
@@ -143,7 +143,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function setResourceOwner(ResourceOwnerInterface $resourceOwner)
+    public function setResourceOwner(ResourceOwnerInterface $resourceOwner): void
     {
         $this->resourceOwner = $resourceOwner;
     }

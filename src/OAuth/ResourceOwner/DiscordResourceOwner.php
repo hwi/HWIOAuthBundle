@@ -41,7 +41,7 @@ final class DiscordResourceOwner extends GenericOAuth2ResourceOwner
         $responseData = $response->getData();
         if (!empty($responseData['id']) && !empty($responseData['avatar'])) {
             // Discord returns the avatar as a hash, build the CDN url from it
-            $responseData['avatar_url'] = sprintf(
+            $responseData['avatar_url'] = \sprintf(
                 'https://cdn.discordapp.com/avatars/%s/%s.png',
                 $responseData['id'],
                 $responseData['avatar']
@@ -56,7 +56,7 @@ final class DiscordResourceOwner extends GenericOAuth2ResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
 

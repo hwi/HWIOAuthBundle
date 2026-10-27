@@ -22,6 +22,7 @@ return (new PhpCsFixer\Config())
         'no_unreachable_default_argument_value' => false,
         'ordered_class_elements' => true,
         'ordered_imports' => true,
+        'declare_strict_types' => false,
         'php_unit_method_casing' => ['case' => 'camel_case'],
         'php_unit_set_up_tear_down_visibility' => true,
         'native_function_invocation' => ['include' => ['@compiler_optimized'], 'scope' => 'namespaced'],

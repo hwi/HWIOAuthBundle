@@ -30,7 +30,7 @@ final class AmazonCognitoResourceOwner extends GenericOAuth2ResourceOwner
         'realname' => 'name',
     ];
 
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
 

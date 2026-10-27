@@ -211,7 +211,7 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
      *
      * @throws AuthenticationException If an OAuth error occurred or no access token is found
      */
-    protected function validateResponseContent($response)
+    protected function validateResponseContent($response): void
     {
         if (isset($response['error_description'])) {
             throw new AuthenticationException(\sprintf('OAuth error: "%s"', $response['error_description']));
@@ -229,7 +229,7 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function configureOptions(OptionsResolver $resolver)
+    protected function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
 

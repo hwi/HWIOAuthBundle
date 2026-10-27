@@ -44,7 +44,7 @@ class CustomResourceOwner implements ResourceOwnerInterface
         return 'custom_provider';
     }
 
-    public function getOption($name)
+    public function getOption($name): void
     {
     }
 

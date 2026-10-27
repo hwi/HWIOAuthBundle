@@ -28,17 +28,17 @@ abstract class AbstractRefreshAccessTokenListener extends AbstractListener
 
     protected bool $enabled = false;
 
-    public function setTokenStorage(TokenStorageInterface $tokenStorage)
+    public function setTokenStorage(TokenStorageInterface $tokenStorage): void
     {
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function setResourceOwnerMap(ResourceOwnerMapInterface $resourceOwnerMap)
+    public function setResourceOwnerMap(ResourceOwnerMapInterface $resourceOwnerMap): void
     {
         $this->resourceOwnerMap = $resourceOwnerMap;
     }
 
-    public function enable(bool $enabled = true)
+    public function enable(bool $enabled = true): void
     {
         $this->enabled = $enabled;
     }

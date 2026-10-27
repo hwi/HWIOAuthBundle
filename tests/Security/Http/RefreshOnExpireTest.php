@@ -49,7 +49,7 @@ class RefreshOnExpireTest extends WebTestCase
         $this->createResourceOwnerMock($container);
     }
 
-    public function testTokenIsValid()
+    public function testTokenIsValid(): void
     {
         $token = $this->loginUserWithToken([
             'expires' => 666,
@@ -67,7 +67,7 @@ class RefreshOnExpireTest extends WebTestCase
         $this->assertEquals($token->getCreatedAt(), $newToken->getCreatedAt());
     }
 
-    public function testTokenIsExpiredSuccessfulRefresh()
+    public function testTokenIsExpiredSuccessfulRefresh(): void
     {
         $token = $this->loginUserWithToken([
             'expires' => 20,
@@ -94,7 +94,7 @@ class RefreshOnExpireTest extends WebTestCase
         $this->assertNotEquals($token->getCreatedAt(), $newToken->getCreatedAt()); // token refreshed
     }
 
-    public function testTokenIsExpiredForwardToLogin()
+    public function testTokenIsExpiredForwardToLogin(): void
     {
         $this->loginUserWithToken([
             'expires' => 20, // expired
@@ -115,7 +115,7 @@ class RefreshOnExpireTest extends WebTestCase
         $this->assertUserNotLogged($newToken);
     }
 
-    public function testTokenIsExpiredSeamlessLogout()
+    public function testTokenIsExpiredSeamlessLogout(): void
     {
         $this->loginUserWithToken([
             'expires' => 20, // expired
@@ -136,7 +136,7 @@ class RefreshOnExpireTest extends WebTestCase
         $this->assertUserNotLogged($newToken);
     }
 
-    public function testDoNotTryRefreshIfTokenDoesNotContainsIt()
+    public function testDoNotTryRefreshIfTokenDoesNotContainsIt(): void
     {
         $token = $this->loginUserWithToken([
             'expires' => 20, // expired
@@ -158,7 +158,7 @@ class RefreshOnExpireTest extends WebTestCase
         $this->assertEquals($token->getCreatedAt(), $newToken->getCreatedAt());
     }
 
-    private function createResourceOwnerMock(ContainerInterface $container)
+    private function createResourceOwnerMock(ContainerInterface $container): void
     {
         $this->resourceOwnerMock = $this->createMock(GenericOAuth2ResourceOwner::class);
         $this->resourceOwnerMock->method('shouldRefreshOnExpire')->willReturn(true);

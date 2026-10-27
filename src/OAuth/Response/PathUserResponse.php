@@ -117,7 +117,7 @@ class PathUserResponse extends AbstractUserResponse
     /**
      * Configure the paths.
      */
-    public function setPaths(array $paths)
+    public function setPaths(array $paths): void
     {
         $this->paths = array_merge($this->paths, $paths);
     }

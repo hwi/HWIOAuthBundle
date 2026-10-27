@@ -45,7 +45,7 @@ final class UserProvider implements OAuthAwareUserProviderInterface, UserProvide
         return true;
     }
 
-    public function connect(UserInterface $user, UserResponseInterface $response)
+    public function connect(UserInterface $user, UserResponseInterface $response): void
     {
         // noop
     }
