@@ -87,7 +87,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function setOAuthToken(OAuthToken $token): void
+    public function setOAuthToken(OAuthToken $token)
     {
         $this->oAuthToken = $token;
     }
@@ -111,7 +111,7 @@ abstract class AbstractUserResponse implements UserResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function setData($data): void
+    public function setData($data)
     {
         if (\is_array($data)) {
             $this->data = $data;
@@ -143,8 +143,10 @@ abstract class AbstractUserResponse implements UserResponseInterface
     /**
      * {@inheritdoc}
      */
-    public function setResourceOwner(ResourceOwnerInterface $resourceOwner): void
+    public function setResourceOwner(ResourceOwnerInterface $resourceOwner)
     {
         $this->resourceOwner = $resourceOwner;
     }
 }
+
+// @php-cs-fixer-ignore void_return (non-final: adding void would break subclasses)

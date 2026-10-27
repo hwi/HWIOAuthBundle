@@ -224,7 +224,7 @@ abstract class GenericOAuth1ResourceOwner extends AbstractResourceOwner
     /**
      * {@inheritdoc}
      */
-    protected function configureOptions(OptionsResolver $resolver): void
+    protected function configureOptions(OptionsResolver $resolver)
     {
         parent::configureOptions($resolver);
 
@@ -240,3 +240,5 @@ abstract class GenericOAuth1ResourceOwner extends AbstractResourceOwner
         $resolver->setAllowedValues('signature_method', ['HMAC-SHA1', 'RSA-SHA1', 'PLAINTEXT']);
     }
 }
+
+// @php-cs-fixer-ignore void_return (non-final: adding void would break subclasses)

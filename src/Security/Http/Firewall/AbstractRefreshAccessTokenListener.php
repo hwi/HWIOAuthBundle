@@ -28,17 +28,17 @@ abstract class AbstractRefreshAccessTokenListener extends AbstractListener
 
     protected bool $enabled = false;
 
-    public function setTokenStorage(TokenStorageInterface $tokenStorage): void
+    public function setTokenStorage(TokenStorageInterface $tokenStorage)
     {
         $this->tokenStorage = $tokenStorage;
     }
 
-    public function setResourceOwnerMap(ResourceOwnerMapInterface $resourceOwnerMap): void
+    public function setResourceOwnerMap(ResourceOwnerMapInterface $resourceOwnerMap)
     {
         $this->resourceOwnerMap = $resourceOwnerMap;
     }
 
-    public function enable(bool $enabled = true): void
+    public function enable(bool $enabled = true)
     {
         $this->enabled = $enabled;
     }
@@ -98,3 +98,5 @@ abstract class AbstractRefreshAccessTokenListener extends AbstractListener
      */
     abstract protected function refreshToken(OAuthToken $token): OAuthToken;
 }
+
+// @php-cs-fixer-ignore void_return (non-final: adding void would break subclasses)
