@@ -5,3 +5,9 @@ parameters:
         - tests/
     excludePaths:
         - vendor/*
+    ignoreErrors:
+        # FirewallListenerOrder is not part of a released Symfony version yet
+        -
+            identifier: attribute.notFound
+            path: src/Security/Http/Firewall/RefreshAccessTokenListener.php
+            reportUnmatched: false
