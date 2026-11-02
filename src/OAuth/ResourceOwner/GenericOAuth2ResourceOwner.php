@@ -271,7 +271,7 @@ abstract class GenericOAuth2ResourceOwner extends AbstractResourceOwner
         return parent::httpRequest($url, $content, $headers, $method);
     }
 
-    private function handleCsrfToken(): void
+    protected function handleCsrfToken(): void
     {
         if (null === $this->state->getCsrfToken()) {
             $this->state->setCsrfToken(NonceGenerator::generate());
