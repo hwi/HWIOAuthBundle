@@ -78,6 +78,7 @@ hwi_oauth:
 - [Stereomood](resource_owners/stereomood.md)
 - [Strava](resource_owners/strava.md)
 - [Telegram](resource_owners/telegram.md)
+- [TikTok](resource_owners/tiktok.md)
 - [Toshl](resource_owners/toshl.md)
 - [Trello](resource_owners/trello.md)
 - [Twitch](resource_owners/twitch.md)

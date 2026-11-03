@@ -74,6 +74,7 @@ This bundle contains support for 59 different providers:
 * Stereomood,
 * Strava,
 * Telegram,
+* TikTok,
 * Toshl,
 * Trakt,
 * Trello,
