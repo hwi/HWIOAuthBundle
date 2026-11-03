@@ -1,5 +1,8 @@
 Changelog
 =========
+## 2.7.0 (2026-xx-xx)
+* Added: TikTok resource owner,
+
 ## 2.6.0 (2026-10-27)
 * Added: Discord resource owner,
 * Added: `RefreshAccessTokenListener` now runs after the context listener,
